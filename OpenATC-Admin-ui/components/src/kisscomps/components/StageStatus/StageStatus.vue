@@ -80,6 +80,7 @@ export default {
       this.getStageLine()
     }
     if (this.controlData) {
+      this.stageLineStatus = true
       this.getPhaseId(this.controlData)
     }
   },
