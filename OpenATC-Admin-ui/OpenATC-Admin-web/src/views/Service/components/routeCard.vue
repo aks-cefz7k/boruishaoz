@@ -13,7 +13,7 @@
   <el-card class="serviceroute-routeCard" v-show="isShow">
     <div slot="header" class="clearfix">
       <span style="vertical-align:middle;">
-        {{ $t("openatc.dutyroute.currentControl") }} : {{node.currentControlName}}
+        <span class="grid-content-label">{{ $t("openatc.dutyroute.currentControl") }} : </span> {{node.currentControlName}}
       </span>
       <el-button
         style="float: right; padding: 3px 0"
