@@ -78,7 +78,7 @@ public class FeatureController {
      * @param agentid
      * @return
      */
-    @PostMapping(value = "/feature/getfeature/{agentid}")
+    @GetMapping(value = "/feature/getfeature/{agentid}")
     public RESTRet getFeature(@PathVariable String agentid){
         return featureService.getFeatureAll(agentid);
     }

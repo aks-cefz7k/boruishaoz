@@ -212,8 +212,13 @@ public class FeatureServiceImpl implements FeatureService {
      */
     @Override
     public RESTRet getFeatureAll(String agentid) {
-//        featureDao.selectFeatureAll(agentid);
-        return RESTRetUtils.successObj("");
+        try {
+            String data = featureDao.selectFeatureAll(agentid);
+            MessageData messageData = gson.fromJson(data, MessageData.class);
+            return RESTRetUtils.successObj(messageData);
+        }catch (Exception e){
+            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_4002);
+        }
     }
 
 
