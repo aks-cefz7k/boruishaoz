@@ -208,7 +208,7 @@ export default {
       email_status: true,
       phone_status: true,
       roles: [],
-      roleNames: ['ordinary user'],
+      roleNames: [],
       tempUser: {
         user_name: '',
         newpass: '',
