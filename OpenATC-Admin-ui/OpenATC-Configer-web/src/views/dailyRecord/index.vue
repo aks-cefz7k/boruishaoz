@@ -19,6 +19,7 @@
         :data="recordList"
         size="mini"
         :max-height="tableHeight"
+        :default-sort = "{prop: 'starttime', order: 'descending'}"
         style="width: 100%"
         id="footerBtn">
         <el-table-column

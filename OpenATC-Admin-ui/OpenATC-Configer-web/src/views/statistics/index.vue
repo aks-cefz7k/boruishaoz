@@ -42,6 +42,7 @@
             :max-height="tableHeight"
             size="small"
             style="width: 100%"
+            :default-sort = "{prop: 'time', order: 'descending'}"
             v-loading.body="listLoading"
             id="footerBtn">
             <el-table-column
