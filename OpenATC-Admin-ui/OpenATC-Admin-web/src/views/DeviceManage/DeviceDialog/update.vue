@@ -55,8 +55,8 @@
           prop="tags"
           >
           <el-tag
-              :key="tag"
-              v-for="tag in deviceInfo.tags?deviceInfo.tags.split(','):currentTags"
+              :key="index"
+              v-for="(tag,index) in deviceInfo.tags?deviceInfo.tags.split(','):currentTags"
               closable
               :disable-transitions="false"
               @close="handleClose(tag)">
@@ -358,7 +358,7 @@ export default {
     }
   },
   created () {
-    this.getDicts()
+    // this.getDicts()
   },
   methods: {
     getDicts () {
@@ -369,7 +369,7 @@ export default {
     addDicts () {
       let resData = {
         type: 'tags',
-        key: 'tag1',
+        key: 'devTag',
         value: this.deviceTag
       }
       addDict(resData).then(res => {
@@ -400,7 +400,7 @@ export default {
         }
         this.addDicts()
       } else {
-        if (this.deviceTag) {
+        if (this.deviceTag) { // && !this.currentTags.includes(this.deviceTag)
           this.currentTags.push(this.deviceTag)
         }
         this.addDicts()
