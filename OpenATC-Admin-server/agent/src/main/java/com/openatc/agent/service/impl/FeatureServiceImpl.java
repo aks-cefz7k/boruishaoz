@@ -200,8 +200,8 @@ public class FeatureServiceImpl implements FeatureService {
 
         int row = featureDao.saveFeatureAll(requestData);
         if (row == 0){
-            InnerError innerError = RESTRetUtils.innerErrorObj(requestData.getAgentid(), IErrorEnumImplInner.E_207, null);
-            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_4002,innerError);
+            InnerError innerError = RESTRetUtils.innerErrorObj(requestData.getAgentid(), IErrorEnumImplInner.E_207, requestData);
+            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_4001,innerError);
         }else {
             return RESTRetUtils.successObj("success");
         }
