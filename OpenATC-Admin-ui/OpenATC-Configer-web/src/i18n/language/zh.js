@@ -371,7 +371,8 @@ const zh = {
       'ControlOption9': '自适应控制',
       'ControlOption10': '无电缆控制',
       'ControlOption12': '行人过街控制',
-      'ControlOption19': '感应式行人过街控制'
+      'ControlOption19': '感应式行人过街控制',
+      'plan': '计划'
     },
     'date': {
       'desc': '描述',

@@ -373,7 +373,8 @@ const en = {
       'ControlOption9': 'Self-Adaption',
       'ControlOption10': 'Nocable Control',
       'ControlOption12': 'Pedestrian Crossing Control',
-      'ControlOption19': 'Inductive Pedestrian Crossing Control'
+      'ControlOption19': 'Inductive Pedestrian Crossing Control',
+      'plan': 'plan'
     },
     'date': {
       'desc': 'Description',
