@@ -21,7 +21,7 @@ Vue.use(Router)
 import compose from '../views/compose/compose'
 import composeNew from '../views/compose/composeNew'
 import LoginFunc from '../views/login/loginInterface'
-import Edgebase from 'edgebase-front'
+import Edgebase from '@openatc/edgebase-front'
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
