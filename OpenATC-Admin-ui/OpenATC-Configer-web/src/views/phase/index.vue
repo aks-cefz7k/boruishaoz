@@ -46,7 +46,8 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.concurrent')" min-width="100">
         <template slot-scope="scope">
-          <el-select multiple v-model="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small">
+          <el-select multiple :value="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small" @change="associateConcurrent(scope.row, $event)">
+          <!-- <el-select multiple v-model="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small"> -->
             <el-option v-for="item in ConcurrentList" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
@@ -347,6 +348,8 @@ export default {
           type: 'success',
           message: this.$t('edge.common.deletesucess')
         })
+        // 删除关联此行的并发相位
+        this.handleDeleteConcurrent(row.id, [], row.concurrent)
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -564,6 +567,56 @@ export default {
         list.push(this.pedimgs[i].id)
       }
       this.$store.getters.tscParam.phaseList[index].peddirection = list
+    },
+    handleChangeConcurrent (row, value) {
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      if (!phaseList || !phaseList.length) return
+      for (let i = 0; i < phaseList.length; i++) {
+        if (phaseList[i].id === row.id) {
+          phaseList[i].concurrent = value
+        }
+      }
+    },
+    handleDeleteConcurrent (curid, curVal, oldVal) {
+      // 删除关联的并发相位
+      for (let i = 0; i < oldVal.length; i++) {
+        if (curVal.indexOf(oldVal[i]) === -1) {
+          // 此项已被删除
+          for (let j = 0; j < this.list.length; j++) {
+            if (this.list[j].id === oldVal[i]) {
+              let index = this.list[j].concurrent.indexOf(curid)
+              if (index !== -1) {
+                this.list[j].concurrent.splice(index, 1)
+              }
+            }
+          }
+        }
+      }
+    },
+    handleAddConcurrent (curid, curVal) {
+      // 处理现有关联相位
+      curVal.forEach(concurrent => {
+        for (let i = 0; i < this.list.length; i++) {
+          let listconcurrent = this.list[i].concurrent
+          let listid = this.list[i].id
+          if (listid === concurrent) {
+            if (listconcurrent.indexOf(curid) === -1) {
+              listconcurrent.push(curid)
+            }
+          } else if (listid !== curid) {
+            if (listconcurrent.indexOf(curid) && curVal.indexOf(listid) === -1) {
+            }
+          }
+        }
+      })
+    },
+    associateConcurrent (row, value) {
+      let curid = row.id
+      let concurrentlist = row.concurrent
+      this.handleDeleteConcurrent(curid, value, concurrentlist)
+      this.handleAddConcurrent(curid, value)
+      // 关联后，再修改对应值
+      this.handleChangeConcurrent(row, value)
     }
   }
 }
