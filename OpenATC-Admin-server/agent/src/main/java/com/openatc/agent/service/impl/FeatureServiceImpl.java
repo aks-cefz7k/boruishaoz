@@ -4,28 +4,38 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.openatc.agent.controller.MessageController;
-import com.openatc.agent.service.ParamConvertService;
+import com.openatc.agent.service.FeatureDao;
+import com.openatc.agent.service.FeatureService;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
+import com.openatc.core.common.IErrorEnum;
+import com.openatc.core.common.IErrorEnumImplInner;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
+import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
 /**
- * @Classname ParamConvertServiceImpl
- * @Description 参数转换
+ * @Classname FeatureServiceImpl
+ * @Description 参数管理
  * @Date 2022/1/25 17:50
  * @Created by panleilei
  */
 @Service
-public class ParamConvertServiceImpl implements ParamConvertService {
+public class FeatureServiceImpl implements FeatureService {
     @Autowired
     MessageController messageController;
+
+    @Autowired
+    FeatureDao featureDao;
+
     private Gson gson = new Gson();
     /**
      * 环转阶段
@@ -175,6 +185,36 @@ public class ParamConvertServiceImpl implements ParamConvertService {
         return ringsList;
     }
 
+    /**
+     * 保存参数到数据库
+     * @param requestData
+     * @return
+     */
+    @Override
+    public RESTRet saveFeatureAll(MessageData requestData) {
+        // todo 同一个agentid存在多条数据
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String createTime = sdf.format(date);
+        requestData.setCreatetime(createTime);
+
+        int row = featureDao.saveFeatureAll(requestData);
+        if (row > 0){
+            return RESTRetUtils.successObj("success");
+        }
+        return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_4002);
+    }
+
+    /**
+     * 从数据库中获取参数 todo
+     * @param agentid
+     * @return
+     */
+    @Override
+    public RESTRet getFeatureAll(String agentid) {
+//        featureDao.selectFeatureAll(agentid);
+        return RESTRetUtils.successObj("");
+    }
 
 
     // 获取相位

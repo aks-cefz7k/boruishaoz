@@ -31,10 +31,11 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_0005("0005", "ValidationException or MethodArgumentNotValidException"),
     E_0006("0006", "system error"),
 
-    E_1000("10000", "Parameter is null!"),
-    E_1001("10001", "Illegal parameter!"),
+    E_1000("1000", "Parameter is null!"),
+    E_1001("1001", "Illegal parameter!"),
     E_1002("1002", "URL is not correct!"),
-    E_2002("10002", "The record is not exit!"),
+    E_1003("1003", "Dict key or value is NULL!"),
+    E_2002("2002", "The record is not exit!"),
 
     E_2003("20003", "The id is not exit or equal 0 !"),
     E_2004("20004", "No Param Record !"),

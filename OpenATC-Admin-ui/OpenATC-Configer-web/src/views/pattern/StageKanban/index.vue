@@ -12,8 +12,11 @@
 <template>
 <div class="components-container board">
   <div class="board-column">
-    <div class="board-column-header">
-      {{headerText}}
+    <div class="board-column-header" style="position:relative">
+      <span>{{$t('edge.pattern.stage')+(subIndex+1)}}</span>
+      <span v-if="contrloType" style="position: absolute;right: 0;">
+        <el-button type="primary" @click="deleteStage(subIndex)" icon="el-icon-close"></el-button>
+      </span>
     </div>
     <div
       class="board-column-content"
@@ -111,38 +114,6 @@
             </el-input-number>
           </el-col>
         </el-row>
-        <!-- <el-row :gutter="0">
-          <el-col :span="12">
-            {{this.$t('edge.pattern.delaystart')}}
-          </el-col>
-          <el-col :span="12">
-            <el-input-number
-              class="stage-value"
-              :controls="false"
-              size="small"
-              v-model.number="stage.delaystart"
-              ref="type"
-              :disabled="true"
-              @change="onDelaystartChange">
-            </el-input-number>
-          </el-col>
-        </el-row> -->
-        <!-- <el-row :gutter="0">
-          <el-col :span="12">
-            {{this.$t('edge.pattern.advanceend')}}
-          </el-col>
-          <el-col :span="12">
-            <el-input-number
-              class="stage-value"
-              :controls="false"
-              size="small"
-              v-model.number="stage.advanceend"
-              ref="type"
-              :disabled="true"
-              @change="onAdvanceendChange">
-            </el-input-number>
-          </el-col>
-        </el-row> -->
       </div>
     </div>
   </div>
@@ -161,9 +132,12 @@ export default {
     }
   },
   props: {
-    headerText: {
-      type: String,
-      default: 'Header'
+    // headerText: {
+    //   type: String,
+    //   default: 'Header'
+    // },
+    stageInfo: {
+      type: Array
     },
     coordphaseOption: {
       type: Array,
@@ -222,6 +196,9 @@ export default {
   mounted () {
   },
   methods: {
+    deleteStage (index) {
+      this.stageInfo.splice(index, 1)
+    },
     getMaxCycle (pattern) {
       let rings = pattern.stagesList
       let stageCycleList = rings.map(item => {
@@ -273,6 +250,11 @@ export default {
     line-height: 40px;
     padding: 1px 1px;
     box-sizing: border-box;
+  }
+  .el-button--primary:hover, .el-button--primary:focus{
+    background: #409EFF;
+    border-color: #409EFF;
+    color: #FFFFFF;
   }
   .stage-value {
     text-align: left;
