@@ -1,9 +1,13 @@
 package com.openatc.agent.controller;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.openatc.agent.model.SystemConfig;
 import com.openatc.agent.service.SystemConfigDao;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +44,24 @@ public class SystemConfigController {
     @GetMapping(value = "/systemconfig/{module}")
     public RESTRetBase getSystemConfigByModule(@PathVariable String module) {
         return RESTRetUtils.successObj(systemConfigDao.findAllByModule(module));
+    }
+
+    /**
+     * @Author: yangyi
+     * @Date: 2022/3/1 13:33
+     * @Description:
+     */
+    @PostMapping("/systemconfig/getList")
+    public RESTRetBase getSystemConfigList(@RequestBody JsonObject param) {
+        List<SystemConfig> list;
+        String module = param.get("module").getAsString();
+        JsonElement jeIsValid = param.get("isValid");
+        if (jeIsValid == null) {
+            list = systemConfigDao.findAllByModule(module);
+        } else {
+            Boolean isValid = jeIsValid.getAsBoolean();
+            list = systemConfigDao.findAllByModuleAndAndIsValid(module, isValid);
+        }
+        return RESTRetUtils.successObj(list);
     }
 }
