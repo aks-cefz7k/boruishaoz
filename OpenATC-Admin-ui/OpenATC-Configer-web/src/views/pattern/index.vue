@@ -118,6 +118,7 @@
               :patternId="scope.row.id"
               :patternStatusList="scope.row.rings"
               :cycles="scope.row.cycle"
+              :phaseList="phaseList"
               >
               </BoardCard>
             </div>
@@ -138,6 +139,8 @@ import StageKanban from '@/views/pattern/StageKanban'
 import BoardCard from '@/components/BoardCard'
 import FollowPhase from '@/components/FollowPhase'
 import ExpendConfig from '@/components/ExpendConfig'
+import { uploadSingleTscParam } from '@/api/param'
+import { getMessageByCode } from '../../utils/responseMessage'
 // import { mapState } from 'vuex'
 // import { getTscControl } from '@/api/control'
 // import { getIframdevid } from '@/utils/auth'
@@ -161,6 +164,7 @@ export default {
       },
       id: 1,
       barrierList: [],
+      phaseList: [], // 当前相位集合
       currPatternName: '--',
       patternStatusIndex: -1,
       // activeName: 'ring',
@@ -192,6 +196,7 @@ export default {
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
     this.initData()
+    this.getPhase()
   },
   mounted: function () {
     var _this = this
@@ -227,6 +232,20 @@ export default {
     },
     sortNumbers (a, b) {
       return a - b
+    },
+    getPhase () {
+      uploadSingleTscParam('phase').then(data => {
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        }
+        this.phaseList = res.data.data.phaseList
+      })
     },
     increaseId () { // 实现id在之前的基础上寻找最小的
       let patternList = this.globalParamModel.getParamsByType('patternList')

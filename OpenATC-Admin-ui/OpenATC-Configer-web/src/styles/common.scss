@@ -866,6 +866,10 @@ border: 1px solid $--border-color-base;
     background-color: #edf6ff;
     border-radius: 6px;
     line-height: 1.15;
+    .patternWalk{
+      left: 8px !important;
+      top: 5px !important;
+    }
   }
   .single-model-select {
     margin-right: 10px;
