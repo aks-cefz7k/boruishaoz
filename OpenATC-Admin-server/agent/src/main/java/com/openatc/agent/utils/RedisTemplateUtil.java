@@ -1,12 +1,14 @@
 package com.openatc.agent.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.model.model.StatusPattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -60,7 +62,7 @@ public class RedisTemplateUtil {
     }
 
     /**
-     * 获取匹配的key
+     * 获取匹配的key的列表
      *
      * @param pattern
      * @return
@@ -69,18 +71,23 @@ public class RedisTemplateUtil {
         return redisTemplate.keys(pattern);
     }
 
+
+    // 获取value
     public String getValue(String key){
         return redisTemplate.opsForValue().get(key);
     }
 
+    // 删除key
     public void delete(String key){
         redisTemplate.delete(key);
     }
 
+    // 设置value
     public void setValue(String key, String value){
         redisTemplate.opsForValue().set(key, value);
     }
 
+    // 发布消息
     public void publish(String channel, String message){
         redisTemplate.convertAndSend(channel, message);
     }
@@ -90,14 +97,29 @@ public class RedisTemplateUtil {
      * @Description: get current pattern from redis
      */
     public StatusPattern getStatusPatternFromRedis (String agentId) {
-        StatusPattern statusPattern = new StatusPattern();
         String key = agenttype + ":" + "status/pattern" + ":" + agentId;
-        String s = redisTemplate.opsForValue().get(key);
-        if (s == null){
+        String value = redisTemplate.opsForValue().get(key);
+        if(value == null)
             return null;
-        }
-        MessageData messageData = gson.fromJson(s, MessageData.class);
-        statusPattern = gson.fromJson(messageData.getData().getAsJsonObject(),StatusPattern.class);
+        MessageData messageData = gson.fromJson(value, MessageData.class);
+        StatusPattern statusPattern = gson.fromJson(messageData.getData().getAsJsonObject(),StatusPattern.class);
         return statusPattern;
+    }
+
+    public JsonObject GetRedisInfo(){
+        Properties info = redisTemplate.getRequiredConnectionFactory().getConnection().info("memory");
+        Properties info2 = redisTemplate.getRequiredConnectionFactory().getConnection().info("clients");
+
+        JsonObject jo = new JsonObject();
+        jo.addProperty("Used Memory", info.getProperty("used_memory_human"));
+        jo.addProperty("Used Memory Peak", info.getProperty("used_memory_peak_human"));
+        jo.addProperty("Used Memory RSS", info.getProperty("used_memory_rss_human"));
+        jo.addProperty("Total System Memory", info.getProperty("total_system_memory_human"));
+        jo.addProperty("Mem Fragmentation Ratio", info.getProperty("mem_fragmentation_ratio"));
+        jo.addProperty("Connected Clients", info2.getProperty("connected_clients"));
+
+//        Properties info3 = redisTemplate.getRequiredConnectionFactory().getConnection().info("stats");
+
+        return jo;
     }
 }
