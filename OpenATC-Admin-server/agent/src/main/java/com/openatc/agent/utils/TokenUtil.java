@@ -19,7 +19,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.openatc.agent.model.Token;
 import com.openatc.agent.model.User;
 import com.openatc.agent.service.UserDao;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,7 +102,7 @@ public class TokenUtil {
         String token = JWT.create()
                 .withSubject(username)
                 .withIssuedAt(new Date())
-                //.withExpiresAt(generateExpirationDate())
+                .withExpiresAt(generateExpirationDate())
                 .withKeyId(timeStamp.toString())
                 .sign(getAlgorithm());
 
@@ -120,6 +122,17 @@ public class TokenUtil {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 
+//    private String getUsername() {
+//        Object principal = SecurityUtils.getSubject().getPrincipal();
+//        return principal.toString();
+//    }
+//
+//    private String getIp(){
+//        Subject subject = SecurityUtils.getSubject();
+//        String host = subject.getSession().getHost();
+//        return host;
+//    }
+
     /**
      * 根据token获取用户名
      *
@@ -137,11 +150,11 @@ public class TokenUtil {
             return jwt.getSubject();
         } catch (JWTVerificationException exception) {
             //Invalid signature/claims
-            logger.error("getUsernameFromToken:{}", exception.getMessage());
+            logger.error("getUsernameFromToken error:{}", exception.getMessage());
             return null;
         } catch (NullPointerException e) {
             //Invalid signature/claims
-            logger.error("getUsernameFromToken:{}", e.getMessage());
+            logger.error("getUsernameFromToken error:{}", e.getMessage());
             return null;
         }
     }

@@ -29,6 +29,8 @@ public class JwtToken implements AuthenticationToken {
 
     private String ip;
 
+    private String url;
+
     @Override
     public String getPrincipal() {
         return principal;

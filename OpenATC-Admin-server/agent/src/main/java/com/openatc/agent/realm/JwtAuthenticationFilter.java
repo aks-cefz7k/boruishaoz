@@ -26,7 +26,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
@@ -34,7 +35,7 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
 
     private static final String TOKEN = "token";
     private static final String AUTH = "Authorization";
-    private Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.toString());
+    private Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
@@ -43,12 +44,13 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
         // 先从Header里面获取
         String token = httpRequest.getHeader(AUTH);
         String remoteIP = getRemortIP(httpRequest);
+        String url = httpRequest.getRequestURI();
         if (token == null || token.length() == 0) {
             // 获取不到再从Parameter中拿
             token = httpRequest.getParameter(TOKEN);
             // 还是获取不到再从Cookie中拿
             if (token == null || token.length() == 0) {
-                return JwtToken.builder().ip(remoteIP).build();
+                return JwtToken.builder().ip(remoteIP).url(url).build();
             }
         }
 
@@ -61,6 +63,7 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
         return JwtToken.builder()
                 .token(token)
                 .ip(remoteIP)
+                .url(url)
                 .build();
     }
 
@@ -73,12 +76,18 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        return false;
+        boolean login = false;
+        try{
+            login = executeLogin(request, response);
+        }catch (Exception e){
+            logger.warn("isAccessAllowed error:{}", e.getMessage());
+        }
+        return login;
     }
 
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        return executeLogin(request, response);
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
+        return false;
     }
 
     @Override
@@ -123,6 +132,7 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
             servletResponse.setHeader("Access-Control-Allow-Origin", "*");
             response.getWriter().write(jsonObject.toString());
         } catch (IOException e) {
+            logger.warn("onLoginFailure error:{}", e.getMessage());
         }
         return false;
     }

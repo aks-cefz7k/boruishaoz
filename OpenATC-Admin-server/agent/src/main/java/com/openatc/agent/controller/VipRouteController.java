@@ -245,13 +245,13 @@ public class VipRouteController {
         }
         // 取消勤务路线
         else if (operation == 0) {
-
+            // 回自主控制
+            RESTRet restRet = backSelfControl(agentid);
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
             log.info("取消执行，存入redis");
             onExcuteDevlist.remove(agentid);
-            // 回自主控制
-            RESTRet restRet = backSelfControl(agentid);
+
             if (restRet.getData() instanceof InnerError)
                 return restRet;
         }

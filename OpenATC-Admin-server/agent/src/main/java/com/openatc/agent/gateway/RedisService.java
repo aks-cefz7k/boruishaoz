@@ -189,93 +189,18 @@ public class RedisService {
     }
 
 
-    // 当此数值等于零，则没有客户端订阅帧数据，增加等待时间
-    int pollingFrameSleepIndex = 0;
-
-    //写入到配置文件中，方便修改
-    private int frameDataRateTemp = 1;
-
-    //创建cMap，用于存放redis中的帧数据，中间件
-    private Map<String, String> cMap = new HashMap<>();
-
-    /**
-     * 定时任务
-     * 定时轮询获取消息
-     * 目前不用
-     */
-//    @Scheduled(fixedRate = 100)
-    protected void getAllPollingFrameData() throws InterruptedException {
-        Map<Session, MyWebSocketServer> fwss = WebSocketServer.getPatternWebSocketSet();
-        if (pollingFrameSleepIndex == 0) {
-            Thread.sleep(500);
-        }
-        //存放数据之前先清空之前的数据
-        cMap.clear();
-        /**
-         * 有一个中间件map,用于存放redis的数据
-         * 首先我们要知道将哪些redis的数据读取出来存放到map中
-         * 遍历客户端集合
-         * 所有客户端所请求的set的并集就是需要存放到map中的数据。
-         */
-        Set<String> allClientsRequireSet = new HashSet<>();
-        for (Session session : fwss.keySet()) {
-            String type = "agentframe";
-            Set<String> myClientRequireSet = fwss.get(session).getWebSocketServer().getPollingTypeMap().get(type);
-            if (myClientRequireSet != null && myClientRequireSet.size() > 0) {
-                for (String str : myClientRequireSet) {
-                    allClientsRequireSet.add(str);
-                }
-            }
-        }
-        //向cMap中添加数据
-        if (allClientsRequireSet != null && allClientsRequireSet.size() > 0) {
-            for (String str : allClientsRequireSet) {
-                String value = redisTemplate.opsForValue().get(str);
-                cMap.put(str, value);
-            }
-        } else {
-            return;
-        }
-        pollingFrameSleepIndex = 0;
-
-        for (Session session : fwss.keySet()) {
-            String name = patternWebSocketSet.get(session).getName();
-
-            //根据各个客户端的请求频率发送帧数据
-            String type = "agentframe";
-            Collection<String> set = fwss.get(session).getWebSocketServer().pollingTypeMap.get(type);
-            if (set != null && set.size() > 0) {
-                pollingFrameSleepIndex++;
-            } else {
-                continue;
-            }
-            if (fwss.get(session).getWebSocketServer().getFrameSendRare() * frameDataRateTemp < fwss.get(session).getWebSocketServer().frameSendIndex) {
-                if (sendMessageToClient(set, type, fwss.get(session).getWebSocketServer())) {
-                    fwss.get(session).getWebSocketServer().frameSendIndex = 0;
-                }
-            } else {
-                fwss.get(session).getWebSocketServer().frameSendIndex++;
-            }
-        }
-    }
-
-
     // 把Redis中的value组合成一个json的字符串
     private StringBuffer appendAllValueFromRedis(Collection<String> keySet) {
         int i = 0;// 当前计数器
         keySet.size();
         StringBuffer sendBuffer = new StringBuffer("[");
 
-        for (String value : keySet) {
+        for (String key : keySet) {
             String strFrame;
             try {
-                if (value.equals("asc:agentframe:network")) {
-                    strFrame = cMap.get(value);
-                } else {
-                    strFrame = redisTemplate.opsForValue().get(value);
-                }
+                strFrame = redisTemplate.opsForValue().get(key);
             } catch (Exception e) {
-                log.info("RedisConnectionException: Unable to connect to redis:6379");
+                log.info("RedisConnectionException: Unable to connect to redis:6379,key:%s", key);
                 sendBuffer = new StringBuffer();
                 return sendBuffer;
             }
@@ -298,22 +223,16 @@ public class RedisService {
         int i = 0;// 当前计数器
         keySet.size();
         StringBuffer sendBuffer = new StringBuffer("[");
-        for (String value : keySet) {
+        for (String key : keySet) {
             // 并不是所有设备的消息都要拼接，这里需要过滤
-            String[] params = value.split(":");
+            String[] params = key.split(":");
             String agentid = params[params.length - 1].trim();
             if (deviceIds == null || !deviceIds.contains(agentid)) continue;
-            String strFrame;
+            String strFrame = "";
             try {
-                if (value.equals("asc:agentframe:network")) {
-                    strFrame = cMap.get(value);
-                } else {
-                    strFrame = redisTemplate.opsForValue().get(value.replace(" ", ""));
-                }
-                log.info("value: " + value);
-                log.info(strFrame);
+                strFrame = redisTemplate.opsForValue().get(key.replace(" ", ""));
             } catch (Exception e) {
-                log.info("RedisConnectionException: Unable to connect to redis:6379");
+                log.info("RedisConnectionException: Unable to connect to redis:6379,key:%s", key);
                 sendBuffer = new StringBuffer();
                 return sendBuffer;
             }

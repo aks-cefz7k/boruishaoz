@@ -121,6 +121,7 @@ public class UdpCommunicationStaticPort implements Communication {
             messageKey = agentid;
 
         this.sendmsgtype = sendmsgtype;
+        thread = Thread.currentThread();
 
         // 按顺序进行消息通讯
         globalLock.lock();
@@ -135,26 +136,26 @@ public class UdpCommunicationStaticPort implements Communication {
         lock.lock();
         lockMap.put(messageKey, lock);
 
-        //socket的发送地址和端口
-        InetSocketAddress address = new InetSocketAddress(ip, port);
-        //生成发送包
-        DatagramPacket sendPacket = new DatagramPacket(packData.getM_packData(), packData.getM_packDataSize(), address);
+        try {
+            //socket的发送地址和端口
+            InetSocketAddress address = new InetSocketAddress(ip, port);
+            //生成发送包
+            DatagramPacket sendPacket = new DatagramPacket(packData.getM_packData(), packData.getM_packDataSize(), address);
 
-        // UDP最大发送长度64K
-        if (sendPacket.getLength() > 64000) {
-            logger.warning("Send Packet too Long! Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " KEY:" + messageKey);
-            return -1;
-        }
+            // UDP最大发送长度64K
+            if (sendPacket.getLength() > 64000) {
+                logger.warning("Send Packet too Long! Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " KEY:" + messageKey);
+                return -1;
+            }
 
         //发送数据
-        try {
+
             datagramSocket.send(sendPacket);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.warning("Send Packet Error! Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Msg:" + e.getMessage() + " KEY:" + messageKey);
         }
-        thread = Thread.currentThread();
         messageMap.put(messageKey, this);
-        logger.info("Udp Send Data Thread#" + thread.getId() + " KEY:" + messageKey + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
+//        logger.info("Udp Send Data Thread#" + thread.getId() + " KEY:" + messageKey + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
 
 
         return 0;
