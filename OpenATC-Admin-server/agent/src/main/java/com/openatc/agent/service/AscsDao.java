@@ -349,6 +349,7 @@ public class AscsDao {
             tt.setCode((String) map.get("code"));
             tt.setGeometry(gson.fromJson(geometry, MyGeometry.class));
             tt.setState((String) map.get("state"));
+            tt.setTags((String) map.get("tags"));
             if (map.get("lastTime") != null) {
                 try {
                     tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
@@ -453,18 +454,18 @@ public class AscsDao {
     }
 
 
-    public List<AscsBaseModel> alterStatus(List<AscsBaseModel> ascsBaseModels) {
-        List<String> faultDevAgentids = getFaultDev();
-        for (AscsBaseModel ascsBaseModel : ascsBaseModels) {
-            if (faultDevAgentids.contains(ascsBaseModel.getAgentid())) {
-                if (ascsBaseModel.getState().equals("DOWN")) {
-                    continue;
-                }
-                ascsBaseModel.setState("FAULT");
-            }
-        }
-        return ascsBaseModels;
-    }
+//    public List<AscsBaseModel> alterStatus(List<AscsBaseModel> ascsBaseModels) {
+//        List<String> faultDevAgentids = getFaultDev();
+//        for (AscsBaseModel ascsBaseModel : ascsBaseModels) {
+//            if (faultDevAgentids.contains(ascsBaseModel.getAgentid())) {
+//                if (ascsBaseModel.getState().equals("DOWN")) {
+//                    continue;
+//                }
+//                ascsBaseModel.setState("FAULT");
+//            }
+//        }
+//        return ascsBaseModels;
+//    }
 
     public int updateAscsByReport(DevCover devCover) {
 
@@ -555,8 +556,10 @@ public class AscsDao {
         }
 
         // 分页条件
-        int pageNum = jsonObject.get("pageNum").getAsInt();
+        int pageNum = jsonObject.get("pageNum").getAsInt() - 1;
         int pageRow = jsonObject.get("pageRow").getAsInt();
+        if (pageNum < 0)
+            pageNum = 0;
         String limitCondition = String.format(" limit  %d  offset  %d ",pageRow, pageNum*pageRow );
 
         // 查询条件
@@ -581,13 +584,18 @@ public class AscsDao {
             String temp = String.format("protocol = '%s'",protocol);
             whereCondition = addWhereCondition(whereCondition,temp);
         }
+        String tags = jsonObject.get("tags").getAsString();
+        if( !tags.isEmpty()){
+            String temp = String.format("tags = '%s'",tags);
+            whereCondition = addWhereCondition(whereCondition,temp);
+        }
         String state = jsonObject.get("state").getAsString();
         if( !state.isEmpty()){
             String temp;
             if(state.equals("DOWN"))
-                temp = "(LOCALTIMESTAMP - lastTime)> '1 min')";
+                temp = "(LOCALTIMESTAMP - lastTime)> '1 min'";
             else
-                temp = "(LOCALTIMESTAMP - lastTime)< '1 min')";
+                temp = "(LOCALTIMESTAMP - lastTime)< '1 min'";
             whereCondition = addWhereCondition(whereCondition,temp);
 
         }
