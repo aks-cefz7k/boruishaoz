@@ -17,8 +17,10 @@
       <!-- 相位倒计时 -->
       <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase" :class="{'countdownBg': isLoaded}">
         <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
-          <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('edge.overview.phase')}}{{curPhase.id}}:</span>
-          <span style="float: left;">{{curPhase.phaseCountdown}}</span>
+          <div v-if="curPhase.phaseCountdown !== -1">
+            <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('edge.overview.phase')}}{{curPhase.id}}:</span>
+            <span style="float: left;">{{curPhase.phaseCountdown}}</span>
+          </div>
         </div>
       </div>
       <!-- 手动刷新 -->
@@ -76,8 +78,10 @@
         <!-- 相位倒计时 -->
         <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
           <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
-            <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('edge.overview.phase')}}{{curPhase.id}}:</span>
-            <span style="float: left;">{{curPhase.phaseCountdown}}</span>
+            <div v-if="curPhase.phaseCountdown !== -1">
+              <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('edge.overview.phase')}}{{curPhase.id}}:</span>
+              <span style="float: left;">{{curPhase.phaseCountdown}}</span>
+            </div>
           </div>
         </div>
         <!-- 手动刷新 -->
@@ -506,8 +510,8 @@ export default {
           return
         }
         this.isLoaded = true
-        this.crossInfo = res.data.data
-        this.tempType = this.crossInfo.type
+        this.crossInfo = res.data.data.param
+        this.tempType = res.data.data.type
         // 获取车道相位、行人相位信息（坐标、名称）
         this.mainType = this.tempType.split('-')[0]
         this.mainDirection = this.tempType.split('-')[1]

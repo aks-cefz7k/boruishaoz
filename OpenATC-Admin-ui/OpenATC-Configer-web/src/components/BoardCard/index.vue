@@ -1,7 +1,7 @@
 <template>
     <div class="boradCard">
-        <StageStatus v-show="isPhase" :controlData="controlData" :patternStatusList="patternStatusList"></StageStatus>
-        <PatternStatus :contrloType="contrloType" :stagesChange="stagesChange" :agentId="agentId" :controlData="controlData" :phaseList="phaseList" :cycle="cycle" :syncTime="syncTime" :style="{'margin-top':cycle ? '25px':'0'}" :patternStatusList="patternStatusList" :patternId="patternId" :cycles="cycles"></PatternStatus>
+        <StageStatus v-show="isPhase" :localPatternList="localPatternList" :contrloType="contrloType" :controlData="controlData" :patternStatusList="patternStatusList"></StageStatus>
+        <PatternStatus :localPatternList="localPatternList" :contrloType="contrloType" :stagesChange="stagesChange" :agentId="agentId" :controlData="controlData" :phaseList="phaseList" :cycle="cycle" :syncTime="syncTime" :style="{'margin-top':cycle ? '25px':'0'}" :patternStatusList="patternStatusList" :patternId="patternId" :cycles="cycles"></PatternStatus>
     </div>
 </template>
 
@@ -20,8 +20,10 @@ export default {
   },
   props: {
     contrloType: {
-      type: Boolean,
-      default: false
+      type: Boolean
+    },
+    localPatternList: {
+      type: Array
     },
     stagesChange: {
       type: Array
