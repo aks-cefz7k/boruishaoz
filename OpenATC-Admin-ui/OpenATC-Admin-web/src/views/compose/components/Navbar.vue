@@ -515,6 +515,9 @@ export default {
       })
     },
     handleSelect (key) {
+      if (key === 'others') {
+        return false
+      }
       this.handleSaveTscParam()
       this.handleJump(key)
       this.$store.dispatch('SetOperatedDeviceId', undefined)
