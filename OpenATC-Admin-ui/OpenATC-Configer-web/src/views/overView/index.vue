@@ -139,6 +139,7 @@
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
             <BoardCard
+            ref="boardCard"
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
             :controlData="controlData"
@@ -248,7 +249,15 @@
                       <div class="control-model" v-for="(item, index) in stagesList" :key="index">
                         <div class="single-model" :class="currentStage == index + 1 ? 'single-model-select' : ''">
                           <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
-                          <div class="current-stage-num">{{index + 1}}</div>
+                          <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
+                            <div class="current-stage-num" style="width:20%;">{{index + 1}}</div>
+                            <div style="width:70%;">
+                              <i class="iconfont icon-BRT" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 4"></i>
+                              <i class="iconfont icon-feijidongche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 6"></i>
+                              <i class="iconfont icon-gongjiaoche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 3"></i>
+                              <i class="iconfont icon-youguidianche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 5"></i>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -729,12 +738,18 @@ export default {
     },
     handleStageData (data) {
       this.stagesList = []
+      let boardCard = this.$refs.boardCard
+      let busPhaseData = []
+      if (boardCard) {
+        busPhaseData = boardCard.$children[1].busPhaseData
+      }
       this.currentStage = data.current_stage
       let stages = data.stages
       if (!stages) return
       for (let stage of stages) {
         let tempList = []
         let directionList = []
+        let stageControType = 0
         for (let stg of stage) {
           let currPhase = this.phaseList.filter((item) => {
             return item.id === stg
@@ -742,12 +757,17 @@ export default {
           if (currPhase !== undefined) {
             directionList = [...currPhase.direction, ...directionList]
           }
-          // directionList = [...currPhase.direction, ...directionList]
+          for (let busPhase of busPhaseData) {
+            if (stg === busPhase.phaseid) {
+              stageControType = busPhase.controltype
+            }
+          }
         }
         directionList = [...new Set(directionList)]
         tempList = directionList.map(dir => ({
           id: dir,
-          color: '#606266'
+          color: '#606266',
+          controltype: stageControType
         }))
         this.stagesList.push(tempList)
       }

@@ -55,7 +55,15 @@
           <div class="control-model" v-for="(item, index) in stagesList" :key="index">
             <div class="single-model" @click="selectStages(index + 1)" :class="preselectStages == index + 1 ? 'single-model-select' : ''">
               <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
-              <div class="current-stage-num">{{index + 1}}</div>
+              <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
+                <div class="current-stage-num" style="width:20%;">{{index + 1}}</div>
+                <div style="width:70%;">
+                  <i class="iconfont icon-BRT" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 4"></i>
+                  <i class="iconfont icon-feijidongche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 6"></i>
+                  <i class="iconfont icon-gongjiaoche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 3"></i>
+                  <i class="iconfont icon-youguidianche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 5"></i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
