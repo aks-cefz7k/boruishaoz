@@ -13,9 +13,9 @@
   <div class="crossImg">
     <!-- 右行道路 B-->
     <div class="right-dir-road" v-if="roadDir === 'right'">
-      <div class="centerText" v-if="crossType !== 'Customroads' && isHasPhase" :class="{'countdownBg': isLoaded}">
+      <div class="centerText" v-if="crossType !== 'Customroads' && isHasPhase">
       <!-- 相位倒计时 -->
-      <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
+      <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase" :class="{'countdownBg': isLoaded}">
         <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
           <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('edge.overview.phase')}}{{curPhase.id}}:</span>
           <span style="float: left;">{{curPhase.phaseCountdown}}</span>
@@ -812,7 +812,7 @@ export default {
   z-index: 9;
   display: flex;
   align-items: center;
-  padding-left: 16px;
+  /* padding-left: 16px; */
 }
 .phaseCountdown {
   line-height: 40px;
@@ -825,8 +825,9 @@ export default {
   margin: 0 auto;
 }
 .countdownBg {
-  border-radius: 50%;
+  border-radius: 10px;
   background-color: rgba(94, 90, 90, 0.8);
+  padding-left: 16px;
 }
 .centerText .text {
   display: inline-block;
