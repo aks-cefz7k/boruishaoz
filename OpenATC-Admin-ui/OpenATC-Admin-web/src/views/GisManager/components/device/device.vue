@@ -30,7 +30,7 @@
           </el-table-column>
           <el-table-column
             prop="agentid"
-            :label="$t('openatc.greenwaveoptimize.deviceid')"
+            :label="$t('openatc.devicemanager.crossid')"
             align="center"
             width="80"
           >

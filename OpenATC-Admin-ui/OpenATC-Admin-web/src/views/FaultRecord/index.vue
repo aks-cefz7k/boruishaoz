@@ -1,352 +1,59 @@
 <template>
-<div class="openatc-faultrecord">
-    <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
-    <div style="float:left;margin:15px 20px;">
-      <div class="common-table-title">{{$t('openatc.main.faultrecord')}}</div>
-    </div>
-    <div class="filter-container">
-      <el-row>
-        <el-col :span="7">
-        <el-input
-            :placeholder="$t('openatc.common.searchdeviceid')"
-            v-model="devsfilter"
-            style="width: 200px;margin-right: 10px;"
-        />
-        </el-col>
-        <el-col :span="14">
-            <el-date-picker
-                v-model="timeValue"
-                popper-class="common-date-popper"
-                size="small"
-                type="datetimerange"
-                style="height:40px;"
-                :range-separator="$t('openatc.usermanager.to')"
-                :start-placeholder="$t('openatc.usermanager.starttime')"
-                :end-placeholder="$t('openatc.usermanager.endtime')">
-            </el-date-picker>
-        </el-col>
-        <el-col :span="3">
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          @click="searchRecord()"
-          >{{ $t("openatc.button.search") }}</el-button>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="devs-table">
-      <el-table
-          :data="tableData"
-          size="mini"
-          :max-height="tableHeight"
-          v-loading.body="listLoading"
-          style="width: 100%"
-          id="footerBtn">
-          <el-table-column
-          type="index"
-          align="center">
-          </el-table-column>
-          <el-table-column
-          prop="agentid"
-          :label="$t('openatc.faultrecord.deviceid')"
-          sortable
-          align="center">
-          </el-table-column>
-           <el-table-column
-          prop="m_wFaultID"
-          :label="$t('openatc.faultrecord.faultid')"
-          align="center">
-          </el-table-column>
-          <el-table-column
-          prop="m_byFaultBoardType"
-          :formatter="formatterBoardType"
-          :label="$t('openatc.faultrecord.boardcardtype')"
-          sortable
-          align="center">
-          </el-table-column>
-          <el-table-column
-          width="150px"
-          prop="m_unFaultOccurTime"
-          :label="$t('openatc.faultrecord.faultbegintime')"
-          sortable
-          align="center">
-          </el-table-column>
-          <el-table-column
-          width="150px"
-          prop="m_unFaultRenewTime"
-          :label="$t('openatc.faultrecord.faultendtime')"
-          align="center">
-          </el-table-column>
-          <el-table-column
-            prop="m_wFaultType"
-            :formatter="m_wFaultTypes"
-            :label="$t('openatc.faultrecord.faulttype')"
-            align="center"
-            >
-          </el-table-column>
-          <el-table-column
-          :formatter="m_wSubFaultType"
-          prop="m_wSubFaultType"
-          :label="$t('openatc.faultrecord.faultchild')"
-          sortable
-          align="center">
-          </el-table-column>
-          <el-table-column
-          :formatter="m_byFaultLevel"
-          prop="m_byFaultLevel"
-          :label="$t('openatc.faultrecord.faultgrade')"
-          sortable
-          align="center">
-          </el-table-column>
-          <el-table-column
-          prop="m_byFaultDescValue"
-          :label="$t('openatc.faultrecord.faultvaluedetail')"
-          align="center">
-          </el-table-column>
-          <el-table-column
-          prop="operator"
-          :label="$t('openatc.faultrecord.operator')"
-          align="center">
-          </el-table-column>
-          <el-table-column
-          prop="operationTime"
-          width="150px"
-          :label="$t('openatc.faultrecord.operationTime')"
-          align="center">
-          </el-table-column>
-          <el-table-column
-          prop="enumerate"
-          :label="$t('openatc.faultrecord.enumerate')"
-          align="center">
-          <template slot-scope="scope">
-            <el-tag v-show="scope.row.enumerate" :type="scope.row.enumerate === '1'?'info':scope.row.enumerate === '2'?'success':scope.row.enumerate === '0'?'':''">{{formatterEnumerate(scope.row)}}</el-tag>
-          </template>
-          </el-table-column>
-          <el-table-column :label="$t('openatc.faultrecord.operation')" align="center" width="240">
-          <template slot-scope="scope">
-              <el-button type="text" @click="handleDelete(scope.row)">{{$t('openatc.common.delete')}}</el-button>
-          </template>
-          </el-table-column>
-      </el-table>
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum" :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" style='margin:0px;'>
-    </el-pagination>
-    </div>
+<div class="faultPage openatc-faultrecord">
+  <div class="tabButton">
+    <el-button-group>
+        <span v-for="(item, index) in chooseButtons"
+          :key="index" v-on:click="()=>handleSwitchPage(item.key)"
+          class="btn"
+          :class="{'btnFocus': item.active === true}"
+          :style="{'borderRadius': item.borderRadius}">{{item.value}}</span>
+    </el-button-group>
+  </div>
+  <CurrentFault v-if="curpagekey === 'realtimefault'"/>
+  <HistoryFault v-if="curpagekey === 'historicalfault'"/>
 </div>
 </template>
 
 <script>
-import { getMessageByCode } from '@/utils/responseMessage'
-import { GetAllFault, GetAllFaultRange, DeleteFaultById } from '@/api/fault'
-import Messagebox from '../../components/MessageBox'
+import HistoryFault from './historyFault'
+import CurrentFault from './realtimeFault'
 export default {
-  components: { Messagebox },
+  components: { HistoryFault, CurrentFault },
   data () {
     return {
-      timeValue: '',
-      tableHeight: 700,
-      screenHeight: window.innerHeight, // 屏幕高度
-      schfilter: '',
-      listLoading: false,
-      devsfilter: '',
-      messageboxVisible: false,
-      tableData: [],
-      listQuery: {
-        pageNum: 1, // 页码
-        pageRow: 50 // 每页条数
-      },
-      totalCount: 0 // 分页组件--数据总条数
+      curpagekey: 'realtimefault',
+      chooseButtons: [
+        {
+          key: 'realtimefault',
+          value: this.$t('openatc.faultrecord.realtimefault'),
+          active: true,
+          borderRadius: '4px 0 0 4px'
+        },
+        {
+          key: 'historicalfault',
+          value: this.$t('openatc.faultrecord.historicalfault'),
+          active: false,
+          borderRadius: '0px 4px 4px 0'
+        }
+      ]
     }
   },
   created () {
-    this.getAllRecord()
-  },
-  mounted: function () {
-    var _this = this
-    _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-      window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
-      }
-    })
-  },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-    }
   },
   methods: {
-    handleDelete (row) {
-      let dev = row
-      this.deleteId = dev.id
-      this.messageboxVisible = true
-    },
-    formatterBoardType (row, column) {
-      let boardType = row.m_byFaultBoardType
-      let res = ''
-      if (boardType === 1) {
-        res = this.$t('openatc.faultrecord.maincontrolboard')
-      } else if (boardType === 2) {
-        res = this.$t('openatc.faultrecord.lightcontrolversion')
-      } else if (boardType === 3) {
-        res = this.$t('openatc.faultrecord.carinspectionboard')
-      } else if (boardType === 4) {
-        res = this.$t('openatc.faultrecord.ioboard')
-      }
-      return res
-    },
-    formatterEnumerate (row, column) {
-      let enumerate = row.enumerate
-      let res = ''
-      if (enumerate === '0') {
-        res = this.$t('openatc.faultrecord.untreated')// 未处理
-      } else if (enumerate === '1') {
-        res = this.$t('openatc.faultrecord.ignored')// 忽略
-      } else if (enumerate === '2') {
-        res = this.$t('openatc.faultrecord.confirmed')// 确认
-      }
-      return res
-    },
-    m_wSubFaultType (row, column) {
-      let wSubFaultType = row.m_wSubFaultType
-      let res = ''
-      if (wSubFaultType === 0) {
-        res = ''
-      } else if (wSubFaultType === 1) {
-        res = this.$t('openatc.faultrecord.powerup')
-      } else if (wSubFaultType === 2) {
-        res = this.$t('openatc.faultrecord.powerdown')
-      } else if (wSubFaultType === 3) {
-        res = this.$t('openatc.faultrecord.powerno')
-      } else if (wSubFaultType === 4) {
-        res = this.$t('openatc.faultrecord.powerfault')
-      }
-      return res
-    },
-    m_byFaultLevel (row, column) {
-      let byFaultLevel = row.m_byFaultLevel
-      let res = ''
-      if (byFaultLevel === 1) {
-        res = this.$t('openatc.faultrecord.general')
-      } else if (byFaultLevel === 2) {
-        res = this.$t('openatc.faultrecord.degradation')
-      } else if (byFaultLevel === 3) {
-        res = this.$t('openatc.faultrecord.serious')
-      }
-      return res
-    },
-    m_wFaultTypes (row, column) {
-      let faultType = row.m_wFaultType
-      let res = ''
-      if (faultType >= 101 && faultType <= 199) {
-        res = this.$t('openatc.faultrecord.maincontrolboardfault')
-      } else if (faultType >= 201 && faultType <= 299) {
-        res = this.$t('openatc.faultrecord.lightcontrolversionfault')
-      } else if (faultType >= 301 && faultType <= 399) {
-        res = this.$t('openatc.faultrecord.carinspectionboardfault')
-      } else if (faultType >= 401 && faultType <= 499) {
-        res = this.$t('openatc.faultrecord.ioboardfault')
-      }
-      return res
-    },
-    formateDate (newDate) {
-      var y = newDate.getFullYear()
-      var m = newDate.getMonth() + 1
-      m = m < 10 ? ('0' + m) : m
-      var d = newDate.getDate()
-      d = d < 10 ? ('0' + d) : d
-      var h = newDate.getHours()
-      h = h < 10 ? ('0' + h) : h
-      var minute = newDate.getMinutes()
-      minute = minute < 10 ? ('0' + minute) : minute
-      var second = newDate.getSeconds()
-      second = second < 10 ? ('0' + second) : second
-      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
-    },
-    searchRecord () {
-      if (this.timeValue) {
-        let beginTime = this.formateDate(this.timeValue[0])
-        let endTime = this.formateDate(this.timeValue[1])
-        GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
-          if (data.data.success !== true) {
-            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-            return
-          }
-          this.tableData = data.data.data.content
-          this.totalCount = data.data.data.total
-        })
-      } else if (this.devsfilter) {
-        let beginTime = ''
-        let endTime = ''
-        GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
-          if (data.data.success !== true) {
-            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-            return
-          }
-          this.tableData = data.data.data.content
-          this.totalCount = data.data.data.total
-        })
-      } else {
-        this.getAllRecord()
-      }
-    },
-    getAllRecord () {
-      this.listLoading = true
-      GetAllFault(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
-        if (data.data.success !== true) {
-          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-          return
-        }
-        if (data.data.success) {
-          this.listLoading = false
-          this.tableData = data.data.data.content
-          this.totalCount = data.data.data.total
+    changeBtnStyle (key) {
+      // 选中按钮高亮
+      this.chooseButtons.forEach(button => {
+        button.active = false
+        if (button.key === key) {
+          button.active = true
+          this.curpagekey = key
         }
       })
     },
-    handleSizeChange (val) {
-      // 改变每页数量
-      this.listQuery.pageRow = val
-      this.getAllRecord()
-    },
-    handleCurrentChange (val) {
-      // 改变页码
-      this.listQuery.pageNum = val
-      this.getAllRecord()
-    },
-    cancle () {
-      this.messageboxVisible = false
-    },
-    ok () {
-      DeleteFaultById(this.deleteId).then(res => {
-        if (!res.data.success) {
-          this.$message.error(res.data.message)
-          this.$message({
-            message: this.$t('openatc.common.deletefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
-          return
-        }
-        this.$message({
-          message: this.$t('openatc.common.deletesuccess'),
-          type: 'success'
-        })
-        this.messageboxVisible = false
-        this.getAllRecord()
-      })
+    handleSwitchPage (key) {
+      this.changeBtnStyle(key)
     }
-
   }
 }
 </script>

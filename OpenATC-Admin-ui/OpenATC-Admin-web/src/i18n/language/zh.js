@@ -142,7 +142,18 @@ const zh = {
       'operator': '确认者',
       'operationTime': '确认时间',
       'enumerate': '确认结果',
-      'operation': '操作'
+      'operation': '操作',
+      'realtimefault': '实时故障',
+      'historicalfault': '历史故障',
+      'boardtype': '板卡类型',
+      'mainfaulttype': '故障主类型',
+      'confirmresults': '确认结果',
+      'intersectionname': '路口名称',
+      'faulttime': '故障发生时间',
+      'isdelfaultrecord': '是否删除此条故障记录？',
+      'channel': '通道',
+      'detector': '检测器',
+      'port': '端口'
     },
     'devicemanager': {
       'devicelist': '路口列表',
@@ -186,7 +197,7 @@ const zh = {
       'faultGrade': '故障等级',
       'faultValue': '故障值',
       'crowsid': '路口ID',
-      'updateDeviceId': '修改设备ID',
+      'updateDeviceId': '修改路口ID',
       'deviceNotNull': '设备ID不能为空！',
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
       'thirdplatformid': '第三方ID',
@@ -345,10 +356,13 @@ const zh = {
     'record': {
       'user': '用户',
       'updatetime': '更新时间',
+      'opertime': '操作时间',
       'originadress': '源地址',
       'deviceid': '设备ID',
       'messagetype': '消息类型',
+      'subInfoType': '消息子类型',
       'reponsestatus': '返回状态',
+      'errorReason': '错误原因',
       'opera': '操作',
       'export': '导出',
       'view': '查看'
@@ -360,7 +374,8 @@ const zh = {
       'unrelateddevice': '未关联设备',
       'relateddevice': '已关联设备',
       'modifyorganization': '修改组织',
-      'addorganization': '添加组织'
+      'addorganization': '添加组织',
+      'emptyname': '名称为空!'
     },
     'dutyroute': {
       'clickaddroute': '点击添加按钮添加路线',

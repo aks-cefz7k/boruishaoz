@@ -713,32 +713,6 @@
   .state-search {
     margin-left: 2px;
   }
-  //故障记录页面样式
-  .openatc-faultrecord {
-    margin-top: 15px;
-    .el-range-editor .el-range-input {
-      background-color: $--background-color-base;
-    }
-    .el-date-editor .el-range-separator {
-      padding: 0
-    }
-    .el-range-editor--small .el-range-separator {
-      line-height: 32px;
-    }
-    .devs-table {
-      position: absolute;
-      top: 130px;
-      left: 20px;
-      right: 20px;
-      border: solid 1px $--border-color-lighter;
-      overflow: auto;
-    }
-    .filter-container {
-      float: right;
-      margin-top: 10px;
-      margin-right: 20px;
-    }
-  }
   // 用户管理页面样式
   .openatc-user {
     margin-top: 15px;
@@ -1100,7 +1074,23 @@
       .filter-container {
         float: right;
         margin-top: 10px;
-        margin-right: 20px;
+        // margin-right: 20px;
+        .header-span {
+          color: $--color-text-secondary;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 14px;
+        }
+        .timepicker {
+          .el-date-editor .el-range-separator {
+            line-height: 29px;
+          }
+          .el-date-editor .el-range-input {
+            color: $--color-text-primary;
+            background-color: $--color-white;
+          }
+        }
       }
   }
   // 组织机构页面样式
@@ -1943,7 +1933,7 @@ table td {
   .header {
     float:right;
     margin-top: -70px;
-    margin-right:50px;
+    margin-right: 120px;
     .crossName {
       float: left;
       margin-right: 8px;
@@ -2328,5 +2318,82 @@ table td {
   pre {
     max-height: 880px;
     overflow: auto;
+  }
+}
+// 故障记录
+.faultPage {
+  position: relative;
+  height: 100%;
+  .tabButton {
+    margin: 20px 16px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    .btn {
+      float: left;
+      width: 124px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      background-color: $--color-white;
+      border: solid 1px $--color-primary;
+      color: $--color-primary;
+      cursor: pointer;
+    }
+    .btnFocus {
+      background-color: $--color-primary;
+      border: solid 1px $--color-primary;
+      color: #fff;
+    }
+  }
+  .openatc-historyfaultrecord {
+    .filter-container {
+      float: right;
+      padding-left: 280px;
+      .filter {
+        float: left;
+        margin-left: 20px;
+        margin-bottom: 10px;
+        .header-span {
+          color: $--color-text-secondary;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 14px;
+        } 
+      }
+    }
+  }
+  .openatc-realtimefaultrecord {
+    padding-top: 90px;
+    margin: 0 20px;
+  }
+}  //故障记录页面样式
+.openatc-faultrecord {
+  margin-top: 15px;
+  .el-range-editor .el-range-input {
+    background-color: $--background-color-base;
+  }
+  .el-date-editor .el-range-separator {
+    padding: 0
+  }
+  .el-range-editor--small .el-range-separator {
+    line-height: 32px;
+  }
+  .devs-table {
+    position: absolute;
+    top: 130px;
+    left: 20px;
+    right: 20px;
+    border: solid 1px $--border-color-lighter;
+    overflow: auto;
+  }
+  .filter-container {
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
   }
 }

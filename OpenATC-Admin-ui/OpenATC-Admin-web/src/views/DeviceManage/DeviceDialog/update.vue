@@ -23,7 +23,7 @@
           :visible.sync="innerVisible"
           append-to-body>
           <el-form ref="deviceId" :model="innerForm">
-            <el-form-item :label="$t('openatc.devicemanager.deviceid')" label-width="15%">
+            <el-form-item :label="$t('openatc.devicemanager.crowsid')" label-width="15%">
               <el-input v-model="innerForm.id" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
@@ -355,11 +355,6 @@ export default {
       UpdateDeviceId(data).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.updatefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
           return
         }
         this.innerVisible = false

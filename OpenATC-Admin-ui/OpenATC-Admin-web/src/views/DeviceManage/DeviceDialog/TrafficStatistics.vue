@@ -35,6 +35,7 @@
           </el-date-picker>
         </div>
           <el-button type="primary"
+                    style="position:absolute;right:60px;"
                     icon="el-icon-search"
                     class="searchbtn"
                     @click="doSearch">{{$t(`openatc.common.search`)}}</el-button>

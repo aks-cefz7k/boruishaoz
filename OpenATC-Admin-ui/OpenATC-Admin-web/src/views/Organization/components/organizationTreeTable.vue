@@ -218,7 +218,7 @@ export default {
     },
     checkEdit (label, description) {
       if (!label) {
-        this.$message.error(this.$t('edge.common.nullerror'))
+        this.$message.error(this.$t('openatc.organization.emptyname'))
         return false
       }
       if (this.dialogStatus === 'update') {

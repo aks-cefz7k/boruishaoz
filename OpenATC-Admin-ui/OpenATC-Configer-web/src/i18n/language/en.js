@@ -112,6 +112,7 @@ const en = {
       'platform': 'platform',
       'online': 'Online',
       'offline': 'Offline',
+      'connected': 'Connected',
       'onlineing': 'Offline...',
       'controlmode': 'Control Mode',
       'manual': 'Manual',
@@ -445,7 +446,10 @@ const en = {
       'greenoutputvoltage': 'Green Output Voltage',
       'greenoffresidualpower': 'Green Off Residual Power',
       'greenonoutputpower': 'Green On Output Power',
-      'inputvoltage': 'Input Voltage'
+      'inputvoltage': 'Input Voltage',
+      'implement': 'Implement',
+      'implementsuccess': 'Implement success!',
+      'noClickedLamp': 'No channel light terminal selected!'
     },
     'pedestrianDetector': {
       'desc': 'Description ',
@@ -875,6 +879,11 @@ const en = {
       '20003': 'id cannot be empty and cannot be 0',
       '20004': 'No parameter record',
       '20005': 'No device id found',
+      '20006': 'Data stream close failed!',
+      '20007': 'Json Type conversion failed!',
+      '20008': 'File read failed!',
+      '20009': 'File does not exist!',
+      '20010': 'I/O close mistake!',
       // 全局异常错误
       '0001': 'Null pointer',
       '0002': 'Wrong request method',
@@ -901,19 +910,50 @@ const en = {
       '3017': 'Organization does not exist',
       '3018': 'Access ip is inconsistent with user ip, login is forbidden',
       // 消息通讯错误
-      '4001': '错误请求',
-      '4002': '错误应答',
-      '4003': '设备不在线',
-      '4004': '重复的设备id',
-      '4005': '信号机应答为空',
-      '4006': '信号机应答操作类型为空',
+      '4001': 'Error Request',
+      '4002': 'Error Response',
+      '4003': 'Device Not Online',
+      '4004': 'Repeat ID',
+      '4005': 'Device Empty Response',
+      '4006': 'Device Response Operation Is None',
+      // 错误子类型
+      // error-request
+      '4100': 'agentid is null!',
+      '4101': 'operation is null!',
+      '4102': 'infotype is null!',
+      '4103': 'infodata is null!',
+      '4104': 'JSON format is incorrect!',
+      '4105': 'agentid not exist!',
+      '4106': 'Unknown operation type!',
+      '4107': 'Unknown infotype!',
+      '4108': 'protocol is null!',
+      '4109': 'Receive Time Out or Receive Incorrect Data!',
+      // error-response
+      '4200': 'response is null!',
+      '4201': 'response format error!',
+      '4203': 'Unknown request instruction!',
+      '4204': 'Comm Send Data error!',
+      '4205': 'Udp Receive InfoType error by Send InfoType',
+      '4206': 'Can not find UdpCommunication for Receive Msg',
+      '4207': 'Error response from feature download',
+      // device not online
+      '4301': 'Device not online',
       // 协调路线错误
-      '5001': '重复的协调路线名称',
+      '5001': 'Repeat Route Name',
       // 勤务路线错误
-      '6001': '重复的勤务路线名称',
-      '6002': '勤务路线正在执行中',
+      '6001': 'Repeat Route Name',
+      '6002': 'The route is on execution',
       // 流量错误
-      '7001': 'ftp客户端连接失败'
+      '7001': 'ftp clent connect fail',
+      // 组织机构错误
+      '11001': 'Repeat Name!',
+      // 路口管理错误
+      '8001': 'device not found By Agentid!',
+      '8002': 'device is found By CoordinateRoute',
+      '8003': 'device is found By VipRoute',
+      '8004': 'Agentid is duplicated',
+      // 错误类型子类型，返回码第二层
+      '8101': 'Device can not delete!'
     }
   }
 }

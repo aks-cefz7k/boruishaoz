@@ -32,6 +32,7 @@
         </el-table-column>
         <el-table-column
           prop="m_byFaultBoardType"
+          :formatter="formatterBoardType"
           :label="$t('openatc.devicemanager.boardCardType')"
           sortable
           width="180">
@@ -50,6 +51,7 @@
         </el-table-column>
         <el-table-column
           prop="m_byFaultDescValue"
+          :formatter="m_byFaultDescValue"
           :label="$t('openatc.devicemanager.faultValue')"
           sortable
           width="100">
@@ -62,7 +64,8 @@
         </el-table-column>
         <el-table-column :label="$t('openatc.devicemanager.operation')" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" @click="onIgnoreClick(scope.row.id)">{{$t('openatc.button.ignore')}}</el-button>
+          <el-button type="primary" @click="onIgnoreClick(scope.row, '2')">{{$t('openatc.faultrecord.confirm')}}</el-button>
+          <el-button type="primary" @click="onIgnoreClick(scope.row, '1')">{{$t('openatc.button.ignore')}}</el-button>
         </template>
         </el-table-column>
       </el-table>
@@ -72,7 +75,7 @@
 </template>
 
 <script>
-import { DeleteFaultById } from '@/api/fault'
+import {enumerateCheck} from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'FaultDetail',
@@ -107,30 +110,44 @@ export default {
     formatDeviceInfo (list) {
       this.formateDateForAllFault(list)
     },
-    formatBoardType (dev) {
-      let typecode = dev.m_byFaultBoardType
-      let type
-      switch (typecode) {
-        case 1:
-          type = this.$t('edge.fault.tab1')
-          break
-        case 2:
-          type = this.$t('edge.fault.tab2')
-          break
-        case 3:
-          type = this.$t('edge.fault.tab3')
-          break
-        case 4:
-          type = this.$t('edge.fault.tab4')
-          break
-        default:
-          type = ''
+    formatterBoardType (row, column) {
+      let boardType = row.m_byFaultBoardType
+      let res = ''
+      if (boardType === 1) {
+        res = this.$t('openatc.faultrecord.maincontrolboard')
+      } else if (boardType === 2) {
+        res = this.$t('openatc.faultrecord.lightcontrolversion')
+      } else if (boardType === 3) {
+        res = this.$t('openatc.faultrecord.carinspectionboard')
+      } else if (boardType === 4) {
+        res = this.$t('openatc.faultrecord.ioboard')
       }
-      dev.m_byFaultBoardType = type
+      return res
     },
+    // formatBoardType (dev) {
+    //   let typecode = dev.m_byFaultBoardType
+    //   let type
+    //   switch (typecode) {
+    //     case 1:
+    //       type = this.$t('edge.fault.tab1')
+    //       break
+    //     case 2:
+    //       type = this.$t('edge.fault.tab2')
+    //       break
+    //     case 3:
+    //       type = this.$t('edge.fault.tab3')
+    //       break
+    //     case 4:
+    //       type = this.$t('edge.fault.tab4')
+    //       break
+    //     default:
+    //       type = ''
+    //   }
+    //   dev.m_byFaultBoardType = type
+    // },
     formateDateForAllFault (datas) {
       for (let data of datas) {
-        this.formatBoardType(data)
+        // this.formatBoardType(data)
         if (this.$i18n.locale === 'en') {
           if (data.m_wFaultType === 103) {
             data.m_wSubFaultType = this.TZParamSubtypeMapEn.get(data.m_wSubFaultType)
@@ -159,28 +176,40 @@ export default {
       }
       return datas
     },
-    onIgnoreClick (id) {
+    onIgnoreClick (row, enumerate) {
       let _this = this
-      DeleteFaultById(id).then(res => {
+      let id = row.m_wFaultID
+      enumerateCheck(row.agentid, id, enumerate).then(res => {
         if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.deletefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
+          _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
           return
         }
         this.dialogFormVisible = false
         this.$message({
-          message: this.$t('openatc.common.deletesuccess'),
+          message: this.$t('openatc.common.operationsuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
-            _this.$parent.getList()
+            _this.$parent.handleFault(row)
           }
         })
       })
+    },
+    m_byFaultDescValue (row) {
+      let res = ''
+      let faultDesc = row.m_byFaultDescValue
+      let boardType = row.m_byFaultBoardType
+      if (faultDesc && faultDesc.length) {
+        res = faultDesc.join(',')
+        if (boardType === 2) {
+          res = this.$t('openatc.faultrecord.channel') + res
+        } else if (boardType === 3) {
+          res = this.$t('openatc.faultrecord.detector') + res
+        } else if (boardType === 4) {
+          res = this.$t('openatc.faultrecord.port') + res
+        }
+      }
+      return res
     },
     closeFormDialog () {
 
