@@ -462,20 +462,20 @@ export default {
       }
       // this.handleCurrentChange(val1)
       if (val2.length > 0) { // 此种情况为收起看板]
-        this.getRowStages(val1.rings)
+        this.getRowStages(val1.rings, val1.id)
       }
     },
     handleSplit (index) {
       let currPattern = this.patternList[index]
       // this.handleCurrentChange(currPattern)
       // this.currentPattern = this.patternList[index]
-      this.getRowStages(currPattern.rings)
+      this.getRowStages(currPattern.rings, index + 1)
     },
     handleClick (tab, event) {
       if (tab.paneName === 'stage') {
       }
     },
-    getRowStages (rings) {
+    getRowStages (rings, id) {
       let agentId = getIframdevid()
       // agentId = '40001'
       if (!agentId) {
@@ -493,7 +493,7 @@ export default {
           return
         }
         // let TscData = JSON.parse(JSON.stringify(data.data.data.data))
-        this.handleStageData(rings) // 处理阶段（驻留）stage数据
+        this.handleStageData(rings, id) // 处理阶段（驻留）stage数据
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
