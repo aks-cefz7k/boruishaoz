@@ -11,6 +11,7 @@ import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnum;
 import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.*;
@@ -192,17 +193,19 @@ public class FeatureServiceImpl implements FeatureService {
      */
     @Override
     public RESTRet saveFeatureAll(MessageData requestData) {
-        // todo 同一个agentid存在多条数据
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         String createTime = sdf.format(date);
         requestData.setCreatetime(createTime);
 
         int row = featureDao.saveFeatureAll(requestData);
-        if (row > 0){
+        if (row == 0){
+            InnerError innerError = RESTRetUtils.innerErrorObj(requestData.getAgentid(), IErrorEnumImplInner.E_207, null);
+            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_4002,innerError);
+        }else {
             return RESTRetUtils.successObj("success");
         }
-        return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_4002);
+
     }
 
     /**
@@ -212,13 +215,36 @@ public class FeatureServiceImpl implements FeatureService {
      */
     @Override
     public RESTRet getFeatureAll(String agentid) {
+        String data;
+        //数据库中不存在数据（可优化为捕获具体异常，分情况处理）
         try {
-            String data = featureDao.selectFeatureAll(agentid);
+            data = featureDao.selectFeatureAll(agentid);
+        } catch (Exception e){
+            InnerError innerError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_109, null);
+            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_2002,innerError);
+        }
+
+        try {
             MessageData messageData = gson.fromJson(data, MessageData.class);
             return RESTRetUtils.successObj(messageData);
         }catch (Exception e){
-            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_4002);
+            InnerError innerError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_104, null);
+            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_4005,innerError);
         }
+    }
+
+    /**
+     * 根据设备id删除数据库中该设备的参数
+     * @param agentid
+     */
+    @Override
+    public RESTRet deleteFeatureByAgentid(String agentid) {
+        int rows = featureDao.deleteFeatureByAgentid(agentid);
+        if (rows == 0){
+            InnerError innerError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_105, null);
+            RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_2002,innerError);
+        }
+        return RESTRetUtils.successObj("success");
     }
 
 

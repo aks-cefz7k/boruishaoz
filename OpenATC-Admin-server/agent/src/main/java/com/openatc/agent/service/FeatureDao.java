@@ -23,14 +23,19 @@ public class FeatureDao {
 
     private Gson gson = new Gson();
 
-    public int saveFeatureAll(MessageData requestData) {
+    public int saveFeatureAll(MessageData requestData){
         String agentid = requestData.getAgentid();
         String time = requestData.getCreatetime();
         String data = gson.toJson(requestData);
         // 保证数据库中每个设备最多有一条记录
         String sql = String.format("INSERT INTO featureall (agentid,time,data) VALUES ('%s','%s','%s')",agentid,time,data);
         sql = sql + String.format("ON CONFLICT(agentid) DO UPDATE SET time='%s',data='%s'",time,data);
-        int rows = jdbcTemplate.update(sql);
+        int rows;
+        try {
+            rows = jdbcTemplate.update(sql);
+        } catch (Exception e){
+            rows = 0;
+        }
         return rows;
     }
 
@@ -38,4 +43,16 @@ public class FeatureDao {
         String sql = String.format("select data from featureall where agentid='%s'",agentid);
         return jdbcTemplate.queryForObject(sql, String.class);
     }
+
+    public int deleteFeatureByAgentid(String agentid) {
+        String sql = String.format("delete from featureall where agentid='%s'",agentid);
+        int rows;
+        try {
+            rows = jdbcTemplate.update(sql);
+        }catch (Exception e){
+            rows = 0;
+        }
+        return rows;
+    }
+
 }

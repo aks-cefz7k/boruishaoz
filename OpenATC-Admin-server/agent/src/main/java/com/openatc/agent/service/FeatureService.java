@@ -22,4 +22,6 @@ public interface FeatureService {
      RESTRet saveFeatureAll(MessageData requestData);
 
      RESTRet getFeatureAll(String agentid);
+
+    RESTRet deleteFeatureByAgentid(String agentid);
 }
