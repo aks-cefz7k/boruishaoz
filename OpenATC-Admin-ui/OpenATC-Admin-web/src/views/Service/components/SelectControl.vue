@@ -60,6 +60,10 @@ export default {
       value: [],
       options: [
         {
+          value: -1,
+          label: this.$t('openatc.dutyroute.unknowControl')
+        },
+        {
           value: 0,
           label: this.$t('openatc.dutyroute.autonomouscontrol')
         },

@@ -184,6 +184,8 @@ export default {
           if (item.agentid === state.agentid) {
             item.state = state.state
             item.resttime = state.resttime
+            item.currentControl = state.control ? state.control : -1
+            item.currentControlName = this.getControlName(item.currentControl)
             let controlName = this.getControlName(item.control)
             item.controlName = controlName
             for (let dev of this.devicesData) {

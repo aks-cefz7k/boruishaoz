@@ -12,9 +12,9 @@
 <template>
   <el-card class="serviceroute-routeCard" v-show="isShow">
     <div slot="header" class="clearfix">
-      <span
-        ><strong>{{ $t("openatc.dutyroute.attributes") }}</strong></span
-      >
+      <span style="vertical-align:middle;">
+        {{ $t("openatc.dutyroute.currentControl") }} : {{node.currentControlName}}
+      </span>
       <el-button
         style="float: right; padding: 3px 0"
         type="text"
