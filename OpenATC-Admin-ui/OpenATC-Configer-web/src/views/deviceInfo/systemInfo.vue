@@ -58,7 +58,7 @@
                 <el-option
                   v-for="item in stepTypeOptions"
                   :key="item.value"
-                  :label="$t('edge.deviceinfo.step' + item.id)"
+                  :label="item.label"
                   :value="item.value">
                 </el-option>
               </el-select>
@@ -343,15 +343,7 @@ export default {
       },
       loading: {},
       commutypeOptions: [{label: 'TCP', value: 1}, {label: 'UDP', value: 2}, {label: 'RS232', value: 3}],
-      stepTypeOptions: [{
-        value: 'stage',
-        // label: '阶段',
-        id: '0'
-      }, {
-        value: 'step',
-        // label: '色步',
-        id: '1'
-      }],
+      stepTypeOptions: [{label: this.$t('edge.deviceinfo.step0'), value: 0}, {label: this.$t('edge.deviceinfo.step1'), value: 1}],
       hourOptions: [],
       minuteOptions: []
     }
