@@ -139,6 +139,7 @@
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
             <BoardCard
+            ref="boardCard"
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
             :controlData="controlData"
@@ -239,8 +240,28 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
                 </div>
-                <div class="cross-content">
+                <div class="cross-content" v-show="closePhase && closePhase.length > 0">
                   <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
+                </div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.currentstage')}}:</div>
+                  <div style="margin-left: 85PX;" >
+                    <div style="width: 100%; height: auto;">
+                      <div class="control-model" v-for="(item, index) in stagesList" :key="index">
+                        <div class="single-model" :class="currentStage == index + 1 ? 'single-model-select' : ''">
+                          <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
+                          <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
+                            <div class="current-stage-num" style="width:20%;">{{index + 1}}</div>
+                            <div style="width:70%;">
+                              <i class="iconfont icon-BRT" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 4"></i>
+                              <i class="iconfont icon-feijidongche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 6"></i>
+                              <i class="iconfont icon-gongjiaoche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 3"></i>
+                              <i class="iconfont icon-youguidianche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 5"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -269,6 +290,7 @@ import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
 import { GetAllFaultRange } from '@/api/fault'
 import FaultDetailModal from '@/components/FaultDetailModal'
+import xdrdirselector from '@/components/XRDDirSelector'
 export default {
   name: 'overview',
   components: {
@@ -281,7 +303,8 @@ export default {
     CurPhase,
     ManualControlModal,
     ClosePhaseControlModal,
-    FaultDetailModal
+    FaultDetailModal,
+    xdrdirselector
   },
   data () {
     return {
@@ -330,8 +353,8 @@ export default {
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
       ParamsMode: new Map([[0, '自主控制'], [1, '本地手动'], [2, '平台控制'], [3, '配置软件控制'], [4, '遥控器控制'], [5, '黄闪器控制'], [6, '降级控制'], [7, '脚本控制'], [8, '算法控制']]),
       ParamsModeEn: new Map([[0, 'Autonomous Control'], [1, 'Local Manual'], [2, 'Platform Control'], [3, 'Configuration Software Control'], [4, 'Remote Control'], [5, 'Yellow Flasher Control'], [6, 'Degradation Control'], [7, 'Script Control'], [8, 'Algorithm Control']]),
-      ParamsControl: new Map([[0, '自主控制'], [1, '黄闪'], [2, '全红'], [3, '关灯'], [4, '步进'], [5, '定周期控制'], [6, '单点感应控制'], [7, '协调感应控制'], [8, '方案选择控制'], [9, '自适应控制'], [10, '无电缆控制'], [11, '有电缆控制'], [12, '行人过街控制'], [13, '方案恢复过渡']]),
-      ParamsControlEn: new Map([[0, 'Auto Control'], [1, 'Yellow Flash Control'], [2, 'Red Control'], [3, 'Dark Control'], [4, 'Step'], [5, 'Fixed_Cycle Control'], [6, 'Free Control'], [7, 'Coordinated Induction Control'], [8, 'Pattern Selection Control'], [9, 'Adaptive Control'], [10, '无电缆控制'], [11, 'Cable Control'], [12, 'Pedestrian Crossing Control'], [13, 'Pattern recovery']]),
+      ParamsControl: new Map([[0, '多时段'], [1, '黄闪'], [2, '全红'], [3, '关灯'], [4, '步进'], [5, '定周期控制'], [6, '单点感应控制'], [7, '协调感应控制'], [8, '方案选择控制'], [9, '自适应控制'], [10, '无电缆控制'], [11, '有电缆控制'], [12, '行人过街控制'], [13, '方案恢复过渡']]),
+      ParamsControlEn: new Map([[0, 'Multi Period'], [1, 'Yellow Flash Control'], [2, 'Red Control'], [3, 'Dark Control'], [4, 'Step'], [5, 'Fixed_Cycle Control'], [6, 'Free Control'], [7, 'Coordinated Induction Control'], [8, 'Pattern Selection Control'], [9, 'Adaptive Control'], [10, '无电缆控制'], [11, 'Cable Control'], [12, 'Pedestrian Crossing Control'], [13, 'Pattern recovery']]),
       phaseType: new Map([[1, '红'], [2, '黄'], [3, '绿']]), // phaseType表示红，黄，绿
       phaseTypeEn: new Map([[1, 'Red'], [2, 'Yellow'], [3, 'Green']]), // phaseType表示红，黄，绿
       ip: '--',
@@ -715,12 +738,18 @@ export default {
     },
     handleStageData (data) {
       this.stagesList = []
+      let boardCard = this.$refs.boardCard
+      let busPhaseData = []
+      if (boardCard) {
+        busPhaseData = boardCard.$children[1].busPhaseData
+      }
       this.currentStage = data.current_stage
       let stages = data.stages
       if (!stages) return
       for (let stage of stages) {
         let tempList = []
         let directionList = []
+        let stageControType = 0
         for (let stg of stage) {
           let currPhase = this.phaseList.filter((item) => {
             return item.id === stg
@@ -728,12 +757,17 @@ export default {
           if (currPhase !== undefined) {
             directionList = [...currPhase.direction, ...directionList]
           }
-          // directionList = [...currPhase.direction, ...directionList]
+          for (let busPhase of busPhaseData) {
+            if (stg === busPhase.phaseid) {
+              stageControType = busPhase.controltype
+            }
+          }
         }
         directionList = [...new Set(directionList)]
         tempList = directionList.map(dir => ({
           id: dir,
-          color: '#606266'
+          color: '#606266',
+          controltype: stageControType
         }))
         this.stagesList.push(tempList)
       }
@@ -763,9 +797,18 @@ export default {
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
+        let success = 0
         if (!data.data.success) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
+        }
+        if (data.data.data && data.data.data.data) {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            this.$message.error(this.$t(errormsg))
+            return
+          }
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
       }).catch(error => {

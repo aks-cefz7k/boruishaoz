@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "27419588",
+      "name": "行人",
+      "font_class": "hangren",
+      "unicode": "e6cc",
+      "unicode_decimal": 59084
+    },
+    {
+      "icon_id": "27412128",
+      "name": "BRT",
+      "font_class": "BRT",
+      "unicode": "e6c8",
+      "unicode_decimal": 59080
+    },
+    {
+      "icon_id": "27412129",
+      "name": "非机动车",
+      "font_class": "feijidongche",
+      "unicode": "e6c9",
+      "unicode_decimal": 59081
+    },
+    {
+      "icon_id": "27412130",
+      "name": "公交车",
+      "font_class": "gongjiaoche",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "27412131",
+      "name": "有轨电车",
+      "font_class": "youguidianche",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
       "icon_id": "26107142",
       "name": "帮助",
       "font_class": "bangzhu",

@@ -889,10 +889,11 @@ border: 1px solid $--border-color-base;
   .current-stage-num {
     margin-top: 3px;
     font-size: 12px;
-    font-weight: normal;
+    font-weight: bold;
     font-stretch: normal;
     letter-spacing: 0px;
-    color: #303133;
+    // color: #303133;
+    color:#606266;
   }
   .sloat-icon {
     cursor:pointer;
@@ -1712,6 +1713,7 @@ border: 1px solid $--border-color-base;
   .box {
     float: left;
     margin-left: 6px;
+    margin-right: 10px;
   }
   .ring-nums {
     // float: left;

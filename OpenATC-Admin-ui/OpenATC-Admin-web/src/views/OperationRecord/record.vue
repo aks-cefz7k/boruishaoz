@@ -112,7 +112,8 @@
         <el-table-column
           prop="status"
           :label="$t('openatc.record.reponsestatus')"
-          align="center">
+          align="center"
+          :formatter="formatterStatus">
         </el-table-column>
         <el-table-column
           prop="responseCode"
@@ -162,8 +163,6 @@ export default {
       schfilter: '',
       listLoading: false,
       tableData: [],
-      statusMode: new Map([['set-request', '请求错误'], ['set-response', '应答成功'], ['error-response', '应答错误'], ['Communication Error!', '通讯错误']]),
-      statusModeEn: new Map([['set-request', 'Request error'], ['set-response', 'Successful response'], ['error-response', 'Response error'], ['Communication Error!', 'Communication error']]),
       infotypeMode: new Map([['control/pattern', '控制消息'], ['control/interrupt', '方案控制消息'], ['control/preempt', '优先控制'], ['system/channelcheck', '通道检测'], ['control/remote', '远程控制'], ['system/centerip', '中心ip地址'], ['system/ip1', '设备ip地址1'], ['system/ip2', '设备ip地址2'], ['system/serialport', '串口信息'], ['system/time', '系统时间'], ['system/remote', '远程调试'], ['system/update', '系统更新'], ['system/paramversion', '参数版本'], ['system/optstatparam', '优化统计参数'], ['system/faultclear', '故障消除'], ['system/udiskupdate', '更新U盘数据'], ['system/volumelog', '交通流量历史数据'], ['feature/channel', '通道'], ['feature/phase', '相位'], ['feature/overlap', '跟随相位'], ['feature/pattern', '方案'], ['feature/plan', '计划'], ['feature/date', '日期'], ['feature/peddetecter', '行人检测器'], ['feature/devinfo', '设备信息'], ['feature/manualpanel', '手动面板配置'], ['feature/channellock', '通道灯色锁定参数配置'], ['feature/all', '整体参数']]),
       // infotypeModeEn: new Map([['control/pattern', '控制消息'], ['control/interrupt', '方案控制消息'], ['control/preempt', '优先控制'], ['system/channelcheck', '通道检测'], ['control/remote', '远程控制'], ['system/centerip', '中心ip地址'], ['system/ip1', '设备ip地址1'], ['system/ip2', '设备ip地址2'], ['system/serialport', '串口信息'], ['system/time', '系统时间'], ['system/remote', '远程调试'], ['system/update', '系统更新'], ['system/paramversion', '参数版本'], ['system/optstatparam', '优化统计参数'], ['system/faultclear', '故障消除'], ['system/udiskupdate', '更新U盘数据'], ['system/volumelog', '交通流量历史数据'], ['feature/channel', '通道'], ['feature/phase', '相位'], ['feature/overlap', '跟随相位'], ['feature/pattern', '方案'], ['feature/plan', '计划'], ['feature/date', '日期'], ['feature/peddetecter', '行人检测器'], ['feature/devinfo', '设备信息'], ['feature/manualpanel', '手动面板配置'], ['feature/channellock', '通道灯色锁定参数配置'], ['feature/all', '整体参数']]),
       listQuery: {
@@ -248,6 +247,11 @@ export default {
         this.totalCount = data.data.data.total
       })
     },
+    formatterStatus (row, column) {
+      let res = ''
+      res = this.$t('openatc.record.' + row.status)
+      return res
+    },
     formatterSubInfoType (row, column) {
       let res = row.subInfoType
       if (row.infotype === 'control/pattern') {
@@ -325,13 +329,6 @@ export default {
       let that = this
       for (let obj of data) {
         Object.keys(obj).forEach(function (key) {
-          if (key === 'status') {
-            if (that.$i18n.locale === 'en') {
-              obj[key] = that.statusModeEn.get(obj[key])
-            } else {
-              obj[key] = that.statusMode.get(obj[key])
-            }
-          }
           if (key === 'infotype') {
             if (that.$i18n.locale === 'zh') {
               // obj[key] = that.infotypeMode.get(obj[key])

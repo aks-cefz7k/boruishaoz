@@ -20,8 +20,6 @@
           <DeviceTags />
         </div>
         <div class="filter-container">
-          <!-- <el-form>
-            <el-form-item> -->
             <div class="filter">
               <span class="header-span">{{$t('openatc.devicemanager.devicetype') }}：</span>
               <el-select
@@ -114,12 +112,9 @@
                   style="width: 100px;"/>
                 </el-popover>
             </div>
-          <!-- </el-form-item>
-            <el-form-item> -->
               <div class="filter" style="margin-right:20px">
                 <el-input
                   @keyup.enter.native="getDeviceRanges()"
-                  @blur="getDeviceRanges()"
                   v-model="devsfilter"
                   :placeholder="$t('openatc.common.searchplaceholder')"
                   prefix-icon="el-icon-search"
@@ -130,12 +125,7 @@
                       @click="handleAdd">
                       {{$t('openatc.common.add')}}
                     </el-button>
-
-                  <!-- slot="reference"
-              </el-popover> -->
               </div>
-            <!-- </el-form-item>
-          </el-form> -->
         </div>
       </div>
     <div class="devs-table">
