@@ -21,6 +21,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import Echarts from 'echarts'
+import openatcComponents from 'openatc-components'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -43,6 +44,7 @@ Vue.use(animate)
 Vue.config.productionTip = false
 Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)
+Vue.use(openatcComponents)
 
 // mian test hg
 /* eslint-disable no-new */
