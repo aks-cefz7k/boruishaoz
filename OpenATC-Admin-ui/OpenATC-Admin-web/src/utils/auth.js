@@ -9,7 +9,7 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-var localStorage = require('@openatc/edgebase-front/src/lib/publicjs/localStorage')
+var localStorage = require('edgebase-front/src/lib/publicjs/localStorage')
 
 const LoginKey = 'token'
 const LoginHost = 'kisshost'

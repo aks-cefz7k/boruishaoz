@@ -9,7 +9,7 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-import Edgebase from '@openatc/edgebase-front'
+import Edgebase from 'edgebase-front'
 const getter = {
   sidebar: state => state.app.sidebar,
   device: state => state.app.device,
