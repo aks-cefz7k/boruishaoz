@@ -176,6 +176,7 @@ const zh = {
       'plat': '平台',
       'tag': '标签',
       'IP': 'IP',
+      'address': '地址',
       'port': '端口',
       'describe': '路口描述',
       'protocol': '协议',

@@ -175,6 +175,7 @@ const en = {
       'platform': 'Platform',
       'type': 'Type',
       'IP': 'IP',
+      'address': 'Address',
       'port': 'Port',
       'describe': 'Describe',
       'protocol': 'Protocol',
