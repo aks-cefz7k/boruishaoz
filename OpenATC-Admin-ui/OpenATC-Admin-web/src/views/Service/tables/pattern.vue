@@ -87,7 +87,7 @@
             ></el-input-number>
           </div>
           <div v-show="scope.row.control === 22">
-            <xdrdirselector Width="40px" Height="40px" :showlist="dirshow"></xdrdirselector>
+            <xdrdirselector Width="40px" Height="40px" :showlist="getShowList(scope.row)"></xdrdirselector>
           </div>
         </template>
       </el-table-column>
@@ -110,7 +110,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-button type="text" @click="handleConfig(scope.row)">{{
+          <el-button type="text" :disabled="scope.row.control !== 22" @click="handleConfig(scope.row)">{{
             $t("openatc.button.config")
           }}</el-button>
           <el-button type="text" @click="handleDelete(scope.row.agentid)">{{
@@ -130,6 +130,7 @@ import SelectPattern from '@/views/Service/components/SelectPattern'
 import { getTscPhase, getTscControl } from '@/api/route'
 import { getMessageByCode } from '@/utils/responseMessage'
 import xdrdirselector from '@/components/XRDDirSelector'
+import { getTheme } from '@/utils/auth'
 // import { getTscControl } from '@/api/route'
 export default {
   name: 'patterns',
@@ -255,8 +256,76 @@ export default {
         })
       })
     },
+    getShowList (row) {
+      let phases = row.phases
+      let res = []
+      let color = 'black'
+      if (getTheme() === 'dark') {
+        color = 'white'
+      }
+      if (phases) {
+        for (let dir of phases) {
+          if (dir.type !== 0) {
+            let item = {
+              id: dir.id,
+              color: color
+            }
+            res.push(item)
+          }
+        }
+      }
+      return res
+    },
     handleConfig (row) {
       console.log(row)
+      let data = {
+        'greenflash': 6,
+        'duration': 600,
+        'yellow': 3,
+        'redclear': 2,
+        'mingreen': 15,
+        'phases': [
+          {
+            'id': 1,
+            'type': 0
+          },
+          {
+            'id': 2,
+            'type': 0
+          },
+          {
+            'id': 3,
+            'type': 0
+          },
+          {
+            'id': 4,
+            'type': 0
+          },
+          {
+            'id': 5,
+            'type': 1
+          },
+          {
+            'id': 6,
+            'type': 0
+          },
+          {
+            'id': 7,
+            'type': 0
+          },
+          {
+            'id': 8,
+            'type': 0
+          }
+        ]
+      }
+      // item.data = data
+      row.greenflash = data.greenflash
+      row.duration = data.duration
+      row.yellow = data.yellow
+      row.redclear = data.redclear
+      row.mingreen = data.mingreen
+      row.phases = data.phases
     },
     handleDelete (agentid) {
       let comfirmMsg = this.$t('openatc.greenwaveoptimize.deletedevice') + agentid
