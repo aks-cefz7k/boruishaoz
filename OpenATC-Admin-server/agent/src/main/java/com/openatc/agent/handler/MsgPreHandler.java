@@ -71,7 +71,7 @@ public class MsgPreHandler implements IMsgPreHandler {
                 Long createTime = Long.valueOf(responseData.getCreatetime());
 
                 // redis中数据时间和当前时间相差大于720ms，向设备请求
-                if (currentTime - createTime < 720){
+                if (currentTime - createTime < 700){
                     return RESTRetUtils.successObj(responseData);
                 }
             }
