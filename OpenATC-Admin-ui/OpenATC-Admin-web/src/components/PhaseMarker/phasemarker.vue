@@ -118,110 +118,110 @@ export default {
 
 <style scoped>
 .patternsvg {
-  height: 60px;
+  height: 60PX;
   position: relative;
 }
 .test {
   position: absolute;
-  top: 10px;
+  top: 10PX;
   z-index: 9;
-  padding-left: 16px;
+  padding-left: 16PX;
 }
 .pattern-mess {
   float: left;
 }
 .dirwrap {
   position:absolute;
-  top: 7px;
-  left: 7px;
-  width: 40px;
-  height: 39px;
+  top: 7PX;
+  left: 7PX;
+  width: 40PX;
+  height: 39PX;
   z-index: 9;
 }
 .dirwrap-right {
   position:absolute;
-  width: 140px;
-  height: 40px;
-  border-radius: 0px 4px 4px 0p;
-  margin-left: 40px;
+  width: 140PX;
+  height: 40PX;
+  border-radius: 0PX 4PX 4PX 0PX;
+  margin-left: 40PX;
 }
 .operation-pattern {
   position:absolute;
-  width: 60px;
-  height: 39px;
-  top: 10px;
-  left: 60px;
+  width: 60PX;
+  height: 39PX;
+  top: 10PX;
+  left: 60PX;
   z-index: 9;
 }
 .pattern-name {
   position:absolute;
-  width: 79px;
-  height: 39px;
-  top: 10px;
-  left: 120px;
+  width: 79PX;
+  height: 39PX;
+  top: 10PX;
+  left: 120PX;
   z-index: 9;
 }
 .center-line {
   position:absolute;
-  top: 3px;
-  width: 1px;
-  height: 34px;
+  top: 3PX;
+  width: 1PX;
+  height: 34PX;
   z-index: 1;
   background: #d3e0eb;
-  margin-left: 60px;
+  margin-left: 60PX;
 }
 .cycle {
   position:absolute;
-  width: 39.5px;
-  height: 18px;
-  font-size: 15px;
+  width: 39.5PX;
+  height: 18PX;
+  font-size: 15PX;
   text-align: center;
-  margin-right: 5px;
+  margin-right: 5PX;
   color: #666666;
 }
 .offset {
   position:absolute;
-  width: 39.5px;
-  height: 18px;
-  font-size: 15px;
+  width: 39.5PX;
+  height: 18PX;
+  font-size: 15PX;
   text-align: center;
   color: #666666;
-  margin-left: 39.5px;
+  margin-left: 39.5PX;
 }
 .cutdown-num {
-  width: 50px;
-  height: 19px;
+  width: 50PX;
+  height: 19PX;
   margin-left: auto;
-  margin-top: 2px;
+  margin-top: 2PX;
   margin-right: auto;
-  font-size: 15px;
+  font-size: 15PX;
   text-align: center;
 }
 .cutdown-name {
-  width: 50px;
-  height: 19px;
+  width: 50PX;
+  height: 19PX;
   margin-left: auto;
-  margin-bottom: 2px;
+  margin-bottom: 2PX;
   margin-right: auto;
-  font-size: 12px;
+  font-size: 12PX;
   text-align: center;
   color: #333333;
 }
 .planname-top {
-  height: 18px;
+  height: 18PX;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 2px;
-  font-size: 15px;
+  margin-top: 2PX;
+  font-size: 15PX;
   text-align: center;
   color: #666666;
 }
 .planname-bottom {
-  height: 18px;
+  height: 18PX;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2px;
-  font-size: 12px;
+  margin-bottom: 2PX;
+  font-size: 12PX;
   text-align: center;
   color: #333333;
 }
