@@ -691,7 +691,7 @@ export default {
       }
       this.narr.reverse()// 阶段差
       // if (this.contrloType) {
-      for (let i = 0; i < stageChange.length; i++) {
+      for (let i = 1; i < stageChange.length; i--) {
         let stage = JSON.parse(JSON.stringify(stageChange[i]))
         let stageItem = this.getStageItem(stage.phases, rings, i, stageChange)
         stagesList.push(JSON.parse(JSON.stringify(stageItem)))
@@ -715,7 +715,7 @@ export default {
     },
     getStageItem (stageArr, ringsList, i, stageChange) {
       let res = {
-        key: i,
+        key: i + 1,
         split: this.narr[i], // 阶段绿性比
         stages: stageArr,
         delaystart: 0,
@@ -738,7 +738,6 @@ export default {
       }
       for (let rings of stageChange) {
         if (i === rings.key) {
-          res.stageChange = true
           res.green = rings.green ? rings.green : 0
           res.yellow = rings.yellow ? rings.yellow : 0
           res.red = rings.red ? rings.red : 0
