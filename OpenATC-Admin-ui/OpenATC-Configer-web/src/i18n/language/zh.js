@@ -370,6 +370,7 @@ const zh = {
       'ok': '确定',
       'cancel': '取消',
       'desc': '描述',
+      'cycle': '周期',
       'time': '时间',
       'pattern': '方案',
       'operation': '操作',

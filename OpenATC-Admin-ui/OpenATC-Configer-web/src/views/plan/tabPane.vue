@@ -95,6 +95,11 @@
           </el-select>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('edge.plan.cycle')" align="center">
+        <template slot-scope="scope">
+          <span v-if="scope.row.pattern">{{PatternOption.filter(item => item.value === scope.row.pattern)[0].cycle}}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('edge.plan.operation')" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="handleDelete(scope.$index)">{{$t('edge.common.delete')}}</el-button>
@@ -521,10 +526,12 @@ export default {
         let obj = {}
         obj.value = patternList[i].id
         obj.label = patternList[i].desc
+        obj.cycle = patternList[i].cycle
         this.PatternOption.push(obj)
       } else {
         let obj = {}
         obj.value = patternList[i].id
+        obj.cycle = patternList[i].cycle
         if (this.$i18n.locale === 'en') {
           obj.label = 'Pattern' + String(patternList[i].id)
         } else if (this.$i18n.locale === 'zh') {

@@ -69,19 +69,19 @@
                 </el-col>
                 <el-col :span="12">
                   <div class="stage-item" style="margin: 30px 50px;">
-                    <el-row style="margin-top:10px">
+                    <el-row v-if="scope.row.forbiddenstage" style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.forbiddenstage')}}
                         <el-input class="stage-value" size="small" v-model="scope.row.forbiddenstage"></el-input>
                       </el-col>
                     </el-row>
-                    <el-row style="margin-top:10px">
+                    <el-row  v-if="scope.row.screenstage" style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.screenstage')}}
                         <el-input class="stage-value" size="small" v-model="scope.row.screenstage"></el-input>
                       </el-col>
                     </el-row>
-                    <el-row style="margin-top:10px">
+                    <el-row  v-if="scope.row.coordinatestage" style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.coordinatestage')}}
                         <el-input class="stage-value" size="small" v-model="scope.row.coordinatestage"></el-input>
@@ -571,11 +571,13 @@ export default {
           let ring = rings[i]// 每个环对象
           let sum = 0
           for (let n = 0; n < ring.length; n++) { // 相位累计长度
-            sum = sum + ring[n].value + (ring[n].sum ? ring[n].sum : 0)
-            if (j < sum) {
-              let phaseId = ring[n].id
-              currentIds = currentIds + '-' + phaseId
-              break
+            if (ring[n].mode !== 7) {
+              sum = sum + ring[n].value + (ring[n].sum ? ring[n].sum : 0)
+              if (j < sum) {
+                let phaseId = ring[n].id
+                currentIds = currentIds + '-' + phaseId
+                break
+              }
             }
           }
         }

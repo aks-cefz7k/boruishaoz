@@ -373,6 +373,7 @@ const en = {
       'cancel': 'Cancel',
       'desc': 'Description',
       'time': 'Time',
+      'cycle': 'Cycle',
       'pattern': 'Pattern',
       'operation': 'Operation',
       'deletetip': 'Delete This Plan?',

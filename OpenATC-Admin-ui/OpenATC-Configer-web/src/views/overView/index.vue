@@ -406,7 +406,7 @@ export default {
         this.stagesList = JSON.parse(JSON.stringify(stagesTemp))
       }
     },
-    getControl (newList) { // 总揽实时数据
+    getControl (newList) { // 总揽阶段实时数据
       let currentIds = ''
       let lastCurrentIds = ''
       this.stateList = [0]
@@ -418,11 +418,13 @@ export default {
           let ring = newList[i]// 每个环对象
           let sum = 0
           for (let n = 0; n < ring.length; n++) { // 相位累计长度
-            sum = sum + ring[n].split
-            if (j < sum) {
-              let phaseId = ring[n].id
-              currentIds = currentIds + '-' + phaseId
-              break
+            if (ring[n].mode !== 7) {
+              sum = sum + ring[n].split
+              if (j < sum) {
+                let phaseId = ring[n].id
+                currentIds = currentIds + '-' + phaseId
+                break
+              }
             }
           }
         }
