@@ -64,7 +64,8 @@
         </el-table-column>
         <el-table-column :label="$t('openatc.devicemanager.operation')" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" @click="onIgnoreClick(scope.row)">{{$t('openatc.button.ignore')}}</el-button>
+          <el-button type="primary" @click="onIgnoreClick(scope.row, '2')">{{$t('openatc.faultrecord.confirm')}}</el-button>
+          <el-button type="primary" @click="onIgnoreClick(scope.row, '1')">{{$t('openatc.button.ignore')}}</el-button>
         </template>
         </el-table-column>
       </el-table>
@@ -175,10 +176,9 @@ export default {
       }
       return datas
     },
-    onIgnoreClick (row) {
+    onIgnoreClick (row, enumerate) {
       let _this = this
       let id = row.m_wFaultID
-      let enumerate = 1
       enumerateCheck(row.agentid, id, enumerate).then(res => {
         if (!res.data.success) {
           _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
