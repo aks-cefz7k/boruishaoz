@@ -330,6 +330,7 @@ PROJECT_FOLDER
 | gis  | gisBoundLeftTop | [31.36360615, 121.30622863] | 地图边界的左上角纬度经度 |
 | gis  | gisBoundRightBottom | [31.11040156, 121.95270538] | 地图边界的右下角纬度经度 |
 | gis  | isShowVideo | true | gis勤务路线是否显示视频 |
+| gis  | isShowGisMenu | true | 是否显示地图菜单 |
 
 
 #### 界面展示
