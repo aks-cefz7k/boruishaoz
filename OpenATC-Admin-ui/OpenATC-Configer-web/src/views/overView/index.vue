@@ -1170,6 +1170,10 @@ export default {
       control.delay = Number(manualInfo.tempDelay)
       control.duration = Number(manualInfo.tempDuration)
       control.value = that.preselectStages === -1 ? 0 : that.preselectStages
+      if (control.control === 0) {
+        // 恢复自主控制（多时段）时，value为当前控制方式
+        control.value = this.currModel
+      }
       putTscControl(control).then(data => {
         that.unlockScreen()
         let success = 0
