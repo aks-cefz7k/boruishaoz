@@ -59,8 +59,8 @@
             </div>
           </div>
         </div>
-        <div class="stage-label">{{$t('edge.overview.specialcontrol')}}:</div>
-        <div style="width: 100%; height: auto;overflow: hidden;">
+        <div class="stage-label" v-if="FuncSort === 'allFunc'">{{$t('edge.overview.specialcontrol')}}:</div>
+        <div style="width: 100%; height: auto;overflow: hidden;" v-if="FuncSort === 'allFunc'">
           <div class="control-model" v-for="(item, index) in specialcontrolList" :key="index">
             <div class="single-model" @click="selectSpecialStages(item.id)">
               <svg-icon :icon-class="item.iconClass" :className="item.id === 23 ? 'closephase-icon' : 'model-icon'"></svg-icon>
