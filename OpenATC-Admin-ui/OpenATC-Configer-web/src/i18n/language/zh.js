@@ -190,6 +190,7 @@ const zh = {
       'modelList13': '方案恢复过渡',
       'modelList15': '通道检测',
       'modelList20': '方案干预',
+      'modelList100': '方案干预',
       'modelList22': '优先控制',
       'modelList19': '感应式行人过街',
       'modelList23': '相位关断',
