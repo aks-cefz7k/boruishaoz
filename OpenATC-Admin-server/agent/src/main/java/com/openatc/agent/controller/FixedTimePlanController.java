@@ -1,10 +1,12 @@
 package com.openatc.agent.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.optimize.fixedtimeplan.config.cross.CrossConfig;
 import com.openatc.optimize.fixedtimeplan.model.control.Cross;
+import com.openatc.optimize.fixedtimeplan.model.control.FixedtimePlan;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +50,10 @@ public class FixedTimePlanController {
                 .phaseMap(new HashMap<>())
                 .build();
         cross.updatePhaseMap();
-        return RESTRetUtils.successObj(cross.calcFixedtimePlan());
+        FixedtimePlan fixedtimePlan = cross.calcFixedtimePlan();
+        log.info("cross:{}", JSON.toJSONString(cross));
+        log.info("fixedtimeplan:{}", JSON.toJSONString(fixedtimePlan));
+        return RESTRetUtils.successObj(fixedtimePlan);
 
     }
 

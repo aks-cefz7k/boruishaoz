@@ -58,6 +58,7 @@ public class FaultServiceImpl {
         Fault[] m_faultDeque = gson.fromJson(msg.getData().getAsJsonObject().getAsJsonArray("m_FaultDeque"), Fault[].class);
         List<Fault> faultList = new ArrayList<Fault>();
         for (Fault fault : m_faultDeque) {
+            fault.setMUnFaultOccurTime(fault.getM_unFaultOccurTime());
             Long m_wFaultID = fault.getM_wFaultID();
             List<Fault> list = faultDao.findByAgentidAndM_wFaultID(agentid,m_wFaultID);
             if (list != null && list.size() > 0) { // 记录已存在

@@ -79,6 +79,14 @@ public class OverflowController {
             OverflowDetector.setType(ofdEntity.getType());
             OverflowDetector.setStatus(ofdEntity.getStatus());
             OverflowDetector.setDescription(ofdEntity.getDescription());
+            List<Integer> ids = overflowDetectorRepository.findOverflowDetbyName(ofdEntity.getDescription());
+            if (ids.size() > 0){
+                if (ofdEntity.getId() !=null && ofdEntity.getId().intValue() == ids.get(0)) {
+                    // 修改，描述不变
+                } else {
+                    return RESTRetUtils.errorObj(E_9004);
+                }
+            }
             rr = overflowDetectorRepository.save(OverflowDetector);
         } else {
             rr = overflowDetectorRepository.save(ofdEntity);
