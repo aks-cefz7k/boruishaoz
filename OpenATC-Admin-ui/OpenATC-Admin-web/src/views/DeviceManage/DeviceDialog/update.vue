@@ -87,7 +87,7 @@
               :key="index"
               v-for="(select,index) in selectTags"
               :disable-transitions="false"
-              :class="(deviceInfo.tags?deviceInfo.tags.split(',').includes(select):currentTags.includes(select)) ? 'phaseSelected' : 'phaseNoSelected'"
+              :class="(deviceInfo.tags?deviceInfo.tags.split(',').includes(select):currentTags.includes(select)) ? 'tagSelected' : 'tagNoSelected'"
               @click="selectItem(select)"
               >
               {{select}}
@@ -647,13 +647,13 @@ export default {
   margin-left: 10px;
   vertical-align: bottom;
 }
-.phaseNoSelected{
+.tagNoSelected{
   border-radius: 3%;
   float: left;
   margin: 1%;
   cursor: pointer;
 }
-.phaseSelected{
+.tagSelected{
   background-color: #a2cfff;
   border-radius: 3%;
   float: left;
