@@ -10,20 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 const getters = {
-  sidebar: state => state.app.sidebar,
-  device: state => state.app.device,
-  token: state => state.user.token,
-  avatar: state => state.user.avatar,
-  name: state => state.user.name,
-  roles: state => state.user.roles,
-  Agent: state => state.Agent.agentid,
-  controlmode: state => state.Agent.controlmode,
-  globalParam: state => state.globalParam,
-  tscParam: state => state.globalParam.tscParam,
-  curPath: state => state.globalParam.curPath,
-  globalParamModel: state => state.globalParamModel.GlobalParamModeObject,
-  devParams: state => state.globalParamModel.devParams,
-  permissionRoutes: state => state.permissionRoutes.routers,
-  roadDirection: state => state.globalParam.roadDirection
+  // globalParam: state => state.globalParam,
+  // roadDirection: state => state.globalParam.roadDirection
 }
 export default getters

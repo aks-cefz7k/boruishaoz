@@ -23,7 +23,7 @@
       :close-on-click-modal="false"
       @close="oncancle"
       append-to-body>
-      <IntersectionMap
+      <intersection-base-map
         ref="intersectionMap"
         :crossStatusData="crossStatusData"
         :devStatus="devStatus"
@@ -33,16 +33,12 @@
   </div>
 </template>
 <script>
-import IntersectionMap from '@/components/IntersectionMap'
 import { getMessageByCode } from '../../utils/responseMessage'
 import { getTscControl, queryDevice } from '@/api/control'
 import { registerMessage } from '@/api/param'
 import { getIframdevid, setIframdevid } from '@/utils/auth'
 export default {
   name: 'demo',
-  components: {
-    IntersectionMap
-  },
   data () {
     return {
       boxVisible: false,

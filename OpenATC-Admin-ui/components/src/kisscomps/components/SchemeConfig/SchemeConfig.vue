@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="scheme-config" style="height: 100%;">
+  <div class="scheme-config openatc-scheme-config" style="height: 100%;">
     <fault-detail-modal ref="faultDetail" :agentId="agentId" @refreshFault="getFaultById"></fault-detail-modal>
         <div style="height: 100%;">
           <transition name="fade-right" mode="out-in"
@@ -27,6 +27,8 @@
                :currentStage="currentStage"
                :preselectStages="preselectStages"
                :realtimeStatusModalvisible="realtimeStatusModalvisible"
+               :funcSort="funcSort"
+               :roadDirection="roadDirection"
                @closeManualModal="closeManualModal"
                @selectModel="selectModel"
                @selectStages="selectStages"
@@ -44,6 +46,7 @@
                 :closePhaseRings="phaseRings"
                 :sidewalkPhaseData="sidewalkPhaseData"
                 :realtimeStatusModalvisible="realtimeStatusModalvisible"
+                :roadDirection="roadDirection"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
               <LockingPhaseControlModal
@@ -52,6 +55,7 @@
                 :closePhaseRings="phaseRings"
                 :sidewalkPhaseData="sidewalkPhaseData"
                 :realtimeStatusModalvisible="realtimeStatusModalvisible"
+                :roadDirection="roadDirection"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
             </div>
@@ -78,6 +82,7 @@
                 :agentId="agentId"
                 :stagesList="stagesList"
                 :sidewalkPhaseData="sidewalkPhaseData"
+                :roadDirection="roadDirection"
                 @changeStatus="changeStatus"
                 @showFaultDetail="showFaultDetail"/>
             </div>
@@ -88,7 +93,7 @@
 
 <script>
 import { putTscControl } from '../../../api/control.js'
-import { uploadSingleTscParam } from '../../../api/param'
+import { uploadSingleTscParam } from '../../../api/param.js'
 import RealtimeStatusModal from './realtimeStatusModal'
 import ManualControlModal from './manualControlModal'
 import ClosePhaseControlModal from './closePhaselControlModal'
@@ -141,6 +146,14 @@ export default {
     Token: {
       type: String,
       default: ''
+    },
+    funcSort: {
+      type: String,
+      default: 'allFunc'
+    },
+    roadDirection: {
+      type: String,
+      default: 'right'
     }
   },
   data () {
@@ -272,10 +285,17 @@ export default {
       handler: function (val) {
         this.setPropsToken(val)
       }
+    },
+    roadDirection: {
+      handler: function (val) {
+        if (val === 'left' || val === 'right') {
+          this.PhaseDataModel = new PhaseDataModel(val)
+        }
+      }
     }
   },
   created () {
-    this.PhaseDataModel = new PhaseDataModel()
+    this.PhaseDataModel = new PhaseDataModel(this.roadDirection)
     this.CrossDiagramMgr = new CrossDiagramMgr()
     if (this.realtimeStatusModalvisible === false) {
       this.changeStatus()

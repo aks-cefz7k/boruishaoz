@@ -44,7 +44,7 @@
             <div class="single-model"
             @click="selectModel(item.id)"
             :class="(preselectModel == item.id && preselectStages == -1)? 'single-model-select' : ''"
-            v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
+            v-if="funcSort === 'allFunc' || (funcSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
               <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
               <div class="single-model-name">{{$t('openatccomponents.overview.modelList' + item.id)}}</div>
             </div>
@@ -54,7 +54,7 @@
         <div style="width: 100%; height: auto;overflow: hidden;">
           <div class="control-model" v-for="(item, index) in stagesList" :key="index">
             <div class="single-model" @click="selectStages(index + 1)" :class="preselectStages == index + 1 ? 'single-model-select' : ''">
-              <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
+              <xdrdirselector Width="40px" Height="40px" :showlist="item" :roadDirection="roadDirection"></xdrdirselector>
               <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
                 <div class="current-stage-num" style="width:20%;">{{index + 1}}</div>
                 <div style="width:70%;">
@@ -67,8 +67,8 @@
             </div>
           </div>
         </div>
-        <div class="stage-label" v-if="FuncSort === 'allFunc'">{{$t('openatccomponents.overview.specialcontrol')}}:</div>
-        <div style="width: 100%; height: auto;overflow: hidden;" v-if="FuncSort === 'allFunc'">
+        <div class="stage-label" v-if="funcSort === 'allFunc'">{{$t('openatccomponents.overview.specialcontrol')}}:</div>
+        <div style="width: 100%; height: auto;overflow: hidden;" v-if="funcSort === 'allFunc'">
           <div class="control-model" v-for="(item, index) in specialcontrolList" :key="index">
             <div class="single-model" @click="selectSpecialStages(item.id)">
               <svg-icon :icon-class="item.iconClass" className="closephase-icon"></svg-icon>
@@ -89,7 +89,6 @@
 
 <script>
 import xdrdirselector from '../../XRDDirSelector/XRDDirSelector'
-import { mapState } from 'vuex'
 export default {
   name: 'manualControl',
   components: {
@@ -126,12 +125,14 @@ export default {
     realtimeStatusModalvisible: {
       type: Boolean,
       default: true
+    },
+    funcSort: {
+      type: String,
+      default: 'allFunc'
+    },
+    roadDirection: {
+      type: String
     }
-  },
-  computed: {
-    ...mapState({
-      FuncSort: state => state.globalParam.FuncSort
-    })
   },
   data () {
     return {
