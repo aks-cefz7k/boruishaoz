@@ -58,7 +58,7 @@
     <rect x="14.2" y="14.9" class="st1" width="5.6" height="1.6"/>
     </g>
     <g id="斜向行人1" class="st0"
-    :class="Data.name === 'X人行横道-/' ? '' : 'invisible'"
+    :class="Data.name === 'X人行横道-\\' ? '' : 'invisible'"
     >
     <rect x="14.2" y="16.2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.0438 17.0053)" class="st1" width="5.6" height="1.6"/>
     <rect x="12.4" y="14.4" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -6.3149 15.2456)" class="st1" width="5.6" height="1.6"/>
@@ -79,7 +79,7 @@
     <rect x="10.7" y="12.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -5.586 13.4859)" class="st1" width="5.6" height="1.6"/>
     </g>
     <g id="斜向行人2" class="st0"
-    :class="Data.name === 'X人行横道-\\' ? '' : 'invisible'"
+    :class="Data.name === 'X人行横道-/' ? '' : 'invisible'"
     >
     <rect x="16.2" y="14.2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.047 16.9978)" class="st1" width="1.6" height="5.6"/>
     <rect x="17.9" y="12.4" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -5.2872 17.7267)" class="st1" width="1.6" height="5.6"/>
