@@ -180,6 +180,7 @@ export default {
           duration: 1 * 1000,
           onClose: () => {
             this.getFaultById()
+            this.$emit('refreshFault')
           }
         })
       })
