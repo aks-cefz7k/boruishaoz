@@ -138,10 +138,10 @@ export default {
           this.$message.error(this.$t('openatc.greenwaveoptimize.choosephase'))
           return true
         }
-        if (inter.patternid === 0) {
-          this.$message.error(this.$t('openatc.greenwaveoptimize.choosepattern'))
-          return true
-        }
+        // if (inter.patternid === 0) {
+        //   this.$message.error(this.$t('openatc.greenwaveoptimize.choosepattern'))
+        //   return true
+        // }
       }
       return false
     },

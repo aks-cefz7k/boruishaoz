@@ -124,13 +124,13 @@ export default {
       }
     },
     checkRules (reqData) {
-      let devs = reqData.devs
-      for (let inter of devs) {
-        if (!inter.terminal || inter.terminal === 0) {
-          this.$message.error(this.$t('openatc.greenwaveoptimize.choosepattern'))
-          return true
-        }
-      }
+      // let devs = reqData.devs
+      // for (let inter of devs) {
+      //   if (!inter.terminal || inter.terminal === 0) {
+      //     this.$message.error(this.$t('openatc.greenwaveoptimize.choosepattern'))
+      //     return true
+      //   }
+      // }
       return false
     },
     onOk () {
