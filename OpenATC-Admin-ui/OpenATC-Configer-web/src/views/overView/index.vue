@@ -259,7 +259,7 @@
                       <div class="control-model" v-for="(item, index) in stagesList" :key="index">
                         <div style="position:relative;" class="single-model" :class="currentStage == index + 1 ? 'single-model-select' : ''">
                           <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
-                            <PatternWalkSvg class="patternWalk" v-if="item.length>0&&item[0].peddirection.includes(side.id)"  :Data="side" :Width="'55'" :Height="'55'" />
+                            <PatternWalkSvg class="patternWalk" v-if="item.length>0&&item[0].peddirection.includes(side.id)"  :Data="side" :Width="'44'" :Height="'44'" />
                           </div>
                           <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
                           <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
