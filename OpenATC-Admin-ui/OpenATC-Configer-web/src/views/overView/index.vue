@@ -231,14 +231,17 @@ export default {
       registerMessage(this.agentId).then(data => {
         if (!data.data.success) {
           this.devStatus = 2
-          if (data.data.code === '4003') {
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
-            if (this.isResend) {
-              this.reSend()
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
             }
-            return
+          } else {
+            this.$message.error(parrenterror)
           }
-          this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
           if (this.isResend) {
             this.reSend()
           }
@@ -297,13 +300,23 @@ export default {
             this.devStatus = 2
             this.clearPatternInterval() // 清除其他定时器
             this.clearVolumeInterval()
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             if (this.isResend) {
               this.reSend()
             }
             return
           }
-          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
+          }
           this.clearPatternInterval() // 清除其他定时器
           this.clearVolumeInterval()
           if (this.isResend) {

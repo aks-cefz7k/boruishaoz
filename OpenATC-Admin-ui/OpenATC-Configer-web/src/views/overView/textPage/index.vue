@@ -406,11 +406,17 @@ export default {
       getTscCurrentVolume(this.agentId).then((data) => {
         // 与每秒获取信号机状态共用一套断线重连机制，此处不做清空定时器的处理
         if (!data.data.success) {
-          if (data.data.code === '4003') {
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
-            return
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
           }
-          this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
           return
         }
         if (data.data.data.data) {
