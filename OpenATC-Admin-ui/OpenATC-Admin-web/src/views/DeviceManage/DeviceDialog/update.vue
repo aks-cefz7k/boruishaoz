@@ -74,7 +74,7 @@
             </el-input>
           <el-popover
             placement="bottom"
-            width="260"
+            width="460"
             v-model="visible2"
             trigger="click"
            >
