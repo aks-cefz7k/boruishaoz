@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="device-list">
-      <div class="title">{{curChoosedId}}</div>
+      <div class="title">{{curChoosedCrossname}}</div>
       <el-button type="primary" class="modify-btn" @click="handleModify">{{!isModify ? $t('openatc.button.modify') : $t('openatc.button.Cancel')}}</el-button>
       <DeviceList
         v-if="resetflag"
@@ -88,16 +88,17 @@ export default {
       this.setDeviceList(choosedRow)
     },
     setDeviceList (choosedRow) {
-      // if (choosedRow.overflowDetectorId === this.curChoosedId) return;
+      // if (choosedRow.id === this.curChoosedId) return;
       this.resetRightComponent()
       if (JSON.stringify(choosedRow) === '{}' || choosedRow === undefined) { return }
       this.curDetectorDevs = choosedRow
-      this.curChoosedId = choosedRow.overflowDetectorId
+      this.curChoosedId = choosedRow.id
+      this.curChoosedCrossname = choosedRow.description
     },
     refresh () {
       this.$refs.overflowDetectorList.getData().then(res => {
         let curData = res.filter(
-          ele => ele.overflowDetectorId === this.curChoosedId
+          ele => ele.id === this.curChoosedId
         )[0]
         this.setDeviceList(curData)
       })

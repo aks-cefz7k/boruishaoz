@@ -961,7 +961,12 @@ const en = {
       '8003': 'device is found By VipRoute',
       '8004': 'Agentid is duplicated',
       // 错误类型子类型，返回码第二层
-      '8101': 'Device can not delete!'
+      '8101': 'Device can not delete!',
+      // 瓶颈控制错误
+      '9001': 'Overflow control failed!',
+      '9002': 'Overflow recovery failed!',
+      '9003': 'Overflow is executing, can not be deleted!',
+      '9004': 'Overflow pattern name is already exist!'
     },
     'faultrecord': {
       'faultDetail': 'Fault Detail',
