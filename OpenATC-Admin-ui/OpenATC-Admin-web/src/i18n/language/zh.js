@@ -161,6 +161,7 @@ const zh = {
     'devicemanager': {
       'devicelist': '路口列表',
       'crossid': '路口ID',
+      'tags': '标签',
       'deviceid': '设备ID',
       'devicename': '路口名称',
       'firm': '厂商',
@@ -217,7 +218,7 @@ const zh = {
       'last4hour': '最近4小时',
       'last1day': '最近1天',
       'last2day': '最近2天',
-      'last1week': '最近一周',
+      'last1week': '最近1周',
       'last1month': '最近一个月',
       'today': '今天',
       'thisWeek': '本周',

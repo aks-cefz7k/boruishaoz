@@ -66,7 +66,7 @@ export default {
       dialogFormVisible: false,
       pickerOptions: {
         shortcuts: [{
-          text: '最近15分钟',
+          text: this.$t(`openatc.devicemanager.last15min`),
           onClick (picker) {
             let end = new Date()
             let start = new Date()
@@ -74,7 +74,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近30分钟',
+          text: this.$t(`openatc.devicemanager.last30min`),
           onClick (picker) {
             let end = new Date()
             let start = new Date()
@@ -82,7 +82,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近1小时',
+          text: this.$t(`openatc.devicemanager.last1hour`),
           onClick (picker) {
             let end = new Date()
             let start = new Date()
@@ -90,7 +90,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近2小时',
+          text: this.$t(`openatc.devicemanager.last2hour`),
           onClick (picker) {
             let end = new Date()
             let start = new Date()
@@ -98,7 +98,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近4小时',
+          text: this.$t(`openatc.devicemanager.last4hour`),
           onClick (picker) {
             let end = new Date()
             let start = new Date()
@@ -106,7 +106,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近1天',
+          text: this.$t(`openatc.devicemanager.last1day`),
           onClick (picker) {
             let end = new Date()
             let start = new Date()
@@ -114,7 +114,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近2天',
+          text: this.$t(`openatc.devicemanager.last2day`),
           onClick (picker) {
             let end = new Date()
             let start = new Date()
@@ -122,7 +122,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近1周',
+          text: this.$t(`openatc.devicemanager.last1week`),
           onClick (picker) {
             let end = new Date()
             let start = new Date()
@@ -130,14 +130,14 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '今天',
+          text: this.$t(`openatc.devicemanager.today`),
           onClick (picker) {
             let start = new Date(new Date().setHours(0, 0, 0, 0))
             let end = new Date(new Date().setHours(23, 59, 59, 999))
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '昨天',
+          text: this.$t(`openatc.devicemanager.lastDay`),
           onClick (picker) {
             let date = new Date()
             date.setDate(date.getDate() - 1)
@@ -146,7 +146,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '本周',
+          text: this.$t(`openatc.devicemanager.thisWeek`),
           onClick (picker) {
             let start = new Date()
             let end = new Date()
@@ -164,7 +164,7 @@ export default {
             // picker.$emit('pick', [start, end])
           }
         }, {
-          text: '上周',
+          text: this.$t(`openatc.devicemanager.lastWeek`),
           onClick (picker) {
             let start = new Date()
             let end = new Date()
@@ -173,7 +173,7 @@ export default {
             picker.$emit('pick', [new Date(start.setHours(0, 0, 0, 0)), new Date(end.setHours(23, 59, 59, 999))])
           }
         }, {
-          text: '本月',
+          text: this.$t(`openatc.devicemanager.thisMonth`),
           onClick (picker) {
             let now = new Date()
             let year = now.getFullYear()
@@ -187,7 +187,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '上月',
+          text: this.$t(`openatc.devicemanager.lastMonth`),
           onClick (picker) {
             let now = new Date()
             let start = new Date(now.getFullYear(), now.getMonth() - 1, 1, 0, 0, 0, 0)

@@ -161,6 +161,7 @@ const en = {
     'devicemanager': {
       'devicelist': 'Intersection',
       'crossid': 'Intersection Id',
+      'tags': 'Tags',
       'deviceid': 'Device Id',
       'devicename': 'Intersection Name',
       'firm': 'Firm',
@@ -224,7 +225,7 @@ const en = {
       'thisMonth': 'this Month',
       'lastDay': 'last Day',
       'lastWeek': 'last Week',
-      'lastMonth': 'laset Month',
+      'lastMonth': 'last Month',
       'trafficFlowStatistic': 'traffic Flow Statistic',
       'detectorFlowStatistics': 'detector Flow Statistics',
       'detectorFlow': 'detector Flow',

@@ -11,19 +11,22 @@
  **/
 import i18n from '@/i18n/index.js'
 import { getMainFaultType, getMainFaultTypeEn } from '@/model/EventModal/utils.js'
-export const BoardType = [{
-  label: i18n.t('edge.fault.tab1'),
-  value: 1
-}, {
-  label: i18n.t('edge.fault.tab2'),
-  value: 2
-}, {
-  label: i18n.t('edge.fault.tab3'),
-  value: 3
-}, {
-  label: i18n.t('edge.fault.tab4'),
-  value: 4
-}]
+export function getBoardType () {
+  let BoardType = [{
+    label: i18n.t('edge.fault.tab1'),
+    value: 1
+  }, {
+    label: i18n.t('edge.fault.tab2'),
+    value: 2
+  }, {
+    label: i18n.t('edge.fault.tab3'),
+    value: 3
+  }, {
+    label: i18n.t('edge.fault.tab4'),
+    value: 4
+  }]
+  return BoardType
+}
 export function formatBoardType (dev) {
   let boardType = dev.m_byFaultBoardType
   let res = ''

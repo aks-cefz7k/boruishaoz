@@ -65,7 +65,7 @@
         </div>
         <div class="filter">
           <span class="header-span">{{$t('openatc.faultrecord.intersectionname') }}：</span>
-          <SelectAgentid ref="selectAgentid" style="width:70%" @onChange="onChangeAgentid"></SelectAgentid>
+          <SelectAgentid ref="selectAgentid" @onChange="onChangeAgentid"></SelectAgentid>
         </div>
         <div class="filter">
           <span class="header-span">{{$t('openatc.faultrecord.faulttime') }}：</span>
@@ -199,7 +199,7 @@
 import { getMessageByCode } from '@/utils/responseMessage'
 import { GetAllFaultRange, DeleteFault } from '@/api/fault'
 import Messagebox from '../../components/MessageBox'
-import { BoardType, formatFaultDescValue, formatBoardType, formatEnumerate, formatSubFaultType, formatFaultLevel, formatFaultTypes } from '@/utils/fault.js'
+import { getBoardType, formatFaultDescValue, formatBoardType, formatEnumerate, formatSubFaultType, formatFaultLevel, formatFaultTypes } from '@/utils/fault.js'
 import { getAllMainFaultTypeArr } from '@/model/EventModal/utils.js'
 import SelectAgentid from '@/components/SelectAgentid'
 export default {
@@ -260,7 +260,7 @@ export default {
   },
   methods: {
     initOptions () {
-      this.boardTypeOptions = BoardType
+      this.boardTypeOptions = getBoardType()
       this.mainFaultOptions = getAllMainFaultTypeArr()
     },
     handleDelete (row) {

@@ -215,19 +215,20 @@ export default {
       })
     },
     getPopupContent (devData) {
-      let agentid = devData.agentid
+      // let agentid = devData.agentid
+      let crossRoadName = devData.name
       let date = devData.lastTime
-      let status = '在线'
+      let status = this.$t('openatc.devicemanager.online')
       if (devData.state === 'UP') {
-        status = '在线'
+        status = this.$t('openatc.devicemanager.online')
       } else if (devData.state === 'DOWN') {
-        status = '离线'
+        status = this.$t('openatc.devicemanager.offline')
       } else {
-        status = '故障'
+        status = this.$t('openatc.devicemanager.fault')
       }
       let content =
       `
-        <div>路口${agentid}</div>
+        <div>${crossRoadName}</div>
         <div>${status}</div>
         <div>${date}</div>
       `
