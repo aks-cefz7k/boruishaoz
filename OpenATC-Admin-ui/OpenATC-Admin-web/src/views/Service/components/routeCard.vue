@@ -100,11 +100,11 @@
           <el-row :gutter="10">
             <el-col :span="10">
               <div class="grid-content-label">
-                {{ $t("openatc.dutyroute.timeleft") }}:
+                {{ $t("openatc.dutyroute.lasttime") }}:
               </div>
             </el-col>
             <el-col :span="14">
-              <template class="grid-content bg-purple">{{ node.resttime }}</template>
+              <template class="grid-content bg-purple">{{ node.totaltime }}</template>
               <el-button
                 v-show="tabName === 'second'"
                 style="float: right;"
