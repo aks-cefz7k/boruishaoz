@@ -119,6 +119,7 @@
               :patternStatusList="scope.row.rings"
               :cycles="scope.row.cycle"
               :phaseList="phaseList"
+              :agentId="agentId"
               >
               </BoardCard>
             </div>
@@ -143,7 +144,7 @@ import { uploadSingleTscParam } from '@/api/param'
 import { getMessageByCode } from '../../utils/responseMessage'
 // import { mapState } from 'vuex'
 // import { getTscControl } from '@/api/control'
-// import { getIframdevid } from '@/utils/auth'
+import { getIframdevid } from '@/utils/auth'
 export default {
   name: 'patterns',
   components: {
@@ -163,6 +164,7 @@ export default {
         group: 'pattern'
       },
       id: 1,
+      agentId: '',
       barrierList: [],
       phaseList: [], // 当前相位集合
       currPatternName: '--',
@@ -220,6 +222,7 @@ export default {
     initData () {
       // 判断有几个环，就创建几个看板
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      this.agentId = getIframdevid()
       let rings = []
       if (phaseList.length === 0) {
         this.$store.getters.tscParam.patternList = []
