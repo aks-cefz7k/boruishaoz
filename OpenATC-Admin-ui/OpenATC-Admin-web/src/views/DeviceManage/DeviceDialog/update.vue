@@ -442,14 +442,14 @@ export default {
     },
     submitDeviceInfo (formName) {
       // 提交表单
-      if (this.deviceInfo.ip === '' || this.deviceInfo.port === '') {
-        this.$message.error(this.$t('openatc.devicemanager.enterrequired'))
-        return
-      }
-      if (!this.ip_status) {
-        this.$message.error(this.$t('openatc.devicemanager.correctIp'))
-        return
-      }
+      // if (this.deviceInfo.ip === '' || this.deviceInfo.port === '') {
+      //   this.$message.error(this.$t('openatc.devicemanager.enterrequired'))
+      //   return
+      // }
+      // if (!this.ip_status) {
+      //   this.$message.error(this.$t('openatc.devicemanager.correctIp'))
+      //   return
+      // }
       if (!this.port_status) {
         this.$message.error(this.$t('openatc.devicemanager.correctport'))
         return
