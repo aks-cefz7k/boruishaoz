@@ -728,3 +728,8 @@ body {
   display: none;
 }
 </style>
+<style scoped>
+.tb-edit >>> .el-select .el-tag__close.el-icon-close {
+  color: #202940;
+}
+</style>
