@@ -104,12 +104,13 @@
                 <el-col :span="24" >
                   <el-scrollbar :vertical="false">
                     <div class="stage-panel-contener">
-                      <OverLap
+                      <over-lap
                       :stageList="scope.row.stagesList"
                       :checked="true"
                       :overlap="overlap"
                       :cycle="scope.row.cycle"
-                      />
+                      >
+                      </over-lap>
                     </div>
                   </el-scrollbar>
                 </el-col>
@@ -138,7 +139,7 @@
       <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" width="870px">
         <template slot-scope="scope">
             <div class="pattern-figure">
-              <BoardCard
+              <pattern-list
               :patternId="scope.row.id"
               :contrloType="contrloType"
               :stagesChange="scope.row.stagesList"
@@ -147,7 +148,7 @@
               :phaseList="phaseList"
               :agentId="agentId"
               >
-              </BoardCard>
+              </pattern-list>
             </div>
          </template>
       </el-table-column>
@@ -164,9 +165,9 @@
 import Kanban from '@/components/Kanban'
 import StageKanban from '@/views/pattern/StageKanban'
 // import StageAdd from '@/views/pattern/StageAdd'
-import BoardCard from '@/components/BoardCard'
+// import BoardCard from '@/components/BoardCard'
 import ExpendConfig from '@/components/ExpendConfig'
-import OverLap from '@/components/OverLap'
+// import OverLap from '@/components/OverLap'
 import { uploadSingleTscParam } from '@/api/param'
 import { getMessageByCode } from '../../utils/responseMessage'
 // import { mapState } from 'vuex'
@@ -176,9 +177,7 @@ export default {
   name: 'patterns',
   components: {
     Kanban,
-    BoardCard,
     ExpendConfig,
-    OverLap,
     StageKanban
   },
   data () {
