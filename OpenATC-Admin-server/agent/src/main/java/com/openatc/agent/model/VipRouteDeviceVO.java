@@ -1,6 +1,7 @@
 package com.openatc.agent.model;
 
 import com.openatc.model.model.MyGeometry;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +38,8 @@ public class VipRouteDeviceVO {
 
     private int totaltime;
 
+    private List<DirectionDetail> directions;
+
     private int state; // 0待执勤, 1执勤中
     private String resttime;
     private int currentControl; // 当前控制方式（-1未知）
@@ -54,6 +57,7 @@ public class VipRouteDeviceVO {
         this.terminalname = device.getTerminalname();
         this.value = device.getValue();
         this.totaltime = device.getTotaltime();
+        this.directions = device.getDirections();
         this.state = status.getState();
         this.resttime = status.getResttime();
         this.currentControl = status.getControl();

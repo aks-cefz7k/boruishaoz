@@ -38,16 +38,12 @@ import static com.openatc.core.common.IErrorEnumImplOuter.*;
 public class VipRouteController {
     @Autowired
     VipRouteDao vipRouteDao;
-
     @Autowired
     public StringRedisTemplate stringRedisTemplate;
-
     @Autowired
     VipRouteDeviceDao vipRouteDeviceDao;
-
     @Autowired
     MessageController messageController;
-
     @Autowired
     AscsDao ascsDao;
 
