@@ -11,6 +11,7 @@
  **/
 <template>
   <div class="container-main">
+    <FaultDetailModal ref="faultDetail" :agentId="agentId" @refreshFault="getFaultById"></FaultDetailModal>
     <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
       <div class="wenzijiemian" v-show="!isShowGui">
         <div class="container-left">
@@ -149,20 +150,192 @@
             </BoardCard>
           </div>
         </div>
+        <div class="tuxing-right" v-if="!graphicMode" ref="tuxingRight">
+          <transition name="fade-right" mode="out-in"
+          :enter-active-class="toPage === 1 ? 'animated fadeInRight' : 'animated fadeInLeft'"
+          :leave-active-class="toPage === 1 ? 'animated fadeOutRight' : 'animated fadeOutLeft' ">
+            <div style="position: absolute;width: 100%;"  v-show="(isOperation && !isClosePhase)">
+             <ManualControlModal
+               :controlData="controlData"
+               :modelList="modelList"
+               :stagesList="stagesList"
+               :specialcontrolList="specialcontrolList"
+               :currModel="currModel"
+               :preselectModel="preselectModel"
+               :currentStage="currentStage"
+               :preselectStages="preselectStages"
+               @closeManualModal="closeManualModal"
+               @selectModel="selectModel"
+               @selectStages="selectStages"
+               @patternCommit="patternCommit"
+               @selectSpecialModel="selectSpecialModel" />
+            </div>
+          </transition>
+          <transition name="fade-left" mode="out-in"
+          enter-active-class="animated fadeInRight"
+          leave-active-class="animated fadeOutRight">
+            <div style="position: absolute;width: 100%;" v-show="(isOperation && isClosePhase)">
+              <ClosePhaseControlModal
+                v-if="specialPage === 'closephase'"
+                :controlData="controlData"
+                :closePhaseRings="phaseRings"
+                @closePhaseBack="closePhaseBack"
+                @closePhaseControl= "closePhaseControl" />
+              <LockingPhaseControlModal
+                v-if="specialPage === 'lockingphase'"
+                :controlData="controlData"
+                :closePhaseRings="phaseRings"
+                @closePhaseBack="closePhaseBack"
+                @closePhaseControl= "closePhaseControl" />
+            </div>
+          </transition>
 
-        <div ref="tuxingRight">
-          <RightPanel
-            ref="rightpanel"
-            :statusData="crossStatusData"
-            :agentName="agentName"
-            :responseTime="responseTime"
-            :devStatus="devStatus"
-            :agentId="agentId"
-            :ip="ip"
-            :platform="platform"
-            :stagesList="stagesList"
-            :currModel="currModel"
-            :currentStage="currentStage" />
+          <transition name="fade-left" mode="out-in"
+          enter-active-class="animated fadeInLeft"
+          leave-active-class="animated fadeOutLeft">
+
+            <div class="right-control-part" style="position: absolute;width: 100%;" v-show="!isOperation">
+              <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
+              <div class="cross-module">
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+                  <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.connected')}}</div>
+                  <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
+                  <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
+                </div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div> -->
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
+                <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
+                <div class="cross-content">
+                  <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
+                  <div style="margin-left: 85px;" v-if="curFaultList.length">
+                    <el-tag v-if="confirmedFault.length" type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span></el-tag>
+                    <el-tag v-if="untreatedFault.length">{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span></el-tag>
+                    <el-tag v-if="ignoredFault.length" type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span></el-tag>
+                    <span class="fault-detail-btn" @click="showFaultDetail">{{$t('edge.overview.details')}} >></span>
+                  </div>
+                  <div style="margin-left: 85px;" class="cross-value" v-if="!curFaultList.length">{{$t('edge.overview.nofault')}}</div>
+                </div>
+              </div>
+              <div class="control-bottom">
+                <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
+                <el-button type="primary" style="float: right; margin-right: 20px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
+                <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
+              </div>
+              <div class="cross-module">
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
+                </div> -->
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div> -->
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
+                </div> -->
+
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
+                </div>
+
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
+                </div> -->
+
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
+                </div>
+
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
+                </div> -->
+
+                <!-- 信号机控制状态模块 Start-->
+                <div class="controlStatePart">
+                  <div class="bigPart">
+                    <el-row :gutter="7">
+                      <el-col :span="12">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.mode}}</div>
+                          <div class="name">{{$t('edge.overview.controlmodel')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
+                          <div class="name">{{$t('edge.overview.curModel')}}</div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <div class="smallPart">
+                    <el-row :gutter="7">
+                      <el-col :span="8" v-if="controlData.patternid !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.patternid}}</div>
+                          <div class="name">{{$t('edge.overview.controlnumber')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="responseTime !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{responseTime + ' ms'}}</div>
+                          <div class="name">{{$t('edge.overview.responseTime')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="controlData.duration !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.duration + ' s'}}</div>
+                          <div class="name">{{$t('edge.overview.duration')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="controlData.delay !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.delay}}</div>
+                          <div class="name">{{$t('edge.overview.delay')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="currentStage !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{currentStage}}</div>
+                          <div class="name">{{$t('edge.overview.curStage')}}</div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+                <!-- 信号机控制状态模块 End-->
+
+                <div class="cross-content" v-show="stagesList && stagesList.length > 0">
+                  <div style="float: left;" class="cross-name">{{$t('edge.overview.currentstage')}}:</div>
+                  <div style="margin-left: 85PX;" >
+                    <div style="width: 100%; height: auto;">
+                      <div class="control-model" v-for="(item, index) in stagesList" :key="index">
+                        <div style="position:relative;" class="single-model" :class="currentStage == index + 1 ? 'single-model-select' : ''">
+                          <PatternWalkSvg class="patternWalk" v-if="item[0].peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'55'" :Height="'55'" />
+                          <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
+                          <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
+                            <div class="current-stage-num" style="width:20%;">{{index + 1}}</div>
+                            <div style="width:70%;">
+                              <i class="iconfont icon-BRT" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 4"></i>
+                              <i class="iconfont icon-feijidongche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 6"></i>
+                              <i class="iconfont icon-gongjiaoche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 3"></i>
+                              <i class="iconfont icon-youguidianche" style="font-size:11PX;color:#606266;" v-if="item[item.length-1].controltype === 5"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cross-content" v-show="closePhase && closePhase.length > 0">
+                  <div style="float: left;margin-right: 16px;" class="cross-name">{{$t('edge.overview.phaseclose')}}:</div>
+                  <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
+                </div>
+
+              </div>
+            </div>
+          </transition>
         </div>
       </div>
     </div>
@@ -176,23 +349,38 @@ import { registerMessage, uploadSingleTscParam } from '@/api/param'
 import { setIframdevid } from '@/utils/auth'
 import FloatImgBtn from '@/components/FloatImgBtn'
 import CrossDiagram from './crossDirection/crossDiagram'
+// import PatternStatus from '@/components/PatternStatus'
+// import StageStatus from '@/components/StageStatus'
 import BoardCard from '@/components/BoardCard'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
-// import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
+import ManualControlModal from './manualControlModal'
+import ClosePhaseControlModal from './closePhaselControlModal'
+import LockingPhaseControlModal from './lockingPhaselControlModal'
+import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
+import { GetAllFaultRange } from '@/api/fault'
+import FaultDetailModal from '@/components/FaultDetailModal'
+import xdrdirselector from '@/components/XRDDirSelector'
+import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkSvg'
 import PhaseDataModel from '@/views/overView/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
-import RightPanel from '@/components/SchemeConfig'
 export default {
   name: 'overview',
   components: {
     FloatImgBtn,
     CrossDiagram,
+    PatternWalkSvg,
+    // PatternStatus,
+    // StageStatus,
     BoardCard,
     CurVolume,
     CurPhase,
-    RightPanel
+    ManualControlModal,
+    ClosePhaseControlModal,
+    LockingPhaseControlModal,
+    FaultDetailModal,
+    xdrdirselector
   },
   data () {
     return {
@@ -208,6 +396,7 @@ export default {
         duration: ''
       },
       controlNum: '',
+      spanArr: [],
       list: [{
         iconClass: 'model',
         name: '控制模式',
@@ -237,6 +426,7 @@ export default {
       phaseControlTimer: null, // 定时器
       registerMessageTimer: null, // 延时器
       volumeControlTimer: null, // 流量定时器
+      faultTimer: null, // 当前故障定时器
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
       ParamsMode: new Map([[0, '自主控制'], [1, '本地手动'], [2, '平台控制'], [3, '配置软件控制'], [4, '遥控器控制'], [5, '黄闪器控制'], [6, '降级控制'], [7, '脚本控制'], [8, '算法控制']]),
       ParamsModeEn: new Map([[0, 'Autonomous Control'], [1, 'Local Manual'], [2, 'Platform Control'], [3, 'Configuration Software Control'], [4, 'Remote Control'], [5, 'Yellow Flasher Control'], [6, 'Degradation Control'], [7, 'Script Control'], [8, 'Algorithm Control']]),
@@ -247,18 +437,65 @@ export default {
       ip: '--',
       port: '--',
       protocol: '--',
+      faultArr: [], // 故障信息
       devStatus: 1,
       mode: '2',
       loading: {},
       agentId: '0',
       agentName: '--',
       platform: undefined,
+      modelList: [{
+        id: 1,
+        iconClass: 'huangshan',
+        iconName: '黄闪'
+      }, {
+        id: 2,
+        iconClass: 'quanhong',
+        iconName: '全红'
+      }, {
+        id: 3,
+        iconClass: 'guandeng',
+        iconName: '关灯'
+      }, {
+        id: 4,
+        iconClass: 'bujin',
+        iconName: '步进'
+      }, {
+        id: 5,
+        iconClass: 'dingzhouqi',
+        iconName: '定周期'
+      }, {
+        id: 6,
+        iconClass: 'ganyingkongzhi',
+        iconName: '感应控制'
+      }, {
+        id: 9,
+        iconClass: 'zishiying',
+        iconName: '自适应控制'
+      }, {
+        id: 10,
+        iconClass: 'wuxianlan',
+        iconName: '无电缆协调'
+      }, {
+        id: 12,
+        iconClass: 'xingrenguojie',
+        iconName: '行人过街'
+      }, {
+        id: 19,
+        iconClass: 'ganyingshixingrenguojie',
+        iconName: '感应式行人过街控制'
+      }],
       currModel: -1,
+      preselectModel: -1, // 预选方案
+      preselectStages: -1, // 预选阶段
       crossStatusData: null, // 路口状态数据
       reset: false,
       currentStage: 0,
       responseTime: 0,
+      closePhase: [],
       stagesList: [],
+      isOperation: false, // 是否为手动可操作状态
+      isdalayshow: true,
       showList: [{
         iconClass: 'model',
         name: '控制模式',
@@ -295,12 +532,34 @@ export default {
       syncTime: '--',
       volumeData: null,
       curTable: 'phase',
+      tempPatternid: 0, // 控制方式手动操作的情况下的控制编号的临时值。
+      tempDelay: 0, // 控制方式手动操作的情况下的延迟时间的临时值。
+      tempDuration: 0, // 控制方式手动操作的情况下的持续时间的临时值。
       phaseList: [], // 当前相位集合
+      // patternStatusList: [], // 显示方案状态的相关数据集合
+      stageStatusList: [], // 实时阶段状态的相关数据集合
+      barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
       shrink: 1,
+      basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
       isResend: true,
       commonHeight: undefined, // 左右侧面板的高度值
-      busPhaseData: []
+      faultvisible: false,
+      isClosePhase: false, // 是否在相位关断
+      toPage: 1, // 与哪一个页面交互，1 代表路口信息页面，3代表 相位关断页面
+      specialcontrolList: [{ // 特殊控制
+        id: 23,
+        iconClass: 'closephase'
+      }, {
+        id: 22,
+        iconClass: 'lockingphase'
+      }],
+      phaseRings: [],
+      curFaultList: [],
+      confirmedFault: [],
+      ignoredFault: [],
+      untreatedFault: [],
+      specialPage: '' // 哪一个特殊控制页面
     }
   },
   computed: {
@@ -322,9 +581,12 @@ export default {
           }
           this.agentId = this.$route.query.agentid
           setIframdevid(this.agentId)
+          // this.ip = this.$route.query.IP
+          // this.port = this.$route.query.port
+          // this.protocol = this.$route.query.protocol
           this.resetCrossDiagram()
           this.getPlatform()
-          this.$refs.rightpanel.getFaultById()
+          this.getFaultById()
         }
       },
       // 深度观察监听
@@ -350,19 +612,27 @@ export default {
     }
   },
   created () {
+    // this.getPedPhasePos()
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
       this.agentId = this.$route.query.agentid
       setIframdevid(this.agentId)
+      // this.ip = this.$route.query.IP
+      // this.port = this.$route.query.port
+      // this.protocol = this.$route.query.protocol
       this.resetCrossDiagram()
       this.registerMessage() // 注册消息
     } else {
+      // setIframdevid('23080400311210000088')
+      // setIframdevid('8011')
       this.queryDevParams() // 查询设备信息
     }
+    // this.registerMessage() // 注册消息
   },
   mounted () {
     this.getPlatform()
+    this.getFault()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
     }
@@ -385,6 +655,12 @@ export default {
           break
         default: break
       }
+    },
+    getFault () {
+      this.getFaultById()
+      this.faultTimer = setInterval(() => {
+        this.getFaultById()
+      }, 30000)
     },
     getPedPhasePos () {
       // 行人相位信息
@@ -424,6 +700,10 @@ export default {
         this.$message.error(error)
         console.log(error)
       })
+      // console.log('获取实时流量')
+      // const Data = require('./test.json')
+      // this.volumeData = JSON.parse(JSON.stringify(Data))
+      // this.getVolumeSum()
     },
     getVolumeSum () {
       let sumVolume = 0
@@ -454,13 +734,27 @@ export default {
           }
           return
         }
+        // let res = data.data.data.data
+        // let obj = {
+        //   ip: '',
+        //   port: '',
+        //   protocol: ''
+        // }
+        // let newRes = {...obj, ...res}
         this.devStatus = 3
+        // this.ip = newRes.ip
+        // this.port = newRes.port
+        // this.protocol = newRes.protocol
+        // if (newRes.fault) {
+        //   this.faultArr = this.getFaultMes(newRes.fault)
+        // }
         this.clearPatternInterval() // 清除其他定时器
         this.clearVolumeInterval()
         this.phaseControlTimer = setInterval(() => {
           if (this.intervalFlag) {
             this.initData()
           }
+          // this.initData()
         }, 1000)
         this.getVolume()
         this.volumeControlTimer = setInterval(() => {
@@ -468,6 +762,13 @@ export default {
         }, 300000)
         this.getPhase()
       })
+    },
+    getFaultMes (codeList) {
+      if (this.$i18n.locale === 'en') {
+        return getFaultMesEn(codeList)
+      } else {
+        return getFaultMesZh(codeList)
+      }
     },
     reSend () { // 设备掉线重连机制
       this.devStatus = 1
@@ -492,6 +793,12 @@ export default {
       if (this.registerMessageTimer !== null) {
         clearTimeout(this.registerMessageTimer) // 清除延时器
         this.registerMessageTimer = null
+      }
+    },
+    clearFaultInterval () {
+      if (this.faultTimer !== null) {
+        clearInterval(this.faultTimer) // 清除流量定时器
+        this.faultTimer = null
       }
     },
     initData () {
@@ -527,49 +834,27 @@ export default {
         this.currModel = TscData.control
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
+        // this.handlePatternData() // 计算方案状态展示数据
+        // this.getStageStatusData()
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
-        // this.handleGetPhaseClose()
+        // this.handlePatternData() // 计算方案状态展示数据
+        this.handleGetPhaseClose()
       }).catch(error => {
         // this.$message.error(error)
         console.log(error)
       })
     },
-    getBusPos () {
-      // 公交相位信息
-      this.busPhaseData = []
-      this.phaseList.forEach((ele, i) => {
-        if (ele.controltype >= 3 && ele.controltype <= 5) {
-          ele.direction.forEach((dir, index) => {
-          // 车道相位
-            this.busPhaseData.push({
-              // key: this.CrossDiagramMgr.getUniqueKey('busphase'),
-              phaseid: ele.id, // 相位id，用于对应相位状态
-              id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
-              name: this.PhaseDataModel.getBusPhasePos(dir).name,
-              controltype: ele.controltype
-            })
-          })
-        }
-      })
-      let result = []
-      let obj = {}
-      for (var i = 0; i < this.busPhaseData.length; i++) {
-        if (!obj[this.busPhaseData[i].phaseid]) {
-          result.push(this.busPhaseData[i])
-          obj[this.busPhaseData[i].phaseid] = true
-        }
-      }
-      this.busPhaseData = result
-    },
     handleStageData (data) {
-      this.getBusPos()
       this.stagesList = []
-      let busPhaseData = this.busPhaseData
+      let boardCard = this.$refs.boardCard
+      let busPhaseData = []
+      if (boardCard) {
+        busPhaseData = boardCard.$children[1].busPhaseData
+      }
       this.currentStage = data.current_stage
       let stages = data.stages
       if (!stages) return
-      let stagesTemp = []
       for (let stage of stages) {
         let tempList = []
         let directionList = []
@@ -595,15 +880,13 @@ export default {
           }
         }
         directionList = [...new Set(directionList)]
-        if (directionList.length === 0) return
         tempList = directionList.map(dir => ({
           id: dir,
           color: '#606266',
           controltype: stageControType,
           peddirection: peddirections
         }))
-        stagesTemp.push(tempList)
-        this.stagesList = JSON.parse(JSON.stringify(stagesTemp))
+        this.stagesList.push(tempList)
       }
     },
     onSubmit () {
@@ -616,8 +899,10 @@ export default {
         return
       }
       this.lockScreen()
+      // let control = { ...this.controlData }
       let control = {}
       control.control = Number(this.control === '999' ? this.controlNum : this.control)
+      // control.pattern = Number(this.form.pattern)
       control.terminal = Number(this.form.terminal)
       control.value = Number(this.form.value)
       control.delay = Number(this.form.delay)
@@ -672,6 +957,8 @@ export default {
         } else if (this.$i18n.locale === 'zh') {
           this.form.mode = this.ParamsMode.get(patternData.mode)
         }
+        // this.form.mode = this.ParamsMode.get(patternData.mode)
+        // this.form.mode = this.ParamsModeEn.get(patternData.mode)
         this.form.value = patternData.value
         this.form.delay = patternData.delay
         this.form.duration = patternData.duration
@@ -757,6 +1044,7 @@ export default {
       let phaseList = value.phase
       let rings = value.rings
       for (let ring of rings) {
+        // let list = ring.sequence.split(' ')
         let list = ring.sequence
         for (let item of list) {
           let obj = {}
@@ -777,6 +1065,7 @@ export default {
         }
       }
       this.$refs.currentPhase.handleObjectSpan()
+      // this.handleObjectSpan()
     },
     lockScreen () {
       this.loading = this.$loading({
@@ -791,6 +1080,128 @@ export default {
     },
     reconnectionDev () {
       this.registerMessage()
+      // registerMessage(this.agentId).then(data => {
+      //   if (!data.data.success) {
+      //     if (this.isResend) {
+      //       this.reSend()
+      //     }
+      //     return
+      //   }
+      //   this.devStatus = 3
+      //   this.clearPatternInterval() // 清除其他定时器
+      //   this.clearVolumeInterval()
+      //   this.phaseControlTimer = setInterval(() => {
+      //     if (this.intervalFlag) {
+      //       this.initData()
+      //     }
+      //     // this.initData()
+      //   }, 1000)
+      //   this.getVolume()
+      //   this.volumeControlTimer = setInterval(() => {
+      //     this.getVolume()
+      //   }, 300000)
+      //   this.getPhase()
+      // })
+    },
+    selectModel (value) {
+      if (!this.isOperation) return
+      // if (this.preselectModel !== -1) {
+      //   this.preselectStages = -1
+      //   if (this.preselectModel === value) {
+      //     this.preselectModel = -1
+      //   } else {
+      //     this.preselectModel = value
+      //   }
+      // } else {
+      //   this.preselectModel = value
+      // }
+      this.preselectStages = -1
+      this.preselectModel = value
+    },
+    selectStages (value) {
+      if (!this.isOperation) return
+      if (this.preselectStages !== -1) {
+        if (this.preselectStages === value) {
+          this.preselectStages = -1
+        } else {
+          this.preselectStages = value
+          this.preselectModel = 4 // 如果选了阶段，默认控制方式为步进
+        }
+      } else {
+        this.preselectStages = value
+        this.preselectModel = 4 // 如果选了阶段，默认控制方式为步进
+      }
+    },
+    changeStatus () {
+      this.toPage = 1
+      this.isOperation = true
+      if (this.modelList.filter(ele => ele.id === 0).length === 0) {
+        let autonomyControl = {
+          id: 0,
+          iconClass: 'zizhukongzhi',
+          iconName: '自主控制'
+        }
+        this.modelList.push(autonomyControl)
+      }
+    },
+    closeManualModal () {
+      this.isOperation = false
+      this.preselectModel = -1
+      this.preselectStages = -1
+      this.tempPatternid = 0
+      this.tempDelay = 0
+      this.tempDuration = 0
+      this.modelList = this.modelList.filter((item) => {
+        return item.id !== 0
+      })
+      this.toPage = 1
+    },
+    patternCommit (manualInfo) {
+      let that = this
+      this.lockScreen()
+      let control = {}
+      that.ParamsMode.forEach(function (value, key, map) {
+        if (that.controlData.mode === value) {
+          control.mode = key
+        }
+      })
+      control.control = that.preselectModel === -1 ? that.currModel : that.preselectModel
+      control.terminal = Number(manualInfo.tempPatternid)
+      control.delay = Number(manualInfo.tempDelay)
+      control.duration = Number(manualInfo.tempDuration)
+      control.value = that.preselectStages === -1 ? 0 : that.preselectStages
+      putTscControl(control).then(data => {
+        that.unlockScreen()
+        let success = 0
+        if (!data.data.success) {
+          that.$message.error(getMessageByCode(data.data.code, that.$i18n.locale))
+          return
+        }
+        if (data.data.data && data.data.data.data) {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            that.$message.error(this.$t(errormsg))
+            return
+          }
+        }
+        // this.closeManualModal()
+        if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
+          that.$message.success(this.$t('edge.overview.nextcycleeffic'))
+          return
+        }
+        if (that.preselectModel === 4) {
+          that.$message.success(this.$t('edge.overview.transitioneffic'))
+          return
+        }
+        if (success === 0) {
+          that.$message.success(this.$t('edge.common.download'))
+        }
+      }).catch(error => {
+        that.unlockScreen()
+        that.$message.error(error)
+        console.log(error)
+      })
     },
     resetCrossDiagram () {
       this.reset = false
@@ -800,6 +1211,21 @@ export default {
     },
     queryDevParams () {
       queryDevice().then(res => {
+        // res.data.data = {
+        //   'id': 192,
+        //   'lastTime': '2021-01-11 15:56:58',
+        //   'type': 'v-atc',
+        //   'status': 0,
+        //   'state': 'UP',
+        //   'jsonparam': {
+        //     'ip': '192.168.14.189',
+        //     'port': 10030,
+        //     'model': 'OpenATC_Software_Version 1.0.0'
+        //   },
+        //   'agentid': '30031',
+        //   'protocol': 'ocp',
+        //   'comtype': 0
+        // }
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
@@ -813,6 +1239,7 @@ export default {
           this.agentName = res.data.data.name
         }
         this.platform = res.data.data.platform
+        // setIframdevid(this.agentId)
         this.resetCrossDiagram()
         this.registerMessage() // 注册消息
       })
@@ -864,14 +1291,198 @@ export default {
       } catch (err) {
         return false
       }
+    },
+    handleFaultsVisible () {
+      this.faultvisible = !this.faultvisible
+    },
+    handleGetPhaseClose () {
+      if (this.crossStatusData.phase) {
+        this.crossStatusData.phase = this.crossStatusData.phase.map(ele => {
+          return {
+            ...ele,
+            close: ele.close || 0,
+            locktype: 0 // 默认所有相位显示解锁状态
+          }
+        })
+        // 相位关断标签
+        this.closePhase = []
+        this.crossStatusData.phase.forEach(phase => {
+          if (phase.close !== undefined && phase.close !== 0) {
+            let typename
+            switch (phase.close) {
+              case 1: typename = ''
+                break
+              case 2: typename = this.$t('edge.overview.vehicle')
+                break
+              case 3: typename = this.$t('edge.overview.pedestrian')
+                break
+              default:typename = ''
+            }
+            this.closePhase.push({
+              id: phase.id,
+              typename: typename
+            })
+          }
+        })
+      }
+    },
+    selectSpecialModel (id) {
+      if (id === 23) {
+        this.toPage = 3
+        this.isClosePhase = true
+        this.initRingPhaseData()
+        this.specialPage = 'closephase'
+      } else if (id === 22) {
+        this.toPage = 3
+        this.isClosePhase = true
+        this.initRingPhaseData()
+        this.specialPage = 'lockingphase'
+      } else {
+        this.isClosePhase = false
+        this.specialPage = ''
+      }
+    },
+    closePhaseBack () {
+      this.toPage = 3
+      this.isClosePhase = false
+    },
+    closePhaseControl (controldata) {
+      this.lockScreen()
+      putTscControl(controldata).then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          this.$message.error(data.data.message)
+          return
+        }
+        this.$alert(this.$t('edge.common.download'), { type: 'success' })
+      }).catch(error => {
+        this.unlockScreen()
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    initRingPhaseData () {
+      // 环信息从单独上载相位信息里获取，以免相位锁定后，方案状态数据里没有rings，导致相位锁定控制列表无法显示
+      this.phaseRings = []
+      let map = {}
+      let dest = []
+      for (let i = 0; i < this.phaseList.length; i++) {
+        let ai = this.phaseList[i]
+        if (!map[ai.ring]) {
+          let addphse = this.addPhaseInfo(ai)
+          dest.push({
+            num: ai.ring,
+            phases: [{...ai, ...addphse}]
+          })
+          map[ai.ring] = ai
+        } else {
+          for (var j = 0; j < dest.length; j++) {
+            var dj = dest[j]
+            if (dj.num === ai.ring) {
+              let addphse = this.addPhaseInfo(ai)
+              dj.phases.push({...ai, ...addphse})
+              break
+            }
+          }
+        }
+      }
+      this.phaseRings = JSON.parse(JSON.stringify(dest))
+    },
+    addPhaseInfo (phase) {
+      let addphse = {}
+      addphse.name = this.$t('edge.overview.phase') + phase.id
+      addphse.desc = this.getPhaseDescription(phase.direction)
+      if (this.crossStatusData !== null) {
+        // 如果方案状态相位有close字段，这边就需要对应close状态进相位关断控制的选项里
+        let phaseStatus = this.crossStatusData.phase.filter(ele => ele.id === phase.id)[0]
+        addphse = {...addphse, ...phaseStatus}
+      }
+      // 相位锁定选项默认都按照解锁状态显示
+      addphse.locktype = 0
+      return addphse
+    },
+    // initRingPhaseData () {
+    // 从方案状态里获取环信息，对应显示相位关断控制列表
+    //   if (this.crossStatusData === null) return
+    //   this.phaseRings = []
+    //   if (!this.crossStatusData.rings) return
+    //   this.crossStatusData.rings.forEach(ring => {
+    //     let obj = {}
+    //     obj.num = ring.num
+    //     obj.phases = []
+    //     for (let i = 0; i < ring.sequence.length; i++) {
+    //       let phaseid = ring.sequence[i]
+    //       let originphase = this.crossStatusData.phase.filter(phase => phase.id === phaseid)[0]
+    //       let addphse = this.getClosePhasesInfo(phaseid)
+    //       obj.phases.push({...originphase, ...addphse})
+    //     }
+    //     this.phaseRings.push(obj)
+    //   })
+    // },
+    // getClosePhasesInfo (phaseid) {
+    //   if (this.phaseList === undefined || this.phaseList.filter(phase => phase.id === phaseid).length === 0) return
+    //   let phaseinfo = this.phaseList.filter(phase => phase.id === phaseid)[0]
+    //   phaseinfo.name = this.$t('edge.overview.phase') + phaseinfo.id
+    //   phaseinfo.desc = this.getPhaseDescription(phaseinfo.direction)
+    //   return phaseinfo
+    // },
+    getPhaseDescription (phaseList) {
+      let list = []
+      for (let id of phaseList) {
+        let obj = {}
+        obj.id = id
+        obj.color = '#454545'
+        list.push(obj)
+      }
+      return list
+    },
+    getFaultById () {
+      // GetCurrentFaultByAgentid(this.agentId).then(res => {
+      //   if (!res.data.success) {
+      //     this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+      //     return false
+      //   } else {
+      //     this.curFaultList = res.data.data
+      //     this.confirmedFault = this.curFaultList.filter(ele => ele.enumerate === '2')
+      //     this.ignoredFault = this.curFaultList.filter(ele => ele.enumerate === '1')
+      //   }
+      // })
+      let param = {
+        agentId: this.agentId,
+        isCurrentFault: true
+      }
+      GetAllFaultRange(param).then(res => {
+        if (res.data.success !== true) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return
+        }
+        this.curFaultList = res.data.data.content
+        this.confirmedFault = this.curFaultList.filter(ele => ele.enumerate === '2')
+        this.ignoredFault = this.curFaultList.filter(ele => ele.enumerate === '1')
+        this.untreatedFault = this.curFaultList.filter(ele => ele.enumerate === '0')
+      })
+    },
+    showFaultDetail () {
+      this.$refs.faultDetail.onViewFaultClick()
     }
   },
+  // beforeDestroy () {
+  //   this.clearPatternInterval() // 清除定时器
+  //   this.clearVolumeInterval()
+  //   this.clearRegisterMessageTimer() // 清除定时器
+  // },
   destroyed () {
     this.isResend = false
     this.clearPatternInterval() // 清除定时器
     this.clearVolumeInterval()
     this.clearRegisterMessageTimer() // 清除定时器
+    this.clearFaultInterval()
     this.getPlatform()
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+</style>
+<style rel="stylesheet/scss" lang="scss">
+</style>
