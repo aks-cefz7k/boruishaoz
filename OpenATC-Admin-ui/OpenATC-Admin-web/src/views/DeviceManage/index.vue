@@ -93,7 +93,7 @@
             <span class="header-span">{{$t('openatc.devicemanager.tag') }}：</span>
             <el-popover
                 placement="bottom"
-                width="260"
+                width="460"
                 v-model="visible2"
                 trigger="click"
               >
@@ -106,7 +106,8 @@
                 {{select}}
               </el-tag>
               <el-input
-                @keyup.enter.native="handleFilter"
+                @keyup.enter.native="getDeviceRanges()"
+                @blur="getDeviceRanges()"
                 v-model="selectTag"
                 slot="reference"
                 style="width: 100px;"/>
