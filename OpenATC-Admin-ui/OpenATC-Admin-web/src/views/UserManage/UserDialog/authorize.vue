@@ -27,6 +27,12 @@
                 :end-placeholder="$t('openatc.usermanager.endtime')">
             </el-date-picker>
         </div>
+        <div class="authorize-token">
+            <div>{{$t('openatc.systemsettings.desc')}}：</div>
+            <div style="margin-top: 10px;">
+              <el-input type="textarea" v-model="description" :rows="3"></el-input>
+            </div>
+        </div>
         <div class="authorize-generate">
             <el-button type="primary" @click="generate" size="small">{{$t('openatc.usermanager.generate')}}</el-button>
         </div>
@@ -58,6 +64,7 @@ export default {
       dialogFormVisible: false,
       value: '',
       token: '',
+      description: '',
       user_name: ''
     }
   },
@@ -66,6 +73,7 @@ export default {
   methods: {
     onAuthorizeClick (user) {
       this.token = ''
+      this.description = ''
       this.user_name = user.user_name
       this.dialogFormVisible = !this.dialogFormVisible
     },
@@ -82,12 +90,14 @@ export default {
       }
       let startDate = this.formateDate(this.value[0])
       let endDate = this.formateDate(this.value[1])
-      AuthorizeToken(this.user_name, startDate, endDate).then(res => {
+      let param = {
+        'user_name': this.user_name,
+        'description': this.description,
+        'start_time': startDate,
+        'end_time': endDate
+      }
+      AuthorizeToken(param).then(res => {
         if (!res.data.success) {
-          if (res.data.code === '3008') {
-            this.$message.error(this.$t('openatc.common.authtip'))
-            return
-          }
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
