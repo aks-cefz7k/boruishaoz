@@ -127,10 +127,6 @@ public class CommClient {
     // 原始通讯接口，通过设备IP和端口，发送和接收消息
     public MessageData exange(String ip, int port, String protype, int exangeType, MessageData sendMsg, int socketType) {
 
-//        long starttime = System.currentTimeMillis();
-//        long endtime = 0L;
-        String agentId = sendMsg.getAgentid();
-
         // 产品工厂类
         ProtocolFactory factory = null;
         // 协议判断
@@ -140,33 +136,14 @@ public class CommClient {
             factory = new scpFactory();
         }
 
-        String sendmsgtype = sendMsg.getInfotype();
-
         // 创建消息处理对象
         Message message = factory.createMessage();
-
-        // 打包
-        PackData packData = null;
-        try {
-            packData = message.pack(sendMsg);
-        } catch (UnsupportedEncodingException e) {
-            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_208,e.getMessage() );;
-            return CreateErrorResponceData(agentId,devCommError);
-        }
-
-        // packData为空，则返回消息不支持
-        if (packData == null) {
-            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId, E_107, null);
-            return CreateErrorRequestData(agentId,devCommError);
-        }
-
-        // 设置通讯类型
+        // 设置平台与设备之间的通讯方式，分为TCP，配置软件UDP和平台UDP
+        // 配置软件UDP使用随机端口，平台UDP使用固定端口
         CommunicationType commType;
-
         // TCP通讯
-        if(socketType == COMM_SOCKET_TYPE_TCP){
+        if(socketType == COMM_SOCKET_TYPE_TCP)
             commType = COMM_TCP;
-        }
         // UDP通讯
         else {
             // 配置软件
@@ -177,22 +154,22 @@ public class CommClient {
                 commType = COMM_UDP_HOSTPORT;
             }
         }
-
         // 创建消息通讯对象
         Communication communication = factory.createCommunication(message,commType, exangeType);
 
-        // 发送
-        int sendrev = 0;
-//        try {
-//            sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
-//        } catch (IOException e) {
-//            log.warning("exange send error: " + e.getMessage() + " Message:" + sendMsg);
-//            return CreateErrorResponceData(agentId,e.getMessage());
-//        }
-
-        sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
-
-        if(sendrev != 0){
+        // 发送-打包
+        String agentId = sendMsg.getAgentid();
+        int sendrev = communication.sendData(agentId,sendMsg, ip, port);
+        // 发送异常处理
+        if(sendrev == -2){
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_208,null );;
+            return CreateErrorResponceData(agentId,devCommError);
+        }
+        else if(sendrev == -3){
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId, E_107, null);
+            return CreateErrorRequestData(agentId,devCommError);
+        }
+        else if(sendrev != 0){
             log.warning("Comm Send Data error!" + sendMsg);
             InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_204,null );
             return CreateErrorResponceData(agentId,devCommError);
@@ -202,35 +179,12 @@ public class CommClient {
         MessageData responceData = null;
         responceData = communication.receiveData();
 
-        // 没有收到消息
+        // 接收异常处理
         if(responceData == null){
             InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_200,null );;
             responceData = CreateErrorResponceData(agentId,devCommError);
         }
 
-//        log.info("receive responceData: " + responceData);
-
-//        try {
-//            responceData = communication.receiveData();
-//
-//            // 没有收到消息
-//            if(responceData == null){
-//                responceData = CreateErrorResponceData(agentId,"Responce Data is null");
-//            }
-//
-//        } catch (IOException e) {
-//            log.warning("exange receive error: " + e.getMessage() + " Message:" + sendMsg);
-//            return CreateErrorResponceData(agentId,e.getMessage());
-//        }
-
-
-//        endtime = System.currentTimeMillis();
-//        responceData.setDelay(endtime-starttime);
-//        log.info("Receive & Unpack Data time:"+ (endtime-starttime) );
-//        log.info("Receive Msg:"+ responceData );
-
         return responceData;
     }
-
-
 }

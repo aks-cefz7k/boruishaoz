@@ -18,6 +18,8 @@ roadnetwork:
                 -   id: 1
                     flowperhour: 200
                     saturation: 1650
+                    mingreen: 15
+                    maxgreen: 150
                 -   id: 2
                     flowperhour: 200
                     saturation: 1650

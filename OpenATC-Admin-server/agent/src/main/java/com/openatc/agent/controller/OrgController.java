@@ -100,7 +100,11 @@ OrgController {
     public RESTRetBase addOrgnization(@RequestBody SysOrg sysOrg) {
         List<SysOrg> list = orgService.findByOrgnization_codeEquals(sysOrg.getOrgnization_code());
         if (list != null && list.size() > 0) {
-            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_11001);
+            if (sysOrg.getId() != null && list.get(0).getId().compareTo(sysOrg.getId()) == 0) {
+                //修改,路径不变情况
+            } else {
+                return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_11001);
+            }
         }
         SysOrg org = orgService.save(sysOrg);
         return RESTRetUtils.successObj(org);

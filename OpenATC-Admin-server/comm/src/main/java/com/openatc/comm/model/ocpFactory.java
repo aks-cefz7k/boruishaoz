@@ -26,9 +26,9 @@ public class ocpFactory implements ProtocolFactory {
         if(commType == COMM_UDP_CONFIGER)
             return new UdpCommunicationForConfiger(message);
         else if (commType == COMM_UDP_HOSTPORT)
-            return new UdpCommunicationStaticPort( OCP_PROTYPE, exangeType);
+            return new UdpCommunicationStaticPort(message, OCP_PROTYPE, exangeType);
         if(commType == COMM_TCP)
-            return new TcpCommunication(message);
+            return new TcpCommunication(message,exangeType);
         else
             return null;
     }

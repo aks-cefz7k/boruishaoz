@@ -16,11 +16,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.Role;
 import com.openatc.agent.model.Token;
+import com.openatc.agent.model.TokenModel;
 import com.openatc.agent.model.User;
 import com.openatc.agent.model.UserRole;
 import com.openatc.agent.realm.JwtToken;
 import com.openatc.agent.service.PermissionDao;
 import com.openatc.agent.service.RoleDao;
+import com.openatc.agent.service.TokenDao;
 import com.openatc.agent.service.UserDao;
 import com.openatc.agent.service.UserRoleDao;
 import com.openatc.agent.utils.DateUtil;
@@ -77,6 +79,8 @@ public class UserController {
     protected TokenUtil tokenUtil;
     @Value("${default.user.password}")
     private String initialPassword;
+    @Autowired
+    protected TokenDao tokenDao;
 
     /**
      * 根据用户创建授权token
@@ -86,9 +90,17 @@ public class UserController {
         String userName = jsonObject.get("user_name").getAsString();
         String endtime = jsonObject.get("end_time").getAsString();
         String starttime = jsonObject.get("start_time").getAsString();
+        String description = jsonObject.get("description").getAsString();
         Date enddate = DateUtil.stringToDate(endtime);
         Date startdate = DateUtil.stringToDate(starttime);
         String token = tokenUtil.generateToken(userName, System.currentTimeMillis());
+        TokenModel tokenModel = new TokenModel();
+        tokenModel.setToken(token);
+        tokenModel.setStartTime(startdate);
+        tokenModel.setEndTime(enddate);
+        tokenModel.setDescription(description);
+        tokenModel.setRelateUser(userName);
+        tokenDao.save(tokenModel);
         tokenUtil.tokenMap.put(token, new Token(token, 1, startdate.getTime(), enddate.getTime()));
         Map resultmap = new HashMap();
         resultmap.put("token", token);
@@ -105,11 +117,16 @@ public class UserController {
         String userName = loginUser.get("user_name").getAsString();
         String password = loginUser.get("password").getAsString();
         timestamp = loginUser.get("timestamp").getAsLong();
-        String ip = getRemoteIP(httpServletRequest);
+        String remote = getRemoteIP(httpServletRequest);
         User user = userDao.getUserByUserName(userName);
 
         //不存在该用户
         if (user == null) {
+            return RESTRetUtils.errorObj(E_3011);
+        }
+
+        //判断IP是否正确
+        if ( ! checkip(remote, user.getLogin_ip_limit())) {
             return RESTRetUtils.errorObj(E_3011);
         }
 
@@ -122,7 +139,7 @@ public class UserController {
         Subject subject = SecurityUtils.getSubject();
         String token = tokenUtil.generateToken(userName, timestamp);
         tokenUtil.tokenMap.put(token, new Token(token, 0, System.currentTimeMillis(), System.currentTimeMillis() + 86400000L));
-        JwtToken loginJwt = JwtToken.builder().token(token).ip(ip).build();
+        JwtToken loginJwt = JwtToken.builder().token(token).ip(remote).build();
         try {
             subject.login(loginJwt);
             Map<String, Object> map = new HashMap<>();
@@ -491,5 +508,19 @@ public class UserController {
         //加密后的字符串
         String encodeStr = DigestUtils.md5Hex(text + key);
         return encodeStr;
+    }
+
+    /**
+     * Token ip校验，如果ip与数据库中不一致，则拒绝访问
+     * 只需要在用户登录的时候判断一次
+     * @param
+     * @return
+     */
+    // todo: 增加正则匹配
+    public boolean checkip(String remoteip, String userip ) {
+
+        if (userip.equals("*") ) return true;
+        if (userip.equals(remoteip)) return true;
+        return false;
     }
 }

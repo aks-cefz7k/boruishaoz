@@ -22,6 +22,9 @@ public class Phase {
     private double saturation;
     private long duration;
     private List<Integer> concurrent;
+    private int mingreen = 15;
+    private int maxgreen = 150;
+    private boolean adjusted = false;
 
     public double Y(){
         return flowperhour/saturation;

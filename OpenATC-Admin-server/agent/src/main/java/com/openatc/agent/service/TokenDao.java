@@ -9,13 +9,19 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.comm.model;
+package com.openatc.agent.service;
+
+import com.openatc.agent.model.TokenModel;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
-import com.openatc.comm.data.MessageData;
+public interface TokenDao extends JpaRepository<TokenModel, Integer>{
 
-public interface Communication {
-//    public DatagramPacket exange( PackData packData, String ip, int port) ;
-    int sendData(String agentid, MessageData messageData, String ip, int port);
-    MessageData receiveData();
+//    List<TokenModel> findAll();
+//
+//    TokenModel save(TokenModel entity);
+//
+//    void deleteById(String id);
 }
+
