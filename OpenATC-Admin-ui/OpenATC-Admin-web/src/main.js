@@ -31,7 +31,7 @@ import '@/permission' // permission control
 import './assets/icon/iconfont.css'
 import 'leaflet/dist/leaflet.css'
 
-import Edgebase from '@openatc/edgebase-front'
+import Edgebase from 'edgebase-front'
 // import './styles/index.scss'
 
 import router from './router'

@@ -48,6 +48,7 @@
           <select-pattern
             :agentid="scope.row.agentid"
             :defaultValue="scope.row.patternid"
+            :isAutoLoad="false"
             @onChange="onSelectPatternChange"
             ref="selectPattern"
           ></select-pattern>
