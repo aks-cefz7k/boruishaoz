@@ -234,12 +234,18 @@ public class HisParamsController {
 
     @GetMapping(value = "/devs/hisparams/{uuid}/export/request")  //对String作序列化处理了
     public RESTRetBase getOperationRecordReport(@PathVariable int uuid) {
+        JsonObject requsetBodyJson = null;
+        JsonObject reponseBodyJson = null;
+
         //获取requestBody
         String requestBody = thisParamsDao.getRequestBodyById(uuid);
-        JsonObject requsetBodyJson = new JsonParser().parse(requestBody).getAsJsonObject();
+        if ( requestBody != null)
+        requsetBodyJson = new JsonParser().parse(requestBody).getAsJsonObject();
+
         //获取reponseBody
         String reponseBody = thisParamsDao.getResponseBodyById(uuid);
-        JsonObject reponseBodyJson = new JsonParser().parse(reponseBody).getAsJsonObject();
+        if ( reponseBody != null && reponseBody.equals("null") != true)
+            reponseBodyJson = new JsonParser().parse(reponseBody).getAsJsonObject();
 
         THisParams tHisParams = thisParamsDao.getPartThisParamsById(uuid);
         JsonObject result = new JsonObject();

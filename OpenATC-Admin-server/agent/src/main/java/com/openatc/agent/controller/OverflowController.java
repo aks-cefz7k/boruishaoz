@@ -9,6 +9,7 @@ import com.openatc.agent.service.OptService;
 import com.openatc.agent.service.OverflowDetectorRepository;
 import com.openatc.agent.service.OverflowRepository;
 import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -22,8 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-import static com.openatc.core.common.IErrorEnumImplOuter.E_9003;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_9004;
+import static com.openatc.core.common.IErrorEnumImplInner.*;
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 
 @RestController
@@ -198,6 +199,7 @@ public class OverflowController {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9005);
 
         //根据id恢复自主控制
+        boolean isExcuteOverflow = false; // 如果没有路口执行，则返回恢复失败
         for (Overflow ov : overflowList) {
             // 已开启的路口发送恢复控制,state: 执行结果, 0：执行失败, 1：执行成功，2：恢复失败，3：恢复成功
             if (ov.getState() == 1) {
@@ -207,13 +209,17 @@ public class OverflowController {
                     overflowRepository.updateIsopenByIntersectionid(agentid, 2);
                     return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9002);
                 }
+                isExcuteOverflow = true;
                 overflowRepository.updateIsopenByIntersectionid(agentid, 3);
             }
         }
-
-        // 设置方案关闭状态
-        overflowDetectorRepository.updateStatusById(id, OverflowDetOff);
-        return RESTRetUtils.successObj();
+        if(isExcuteOverflow){
+            // 设置方案关闭状态
+            overflowDetectorRepository.updateStatusById(id, OverflowDetOff);
+            return RESTRetUtils.successObj();
+        }
+        else
+            return RESTRetUtils.errorObj(E_9006);
     }
 
     /**
@@ -236,8 +242,13 @@ public class OverflowController {
             OverflowStatus overflowStatus = new OverflowStatus();
             String agentid = ov.getIntersectionid();
             overflowStatus.setAgentid(agentid);
+            overflowStatus.setState(ov.getState());
 
             AscsBaseModel devs = ascsDao.getAscsByID(agentid);
+            if(devs == null){
+                InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, E_105, null);
+                return RESTRetUtils.errorDetialObj(E_4001, devCommError);
+            }
             if(devs.getState().equals("DOWN")) {
                 overflowStatus.setControl(-1);
             }
