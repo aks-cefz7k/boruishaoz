@@ -536,7 +536,7 @@ const en = {
       'staticWeight': 'Static Weight',
       'phaseStaticFactor': 'Phase Static Factor',
       'createPatternFirst': 'Please create pattern first',
-      'gratterThanOne': 'The sum must less than one '
+      'gratterThanHundred': 'The sum must less than hundred '
     },
     'controlpanel': {
       'controlmode': 'Control Mode',
