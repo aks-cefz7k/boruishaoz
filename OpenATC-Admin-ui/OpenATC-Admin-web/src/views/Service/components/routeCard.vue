@@ -51,7 +51,7 @@
 <script>
 import { ExecuteViproute } from '@/api/service'
 import { getMessageByCode } from '@/utils/responseMessage'
-import ServiceUtil from '../ServiceUtil.js'
+import ServiceUtil from '../serviceUtil.js'
 export default {
   name: 'nodeCard',
   props: {
