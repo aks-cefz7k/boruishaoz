@@ -21,6 +21,7 @@
     filterable
     :placeholder="$t('openatc.common.placeholder')"
     @change="onChange"
+    @click.native="onClick"
   >
     <el-option
       v-for="(item, index) in options"
@@ -57,6 +58,10 @@ export default {
       type: Number,
       default: 0
     },
+    defaultLabel: {
+      type: String,
+      default: ''
+    },
     isAutoLoad: {
       type: Boolean,
       default: true
@@ -69,6 +74,13 @@ export default {
     }
   },
   created () {
+    this.value = this.defaultValue
+    this.options = [
+      {
+        patterndesc: this.defaultLabel,
+        patternid: this.defaultValue
+      }
+    ]
     if (this.isAutoLoad) {
       this.onLoad()
     }
@@ -76,6 +88,9 @@ export default {
   methods: {
     onLoad () {
       this.getCurPattern(this.agentid)
+    },
+    onClick () {
+      this.onLoad()
     },
     getCurPattern (agentid) {
       // 获取当前设备所有可选方案
@@ -86,6 +101,7 @@ export default {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
+        this.options = []
         let list = res.data.data.data.patternList
         for (let item of list) {
           let res = {
