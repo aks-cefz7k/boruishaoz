@@ -130,11 +130,11 @@ public class HistoryDataDao {
 
         }
         mDao.statesCollectYesterday.setOnline(online);
-        mDao.statesCollectYesterday.setOnline(offline);
+        mDao.statesCollectYesterday.setOffline(offline);
 
         // 统计设备故障数
         int fault = faultDao.getCurrentFaultDevCount();
-        mDao.statesCollectYesterday.setOnline(fault);
+        mDao.statesCollectYesterday.setFault(fault);
     }
 
     class HistoryData {
