@@ -76,8 +76,10 @@
         <!-- 相位倒计时 -->
         <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
           <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
-            <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('openatccomponents.overview.phase')}}{{curPhase.id}}:</span>
-            <span style="float: left;">{{curPhase.phaseCountdown}}</span>
+            <div v-if="curPhase.phaseCountdown !== -1">
+              <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('openatccomponents.overview.phase')}}{{curPhase.id}}:</span>
+              <span style="float: left;">{{curPhase.phaseCountdown}}</span>
+            </div>
           </div>
         </div>
         <!-- 手动刷新 -->
