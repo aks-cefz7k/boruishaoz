@@ -1110,7 +1110,7 @@ export default {
               !this.GreenFlashColor || this.GreenFlashColor === '#828282'
                 ? '#7bd66b'
                 : '#828282'
-          }, 1000)
+          }, 500)
           this.lastType = val.pedtype
         }
         if (
