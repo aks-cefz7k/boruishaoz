@@ -16,5 +16,5 @@ import java.util.List;
 public interface DevService {
     RESTRet getDevs(List<AscsBaseModel> ascsBaseModels);
 
-    RESTRetBase getRangeDevs(JsonObject jsonObject);
+//    RESTRetBase getRangeDevs(JsonObject jsonObject);
 }
