@@ -172,14 +172,14 @@ export default {
         'isCurrentFault': true
       }
       GetFaultRange(reqData).then(res => {
-        let list = []
+        let list = {}
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return false
         } else {
           list = res.data.data
         }
-        this.faultList = list.content
+        this.faultList = list.content || []
       })
     }
   },

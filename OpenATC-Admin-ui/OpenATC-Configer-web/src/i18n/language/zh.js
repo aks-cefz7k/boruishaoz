@@ -1022,7 +1022,7 @@ const zh = {
       'faultvaluedetail': '故障详细值',
       'operator': '确认者',
       'operationTime': '确认时间',
-      'enumerate': '确认结果',
+      'enumerate': '故障状态',
       'operation': '操作',
       'realtimefault': '实时故障',
       'historicalfault': '历史故障',
