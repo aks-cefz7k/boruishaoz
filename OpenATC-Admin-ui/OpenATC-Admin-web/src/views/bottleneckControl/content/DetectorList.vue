@@ -135,7 +135,7 @@ export default {
       this.visible = true
     },
     handleDeleteDetector (row) {
-      this.$confirm(this.$t('openatc.bottleneckcontrol.isdeletedetector') + row.id, this.$t('openatc.common.tipsmodaltitle'), {
+      this.$confirm(this.$t('openatc.bottleneckcontrol.isdeletedetector') + row.description, this.$t('openatc.common.tipsmodaltitle'), {
         confirmButtonText: this.$t('openatc.button.OK'),
         cancelButtonText: this.$t('openatc.button.Cancel'),
         type: 'warning'
@@ -167,7 +167,7 @@ export default {
         })
     },
     handleOpenControl (row) {
-      this.$confirm(this.$t('openatc.bottleneckcontrol.isopencontrol') + ' ' + row.id, this.$t('openatc.common.tipsmodaltitle'), {
+      this.$confirm(this.$t('openatc.bottleneckcontrol.isopencontrol') + ' ' + row.description, this.$t('openatc.common.tipsmodaltitle'), {
         confirmButtonText: this.$t('openatc.button.OK'),
         cancelButtonText: this.$t('openatc.button.Cancel'),
         type: 'warning'
@@ -206,7 +206,7 @@ export default {
         })
     },
     handleOffControl (row) {
-      this.$confirm(this.$t('openatc.bottleneckcontrol.isoffcontrol') + ' ' + row.id, this.$t('openatc.common.tipsmodaltitle'), {
+      this.$confirm(this.$t('openatc.bottleneckcontrol.isoffcontrol') + ' ' + row.description, this.$t('openatc.common.tipsmodaltitle'), {
         confirmButtonText: this.$t('openatc.button.OK'),
         cancelButtonText: this.$t('openatc.button.Cancel'),
         type: 'warning'

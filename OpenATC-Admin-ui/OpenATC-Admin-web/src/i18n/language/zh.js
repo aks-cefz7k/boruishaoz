@@ -479,7 +479,7 @@ const zh = {
       'greenextension': '绿灯延长',
       'greenreduction': '绿灯缩减',
       'bottleneckinfo': '区域控制信息',
-      'isdeletedetector': '确认删除检测器',
+      'isdeletedetector': '确认删除',
       'putTscControlError1': '不支持的控制方式',
       'putTscControlError2': '不存在的方案编号',
       'putTscControlError3': '不支持的控制参数',
