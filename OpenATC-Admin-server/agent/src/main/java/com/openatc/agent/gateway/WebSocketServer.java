@@ -100,7 +100,7 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        this.session.setMaxIdleTimeout(5 * 60 * 1000);
+        this.session.setMaxIdleTimeout(60 * 60 * 1000);
         this.session.setMaxTextMessageBufferSize(5 * 1024 * 1024);
         patternWebSocketSet.put(session, new MyWebSocketServer(username, this));
         synchronized (WebSocketServer.class) {
