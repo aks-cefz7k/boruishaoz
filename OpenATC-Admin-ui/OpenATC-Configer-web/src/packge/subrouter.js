@@ -213,19 +213,19 @@ const subRouter = [{
     }
   }]
 },
-{
-  path: '/optimize',
-  component: Layout,
-  children: [{
-    path: 'index',
-    name: 'Optimize',
-    component: () => import('@/views/optimize/index'),
-    meta: {
-      title: 'edge.route.optimize',
-      icon: 'optimize'
-    }
-  }]
-},
+// {
+//   path: '/optimize',
+//   component: Layout,
+//   children: [{
+//     path: 'index',
+//     name: 'Optimize',
+//     component: () => import('@/views/optimize/index'),
+//     meta: {
+//       title: 'edge.route.optimize',
+//       icon: 'optimize'
+//     }
+//   }]
+// },
 {
   path: '/history',
   component: Layout,

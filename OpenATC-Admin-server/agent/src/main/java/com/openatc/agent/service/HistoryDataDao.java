@@ -53,6 +53,7 @@ public class HistoryDataDao {
                 phosedata.remove("countdown");
                 phosedata.remove("pedtype");
                 phosedata.remove("pedcountdown");
+                phosedata.remove("close");
             }
         }catch (Exception e){
             logger.warning(e.getMessage());
