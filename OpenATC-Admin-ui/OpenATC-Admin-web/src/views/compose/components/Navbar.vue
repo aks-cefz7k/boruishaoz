@@ -133,19 +133,11 @@
         :visible.sync="drawer"
         :modal="false"
         :with-header="true">
-        <!-- <span> -->
           <div class="empty" v-show="faultData.length === 0">
             <img src="../../../../static/img/noMessage.png">
             <div class="noInfo">没有新消息</div>
           </div>
           <el-card v-for="(fault,index) in faultData" :key="index" class="box-card" style="margin:10px 16px">
-            <!-- <div slot="header" class="clearfix">
-              <i class="el-icon-location-outline" type="primary"></i>
-              <span>{{$t('openatc.faultrecord.deviceid')}}</span>
-              <el-button style="float: right; padding: 3px 0" type="text">
-                <i class="el-icon-close"></i>
-              </el-button>
-            </div> -->
             <div class="text item">
               <el-row :gutter="20" class="row-bg">
                 <el-col :span="24">
@@ -217,9 +209,8 @@
               <el-button type="text" icon="el-icon-remove-outline" size="mini" @click="confirmeds(fault)">{{$t('openatc.faultrecord.neglect')}}</el-button>
             </div>
           </el-card>
-        <!-- </span> -->
       </el-drawer>
-    <div class="alarm-message" @click="drawer = true, isDot=false">
+    <div class="alarm-message" @click="drawer = true, isDot=false, getCurrent()">
       <el-badge :is-dot="isDot" class="item">
         <img style ="width: 18px;" src="../../../assets/home/notice.png">
       </el-badge>
@@ -359,35 +350,35 @@ export default {
       let value = ''
       if (this.$i18n.locale === 'en') {
         if (data.m_wFaultType === 103) {
-          value = data.m_byFaultDescValue + getMainFaultTypeEn.get(data.m_wFaultType) + this.TZParamSubtypeMapEn.get(data.m_wSubFaultType)
+          value = data.m_byFaultDescValue + getMainFaultTypeEn(data.m_wFaultType) + this.TZParamSubtypeMapEn.get(data.m_wSubFaultType)
           return value
         } else if (data.m_wFaultType === 208 || data.m_wFaultType === 207 || data.m_wFaultType === 206) {
-          value = data.m_byFaultDescValue + getMainFaultTypeEn.get(data.m_wFaultType) + this.greenLampSubtypeMapEn.get(data.m_wSubFaultType)
+          value = data.m_byFaultDescValue + getMainFaultTypeEn(data.m_wFaultType) + this.greenLampSubtypeMapEn.get(data.m_wSubFaultType)
           return value
         } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
-          value = data.m_byFaultDescValue + getMainFaultTypeEn.get(data.m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.m_wSubFaultType)
+          value = data.m_byFaultDescValue + getMainFaultTypeEn(data.m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.m_wSubFaultType)
           return value
         } else if (data.m_wFaultType === 212) {
-          value = data.m_byFaultDescValue + getMainFaultTypeEn.get(data.m_wFaultType) + this.lampgroupfailureMapEn.get(data.m_wSubFaultType)
+          value = data.m_byFaultDescValue + getMainFaultTypeEn(data.m_wFaultType) + this.lampgroupfailureMapEn.get(data.m_wSubFaultType)
         } else {
-          value = data.m_byFaultDescValue + getMainFaultTypeEn.get(data.m_wFaultType)
+          value = data.m_byFaultDescValue + getMainFaultTypeEn(data.m_wFaultType)
           return value
         }
       } else {
         if (data.m_wFaultType === 103) {
-          value = data.m_byFaultDescValue + getMainFaultType.get(data.m_wFaultType) + this.TZParamSubtypeMap.get(data.m_wSubFaultType)
+          value = data.m_byFaultDescValue + getMainFaultType(data.m_wFaultType) + this.TZParamSubtypeMap.get(data.m_wSubFaultType)
           return value
         } else if (data.m_wFaultType === 208 || data.m_wFaultType === 207 || data.m_wFaultType === 206) {
-          value = data.m_byFaultDescValue + getMainFaultType.get(data.m_wFaultType) + this.greenLampSubtypeMap.get(data.m_wSubFaultType)
+          value = data.m_byFaultDescValue + getMainFaultType(data.m_wFaultType) + this.greenLampSubtypeMap.get(data.m_wSubFaultType)
           return value
         } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
-          value = data.m_byFaultDescValue + getMainFaultType.get(data.m_wFaultType) + this.lampPowerSubtypeMap.get(data.m_wSubFaultType)
+          value = data.m_byFaultDescValue + getMainFaultType(data.m_wFaultType) + this.lampPowerSubtypeMap.get(data.m_wSubFaultType)
           return value
         } else if (data.m_wFaultType === 212) {
-          value = data.m_byFaultDescValue + getMainFaultType.get(data.m_wFaultType) + this.lampgroupfailureMap.get(data.m_wSubFaultType)
+          value = data.m_byFaultDescValue + getMainFaultType(data.m_wFaultType) + this.lampgroupfailureMap.get(data.m_wSubFaultType)
           return value
         } else {
-          value = data.m_byFaultDescValue + getMainFaultType.get(data.m_wFaultType)
+          value = data.m_byFaultDescValue + getMainFaultType(data.m_wFaultType)
           return value
         }
       }
@@ -406,33 +397,36 @@ export default {
       this.model = this.formatterModel(data.model)
       if (this.$i18n.locale === 'en') {
         if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
-          this.faultDescValue = getMainFaultTypeEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
+          this.faultDescValue = getMainFaultTypeEn(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 208 || data.data.m_FaultDeque[0].m_wFaultType === 207 || data.data.m_FaultDeque[0].m_wFaultType === 206) {
-          this.faultDescValue = getMainFaultTypeEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
+          this.faultDescValue = getMainFaultTypeEn(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
-          this.faultDescValue = getMainFaultTypeEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
+          this.faultDescValue = getMainFaultTypeEn(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
-          this.faultDescValue = getMainFaultTypeEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
+          this.faultDescValue = getMainFaultTypeEn(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
         } else {
-          this.faultDescValue = getMainFaultTypeEn.get(data.data.m_FaultDeque[0].m_wFaultType)
+          this.faultDescValue = getMainFaultTypeEn(data.data.m_FaultDeque[0].m_wFaultType)
         }
       } else {
         if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
-          this.faultDescValue = getMainFaultType.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
+          this.faultDescValue = getMainFaultType(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 208 || data.data.m_FaultDeque[0].m_wFaultType === 207 || data.data.m_FaultDeque[0].m_wFaultType === 206) {
-          this.faultDescValue = getMainFaultType.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
+          this.faultDescValue = getMainFaultType(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
-          this.faultDescValue = getMainFaultType.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
+          this.faultDescValue = getMainFaultType(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
-          this.faultDescValue = getMainFaultType.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
+          this.faultDescValue = getMainFaultType(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
         } else {
-          this.faultDescValue = getMainFaultType.get(data.data.m_FaultDeque[0].m_wFaultType)
+          this.faultDescValue = getMainFaultType(data.data.m_FaultDeque[0].m_wFaultType)
         }
       }
       if (this.notify) {
         this.notify.close()
       }
       this.open2()
+    },
+    getCurrent () {
+      this.getUntreated()
     },
     open2 () {
       const h = this.$createElement

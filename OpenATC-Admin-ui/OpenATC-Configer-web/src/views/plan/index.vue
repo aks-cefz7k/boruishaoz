@@ -124,46 +124,51 @@ export default {
       }
     },
     AddTab () {
-      this.$prompt(this.$t('edge.plan.tipcontext'), this.$t('edge.plan.tip'), {
-        confirmButtonText: this.$t('edge.plan.ok'),
-        cancelButtonText: this.$t('edge.plan.cancel'),
-        inputValidator: (value) => {
-          if (value === undefined || value === null || value.replace(/\s/g, '') === '') {
-            // 计划名必填校验
-            return this.$t('edge.plan.plannamerequired')
-          }
-          // 计划名不能重复校验
-          let inputvalue = value.replace(/\s/g, '')
-          const planList = this.globalParamModel.getParamsByType('planList')
-          for (let obj of planList) {
-            let curdesc = obj.desc
-            if (curdesc) {
-              curdesc = curdesc.replace(/\s/g, '')
-            }
-            if (curdesc === inputvalue) {
-              return this.$t('edge.plan.plannamerepeated')
-            }
-          }
-          return true
-        }
-      }).then(({ value }) => {
-        let inputvalue = value.replace(/\s/g, '') // 去掉字符串空格
-        let planItem = {}
-        // this.tabIndex = this.GetUnUesdPlanNum()
-        // planItem.index = String(this.tabIndex)
-        planItem.id = this.getIdOfByte()
-        planItem.desc = inputvalue
-        planItem.plan = []
-        // planList.push(planItem)
-        this.globalParamModel.addParamsByType('planList', planItem)
-        this.curTabsValue = String(planItem.id)
-        this.isAddTab = true
-      }).catch(() => {
-        // this.$message({
-        //   type: 'info',
-        //   message: 'Input canceled'
-        // })
-      })
+      // this.$prompt(this.$t('edge.plan.tipcontext'), this.$t('edge.plan.tip'), {
+      //   confirmButtonText: this.$t('edge.plan.ok'),
+      //   cancelButtonText: this.$t('edge.plan.cancel'),
+      //   inputValidator: (value) => {
+      //     if (value === undefined || value === null || value.replace(/\s/g, '') === '') {
+      //       // 计划名必填校验
+      //       return this.$t('edge.plan.plannamerequired')
+      //     }
+      //     // 计划名不能重复校验
+      //     let inputvalue = value.replace(/\s/g, '')
+      //     const planList = this.globalParamModel.getParamsByType('planList')
+      //     for (let obj of planList) {
+      //       let curdesc = obj.desc
+      //       if (curdesc) {
+      //         curdesc = curdesc.replace(/\s/g, '')
+      //       }
+      //       if (curdesc === inputvalue) {
+      //         return this.$t('edge.plan.plannamerepeated')
+      //       }
+      //     }
+      //     return true
+      //   }
+      // }).then(({ value }) => {
+      //   let inputvalue = value.replace(/\s/g, '') // 去掉字符串空格
+      //   let planItem = {}
+      //   // this.tabIndex = this.GetUnUesdPlanNum()
+      //   // planItem.index = String(this.tabIndex)
+      //   planItem.id = this.getIdOfByte()
+      //   planItem.desc = inputvalue
+      //   planItem.plan = []
+      //   // planList.push(planItem)
+      //   this.globalParamModel.addParamsByType('planList', planItem)
+      //   this.curTabsValue = String(planItem.id)
+      //   this.isAddTab = true
+      // }).catch(() => {
+      // })
+      let planItem = {}
+      // this.tabIndex = this.GetUnUesdPlanNum()
+      // planItem.index = String(this.tabIndex)
+      planItem.id = this.getIdOfByte()
+      planItem.desc = `${this.$t('edge.plan.plan')}${this.getIdOfByte()}`
+      planItem.plan = []
+      this.globalParamModel.addParamsByType('planList', planItem)
+      this.curTabsValue = String(planItem.id)
+      this.isAddTab = true
     },
     /* 活动标签切换时触发 */
     beforeLeave (currentName, oldName) {

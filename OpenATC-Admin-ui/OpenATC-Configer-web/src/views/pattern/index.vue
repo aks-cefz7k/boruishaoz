@@ -268,7 +268,7 @@ export default {
       this.increaseId()
       let Pattern = {
         id: this.id,
-        desc: '',
+        desc: `${this.$t('edge.pattern.pattern')}${this.id}`,
         offset: 0,
         cycle: 0,
         rings: [[], [], [], []]
@@ -301,14 +301,12 @@ export default {
     onAdd () {
       if (this.globalParamModel.getParamLength('phaseList') === 0) {
         this.$message.error(
-          // 'Please create phase first !'
           this.$t('edge.pattern.firstphase')
         )
         return
       }
       if (this.globalParamModel.getParamLength('patternList') >= 32) {
         this.$message.error(
-          // 'There are at most 100 data !'
           this.$t('edge.pattern.mostdata')
         )
         return

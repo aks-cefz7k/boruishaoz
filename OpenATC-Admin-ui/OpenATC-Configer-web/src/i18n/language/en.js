@@ -150,7 +150,8 @@ const en = {
       'cycle': 'Cycle',
       'phasesplit': 'Phase Split',
       'phase': 'Phase',
-      'phasedifference': 'Offset',
+      'patternoffset': 'Pattern offset',
+      'coordinationtime': 'Offset',
       'getintersectionmapagain': 'Get intersection map again',
       'ring': 'Ring',
       'phaseid': 'Phase ID',
@@ -344,7 +345,8 @@ const en = {
       'stage': 'Stage',
       'phase': 'Phase',
       'agentidError': 'Failed to get agentid!',
-      'splitCheckMsg': 'The green letter ratio must be greater than the phase transition time or the pedestrian crossing + pedestrian transition time!'
+      'splitCheckMsg': 'The green letter ratio must be greater than the phase transition time or the pedestrian crossing + pedestrian transition time!',
+      'pattern': 'Pattern'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
@@ -373,7 +375,8 @@ const en = {
       'ControlOption9': 'Self-Adaption',
       'ControlOption10': 'Nocable Control',
       'ControlOption12': 'Pedestrian Crossing Control',
-      'ControlOption19': 'Inductive Pedestrian Crossing Control'
+      'ControlOption19': 'Inductive Pedestrian Crossing Control',
+      'plan': 'plan'
     },
     'date': {
       'desc': 'Description',

@@ -14,26 +14,128 @@
     <!-- <SelectAgentid @onChange="onSelectAgentidChange"></SelectAgentid>
     <SelectCrossPhase :agentid="agentid" @onChange="onSelectCrossPhaseChange"></SelectCrossPhase> -->
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
-    <div class="devs-container">
-      <div class="tag-container">
+    <div class="devs-container" style="position:relative">
+        <div class="tag-container">
         <DeviceTags />
       </div>
       <div class="filter-container">
-        <el-form>
-          <el-form-item>
-            <el-button
-            type="primary"
-            icon="el-icon-plus"
-            @click="handleAdd">{{$t('openatc.common.add')}}</el-button>
-            <el-input
-              @keyup.enter.native="handleFilter"
-              v-model="devsfilter"
-              :placeholder="$t('openatc.common.searchplaceholder')"
-              prefix-icon="el-icon-search"
-              style="width: 200px;"/>
-          </el-form-item>
-        </el-form>
-      </div>
+        <!-- <el-form>
+          <el-form-item> -->
+          <div class="filter">
+            <span class="header-span">{{$t('openatc.devicemanager.devicetype') }}：</span>
+            <el-select
+              style="width: 100px;"
+              v-model="devicetypes"
+              @change="getDeviceRanges('search')"
+              clearable
+              filterable>
+              <el-option
+                v-for="(item, index) in devicetype"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="filter">
+            <span class="header-span">{{$t('openatc.devicemanager.plat') }}：</span>
+            <el-select
+              style="width: 100px;"
+              v-model="plats"
+              @change="getDeviceRanges('search')"
+              clearable
+              filterable>
+              <el-option
+                v-for="(item, index) in plat"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="filter">
+            <span class="header-span">{{$t('openatc.devicemanager.protocol') }}：</span>
+            <el-select
+              style="width: 100px;"
+              v-model="protocols"
+              @change="getDeviceRanges('search')"
+              clearable
+              filterable>
+              <el-option
+                v-for="(item, index) in protocol"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="filter">
+            <span class="header-span">{{$t('openatc.devicemanager.state') }}：</span>
+            <el-select
+              style="width: 100px;"
+              v-model="states"
+              @change="getDeviceRanges('search')"
+              clearable
+              filterable>
+              <el-option
+                v-for="(item, index) in state"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="filter">
+            <span class="header-span">{{$t('openatc.devicemanager.tag') }}：</span>
+            <el-popover
+                placement="bottom"
+                width="460"
+                v-model="visible2"
+                trigger="click"
+              >
+              <el-tag
+                :key="index"
+                v-for="(select,index) in selectTags"
+                :disable-transitions="false"
+                @click="selectItem(select)"
+                >
+                {{select}}
+              </el-tag>
+              <el-input
+                @keyup.enter.native="getDeviceRanges()"
+                @blur="getDeviceRanges()"
+                v-model="selectTag"
+                slot="reference"
+                style="width: 100px;"/>
+              </el-popover>
+          </div>
+        <!-- </el-form-item>
+          <el-form-item> -->
+            <div class="filter" style="margin-right:20px">
+              <el-input
+                @keyup.enter.native="getDeviceRanges()"
+                @blur="getDeviceRanges()"
+                v-model="devsfilter"
+                :placeholder="$t('openatc.common.searchplaceholder')"
+                prefix-icon="el-icon-search"
+                style="width: 200px;"/>
+                  <el-button
+                    type="primary"
+                    icon="el-icon-plus"
+                    @click="handleAdd">
+                    {{$t('openatc.common.add')}}
+                  </el-button>
+
+                <!-- slot="reference"
+            </el-popover> -->
+            </div>
+          <!-- </el-form-item>
+        </el-form> -->
+        </div>
     <div class="devs-table">
       <el-table
           :data="computedTable"
@@ -102,7 +204,7 @@
           :label="$t('openatc.devicemanager.protocol')"
           align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="roles"
             :label="$t('openatc.devicemanager.state')"
             align="center">
@@ -127,7 +229,7 @@
                     <el-tag size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
                 </div>
               </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           prop="lastTime"
           width="150"
@@ -154,12 +256,15 @@
           </template>
           </el-table-column>
       </el-table>
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum" :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" style='margin:0px;'>
+      </el-pagination>
+      </div>
     </div>
     <Update ref="updateChild" :childTitle="childTitle"></Update>
     <Fault-detail ref="faultDetail" :childTitle="childTitle"></Fault-detail>
     <PatternStatistics ref="patternStatistics" :childTitle="childTitle"></PatternStatistics>
     <TrafficStatistics ref="trafficStatistics" :childTitle="childTitle"></TrafficStatistics>
-  </div>
+  <!-- </div> -->
   <router-view></router-view>
 </div>
 </template>
@@ -172,36 +277,118 @@ import FaultDetail from './DeviceDialog/FaultDetail'
 import PatternStatistics from './DeviceDialog/PatternStatistics'
 import TrafficStatistics from './DeviceDialog/TrafficStatistics'
 import DeviceTags from './deviceTags'
-import { GetAllDevice, DeleteDevice } from '@/api/device'
+import { DeleteDevice, getDeviceRange, getDict } from '@/api/device'// GetAllDevice,
 import { GetFaultRange } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
 import SelectAgentid from '@/components/SelectAgentid'
 import SelectCrossPhase from '@/components/SelectCrossPhase'
-import { setCrossFilter, getCrossFilter } from '@/utils/crossFilterMgr'
+// import { setCrossFilter, getCrossFilter } from '@/utils/crossFilterMgr'
 export default {
   name: 'device',
   components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics, SelectAgentid, SelectCrossPhase },
   data () {
     return {
-      agentid: 1489,
-      stateList: ['UP', 'FAULT', 'DOWN'],
+      agentid: 0,
+      // stateList: ['UP', 'FAULT', 'DOWN'],
       isOnlineChecked: true,
       isFaultChecked: true,
       isOfflineChecked: true,
       tableHeight: 700,
       devsfilter: '',
       childTitle: 'adddevice',
+      visible2: false,
+      devicetypes: '',
+      plats: '',
+      protocols: '',
+      states: '',
+      selectTag: '',
+      devicetype: [
+        {
+          label: 'asc',
+          value: 'asc'
+        },
+        {
+          label: 'simu',
+          value: 'simu'
+        },
+        {
+          label: 'v-atc',
+          value: 'v-atc'
+        }
+      ],
+      plat: [
+        {
+          label: 'OpenATC',
+          value: 'OpenATC'
+        },
+        {
+          label: 'SCATS',
+          value: 'SCATS'
+        },
+        {
+          label: 'HUATONG',
+          value: 'HUATONG'
+        },
+        {
+          label: 'HiCon',
+          value: 'HiCon'
+        }
+      ],
+      protocol: [
+        {
+          label: 'ocp',
+          value: 'ocp'
+        },
+        {
+          label: 'scp',
+          value: 'scp'
+        }
+      ],
+      state: [
+        {
+          label: this.$t('openatc.devicemanager.offline'),
+          value: 'DOWN'
+        },
+        {
+          label: this.$t('openatc.devicemanager.online'),
+          value: 'UP'
+        }
+      ],
+      listQuery: {
+        pageNum: 1, // 页码
+        pageRow: 50 // 每页条数
+      },
+      totalCount: 0, // 分页组件--数据总条数
+      selectTags: [],
       messageboxVisible: false,
       tableData: [],
       listLoading: false, // 数据加载等待动画
       firmMap: new Map([['Kedacom', '科达'], ['Tyco', '泰科'], ['Huatong', '华通']])
     }
   },
+  // mounted: function () {
+  //   var _this = this
+  //   _this.$nextTick(function () {
+  //     // window.innerHeight:浏览器的可用高度
+  //     _this.tableHeight = window.innerHeight * 0.8
+  //   })
+  // },
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
       // window.innerHeight:浏览器的可用高度
-      _this.tableHeight = window.innerHeight * 0.8
+      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
+      // 后面的50：根据需求空出的高度，自行调整
+      _this.tableHeight = window.innerHeight - document.querySelector('#footerBtn').offsetTop - 110
+      window.addEventListener(
+        'resize',
+        () => {
+        // 定义窗口大小变更通知事件
+          _this.tableHeight = window.innerHeight - document.querySelector('#footerBtn').offsetTop - 110
+          // 用于计算按钮组距离顶部高度（因为按钮组不能用定位，会影响表格自适应高度）
+          // _this.$emit('changeBtnPosition', document.querySelector('#historyfaultrecord').offsetTop)
+        }
+      )
     })
   },
   computed: {
@@ -210,12 +397,13 @@ export default {
     }),
     computedTable () {
       let list = []
-      list = this.tableData.filter(data =>
-        !this.devsfilter ||
-        (data.agentid !== undefined && data.agentid.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
-        (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
-        (data.name !== undefined && data.name.toLowerCase().includes(this.devsfilter.toLowerCase()))
-      )
+      // list = this.tableData.filter(data =>
+      //   !this.devsfilter ||
+      //   (data.agentid !== undefined && data.agentid.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
+      //   (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
+      //   (data.name !== undefined && data.name.toLowerCase().includes(this.devsfilter.toLowerCase()))
+      // )
+      list = this.tableData
       let stateList = this.stateList
       if (stateList && stateList.length >= 0) {
         list = list.filter(dev => {
@@ -230,88 +418,128 @@ export default {
     }
   },
   watch: {
-    devsfilter: {
-      handler: (filter) => {
-        setCrossFilter(filter)
-      },
-      deep: true
-    }
+    // devsfilter: {
+    //   handler: (filter) => {
+    //     setCrossFilter(filter)
+    //   },
+    //   deep: true
+    // }
   },
   created () {
-    this.devsfilter = getCrossFilter('deviceFilter')
-    this.getList()
-    this.getStatusFilterParams()
+    // this.devsfilter = getCrossFilter('deviceFilter')
+    this.getDicts()
+    if (this.$route.params.filter) {
+      this.getStatusFilterParams()
+    } else {
+      this.getDeviceRanges()
+    }
   },
   methods: {
+    getDicts () {
+      getDict().then(res => {
+        this.selectTags = res.data.data.filter(it => it.value).map(it => it.value)
+      })
+    },
+    selectItem (select) {
+      this.selectTag = select
+      this.getDeviceRanges()
+      this.visible2 = false
+    },
+    handleSizeChange (val) {
+      // 改变每页数量，默认返回第一页
+      this.listQuery.pageNum = 1
+      this.listQuery.pageRow = val
+      this.getDeviceRanges()
+    },
+    handleCurrentChange (val) {
+      // 改变页码
+      this.listQuery.pageNum = val
+      this.getDeviceRanges()
+    },
     onSelectAgentidChange (agentid) {
       this.agentid = agentid
     },
     onSelectCrossPhaseChange (dir) {
       // console.log(dir)
     },
-    onOnlineChange (val) {
-      this.isOnlineChecked = val
-      this.onStateChange()
-    },
-    onFaultChange (val) {
-      this.isFaultChecked = val
-      this.onStateChange()
-    },
-    onOfflineChange (val) {
-      this.isOfflineChecked = val
-      this.onStateChange()
-    },
-    onStateChange () {
-      let stateList = []
-      if (this.isOnlineChecked) {
-        stateList.push('UP')
-      }
-      if (this.isFaultChecked) {
-        stateList.push('FAULT')
-      }
-      if (this.isOfflineChecked) {
-        stateList.push('DOWN')
-      }
-      this.stateList = stateList
-    },
-    getTag (row) {
-      if (row.state === 'DOWN') {
-        return {
-          label: this.$t('openatc.devicemanager.offline'),
-          type: 'info'
-        }
-      } else if (row.state === 'FAULT') {
-        return {
-          label: this.$t('openatc.devicemanager.fault'),
-          type: 'danger'
-        }
-      } else {
-        if (row.status === 0) {
-          // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
-          return {
-            label: this.$t('openatc.devicemanager.online'),
-            type: 'success'
-          }
-        } else {
-          return {
-            label: this.$t('openatc.devicemanager.fault'),
-            type: 'danger'
-          }
-        }
-      }
-    },
-    getList () {
+    // onOnlineChange (val) {
+    //   this.isOnlineChecked = val
+    //   this.onStateChange()
+    // },
+    // onFaultChange (val) {
+    //   this.isFaultChecked = val
+    //   this.onStateChange()
+    // },
+    // onOfflineChange (val) {
+    //   this.isOfflineChecked = val
+    //   this.onStateChange()
+    // },
+    // onStateChange () {
+    //   let stateList = []
+    //   if (this.isOnlineChecked) {
+    //     stateList.push('UP')
+    //   }
+    //   // if (this.isFaultChecked) {
+    //   //   stateList.push('FAULT')
+    //   // }
+    //   if (this.isOfflineChecked) {
+    //     stateList.push('DOWN')
+    //   }
+    //   this.stateList = stateList
+    // },
+    // getTag (row) {
+    //   if (row.state === 'DOWN') {
+    //     return {
+    //       label: this.$t('openatc.devicemanager.offline'),
+    //       type: 'info'
+    //     }
+    //   } else if (row.state === 'FAULT') {
+    //     return {
+    //       label: this.$t('openatc.devicemanager.fault'),
+    //       type: 'danger'
+    //     }
+    //   } else {
+    //     if (row.status === 0) {
+    //       // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
+    //       return {
+    //         label: this.$t('openatc.devicemanager.online'),
+    //         type: 'success'
+    //       }
+    //     } else {
+    //       return {
+    //         label: this.$t('openatc.devicemanager.fault'),
+    //         type: 'danger'
+    //       }
+    //     }
+    //   }
+    // },
+    getDeviceRanges (row) {
       this.listLoading = true
-      GetAllDevice().then(res => {
+      let reqData = {
+        'pageNum': this.listQuery.pageNum,
+        'pageRow': this.listQuery.pageRow,
+        'search': this.devsfilter,
+        'type': this.devicetypes,
+        'platform': this.plats,
+        'protocol': this.protocols,
+        'state': this.states,
+        'tags': this.selectTag
+      }
+      getDeviceRange(reqData).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
-        this.tableData = res.data.data.map(data => ({
-          ...data,
-          firm: this.firmMap.get(data.firm)
-        }))
+        if (res.data.data.content) {
+          this.tableData = res.data.data.content.map(data => ({
+            ...data,
+            firm: this.firmMap.get(data.firm)
+          }))
+        } else {
+          this.tableData = []
+        }
+        this.totalCount = res.data.data.total
       })
     },
     handleToDetail (row) {
@@ -345,7 +573,7 @@ export default {
       this.childTitle = 'editdevice'
       let dev = row
       let updateChild = this.$refs.updateChild
-      updateChild.onUpdateClick(dev)
+      updateChild.onUpdateClick(dev)// 没有tags字段
     },
     handleDelete (row) {
       this.childTitle = 'faultDetail'
@@ -407,7 +635,7 @@ export default {
         //   type: 'success'
         // })
         this.messageboxVisible = false
-        this.getList()
+        this.getDeviceRanges()
       })
     },
     sortAgentId (obj1, obj2) {
@@ -439,20 +667,22 @@ export default {
       // 获取从首页跳转过来的设备状态过滤参数
       if (this.$route.params.filter !== undefined) {
         let stateFilter = this.$route.params.filter
-        switch (stateFilter) {
-          case 'online': this.onOnlineChange(true)
-            this.onOfflineChange(false)
-            this.onFaultChange(false)
-            break
-          case 'offline': this.onOfflineChange(true)
-            this.onOnlineChange(false)
-            this.onFaultChange(false)
-            break
-          case 'fault': this.onFaultChange(true)
-            this.onOnlineChange(false)
-            this.onOfflineChange(false)
-            break
-        }
+        this.states = stateFilter
+        this.getDeviceRanges()
+        // switch (stateFilter) {
+        //   case 'online': this.onOnlineChange(true)
+        //     this.onOfflineChange(false)
+        //     this.onFaultChange(false)
+        //     break
+        //   case 'offline': this.onOfflineChange(true)
+        //     this.onOnlineChange(false)
+        //     this.onFaultChange(false)
+        //     break
+        // case 'fault': this.onFaultChange(true)
+        //   this.onOnlineChange(false)
+        //   this.onOfflineChange(false)
+        //   break
+        // }
       }
     }
   }
@@ -478,6 +708,21 @@ export default {
 //   border: solid 1px $--border-color-lighter;
 //   overflow: auto;
 // }
+.el-tag + .el-tag {
+  margin: 4px 4px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
 .el-dropdown-link {
     margin-left: 5px;
     cursor: pointer;

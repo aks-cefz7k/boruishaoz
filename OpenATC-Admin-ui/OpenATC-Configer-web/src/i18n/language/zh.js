@@ -150,7 +150,8 @@ const zh = {
       'cycle': '周期',
       'phasesplit': '绿信比',
       'phase': '相位',
-      'phasedifference': '相位差',
+      'patternoffset': '相位差',
+      'coordinationtime': '协调时间',
       'getintersectionmapagain': '重新获取路口图',
       'ring': '环',
       'phaseid': '相位id',
@@ -342,7 +343,8 @@ const zh = {
       'stage': '阶段',
       'phase': '相位',
       'agentidError': '获取设备ID失败!',
-      'splitCheckMsg': '绿信比需大于相位过渡时间或绿信比需大于行人过街+行人过渡时间!'
+      'splitCheckMsg': '绿信比需大于相位过渡时间或绿信比需大于行人过街+行人过渡时间!',
+      'pattern': '方案'
     },
     'plan': {
       'tipcontext': '请输入计划名！',
@@ -371,7 +373,8 @@ const zh = {
       'ControlOption9': '自适应控制',
       'ControlOption10': '无电缆控制',
       'ControlOption12': '行人过街控制',
-      'ControlOption19': '感应式行人过街控制'
+      'ControlOption19': '感应式行人过街控制',
+      'plan': '计划'
     },
     'date': {
       'desc': '描述',
