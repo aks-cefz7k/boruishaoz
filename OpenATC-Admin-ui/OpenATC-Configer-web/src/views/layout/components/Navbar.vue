@@ -111,7 +111,7 @@
       <div class="switch-language" v-show="isShowLogout">
         <el-dropdown trigger="click" @command="switchLanguage">
           <span class="el-dropdown-link">
-            {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{$t('edge.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Ch">中文</el-dropdown-item>
@@ -202,7 +202,6 @@ export default {
       splitCheck: true,
       singleDownloadNotZero: false, // 判断单独下载数据是否为空
       type: false,
-      language: 'Language',
       loading: {},
       options: [{
         value: 'all',

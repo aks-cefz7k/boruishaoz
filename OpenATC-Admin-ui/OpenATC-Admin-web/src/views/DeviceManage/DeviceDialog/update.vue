@@ -381,13 +381,20 @@ export default {
       delete devInfo.lat
       AddDevice(devInfo).then(res => {
         if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+          let errorCode = res.data.data.errorCode
+          if (errorCode) {
+            msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+          }
+          this.$message.error(msg)
+          return false
+          // this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           // this.$message({
           //   message: res.data.message,
           //   type: 'error',
           //   duration: 1 * 1000
           // })
-          return
+          // return
         }
         this.dialogFormVisible = false
         this.$message({

@@ -74,6 +74,7 @@ const en = {
       'copyPattern': 'pattern already copied',
       'tip': 'Tips',
       'read': 'Read',
+      'language': 'Language',
       'readDevice': 'Whether to load device',
       'readPattern': 'pattern into the current device configuration ?',
       'title': 'Welcome to KISS Edge Manage Center',
