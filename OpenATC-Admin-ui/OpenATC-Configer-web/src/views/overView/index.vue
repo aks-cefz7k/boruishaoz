@@ -305,7 +305,7 @@
                 </div>
                 <!-- 信号机控制状态模块 End-->
 
-                <div class="cross-content">
+                <div class="cross-content" v-show="stagesList && stagesList.length > 0">
                   <div style="float: left;" class="cross-name">{{$t('edge.overview.currentstage')}}:</div>
                   <div style="margin-left: 85PX;" >
                     <div style="width: 100%; height: auto;">
@@ -1040,6 +1040,7 @@ export default {
     handleTableData (value) {
       this.tableData = []
       if (!value.phase) return
+      if (!value.rings) return
       let phaseList = value.phase
       let rings = value.rings
       for (let ring of rings) {
