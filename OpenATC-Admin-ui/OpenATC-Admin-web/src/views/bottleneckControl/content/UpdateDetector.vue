@@ -62,7 +62,7 @@ export default {
       ],
       rules: {
         description: [
-          { required: true, message: this.$t('openatc.devicemanager.entername'), trigger: 'blur' }
+          { required: true, message: this.$t('openatc.bottleneckcontrol.entername'), trigger: 'blur' }
         ]
       }
     }
