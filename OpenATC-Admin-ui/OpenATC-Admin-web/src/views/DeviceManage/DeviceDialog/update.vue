@@ -65,29 +65,33 @@
             <el-input
               class="input-new-tag"
               v-if="inputVisible"
-              v-model="deviceTag"
+              v-model.trim="deviceTag"
+              maxlength="10"
               ref="saveTagInput"
               size="small"
               @keyup.enter.native="handleInputConfirm"
               @blur="handleInputConfirm"
             >
             </el-input>
+            <el-button :disabled="popovers" v-popover:popover class="button-new-tag" size="small"  @click="showInput">+ 新标签</el-button>
+            <!-- 相对于button定位 button消失定位错乱 -->
           <el-popover
+           ref="popover"
             placement="bottom"
             width="460"
-            v-model="visible2"
+            :popper-options="{boundariesElement:'body' }"
+            v-model="popovers"
             trigger="click"
            >
             <el-tag
               :key="index"
               v-for="(select,index) in selectTags"
               :disable-transitions="false"
-              :class="(deviceInfo.tags?deviceInfo.tags.split(',').includes(select):currentTags.includes(select)) ? 'phaseSelected' : 'phaseNoSelected'"
+              :class="(deviceInfo.tags?deviceInfo.tags.split(',').includes(select):currentTags.includes(select)) ? 'tagSelected' : 'tagNoSelected'"
               @click="selectItem(select)"
               >
               {{select}}
             </el-tag>
-            <el-button slot="reference" class="button-new-tag"  v-model="name" size="small" @click="showInput">+ 新标签</el-button>
           </el-popover>
         </el-form-item>
         <el-form-item
@@ -178,7 +182,7 @@
             @keyup.enter.native="submitDeviceInfo('device')">
             </el-input>
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
             :label="$t('openatc.devicemanager.longitude')"
             prop="lng">
             <el-input
@@ -195,7 +199,7 @@
             v-model="deviceInfo.lat"
             @keyup.enter.native="submitDeviceInfo('device')">
             </el-input>
-        </el-form-item>
+        </el-form-item> -->
         </el-form>
         <div
         slot="footer"
@@ -267,9 +271,9 @@ export default {
       currentTags: [],
       selectTags: [],
       inputVisible: false,
-      visible2: false,
+      popovers: false,
       deviceTag: '',
-      name: '',
+      // name: '',
       dialogFormVisible: false,
       innerVisible: false,
       ip_status: true,
@@ -619,14 +623,17 @@ export default {
   }
 }
 </script>
-
+<style lang="scss" rel="stylesheet/scss">
+.popper__arrow {
+  display: none !important;
+}
+</style>
 <style lang="scss" scoped rel="stylesheet/scss">
 .dev-update .el-dialog__body {
   padding: 30px 72px 30px 0;
 }
 .el-tag + .el-tag {
   margin: 4px 4px;
-  // margin-left: 10px;
 }
 .button-new-tag {
   margin-left: 10px;
@@ -640,18 +647,13 @@ export default {
   margin-left: 10px;
   vertical-align: bottom;
 }
-.phaseNoSelected{
-  // width: 23%;
-  /* padding-bottom: 23%; */
-  // background-color: #edf6ff;
+.tagNoSelected{
   border-radius: 3%;
   float: left;
   margin: 1%;
   cursor: pointer;
 }
-.phaseSelected{
-  // width: 23%;
-  /* padding-bottom: 23%; */
+.tagSelected{
   background-color: #a2cfff;
   border-radius: 3%;
   float: left;

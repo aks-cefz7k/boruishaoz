@@ -107,9 +107,9 @@
                   {{select}}
                 </el-tag>
                 <el-input
-                  @keyup.enter.native="getDeviceRanges()"
-                  @blur="getDeviceRanges()"
                   v-model="selectTag"
+                  clearable
+                  @change="getDeviceRanges()"
                   slot="reference"
                   style="width: 100px;"/>
                 </el-popover>

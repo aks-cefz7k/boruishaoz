@@ -20,19 +20,19 @@
                   <div class="ring-phase">
                     <xdrdirselector  Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
                   </div>
+                  <!-- 人行道 -->
+                  <PatternWalkSvg v-if="item.peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'32'" :Height="'34'" />
                   <div class="box">
                     <div class="ring-nums">P{{item.id}}</div>
                     <div class="ring-nums">{{item.split}}</div>
                   </div>
-                  <!-- 人行道 -->
-                  <SidewalkSvg v-if="item.peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'38'" :Height="'34'" />
                 </div>
               </el-tooltip>
             </div>
-            <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left', 'background':'repeating-linear-gradient(to right, #7CCC66 20%, #ffffff 50%)'}"></div>
+            <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left','background': 'linear-gradient(to right, #ffffff 50%, #7ccc66 0)','background-size': '4px 100%'}"></div>
             <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
             <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
-          </div>
+            </div>
         </div>
       <div v-for="(item, index) in barrierList" :key="index + '1'">
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
@@ -45,13 +45,13 @@
 </template>
 <script>
 import xdrdirselector from '@/components/XRDDirSelector'
-import SidewalkSvg from '@/views/overView/crossDirection/baseImg/SidewalkSvg'
+import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkSvg'
 import PhaseDataModel from '../../views/overView/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 export default {
   name: 'patternstatus',
   components: {
-    SidewalkSvg,
+    PatternWalkSvg,
     xdrdirselector
   },
   data () {
@@ -190,9 +190,9 @@ export default {
       if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
       if (!this.controlDatas.phase) return
       let cycle = this.controlDatas.cycle
+      let list = []
       for (let rings of this.controlDatas.rings) {
         let phase = this.controlDatas.phase
-        let list = []
         for (let sequ of rings.sequence) {
           let obj = {}
           obj.id = sequ
@@ -202,19 +202,21 @@ export default {
           let currPhase = this.phaseList.filter((item) => {
             return item.id === sequ
           })[0]
-          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / cycle * 100).toFixed(3) + '%'
-          obj.flashgreen = (currPhase.flashgreen / cycle * 100).toFixed(3) + '%'
-          obj.peddirection = currPhase.peddirection
-          obj.split = split
-          obj.direction = currPhase.direction.map(item => {
-            return {
-              id: item,
-              color: '#454545'
-            }
-          })
-          list.push(obj)
+          if (currPhase) {
+            obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
+            obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / cycle * 100).toFixed(3) + '%'
+            obj.flashgreen = (currPhase.flashgreen / cycle * 100).toFixed(3) + '%'
+            obj.peddirection = currPhase.peddirection
+            obj.split = split
+            obj.direction = currPhase.direction.map(item => {
+              return {
+                id: item,
+                color: '#454545'
+              }
+            })
+            list.push(obj)
+          }
         }
         this.newList.push(list)
         this.pattern = this.newList
