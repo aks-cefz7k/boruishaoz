@@ -82,11 +82,11 @@
       <el-table-column :label="$t('openatc.bottleneckcontrol.executerestatus')" v-if="!isModify" align="center">
         <template slot-scope="scope">
           <div v-if="scope.row.statedata !== undefined">
-            <el-tooltip v-if="scope.row.statedata.control !== 20" class="item" effect="dark"
+            <el-tooltip v-if="scope.row.statedata.control !== 20 && scope.row.statedata.control !== 100" class="item" effect="dark"
               :content="scope.row.statedata.control > -1 ? $t('edge.overview.modelList' + scope.row.statedata.control) : $t('openatc.bottleneckcontrol.unknow')" placement="bottom">
               <el-tag size="medium" effect="plain" :type="formatCode(scope.row.statedata.control).type">{{ formatCode(scope.row.statedata.control).label }}</el-tag>
             </el-tooltip>
-            <el-tag v-if="scope.row.statedata.control === 20" size="medium" effect="plain" :type="formatCode(scope.row.statedata.control).type">{{ formatCode(scope.row.statedata.control).label }}</el-tag>
+            <el-tag v-if="scope.row.statedata.control === 20 || scope.row.statedata.control === 100" size="medium" effect="plain" :type="formatCode(scope.row.statedata.control).type">{{ formatCode(scope.row.statedata.control).label }}</el-tag>
           </div>
         </template>
       </el-table-column>
@@ -388,7 +388,7 @@ export default {
       return this.statusMap.get(String(cellValue))
     },
     formatCode (control) {
-      if (control === 20) {
+      if (control === 20 || control === 100) {
         return {
           label: this.$t('openatc.bottleneckcontrol.executed'),
           type: 'success'
