@@ -39,7 +39,7 @@
             </el-tooltip>
         </el-col>
         <el-col :span="10">
-          <el-input-number :controls="false" class="col-content" size="small" :min="0" :max="255" :step="1" v-model.number="element.value" ref="type" :disabled="element.mode === 7"></el-input-number>
+          <el-input-number :controls="false" class="col-content" size="small" :min="element.minSplit" :max="255" :step="1" v-model.number="element.value" ref="type" :disabled="element.mode === 7"></el-input-number>
         </el-col>
         <el-col :span="10">
           <el-select v-model="element.mode" class="col-content"  size="small" @change="doChange(element)" :placeholder="$t('edge.common.select')">
@@ -180,7 +180,8 @@ export default {
         // if (ls.mode !== 7 && ls.value < ls.minSplit) {
         //   ls.value = ls.minSplit
         // }
-        let temp1 = phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
+        // let temp1 = phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
+        let temp1 = phase.yellow + phase.redclear + phase.mingreen
         let temp2 = phase.yellow + phase.redclear + phase.phasewalk + phase.pedclear
         ls.minSplit = temp1 > temp2 ? temp1 : temp2
         if (ls.mode !== 7 && ls.value < ls.minSplit) {

@@ -42,9 +42,14 @@
              width="60"
             align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="agentid"
             :label="$t('openatc.bottleneckcontrol.detectorid')"
+            align="center">
+          </el-table-column> -->
+          <el-table-column
+            prop="name"
+            :label="$t('openatc.bottleneckcontrol.devicename')"
             align="center">
           </el-table-column>
           <el-table-column
@@ -56,11 +61,6 @@
           <el-table-column
             prop="jsonparam.port"
             :label="$t('openatc.bottleneckcontrol.port')"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            :label="$t('openatc.bottleneckcontrol.name')"
             align="center">
           </el-table-column>
       </el-table>

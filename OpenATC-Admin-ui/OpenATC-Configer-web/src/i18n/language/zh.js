@@ -185,6 +185,7 @@ const zh = {
       'modelList10': '无电缆协调',
       'modelList12': '行人过街',
       'modelList13': '方案恢复过渡',
+      'modelList15': '通道检测',
       'modelList19': '感应式行人过街',
       'modelList23': '相位关断',
       'modelList16': '相位锁定',
@@ -417,7 +418,8 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此检测器？',
       'deleteAlltip': '确认删除所有检测器？',
-      'mostdata': '最多只能创建64条数据！'
+      'mostdata': '最多只能创建64条数据！',
+      'mostclonedata': '最多只能克隆72条数据！'
     },
     'channellock': {
       'deleteAlltip': '确认删除所有通道锁定？',
@@ -429,7 +431,8 @@ const zh = {
       'channelstats': '通道状态',
       'channel': '通道',
       'channelinfo': '通道信息',
-      'status': '状态'
+      'status': '状态',
+      'maxlength': '最多添加24个通道锁定记录!'
     },
     'channelControl': {
       'recoverysuccess': '恢复成功！',
@@ -966,7 +969,8 @@ const zh = {
       '9001': '瓶颈控制执行失败!',
       '9002': '瓶颈控制恢复失败!',
       '9003': '正在执行瓶颈控制，无法删除!',
-      '9004': '瓶颈控制名称已存在!'
+      '9004': '瓶颈控制方案名称已存在!',
+      '9005': '瓶颈控制方案为空！'
     },
     'faultrecord': {
       'faultDetail': '故障信息',

@@ -216,7 +216,8 @@ export default {
         controltime: ele.controltime,
         level: ele.level
       }))
-      OverflowDecApi.UpdateOverflows(submitData)
+      let patternid = this.curDetectorDevs.id
+      OverflowDecApi.UpdateOverflows(patternid, submitData)
         .then(data => {
           if (!data.data.success) {
             this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
@@ -248,6 +249,7 @@ export default {
       let addDevs = multiDevs.map(ele => ({
         ...ele,
         intersectionid: ele.agentid,
+        intersectionname: ele.name,
         phaseoptions: []
       }))
       this.deviceList = this.deviceList.concat(addDevs)

@@ -381,6 +381,8 @@ export default {
         }).then(() => {
         let phaseList = this.globalParamModel.getParamsByType('phaseList')
         let patternList = this.globalParamModel.getParamsByType('patternList')
+        let overlaplList = this.globalParamModel.getParamsByType('overlaplList')
+        this.globalParamModel.deleteParamsByType('overlaplList', 0, overlaplList.length)
         this.globalParamModel.deleteParamsByType('phaseList', 0, phaseList.length)
         this.globalParamModel.deleteParamsByType('patternList', 0, patternList.length)
         this.id = 1

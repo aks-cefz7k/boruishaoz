@@ -185,6 +185,7 @@ const en = {
       'modelList10': 'Nocable Control',
       'modelList12': 'phasewalk',
       'modelList13': 'Pattern Recovery',
+      'modelList15': 'Channel Detection',
       'modelList19': 'Inductive Pedestrian Crossing Control',
       'modelList23': 'Close Phase',
       'modelList16': 'Lock Phase',
@@ -419,7 +420,8 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Detector?',
       'deleteAlltip': 'Delete All Detector?',
-      'mostdata': 'There are at most 64 data !'
+      'mostdata': 'There are at most 64 data !',
+      'mostclonedata': 'There are at most 72 data !'
     },
     'channellock': {
       'deleteAlltip': 'Delete All channellock',
@@ -431,7 +433,8 @@ const en = {
       'channelstats': 'Channel Status',
       'channel': 'Channel',
       'channelinfo': 'Channel Info',
-      'status': 'Status'
+      'status': 'Status',
+      'maxlength': 'There are at most 24 data !'
     },
     'channelControl': {
       'recoverysuccess': 'Recovery Success!',
@@ -967,7 +970,8 @@ const en = {
       '9001': 'Overflow control failed!',
       '9002': 'Overflow recovery failed!',
       '9003': 'Overflow is executing, can not be deleted!',
-      '9004': 'Overflow pattern name is already exist!'
+      '9004': 'Overflow pattern name is already exist!',
+      '9005': 'Overflow pattern is empty!'
     },
     'faultrecord': {
       'faultDetail': 'Fault Detail',

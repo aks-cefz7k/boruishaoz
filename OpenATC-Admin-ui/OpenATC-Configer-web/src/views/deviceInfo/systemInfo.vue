@@ -144,15 +144,15 @@
           <el-row class="demo-autocomplete" :gutter="30">
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenandredon')}}</div>
-              <el-input v-model.number="customInfo.faultdetect.detectgapgreenandredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input-number :min="0" :max="65535" :controls="false" v-model="customInfo.faultdetect.detectgapgreenandredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input-number>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapnoredon')}}</div>
-              <el-input v-model.number="customInfo.faultdetect.detectgapnoredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input-number :min="0" :max="65535" :controls="false" v-model="customInfo.faultdetect.detectgapnoredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input-number>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenconflict')}}</div>
-              <el-input v-model.number="customInfo.faultdetect.detectgapgreenconflict" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input-number :min="0" :max="65535" :controls="false" v-model="customInfo.faultdetect.detectgapgreenconflict" :placeholder="$t('edge.common.entercontent')" size="small"></el-input-number>
             </el-col>
           </el-row>
           <el-row class="demo-autocomplete" :gutter="30">
