@@ -515,7 +515,7 @@ export default {
       // 公交相位信息
       this.busPhaseData = []
       this.crossInfo.phaseList.forEach((ele, i) => {
-        if (ele.controltype >= 3 && ele.controltype <= 5) {
+        if (ele.controltype >= 3 && ele.controltype <= 6) {
           ele.direction.forEach((dir, index) => {
           // 车道相位
             this.busPhaseData.push({

@@ -234,6 +234,9 @@ export default {
         label: this.$t('edge.phase.tramonly'),
         value: 5
       }, {
+        label: this.$t('edge.phase.nonvehiclesonly'),
+        value: 6
+      }, {
         label: this.$t('edge.phase.virtualphase'),
         value: 99
       }],
