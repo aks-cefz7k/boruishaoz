@@ -116,6 +116,10 @@
     border-color: $--border-color-lighter;
   }
 }
+.el-range-editor .el-range-input {
+  background-color: $--color-white;
+}
+
  // 主页样式
  .homeLayout {
     padding: 19px;
