@@ -582,7 +582,9 @@ public class AscsDao {
             agentid = thirdidToAgentidOcp.get(thirdpartyid);
             if(agentid == null){
                 // 还是没有agentid，则表明是新的设备
-                agentid = String.valueOf(System.currentTimeMillis());
+                Random rand = new Random();
+                int randint = rand.nextInt(900)+ 100;// 三位随机整数
+                agentid =  thirdpartyid + "-" + randint;
             }
         }
 

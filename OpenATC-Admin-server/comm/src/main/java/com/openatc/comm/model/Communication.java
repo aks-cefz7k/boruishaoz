@@ -16,6 +16,6 @@ import com.openatc.comm.data.MessageData;
 
 public interface Communication {
 //    public DatagramPacket exange( PackData packData, String ip, int port) ;
-    int sendData(String agentid, MessageData messageData, String ip, int port, String sendmsgtype);
+    int sendData(String agentid, MessageData messageData, String ip, int port);
     MessageData receiveData();
 }

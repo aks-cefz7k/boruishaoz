@@ -17,14 +17,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.openatc.agent.model.Token;
-import com.openatc.agent.model.User;
-import com.openatc.agent.service.UserDao;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +27,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
@@ -40,16 +34,8 @@ public class TokenUtil {
 
     //      String为token的内容，long为token的过期时间戳
     public volatile Map<String, Token> tokenMap = new HashMap<>();
-    private final String patternIp = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
-            + "(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
-            + "(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
-            + "(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
-    private Pattern pattern = Pattern.compile(patternIp);
 
     private Logger logger = LoggerFactory.getLogger(TokenUtil.class);
-
-    @Autowired
-    private UserDao userDao;
 
     @Value("${jwt.token.secret:kedacom}")
     private String secret;
@@ -242,25 +228,5 @@ public class TokenUtil {
         } else {
             return true;
         }
-    }
-
-    /**
-     * Token ip校验，如果ip与数据库中不一致，则拒绝访问
-     *
-     * @param token token字符串
-     * @return
-     */
-    public boolean checkip(String ip, String token) throws AuthenticationException {
-        String username = getUsernameFromToken(token);
-        if(username == null){
-            return false;
-        }
-        User user = userDao.getUserByUserName(username);
-        String login_ip_limit = user.getLogin_ip_limit();
-        Matcher matcher = pattern.matcher(ip);
-        if (login_ip_limit.equals("*") || ip.equals("0:0:0:0:0:0:0:1")) return true;
-        if (!matcher.matches()) return false;
-        if (login_ip_limit.equals(ip)) return true;
-        return false;
     }
 }
