@@ -128,6 +128,8 @@ const zh = {
       'lightcontrolversion': '灯控版',
       'carinspectionboard': '车检板',
       'ioboard': 'I/O板',
+      'faultboard': '故障板',
+      'characteristicparams': '特征参数',
       'maincontrolboardfault': '主控板故障',
       'lightcontrolversionfault': '灯控版故障',
       'carinspectionboardfault': '车检板故障',

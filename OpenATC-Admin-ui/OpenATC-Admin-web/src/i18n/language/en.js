@@ -128,6 +128,8 @@ const en = {
       'realtimealert': 'Real Time Alert',
       'detaileddescription': 'Detailed Description',
       'ioboard': 'I/O board',
+      'faultboard': 'Fault board',
+      'characteristicparams': 'Characteristic params',
       'maincontrolboardfault': 'Main Control Board Fault',
       'lightcontrolversionfault': 'Light Control Version Fault',
       'carinspectionboardfault': 'Car Inspection Board Fault',

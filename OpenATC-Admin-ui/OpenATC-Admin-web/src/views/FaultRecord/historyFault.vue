@@ -199,8 +199,7 @@
 import { getMessageByCode } from '@/utils/responseMessage'
 import { GetAllFaultRange, DeleteFault } from '@/api/fault'
 import Messagebox from '../../components/MessageBox'
-import { getBoardType, formatFaultDescValue, formatBoardType, formatEnumerate, formatSubFaultType, formatFaultLevel, formatFaultTypes } from '@/utils/fault.js'
-import { getAllMainFaultTypeArr } from '@/model/EventModal/utils.js'
+import { getBoardType, getAllMainFaultTypeArr, formatFaultDescValue, formatBoardType, formatEnumerate, formatSubFaultType, formatFaultLevel, formatFaultTypes } from '@/utils/fault.js'
 import SelectAgentid from '@/components/SelectAgentid'
 export default {
   components: { Messagebox, SelectAgentid },
