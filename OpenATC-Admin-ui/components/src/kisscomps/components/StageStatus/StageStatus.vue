@@ -11,7 +11,7 @@
  **/
 <template>
     <div class="main-statgestatus">
-        <div class="stage-line" v-show="stageLineStatus"></div>
+        <div class="stage-line"></div>
         <div v-for="(item, index) in numList" :key="index + '1'">
           <div class="stage-verticalline" :style="{'margin-left':item}"></div>
         </div>
@@ -32,8 +32,8 @@ export default {
       stateList: [],
       narr: [],
       max: '',
-      stageStatusList: [],
-      stageLineStatus: false
+      stageStatusList: []
+      // stageLineStatus: false
     }
   },
   props: {
@@ -80,7 +80,7 @@ export default {
       this.getStageLine()
     }
     if (this.controlData) {
-      this.stageLineStatus = true
+      // this.stageLineStatus = true
       this.getPhaseId(this.controlData)
     }
   },
@@ -117,7 +117,7 @@ export default {
     },
     addList (baseArr, maxCycle) {
       this.narr = []
-      this.stageLineStatus = true
+      // this.stageLineStatus = true
       let setArr = []
       let currNum = 0
       baseArr.forEach((item, index) => {
@@ -178,10 +178,10 @@ export default {
     getPhaseId (rings) { // 画阶段方法
       rings = JSON.parse(JSON.stringify(rings))
       if (rings.length === 0) {
-        this.stageLineStatus = false
+        // this.stageLineStatus = false
         return
       }
-      this.stageLineStatus = true
+      // this.stageLineStatus = true
       if (this.controlData) {
         if (!rings.rings) return
         let mapAdd = rings.phase.map(item => {
@@ -238,10 +238,10 @@ export default {
       this.numList = [0]
       this.narr = []
       if (this.patternStatusList.length === 0) {
-        this.stageLineStatus = false
+        // this.stageLineStatus = false
         return
       }
-      this.stageLineStatus = true
+      // this.stageLineStatus = true
       let firstPatternStatusList = this.patternStatusList[0]
       let stageLength = 0
       let stageStatusLength = 0
