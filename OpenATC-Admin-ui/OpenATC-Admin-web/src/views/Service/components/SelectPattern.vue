@@ -56,6 +56,10 @@ export default {
     defaultValue: {
       type: Number,
       default: 0
+    },
+    isAutoLoad: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -65,7 +69,9 @@ export default {
     }
   },
   created () {
-    this.onLoad()
+    if (this.isAutoLoad) {
+      this.onLoad()
+    }
   },
   methods: {
     onLoad () {
