@@ -545,10 +545,13 @@ const en = {
       'coordinationtime': 'Coordination time',
       'mode0': 'Autonomous Control',
       'mode1': 'Local Manual',
-      'mode2': 'System Control',
+      'mode2': 'Platform Control',
       'mode3': 'Configuration Software Control',
       'mode4': 'Remote Control',
-      'mode5': 'Yellow Flasher Trigger',
+      'mode5': 'Yellow Flasher Control',
+      'mode6': 'Degradation Control',
+      'mode7': 'Script Control',
+      'mode8': 'Algorithm Control',
       'pattern': 'Pattern'
     },
     'token': {

@@ -544,10 +544,13 @@ const zh = {
       'coordinationtime': '协调时间',
       'mode0': '自主控制',
       'mode1': '本地手动',
-      'mode2': '系统控制',
+      'mode2': '平台控制',
       'mode3': '配置软件控制',
       'mode4': '遥控器控制',
-      'mode5': '黄闪器触发',
+      'mode5': '黄闪器控制',
+      'mode6': '降级控制',
+      'mode7': '脚本控制',
+      'mode8': '算法控制',
       'pattern': '方案'
     },
     'token': {
