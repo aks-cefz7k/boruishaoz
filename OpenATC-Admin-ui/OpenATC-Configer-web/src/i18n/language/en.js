@@ -125,6 +125,7 @@ const en = {
       'stage': 'Stage',
       'specialcontrol': 'Special Control',
       'phaseclosecontrol': 'Phase Close Control',
+      'phaseclose': 'Close Phase',
       'phaselocking': 'Priority Control',
       'implement': 'Execute',
       'ipaddress': 'IP',

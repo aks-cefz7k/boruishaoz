@@ -950,6 +950,7 @@ border: 1px solid $--border-color-base;
       margin-bottom: 5px;
       .grid-content {
         padding-top: 22px;
+        border-radius: 6px;
         .value {
           margin-bottom: 5px;
           font-size: 18px;
@@ -971,6 +972,7 @@ border: 1px solid $--border-color-base;
         height: 70px;
         padding-top: 10px;
         margin-bottom: 5px;
+        border-radius: 6px;
         .value {
           margin-bottom: 5px;
           font-size: 14px;

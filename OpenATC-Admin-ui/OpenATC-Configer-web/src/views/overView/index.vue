@@ -305,10 +305,8 @@
                 </div>
                 <!-- 信号机控制状态模块 End-->
 
-                <div class="cross-content" v-show="closePhase && closePhase.length > 0">
-                  <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
-                </div>
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.currentstage')}}:</div>
+                <div class="cross-content">
+                  <div style="float: left;" class="cross-name">{{$t('edge.overview.currentstage')}}:</div>
                   <div style="margin-left: 85PX;" >
                     <div style="width: 100%; height: auto;">
                       <div class="control-model" v-for="(item, index) in stagesList" :key="index">
@@ -329,6 +327,12 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="cross-content" v-show="closePhase && closePhase.length > 0">
+                  <div style="float: left;margin-right: 16px;" class="cross-name">{{$t('edge.overview.phaseclose')}}:</div>
+                  <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
+                </div>
+
               </div>
             </div>
           </transition>
