@@ -58,11 +58,12 @@ public class DictController {
     // 设置配置
     @PostMapping(value = "/dict")
     public RESTRetBase setDictConfig(@RequestBody DictConfig dictConfig) {
-        List<DictConfig> find = dictConfigRepository.findByConfigtypeAndKey(dictConfig.getType(),dictConfig.getKey());
+        List<DictConfig> find = dictConfigRepository.findByConfigtypeAndKeyAndVale(dictConfig.getType(),dictConfig.getKey(), dictConfig.getValue());
         if(find.size() == 0 )
             return RESTRetUtils.successObj(dictConfigRepository.save(dictConfig));
-        else
+        else{
             return RESTRetUtils.successObj();
+        }
     }
 
     // 删除配置
