@@ -71,7 +71,6 @@ export default {
       this.$emit('closeAddDrawer')
     },
     closePhaseControl (data) {
-      debugger
       this.$emit('closePhaseControl', data)
       this.$emit('closeAddDrawer')
     }

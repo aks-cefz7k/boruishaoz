@@ -135,6 +135,11 @@
     "method": "delete"
   },
   {
+    "key": "getYesterdayStatusCollect",
+    "url": "/devs/statuscollect/yesterday",
+    "method": "get"
+  },
+  {
     "key": "getSimpleRoute",
     "url": "/route/simple",
     "method": "get"
@@ -468,5 +473,10 @@
     "key": "deleteToken",
     "url": "/token/deleteById",
     "method": "delete"
+  },
+  {
+    "key": "getAllServerStatus",
+    "url": "/system/status/server/all",
+    "method": "get"
   }
 ]

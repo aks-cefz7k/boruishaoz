@@ -26,7 +26,7 @@ export function getFaultType (type) {
   if (type >= 101 && type <= 199) {
     return i18n.t('edge.faultrecord.maincontrolboardfault')
   } else if (type >= 201 && type <= 299) {
-    return i18n.t('edge.faultrecord.lightcontrolversionfault')
+    return i18n.t('edge.faultrecord.lightcontrolboardfault')
   } else if (type >= 301 && type <= 399) {
     return i18n.t('edge.faultrecord.carinspectionboardfault')
   } else if (type >= 401 && type <= 499) {
@@ -104,7 +104,7 @@ export function formatBoardType (dev) {
   if (boardType === 1) {
     res = i18n.t('openatc.faultrecord.maincontrolboard')
   } else if (boardType === 2) {
-    res = i18n.t('openatc.faultrecord.lightcontrolversion')
+    res = i18n.t('openatc.faultrecord.lightcontrolboard')
   } else if (boardType === 3) {
     res = i18n.t('openatc.faultrecord.carinspectionboard')
   } else if (boardType === 4) {

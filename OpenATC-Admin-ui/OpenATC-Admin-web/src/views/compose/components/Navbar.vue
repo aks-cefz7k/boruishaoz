@@ -691,8 +691,8 @@ export default {
 .openatc-operate {
   cursor: pointer;
   float: right;
-  height: 50px;
-  padding-top: 17px;
+  height: 52PX;
+  line-height: 52PX;
   .admin {
     float: left;
   }
@@ -700,9 +700,9 @@ export default {
 </style>
 <style scoped>
 .openatc-navbar >>> .iconfont {
-    margin-right: 5px;
+    margin-right: 5PX;
     text-align: center;
-    font-size: 14px;
-    vertical-align: top;
+    font-size: 14PX;
+    line-height: 40PX;
 }
 </style>

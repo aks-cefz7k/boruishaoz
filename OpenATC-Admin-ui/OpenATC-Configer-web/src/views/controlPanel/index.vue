@@ -702,6 +702,7 @@ export default {
   height: 16px;
   color: #409eff;
   cursor:pointer;
+  font-size: 16px;
 }
 .manual-tables-clear {
   position: absolute;
@@ -710,6 +711,7 @@ export default {
   width: 200px;
   height: 20px;
   color: #409eff;
+  font-size: 16px;
 }
 .manual-tables-qingkong {
   margin-left: 5px;

@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="device-part">
     <!-- <el-button
         class="add-btn"
         type="primary"

@@ -132,24 +132,21 @@ public class HisParamsController {
         Specification<THisParams> queryCondition = (Specification<THisParams>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
+            // 过滤出属于该用户所在组织的设备
+            List<String> agentids = hisParamService.getAgentidListByUserRole();
+            CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("agentid"));
+            if (!agentids.isEmpty()) {
+                for (String agentid : agentids) {
+                    in.value(agentid);
+                }
+            }else {
+                in.value("null");
+            }
+            predicateList.add(in);
             // 路口名称
             if (!agentId.equals("")) {
                 predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
             }
-            // 路口id为空
-            else {
-                List<String> agentids = hisParamService.getAgentidListByUserRole();
-                CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("agentid"));
-                if (!agentids.isEmpty()) {
-                    for (String agentid : agentids) {
-                        in.value(agentid);
-                    }
-                }else {
-                    in.value("null");
-                }
-                predicateList.add(in);
-            }
-
             // 源地址
             if (!source.equals("")) {
                 predicateList.add(criteriaBuilder.like(root.get("source"), "%" + source + "%"));

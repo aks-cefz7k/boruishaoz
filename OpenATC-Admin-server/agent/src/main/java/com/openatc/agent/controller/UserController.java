@@ -521,6 +521,7 @@ public class UserController {
 
         if (userip.equals("*") ) return true;
         if (userip.equals(remoteip)) return true;
+        if (userip.equals("")) return true;
         return false;
     }
 }
