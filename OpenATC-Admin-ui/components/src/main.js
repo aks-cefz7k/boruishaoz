@@ -9,6 +9,7 @@ import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import i18n from './i18n'
 import 'element-ui/lib/theme-chalk/index.css'
+import './icons' // icon
 
 // 深浅主题按需加载
 import('../static/styles/dark/index.scss')

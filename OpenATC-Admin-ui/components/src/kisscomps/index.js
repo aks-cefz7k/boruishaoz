@@ -5,7 +5,6 @@ import IntersectionMap from './components/IntersectionMap/index'
 import SchemeConfig from './components/SchemeConfig/index'
 import FaultDetailModal from './components/FaultDetailModal/index'
 import CommonKanban from './components/CommonKanban/index'
-import SvgIcon from './components/SvgIcon/index'
 
 import en from '../i18n/language/en'
 import zh from '../i18n/language/zh'
@@ -18,8 +17,7 @@ const components = {
   IntersectionMap,
   SchemeConfig,
   FaultDetailModal,
-  CommonKanban,
-  SvgIcon
+  CommonKanban
 }
 
 const language = {
