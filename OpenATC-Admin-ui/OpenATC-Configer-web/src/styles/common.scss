@@ -18,12 +18,12 @@ $light_gray: #eee;
 
  // 全局滚动条样式
  ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 6PX;
+  height: 6PX;
 }
 ::-webkit-scrollbar-thumb {
   // 滚动条的滑块
-  border-radius: 4px;
+  border-radius: 4PX;
   background: rgba(144, 147, 153, 0.3);
 }
 ::-webkit-scrollbar-corner{
@@ -33,20 +33,20 @@ $light_gray: #eee;
 
 
 .app-container {
-  // min-width: 1730px;
+  // min-width: 1730PX;
   height: 100%;
   background-color: $--background-color-base;
 }
 // 侧边栏
 .sidebar-container .el-submenu .el-menu-item {
-  min-width: 180px !important;
+  min-width: 180PX !important;
   background-color: $--color-white !important;
   &:hover {
     background-color: $--background-color-base !important;
   }
 }
 .el-menu--collapse .el-menu .el-submenu {
-  min-width: 180px !important;
+  min-width: 180PX !important;
 }
 .cssstyle-auth {
   #pass-label .el-form-item__label {
@@ -65,18 +65,18 @@ $light_gray: #eee;
 
   .borde-style {
     overflow: auto;
-    height: 310px;
-    border: 1px solid;
-    border-width: 1px;
+    height: 310PX;
+    border: 1PX solid;
+    border-width: 1PX;
     border-color: #eeeeee
   }
 
   /********************** 设置主页字体样式 ********************/
   .dashboard-container {
     font-style: italic;
-    font-size: 30px;
+    font-size: 30PX;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 20PX;
   }
 
   /********************** 设置dashboard后面文字的样式 ********************/
@@ -92,48 +92,48 @@ $light_gray: #eee;
     background-color: $bg;
 
     input:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0px 1000px #293444 inset !important;
+      -webkit-box-shadow: 0 0 0PX 1000PX #293444 inset !important;
       -webkit-text-fill-color: $--color-white !important;
     }
 
     input {
       background: transparent;
-      border: 0px;
+      border: 0PX;
       -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
+      border-radius: 0PX;
+      padding: 12PX 5PX 12PX 15PX;
       color: $light_gray;
-      height: 47px;
+      height: 47PX;
     }
 
     .el-input {
       display: inline-block;
-      height: 47px;
+      height: 47PX;
       width: 85%;
     }
 
     .tips {
-      font-size: 14px;
+      font-size: 14PX;
       color: $--color-white;
-      margin-bottom: 10px;
+      margin-bottom: 10PX;
     }
 
     .svg-container {
-      padding: 6px 5px 6px 15px;
+      padding: 6PX 5PX 6PX 15PX;
       color: $dark_gray;
       vertical-align: middle;
-      width: 30px;
+      width: 30PX;
       display: inline-block;
 
       &_login {
-        font-size: 20px;
+        font-size: 20PX;
       }
     }
 
     .title {
-      font-size: 26px;
+      font-size: 26PX;
       color: $light_gray;
-      margin: 0px auto 40px auto;
+      margin: 0PX auto 40PX auto;
       text-align: center;
       font-weight: bold;
     }
@@ -142,32 +142,32 @@ $light_gray: #eee;
       position: absolute;
       left: 0;
       right: 0;
-      width: 400px;
-      padding: 35px 35px 15px 35px;
-      margin: 120px auto;
+      width: 400PX;
+      padding: 35PX 35PX 15PX 35PX;
+      margin: 120PX auto;
       vertical-align: middle;
     }
 
     .el-form-item {
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1PX solid rgba(255, 255, 255, 0.1);
       background: rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
+      border-radius: 5PX;
       color: #454545;
     }
 
     .show-pwd {
       position: absolute;
-      right: 10px;
-      top: 7px;
-      font-size: 16px;
+      right: 10PX;
+      top: 7PX;
+      font-size: 16PX;
       color: $dark_gray;
       cursor: pointer;
     }
 
     .thirdparty-button {
       position: absolute;
-      right: 35px;
-      bottom: 28px;
+      right: 35PX;
+      bottom: 28PX;
     }
   }
 
@@ -176,7 +176,7 @@ $light_gray: #eee;
     line-height: 1;
     white-space: nowrap;
     background: $--color-primary;
-    border: 1px solid $--color-primary;
+    border: 1PX solid $--color-primary;
     border-color: $--color-primary;
     color: $--color-white;
     -webkit-appearance: none;
@@ -191,16 +191,16 @@ $light_gray: #eee;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    padding: 12px 20px;
-    font-size: 14px;
-    border-radius: 4px;
+    padding: 12PX 20PX;
+    font-size: 14PX;
+    border-radius: 4PX;
     &:hover {
       display: inline-block;
       line-height: 1;
       white-space: nowrap;
       cursor: pointer;
       background: $--color-primary;
-      border: 1px solid $--color-primary;
+      border: 1PX solid $--color-primary;
       border-color: $--color-primary;
       color: $--color-white;
       -webkit-appearance: none;
@@ -215,9 +215,9 @@ $light_gray: #eee;
       -moz-user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
-      padding: 12px 20px;
-      font-size: 14px;
-      border-radius: 4px;
+      padding: 12PX 20PX;
+      font-size: 14PX;
+      border-radius: 4PX;
     }
   }
 }
@@ -240,18 +240,18 @@ $light_gray: #eee;
 
 .borde-style {
   overflow: auto;
-  height: 310px;
-  border: 1px solid;
-  border-width: 1px;
+  height: 310PX;
+  border: 1PX solid;
+  border-width: 1PX;
   border-color: #eeeeee
 }
 
 /********************** 设置主页字体样式 ********************/
 .dashboard-container {
   font-style: italic;
-  font-size: 30px;
+  font-size: 30PX;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 20PX;
 }
 
 /********************** 设置dashboard后面文字的样式 ********************/
@@ -282,7 +282,7 @@ $light_gray: #eee;
 }
 .iconfont {
   font-family:"iconfont" !important;
-  font-size:40px;
+  font-size:40PX;
   text-align:center;
   font-weight:500;
   color: #000000;
@@ -293,51 +293,51 @@ $light_gray: #eee;
 
 /********************** 设置kanban样式 ********************/
 .kanbanRing{
-  margin-top:20px;
-  height:42px;
-  line-height:42px;
+  margin-top:20PX;
+  height:42PX;
+  line-height:42PX;
   .board-title {
     float:left;
-    width:25px;
+    width:25PX;
   }
   .board-content {
     float:left;
     width:22%;
-    margin-left:10px
+    margin-left:10PX
   }
 }
 .phase-description {
-  border-radius: 4px;
+  border-radius: 4PX;
   background: rgb(217, 236, 255);
-  width: 40px;
-  height: 40px;
+  width: 40PX;
+  height: 40PX;
 }
 .board-column {
-min-width: 180px;
-min-height: 100px;
+min-width: 180PX;
+min-height: 100PX;
 height: auto;
 overflow: hidden;
 // background: #f0f0f0;
-border-radius: 3px;
-border: 1px solid $--border-color-base;
+border-radius: 3PX;
+border: 1PX solid $--border-color-base;
 
 .board-column-header {
-  height: 50px;
-  line-height: 50px;
+  height: 50PX;
+  line-height: 50PX;
   overflow: hidden;
-  padding: 0 10px;
+  padding: 0 10PX;
   text-align: center;
   background: $--color-primary;
   color: #FFFFFF;
-  border-radius: 3px 3px 0 0;
+  border-radius: 3PX 3PX 0 0;
 }
 .board-table-header {
-  height: 30px;
-  line-height: 30px;
+  height: 30PX;
+  line-height: 30PX;
   overflow: hidden;
   text-align: center;
-  margin-bottom: -20px;
-  font-size: 12px;
+  margin-bottom: -20PX;
+  font-size: 12PX;
   color: $--color-info;
   background-color: $--color-black;
 }
@@ -345,8 +345,8 @@ border: 1px solid $--border-color-base;
 .board-column-content {
   height: auto;
   overflow: hidden;
-  border: 10px solid transparent;
-  min-height: 60px;
+  border: 10PX solid transparent;
+  min-height: 60PX;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -356,23 +356,23 @@ border: 1px solid $--border-color-base;
   .board-item {
     cursor: pointer;
     width: 100%;
-    height: 48px;
-    margin: 5px 0;
+    height: 48PX;
+    margin: 5PX 0;
     // background-color: rgba(31,46,46,0.9);
     text-align: left;
-    line-height: 40px;
-    padding: 1px 1px;
+    line-height: 40PX;
+    padding: 1PX 1PX;
     box-sizing: border-box;
   }
 }
 }
 .agent-id {
   color: $--color-text-regular;
-  font-size: 14px;
+  font-size: 14PX;
 }
 .sysytem-strategy {
   color: $--color-text-regular;
-  margin-right: 10px;
+  margin-right: 10PX;
 }
 .system-saturation {
   color: $--color-text-regular;
@@ -380,7 +380,7 @@ border: 1px solid $--border-color-base;
 .control-container {
   font-weight: bold;
   color: $--color-text-regular;
-  margin-top: 20px;
+  margin-top: 20PX;
 }
 // 面包屑
 .hamburgercolor {
@@ -408,14 +408,14 @@ border: 1px solid $--border-color-base;
 .navbar {
 .sloat-icon {
   float: right;
-  margin-right: 45px;
+  margin-right: 45PX;
   .iconfont {
-    font-size: 18px;
+    font-size: 18PX;
     cursor: pointer;
   }
   .el-button {
-    margin-left: 8px;
-    line-height: 22px;
+    margin-left: 8PX;
+    line-height: 22PX;
   }
   .choosedIcon {
     color: #409eff;
@@ -428,13 +428,13 @@ border: 1px solid $--border-color-base;
 // 总览页面
 .container-main {
   width: 100%;
-  // height: 880px;
+  // height: 880PX;
   height: 100%;
-  // min-width: 1250px;
+  // min-width: 1250PX;
   background: $--background-color-base;
   .iconfont {
     font-family: "iconfont" !important;
-    font-size: 34px;
+    font-size: 34PX;
     text-align: center;
     font-weight: 500;
     color: #000000;
@@ -444,224 +444,224 @@ border: 1px solid $--border-color-base;
   }
   .container-left {
     float: left;
-    margin-top: 20px;
-    margin-left: 20px;
+    margin-top: 20PX;
+    margin-left: 20PX;
     width: 76.8%;
-    height: 880px;
+    height: 880PX;
     background-color: $--color-white;
-    border: solid 1px $--border-color-lighter;
+    border: solid 1PX $--border-color-lighter;
   }
   .container-right {
     float: left;
-    margin-top: 20px;
-    margin-left: 20px;
+    margin-top: 20PX;
+    margin-left: 20PX;
     width: 20%;
-    height: 880px;
+    height: 880PX;
     background-color: $--color-white;
-    border: solid 1px $--border-color-lighter;
+    border: solid 1PX $--border-color-lighter;
   }
   .container-left-top {
     width: 100%;
-    height: 420px;
+    height: 420PX;
   }
   .container-left-bottom {
     width: 100%;
-    height: 400px;
+    height: 400PX;
     background-color: $--color-white;
   }
   .curr-order {
     float: left;
-    margin-left: 20px;
-    margin-top: 1px;
+    margin-left: 20PX;
+    margin-top: 1PX;
   }
   .control-right {
-    margin-top: 40px;
-    margin-left: 20px;
+    margin-top: 40PX;
+    margin-left: 20PX;
   }
   .agent-div {
     float: left;
     width: 28%;
-    height: 420px;
-    border-bottom: solid 0.5px $--border-color-lighter;
+    height: 420PX;
+    border-bottom: solid 0.5PX $--border-color-lighter;
   }
   .other-div {
     float: left;
     width: 24%;
-    height: 210px;
-    border-left: solid 1px $--border-color-lighter;
-    border-bottom: solid 1px $--border-color-lighter;
+    height: 210PX;
+    border-left: solid 1PX $--border-color-lighter;
+    border-bottom: solid 1PX $--border-color-lighter;
     .model-icon {
-      width: 20px;
-      height: 20px;
+      width: 20PX;
+      height: 20PX;
     }
   }
   .agent-icon {
     position:relative;
     float: left;
     width: 50%;
-    height: 210px;
+    height: 210PX;
   }
   .agent-num {
     float: left;
     width: 50%;
-    height: 210px;
+    height: 210PX;
   }
   .lianji-success {
     position:relative;
     float: right;
-    right: 30px;
-    top: 25px;
+    right: 30PX;
+    top: 25PX;
     text-align: center;
-    width: 81px;
-    height: 34px;
+    width: 81PX;
+    height: 34PX;
     background-color: $--color-primary;
-    border-radius: 4px;
-    font-size: 14px;
-    padding:10px 0;
+    border-radius: 4PX;
+    font-size: 14PX;
+    padding:10PX 0;
     color: $--color-white;
   }
   .lianji-fail {
     position:relative;
     float: right;
-    right: 30px;
-    top: 25px;
+    right: 30PX;
+    top: 25PX;
     text-align: center;
-    width: 81px;
-    height: 34px;
+    width: 81PX;
+    height: 34PX;
     background-color: #909399;
-    border-radius: 4px;
-    font-size: 14px;
-    padding:10px 0;
+    border-radius: 4PX;
+    font-size: 14PX;
+    padding:10PX 0;
     color: $--color-white;
   }
   .lianji-wait {
     position:relative;
     float: right;
-    right: 30px;
-    top: 25px;
+    right: 30PX;
+    top: 25PX;
     text-align: center;
-    width: 110px;
-    height: 34px;
+    width: 110PX;
+    height: 34PX;
     background-color: #e6a23c;
-    border-radius: 4px;
-    font-size: 14px;
-    padding:10px 0;
+    border-radius: 4PX;
+    font-size: 14PX;
+    padding:10PX 0;
     color: $--color-white;
   }
   .agent-id {
-    margin-top: 20px;
-    margin-right: 30px;
+    margin-top: 20PX;
+    margin-right: 30PX;
     text-align: right;
-    font-size: 14px;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-text-secondary;
   }
   .agent-number {
-    margin-top: 10px;
-    margin-right: 30px;
+    margin-top: 10PX;
+    margin-right: 30PX;
     text-align: right;
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .agent-port {
-    margin-top: 20px;
-    margin-right: 30px;
+    margin-top: 20PX;
+    margin-right: 30PX;
     text-align: right;
-    font-size: 14px;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-text-secondary;
   }
   .port-number {
-    margin-top: 10px;
-    margin-right: 30px;
+    margin-top: 10PX;
+    margin-right: 30PX;
     text-align: right;
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .model-name {
     float: left;
-    margin-top: 32px;
-    font-size: 14px;
+    margin-top: 32PX;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-text-regular;
-    margin-right: 10px;
+    margin-right: 10PX;
   }
   .model-tupian {
     float: left;
-    margin-top: 30px;
-    margin-left: 20px;
-    margin-right: 10px;
+    margin-top: 30PX;
+    margin-left: 20PX;
+    margin-right: 10PX;
   }
   .to-detail {
     float: left;
-    margin-top: 35px;
-    line-height: 10px;
-    font-size: 14px;
+    margin-top: 35PX;
+    line-height: 10PX;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-primary;
-    padding-left: 10px;
-    border-left: 1px solid $--color-primary;
+    padding-left: 10PX;
+    border-left: 1PX solid $--color-primary;
     cursor: pointer;
   }
 
   .control-center {
     // float: left;
     text-align: center;
-    margin-top: 40px;
-    font-size: 30px;
+    margin-top: 40PX;
+    font-size: 30PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
+    line-height: 20PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .curr-grade {
-    margin-top: 30px;
-    font-size: 24px;
+    margin-top: 30PX;
+    font-size: 24PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 14px;
-    letter-spacing: 0px;
+    line-height: 14PX;
+    letter-spacing: 0PX;
     color: $--color-text-regular;
   }
   .curr-num {
-    margin-top: 20px;
-    font-size: 14px;
+    margin-top: 20PX;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 14px;
-    letter-spacing: 0px;
+    line-height: 14PX;
+    letter-spacing: 0PX;
     color: $--color-text-secondary;
   }
   .icon-ziyuan:before {
     content: "\e670";
     position:absolute;
     z-index:2;
-    left: 45px;
-    top: 72px;
+    left: 45PX;
+    top: 72PX;
     // color: #$--color-primary;
   }
   .yuanxing {
     position:absolute;
-    left: 20px;
-    top: 50px;
+    left: 20PX;
+    top: 50PX;
     z-index:1;
-    width: 90px;
-    height: 90px;
+    width: 90PX;
+    height: 90PX;
     // background-color: #459ffc;
     opacity: 0.2;
     border-radius: 50%;
@@ -669,25 +669,25 @@ border: 1px solid $--border-color-base;
   .dev-status {
     position:absolute;
     // text-align: center;
-    // margin-top: 150px;
-    // left: 30px;
-    top: 150px;
-    height: 21px;
-    font-size: 22px;
+    // margin-top: 150PX;
+    // left: 30PX;
+    top: 150PX;
+    height: 21PX;
+    font-size: 22PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 14px;
-    letter-spacing: 0px;
+    line-height: 14PX;
+    letter-spacing: 0PX;
     // color: $--color-primary;
   }
   .tuxing-left {
     float: left;
-    // margin-top: 20px;
+    // margin-top: 20PX;
     margin-left: 1%;
     width: 62%;
-    // height: 860px;
+    // height: 860PX;
     background-color: $--color-white;
-    border: solid 1px $--border-color-lighter;
+    border: solid 1PX $--border-color-lighter;
   }
   .tuxing-right {
     float: left;
@@ -695,69 +695,69 @@ border: 1px solid $--border-color-base;
     width: 35%;
     box-sizing: border-box;
     background-color: $--color-white;
-    border: solid 1px $--border-color-lighter;
+    border: solid 1PX $--border-color-lighter;
     position: relative;
     overflow-x: auto;
   }
 
   .pattern-status {
-    min-height: 200px;
-    margin-left: 20px;
-    margin-top: 20px;
-    margin-right: 20px;
-    margin-bottom: 86px;
+    min-height: 200PX;
+    margin-left: 20PX;
+    margin-top: 20PX;
+    margin-right: 20PX;
+    margin-bottom: 86PX;
     .overLap{
       width: 100% !important;
     }
   }
   .pattern-name {
     display: inline;
-    font-size: 20px;
+    font-size: 20PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
+    line-height: 22PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .pattern-message {
     display: inline;
-    margin-left: 10px;
-    font-size: 14px;
+    margin-left: 10PX;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
+    line-height: 22PX;
+    letter-spacing: 0PX;
     color: $--color-text-regular;
   }
 
   .cross-mess {
-    margin-left: 15px;
-    margin-top: 15px;
-    height: 20px;
-    font-size: 20px;
+    margin-left: 15PX;
+    margin-top: 15PX;
+    height: 20PX;
+    font-size: 20PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
+    line-height: 22PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   
 
   .el-tag {
-    margin-right: 4px;
-    margin-bottom: 4px;
+    margin-right: 4PX;
+    margin-bottom: 4PX;
   }
   .sloat-icon {
     cursor:pointer;
-    margin-top: 15px;
+    margin-top: 15PX;
   }
   .control-time {
-    margin-top: 40px;
-    font-size: 30px;
+    margin-top: 40PX;
+    font-size: 30PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
+    line-height: 20PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .control-time .time {
@@ -766,24 +766,24 @@ border: 1px solid $--border-color-base;
     text-align: center;
   }
   .control-time span:first-of-type {
-    border-right: 1px solid #e5e5e5;
+    border-right: 1PX solid #e5e5e5;
   }
   .pattern-explain {
     float: right;
     color: $--color-text-regular;
     .el-checkbox__label {
-      font-size: 16px;
+      font-size: 16PX;
       color: $--color-text-regular;
       font-weight: normal;
       font-stretch: normal;
-      line-height: 22px;
-      letter-spacing: 0px;
+      line-height: 22PX;
+      letter-spacing: 0PX;
     }
   }
  .jsontextarea {
   textarea {
-    min-height: 200px !important;
-    max-height:300px;
+    min-height: 200PX !important;
+    max-height:300PX;
   }
  }
  .wenzijiemian {
@@ -799,79 +799,79 @@ border: 1px solid $--border-color-base;
 // 路口图组件
 .intersection-map {
   .crossDirection-display {
-    // height: 650px;
+    // height: 650PX;
     // transform-origin: center top;
-    padding-top: 30px;
+    padding-top: 30PX;
   }
   .changeWidth {
     width: 98% !important;
   }
   .changePaddingBottom {
-    padding-bottom: 30px;
+    padding-bottom: 30PX;
   }
-  /*当屏幕小于等于1680px的屏幕样式*/
-  @media only screen and (max-width: 1680px){
+  /*当屏幕小于等于1680PX的屏幕样式*/
+  @media only screen and (max-width: 1680PX){
     .crossDirection-display{
       // transform: scale(0.9);
       zoom: 0.9;
       
     }
     .centerText .text {
-      font-size: 14px;
+      font-size: 14PX;
     }
    }
-  /*当屏幕小于等于1440px的屏幕样式*/
-  @media only screen and (max-width: 1440px){
+  /*当屏幕小于等于1440PX的屏幕样式*/
+  @media only screen and (max-width: 1440PX){
     .crossDirection-display{
       // transform: scale(0.8);
       zoom: 0.8;
       
     }
     .centerText .text {
-      font-size: 18px;
+      font-size: 18PX;
     }
    }
-   /*当屏幕小于等于1280px的屏幕样式*/
-  @media only screen and (max-width: 1280px){
+   /*当屏幕小于等于1280PX的屏幕样式*/
+  @media only screen and (max-width: 1280PX){
     .crossDirection-display{
       // transform: scale(0.65);
       zoom: 0.65;
     }
     .centerText .text {
-      font-size: 20px;
+      font-size: 20PX;
     }
    }
-   /*当屏幕小于等于960px的屏幕样式*/
-  @media only screen and (max-width: 960px){
+   /*当屏幕小于等于960PX的屏幕样式*/
+  @media only screen and (max-width: 960PX){
     .crossDirection-display{
       // transform: scale(0.5);
       zoom: 0.5;
     }
     .centerText .text {
-      font-size: 14px;
+      font-size: 14PX;
     }
    }
-    /*当屏幕小于等于720px的屏幕样式*/
-  @media only screen and (max-width: 720px){
+    /*当屏幕小于等于720PX的屏幕样式*/
+  @media only screen and (max-width: 720PX){
     .crossDirection-display{
       // transform: scale(0.45);
       zoom: 0.45;
     }
     .centerText .text {
-      font-size: 14px;
+      font-size: 14PX;
     }
    }
   // 小屏幕打开首页适配样式
   .minifont {
-    font-size: 12px;
+    font-size: 12PX;
     .cross-mess {
-      font-size: 16px;
+      font-size: 16PX;
     }
     .cross-value {
-      font-size: 12px;
+      font-size: 12PX;
     }
     .pattern-message {
-      font-size: 12px;
+      font-size: 12PX;
     }
   }
   .superlargeCrossImg {
@@ -945,7 +945,7 @@ border: 1px solid $--border-color-base;
 .scheme-config {
   .iconfont {
     font-family: "iconfont" !important;
-    font-size: 34px;
+    font-size: 34PX;
     text-align: center;
     font-weight: 500;
     color: #000000;
@@ -954,141 +954,141 @@ border: 1px solid $--border-color-base;
     -moz-osx-font-smoothing: grayscale;
   }
   .right-control-part {
-    min-width: 300px;
+    min-width: 300PX;
     overflow: auto;
   }
   .cross-mess {
-    margin-left: 15px;
-    margin-top: 15px;
-    height: 20px;
-    font-size: 20px;
+    margin-left: 15PX;
+    margin-top: 15PX;
+    height: 20PX;
+    font-size: 20PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
+    line-height: 22PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .cross-module {
     float: left;
-    margin-top: 5px;
-    padding-left: 15px;
+    margin-top: 5PX;
+    padding-left: 15PX;
     width: 100%;
-    padding-bottom: 20px;
-    // min-width: 600px;
-    // height: 180px;
+    padding-bottom: 20PX;
+    // min-width: 600PX;
+    // height: 180PX;
     background-color: $--color-white;
   }
   .cross-content {
-    margin-top: 19px;
-    // margin-left: 7px;
+    margin-top: 19PX;
+    // margin-left: 7PX;
     overflow: hidden;
   }
   .cross-name {
-    // height: 13px;
-    font-size: 14px;font-weight: normal;
+    // height: 13PX;
+    font-size: 14PX;font-weight: normal;
     font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
+    line-height: 22PX;
+    letter-spacing: 0PX;
     color: $--color-text-regular;
   }
   .control-model {
     float: left;
-    margin-top: 10px;
-    // margin-left: 15px;
+    margin-top: 10PX;
+    // margin-left: 15PX;
   }
   .model-label, .stage-label {
-    width: 100px;
-    font-size: 14px;
+    width: 100PX;
+    font-size: 14PX;
     font-weight: 400;
     color: #606266;
-    line-height: 28px;
-    padding-right: 12px;
+    line-height: 28PX;
+    padding-right: 12PX;
   }
   .single-model {
-    margin-right: 10px;
+    margin-right: 10PX;
     text-align: center;
     cursor:pointer;
-    width: 70px;
-    height: 65px;
+    width: 70PX;
+    height: 65PX;
     background-color: #edf6ff;
-    border-radius: 6px;
+    border-radius: 6PX;
     line-height: 1.15;
     .patternWalk{
-      left: 14px !important;
+      left: 14PX !important;
     }
   }
   .single-model .closephase-icon {
-    margin-top: 10px;
-    width: 56px;
-    height: 24px;
+    margin-top: 10PX;
+    width: 56PX;
+    height: 24PX;
   }
   .single-model .model-icon {
-    margin-top: 10px;
-    width: 24px;
-    height: 24px;
+    margin-top: 10PX;
+    width: 24PX;
+    height: 24PX;
   }
   .single-model-select {
-    margin-right: 10px;
+    margin-right: 10PX;
     text-align: center;
     cursor:pointer;
-    width: 70px;
-    height: 65px;
+    width: 70PX;
+    height: 65PX;
     background-color: #a2cfff;
-    border-radius: 6px;
-    // border: solid 1px #409eff;
+    border-radius: 6PX;
+    // border: solid 1PX #409eff;
   }
   .single-model-name {
-    margin-top: 3px;
-    font-size: 12px;
+    margin-top: 3PX;
+    font-size: 12PX;
     font-weight: normal;
     font-stretch: normal;
-    // line-height: 22px;
-    letter-spacing: 0px;
+    // line-height: 22PX;
+    letter-spacing: 0PX;
     color: #606266;
   }
   .current-stage-num {
-    margin-top: 3px;
-    font-size: 12px;
+    margin-top: 3PX;
+    font-size: 12PX;
     font-weight: bold;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     // color: #303133;
     color:#606266;
   }
   .cross-value {
-    width: 180px;
-    height: 22px;
-    font-size: 14px;
+    width: 180PX;
+    height: 22PX;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
+    line-height: 22PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .el-tag {
-    margin-right: 4px;
-    margin-bottom: 4px;
+    margin-right: 4PX;
+    margin-bottom: 4PX;
   }
   .fault-detail-btn {
     float: right;
-    font-size: 14px;
+    font-size: 14PX;
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #409EFF;
-    line-height: 32px;
-    margin-right: 20px;
+    line-height: 32PX;
+    margin-right: 20PX;
     cursor: pointer;
   }
     // 信号机控制状态模块样式
     .controlStatePart {
       color: $--color-text-primary;
-      padding-right: 13px;
+      padding-right: 13PX;
       .el-row {
         height: 100%;
       }
       .el-col {
         height: 100%;
-        min-width: 90px;
+        min-width: 90PX;
         text-align: center;
       }
       .bg-base {
@@ -1097,21 +1097,21 @@ border: 1px solid $--border-color-base;
       }
       .bigPart {
         width: 100%;
-        height: 90px;
-        margin-bottom: 5px;
+        height: 90PX;
+        margin-bottom: 5PX;
         .grid-content {
-          padding-top: 22px;
-          border-radius: 6px;
+          padding-top: 22PX;
+          border-radius: 6PX;
           .value {
-            margin-bottom: 5px;
-            font-size: 18px;
-            line-height: 22px;
-            height: 22px;
+            margin-bottom: 5PX;
+            font-size: 18PX;
+            line-height: 22PX;
+            height: 22PX;
             color: $--color-text-primary;
           }
           .name {
-            font-size: 14px;
-            line-height: 22px;
+            font-size: 14PX;
+            line-height: 22PX;
             color: $--color-text-secondary;
           }
         }
@@ -1120,20 +1120,20 @@ border: 1px solid $--border-color-base;
       .smallPart {
         width: 100%;
         .grid-content {
-          height: 70px;
-          padding-top: 10px;
-          margin-bottom: 5px;
-          border-radius: 6px;
+          height: 70PX;
+          padding-top: 10PX;
+          margin-bottom: 5PX;
+          border-radius: 6PX;
           .value {
-            margin-bottom: 5px;
-            font-size: 14px;
-            line-height: 22px;
+            margin-bottom: 5PX;
+            font-size: 14PX;
+            line-height: 22PX;
             color: $--color-text-primary;
-            height: 22px;
+            height: 22PX;
           }
           .name {
-            font-size: 14px;
-            line-height: 22px;
+            font-size: 14PX;
+            line-height: 22PX;
             color: $--color-text-secondary;
           }
         }
@@ -1142,42 +1142,42 @@ border: 1px solid $--border-color-base;
 }
 // 手动控制弹框
 .manual-control-modal{
-  padding: 21px 0px 21px 28px;
-  min-width: 360px;
+  padding: 21PX 0PX 21PX 28PX;
+  min-width: 360PX;
   overflow: auto;
   .title {
-    margin-bottom: 24px;
-    font-size: 20px;
+    margin-bottom: 24PX;
+    font-size: 20PX;
     font-weight: 400;
-    line-height: 22px;
+    line-height: 22PX;
     color: $--color-text-primary;
   }
   .model-label {
-    margin-top: 14px;
+    margin-top: 14PX;
   }
   .stage-label {
-    margin-top: 30px;
+    margin-top: 30PX;
   }
   .footer {
     float: right;
-    margin: 38px 24px 40px 0;
+    margin: 38PX 24PX 40PX 0;
   }
   .el-form-item {
-    margin-bottom: 0px;
+    margin-bottom: 0PX;
   }
   .el-form-item__label {
-    font-size: 14px;
+    font-size: 14PX;
     font-weight: 400;
     color: $--color-text-secondary;
   }
   .el-dialog__footer {
-    padding: 10px 72px 38px 0;
+    padding: 10PX 72PX 38PX 0;
   }
   .el-dialog__header {
-    padding: 19px 30px;
+    padding: 19PX 30PX;
   }
   .el-select {
-    width: 75px;
+    width: 75PX;
   }
   .el-input {
     width: 50%;
@@ -1190,12 +1190,12 @@ border: 1px solid $--border-color-base;
   }
   .footer {
     button {
-      width: 56px;
-      height: 32px;
+      width: 56PX;
+      height: 32PX;
       padding: 0;
       text-align: center;
-      line-height: 30px;
-      font-size: 12px;
+      line-height: 30PX;
+      font-size: 12PX;
       font-weight: normal;
       font-stretch: normal;
     }
@@ -1207,123 +1207,128 @@ border: 1px solid $--border-color-base;
 
 .closephase-control{
   height: 100%;
-  min-width: 250px;
+  min-width: 250PX;
   overflow: auto;
   .closephasekanban {
     width: 60%;
     margin: 0 auto;
-    margin-bottom: 13px;
+    margin-bottom: 13PX;
   }
   .el-form-item__content {
-    min-width: 120px;
+    min-width: 120PX;
   }
 } 
 
 .lockingphase-control {
   height: 100%;
-  min-width: 430px;
+  min-width: 430PX;
   overflow: auto;
   .closephasekanban {
     width: 60%;
     margin: 0 auto;
-    margin-bottom: 13px;
+    margin-bottom: 13PX;
   }
   .el-form-item {
     width: 45%;
-    min-width: 180px;
+    min-width: 180PX;
   }
   .el-input {
     width: 100%;
   }
   .el-form-item__content {
-    width: calc(100% - 120px);
-    min-width: 80px;
+    width: calc(100% - 120PX);
+    min-width: 80PX;
   }
 }
 
 // 公共面板组件通用样式
 .common-board-column {
-    min-width: 180px;
-    min-height: 100px;
-    max-width: 350px;
+    min-width: 180PX;
+    min-height: 100PX;
+    max-width: 350PX;
     height: auto;
     overflow: hidden;
     // background: #f0f0f0;
-    // border: 1px solid $--border-color-base;
+    // border: 1PX solid $--border-color-base;
   .common-phase-description {
     position: relative;
     background: rgb(217, 236, 255);
-    width: 42px;
-    height: 40px;
+    width: 42PX;
+    height: 40PX;
   }
 
 
   .common-board-column-header {
-    line-height: 40px;
+    line-height: 40PX;
     overflow: hidden;
     text-align: center;
     background: $--color-primary;
     color: #FFFFFF;
-    height: 40px;
+    height: 40PX;
+    font-size: 14PX;
   }
   .common-board-table-header {
-    height: 42px;
+    height: 42PX;
     overflow: hidden;
     text-align: center;
-    margin-bottom: -20px;
-    font-size: 14px;
+    margin-bottom: -20PX;
+    font-size: 14PX;
     color: $--color-info;
     background-color: $--color-black;
-    border: 20px solid transparent;
-    border-bottom-width: 0px;
+    border: 20PX solid transparent;
+    border-bottom-width: 0PX;
     .common-titlecolumn {
       float: left;
       text-align: left;
     }
     .phase {
-      width: 50px;
+      width: 50PX;
     }
     .mode {
-      width: calc(100% - 50px)
+      width: calc(100% - 50PX)
     }
   }
 
   .common-board-column-content {
     height: auto;
     overflow: hidden;
-    border: 10px solid transparent;
-    min-height: 60px;
+    border: 10PX solid transparent;
+    min-height: 60PX;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
     align-items: center;
     background-color: $--color-black;
-    border-width: 20px;
-    border-top-width: 16px;
-    border-bottom-width: 15px;
+    border-width: 20PX;
+    border-top-width: 16PX;
+    border-bottom-width: 15PX;
     .common-contentcolumn {
       float: left;
     }
     .phase {
-      width: 40px;
+      width: 40PX;
     }
     .mode {
-      margin-left: 10px;
-      width: calc(100% - 50px);
+      margin-left: 10PX;
+      width: calc(100% - 50PX);
+      height: 40PX;
+      .el-select {
+        line-height: 40PX;
+      }
     }
 
     .common-board-item {
       cursor: pointer;
       width: 100%;
-      height: 40px;
-      margin-top: 10px;
+      height: 40PX;
+      margin-top: 10PX;
       text-align: left;
       box-sizing: border-box;
       .el-input {
         width: 100%;
         .el-input__inner {
-          height: 40px;
-          line-height: 40px;
+          height: 40PX;
+          line-height: 40PX;
         }
       }
     }
@@ -1335,53 +1340,54 @@ border: 1px solid $--border-color-base;
 }
 .stage-line {
   position: relative;
-  top: 7px;
+  top: 7PX;
   width: 100%;
-  height: 1px;
+  height: 1PX;
   background-color: $--color-text-secondary;
   z-index:1;
 }
 .stage-verticalline {
   position: absolute;
   float: left;
-  width: 1px;
-  height: 14px;
+  width: 1PX;
+  height: 14PX;
   background-color: $--color-text-secondary;
   z-index:2;
 }
 .stage-text {
   position: absolute;
   float: left;
-  width: 25px;
+  width: 25PX;
   text-align: center;
   background-color: $--color-white;
   z-index:3;
+  font-size: 14PX;
 }
 .stage-span {
   // position: relative;
-  bottom: 3px;
-  left: 5px;
-  width: 15px;
-  height: 14px;
-  font-size: 14px;
+  bottom: 3PX;
+  left: 5PX;
+  width: 15PX;
+  height: 14PX;
+  font-size: 14PX;
   font-weight: normal;
   font-stretch: normal;
-  line-height: 20px;
-  letter-spacing: 0px;
+  line-height: 20PX;
+  letter-spacing: 0PX;
   background-color: $--color-white;
   color: $--color-text-primary;
 }
 .container-right .el-form-item__label {
   text-align: right;
   float: left;
-  font-size: 14px;
-  line-height: 40px;
-  padding: 0 12px 0 0;
+  font-size: 14PX;
+  line-height: 40PX;
+  padding: 0 12PX 0 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-weight: normal;
   font-stretch: normal;
-  letter-spacing: 0px;
+  letter-spacing: 0PX;
   color: $--color-text-secondary;
 }
 .container-right .el-select {
@@ -1389,7 +1395,7 @@ border: 1px solid $--border-color-base;
 }
 .ys-float-btn {
   background:$--color-primary;
-  box-shadow:0 2px 10px 0 rgba(0,0,0,0.1);
+  box-shadow:0 2PX 10PX 0 rgba(0,0,0,0.1);
   border-radius:50%;
   color: $--color-text-regular;
   z-index: 20;
@@ -1404,82 +1410,82 @@ border: 1px solid $--border-color-base;
     width: 50%;
     height: 50%;
     object-fit: contain;
-    margin-bottom: 3px;
+    margin-bottom: 3PX;
   }
   p{
-    font-size:7px;
+    font-size:7PX;
   }
 }
 .phase-part {
-  padding: 33px 30px;
+  padding: 33PX 30PX;
   box-sizing: border-box;
   .current-phase {
     display: flex; /*所有子元素block或inline都变成行内块元素的样式*/
     align-items: center;
     justify-content: flex-start;
     width: 96%;
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .current-phasetable {
     width: 96%;
-    height: 330px;
-    margin-top: 40px;
+    height: 330PX;
+    margin-top: 40PX;
     .el-table {
       width: 100%;
-      font-size: 14px;
+      font-size: 14PX;
     }
   }
   .color-block {
     float: left;
-    width: 14px;
-    height: 14px;
+    width: 14PX;
+    height: 14PX;
     background-color: $--color-primary;
   }
   .curr-phase {
-    margin-left: 5px;
+    margin-left: 5PX;
   }
   .curr-ring {
-    margin-left: 20px;
+    margin-left: 20PX;
   }
   .phase-order {
-    margin-left: 20px;
+    margin-left: 20PX;
   }
 }
 .volume-part {
-  padding: 33px 30px;
+  padding: 33PX 30PX;
   box-sizing: border-box;
   .current-volume {
     display: flex; /*所有子元素block或inline都变成行内块元素的样式*/
     align-items: center;
     justify-content: flex-start;
     width: 96%;
-    font-size: 16px;
+    font-size: 16PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .color-block {
-    width: 14px;
-    height: 14px;
+    width: 14PX;
+    height: 14PX;
     background-color: $--color-primary;
   }
   .curr-volume {
-    margin-left: 5px;
+    margin-left: 5PX;
   }
   .curr-time {
-    margin-left: 20px;
+    margin-left: 20PX;
   }
   .current-volumetable {
     width: 96%;
-    height: 330px;
-    margin-top: 40px;
+    height: 330PX;
+    margin-top: 40PX;
     .el-table {
-      font-size: 14px;
+      font-size: 14PX;
     }
   }
 }
@@ -1489,7 +1495,7 @@ border: 1px solid $--border-color-base;
   width: 100%;
   height: 100%;
   .manual-top {
-    margin-left: 10px;
+    margin-left: 10PX;
   }
   .manual-bottom {
     float: left;
@@ -1506,85 +1512,85 @@ border: 1px solid $--border-color-base;
   .manual-tables-bottom {
     width: 100%;
     float: left;
-    margin-top: 10px;
+    margin-top: 10PX;
   }
   .channel-status {
-    font-size: 18px;
+    font-size: 18PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
+    line-height: 20PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
 }
 // 设备信息
 .device-info {
-  height: 18px;
-  font-size: 18px;
+  height: 18PX;
+  font-size: 18PX;
   font-weight: normal;
   font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
+  line-height: 14PX;
+  letter-spacing: 0PX;
   color: $--color-text-regular;
 }
 .device-second-title {
-  margin: 15px 0 5px 0;
-  font-size: 15px;
-  letter-spacing: 0px;
+  margin: 15PX 0 5PX 0;
+  font-size: 15PX;
+  letter-spacing: 0PX;
   color: $--color-text-regular;
 }
 .device-message {
-  margin: -15px 5px 5px 5px;
-  padding: 20px;
+  margin: -15PX 5PX 5PX 5PX;
+  padding: 20PX;
   background-color: $--color-black;
 }
 .sub-title {
   color: $--color-info;
-  font-size: 14px;
+  font-size: 14PX;
   line-height: 120%;
-  margin: 15px 0 5px 0;
+  margin: 15PX 0 5PX 0;
   .see-cut  {
-    font-size: 14px;
+    font-size: 14PX;
     padding: 0 0;
     float: right;
   }
 }
 
 .device-param {
-  margin: 10px 5px 5px 5px;
-  padding: 20px;
+  margin: 10PX 5PX 5PX 5PX;
+  padding: 20PX;
   background-color: $--color-black;
 }
 .device-netcard {
-  margin: 10px 5px 5px 5px;
-  padding: 20px;
+  margin: 10PX 5PX 5PX 5PX;
+  padding: 20PX;
   background-color: $--color-black;
 }
 .device-fault-detect {
-  margin: 10px 5px 5px 5px;
-  padding: 20px;
+  margin: 10PX 5PX 5PX 5PX;
+  padding: 20PX;
   background-color: $--color-black;
 }
 .device-content {
   // position: relative;
-  margin-top: 10px;
-  left: 20px;
-  font-size: 14px;
+  margin-top: 10PX;
+  left: 20PX;
+  font-size: 14PX;
   font-weight: normal;
   font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
+  line-height: 14PX;
+  letter-spacing: 0PX;
   color: $--color-text-primary;
 }
 .device-value {
   position: relative;
 }
 .device-header {
-  font-size: 14px;
+  font-size: 14PX;
   font-weight: normal;
   font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
+  line-height: 14PX;
+  letter-spacing: 0PX;
   color: $--color-text-primary;
 }
 
@@ -1592,10 +1598,10 @@ border: 1px solid $--border-color-base;
 .deviceinfo-seeCutDetail {
   .edit-button {
     float: left;
-    margin-top: 10px;
+    margin-top: 10PX;
   }
   .effect-pic {
-    height: 200px;
+    height: 200PX;
     background: $--background-color-base;
     display: flex;
     flex-direction: row;
@@ -1607,25 +1613,25 @@ border: 1px solid $--border-color-base;
   .x-title {
     height: 20%;
     text-align:center;
-    padding-top: 10px;
+    padding-top: 10PX;
   }
   .x-item-container {
     height: 80%;
-    border: 1px solid $--color-text-secondary;
+    border: 1PX solid $--color-text-secondary;
   }
   .r-container {
     width: 34%;
     height: 100%;
-    margin-left: 20px;
+    margin-left: 20PX;
   }
   .r-title {
     height: 20%;
     text-align:center;
-    padding-top: 10px;
+    padding-top: 10PX;
   }
   .r-item-container {
     height: 80%;
-    border: 1px solid $--color-text-secondary;
+    border: 1PX solid $--color-text-secondary;
   }
   .icon-container {
     float: left;
@@ -1634,10 +1640,10 @@ border: 1px solid $--border-color-base;
   .content {
     height: 100%;
     text-align: center;
-    padding: 10px;
+    padding: 10PX;
   }
   .el-row {
-    margin-bottom: 20px;
+    margin-bottom: 20PX;
     &:last-child {
       margin-bottom: 0;
     }
@@ -1651,73 +1657,73 @@ border: 1px solid $--border-color-base;
 .manual-record {
   .control-model-name {
     float: left;
-    margin-left: 30px;
-    margin-top: 30px;
-    font-size: 14px;
+    margin-left: 30PX;
+    margin-top: 30PX;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 14px;
-    letter-spacing: 0px;
+    line-height: 14PX;
+    letter-spacing: 0PX;
     color: $--color-text-regular;
   }
   .control-model-value {
     float: left;
-    margin-left: 5px;
-    margin-top: 30px;
-    font-size: 14px;
+    margin-left: 5PX;
+    margin-top: 30PX;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 14px;
-    letter-spacing: 0px;
+    line-height: 14PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .manual-tables-name {
     float: left;
-    margin-left: 10px;
-    margin-top: 22px;
-    font-size: 18px;
+    margin-left: 10PX;
+    margin-top: 22PX;
+    font-size: 18PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
+    line-height: 20PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
 }
 // 系统
 .signal-version-name {
-  margin-top: 20px;
-  margin-left: 30px;
-  height: 18px;
-  font-size: 18px;
+  margin-top: 20PX;
+  margin-left: 30PX;
+  height: 18PX;
+  font-size: 18PX;
   font-weight: normal;
   font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
+  line-height: 14PX;
+  letter-spacing: 0PX;
   color: $--color-text-regular;
 }
 .signal-version-value {
-  margin-top: 10px;
-  margin-left: 30px;
+  margin-top: 10PX;
+  margin-left: 30PX;
   background-color: $--color-black;
 }
 .signal-version-bottom {
-  margin-top: 10px;
-  margin-left: 30px;
+  margin-top: 10PX;
+  margin-left: 30PX;
 }
 .software {
   position: relative;
-  left: 20px;
-  font-size: 14px;
+  left: 20PX;
+  font-size: 14PX;
   font-weight: normal;
   font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
+  line-height: 14PX;
+  letter-spacing: 0PX;
   color: $--color-text-primary;
 }
 .remote-select {
   float: left;
-  margin-left: 10px;
-  margin-top: 20px;
+  margin-left: 10PX;
+  margin-top: 20PX;
 }
 .currsystemtime {
   width: 100%;
@@ -1727,43 +1733,43 @@ border: 1px solid $--border-color-base;
   height: 100%;
   }
   .el-tabs__content {
-    height: calc(100% - 55px);
+    height: calc(100% - 55PX);
     overflow-y: auto;
     .el-tab-pane {
-      height: calc(100% - 20px);
+      height: calc(100% - 20PX);
     }
   }
   .channel-panel {
     height: 100%;
     .channels{
       .single-channel {
-        width: 148px;
-        height: 240px;
+        width: 148PX;
+        height: 240PX;
         background-color: $--color-info;
-        border-radius: 4px;
-        border: solid 1px $--border-color-base;
+        border-radius: 4PX;
+        border: solid 1PX $--border-color-base;
         float: left;
-        margin-right: 20px;
+        margin-right: 20PX;
         .name {
-          height: 40px;
+          height: 40PX;
           background: $--color-black;
-          line-height: 40px;
+          line-height: 40PX;
           text-align: center;
-          font-size: 14px;
+          font-size: 14PX;
           font-weight: normal;
           font-stretch: normal;
-          letter-spacing: 0px;
+          letter-spacing: 0PX;
           color: $--color-text-primary;
         }
       }
     }
     
     .channeltest {
-      height: calc(100% - 240px);
+      height: calc(100% - 240PX);
       .list {
-        margin-top: 30px;
+        margin-top: 30PX;
         .title {
-          margin-bottom: 10px;
+          margin-bottom: 10PX;
           color: $--color-text-primary;
         }
       }
@@ -1772,12 +1778,12 @@ border: 1px solid $--border-color-base;
 }
 
 .history-container {
-  padding: 0 20px !important;
+  padding: 0 20PX !important;
   .el-tabs {
-    height: calc(100% - 52px);
+    height: calc(100% - 52PX);
     }
     .el-tabs__content {
-      height: calc(100% - 65px);
+      height: calc(100% - 65PX);
       overflow-y: auto;
       .el-tab-pane {
         height: 100%;
@@ -1802,7 +1808,7 @@ border: 1px solid $--border-color-base;
     height: 100%;
     }
   .el-tabs__content {
-    height: calc(100% - 65px);
+    height: calc(100% - 65PX);
     overflow-y: auto;
     .el-tab-pane {
       height: 100%;
@@ -1813,7 +1819,7 @@ border: 1px solid $--border-color-base;
 // 统计
 .statistics {
   height: 100%;
-  padding: 0 20px;
+  padding: 0 20PX;
   .one {
     position: relative;
   }
@@ -1834,11 +1840,11 @@ border: 1px solid $--border-color-base;
   }
   .statistics-button {
     position: absolute;
-    left: 0px;
-    top: 45px;
+    left: 0PX;
+    top: 45PX;
     z-index: 9999999;
     .el-select {
-      width: 106px;
+      width: 106PX;
     }
   }
   .statistics-input {
@@ -1846,14 +1852,14 @@ border: 1px solid $--border-color-base;
   }
   .statistics-name {
   float: left;
-  margin-top: 8px;
-  margin-left: 10px;
-  height: 14px;
-  font-size: 14px;
+  margin-top: 8PX;
+  margin-left: 10PX;
+  height: 14PX;
+  font-size: 14PX;
   font-weight: normal;
   font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
+  line-height: 14PX;
+  letter-spacing: 0PX;
   color: $--color-text-secondary;
   }
 
@@ -1862,14 +1868,14 @@ border: 1px solid $--border-color-base;
 .pattern-figure {
   // position: fixed;
   // width: 88%;
-  // bottom: 30px;
+  // bottom: 30PX;
   .pattern-status {
     display: inline;
-    font-size: 20px;
+    font-size: 20PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
+    line-height: 22PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
   }
   .pattern-explain {
@@ -1878,14 +1884,14 @@ border: 1px solid $--border-color-base;
   }
 }
 .el-menu--horizontal {
-  border-bottom: solid 1px $--border-color-base!important;
+  border-bottom: solid 1PX $--border-color-base!important;
 }
 .main-patternstatus {
   position: relative;
   .ring-first {
-    margin-top: 1px;
+    margin-top: 1PX;
     width: 100%;
-    height: 34px;
+    height: 34PX;
   }
   .first-1 {
     float: left;
@@ -1893,40 +1899,40 @@ border: 1px solid $--border-color-base;
   }
   // .ring-num {
   //   float: left;
-  //   margin-top:7px;
-  //   margin-left: 5px;
-  //   font-size: 14px;
+  //   margin-top:7PX;
+  //   margin-left: 5PX;
+  //   font-size: 14PX;
   //   font-weight: normal;
   //   font-stretch: normal;
-  //   line-height: 22px;
-  //   letter-spacing: 0px;
+  //   line-height: 22PX;
+  //   letter-spacing: 0PX;
   //   color: #ffffff;
   // }
   .box {
     float: left;
-    margin-left: 6px;
-    margin-right: 10px;
+    margin-left: 6PX;
+    margin-right: 10PX;
   }
   .ring-nums {
     // float: left;
-    // margin-top:7px;
-    // margin-left: 5px;
-    font-size: 12px;
-    height: 14px;
+    // margin-top:7PX;
+    // margin-left: 5PX;
+    font-size: 12PX;
+    height: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    // line-height: 22px;
-    letter-spacing: 0px;
+    // line-height: 22PX;
+    letter-spacing: 0PX;
     color: #333333;
   }
   .ring-phase {
     position: relative;
     float: left;
-    // margin-left: 5px;
-    height: 34px;
+    // margin-left: 5PX;
+    height: 34PX;
     z-index: 999;
     background: rgba(30, 96, 12, 0.2);
-    // margin-top:1px;
+    // margin-top:1PX;
   }
   .ring-phase::after {
     position: absolute;
@@ -1934,35 +1940,35 @@ border: 1px solid $--border-color-base;
     content: '';
     height: 0;
     width: 0;
-    top: 11px;
-    left: 36px;
-    border: 5px solid transparent;
+    top: 11PX;
+    left: 36PX;
+    border: 5PX solid transparent;
     border-left-color: rgba(30, 96, 12, 0.2);
   }
   .divider {
     position: absolute;
-    top: -10px;
-    // left: 370px;
-    width: 3px;
-    // height: 99px;
+    top: -10PX;
+    // left: 370PX;
+    width: 3PX;
+    // height: 99PX;
     z-index: 999;
     background-color: $--color-text-secondary;
   }
   .curTimeLine {
     position: absolute;
-    top: -10px;
-    width: 2px;
+    top: -10PX;
+    width: 2PX;
     background-color: #409EFF;
   }
   .curTimeDiv {
     position: absolute;
     z-index:50;
-    top: -21px;
-    margin-left: -30px;
+    top: -21PX;
+    margin-left: -30PX;
     text-align:center;
     vertical-align: middle;
-    width: 60px;
-    height: 19px;
+    width: 60PX;
+    height: 19PX;
     color:#FFFFFF;
     background-color: #409EFF;
   }
@@ -1971,10 +1977,10 @@ border: 1px solid $--border-color-base;
   color: #FFFFFF;
 }
 .atc-table {
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  // border: solid 1px $--border-color-base;
+  top: 150PX;
+  left: 20PX;
+  right: 20PX;
+  // border: solid 1PX $--border-color-base;
   overflow: auto;
 }
 // el-switch样式
@@ -1982,11 +1988,11 @@ border: 1px solid $--border-color-base;
   margin: 0;
   display: inline-block;
   position: relative;
-  width: 40px;
-  height: 20px;
-  border: 1px solid $--border-color-light;
+  width: 40PX;
+  height: 20PX;
+  border: 1PX solid $--border-color-light;
   outline: none;
-  border-radius: 10px;
+  border-radius: 10PX;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   background: $--border-color-light;
@@ -1998,7 +2004,7 @@ border: 1px solid $--border-color-base;
 // el-tooltip样式
 .el-tooltip__popper.is-light {
   background: $--color-primary;
-  border: 1px solid $--color-primary;
+  border: 1PX solid $--color-primary;
   color: $--color-text-primary;
 }
 .el-tooltip__popper.is-light[x-placement^="top"] .popper__arrow {
@@ -2016,22 +2022,22 @@ border: 1px solid $--border-color-base;
   background-color: $--background-color-base;
   .switch-language {
     cursor:pointer;
-    margin-top: 20px;
-    margin-right: 20px;
+    margin-top: 20PX;
+    margin-right: 20PX;
     float: right;
   }
   .el-input {
     display: inline-block;
-    height: 47px;
+    height: 47PX;
     width: 85%;
     input {
       background: $--color-white;
-      border: 0px;
+      border: 0PX;
       -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
+      border-radius: 0PX;
+      padding: 12PX 5PX 12PX 15PX;
       color:  $--color-text-primary;
-      height: 47px;
+      height: 47PX;
       &:-webkit-autofill {
         -webkit-text-fill-color: rgb(0, 0, 0) !important;
       }
@@ -2039,17 +2045,17 @@ border: 1px solid $--border-color-base;
         -webkit-appearance: none;
         background-color: $--color-white;
         background-image: none;
-        border-radius: 4px;
-        border: 0px solid #dcdfe6;
+        border-radius: 4PX;
+        border: 0PX solid #dcdfe6;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         color: $--color-text-regular;
         display: inline-block;
         font-size: inherit;
-        height: 40px;
-        line-height: 40px;
+        height: 40PX;
+        line-height: 40PX;
         outline: 0;
-        padding: 0 15px;
+        padding: 0 15PX;
         -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
         transition: border-color .2s cubic-bezier(.645,.045,.355,1);
         width: 100%;
@@ -2057,9 +2063,9 @@ border: 1px solid $--border-color-base;
     }
   }
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1PX solid rgba(255, 255, 255, 0.1);
     background: $--color-white;
-    border-radius: 5px;
+    border-radius: 5PX;
     color: $--color-primary;
   }
   .login-form {
@@ -2068,64 +2074,64 @@ border: 1px solid $--border-color-base;
     right: 0;
     //width: 33%;
     width: 20%;
-    min-width: 400px;
-    padding: 35px 35px 15px 35px;
-    margin: 120px auto;
+    min-width: 400PX;
+    padding: 35PX 35PX 15PX 35PX;
+    margin: 120PX auto;
   }
   .tips {
-    font-size: 14px;
+    font-size: 14PX;
     color: $--color-text-secondary;
-    margin-bottom: 10px;
+    margin-bottom: 10PX;
     span {
       &:first-of-type {
-        margin-right: 16px;
+        margin-right: 16PX;
       }
     }
   }
   .svg-container {
-    padding: 6px 5px 6px 15px;
+    padding: 6PX 5PX 6PX 15PX;
     color: $--color-primary;
     vertical-align: middle;
-    width: 30px;
+    width: 30PX;
     display: inline-block;
     &_login {
-      font-size: 20px;
+      font-size: 20PX;
     }
   }
   .text-container {
-    padding: 6px 0px 0px 15px;
-    font-size: 14px;
+    padding: 6PX 0PX 0PX 15PX;
+    font-size: 14PX;
     font-weight: normal;
     font-stretch: normal;
-    letter-spacing: 0px;
+    letter-spacing: 0PX;
     color: $--color-primary;
   }
   .title {
-    font-size: 26px;
+    font-size: 26PX;
     font-weight: 400;
     color: $--color-primary;
-    margin: 0px auto 40px auto;
+    margin: 0PX auto 40PX auto;
     text-align: center;
     font-weight: bold;
     font-stretch: normal;
   }
   .show-pwd {
     position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
+    right: 10PX;
+    top: 7PX;
+    font-size: 16PX;
     color: $--color-info;
     cursor: pointer;
     user-select: none;
   }
   .expand-text {
   position: relative;
-  top: -10px;
-  // margin-left: 280px;
-  font-size: 13px;
+  top: -10PX;
+  // margin-left: 280PX;
+  font-size: 13PX;
   font-weight: normal;
   font-stretch: normal;
-  letter-spacing: 0px;
+  letter-spacing: 0PX;
   color: $--color-primary;
   cursor: pointer;
 }
@@ -2137,43 +2143,43 @@ border: 1px solid $--border-color-base;
       color: $--color-white;
   }
   .el-dialog__header {
-      padding: 50px 30px 10px;
-      height: 109px;
+      padding: 50PX 30PX 10PX;
+      height: 109PX;
       background-color: $--color-primary;
-      border-radius: 4px 4px 0px 0p
+      border-radius: 4PX 4PX 0PX 0p
   }
   .el-dialog__title {
-      width: 291px;
-      height: 38px;
-      margin-top: 40px;
-      font-size: 36px;
+      width: 291PX;
+      height: 38PX;
+      margin-top: 40PX;
+      font-size: 36PX;
       font-weight: normal;
       font-stretch: normal;
-      line-height: 14px;
-      letter-spacing: 0px;
+      line-height: 14PX;
+      letter-spacing: 0PX;
       color: #fff;
   }
   .banben {
-      font-size: 14px;
+      font-size: 14PX;
       font-weight: normal;
       font-stretch: normal;
-      line-height: 14px;
-      letter-spacing: 0px;
+      line-height: 14PX;
+      letter-spacing: 0PX;
       color: $--color-text-regular;
   }
   .divider {
-      // width: 483px;
-      height: 1px;
-      margin-top: 15px;
+      // width: 483PX;
+      height: 1PX;
+      margin-top: 15PX;
       background-color: $--border-color-light;
   }
   .open-source {
-      margin-top: 25px;
-      font-size: 14px;
+      margin-top: 25PX;
+      font-size: 14PX;
       font-weight: normal;
       font-stretch: normal;
-      line-height: 14px;
-      letter-spacing: 0px;
+      line-height: 14PX;
+      letter-spacing: 0PX;
       color: $--color-primary;
   }
   .agreement {
@@ -2188,7 +2194,7 @@ border: 1px solid $--border-color-base;
   .bar {
     position: relative;
     margin: auto;
-    border-radius: 20px;
+    border-radius: 20PX;
     background: $main-color;
     overflow: hidden;
 
@@ -2197,9 +2203,9 @@ border: 1px solid $--border-color-base;
       content: "";
       top: 0;
       left: 0;
-      width: 1200px;
-      height: 85px;
-      background: repeating-linear-gradient(45deg, $sub-color, $sub-color 10px, transparent 11px, transparent 19px, $sub-color 20px) no-repeat 0 0;
+      width: 1200PX;
+      height: 85PX;
+      background: repeating-linear-gradient(45deg, $sub-color, $sub-color 10PX, transparent 11PX, transparent 19PX, $sub-color 20PX) no-repeat 0 0;
       animation: move 1s linear infinite;
     }
   }
@@ -2209,52 +2215,52 @@ border: 1px solid $--border-color-base;
       background-position: 0 0;
     }
     to {
-      background-position: 0 -56px;
+      background-position: 0 -56PX;
     }
   }
 
   .bartext {
     color: $--color-primary;;
-    margin-top: 8px;
-    font-size: 12px;
+    margin-top: 8PX;
+    font-size: 12PX;
   }
 }
 
 // 模版导入
 .temp-import {
   .el-select {
-    width: 75px;
+    width: 75PX;
   }
   .footer {
     button {
-      width: 56px;
-      height: 32px;
+      width: 56PX;
+      height: 32PX;
       padding: 0;
       text-align: center;
-      line-height: 30px;
-      font-size: 12px;
+      line-height: 30PX;
+      font-size: 12PX;
       font-weight: normal;
       font-stretch: normal;
     }
   }
   .sort-name {
-    font-size: 15px;
+    font-size: 15PX;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 40px;
-    letter-spacing: 0px;
+    line-height: 40PX;
+    letter-spacing: 0PX;
     color: $--color-text-primary;
     text-align: right;
-    padding-right: 30px;
+    padding-right: 30PX;
 }
 .el-form-item__label {
   color: $--color-text-secondary;
   font-weight: 400;
 }
 .el-dialog__footer {
-  padding: 10px 72px 38px 0;
+  padding: 10PX 72PX 38PX 0;
 }
 .el-dialog__body {
-  line-height: 0px;
+  line-height: 0PX;
 }
 }
