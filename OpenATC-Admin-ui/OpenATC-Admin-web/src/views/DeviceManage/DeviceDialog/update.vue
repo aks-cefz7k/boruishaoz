@@ -440,10 +440,10 @@ export default {
       this.showModifyIdButton = true
       if (dev.protocol === 'ocp') {
         this.platformCheck = true
-        dev.platform = ''
+        dev.platform = 'OpenATC'
       } else {
         this.platformCheck = false
-        dev.platform = 'OpenATC'
+        // dev.platform = ''
       }
       // 编辑
       const device = JSON.parse(JSON.stringify(dev))
@@ -479,11 +479,11 @@ export default {
     },
     doChangeProtocol (val) {
       if (val === 'ocp') {
-        this.deviceInfo.platform = ''
         this.platformCheck = true
+        this.deviceInfo.platform = 'OpenATC'
       } else {
         this.platformCheck = false
-        this.deviceInfo.platform = 'OpenATC'
+        this.deviceInfo.platform = ''
       }
     }
   }

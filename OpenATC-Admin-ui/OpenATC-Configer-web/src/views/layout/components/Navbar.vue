@@ -1384,11 +1384,12 @@ export default {
       versionInfoChild.showMessage()
     },
     showHelp () {
+      let host = `${window.location.href.split('#')[0]}`
       if (this.$i18n.locale === 'zh') {
-        window.open('/UserManual/openatcConfig/zh/index.html')
+        window.open(`${host}UserManual/openatcConfig/zh/index.html`)
       }
       if (this.$i18n.locale === 'en') {
-        window.open('/UserManual/openatcConfig/en/index.html')
+        window.open(`${host}UserManual/openatcConfig/en/index.html`)
       }
     },
     showInfo (val) {

@@ -390,9 +390,11 @@ export default {
       DeleteDevice(this.deleteId).then(res => {
         if (!res.data.success) {
           let msg = getMessageByCode(res.data.code, this.$i18n.locale)
-          let errorCode = res.data.data.errorCode
-          if (errorCode) {
-            msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+          if (res.data.data) {
+            let errorCode = res.data.data.errorCode
+            if (errorCode) {
+              msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+            }
           }
           this.$message.error(msg)
           return false
