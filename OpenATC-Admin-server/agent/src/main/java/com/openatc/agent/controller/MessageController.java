@@ -21,6 +21,7 @@ import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.DictConfigRepository;
 import com.openatc.agent.service.HisParamServiceImpl;
+import com.openatc.agent.service.MessageService;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
@@ -74,6 +75,9 @@ public class MessageController {
 
     @Autowired
     private DictConfigRepository dictConfigRepository;
+
+    @Autowired
+    private MessageService messageService;
 
     Gson gson = new Gson();
 
@@ -163,8 +167,27 @@ public class MessageController {
             }
         }
 
+        RESTRet responceData;
+        // 处理方案状态请求
+        if (requestData.getInfotype().equals("status/pattern")){
+            // 先从redis中查，如果redis中不存在，向设备请求
+            String agentid = requestData.getAgentid();
+            responceData =  messageService.getStatusPatternFromRedis(agentid);
+            if (responceData.isSuccess()){
+                return responceData;
+            }
+        }
+
         // 发送请求，并把应答返回
-        RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
+        responceData = commClient.devMessage(requestData, ascsBaseModel);
+
+        // 处理方案状态请求应答
+        if (responceData.isSuccess()){
+            if (requestData.getInfotype().equals("status/pattern")){
+                // 将消息保存到redis，并设置过期时间1S
+                messageService.saveStatusPatternToRedis((MessageData)responceData.getData());
+            }
+        }
 
         // 把设置请求set-request的操作保存到历史记录中
         if (requestData.getOperation().equals("set-request")) {
