@@ -30,7 +30,7 @@
       <el-menu-item index="bottleneckcontrol" style="display:inline">
         <i class="iconfont icon-pingjingkongzhi"></i>{{$t('openatc.main.bottleneckcontrol')}}
       </el-menu-item>
-      <el-menu-item index="gis" style="display:inline">
+      <el-menu-item index="gis" style="display:inline" v-if="isShowGisMenu">
         <el-dropdown trigger="click" @command="handleSelect">
           <span class="el-dropdown-link">
             <i class="iconfont icon-lukou"></i>{{$t('openatc.main.gis')}}
@@ -309,7 +309,8 @@ export default {
       tittle: state => state.globalVariable.logo,
       userInfo: state => state.user.userInfo,
       operateId: state => state.globalVariable.operateId,
-      devicePath: state => state.globalVariable.devicePath
+      devicePath: state => state.globalVariable.devicePath,
+      isShowGisMenu: state => state.globalVariable.isShowGisMenu
     }),
     userInfo: {
       get: function () {
@@ -545,7 +546,7 @@ export default {
         default: router.push({ path: '/' })
       }
     },
-    getGisConfig () {
+    getSystemConfig () {
       return new Promise((resolve, reject) => {
         SystemconfigApi.GetSystemconfigByModule('system').then((data) => {
           if (data.data.success !== true) {
@@ -568,7 +569,7 @@ export default {
       window.open(url)
     },
     async showHelp () {
-      await this.getGisConfig()
+      await this.getSystemConfig()
       let url = this.zh_handbook
       if (this.$i18n.locale === 'en') {
         url = this.en_handbook

@@ -146,6 +146,11 @@ export default {
       } else {
         this.isShowPattern = false
       }
+    },
+    isShowGisMenu (val) {
+      if (val === false) {
+        this.$router.push({ path: '/' })
+      }
     }
   },
   mounted () {
@@ -157,7 +162,8 @@ export default {
   },
   computed: {
     ...mapState({
-      bizType: state => state.globalVariable.gisBizType
+      bizType: state => state.globalVariable.gisBizType,
+      isShowGisMenu: state => state.globalVariable.isShowGisMenu
     }),
     defaultOptions () {
       let res = { animationData: Anim, loop: false, autoplay: false }
