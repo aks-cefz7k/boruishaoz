@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 /**
  * Copyright (c) 2020 kedacom
@@ -43,28 +45,29 @@ public class DictController {
     // 查询全部配置
     @GetMapping(value = "/dict")
     public RESTRetBase getDictConfig() {
-        //获取全部配置
         return RESTRetUtils.successObj(dictConfigRepository.findAll());
     }
 
     // 按照类型配置查询
     @GetMapping(value = "/dict/{configtype}")
-    public RESTRetBase getDictConfigByType(@PathVariable int configtype) {
-        //获取配置
+    public RESTRetBase getDictConfigByType(@PathVariable String configtype) {
         return RESTRetUtils.successObj(dictConfigRepository.findByConfigtype(configtype));
     }
+
 
     // 设置配置
     @PostMapping(value = "/dict")
     public RESTRetBase setDictConfig(@RequestBody DictConfig dictConfig) {
-        //获取全部配置
-        return RESTRetUtils.successObj(dictConfigRepository.save(dictConfig));
+        List<DictConfig> find = dictConfigRepository.findByConfigtypeAndKey(dictConfig.getType(),dictConfig.getKey());
+        if(find.size() == 0 )
+            return RESTRetUtils.successObj(dictConfigRepository.save(dictConfig));
+        else
+            return RESTRetUtils.successObj();
     }
 
     // 删除配置
     @DeleteMapping(value = "/dict")
     public RESTRetBase delDictConfig(@RequestBody DictConfig dictConfig) {
-        //获取全部配置
         dictConfigRepository.delete(dictConfig);
         return RESTRetUtils.successObj();
     }

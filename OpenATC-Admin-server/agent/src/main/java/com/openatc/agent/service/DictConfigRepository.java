@@ -30,6 +30,9 @@ import java.util.List;
 
 public interface DictConfigRepository extends JpaRepository<DictConfig, Long> {
 
-    @Query(nativeQuery=true,value=" SELECT * from sysconfig where configtype = :configtype ")
-    List<DictConfig> findByConfigtype(int configtype);
+    @Query(nativeQuery=true,value=" SELECT * from dict_config where type = :configtype ")
+    List<DictConfig> findByConfigtype(String configtype);
+
+    @Query(nativeQuery=true,value=" SELECT * from dict_config where type = :configtype  and key = :key")
+    List<DictConfig> findByConfigtypeAndKey(String configtype,  String key);
 }
