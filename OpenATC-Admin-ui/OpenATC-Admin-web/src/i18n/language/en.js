@@ -168,6 +168,7 @@ const en = {
       'devicetype': 'Device Type',
       'plat': 'Plat',
       'deviceid': 'Device Id',
+      'gbid': 'GBID',
       'devicename': 'Intersection Name',
       'firm': 'Firm',
       'platform': 'Platform',

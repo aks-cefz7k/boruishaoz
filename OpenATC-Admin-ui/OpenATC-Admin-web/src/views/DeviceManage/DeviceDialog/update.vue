@@ -104,6 +104,15 @@
             </el-input>
         </el-form-item>
         <el-form-item
+            :label="$t('openatc.devicemanager.gbid')"
+            prop="gbid">
+            <el-input
+            type="text"
+            v-model="deviceInfo.gbid"
+            @keyup.enter.native="submitDeviceInfo('device')">
+            </el-input>
+        </el-form-item>
+        <el-form-item
             :label="$t('openatc.devicemanager.devicename')"
             prop="name">
             <el-input
@@ -283,6 +292,7 @@ export default {
       tempDevice: {
         agentid: '',
         thirdplatformid: '',
+        gbid: '',
         name: '',
         descs: '',
         tags: '',

@@ -166,6 +166,7 @@ const zh = {
       'crossid': '路口ID',
       'tags': '标签',
       'deviceid': '设备ID',
+      'gbid': '国标ID',
       'devicename': '路口名称',
       'firm': '厂商',
       'platform': '平台',
