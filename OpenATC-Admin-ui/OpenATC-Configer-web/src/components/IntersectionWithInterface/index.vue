@@ -25,7 +25,7 @@ import IntersectionMap from '@/components/IntersectionMap'
 import { getMessageByCode } from '../../utils/responseMessage'
 import { getTscControl, queryDevice } from '@/api/control'
 import { registerMessage } from '@/api/param'
-import { getIframdevid, setIframdevid } from '@/utils/auth'
+import { getIframdevid, setIframdevid, setToken } from '@/utils/auth'
 export default {
   name: 'intersection-with-interface',
   components: {
@@ -47,6 +47,10 @@ export default {
     AgentId: {
       type: String,
       default: '0'
+    },
+    Token: {
+      type: String,
+      default: ''
     }
   },
   watch: {
@@ -56,6 +60,11 @@ export default {
       },
       // 深度观察监听
       deep: true
+    },
+    Token: {
+      handler: function (val) {
+        this.setPropsToken(val)
+      }
     }
   },
   methods: {
@@ -75,6 +84,7 @@ export default {
       }
     },
     resetIntersectionMap () {
+      this.setPropsToken(this.Token)
       this.firstInit()
       this.$refs.intersectionMap.resetCrossDiagram()
       this.initData()
@@ -206,6 +216,12 @@ export default {
       this.isResend = false
       this.clearPatternInterval() // 清除定时器
       this.clearRegisterMessageTimer() // 清除定时器
+    },
+    setPropsToken (token) {
+      // 获取组件外传入的token，便于独立组件调用接口
+      if (token && token !== '') {
+        setToken(token)
+      }
     }
   },
   created () {

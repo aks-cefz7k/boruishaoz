@@ -34,6 +34,7 @@
 
 <script>
 import CrossDiagram from './crossDirection/crossDiagram'
+import { setToken } from '@/utils/auth'
 export default {
   name: 'intersection-map',
   components: {
@@ -69,6 +70,11 @@ export default {
     isShowInterval: {
       type: Boolean,
       default: true
+    },
+    Token: {
+      handler: function (val) {
+        this.setPropsToken(val)
+      }
     }
   },
   watch: {
@@ -80,6 +86,11 @@ export default {
       },
       // 深度观察监听
       deep: true
+    },
+    Token: {
+      handler: function (val) {
+        this.setPropsToken(val)
+      }
     }
   },
   created () {
@@ -89,6 +100,7 @@ export default {
   },
   mounted () {
     this.getParentSize()
+    this.setPropsToken(this.Token)
   },
   updated () {
   },
@@ -113,6 +125,12 @@ export default {
           console.log('resize this.bodyDomSize.width', _this.bodyDomSize.width)
         }, false)
       })
+    },
+    setPropsToken (token) {
+      // 获取组件外传入的token，便于独立组件调用接口
+      if (token && token !== '') {
+        setToken(token)
+      }
     }
   },
   destroyed () {
