@@ -19,4 +19,6 @@ import java.util.List;
 public class BarrierItem {
     private int ring;
     private List<Integer> data;
+    private boolean adjusted = false;
+    private int duration;
 }
