@@ -176,8 +176,15 @@
           leave-active-class="animated fadeOutRight">
             <div style="position: absolute;width: 100%;" v-show="(isOperation && isClosePhase)">
               <ClosePhaseControlModal
+                v-if="specialPage === 'closephase'"
                 :controlData="controlData"
-                :closePhaseRings="closePhaseRings"
+                :closePhaseRings="phaseRings"
+                @closePhaseBack="closePhaseBack"
+                @closePhaseControl= "closePhaseControl" />
+              <LockingPhaseControlModal
+                v-if="specialPage === 'lockingphase'"
+                :controlData="controlData"
+                :closePhaseRings="phaseRings"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
             </div>
@@ -345,6 +352,7 @@ import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
 import ClosePhaseControlModal from './closePhaselControlModal'
+import LockingPhaseControlModal from './lockingPhaselControlModal'
 import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
 import { GetAllFaultRange } from '@/api/fault'
@@ -366,6 +374,7 @@ export default {
     CurPhase,
     ManualControlModal,
     ClosePhaseControlModal,
+    LockingPhaseControlModal,
     FaultDetailModal,
     xdrdirselector
   },
@@ -536,14 +545,17 @@ export default {
       toPage: 1, // 与哪一个页面交互，1 代表路口信息页面，3代表 相位关断页面
       specialcontrolList: [{ // 特殊控制
         id: 23,
-        iconClass: 'closephase',
-        iconName: '关断相位'
+        iconClass: 'closephase'
+      }, {
+        id: 22,
+        iconClass: 'lockingphase'
       }],
-      closePhaseRings: [],
+      phaseRings: [],
       curFaultList: [],
       confirmedFault: [],
       ignoredFault: [],
-      untreatedFault: []
+      untreatedFault: [],
+      specialPage: '' // 哪一个特殊控制页面
     }
   },
   computed: {
@@ -1283,7 +1295,8 @@ export default {
         this.crossStatusData.phase = this.crossStatusData.phase.map(ele => {
           return {
             ...ele,
-            close: ele.close || 0
+            close: ele.close || 0,
+            locktype: 0 // 默认所有相位显示解锁状态
           }
         })
         // 相位关断标签
@@ -1313,8 +1326,15 @@ export default {
         this.toPage = 3
         this.isClosePhase = true
         this.initRingPhaseData()
+        this.specialPage = 'closephase'
+      } else if (id === 22) {
+        this.toPage = 3
+        this.isClosePhase = true
+        this.initRingPhaseData()
+        this.specialPage = 'lockingphase'
       } else {
         this.isClosePhase = false
+        this.specialPage = ''
       }
     },
     closePhaseBack () {
@@ -1337,7 +1357,7 @@ export default {
       })
     },
     initRingPhaseData () {
-      this.closePhaseRings = []
+      this.phaseRings = []
       if (!this.crossStatusData.rings) return
       this.crossStatusData.rings.forEach(ring => {
         let obj = {}
@@ -1349,7 +1369,7 @@ export default {
           let addphse = this.getPhasesInfo(phaseid)
           obj.phases.push({...originphase, ...addphse})
         }
-        this.closePhaseRings.push(obj)
+        this.phaseRings.push(obj)
       })
     },
     getPhasesInfo (phaseid) {
