@@ -12,10 +12,10 @@
 <template>
   <div class="app-container" ref="pattern-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
-    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row   @expand-change="expandChange" ref="singleTable" id="footerBtn">
+    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row  ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
         <template slot-scope="scope">
-          <el-tabs v-model="activeList[scope.$index]" type="card" @tab-click="handleClick">
+          <el-tabs v-model="activeList[scope.$index]"  @tab-click="handleClick" type="card">
             <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
               <el-row :gutter="20">
                 <el-col :span="12" >
@@ -138,9 +138,9 @@ import StageKanban from '@/views/pattern/StageKanban'
 import BoardCard from '@/components/BoardCard'
 import FollowPhase from '@/components/FollowPhase'
 import ExpendConfig from '@/components/ExpendConfig'
-import { mapState } from 'vuex'
-import { getTscControl } from '@/api/control'
-import { getIframdevid } from '@/utils/auth'
+// import { mapState } from 'vuex'
+// import { getTscControl } from '@/api/control'
+// import { getIframdevid } from '@/utils/auth'
 export default {
   name: 'patterns',
   components: {
@@ -176,9 +176,15 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      patternList: state => state.globalParam.tscParam.patternList
-    }),
+    patternList () {
+      let patternList = this.$store.state.globalParam.tscParam.patternList
+      if (!patternList.length) return
+      this.initData()
+      for (let i = 0; i < patternList.length; i++) {
+        this.handleStageData(patternList[i].rings, patternList[i].id)
+      }
+      return patternList
+    },
     activeList () {
       return this.patternList.map(i => 'ring')
     }
@@ -197,13 +203,6 @@ export default {
     })
   },
   watch: {
-    patternList: function (val) {
-      if (!val.length) return
-      this.initData()
-      for (let i = 0; i < val.length; i++) {
-        this.handleStageData(val[i].rings, val[i].id)
-      }
-    }
   },
   methods: {
     initData () {
@@ -448,56 +447,56 @@ export default {
         this.$message.error('相位差不能大于周期！')
       }
     },
-    expandChange (val1, val2) {
-      if (val1.desc === '') {
-        if (this.$i18n.locale === 'en') {
-          this.currPatternName = 'pattern' + val1.id
-        } else {
-          this.currPatternName = '方案' + val1.id
-        }
-        // this.currPatternName = 'pattern' + val1.id
-      } else {
-        this.currPatternName = val1.desc
-      }
-      // this.handleCurrentChange(val1)
-      if (val2.length > 0) { // 此种情况为收起看板]
-        this.getRowStages(val1.rings, val1.id)
-      }
-    },
+    // expandChange (val1, val2) {
+    //   if (val1.desc === '') {
+    //     if (this.$i18n.locale === 'en') {
+    //       this.currPatternName = 'pattern' + val1.id
+    //     } else {
+    //       this.currPatternName = '方案' + val1.id
+    //     }
+    //     // this.currPatternName = 'pattern' + val1.id
+    //   } else {
+    //     this.currPatternName = val1.desc
+    //   }
+    //   // this.handleCurrentChange(val1)
+    //   if (val2.length > 0) { // 此种情况为收起看板]
+    //     // this.handleStageData(val1.rings, val1.id)
+    //   }
+    // },
     handleSplit (index) {
       let currPattern = this.patternList[index]
-      // this.handleCurrentChange(currPattern)
-      // this.currentPattern = this.patternList[index]
-      this.getRowStages(currPattern.rings, this.patternList[index].id)
+      setTimeout(() => {
+        this.handleStageData(currPattern.rings, this.patternList[index].id)
+      }, 50)
     },
     handleClick (tab, event) {
       if (tab.paneName === 'stage') {
       }
     },
-    getRowStages (rings, id) {
-      let agentId = getIframdevid()
-      // agentId = '40001'
-      if (!agentId) {
-        this.$message.warning(this.$t('edge.pattern.agentidError'))
-        return false
-      }
-      getTscControl(agentId).then((data) => {
-        this.intervalFlag = true
-        if (!data.data.success) {
-          if (data.data.code === '4003') {
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
-            return
-          }
-          this.$message.error(data.data.message)
-          return
-        }
-        // let TscData = JSON.parse(JSON.stringify(data.data.data.data))
-        this.handleStageData(rings, id) // 处理阶段（驻留）stage数据
-      }).catch(error => {
-        this.$message.error(error)
-        console.log(error)
-      })
-    },
+    // getRowStages (rings, id) {
+    //   let agentId = getIframdevid()
+    //   // agentId = '40001'
+    //   if (!agentId) {
+    //     this.$message.warning(this.$t('edge.pattern.agentidError'))
+    //     return false
+    //   }
+    //   getTscControl(agentId).then((data) => {
+    //     this.intervalFlag = true
+    //     if (!data.data.success) {
+    //       if (data.data.code === '4003') {
+    //         this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+    //         return
+    //       }
+    //       this.$message.error(data.data.message)
+    //       return
+    //     }
+    //     // let TscData = JSON.parse(JSON.stringify(data.data.data.data))
+    //     this.handleStageData(rings, id) // 处理阶段（驻留）stage数据
+    //   }).catch(error => {
+    //     this.$message.error(error)
+    //     console.log(error)
+    //   })
+    // },
     handleStageData (rings, id) { // stagesList
       let phaseList = []
       let stagesList = []
@@ -543,8 +542,8 @@ export default {
         let rangeArr = i.split('-').map(Number)
         if (rangeArr.length > 2) {
           newPhaselist.push([
-            rangeArr[1],
-            rangeArr[2]
+            JSON.parse(JSON.stringify(rangeArr[1])),
+            JSON.parse(JSON.stringify(rangeArr[2]))
           ])
         } else {
           newPhaselist.push([
@@ -557,17 +556,17 @@ export default {
       }
       this.narr.reverse()
       for (let i = 0; i < newPhaselist.length; i++) {
-        let stage = newPhaselist[i]
+        let stage = JSON.parse(JSON.stringify(newPhaselist[i]))
         let stageItem = this.getStageItem(stage, rings, i)
-        stagesList.push(stageItem)
+        stagesList.push(JSON.parse(JSON.stringify(stageItem)))
       }
       patternList.map(item => { // 添加特征参数stage
         if (item.id === id) {
-          item.stagesList = stagesList
-          item.stages = newPhaselist
+          item.stagesList = JSON.parse(JSON.stringify(stagesList))
+          item.stages = JSON.parse(JSON.stringify(newPhaselist))
         }
       })
-      this.stagesList = stagesList
+      this.stagesList = JSON.parse(JSON.stringify(stagesList))
     },
     getStageItem (stageArr, ringsList, i) {
       let res = {
