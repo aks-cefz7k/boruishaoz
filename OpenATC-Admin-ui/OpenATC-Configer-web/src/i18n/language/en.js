@@ -1016,7 +1016,8 @@ const en = {
       '9002': 'Overflow recovery failed!',
       '9003': 'Overflow is executing, can not be deleted!',
       '9004': 'Overflow pattern name is already exist!',
-      '9005': 'Overflow pattern is empty!'
+      '9005': 'Overflow pattern is empty!',
+      '9006': 'No Overflow pattern is in execution!'
     },
     'faultrecord': {
       'faultDetail': 'Fault Detail',
