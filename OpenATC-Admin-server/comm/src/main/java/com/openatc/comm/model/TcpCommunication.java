@@ -48,7 +48,7 @@ public class TcpCommunication implements Communication {
     }
 
     @Override
-    public int sendData(String agentid, MessageData messageData, String ip, int port, String sendmsgtype){
+    public int sendData(String agentid, MessageData messageData, String ip, int port ){
 
         // 打包
         PackData packData = null;

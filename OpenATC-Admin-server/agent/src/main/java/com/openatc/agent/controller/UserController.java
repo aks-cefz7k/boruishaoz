@@ -117,11 +117,16 @@ public class UserController {
         String userName = loginUser.get("user_name").getAsString();
         String password = loginUser.get("password").getAsString();
         timestamp = loginUser.get("timestamp").getAsLong();
-        String ip = getRemoteIP(httpServletRequest);
+        String remote = getRemoteIP(httpServletRequest);
         User user = userDao.getUserByUserName(userName);
 
         //不存在该用户
         if (user == null) {
+            return RESTRetUtils.errorObj(E_3011);
+        }
+
+        //判断IP是否正确
+        if ( ! checkip(remote, user.getLogin_ip_limit())) {
             return RESTRetUtils.errorObj(E_3011);
         }
 
@@ -134,7 +139,7 @@ public class UserController {
         Subject subject = SecurityUtils.getSubject();
         String token = tokenUtil.generateToken(userName, timestamp);
         tokenUtil.tokenMap.put(token, new Token(token, 0, System.currentTimeMillis(), System.currentTimeMillis() + 86400000L));
-        JwtToken loginJwt = JwtToken.builder().token(token).ip(ip).build();
+        JwtToken loginJwt = JwtToken.builder().token(token).ip(remote).build();
         try {
             subject.login(loginJwt);
             Map<String, Object> map = new HashMap<>();
@@ -503,5 +508,19 @@ public class UserController {
         //加密后的字符串
         String encodeStr = DigestUtils.md5Hex(text + key);
         return encodeStr;
+    }
+
+    /**
+     * Token ip校验，如果ip与数据库中不一致，则拒绝访问
+     * 只需要在用户登录的时候判断一次
+     * @param
+     * @return
+     */
+    // todo: 增加正则匹配
+    public boolean checkip(String remoteip, String userip ) {
+
+        if (userip.equals("*") ) return true;
+        if (userip.equals(remoteip)) return true;
+        return false;
     }
 }

@@ -159,8 +159,7 @@ public class CommClient {
 
         // 发送-打包
         String agentId = sendMsg.getAgentid();
-        String sendmsgtype = sendMsg.getInfotype();
-        int sendrev = communication.sendData(agentId,sendMsg, ip, port,sendmsgtype);
+        int sendrev = communication.sendData(agentId,sendMsg, ip, port);
         // 发送异常处理
         if(sendrev == -2){
             InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_208,null );;
