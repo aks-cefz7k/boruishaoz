@@ -213,6 +213,7 @@ const en = {
       'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
       'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control',
       'putTscControlError7': 'The scheme corresponding to the scheme number does not exist',
+      'putTscControlError8': 'Configuration contains green conflicts',
       'nofault': 'None',
       'extendedContent': 'Extended Content',
       'JSONFormatError': 'JSON format error!',

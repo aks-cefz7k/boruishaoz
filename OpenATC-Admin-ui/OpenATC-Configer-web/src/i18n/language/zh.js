@@ -213,6 +213,7 @@ const zh = {
       'putTscControlError5': '优先级更高的方案控制中，无法执行',
       'putTscControlError6': '优先级更高的用户控制中，无法执行',
       'putTscControlError7': '方案编号对应的方案不存在',
+      'putTscControlError8': '配置包含绿冲突',
       'nofault': '无',
       'extendedContent': '扩展内容',
       'JSONFormatError': 'JSON格式错误!',
