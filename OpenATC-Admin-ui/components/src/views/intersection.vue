@@ -12,7 +12,7 @@
       <intersection-with-interface
         ref="intersectionWithInterface"
         :AgentId="agentId"
-        Token="eyJraWQiOiIxNjQ4ODAyNTk2Nzc4IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTIwMjU5NiwiaWF0IjoxNjQ4ODAyNTk2fQ.TMA7MaKDDwGxOrzyRIFbfrsH-_UyPGFz2Uqnnwsc8nk"
+        Token="eyJraWQiOiIxNjQ5NDI2MzAyMTc5IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTgyNjMwMiwiaWF0IjoxNjQ5NDI2MzAyfQ.Oj1S7wABnH7nvX4l3omhGbr7weLRieczMVN9WkdNEuY"
         ></intersection-with-interface>
     </el-dialog>
   </div>
@@ -24,7 +24,7 @@ export default {
     return {
       boxVisible: false,
       dialogWidth: '80%',
-      agentId: '10001-928'
+      agentId: '40003-132'
     }
   },
   methods: {

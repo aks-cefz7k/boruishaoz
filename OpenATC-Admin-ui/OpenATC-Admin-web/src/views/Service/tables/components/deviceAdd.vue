@@ -12,88 +12,48 @@
 <template>
   <div class="serviceroute-addDeviceDrawer">
     <div class="devs-container">
-      <div class="filter-container">
-        <el-form>
-          <el-form-item>
-            <el-input
-              v-model="devsfilter"
-              :placeholder="$t('openatc.common.searchplaceholder')"
-              prefix-icon="el-icon-search"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="devs-table">
-        <el-table
-          ref="addDeviceTable"
-          size="mini"
-          style="width: 100%"
-          v-loading.body="listLoading"
-          :data="tableData"
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column type="selection" width="55"> </el-table-column>
-          <el-table-column type="index" label="#" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="agentid"
-            :label="$t('openatc.greenwaveoptimize.deviceid')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="jsonparam.ip"
-            :label="$t('openatc.greenwaveoptimize.IP')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="jsonparam.port"
-            :label="$t('openatc.greenwaveoptimize.port')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            :label="$t('openatc.greenwaveoptimize.devicename')"
-            align="center"
-          >
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="btnGroup">
-        <el-button class="btn" @click="handleClose">{{
-          $t("openatc.button.Cancel")
-        }}</el-button>
-        <el-button class="btn" type="primary" @click="onOk">{{
-          $t("openatc.button.OK")
-        }}</el-button>
-      </div>
+      <!-- <LockPhaselControl
+        :phaseList="phaseList"
+        :patternStatus="patternStatus"
+        :lockPhaseBtnName="lockPhaseBtnName"
+        @closePhaseBack="closePhaseBack"
+        @closePhaseControl="closePhaseControl" /> -->
+      <scheme-config
+        ref="rightpanel"
+        :agentId="agentId"
+        :lockPhaseBtnName="lockPhaseBtnName"
+        :statusData="crossStatusData"
+        :realtimeStatusModalvisible="false"
+        @patternCommit="patternCommit"
+        @closePhaseBack="closePhaseBack"
+        @closePhaseControl="closePhaseControl" />
     </div>
     <router-view></router-view>
   </div>
 </template>
 <script>
-import { GetAllDevice } from '@/api/device'
-import { getMessageByCode } from '@/utils/responseMessage'
+// import { getToken } from '@/utils/auth' // 验权
 export default {
   name: 'deviceAdd',
   props: {
+    phaseList: {
+      type: Array
+    },
+    patternStatus: {
+      type: Object
+    },
     choosedDevice: {
       type: Array
     }
   },
-  watch: {
-    devsfilter: {
-      handler: function (val) {
-        this.handleFilter(val)
-      },
-      deep: true
-    }
-  },
   data () {
     return {
+      lockPhaseBtnName: this.$t('openatccomponents.overview.comfirm'),
+      agentId: '10001-928',
+      Token: 'eyJraWQiOiIxNjQ5NDI2MzAyMTc5IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTgyNjMwMiwiaWF0IjoxNjQ5NDI2MzAyfQ.Oj1S7wABnH7nvX4l3omhGbr7weLRieczMVN9WkdNEuY',
+      boxVisible: false,
+      dialogWidth: '80%',
+      crossStatusData: {}, // 路口状态数据,
       devsfilter: '',
       devsData: [], // 所有设备
       tableData: [], // 过滤后表格显示的设备
@@ -102,45 +62,16 @@ export default {
     }
   },
   created () {
-    this.getList()
   },
   methods: {
-    handleSelectionChange (val) {
-      this.multipleSelection = val
+    patternCommit (control) {
+      this.$emit('patternCommit', control)
     },
-    getList () {
-      this.listLoading = true
-      GetAllDevice().then(res => {
-        if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          return
-        }
-        this.listLoading = false
-        this.filterDeviceData(res.data.data)
-      })
-    },
-    filterDeviceData (allDevs) {
-      // 数据源过滤掉已选择设备
-      const agentids = this.choosedDevice.map(ele => ele.agentid)
-      this.devsData = allDevs.filter(data => !agentids.includes(data.agentid))
-      this.tableData = this.devsData
-    },
-    handleFilter (val) {
-      this.tableData = this.devsData.filter(data => !this.devsfilter ||
-        (data.agentid !== undefined && data.agentid.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
-        (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
-        (data.name !== undefined && data.name.toLowerCase().includes(this.devsfilter.toLowerCase())))
-      this.multipleSelection.forEach(row => {
-        this.$nextTick(() => {
-          this.$refs.addDeviceTable.toggleRowSelection(row, true)
-        })
-      })
-    },
-    onOk () {
-      this.$emit('addMultiDevice', this.multipleSelection)
+    closePhaseBack () {
       this.$emit('closeAddDrawer')
     },
-    handleClose (done) {
+    closePhaseControl (data) {
+      this.$emit('closePhaseControl', data)
       this.$emit('closeAddDrawer')
     }
   }
@@ -155,33 +86,4 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-// .serviceroute-addDeviceDrawer {
-//   height: 100%;
-//   position: relative;
-// }
-// .serviceroute-addDeviceDrawer .btnGroup {
-//   position: absolute;
-//   bottom: 30px;
-//   left: 0;
-//   width: 100%;
-//   padding: 0 16px;
-//   display: flex;
-//   align-items: center;
-// }
-// .serviceroute-addDeviceDrawer .btnGroup .btn {
-//   width: 50%;
-// }
-// .serviceroute-addDeviceDrawer .devs-container {
-//   padding: 0 20px;
-//   overflow: hidden;
-// }
-// .serviceroute-addDeviceDrawer .filter-container {
-//   float: right;
-//   width: 100%;
-// }
-// .serviceroute-addDeviceDrawer .devs-table {
-//   border: solid 1px $--border-color-lighter;
-//   overflow: auto;
-//   max-height: 590px;
-// }
 </style>

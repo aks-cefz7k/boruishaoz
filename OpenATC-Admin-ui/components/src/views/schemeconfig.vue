@@ -22,7 +22,8 @@
       append-to-body>
       <scheme-config
         ref="rightpanel"
-        agentId="10001-928"
+        :agentId="agentId"
+        :lockPhaseBtnName="lockPhaseBtnName"
         :statusData="crossStatusData"
         :realtimeStatusModalvisible="false" />
     </el-dialog>
@@ -32,12 +33,16 @@
 import { getTscControl } from '../api/control.js'
 import { getMessageByCode } from '../utils/responseMessage.js'
 import {
-  getIframdevid
+  getIframdevid, setToken
 } from '../utils/auth'
 export default {
   name: 'democonfig',
   data () {
     return {
+      lockPhaseBtnName: this.$t('openatccomponents.overview.comfirm'),
+      agentId: '10002-994',
+      Token: 'eyJraWQiOiIxNjQ5MzM4NzA5MTA0IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTczODcwOSwiaWF0IjoxNjQ5MzM4NzA5fQ.JDSkpT1SbB61dEKvorhVdZJHKJzoQZEY5DPKHs1Imo0',
+      Token103: 'eyJraWQiOiIxNjQ5MzM4NzA5MTA0IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTczODcwOSwiaWF0IjoxNjQ5MzM4NzA5fQ.JDSkpT1SbB61dEKvorhVdZJHKJzoQZEY5DPKHs1Imo0',
       boxVisible: false,
       dialogWidth: '80%',
       crossStatusData: {} // 路口状态数据
@@ -49,6 +54,9 @@ export default {
     },
     handleOpenConfigPanel () {
       this.boxVisible = true
+      this.$nextTick(() => {
+        // this.$refs.rightpanel.selectSpecialModel(22)
+      })
     },
     setDialogWidth () {
       var val = document.body.offsetWidth
@@ -84,12 +92,19 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    setPropsToken (token) {
+      // 获取组件外传入的token，便于独立组件调用接口
+      if (token && token !== '') {
+        setToken(token)
+      }
     }
   },
   created () {
     this.setDialogWidth()
   },
   mounted () {
+    this.setPropsToken(this.Token)
     this.initData()
     window.onresize = () => {
       return (() => {

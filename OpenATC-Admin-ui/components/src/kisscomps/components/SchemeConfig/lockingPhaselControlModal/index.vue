@@ -75,62 +75,35 @@
           </common-kanban>
         </div>
     </el-row>
-    <div class="footer" v-if="realtimeStatusModalvisible">
+    <div class="footer">
         <el-button @click="handleClose()">{{$t('openatccomponents.button.Back')}}</el-button>
-        <el-button type="primary" @click="handleManualControl()">{{$t('openatccomponents.overview.implement')}}</el-button>
-    </div>
-    <div class="footer" v-if="!realtimeStatusModalvisible">
-        <el-button @click="handleClose()">{{$t('openatccomponents.button.Back')}}</el-button>
-        <el-button type="primary" @click="handleManualControl()">{{$t('openatccomponents.overview.comfirm')}}</el-button>
+        <el-button type="primary" @click="handleLockPhase()">{{lockPhaseBtnName}}</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import RingDataModel from '../../../../utils/RingDataModel.js'
 export default {
-  name: 'closePhaselControl',
+  name: 'LockPhaselControl',
   props: {
-    Visible: {
-      type: Boolean
+    phaseList: {
+      type: Array
     },
-    controlData: {
+    patternStatus: {
       type: Object
     },
-    modelList: {
-      type: Array
-    },
-    stagesList: {
-      type: Array
-    },
-    currModel: {
-      type: Number
-    },
-    preselectModel: {
-      type: Number
-    },
-    currentStage: {
-      type: Number
-    },
-    preselectStages: {
-      type: Number
-    },
-    specialcontrolList: {
-      type: Array
-    },
-    closePhaseRings: {
-      type: Array
-    },
-    realtimeStatusModalvisible: {
-      type: Boolean,
-      default: true
-    },
-    sidewalkPhaseData: {
-      type: Array
+    lockPhaseBtnName: {
+      type: String,
+      default () {
+        return this.$t('openatccomponents.overview.implement')
+      }
     }
   },
   data () {
     return {
-      visible: this.Visible,
+      closePhaseRings: [],
+      sidewalkPhaseData: [],
       manualInfo: {
         tempGreenflash: 6,
         tempDuration: 600, // 控制方式手动操作的情况下的持续时间的临时值。
@@ -149,11 +122,18 @@ export default {
       }]
     }
   },
+  mounted () {
+    if (this.patternStatus && this.phaseList && this.phaseList.length > 0) {
+      let ringDataModel = new RingDataModel(this.patternStatus, this.phaseList)
+      this.closePhaseRings = ringDataModel.initRingPhaseData()
+      this.sidewalkPhaseData = ringDataModel.getPedPhasePos()
+    }
+  },
   methods: {
     handleClose () {
       this.$emit('closePhaseBack')
     },
-    handleManualControl () {
+    handleLockPhase () {
       let submitdata = {
         control: 22,
         data: {}

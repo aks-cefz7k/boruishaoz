@@ -46,8 +46,8 @@ export function AddDevice (data) {
   delete params.port
   return api.Send({}, params, [])
 }
-export function queryDevice () {
-  var iframdevid = getIframdevid()
+export function queryDevice (iframdevid) {
+  // var iframdevid = getIframdevid()
   let api = new Authapi('queryDevice')
   let paramList = [iframdevid]
   return api.Send({}, {}, paramList)

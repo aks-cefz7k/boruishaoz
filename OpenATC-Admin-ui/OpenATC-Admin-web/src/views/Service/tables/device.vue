@@ -13,7 +13,6 @@
   <div class="serviceroute-device">
     <el-drawer
       ref="addDrawer"
-      :title="$t('openatc.greenwaveoptimize.adddevice')"
       destroy-on-close
       :wrapperClosable="false"
       :append-to-body="true"
@@ -22,8 +21,11 @@
     >
       <DeviceAdd
         :choosedDevice="devicesTableData"
+        :phaseList="phaseList"
+        :patternStatus="patternStatus"
+        @patternCommit="patternCommit"
+        @closePhaseControl="closePhaseControl"
         @closeAddDrawer="closeAddDrawer"
-        @addMultiDevice="addMultiDevice"
       />
     </el-drawer>
     <Messagebox
@@ -34,71 +36,6 @@
       @ok="confirmDel"
     />
     <div>
-      <div style="overflow: hidden">
-        <el-button class="addbtn" type="primary" @click="handleAdd">{{
-          $t("openatc.greenwaveoptimize.adddevice")
-        }}</el-button>
-      </div>
-      <div class="devicePanel">
-        <el-table
-          class="deviceTable"
-          :data="devicesTableData"
-          row-key="id"
-          v-loading.body="listLoading"
-          style="width: 100%"
-          max-height="660px"
-        >
-          <el-table-column type="index" label="#" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="agentid"
-            :label="$t('openatc.greenwaveoptimize.deviceid')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            :label="$t('openatc.greenwaveoptimize.devicename')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="type"
-            :label="$t('openatc.greenwaveoptimize.type')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            width="120"
-            prop="jsonparam.ip"
-            :label="$t('openatc.greenwaveoptimize.IP')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="jsonparam.port"
-            :label="$t('openatc.greenwaveoptimize.port')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="descs"
-            :label="$t('openatc.greenwaveoptimize.describe')"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            :label="$t('openatc.greenwaveoptimize.operation')"
-            align="center"
-          >
-            <template slot-scope="scope">
-              <el-button type="text" @click="handleDelete(scope.$index)">{{
-                $t("openatc.common.delete")
-              }}</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
     </div>
   </div>
 </template>
@@ -126,6 +63,8 @@ export default {
   },
   data () {
     return {
+      phaseList: [],
+      patternStatus: {},
       devicesTableData: [],
       messageboxVisible: false,
       listLoading: false, // 表格数据加载等待动画
@@ -176,11 +115,17 @@ export default {
     handleClose (done) {
       done()
     },
-    handleAdd () {
+    handleAdd (phaseList, statusPattern) {
+      this.phaseList = phaseList
+      this.statusPattern = statusPattern
       this.innerDrawer = true
     },
-    addMultiDevice (multiDevs) {
-      this.$emit('addDevice', multiDevs)
+    closePhaseControl (multiDevs) {
+      this.$emit('closePhaseControl', multiDevs)
+      this.innerDrawer = false
+    },
+    patternCommit (control) {
+      this.$emit('patternCommit', control)
       this.innerDrawer = false
     },
     closeAddDrawer () {

@@ -45,15 +45,14 @@
                 :sidewalkPhaseData="sidewalkPhaseData"
                 :realtimeStatusModalvisible="realtimeStatusModalvisible"
                 @closePhaseBack="closePhaseBack"
-                @closePhaseControl= "closePhaseControl" />
+                @closePhaseControl="closePhaseControl" />
               <LockingPhaseControlModal
                 v-if="specialPage === 'lockingphase'"
-                :controlData="controlData"
-                :closePhaseRings="phaseRings"
-                :sidewalkPhaseData="sidewalkPhaseData"
-                :realtimeStatusModalvisible="realtimeStatusModalvisible"
+                :phaseList="phaseList"
+                :patternStatus="statusData"
+                :lockPhaseBtnName="lockPhaseBtnName"
                 @closePhaseBack="closePhaseBack"
-                @closePhaseControl= "closePhaseControl" />
+                @closePhaseControl="closePhaseControl" />
             </div>
           </transition>
 
@@ -99,6 +98,7 @@ import { GetAllFaultRange } from '../../../api/fault'
 import PhaseDataModel from '../IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '../../../EdgeMgr/controller/crossDiagramMgr.js'
 import { setToken } from '../../../utils/auth.js'
+import RingDataModel from '../../../utils/RingDataModel.js'
 export default {
   name: 'scheme-config',
   components: {
@@ -137,6 +137,9 @@ export default {
     realtimeStatusModalvisible: {
       type: Boolean,
       default: true
+    },
+    lockPhaseBtnName: {
+      type: String
     },
     Token: {
       type: String,
@@ -270,6 +273,7 @@ export default {
     },
     Token: {
       handler: function (val) {
+        debugger
         this.setPropsToken(val)
       }
     }
@@ -295,23 +299,25 @@ export default {
       }, 30000)
     },
     getPedPhasePos () {
-      // 行人相位信息
-      this.sidewalkPhaseData = []
-      this.phaseList.forEach((ele, i) => {
-        if (ele.peddirection) {
-          ele.peddirection.forEach((dir, index) => {
-          // 行人相位
-            if (this.PhaseDataModel.getSidePos(dir)) {
-              this.sidewalkPhaseData.push({
-                key: this.CrossDiagramMgr.getUniqueKey('pedphase'),
-                phaseid: ele.id, // 相位id，用于对应相位状态
-                id: dir,
-                name: this.PhaseDataModel.getSidePos(dir).name
-              })
-            }
-          })
-        }
-      })
+      let ringDataModel = new RingDataModel(this.statusData, this.phaseList)
+      this.sidewalkPhaseData = ringDataModel.getPedPhasePos()
+      // // 行人相位信息
+      // this.sidewalkPhaseData = []
+      // this.phaseList.forEach((ele, i) => {
+      //   if (ele.peddirection) {
+      //     ele.peddirection.forEach((dir, index) => {
+      //     // 行人相位
+      //       if (this.PhaseDataModel.getSidePos(dir)) {
+      //         this.sidewalkPhaseData.push({
+      //           key: this.CrossDiagramMgr.getUniqueKey('pedphase'),
+      //           phaseid: ele.id, // 相位id，用于对应相位状态
+      //           id: dir,
+      //           name: this.PhaseDataModel.getSidePos(dir).name
+      //         })
+      //       }
+      //     })
+      //   }
+      // })
     },
     clearFaultInterval () {
       if (this.faultTimer !== null) {
@@ -395,8 +401,10 @@ export default {
           peddirection: peddirections
         }))
         stagesTemp.push(tempList)
-        this.stagesList = JSON.parse(JSON.stringify(stagesTemp))
       }
+      this.stagesList = JSON.parse(JSON.stringify(stagesTemp))
+      console.log(this.stagesList)
+      alert('stagesList')
     },
     lockScreen () {
       this.loading = this.$loading({
@@ -498,7 +506,11 @@ export default {
       })
       this.toPage = 1
     },
+    handleManualConfirm (manualInfo) {
+      this.$emit('handleManualConfirm', manualInfo)
+    },
     patternCommit (manualInfo) {
+      debugger
       let that = this
       let control = {}
       that.ParamsMode.forEach(function (value, key, map) {
@@ -517,6 +529,7 @@ export default {
       }
       if (!this.realtimeStatusModalvisible) {
         console.log(control)
+        this.$emit('patternCommit', control)
         return
       }
       this.lockScreen()
@@ -555,7 +568,7 @@ export default {
     getPhase () {
       let _this = this
       return new Promise(function (resolve, reject) {
-        uploadSingleTscParam('phase').then(data => {
+        uploadSingleTscParam('phase', _this.agentId).then(data => {
           let res = data.data
           if (!res.success) {
             if (res.code === '4003') {
@@ -606,15 +619,16 @@ export default {
       }
     },
     selectSpecialModel (id) {
+      let ringDataModel = new RingDataModel(this.statusData, this.phaseList)
       if (id === 23) {
         this.toPage = 3
         this.isClosePhase = true
-        this.initRingPhaseData()
+        this.phaseRings = ringDataModel.initRingPhaseData()
         this.specialPage = 'closephase'
       } else if (id === 22) {
         this.toPage = 3
         this.isClosePhase = true
-        this.initRingPhaseData()
+        this.phaseRings = ringDataModel.initRingPhaseData()
         this.specialPage = 'lockingphase'
       } else {
         this.isClosePhase = false
@@ -622,12 +636,17 @@ export default {
       }
     },
     closePhaseBack () {
+      // if (!this.realtimeStatusModalvisible) {
+      //   this.$emit('closePhaseBack')
+      //   return
+      // }
       this.toPage = 3
       this.isClosePhase = false
     },
     closePhaseControl (controldata) {
       if (!this.realtimeStatusModalvisible) {
         console.log(controldata)
+        this.$emit('closePhaseControl', controldata)
         return
       }
       this.lockScreen()
@@ -652,57 +671,57 @@ export default {
         console.log(error)
       })
     },
-    initRingPhaseData () {
-      // 环信息从单独上载相位信息里获取，以免相位锁定后，方案状态数据里没有rings，导致相位锁定控制列表无法显示
-      this.phaseRings = []
-      let map = {}
-      let dest = []
-      for (let i = 0; i < this.phaseList.length; i++) {
-        let ai = this.phaseList[i]
-        if (!map[ai.ring]) {
-          let addphse = this.addPhaseInfo(ai)
-          dest.push({
-            num: ai.ring,
-            phases: [{...ai, ...addphse}]
-          })
-          map[ai.ring] = ai
-        } else {
-          for (var j = 0; j < dest.length; j++) {
-            var dj = dest[j]
-            if (dj.num === ai.ring) {
-              let addphse = this.addPhaseInfo(ai)
-              dj.phases.push({...ai, ...addphse})
-              break
-            }
-          }
-        }
-      }
-      this.phaseRings = JSON.parse(JSON.stringify(dest))
-    },
-    addPhaseInfo (phase) {
-      let addphse = {}
-      addphse.name = this.$t('openatccomponents.overview.phase') + phase.id
-      addphse.desc = this.getPhaseDescription(phase.direction)
-      // 相位锁定选项默认都按照解锁状态显示
-      addphse.locktype = 0
-      addphse.close = 0
-      if (this.crossStatusData !== null && this.crossStatusData.phase) {
-        // 如果方案状态相位有close字段，这边就需要对应close状态进相位关断控制的选项里
-        let phaseStatus = this.crossStatusData.phase.filter(ele => ele.id === phase.id)[0]
-        addphse = {...addphse, ...phaseStatus}
-      }
-      return addphse
-    },
-    getPhaseDescription (phaseList) {
-      let list = []
-      for (let id of phaseList) {
-        let obj = {}
-        obj.id = id
-        obj.color = '#454545'
-        list.push(obj)
-      }
-      return list
-    },
+    // initRingPhaseData () {
+    //   // 环信息从单独上载相位信息里获取，以免相位锁定后，方案状态数据里没有rings，导致相位锁定控制列表无法显示
+    //   this.phaseRings = []
+    //   let map = {}
+    //   let dest = []
+    //   for (let i = 0; i < this.phaseList.length; i++) {
+    //     let ai = this.phaseList[i]
+    //     if (!map[ai.ring]) {
+    //       let addphse = this.addPhaseInfo(ai)
+    //       dest.push({
+    //         num: ai.ring,
+    //         phases: [{...ai, ...addphse}]
+    //       })
+    //       map[ai.ring] = ai
+    //     } else {
+    //       for (var j = 0; j < dest.length; j++) {
+    //         var dj = dest[j]
+    //         if (dj.num === ai.ring) {
+    //           let addphse = this.addPhaseInfo(ai)
+    //           dj.phases.push({...ai, ...addphse})
+    //           break
+    //         }
+    //       }
+    //     }
+    //   }
+    //   this.phaseRings = JSON.parse(JSON.stringify(dest))
+    // },
+    // addPhaseInfo (phase) {
+    //   let addphse = {}
+    //   addphse.name = this.$t('openatccomponents.overview.phase') + phase.id
+    //   addphse.desc = this.getPhaseDescription(phase.direction)
+    //   // 相位锁定选项默认都按照解锁状态显示
+    //   addphse.locktype = 0
+    //   addphse.close = 0
+    //   if (this.crossStatusData !== null && this.crossStatusData.phase) {
+    //     // 如果方案状态相位有close字段，这边就需要对应close状态进相位关断控制的选项里
+    //     let phaseStatus = this.crossStatusData.phase.filter(ele => ele.id === phase.id)[0]
+    //     addphse = {...addphse, ...phaseStatus}
+    //   }
+    //   return addphse
+    // },
+    // getPhaseDescription (phaseList) {
+    //   let list = []
+    //   for (let id of phaseList) {
+    //     let obj = {}
+    //     obj.id = id
+    //     obj.color = '#454545'
+    //     list.push(obj)
+    //   }
+    //   return list
+    // },
     getFaultById () {
       let param = {
         agentId: this.agentId,
