@@ -25,8 +25,7 @@
                     :class="{'btnFocus': item.active === true}">{{item.value}}</span>
             </span>
           </div>
-          <div class="chart1"
-               id="strength"></div>
+          <div class="chart1" id="strength"></div>
 
       </div>
       <div class="leftbottom">
@@ -141,11 +140,11 @@ export default {
     },
     updateStrengthChart (key) {
       this.changeBtnStyle(key)
+      // 更新相位分布环图小标题
+      this.curChart = this.chooseButtons.filter(btn => btn.key === key)[0]
       const curData = this.decisionModel.getData(key)
       this.strengthData = curData
       this.renderStrengthChart()
-      // 更新相位分布环图小标题
-      this.curChart = this.chooseButtons.filter(btn => btn.key === key)[0]
     },
     lockScreen () {
       this.loading = true
@@ -163,9 +162,6 @@ export default {
         _this.strengthChart.resize()
         _this.timingChart.resize()
       }
-      // if (this.ASCID) {
-      //   this.refreshChart(this.ASCID)
-      // }
     },
     ShowPanelStrength (selIndex) {
       if (this.strengthData === undefined || selIndex === undefined) return
@@ -274,7 +270,24 @@ export default {
       this.curStrengthData = this.alldata[this.alldata.length - 1]
       let strOption = {
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          },
+          formatter: function (params) {
+            if (params[0].seriesName === 'anchor') {
+              return ''
+            }
+            var text = '--'
+            if (params && params.length) {
+              text = params[0].data[0] // 提示框顶部的日期标题
+              params.forEach(item => {
+                const dotHtml = item.marker // 提示框示例的小圆圈,可以在这里修改
+                text += `</br>${dotHtml}${item.seriesName} : ${item.data[1] !== null ? item.data[1] : '-'}`
+              })
+            }
+            return text
+          }
         },
         grid: {
           containLabel: true,
@@ -284,10 +297,15 @@ export default {
           bottom: '20'
         },
         xAxis: {
+          type: 'time',
           boundaryGap: false,
           axisLabel: {
             textStyle: {
               color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            },
+            formatter: function (value, index) { // 坐标轴文字展示样式处理
+              // return echart.format.formatTime('yyyy-MM-dd hh:mm:ss', value)
+              return echart.format.formatTime('MM-dd hh:mm:ss', value)
             }
           },
           axisTick: {
@@ -299,8 +317,7 @@ export default {
             lineStyle: {
               color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
             }
-          },
-          data: this.getStrXAxis(this.strengthData)
+          }
         },
         yAxis: {
           axisTick: {
@@ -330,7 +347,7 @@ export default {
             }
           }
         },
-        series: this.getStrSeries(this.strengthData)
+        series: [this.getStrSeries(this.strengthData), this.getLineAnchorSeries()]
       }
       this.strengthChart.setOption(strOption)
     },
@@ -352,7 +369,9 @@ export default {
     },
     getStrSeries (dataList) {
       let series = {
+        name: this.curChart.value,
         type: 'line',
+        connectNulls: true,
         itemStyle: {
           color: '#75B1E6'
         },
@@ -373,9 +392,24 @@ export default {
         }
       }
       series.data = dataList.map(item => {
-        return item.value
+        return [item.date, item.value]
       })
-      return [series]
+      return series
+    },
+    getLineAnchorSeries () {
+      let anchor = [
+        [moment(this.date[0]).format('YYYY-MM-DD HH:mm:ss'), 0],
+        [moment(this.date[1]).format('YYYY-MM-DD HH:mm:ss'), 0]
+      ]
+      let anchorSeries = {
+        name: 'anchor',
+        type: 'line',
+        showSymbol: false,
+        data: anchor,
+        itemStyle: {normal: {opacity: 0}},
+        lineStyle: {normal: {opacity: 0}}
+      }
+      return anchorSeries
     },
     refreshTimingChart () {
       return this.getTimingData().then(data => {
@@ -387,7 +421,24 @@ export default {
         this.curTimeData = data[data.length - 1]
         let strOption = {
           tooltip: {
-            trigger: 'axis'
+            trigger: 'axis',
+            axisPointer: {
+              animation: false
+            },
+            formatter: function (params) {
+              if (params[0].seriesName === 'anchor') {
+                return ''
+              }
+              var text = '--'
+              if (params && params.length) {
+                text = params[0].data[0] // 提示框顶部的日期标题
+                params.forEach(item => {
+                  const dotHtml = item.marker // 提示框示例的小圆圈,可以在这里修改
+                  text += `</br>${dotHtml}${item.seriesName} : ${item.data[1] !== null ? item.data[1] : '-'}`
+                })
+              }
+              return text
+            }
           },
           grid: {
             containLabel: true,
@@ -404,6 +455,7 @@ export default {
             data: this.getTimingLegend(this.TimingData)
           },
           xAxis: {
+            type: 'time',
             axisTick: {
               lineStyle: {
                 color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
@@ -417,9 +469,11 @@ export default {
             axisLabel: {
               textStyle: {
                 color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+              },
+              formatter: function (value, index) { // 坐标轴文字展示样式处理
+                return echart.format.formatTime('MM-dd hh:mm:ss', value)
               }
-            },
-            data: this.getTimingXAxis(this.TimingData)
+            }
           },
           yAxis: {
             axisTick: {
@@ -455,6 +509,21 @@ export default {
         this.timingChart.setOption(strOption)
       })
     },
+    getBarAnchorSeries () {
+      let anchor = [
+        [moment(this.date[0]).format('YYYY-MM-DD HH:mm:ss'), 0],
+        [moment(this.date[1]).format('YYYY-MM-DD HH:mm:ss'), 0]
+      ]
+      let anchorSeries = {
+        name: 'anchor',
+        type: 'bar',
+        stack: 'rang1',
+        barMaxWidth: 20,
+        data: anchor,
+        itemStyle: {normal: {opacity: 0}}
+      }
+      return anchorSeries
+    },
     getTimingLegend (dataList) {
       let lergeList = []
 
@@ -476,8 +545,11 @@ export default {
       })
     },
     getTimingSeries (dataList) {
-      let series = []
+      let series = [
+        this.getBarAnchorSeries()
+      ]
       for (let data of dataList) {
+        let date = data.date
         for (let i = 0; i < data.rang1.length; i++) {
           let phase = data.rang1[i]
           let ser = series.find(val => val.name === phase.phasename && val.stack === 'rang1')
@@ -490,10 +562,10 @@ export default {
               itemStyle: {
                 color: this.Color.get(i)
               },
-              data: [phase.time]
+              data: [[date, phase.time]]
             })
           } else {
-            ser.data.push(phase.time)
+            ser.data.push([date, phase.time])
           }
         }
 
@@ -506,13 +578,13 @@ export default {
               type: 'bar',
               stack: 'rang2',
               barMaxWidth: 20,
-              data: [phase.time],
+              data: [[date, phase.time]],
               itemStyle: {
                 color: this.Color.get(i)
               }
             })
           } else {
-            ser.data.push(phase.time)
+            ser.data.push([date, phase.time])
           }
         }
       }
@@ -542,7 +614,7 @@ export default {
         let res = JSON.parse(JSON.stringify(this.HistoryPatternData))
         let resData = []
         for (let data of res.data.data) {
-          let date = moment(data['time']).format('MM-DD HH:mm:ss')
+          let date = moment(data['time']).format('YYYY-MM-DD HH:mm:ss')
           let phaseData = {
             date,
             mode: data.data.mode,
@@ -576,7 +648,7 @@ export default {
         let res = JSON.parse(JSON.stringify(this.HistoryPatternData))
         let resData = []
         for (let data of res.data.data) {
-          let curTime = moment(data['time']).format('MM-DD HH:mm:ss')
+          let curTime = moment(data['time']).format('YYYY-MM-DD HH:mm:ss')
           let timeData = resData.find(val => curTime === val.date)
           if (timeData === undefined) {
             timeData = {
