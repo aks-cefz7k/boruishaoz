@@ -177,6 +177,7 @@ export default {
       _this.routeLayer = L.layerGroup(polylines)
       _this.map.addLayer(_this.routeLayer)
       this.addRoutePopup()
+      this.addMarkerPopup()
     },
     onPolylineClick (e) {
       let routeId = e.target.options.routeId
@@ -190,6 +191,23 @@ export default {
       }
       // e.target.setStyle(this.newRouteOptions)
       this.showPlanchart(routeId)
+    },
+    addMarkerPopup () {
+      let _this = this
+      this.deviceGroupLayer.eachLayer(function (layer) {
+        let options = layer.options.icon.options
+        let devData = options.alt
+        let content = _this.getMarkerPopupContent(devData)
+        layer.bindPopup(content)
+      })
+    },
+    getMarkerPopupContent (devData) {
+      let agentid = devData.agentid
+      let content =
+      `
+        <div> ${this.$t('openatc.gis.crossRoad')}${agentid}</div>
+      `
+      return content
     },
     addRoutePopup () {
       let _this = this
@@ -237,7 +255,7 @@ export default {
           iconUrl: iconUrl,
           iconSize: [24, 27],
           // title: dev.state,
-          // alt: dev,
+          alt: dev,
           iconAnchor: [12, 27]
         })
         let deviceMark = L.marker(latlngs, { icon: notOnlineIcon }).addTo(this.map)

@@ -68,12 +68,13 @@ const zh = {
       'download': '下载',
       'import': '从文件导入',
       'export': '从文件导出',
-      'importtemplate': '从模板导入',
+      'importtemplate': '模板操作',
       'copy': '复制参数',
       'copyDevice': '设备',
       'copyPattern': '的方案已被复制',
       'tip': '提示',
       'read': '读取',
+      'language': '语言',
       'readDevice': '是否载入设备',
       'readPattern': '的方案信息，到当前设备配置中 ?',
       'title': '欢迎进入配置管理中心',
@@ -106,19 +107,20 @@ const zh = {
       'crossname': '路口名称',
       'divicestate': '设备状态',
       'protocoltype': '协议类型',
-      'signalID': '信号机ID',
+      'signalID': '路口ID',
       'signalIP': '信号机IP',
       'faultinfo': '故障信息',
       'platform': '平台类型',
       'online': '在线',
       'offline': '离线',
+      'connected': '已连接',
       'onlineing': '联机中...',
       'controlmode': '控制方式',
       'manual': '手动控制',
       'exitmanual': '退出手动',
       'controlmodel': '控制模式',
       'patternname': '方案名称',
-      'controlnumber': '控制编号',
+      'controlnumber': '方案编号',
       'mode': '控制方式',
       'stage': '阶段(驻留)',
       'specialcontrol': '特殊控制',
@@ -183,8 +185,10 @@ const zh = {
       'modelList10': '无电缆协调',
       'modelList12': '行人过街',
       'modelList13': '方案恢复过渡',
+      'modelList15': '通道检测',
       'modelList19': '感应式行人过街',
       'modelList23': '相位关断',
+      'modelList16': '相位锁定',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
       'canceled': '已取消',
@@ -214,7 +218,11 @@ const zh = {
       'closeOption2': '仅机动车关断',
       'closeOption3': '仅行人关断',
       'vehicle': '机动车',
-      'pedestrian': '行人'
+      'pedestrian': '行人',
+      'confirmed': '已确认',
+      'ignored': '已忽略',
+      'untreated': '未处理',
+      'item': '条'
     },
     'phase': {
       'desc': '车道方向',
@@ -410,7 +418,8 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此检测器？',
       'deleteAlltip': '确认删除所有检测器？',
-      'mostdata': '最多只能创建64条数据！'
+      'mostdata': '最多只能创建64条数据！',
+      'mostclonedata': '最多只能克隆72条数据！'
     },
     'channellock': {
       'deleteAlltip': '确认删除所有通道锁定？',
@@ -422,7 +431,8 @@ const zh = {
       'channelstats': '通道状态',
       'channel': '通道',
       'channelinfo': '通道信息',
-      'status': '状态'
+      'status': '状态',
+      'maxlength': '最多添加24个通道锁定记录!'
     },
     'channelControl': {
       'recoverysuccess': '恢复成功！',
@@ -442,7 +452,10 @@ const zh = {
       'greenoutputvoltage': '绿灯输出电压',
       'greenoffresidualpower': '绿灯关闭的残留功率',
       'greenonoutputpower': '绿灯亮灯的输出功率',
-      'inputvoltage': '通道输入电压'
+      'inputvoltage': '通道输入电压',
+      'implement': '执行',
+      'implementsuccess': '执行成功！',
+      'noClickedLamp': '未选择通道灯端子！'
     },
     'pedestrianDetector': {
       'desc': '描述',
@@ -470,7 +483,8 @@ const zh = {
       'deviceinfo': '设备信息: ',
       'addresscode': '地址码: ',
       'areaid': '区域ID: ',
-      'crossid': '路口ID: ',
+      'devid': '设备ID: ',
+      'devname': '设备名称',
       'selflearning': '自学习:',
       'deviceparam': '设备参数: ',
       'startyellowflashtime': '启动黄闪时间(秒): ',
@@ -524,7 +538,7 @@ const zh = {
     },
     'controlpanel': {
       'controlmode': '控制模式',
-      'duration': '持续时间',
+      'duration': '绿灯持续时间',
       'transitiongreenflashtime': '过渡绿闪时间:',
       'transitionyellowtime': '过渡黄灯时间:',
       'transitionredtime': '过渡全红时间',
@@ -538,6 +552,7 @@ const zh = {
       'defaultsettings': '生成默认设置',
       'allclear': '全部清除',
       'clear': '清空',
+      'execute': '锁定当前方向',
       'resetstatus': '状态重置',
       'manualbtn': 'manualbtn',
       'manualbtn1': '东西直行',
@@ -562,7 +577,8 @@ const zh = {
       'manualpanelundefined': '',
       'manualpanel0': '默认',
       'manualpanel1': '自定义',
-      'manualcontrolbackground': 'manualcontrolbackground'
+      'manualcontrolbackground': 'manualcontrolbackground',
+      'lockconfigempty': '通道锁定信息不能为空！'
     },
     'system': {
       'information': '信息',
@@ -709,7 +725,9 @@ const zh = {
     'button': {
       'OK': '确定',
       'Cancel': '取消',
-      'Back': '返回'
+      'Back': '返回',
+      'ignore': '忽略',
+      'confirm': '确认'
     },
     'common': {
       'confirm': '确认',
@@ -756,7 +774,8 @@ const zh = {
       'querysucess': '查询成功！',
       'setup': '设置',
       'tipsmodaltitle': '提示',
-      'deviceoffline': '设备不在线！'
+      'deviceoffline': '设备不在线！',
+      'operationsuccess': '操作成功'
     },
     'login': {
       'title': '信号机设备配置',
@@ -801,7 +820,8 @@ const zh = {
       'ringErrorTip': '环配置应从环1起配，不允出现跳环配置!',
       'deviceinformationnotnull': '设备信息中的地址码不能为空！',
       'noSchemeUpload': '暂没有可上载方案！',
-      'readSchemeSucc': '读取方案成功！'
+      'readSchemeSucc': '读取方案成功！',
+      'singleDownloadNotZero': '下载数据不能为空!'
     },
     'importTemp': {
       'editTemplateData': '模板数据编辑',
@@ -870,6 +890,11 @@ const zh = {
       '20003': 'id不能为空且不能为0',
       '20004': '无参数记录',
       '20005': '没有发现设备id',
+      '20006': '数据流关闭失败!',
+      '20007': 'Json类型转换失败!',
+      '20008': '文件读取失败!',
+      '20009': '文件不存在!',
+      '20010': 'I/O关闭错误!',
       // 全局异常错误
       '0001': '空指针',
       '0002': '错误请求方式',
@@ -902,13 +927,114 @@ const zh = {
       '4004': '重复的设备id',
       '4005': '信号机应答为空',
       '4006': '信号机应答操作类型为空',
+      // 错误子类型
+      // error-request
+      '4100': 'agentid为空',
+      '4101': '操作类型为空!',
+      '4102': '消息类型为空!',
+      '4103': '消息数据为空!',
+      '4104': 'JSON格式错误!',
+      '4105': 'agentid不存在!',
+      '4106': '未知的操作类型!',
+      '4107': '未知的消息类型!',
+      '4108': '协议为空!',
+      '4109': '接收数据超时或收到错误数据!',
+      // error-response
+      '4200': '应答为空!',
+      '4201': '应答消息转换错误!',
+      '4203': '未知的请求指示!',
+      '4204': 'Comm数据发送错误!',
+      '4205': 'Udp接收消息类型错误',
+      '4206': '从接收信息中没找到UdpCommunication',
+      '4207': '下载异常导致应答错误',
+      // device not online
+      '4301': '设备不在线',
       // 协调路线错误
       '5001': '重复的协调路线名称',
       // 勤务路线错误
       '6001': '重复的勤务路线名称',
       '6002': '勤务路线正在执行中',
       // 流量错误
-      '7001': 'ftp客户端连接失败'
+      '7001': 'ftp客户端连接失败',
+      // 组织机构错误
+      '11001': '名称重复!',
+      // 路口管理错误
+      '8001': '通过路口ID未找到路口!',
+      '8002': '路口位于协调路线上',
+      '8003': '路口位于特勤路线上',
+      '8004': 'Agentid重复',
+      // 错误类型子类型，返回码第二层
+      '8101': '路口不允许删除!',
+      // 瓶颈控制错误
+      '9001': '瓶颈控制执行失败!',
+      '9002': '瓶颈控制恢复失败!',
+      '9003': '正在执行瓶颈控制，无法删除!',
+      '9004': '瓶颈控制方案名称已存在!',
+      '9005': '瓶颈控制方案为空！'
+    },
+    'faultrecord': {
+      'faultDetail': '故障信息',
+      'faultMaintype': '故障主类型',
+      'faultSubtype': '故障子类型',
+      'faultOccurtime': '发生时间',
+      'boardCardType': '板卡类型',
+      'faultGrade': '故障等级',
+      'faultValue': '故障值',
+      'asc': '信号机',
+      'patterncalc': '方案检测服务',
+      'monitor': '监控服务',
+      'statusfault': '设备故障',
+      'untreated': '未处理',
+      'ignored': '已忽略',
+      'confirmed': '已确认',
+      'powerup': '功率异常增加',
+      'powerdown': '功率异常减少',
+      'powerno': '功率无输出',
+      'powerfault': '关闭状态有功率输出',
+      'general': '一般故障',
+      'degradation': '降级故障',
+      'serious': '严重故障',
+      'eportingmodule': '上报模块',
+      'roadname': '路口名称',
+      'realtimealert': '实时告警',
+      'neglect': '忽略',
+      'confirm': '确认',
+      'faultlist': '告警中心',
+      'eventtype': '事件类型',
+      'detaileddescription': '详细描述',
+      'maincontrolboard': '主控板',
+      'lightcontrolversion': '灯控版',
+      'carinspectionboard': '车检板',
+      'ioboard': 'I/O板',
+      'maincontrolboardfault': '主控板故障',
+      'lightcontrolversionfault': '灯控版故障',
+      'carinspectionboardfault': '车检板故障',
+      'ioboardfault': 'I/O板故障',
+      'fixdetail': '故障描述',
+      'deviceid': '设备ID',
+      'faultid': '故障ID',
+      'boardcardtype': '板卡类型',
+      'faultbegintime': '故障发生时间',
+      'faultendtime': '故障恢复时间',
+      'faulttype': '故障主类型',
+      'faultchild': '故障子类型',
+      'faultgrade': '故障等级',
+      'faultvaluedetail': '故障详细值',
+      'operator': '确认者',
+      'operationTime': '确认时间',
+      'enumerate': '确认结果',
+      'operation': '操作',
+      'realtimefault': '实时故障',
+      'historicalfault': '历史故障',
+      'boardtype': '板卡类型',
+      'mainfaulttype': '故障主类型',
+      'confirmresults': '确认结果',
+      'intersectionname': '路口名称',
+      'faulttime': '故障发生时间',
+      'isdelfaultrecord': '是否删除此条故障记录？',
+      'channel': '通道',
+      'detector': '检测器',
+      'port': '端口'
     }
   }
 }

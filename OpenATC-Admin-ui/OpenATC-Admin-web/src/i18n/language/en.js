@@ -93,10 +93,10 @@ const en = {
       'faultsum': 'Fault Sum',
       'faulttype': 'Fault Type',
       'quantity': 'Quantity',
-      'devicemaneger': 'Device Maneger',
+      'devicemaneger': 'Cross Maneger',
       'usermanager': 'User Manager',
       'operationrecord': 'Operation Record',
-      'faultOrOffLine': 'Fault / Online'
+      'fault': 'Fault'
     },
     'faultrecord': {
       'asc': 'Asc',
@@ -142,7 +142,18 @@ const en = {
       'faultvaluedetail': 'Fault Value Detail',
       'operator': 'Operator',
       'operationTime': 'Operation Time',
-      'enumerate': 'Enumerate'
+      'enumerate': 'Enumerate',
+      'realtimefault': 'Realtime Fault',
+      'historicalfault': 'Historical Fault',
+      'boardtype': 'Board type',
+      'mainfaulttype': 'Main fault type',
+      'confirmresults': 'Confirmation results',
+      'intersectionname': 'Intersection Name',
+      'faulttime': 'Time of failure',
+      'isdelfaultrecord': 'Delete this fault record?',
+      'channel': 'channel',
+      'detector': 'detector',
+      'port': 'port'
     },
     'devicemanager': {
       'devicelist': 'Intersection',
@@ -345,12 +356,16 @@ const en = {
     'record': {
       'user': 'Operator',
       'updatetime': 'Update Time',
+      'opertime': 'Operation Time',
       'originadress': 'Source',
       'deviceid': 'Device Id',
       'messagetype': 'Infotype',
+      'subInfoType': 'Sub InfoType',
       'reponsestatus': 'Response Status',
+      'errorReason': 'Error Reason',
       'opera': 'Operation',
-      'export': 'Export'
+      'export': 'Export',
+      'view': 'View'
     },
     'organization': {
       'viewdevice': 'ViewDevice',
@@ -359,7 +374,8 @@ const en = {
       'unrelateddevice': 'Unrelated Device',
       'relateddevice': 'Related Device',
       'modifyorganization': 'Modify Organization',
-      'addorganization': 'Add Organization'
+      'addorganization': 'Add Organization',
+      'emptyname': 'Empty Name !'
     },
     'dutyroute': {
       'clickaddroute': 'Click to add a new route',
@@ -430,6 +446,8 @@ const en = {
       'detector': 'Detector',
       'open': 'Open',
       'off': 'Off',
+      'control': 'Control',
+      'recovery': 'Recovery',
       'isoffcontrol': 'Is cancel area control',
       'isopencontrol': 'Is open area control',
       'opensuccess': 'Open area control success!',
@@ -437,12 +455,14 @@ const en = {
       'switchsavereminder': 'Switching area management list will not save the current configuration. Are you sure you want to switch?',
       'bottlenecklist': 'Area management list',
       'detectorid': 'Area ID',
+      'detectorname': 'Area Name',
       'desc': 'Describe',
       'type': 'Type',
       'status': 'Status',
       'port': 'Port',
       'name': 'Name',
       'deviceid': 'Intersection ID',
+      'devicename': 'Intersection Name',
       'phaseid': 'Phase ID',
       'controllevel': 'Control Level',
       'controltype': 'Control Type',
@@ -459,7 +479,14 @@ const en = {
       'greenextension': 'Green Extension',
       'greenreduction': 'Green Reduction',
       'bottleneckinfo': 'Area management info',
-      'isdeletedetector': 'Are you sure delete the detector'
+      'isdeletedetector': 'Are you sure delete the detector',
+      'putTscControlError1': 'Unsupported control pattern',
+      'putTscControlError2': 'Control number not exist',
+      'putTscControlError3': 'Unsupported control params',
+      'putTscControlError4': 'Unable to execute because device is in initialization',
+      'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
+      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control',
+      'entername': 'Please enter area name'
     },
     'about': {
       'version': 'Version',
@@ -470,12 +497,12 @@ const en = {
     },
     'message': {
       // 协调路线错误
-      '5001': '重复的协调路线名称',
+      '5001': 'Repeat Route Name',
       // 勤务路线错误
-      '6001': '重复的勤务路线名称',
-      '6002': '勤务路线正在执行中',
+      '6001': 'Repeat Route Name',
+      '6002': 'The route is on execution',
       // 流量错误
-      '7001': 'ftp客户端连接失败'
+      '7001': 'ftp clent connect fail'
     },
     'patternstatistic': {
       'patterninfo': 'Pattern info',

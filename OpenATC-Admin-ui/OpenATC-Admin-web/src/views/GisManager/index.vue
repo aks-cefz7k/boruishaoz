@@ -29,6 +29,7 @@
           <device v-if="bizType === 'deviceState'" ref="device"> </device>
           <dutyRoute v-if="bizType === 'dutyRoute'"
                      ref="dutyRoute"
+                     :style="contentStyle"
                      @onDeviceIdsChange = "onDeviceIdsChange"
                      @onRouteChange="onRouteChange"> </dutyRoute>
           <greenWaveCharts v-if="bizType === 'coordinateRoute'"
@@ -108,6 +109,9 @@ export default {
       layoutStyle: {
         width: screen.width * 0.3 + 'px',
         height: screen.height * 0.7 + 'px'
+      },
+      contentStyle: {
+        height: screen.height * 0.68 + 'px'
       },
       // bizType: 'deviceState',
       mapType: '2D',
@@ -364,7 +368,7 @@ export default {
       this.getRouteDistande(pointArr)
     },
     getRouteDistande (pointArr) {
-      if (!this.map) {
+      if (!this.map || pointArr.length === 0) {
         return 0
       }
       let res = 0

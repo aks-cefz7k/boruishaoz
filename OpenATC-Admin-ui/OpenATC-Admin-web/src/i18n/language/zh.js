@@ -93,10 +93,10 @@ const zh = {
       'faultsum': '故障总数',
       'faulttype': '故障类型',
       'quantity': '数量',
-      'devicemaneger': '设备管理',
+      'devicemaneger': '路口管理',
       'usermanager': '用户管理',
       'operationrecord': '操作记录',
-      'faultOrOffLine': '故障 / 在线'
+      'fault': '故障'
     },
     'faultrecord': {
       'asc': '信号机',
@@ -142,7 +142,18 @@ const zh = {
       'operator': '确认者',
       'operationTime': '确认时间',
       'enumerate': '确认结果',
-      'operation': '操作'
+      'operation': '操作',
+      'realtimefault': '实时故障',
+      'historicalfault': '历史故障',
+      'boardtype': '板卡类型',
+      'mainfaulttype': '故障主类型',
+      'confirmresults': '确认结果',
+      'intersectionname': '路口名称',
+      'faulttime': '故障发生时间',
+      'isdelfaultrecord': '是否删除此条故障记录？',
+      'channel': '通道',
+      'detector': '检测器',
+      'port': '端口'
     },
     'devicemanager': {
       'devicelist': '路口列表',
@@ -186,7 +197,7 @@ const zh = {
       'faultGrade': '故障等级',
       'faultValue': '故障值',
       'crowsid': '路口ID',
-      'updateDeviceId': '修改设备ID',
+      'updateDeviceId': '修改路口ID',
       'deviceNotNull': '设备ID不能为空！',
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
       'thirdplatformid': '第三方ID',
@@ -345,12 +356,16 @@ const zh = {
     'record': {
       'user': '用户',
       'updatetime': '更新时间',
+      'opertime': '操作时间',
       'originadress': '源地址',
       'deviceid': '设备ID',
       'messagetype': '消息类型',
+      'subInfoType': '消息子类型',
       'reponsestatus': '返回状态',
+      'errorReason': '错误原因',
       'opera': '操作',
-      'export': '导出'
+      'export': '导出',
+      'view': '查看'
     },
     'organization': {
       'viewdevice': '查看设备',
@@ -359,7 +374,8 @@ const zh = {
       'unrelateddevice': '未关联设备',
       'relateddevice': '已关联设备',
       'modifyorganization': '修改组织',
-      'addorganization': '添加组织'
+      'addorganization': '添加组织',
+      'emptyname': '名称为空!'
     },
     'dutyroute': {
       'clickaddroute': '点击添加按钮添加路线',
@@ -430,6 +446,8 @@ const zh = {
       'detector': '检测器',
       'open': '开启',
       'off': '取消',
+      'control': '执行',
+      'recovery': '恢复',
       'isoffcontrol': '是否取消控制',
       'isopencontrol': '是否开启控制',
       'opensuccess': '开启区域控制成功！',
@@ -437,12 +455,14 @@ const zh = {
       'switchsavereminder': '切换区域控制列表，不会保存当前配置，确认切换么?',
       'bottlenecklist': '区域控制列表',
       'detectorid': '区域ID',
+      'detectorname': '区域名称',
       'desc': '描述',
       'type': '类型',
       'status': '状态',
       'port': '端口',
       'name': '名称',
       'deviceid': '路口ID',
+      'devicename': '路口名称',
       'phaseid': '相位ID',
       'controllevel': '控制等级',
       'controltype': '控制类型',
@@ -459,7 +479,14 @@ const zh = {
       'greenextension': '绿灯延长',
       'greenreduction': '绿灯缩减',
       'bottleneckinfo': '区域控制信息',
-      'isdeletedetector': '确认删除检测器'
+      'isdeletedetector': '确认删除检测器',
+      'putTscControlError1': '不支持的控制方式',
+      'putTscControlError2': '不存在的方案编号',
+      'putTscControlError3': '不支持的控制参数',
+      'putTscControlError4': '设备初始化中，无法执行',
+      'putTscControlError5': '优先级更高的方案控制中，无法执行',
+      'putTscControlError6': '优先级更高的用户控制中，无法执行',
+      'entername': '请输入区域名称'
     },
     'about': {
       'version': '版本',

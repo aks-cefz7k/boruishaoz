@@ -74,6 +74,7 @@ const en = {
       'copyPattern': 'pattern already copied',
       'tip': 'Tips',
       'read': 'Read',
+      'language': 'Language',
       'readDevice': 'Whether to load device',
       'readPattern': 'pattern into the current device configuration ?',
       'title': 'Welcome to KISS Edge Manage Center',
@@ -106,19 +107,20 @@ const en = {
       'crossname': 'Cross Name',
       'divicestate': 'Device Status',
       'protocoltype': 'Protocol',
-      'signalID': 'Signal ID',
+      'signalID': 'Intersection ID',
       'signalIP': 'Signal IP',
       'faultinfo': 'Fault Information',
       'platform': 'platform',
       'online': 'Online',
       'offline': 'Offline',
+      'connected': 'Connected',
       'onlineing': 'Offline...',
       'controlmode': 'Control Mode',
       'manual': 'Manual',
       'exitmanual': 'Exit Manual',
       'controlmodel': 'Control Pattern',
       'patternname': 'Pattern Name',
-      'controlnumber': 'Control Num',
+      'controlnumber': 'Pattern Num',
       'mode': 'Mode',
       'stage': 'Stage',
       'specialcontrol': 'Special Control',
@@ -183,8 +185,10 @@ const en = {
       'modelList10': 'Nocable Control',
       'modelList12': 'phasewalk',
       'modelList13': 'Pattern Recovery',
+      'modelList15': 'Channel Detection',
       'modelList19': 'Inductive Pedestrian Crossing Control',
       'modelList23': 'Close Phase',
+      'modelList16': 'Lock Phase',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
       'canceled': 'Cancelled',
@@ -214,7 +218,11 @@ const en = {
       'closeOption2': 'only vehicle close',
       'closeOption3': 'only pedestrian close',
       'vehicle': 'vehicle',
-      'pedestrian': 'pedestrian'
+      'pedestrian': 'pedestrian',
+      'confirmed': 'confirmed',
+      'ignored': 'ignored',
+      'untreated': 'untreated',
+      'item': 'item'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -412,7 +420,8 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Detector?',
       'deleteAlltip': 'Delete All Detector?',
-      'mostdata': 'There are at most 64 data !'
+      'mostdata': 'There are at most 64 data !',
+      'mostclonedata': 'There are at most 72 data !'
     },
     'channellock': {
       'deleteAlltip': 'Delete All channellock',
@@ -424,7 +433,8 @@ const en = {
       'channelstats': 'Channel Status',
       'channel': 'Channel',
       'channelinfo': 'Channel Info',
-      'status': 'Status'
+      'status': 'Status',
+      'maxlength': 'There are at most 24 data !'
     },
     'channelControl': {
       'recoverysuccess': 'Recovery Success!',
@@ -444,7 +454,10 @@ const en = {
       'greenoutputvoltage': 'Green Output Voltage',
       'greenoffresidualpower': 'Green Off Residual Power',
       'greenonoutputpower': 'Green On Output Power',
-      'inputvoltage': 'Input Voltage'
+      'inputvoltage': 'Input Voltage',
+      'implement': 'Implement',
+      'implementsuccess': 'Implement success!',
+      'noClickedLamp': 'No channel light terminal selected!'
     },
     'pedestrianDetector': {
       'desc': 'Description ',
@@ -472,7 +485,8 @@ const en = {
       'deviceinfo': 'Device Info:',
       'addresscode': 'Adress Code:',
       'areaid': 'Region ID:',
-      'crossid': 'Cross ID:',
+      'devid': 'Intersection ID:',
+      'devname': 'Intersection Name',
       'selflearning': 'Selflearning:',
       'deviceparam': 'Device Parameters:',
       'startyellowflashtime': 'Start Yellow Flash Time:',
@@ -526,7 +540,7 @@ const en = {
     },
     'controlpanel': {
       'controlmode': 'Control Mode',
-      'duration': 'Duration',
+      'duration': 'Green Duration',
       'transitiongreenflashtime': 'Green Flash Time',
       'transitionyellowtime': 'Yellow Time',
       'transitionredtime': 'All Red Time',
@@ -540,6 +554,7 @@ const en = {
       'defaultsettings': 'Default Settings',
       'allclear': 'All Clear',
       'clear': 'Clear',
+      'execute': 'Lock current direction',
       'resetstatus': 'Reset State',
       'manualbtn': 'manualbtn',
       'manualbtn1': '1',
@@ -564,7 +579,8 @@ const en = {
       'manualpanelundefined': '',
       'manualpanel0': 'Default',
       'manualpanel1': 'Custom',
-      'manualcontrolbackground': 'manualcontrolbackgrounden'
+      'manualcontrolbackground': 'manualcontrolbackgrounden',
+      'lockconfigempty': 'Channel locK info cannot be empty!'
     },
     'system': {
       'information': 'Information',
@@ -711,7 +727,9 @@ const en = {
     'button': {
       'OK': 'OK',
       'Cancel': 'Cancel',
-      'Back': 'Back'
+      'Back': 'Back',
+      'ignore': 'Ignore',
+      'confirm': 'Confirm'
     },
     'common': {
       'confirm': 'Confirm',
@@ -758,7 +776,8 @@ const en = {
       'querysucess': 'Query Success!',
       'setup': 'setup',
       'tipsmodaltitle': 'Tips',
-      'deviceoffline': 'Device not online!'
+      'deviceoffline': 'Device not online!',
+      'operationsuccess': 'Operation Success !'
     },
     'login': {
       'title': 'Openatc-Configer',
@@ -802,7 +821,8 @@ const en = {
       'ringErrorTip': 'Ring configuration should be started from ring 1, and skip ring configuration is not allowed!',
       'deviceinformationnotnull': 'Address code in device information cannot be empty!',
       'noSchemeUpload': 'There is no scheme to upload!',
-      'readSchemeSucc': 'Reading scheme succeeded!'
+      'readSchemeSucc': 'Reading scheme succeeded!',
+      'singleDownloadNotZero': 'Download data cannot be empty!'
     },
     'importTemp': {
       'editTemplateData': 'Edit Template Data',
@@ -871,6 +891,11 @@ const en = {
       '20003': 'id cannot be empty and cannot be 0',
       '20004': 'No parameter record',
       '20005': 'No device id found',
+      '20006': 'Data stream close failed!',
+      '20007': 'Json Type conversion failed!',
+      '20008': 'File read failed!',
+      '20009': 'File does not exist!',
+      '20010': 'I/O close mistake!',
       // 全局异常错误
       '0001': 'Null pointer',
       '0002': 'Wrong request method',
@@ -897,19 +922,120 @@ const en = {
       '3017': 'Organization does not exist',
       '3018': 'Access ip is inconsistent with user ip, login is forbidden',
       // 消息通讯错误
-      '4001': '错误请求',
-      '4002': '错误应答',
-      '4003': '设备不在线',
-      '4004': '重复的设备id',
-      '4005': '信号机应答为空',
-      '4006': '信号机应答操作类型为空',
+      '4001': 'Error Request',
+      '4002': 'Error Response',
+      '4003': 'Device Not Online',
+      '4004': 'Repeat ID',
+      '4005': 'Device Empty Response',
+      '4006': 'Device Response Operation Is None',
+      // 错误子类型
+      // error-request
+      '4100': 'agentid is null!',
+      '4101': 'operation is null!',
+      '4102': 'infotype is null!',
+      '4103': 'infodata is null!',
+      '4104': 'JSON format is incorrect!',
+      '4105': 'agentid not exist!',
+      '4106': 'Unknown operation type!',
+      '4107': 'Unknown infotype!',
+      '4108': 'protocol is null!',
+      '4109': 'Receive Time Out or Receive Incorrect Data!',
+      // error-response
+      '4200': 'response is null!',
+      '4201': 'response format error!',
+      '4203': 'Unknown request instruction!',
+      '4204': 'Comm Send Data error!',
+      '4205': 'Udp Receive InfoType error by Send InfoType',
+      '4206': 'Can not find UdpCommunication for Receive Msg',
+      '4207': 'Error response from feature download',
+      // device not online
+      '4301': 'Device not online',
       // 协调路线错误
-      '5001': '重复的协调路线名称',
+      '5001': 'Repeat Route Name',
       // 勤务路线错误
-      '6001': '重复的勤务路线名称',
-      '6002': '勤务路线正在执行中',
+      '6001': 'Repeat Route Name',
+      '6002': 'The route is on execution',
       // 流量错误
-      '7001': 'ftp客户端连接失败'
+      '7001': 'ftp clent connect fail',
+      // 组织机构错误
+      '11001': 'Repeat Name!',
+      // 路口管理错误
+      '8001': 'device not found By Agentid!',
+      '8002': 'device is found By CoordinateRoute',
+      '8003': 'device is found By VipRoute',
+      '8004': 'Agentid is duplicated',
+      // 错误类型子类型，返回码第二层
+      '8101': 'Device can not delete!',
+      // 瓶颈控制错误
+      '9001': 'Overflow control failed!',
+      '9002': 'Overflow recovery failed!',
+      '9003': 'Overflow is executing, can not be deleted!',
+      '9004': 'Overflow pattern name is already exist!',
+      '9005': 'Overflow pattern is empty!'
+    },
+    'faultrecord': {
+      'faultDetail': 'Fault Detail',
+      'faultMaintype': 'Main Type',
+      'faultSubtype': 'Sub Type',
+      'faultOccurtime': 'Occur Time',
+      'boardCardType': 'BoardCard Type',
+      'faultGrade': 'Grade',
+      'faultValue': 'Value',
+      'asc': 'Asc',
+      'patterncalc': 'Pattern Calc',
+      'monitor': 'Monitor',
+      'statusfault': 'Status Fault',
+      'untreated': 'Untreated',
+      'ignored': 'Ignored',
+      'confirmed': 'Confirmed',
+      'powerup': 'Output Power Is Up',
+      'powerdown': 'Output Power Is Down',
+      'powerno': 'Output Power Is Zero',
+      'powerfault': 'Off Output Power Is High',
+      'general': 'General failure',
+      'degradation': 'Degradation failure',
+      'serious': 'Serious failure',
+      'maincontrolboard': 'Main Control Board',
+      'lightcontrolversion': 'Light Control Version',
+      'carinspectionboard': 'Car Inspection Board',
+      'eportingmodule': 'Eporting Module',
+      'roadname': 'Road Name',
+      'eventtype': 'Event Type',
+      'neglect': 'Neglect',
+      'faultlist': 'Fault Center',
+      'confirm': 'Confirm',
+      'realtimealert': 'Real Time Alert',
+      'detaileddescription': 'Detailed Description',
+      'ioboard': 'I/O board',
+      'maincontrolboardfault': 'Main Control Board Fault',
+      'lightcontrolversionfault': 'Light Control Version Fault',
+      'carinspectionboardfault': 'Car Inspection Board Fault',
+      'ioboardfault': 'I/O board Fault',
+      'fixdetail': 'Fix Detail',
+      'deviceid': 'Device Id',
+      'faultid': 'Fault Id',
+      'boardcardtype': 'Board Card Type',
+      'faultbegintime': 'Fault Begin Time',
+      'faultendtime': 'Fault End Time',
+      'faulttype': 'Fault Type',
+      'faultchild': 'Fault Child',
+      'faultgrade': 'Fault Grade',
+      'operation': 'Operation',
+      'faultvaluedetail': 'Fault Value Detail',
+      'operator': 'Operator',
+      'operationTime': 'Operation Time',
+      'enumerate': 'Enumerate',
+      'realtimefault': 'Realtime Fault',
+      'historicalfault': 'Historical Fault',
+      'boardtype': 'Board type',
+      'mainfaulttype': 'Main fault type',
+      'confirmresults': 'Confirmation results',
+      'intersectionname': 'Intersection Name',
+      'faulttime': 'Time of failure',
+      'isdelfaultrecord': 'Delete this fault record?',
+      'channel': 'channel',
+      'detector': 'detector',
+      'port': 'port'
     }
   }
 }

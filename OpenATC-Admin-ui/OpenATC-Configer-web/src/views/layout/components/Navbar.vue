@@ -101,7 +101,7 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
-                <el-dropdown-item command="help">{{$t('edge.main.help')}}</el-dropdown-item>
+                <!-- <el-dropdown-item command="help">{{$t('edge.main.help')}}</el-dropdown-item> -->
                 <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
@@ -111,7 +111,7 @@
       <div class="switch-language" v-show="isShowLogout">
         <el-dropdown trigger="click" @command="switchLanguage">
           <span class="el-dropdown-link">
-            {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{$t('edge.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Ch">中文</el-dropdown-item>
@@ -125,6 +125,9 @@
         </el-tooltip>
         <el-tooltip :content="$t('edge.main.text')" placement="bottom" effect="dark">
           <el-button type="text" @click="clickSwitchIcon(false)"><i class="iconfont icon-wenzijiemian" :class="{'choosedIcon': !isShowGui, 'defaultIcon': isShowGui}"></i></el-button>
+        </el-tooltip>
+         <el-tooltip :content="$t('edge.main.help')" placement="bottom" effect="dark">
+          <el-button type="text" @click="showHelp()"><i class="iconfont icon-bangzhu defaultIcon"></i></el-button>
         </el-tooltip>
       </div>
     </el-menu>
@@ -197,8 +200,8 @@ export default {
       manualpanelIsNull: false, // 判断手动面板数据是否为空
       deviceinfo: false, // 校验设备信息的规则
       splitCheck: true,
+      singleDownloadNotZero: false, // 判断单独下载数据是否为空
       type: false,
-      language: 'Language',
       loading: {},
       options: [{
         value: 'all',
@@ -207,22 +210,27 @@ export default {
       }, {
         value: 'phase',
         // label: '相位'
+        field: 'phaseList',
         label: '2'
       }, {
         value: 'overlap',
         // label: '跟随相位'
+        field: 'overlaplList',
         label: '3'
       }, {
         value: 'pattern',
         // label: '方案'
+        field: 'patternList',
         label: '4'
       }, {
         value: 'plan',
         // label: '计划'
+        field: 'planList',
         label: '5'
       }, {
         value: 'date',
         // label: '日期'
+        field: 'dateList',
         label: '6'
       }
       // {
@@ -389,13 +397,15 @@ export default {
       if (this.value === 'all' || this.value === 'pattern') {
         // 去除patternList里的description对象
         let patternList = res.patternList
-        for (let pattern of patternList) {
-          for (let rings of pattern.rings) {
-            for (let i = 0; i < rings.length; i++) {
-              rings[i] = (
-                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
-                  ({ name, id, value, mode, options, minSplit, delaystart, advanceend })
-              )(rings[i])
+        if (patternList !== undefined) {
+          for (let pattern of patternList) {
+            for (let rings of pattern.rings) {
+              for (let i = 0; i < rings.length; i++) {
+                rings[i] = (
+                  ({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
+                    ({ name, id, value, mode, options, minSplit, delaystart, advanceend })
+                )(rings[i])
+              }
             }
           }
         }
@@ -463,7 +473,6 @@ export default {
       this.$store.dispatch('SetChannelDesc', desclist)
     },
     upload () {
-      this.globalParamModel.reset()
       this.lockScreen()
       let typeStr = this.value
       if (typeStr !== 'all') {
@@ -471,6 +480,7 @@ export default {
         // this.unlockScreen()
         return
       }
+      this.globalParamModel.reset()
       uploadTscParam().then(data => {
         this.unlockScreen()
         if (!data.data.success) {
@@ -540,16 +550,8 @@ export default {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        // if (allTscParam.manualpanel === undefined) {
-        //   allTscParam.manualpanel = {}
-        // }
-        // if (allTscParam.channellock === undefined) {
-        //   allTscParam.channellock = []
-        // }
-        // if (allTscParam.singleoptim === undefined) {
-        //   allTscParam.singleoptim = []
-        // }
-        this.globalParamModel.setGlobalParams(allTscParam)
+        let newTscParam = this.handleSingleData(typeStr, allTscParam)
+        this.globalParamModel.setGlobalParams(newTscParam)
         this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
         // 上载成功后就生成通道描述map
         // if (typeStr === 'channel') {
@@ -559,6 +561,24 @@ export default {
         //   })
         // }
       })
+    },
+    handleSingleData (type, TscParam) {
+      // 在全局参数中，替换单独上载的数据
+      let singleTscParam = JSON.parse(JSON.stringify(TscParam))
+      let curTscParam = this.globalParamModel.getGlobalParams()
+      // 解决相位、跟随相位单独上载，相位方向和行人相位方向组件不更新问题
+      if (type === 'phase') {
+        this.$store.dispatch('SetRefreshTankuang', 'phase')
+      } else if (type === 'overlap') {
+        this.$store.dispatch('SetRefreshTankuang', 'overlap')
+      } else {
+        this.$store.dispatch('SetRefreshTankuang', 'norefresh')
+      }
+      curTscParam = {
+        ...curTscParam,
+        ...singleTscParam
+      }
+      return curTscParam
     },
     download () {
       let typeStr = this.value
@@ -583,8 +603,8 @@ export default {
       downloadTscParam(this.$store.state.user.user_name, newTscParam).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          if (data.data.code === '4002') { // 信号机参数校验
-            let codeList = data.data.data.errorCode
+          if (data.data.code === '4002' && data.data.data.errorCode === '4207') { // 信号机参数校验
+            let codeList = data.data.data.content.errorCode
             if (codeList.length === 0) {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return
@@ -619,35 +639,39 @@ export default {
       let newTscParam = this.cloneObjectFn(tscParam)
       if (this.value === 'all' || this.value === 'date') {
         let dateList = newTscParam.dateList
-        for (let dates of dateList) {
-          let date = dates.date
-          let day = dates.day
-          let month = dates.month
-          if (date && date.includes('全选')) {
-            let index = date.indexOf('全选')
-            date.splice(index, 1) // 排除全选选项
-          } else if (date && date.includes('All')) {
-            let index = date.indexOf('All')
-            date.splice(index, 1) // 排除全选选项
-          }
-          if (day && day.includes(8)) {
-            let index = day.indexOf(8)
-            day.splice(index, 1) // 排除全选选项
-          }
-          if (month && month.includes(0)) {
-            let index = month.indexOf(0)
-            month.splice(index, 1) // 排除全选选项
+        if (dateList !== undefined) {
+          for (let dates of dateList) {
+            let date = dates.date
+            let day = dates.day
+            let month = dates.month
+            if (date && date.includes('全选')) {
+              let index = date.indexOf('全选')
+              date.splice(index, 1) // 排除全选选项
+            } else if (date && date.includes('All')) {
+              let index = date.indexOf('All')
+              date.splice(index, 1) // 排除全选选项
+            }
+            if (day && day.includes(8)) {
+              let index = day.indexOf(8)
+              day.splice(index, 1) // 排除全选选项
+            }
+            if (month && month.includes(0)) {
+              let index = month.indexOf(0)
+              month.splice(index, 1) // 排除全选选项
+            }
           }
         }
       }
       if (this.value === 'all' || this.value === 'pattern') {
         let patternList = newTscParam.patternList
-        for (let pattern of patternList) {
-          let rings = pattern.rings
-          for (let ring of rings) {
-            if (ring.length === 0) continue
-            for (let rg of ring) {
-              rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+        if (patternList !== undefined) {
+          for (let pattern of patternList) {
+            let rings = pattern.rings
+            for (let ring of rings) {
+              if (ring.length === 0) continue
+              for (let rg of ring) {
+                rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+              }
             }
           }
         }
@@ -684,16 +708,56 @@ export default {
       if (list.includes(4)) arr[2] = 1
       return arr
     },
+    handleSingleParam (type, tscParams) {
+      this.singleDownloadNotZero = true
+      let allparam = JSON.parse(JSON.stringify(tscParams))
+      let typeOption = this.options.filter(option => option.value === type)
+      let optionobj
+      let typeParams = {}
+      if (typeOption.length) {
+        optionobj = typeOption[0]
+        let field = optionobj.field
+        if (allparam[field] === undefined || !allparam[field].length) {
+          this.singleDownloadNotZero = false
+        }
+        typeParams[field] = allparam[field]
+        return typeParams
+      }
+    },
     singleDownload (typeStr) {
       let tscParam = this.globalParamModel.getGlobalParams()
       let targetTscParam = this.normalData(tscParam) // 规范数据格式
       let newTscParam = this.handleTscParam(targetTscParam)
+      let typeParams = this.handleSingleParam(typeStr, newTscParam)
+      if (!this.singleDownloadNotZero) {
+        this.$message.error(
+          this.$t('edge.errorTip.singleDownloadNotZero')
+        )
+        return
+      }
       this.lockScreen()
-      downloadSingleTscParam(typeStr, newTscParam).then(data => {
+      downloadSingleTscParam(typeStr, typeParams).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          if (data.data.code === '4003') {
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+          if (data.data.code === '4002' && data.data.data.errorCode === '4207') { // 信号机参数校验
+            let codeList = data.data.data.content.errorCode
+            if (codeList.length === 0) {
+              this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
+              return
+            }
+            let errorMes = this.$t('edge.common.downloaderror')
+            for (let code of codeList) {
+              if (this.$i18n.locale === 'en') {
+                errorMes = getErrorMesEn(errorMes, code)
+              } else {
+                errorMes = getErrorMesZh(errorMes, code)
+              }
+            }
+            this.$message({
+              message: errorMes,
+              type: 'error',
+              dangerouslyUseHTMLString: true
+            })
             return
           }
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
@@ -1297,8 +1361,8 @@ export default {
           break
         case 'about': this.showVersion()
           break
-        case 'help': this.showHelp()
-          break
+        // case 'help': this.showHelp()
+        //   break
         default: router.push({ path: '/' })
       }
     },

@@ -21,12 +21,12 @@
       </el-table-column>
       <el-table-column class="table-column" :label="$t('edge.phase.desc')" min-width="150" align="center">
         <template slot-scope="scope">
-          <Tankuang :list="scope.row.direction" :imgs="imgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" @finsh="handlefinsh"/>
+          <Tankuang :list="scope.row.direction" :imgs="imgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" :refresh="refreshTankuang" @finsh="handlefinsh"/>
         </template>
       </el-table-column>
       <el-table-column class="table-column" :label="$t('edge.phase.peddesc')" min-width="150" align="center">
         <template slot-scope="scope">
-          <PedTankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" @finsh="handlefinshped"/>
+          <PedTankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" :refresh="refreshTankuang" @finsh="handlefinshped"/>
         </template>
       </el-table-column>
       <el-table-column class="table-column" :label="$t('edge.phase.controltype')" min-width="150" align="center">
@@ -248,7 +248,8 @@ export default {
       }, {
         label: this.$t('edge.phase.offpulse'),
         value: 3
-      }]
+      }],
+      refreshTankuang: false // 是否重新刷新弹框数据
     }
   },
   directives: { clickoutside },
@@ -283,8 +284,18 @@ export default {
       return arrays
     },
     ...mapState({
-      list: state => state.globalParam.tscParam.phaseList
+      list: state => state.globalParam.tscParam.phaseList,
+      isRefreshTankuang: state => state.globalParam.isRefreshTankuang
     })
+  },
+  watch: {
+    isRefreshTankuang: {
+      handler: function (val) {
+        if (val === 'phase') {
+          this.refreshTankuang = true
+        }
+      }
+    }
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
@@ -370,6 +381,8 @@ export default {
         }).then(() => {
         let phaseList = this.globalParamModel.getParamsByType('phaseList')
         let patternList = this.globalParamModel.getParamsByType('patternList')
+        let overlaplList = this.globalParamModel.getParamsByType('overlaplList')
+        this.globalParamModel.deleteParamsByType('overlaplList', 0, overlaplList.length)
         this.globalParamModel.deleteParamsByType('phaseList', 0, phaseList.length)
         this.globalParamModel.deleteParamsByType('patternList', 0, patternList.length)
         this.id = 1

@@ -18,7 +18,7 @@
           <div class="cross-value">{{controlData.mode !==undefined ? $t('openatc.patternstatistic.mode' + controlData.mode) : ''}}</div>
         </div>
         <div class="cross-content">
-          <div class="cross-name">{{$t('openatc.patternstatistic.controlmodel')}}:</div>
+          <div class="cross-name">{{$t('openatc.patternstatistic.controltype')}}:</div>
           <div class="cross-value">{{controlData.control !==undefined ? $t('edge.overview.modelList' + controlData.control) : ''}}</div>
         </div>
         <div class="cross-content">

@@ -160,6 +160,21 @@
     "method": "put"
   },
   {
+    "key": "uploadSingleTscParam",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
+    "key": "getTscCurrentVolume",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
+    "key": "putTscControl",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
     "key": "getTscControl",
     "url": "/devs/message",
     "method": "post"
@@ -290,6 +305,11 @@
     "method": "delete"
   },
   {
+    "key": "DeleteFault",
+    "url": "/fault/del",
+    "method": "delete"
+  },
+  {
     "key": "get_all_systemconfig",
     "url": "/systemconfig",
     "method": "get"
@@ -376,7 +396,7 @@
   },
   {
     "key": "off_overflow_control",
-    "url": "/overflow/control",
+    "url": "/overflow/control/off",
     "method": "post"
   },
   {
@@ -387,6 +407,11 @@
   {
     "key": "getHistoryPatternData",
     "url": "/historydata/pattern/range",
+    "method": "post"
+  },
+  {
+    "key": "getHisParamsRange",
+    "url": "/devs/hisparams/range",
     "method": "post"
   }
 ]

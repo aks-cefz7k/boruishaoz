@@ -77,10 +77,6 @@ export default {
       getTscControl(agentid).then(res => {
         this.loading = false
         if (!res.data.success) {
-          if (res.data.code === '4003') {
-            this.$message.error(this.$t('openatc.common.devicenotonline'))
-            return
-          }
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }

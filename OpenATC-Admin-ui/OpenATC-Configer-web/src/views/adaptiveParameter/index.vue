@@ -44,17 +44,17 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.singleoptim.lossTimeOfGreenBeginning')">
         <template slot-scope="scope">
-          <el-input-number size="small" :controls="false" v-model="scope.row.greenstartuplosstime"></el-input-number>
+          <el-input-number size="small" :min="0" :max="65535" :controls="false" v-model="scope.row.greenstartuplosstime"></el-input-number>
         </template>
       </el-table-column>
       <el-table-column  align="center" :label="$t('edge.singleoptim.lossTimeOfYellowEnding')">
         <template slot-scope="scope">
-          <el-input-number size="small" :controls="false" v-model.number="scope.row.yellowendlosstime"></el-input-number>
+          <el-input-number size="small" :min="0" :max="65535" :controls="false" v-model.number="scope.row.yellowendlosstime"></el-input-number>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.singleoptim.saturationFlow')">
         <template slot-scope="scope">
-          <el-input-number size="small" :controls="false" v-model.number="scope.row.maxflow"></el-input-number>
+          <el-input-number size="small" :min="0" :max="65535" :controls="false" v-model.number="scope.row.maxflow"></el-input-number>
         </template>
       </el-table-column>
       <el-table-column  align="center" :label="$t('edge.singleoptim.selfLearningModeOnOrOff')">
@@ -73,7 +73,7 @@
       </el-table-column>
       <el-table-column  align="center" :label="$t('edge.singleoptim.cycleAdjustmentFactor')">
         <template slot-scope="scope">
-          <el-input-number size="small" :controls="false" v-model.number="scope.row.cycleadjustfactor"></el-input-number>
+          <el-input-number size="small" :min="0" :max="65535" :controls="false" v-model.number="scope.row.cycleadjustfactor"></el-input-number>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">

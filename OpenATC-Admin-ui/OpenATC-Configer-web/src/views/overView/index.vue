@@ -11,6 +11,7 @@
  **/
 <template>
   <div class="container-main">
+    <FaultDetailModal ref="faultDetail" :agentId="agentId"></FaultDetailModal>
     <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
       <div class="wenzijiemian" v-show="!isShowGui">
         <div class="container-left">
@@ -45,8 +46,8 @@
                   <div class="curr-num">{{$t('edge.overview.patternnum')}}</div>
                 </div>
                 <div style="float: right; height: 50%; width: 50%; text-align: center;">
-                  <div class="curr-grade">{{controlData.name}}</div>
-                  <div class="curr-num">{{$t('edge.overview.patternname')}}</div>
+                  <!-- <div class="curr-grade">{{controlData.name}}</div>
+                  <div class="curr-num">{{$t('edge.overview.patternname')}}</div> -->
                 </div>
               </div>
             </div>
@@ -187,7 +188,7 @@
               <div class="cross-module">
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
-                  <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
+                  <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.connected')}}</div>
                   <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
                   <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
                 </div>
@@ -198,18 +199,18 @@
                 <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
                 <div class="cross-content">
                   <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
-                  <div style="margin-left: 85px;" v-if="faultArr.length">
-                    <div style="margin-bottom: 10px;"><el-button type="primary" size="mini" class="faultbtn" @click="handleFaultsVisible">{{ faultvisible ? $t('edge.overview.hideFault') : $t('edge.overview.showFault')}}</el-button></div>
-                    <div v-if="faultvisible">
-                      <el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index" size="small" >{{faultMsg}}</el-tag>
-                    </div>
+                  <div style="margin-left: 85px;" v-if="curFaultList.length">
+                    <el-tag type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span></el-tag>
+                    <el-tag>{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span></el-tag>
+                    <el-tag type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span></el-tag>
+                    <span class="fault-detail-btn" @click="showFaultDetail">{{$t('edge.overview.details')}} >></span>
                   </div>
-                  <div style="margin-left: 85px;" class="cross-value" v-if="!faultArr.length">{{$t('edge.overview.nofault')}}</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-if="!curFaultList.length">{{$t('edge.overview.nofault')}}</div>
                 </div>
               </div>
               <div class="control-bottom">
                 <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
-                <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
+                <el-button type="primary" style="float: right; margin-right: 20px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
                 <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
               </div>
               <div class="cross-module">
@@ -217,7 +218,7 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
                 </div>
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div> -->
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
                 </div>
@@ -265,6 +266,8 @@ import ManualControlModal from './manualControlModal'
 import ClosePhaseControlModal from './closePhaselControlModal'
 import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
+import { GetAllFaultRange } from '@/api/fault'
+import FaultDetailModal from '@/components/FaultDetailModal'
 export default {
   name: 'overview',
   components: {
@@ -276,7 +279,8 @@ export default {
     CurVolume,
     CurPhase,
     ManualControlModal,
-    ClosePhaseControlModal
+    ClosePhaseControlModal,
+    FaultDetailModal
   },
   data () {
     return {
@@ -446,7 +450,11 @@ export default {
         iconClass: 'closephase',
         iconName: '关断相位'
       }],
-      closePhaseRings: []
+      closePhaseRings: [],
+      curFaultList: [],
+      confirmedFault: [],
+      ignoredFault: [],
+      untreatedFault: []
     }
   },
   computed: {
@@ -473,6 +481,7 @@ export default {
           // this.protocol = this.$route.query.protocol
           this.resetCrossDiagram()
           this.getPlatform()
+          this.getFaultById()
         }
       },
       // 深度观察监听
@@ -508,6 +517,7 @@ export default {
   },
   mounted () {
     this.getPlatform()
+    this.getFaultById()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
     }
@@ -693,6 +703,7 @@ export default {
       this.stagesList = []
       this.currentStage = data.current_stage
       let stages = data.stages
+      if (!stages) return
       for (let stage of stages) {
         let tempList = []
         let directionList = []
@@ -990,12 +1001,12 @@ export default {
         if (!data.data.success) {
           that.$message.error(getMessageByCode(data.data.code, that.$i18n.locale))
           return
-        } else {
-          success = data.data.data.data.success
-          if (success !== 0) {
-            let errormsg = 'edge.overview.putTscControlError' + success
-            that.$message.error(this.$t(errormsg))
-          }
+        }
+        success = data.data.data.data.success
+        if (success !== 0) {
+          let errormsg = 'edge.overview.putTscControlError' + success
+          that.$message.error(this.$t(errormsg))
+          return
         }
         // this.closeManualModal()
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
@@ -1290,6 +1301,35 @@ export default {
         list.push(obj)
       }
       return list
+    },
+    getFaultById () {
+      // GetCurrentFaultByAgentid(this.agentId).then(res => {
+      //   if (!res.data.success) {
+      //     this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+      //     return false
+      //   } else {
+      //     this.curFaultList = res.data.data
+      //     this.confirmedFault = this.curFaultList.filter(ele => ele.enumerate === '2')
+      //     this.ignoredFault = this.curFaultList.filter(ele => ele.enumerate === '1')
+      //   }
+      // })
+      let param = {
+        agentId: this.agentId,
+        isCurrentFault: true
+      }
+      GetAllFaultRange(param).then(res => {
+        if (res.data.success !== true) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return
+        }
+        this.curFaultList = res.data.data.content
+        this.confirmedFault = this.curFaultList.filter(ele => ele.enumerate === '2')
+        this.ignoredFault = this.curFaultList.filter(ele => ele.enumerate === '1')
+        this.untreatedFault = this.curFaultList.filter(ele => ele.enumerate === '0')
+      })
+    },
+    showFaultDetail () {
+      this.$refs.faultDetail.onViewFaultClick()
     }
   },
   // beforeDestroy () {

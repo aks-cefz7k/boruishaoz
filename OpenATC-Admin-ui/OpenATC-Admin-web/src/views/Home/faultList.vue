@@ -11,12 +11,12 @@
  **/
 <template>
 <div class="faultList">
-    <div class="total" :style="{ width: '100%' }">
+    <div class="total" :style="{ width: '100%', height: totalHeight }">
         <div class="Img"></div>
         <div class="text">
             {{$t('openatc.home.faultsum')}}
         </div>
-        <div class="num">{{maxValue}}</div>
+        <div class="num" @click="jumpToCurrentFault">{{maxValue}}</div>
     </div>
     <div class="content" :style="{maxHeight: maxListHeight}">
       <el-table
@@ -26,9 +26,9 @@
         :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
         >
         <el-table-column
-          prop="agentid"
-          :label="$t('openatc.devicemanager.crowsid')"
-          width="100">
+          prop="name"
+          :label="$t('openatc.devicemanager.devicename')"
+          width="220">
         </el-table-column>
         <el-table-column
           prop="m_unFaultOccurTime"
@@ -74,6 +74,7 @@ export default {
       maxListHeight: '330px',
       typeNameWidth: '142px',
       faultNumWidth: '295px',
+      totalHeight: '54px',
       chartWidth: '400px'
     }
   },
@@ -98,19 +99,29 @@ export default {
         res = this.$t('edge.fault.tab4')
       }
       return res
+    },
+    calculateChartSize () {
+      let viewH = document.documentElement.clientHeight - 40
+      let viewW = document.documentElement.clientWidth - 40
+      this.totalMarginBottom = (24 / 1080 * viewH).toFixed(0) + 'px'
+      this.titleMarginBottom = (30 / 1080 * viewH).toFixed(0) + 'px'
+      this.maxListHeight = (350 / 1080 * viewH).toFixed(0) + 'px'
+      this.typeNameWidth = (142 / 1920 * viewW).toFixed(0) + 'px'
+      this.faultNumWidth = (295 / 1920 * viewW).toFixed(0) + 'px'
+      this.chartWidth = (400 / 1920 * viewW).toFixed(0) + 'px'
+      this.totalHeight = (54 / 1080 * viewH).toFixed(0) + 'px'
+    },
+    jumpToCurrentFault () {
+      this.$router.push({ path: '/faultrecord' })
     }
   },
   created () {
-    let viewH = document.documentElement.clientHeight - 40
-    let viewW = document.documentElement.clientWidth - 40
-    this.totalMarginBottom = (24 / 1080 * viewH).toFixed(0) + 'px'
-    this.titleMarginBottom = (30 / 1080 * viewH).toFixed(0) + 'px'
-    this.maxListHeight = (350 / 1080 * viewH).toFixed(0) + 'px'
-    this.typeNameWidth = (142 / 1920 * viewW).toFixed(0) + 'px'
-    this.faultNumWidth = (295 / 1920 * viewW).toFixed(0) + 'px'
-    this.chartWidth = (400 / 1920 * viewW).toFixed(0) + 'px'
+    this.calculateChartSize()
   },
   mounted () {
+    window.addEventListener('resize', () => {
+      this.calculateChartSize()
+    }, false)
     this.initData()
   }
 }

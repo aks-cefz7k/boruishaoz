@@ -14,11 +14,11 @@
   <div class="manual-top">
     <div class="control-model">
       <div class="control-model-name">{{$t('edge.controlpanel.controlmode')}}：</div><div class="control-model-value">{{$t('edge.controlpanel.manualpanel' + manualpanel.controlmode)}}</div>
-      <div class="control-model-name">{{$t('edge.controlpanel.duration')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.duration" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">{{$t('edge.controlpanel.transitiongreenflashtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.greenflash" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">{{$t('edge.controlpanel.transitionyellowtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.yellow" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">{{$t('edge.controlpanel.transitionredtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.redclear" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">{{$t('edge.controlpanel.mingreen')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.mingreen" placeholder="" size="small"></el-input></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.duration')}}：</div><div class="control-model-input"><el-input-number :min="0" :max="65535" :controls="false" v-model="manualpanel.duration" placeholder="" size="small"></el-input-number></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitiongreenflashtime')}}：</div><div class="control-model-input"><el-input-number :min="0" :controls="false" :max="65535" v-model="manualpanel.greenflash" placeholder="" size="small"></el-input-number></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitionyellowtime')}}：</div><div class="control-model-input"><el-input-number :min="0" :controls="false" :max="65535" v-model="manualpanel.yellow" placeholder="" size="small"></el-input-number></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitionredtime')}}：</div><div class="control-model-input"><el-input-number :min="0" :controls="false" :max="65535" v-model="manualpanel.redclear" placeholder="" size="small"></el-input-number></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.mingreen')}}：</div><div class="control-model-input"><el-input-number :min="0" :max="65535" :controls="false" v-model="manualpanel.mingreen" placeholder="" size="small"></el-input-number></div>
     </div>
   </div>
   <div class="manual-bottom" style="display: inline-block">
@@ -39,6 +39,7 @@
       <div class="manual-control-button">
         <el-button type="primary" @click="resetDefaultManualpanel">{{$t('edge.controlpanel.defaultsettings')}}</el-button>
         <el-button type="primary" @click="allclear">{{$t('edge.controlpanel.allclear')}}</el-button>
+        <el-button type="primary" @click="execute" style="margin-left: 50px;">{{$t('edge.controlpanel.execute')}}</el-button>
       </div>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -97,6 +98,7 @@
 import { mapState } from 'vuex'
 import { getManualpanel, getChannel, getDefaultManualpanel } from '@/api/manual'
 import { getMessageByCode } from '@/utils/responseMessage'
+import { putTscControl } from '@/api/control'
 export default {
   name: 'manualcontrol',
   components: {},
@@ -191,7 +193,7 @@ export default {
   },
   watch: {
     manualpanel: function (val) {
-      this.initManualPanel()
+      this.createManualList()
     }
   },
   created () {
@@ -202,13 +204,16 @@ export default {
   },
   methods: {
     initManualPanel () {
+      this.currChannelId = 1 // 默认东西直行方向
+      this.createManualList()
+    },
+    createManualList () {
+      // 生成当前的通道状态列表
       this.manualList = []
-      this.currChannelId = -1
-      // if (this.manualpanel.controlmode === 0) {
-      //   this.controlMode = '默认'
-      // } else if (this.manualpanel.controlmode === 1) {
-      //   this.controlMode = '自定义'
-      // }
+      let manualval = this.manualBtnList.filter(ele => ele.id === this.currChannelId)
+      if (manualval.length > 0) {
+        this.handleManualList(manualval[0])
+      }
     },
     getChannelList () {
       getChannel().then((data) => {
@@ -250,21 +255,24 @@ export default {
         this.currChannelId = -1
         this.manualList = []
       } else {
-        this.currChannelName = val.name
-        this.currChannelId = val.id
-        let keyconfig = this.manualpanel.keyconfig
-        if (keyconfig === undefined) return
-        let currKeyconfig = keyconfig.filter((item) => {
-          return item.keynum === val.id
-        })
-        if (currKeyconfig.length === 0) {
-          this.manualList = []
-          return
-        }
-        this.manualList = currKeyconfig[0].channel
-        for (let manual of this.manualList) {
-          manual.desc = this.channelDescMap.get(manual.channelid)
-        }
+        this.handleManualList(val)
+      }
+    },
+    handleManualList (val) {
+      this.currChannelName = val.name
+      this.currChannelId = val.id
+      let keyconfig = this.manualpanel.keyconfig
+      if (keyconfig === undefined) return
+      let currKeyconfig = keyconfig.filter((item) => {
+        return item.keynum === val.id
+      })
+      if (currKeyconfig.length === 0) {
+        this.manualList = []
+        return
+      }
+      this.manualList = currKeyconfig[0].channel
+      for (let manual of this.manualList) {
+        manual.desc = this.channelDescMap.get(manual.channelid)
       }
     },
     edit () {
@@ -368,6 +376,66 @@ export default {
     },
     allclear () {
       this.$store.dispatch('ClearManualPanel')
+    },
+    execute () {
+      if (this.currChannelId === -1 || this.manualpanel.keyconfig === undefined) {
+        this.$message.error(this.$t('edge.controlpanel.lockconfigempty'))
+        return
+      }
+      let param = {
+        channellocKinfo: []
+      }
+      if (this.manualpanel.duration) {
+        param.duration = this.manualpanel.duration
+      }
+      if (this.manualpanel.greenflash) {
+        param.greenflash = this.manualpanel.greenflash
+      }
+      if (this.manualpanel.yellow) {
+        param.yellow = this.manualpanel.yellow
+      }
+      if (this.manualpanel.redclear) {
+        param.redclear = this.manualpanel.redclear
+      }
+      if (this.manualpanel.mingreen) {
+        param.mingreen = this.manualpanel.mingreen
+      }
+      if (this.manualpanel.keyconfig && this.manualpanel.keyconfig.length > 0) {
+        let currDirChannellockInfo = this.manualpanel.keyconfig.filter(ele => ele.keynum === this.currChannelId)[0]
+        if (currDirChannellockInfo) {
+          let channellocKinfo = currDirChannellockInfo.channel.map(data => {
+            return {
+              channelid: data.channelid,
+              channelstatus: data.channelstatus
+            }
+          })
+          param.channellocKinfo = channellocKinfo
+        }
+      }
+      this.handleChannelLock(param)
+    },
+    handleChannelLock (param) {
+      let control = {}
+      control.control = 16
+      control.data = param
+      putTscControl(control).then(data => {
+        let success = 0
+        if (!data.data.success) {
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        } else {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            this.$message.error(this.$t(errormsg))
+          }
+        }
+        if (success === 0) {
+          this.$message.success(this.$t('edge.common.download'))
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
     }
   }
 }
@@ -546,6 +614,7 @@ export default {
   color: #ffffff;
 }
 .manual-control-button {
+  width: 848px;
   margin-top: 20px;
   text-align: center;
 }

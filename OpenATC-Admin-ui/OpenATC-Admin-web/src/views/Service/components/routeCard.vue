@@ -174,8 +174,21 @@ export default {
       ExecuteViproute(reqData).then(res => {
         // this.isBtnDisabled = false
         if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+          let errorCode = res.data.data.errorCode
+          if (errorCode) {
+            msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+          }
+          this.$message.error(msg)
           return false
+        } else {
+          let success = res.data.data.data.success
+          if (success !== 0) {
+            // 手动面板控制提示
+            let errormsg = 'edge.overview.putTscControlError' + success
+            this.$message.error(this.$t(errormsg))
+            return false
+          }
         }
         this.$emit('research')
       })

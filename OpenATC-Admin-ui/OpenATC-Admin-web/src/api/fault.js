@@ -64,6 +64,16 @@ export const DeleteFaultById = (id) => {
   return api.Send({}, {}, urlParamList)
 }
 
+export const DeleteFault = (delObj) => {
+  // 删除故障记录
+  let api = new Authapi('DeleteFault')
+  let param = {
+    agentid: delObj.agentid,
+    id: delObj.id
+  }
+  return api.Send({}, param)
+}
+
 export const enumerateCheck = (agentid, id, enumerate) => {
   let api = new Authapi('enumerateCheck')
   let param = {
@@ -74,19 +84,43 @@ export const enumerateCheck = (agentid, id, enumerate) => {
   return api.Send({}, param)
 }
 
-export const GetAllFaultRange = (pageNum, pageSize, id, beginTime, endTime) => {
+export const GetAllFaultRange = (pageNum, pageSize, isCurrentFault, id, beginTime, endTime, faultBoardType, faultType, enumerate) => {
   let api = new Authapi('GetAllFaultRange')
   let param = {
     'pageNum': pageNum,
-    'pageRow': pageSize,
-    'agentId': id,
-    'beginTime': beginTime,
-    'endTime': endTime
+    'pageRow': pageSize
+  }
+  if (isCurrentFault) {
+    param.isCurrentFault = isCurrentFault
+  }
+  if (id && id !== '') {
+    param.agentId = id
+  }
+  if (beginTime) {
+    param.beginTime = beginTime
+  }
+  if (endTime) {
+    param.endTime = endTime
+  }
+  if (faultBoardType && faultBoardType !== '') {
+    param.m_byFaultBoardType = faultBoardType
+  }
+  if (faultType && faultType !== '') {
+    param.m_wFaultType = faultType
+  }
+  if (enumerate && enumerate !== '') {
+    param.enumerate = enumerate
   }
   return api.Send({}, param)
 }
 
+export const GetFaultRange = (param) => {
+  let api = new Authapi('GetAllFaultRange')
+  return api.Send({}, param)
+}
+
 export default {
+  GetFaultRange,
   GetAllCurrentFault,
   GetAllHistoryFault,
   GetCurrentFaultByAgentid,
