@@ -546,7 +546,13 @@ const en = {
       '6001': 'Repeat Route Name',
       '6002': 'The route is on execution',
       // 流量错误
-      '7001': 'ftp clent connect fail'
+      '7001': 'ftp clent connect fail',
+      // 字典错误
+      '1000': 'Parameter is null!',
+      '1001': 'Illegal parameter!',
+      '1002': 'URL is not correct!',
+      '1003': 'Dict key or value is NULL!',
+      '1004': 'Duplicate key !'
     },
     'patternstatistic': {
       'patterninfo': 'Pattern info',

@@ -35,6 +35,7 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_1001("1001", "Illegal parameter!"),
     E_1002("1002", "URL is not correct!"),
     E_1003("1003", "Dict key or value is NULL!"),
+    E_1004("1004", "Duplicate key !"),
     E_2002("2002", "The record is not exit!"),
 
     E_2003("20003", "The id is not exit or equal 0 !"),
