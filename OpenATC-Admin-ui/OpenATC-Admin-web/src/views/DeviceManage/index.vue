@@ -218,7 +218,7 @@
               </template> -->
               <template  slot-scope="scope">
                 <div>
-                  <el-tooltip placement="top-start" effect="light">
+                  <el-tooltip placement="top-start" effect="light" popper-class="atooltip">
                     <div slot="content">{{$t('openatc.devicemanager.lastupdatetime')}}:{{scope.row.lastTime}}</div>
                     <el-tag style="cursor:pointer;"  size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
                   </el-tooltip>
