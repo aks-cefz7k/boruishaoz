@@ -162,7 +162,7 @@ export default {
     padding-top: 10px;
     padding-left: 43px;
     font-size: 12px;
-    height: 17px;
+    height: 14px;
     font-weight: normal;
     font-stretch: normal;
     // line-height: 22px;

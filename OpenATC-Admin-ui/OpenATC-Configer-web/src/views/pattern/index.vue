@@ -34,9 +34,6 @@
                   </div>
                 </el-col>
                 <el-col :span="12">
-                  <FollowPhase>
-
-                  </FollowPhase>
                 </el-col>
               </el-row>
             </el-tab-pane>
@@ -168,7 +165,6 @@ import Kanban from '@/components/Kanban'
 import StageKanban from '@/views/pattern/StageKanban'
 // import StageAdd from '@/views/pattern/StageAdd'
 import BoardCard from '@/components/BoardCard'
-import FollowPhase from '@/components/FollowPhase'
 import ExpendConfig from '@/components/ExpendConfig'
 import OverLap from '@/components/OverLap'
 import { uploadSingleTscParam } from '@/api/param'
@@ -181,7 +177,6 @@ export default {
   components: {
     Kanban,
     BoardCard,
-    FollowPhase,
     ExpendConfig,
     OverLap,
     StageKanban

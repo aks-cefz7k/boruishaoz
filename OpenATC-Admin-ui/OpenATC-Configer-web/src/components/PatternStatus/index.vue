@@ -311,7 +311,7 @@ export default {
           directionList.push(...currPhase.direction)
           directionList = Array.from(new Set(directionList))
         }
-        if (directionList.length === 0) return
+        // if (directionList.length === 0) return
         tempList = directionList.map(dir => ({
           id: dir,
           color: '#606266'
@@ -332,8 +332,8 @@ export default {
           this.stageLists = this.localPatternList[i].stagesList.map(item => {
             return {
               ...item,
-              peddirection: this.getPed(item.phases),
-              direction: this.handleStageData(item.phases),
+              peddirection: this.getPed(item.phases ? item.phases : item.stages),
+              direction: this.handleStageData(item.phases ? item.phases : item.stages),
               greenWidth: (item.green / stageMaxCyle * 100).toFixed(3) + '%',
               yellowWidth: (item.yellow / stageMaxCyle * 100).toFixed(3) + '%',
               redWidth: (item.red / stageMaxCyle * 100).toFixed(3) + '%'
@@ -353,8 +353,8 @@ export default {
       this.stageLists = this.stagesChange.map(item => {
         return {
           ...item,
-          peddirection: this.getPed(item.phases),
-          direction: this.handleStageData(item.phases),
+          peddirection: this.getPed(item.phases ? item.phases : item.stages),
+          direction: this.handleStageData(item.phases ? item.phases : item.stages),
           greenWidth: (item.green / stageMaxCyle * 100).toFixed(3) + '%',
           yellowWidth: (item.yellow / stageMaxCyle * 100).toFixed(3) + '%',
           redWidth: (item.red / stageMaxCyle * 100).toFixed(3) + '%'
