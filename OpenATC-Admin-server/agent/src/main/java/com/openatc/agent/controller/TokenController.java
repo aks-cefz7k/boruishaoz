@@ -11,10 +11,18 @@
  **/
 package com.openatc.agent.controller;
 
+import com.google.gson.JsonObject;
+import com.openatc.agent.model.Token;
 import com.openatc.agent.model.TokenModel;
 import com.openatc.agent.service.TokenDao;
+import com.openatc.agent.utils.DateUtil;
+import com.openatc.agent.utils.TokenUtil;
+import com.openatc.core.common.IErrorEnum;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import io.swagger.models.auth.In;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -31,7 +39,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
     @Autowired
     protected TokenDao tokenDao;
+    @Autowired
+    protected TokenUtil tokenUtil;
 
+    /**
+     * @Author: yangyi
+     * @Date: 2022/1/4 11:08
+     * @Description: 
+     */
     @GetMapping("/findAll")
     public RESTRetBase findAll() {
         Sort sort = new Sort(Sort.Direction.ASC, "id");
@@ -39,15 +54,50 @@ public class TokenController {
         return RESTRetUtils.successObj(list);
     }
 
-    @PostMapping("/save")
-    public RESTRetBase save(@RequestBody TokenModel tokenModel) {
+    /**
+     * @Author: yangyi
+     * @Date: 2022/1/4 11:07
+     * @Description:
+     */ 
+    @PostMapping("/modify")
+    public RESTRetBase modify(@RequestBody JsonObject jsonObject) {
+        Integer id = jsonObject.get("id").getAsInt();
+        String description = jsonObject.get("description").getAsString();
+        Boolean isValid = jsonObject.get("isValid").getAsBoolean();
+        TokenModel tokenModel = tokenDao.getOne(id);
+        if (tokenModel == null) {
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
+        }
+        tokenModel.setDescription(description);
+        tokenModel.setIsValid(isValid);
         TokenModel record = tokenDao.save(tokenModel);
+        //更新缓存
+        if (tokenModel.getIsValid() == false) {
+            tokenUtil.tokenMap.remove(tokenModel.getToken());
+        } else {
+            Date enddate = tokenModel.getEndTime();
+            Date startdate = tokenModel.getStartTime();
+            String token = tokenModel.getToken();
+            tokenUtil.tokenMap.put(token, new Token(token, 1, startdate.getTime(), enddate.getTime()));
+        }
         return RESTRetUtils.successObj(record);
     }
 
+    /**
+     * @Author: yangyi
+     * @Date: 2022/1/4 11:07
+     * @Description: 
+     */ 
     @DeleteMapping("/deleteById/{id}")
     public RESTRetBase deleteById (@PathVariable Integer id) {
-        tokenDao.deleteById(id);
+        TokenModel tokenModel = tokenDao.getOne(id);
+        if (tokenModel != null) {
+            tokenDao.deleteById(id);
+            //更新缓存
+            tokenUtil.tokenMap.remove(tokenModel.getToken());
+        } else {
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
+        }
         return RESTRetUtils.successObj();
     }
 }
