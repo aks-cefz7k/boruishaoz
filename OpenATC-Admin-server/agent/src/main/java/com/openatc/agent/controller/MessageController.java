@@ -25,6 +25,7 @@ import com.openatc.agent.service.MessageService;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
+import com.openatc.comm.handler.IMsgPostHandler;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.comm.ocp.DataParamMD5;
 import com.openatc.core.model.InnerError;
@@ -78,6 +79,9 @@ public class MessageController {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private IMsgPostHandler msgPostHandler;
 
     Gson gson = new Gson();
 
@@ -181,13 +185,21 @@ public class MessageController {
         // 发送请求，并把应答返回
         responceData = commClient.devMessage(requestData, ascsBaseModel);
 
-        // 处理方案状态请求应答
-        if (responceData.isSuccess()){
-            if (requestData.getInfotype().equals("status/pattern")){
-                // 将消息保存到redis，并设置过期时间1S
-                messageService.saveStatusPatternToRedis((MessageData)responceData.getData());
+
+        // 处理应答后的get-request请求
+        if (requestData.getOperation().equals("get-request")){
+            if (responceData.isSuccess()){
+                msgPostHandler.process((MessageData) responceData.getData());
             }
         }
+
+//        // 处理方案状态请求应答
+//        if (responceData.isSuccess()){
+//            if (requestData.getInfotype().equals("status/pattern")){
+//                // 将消息保存到redis，并设置过期时间1S
+//                messageService.saveStatusPatternToRedis((MessageData)responceData.getData());
+//            }
+//        }
 
         // 把设置请求set-request的操作保存到历史记录中
         if (requestData.getOperation().equals("set-request")) {
@@ -201,6 +213,9 @@ public class MessageController {
             }
             THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, subject);
             hisParamService.insertHisParam(tParams);
+            if (responceData.isSuccess()){
+                msgPostHandler.process(requestData);
+            }
             return responceData;
 
         }
