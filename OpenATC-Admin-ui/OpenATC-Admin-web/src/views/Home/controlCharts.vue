@@ -42,6 +42,7 @@ export default {
   watch: {
     curDevsData: {
       handler: function (val) {
+        this.initChart()
         this.refresh()
       },
       deep: true
@@ -51,7 +52,7 @@ export default {
     return {
       chartData: [],
       // ColorMap: new Map([[1, '#3BA272'], [2, '#FAC858'], [3, '#73C0DE'], [4, '#91CC75'], [5, '#EE6666'], [0, '#5470C6']]),
-      Color: ['#3BA272', '#FAC858', '#73C0DE', '#91CC75', '#EE6666', '#5470C6', '#cccc66', '#ea7ccc', '#9a60b4'],
+      Color: ['#3BA272', '#FAC858', '#73C0DE', '#91CC75', '#EE6666', '#5470C6', '#ea7ccc', '#cccc66', '#9a60b4'],
       controlMap: new Map(),
       allControl: [1, 2, 3, 4, 22, 0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 99, 100],
       specialControl: [1, 2, 3, 4, 22],
@@ -60,6 +61,7 @@ export default {
   },
   methods: {
     initChart () {
+      echart.init(document.getElementById('control-charts')).dispose() // 删除之前绘画的实例
       this.controlChart = echart.init(document.getElementById('control-charts'))
       const _this = this
       // 因为引用的父组件和子组件都使用了window.onresize以至于子组件window.onresize失效。需改写为以下方式
@@ -79,7 +81,7 @@ export default {
         },
         series: [
           {
-            name: 'control',
+            name: this.$t('openatc.patternstatistic.controltype'),
             type: 'pie',
             radius: ['28%', '80%'],
             emphasis: {
@@ -134,7 +136,7 @@ export default {
           }
         }
       })
-      // console.log('controlMap', this.controlMap)
+      console.log('controlMap', this.controlMap)
       this.allControlList = this.allControlList.map(controlitem => {
         let value = this.controlMap.get(controlitem.id)
         if (value !== undefined) {
@@ -142,7 +144,7 @@ export default {
         }
         return controlitem
       })
-      // console.log(this.allControlList)
+      console.log(this.allControlList)
       this.refreshChart()
     },
     getLang () {
@@ -172,13 +174,10 @@ export default {
         }
         this.allControlList.push(obj)
       }
-      console.log(this.allControlList)
+      // console.log(this.allControlList)
     }
   },
   created () {
-    // for (let i = 0; i < this.allControlList.length; i++) {
-    //   this.allControlList[i].color = this.Color.get(this.allControlList[i].id)
-    // }
     this.createAllControlList()
   },
   mounted () {

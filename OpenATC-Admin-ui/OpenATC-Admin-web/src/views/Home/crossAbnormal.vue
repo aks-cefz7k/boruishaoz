@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     removeDuplicateCross () {
-      // console.log(this.faultCrossMap)
       this.faultList.forEach(fault => {
         if (fault.m_byFaultBoardType !== undefined) {
           let faultTypeCross = this.faultCrossMap.get(fault.m_byFaultBoardType)

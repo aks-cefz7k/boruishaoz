@@ -41,6 +41,7 @@ export default {
   watch: {
     curDevsData: {
       handler: function () {
+        this.initChart()
         this.refresh()
       },
       deep: true
@@ -50,7 +51,7 @@ export default {
     return {
       chartData: [],
       // ColorMap: new Map([[1, '#3BA272'], [2, '#FAC858'], [3, '#73C0DE'], [4, '#91CC75'], [5, '#EE6666'], [0, '#5470C6']]),
-      Color: ['#3BA272', '#FAC858', '#73C0DE', '#91CC75', '#EE6666', '#5470C6', '#cccc66', '#ea7ccc', '#9a60b4'],
+      Color: ['#3BA272', '#FAC858', '#73C0DE', '#91CC75', '#EE6666', '#5470C6', '#ea7ccc', '#cccc66', '#9a60b4'],
       modeMap: new Map(),
       modeList: [
         {
@@ -95,6 +96,7 @@ export default {
   },
   methods: {
     initChart () {
+      echart.init(document.getElementById('mode-charts')).dispose() // 删除之前绘画的实例
       this.modeChart = echart.init(document.getElementById('mode-charts'))
       const _this = this
       // 因为引用的父组件和子组件都使用了window.onresize以至于子组件window.onresize失效。需改写为以下方式
@@ -114,7 +116,7 @@ export default {
         },
         series: [
           {
-            name: 'mode',
+            name: this.$t('openatc.patternstatistic.controlmode'),
             type: 'pie',
             radius: ['28%', '80%'],
             emphasis: {
