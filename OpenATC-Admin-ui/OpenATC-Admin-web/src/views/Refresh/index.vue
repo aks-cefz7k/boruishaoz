@@ -9,35 +9,16 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-//globl transition css
-
-/*fade*/
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.28s;
+<template>
+<div></div>
+</template>
+<script>
+export default {
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$router.replace(from.path)
+      // 跳到该路由页面后，再替换为from.path来源路径
+    })
+  }
 }
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-}
-
-/*fade*/
-.breadcrumb-enter-active,
-.breadcrumb-leave-active {
-  transition: all .5s;
-}
-
-.breadcrumb-enter,
-.breadcrumb-leave-active {
-  opacity: 0;
-  transform: translateX(20PX);
-}
-
-.breadcrumb-move {
-  transition: all .5s;
-}
-
-.breadcrumb-leave-active {
-  position: absolute;
-}
+</script>

@@ -9,35 +9,8 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-//globl transition css
-
-/*fade*/
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.28s;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-}
-
-/*fade*/
-.breadcrumb-enter-active,
-.breadcrumb-leave-active {
-  transition: all .5s;
-}
-
-.breadcrumb-enter,
-.breadcrumb-leave-active {
-  opacity: 0;
-  transform: translateX(20PX);
-}
-
-.breadcrumb-move {
-  transition: all .5s;
-}
-
-.breadcrumb-leave-active {
-  position: absolute;
+import Authapi from './authapi'
+export function getAllServerStatus () {
+  let api = new Authapi('getAllServerStatus')
+  return api.Send({}, {}, [])
 }

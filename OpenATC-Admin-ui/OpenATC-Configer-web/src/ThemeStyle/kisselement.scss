@@ -78,7 +78,7 @@ $--background-color-bright: #0096ba !default;          // 一般可以用于hove
 
 /* Border
 -------------------------- */
-$--border-width-base: 1px !default;                 // 边框的所有线宽
+$--border-width-base: 1PX !default;                 // 边框的所有线宽
 $--border-style-base: solid !default;               // 边框的线的样式的，实线
 $--border-color-base: #0096ba !default;           // 边框的颜色主调
 $--border-color-light: #0096ba !default;          // 次级边框的颜色 较边框主色调浅
@@ -87,15 +87,15 @@ $--border-color-dark: #0a4958 !default;
 $--border-color-extra-light: #0096a9 !default;    // 其他的边框
 $--border-color-hover: $--color-text-placeholder !default;
 $--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
-$--border-radius-base: 4px !default;
-$--border-radius-small: 2px !default;
+$--border-radius-base: 4PX !default;
+$--border-radius-small: 2PX !default;
 $--border-radius-circle: 100% !default;
 
 /* Box-shadow   这里是一般边框的阴影样式
 -------------------------- */
-$--box-shadow-base: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) !default;
-$--box-shadow-dark: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .12) !default;
-$--box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
+$--box-shadow-base: 0 2PX 4PX rgba(0, 0, 0, .12), 0 0 6PX rgba(0, 0, 0, .04) !default;
+$--box-shadow-dark: 0 2PX 4PX rgba(0, 0, 0, .12), 0 0 6PX rgba(0, 0, 0, .12) !default;
+$--box-shadow-light: 0 2PX 12PX 0 rgba(0, 0, 0, 0.1) !default;
 
 /* Fill
 -------------------------- */
@@ -104,18 +104,18 @@ $--fill-base: $--color-white !default;  // 填充色
 /* Font
 -------------------------- */
 $--font-path: 'fonts' !default;
-$--font-size-base: 14px !default;
-$--font-size-small: 13px !default;
-$--font-size-large: 18px !default;
+$--font-size-base: 14PX !default;
+$--font-size-small: 13PX !default;
+$--font-size-large: 18PX !default;
 $--font-color-disabled-base: #42daff !default;   //  字体的基本颜色
 $--font-weight-primary: 500 !default;
-$--font-line-height-primary: 24px !default;
+$--font-line-height-primary: 24PX !default;
 
 /*************************************** 这个以上需要确定下 *****************************************/
 
 /* Size
 -------------------------- */
-$--size-base: 14px !default;
+$--size-base: 14PX !default;
 
 /* z-index
 -------------------------- */
@@ -136,11 +136,11 @@ $--icon-color-base: $--color-info !default;
 
 /* Checkbox
 -------------------------- */
-$--checkbox-font-size: 14px !default;
+$--checkbox-font-size: 14PX !default;
 $--checkbox-font-weight: $--font-weight-primary !default;
 $--checkbox-color: $--color-text-regular !default;
-$--checkbox-input-height: 14px !default;
-$--checkbox-input-width: 14px !default;
+$--checkbox-input-height: 14PX !default;
+$--checkbox-input-width: 14PX !default;
 $--checkbox-input-border-radius: $--border-radius-small !default;
 $--checkbox-input-fill: $--color-white !default;
 $--checkbox-input-border: $--border-base !default;
@@ -162,20 +162,20 @@ $--checkbox-checked-icon-color: $--fill-base !default;
 
 $--checkbox-input-border-color-hover: $--color-primary !default;
 
-$--checkbox-bordered-height: 40px !default;
-$--checkbox-bordered-padding: 9px 20px 9px 10px !default;
-$--checkbox-bordered-medium-padding: 7px 20px 7px 10px !default;
-$--checkbox-bordered-small-padding: 5px 15px 5px 10px !default;
-$--checkbox-bordered-mini-padding: 3px 15px 3px 10px !default;
-$--checkbox-bordered-medium-input-height: 14px !default;
-$--checkbox-bordered-medium-input-width: 14px !default;
-$--checkbox-bordered-medium-height: 36px !default;
-$--checkbox-bordered-small-input-height: 12px !default;
-$--checkbox-bordered-small-input-width: 12px !default;
-$--checkbox-bordered-small-height: 32px !default;
-$--checkbox-bordered-mini-input-height: 12px !default;
-$--checkbox-bordered-mini-input-width: 12px !default;
-$--checkbox-bordered-mini-height: 28px !default;
+$--checkbox-bordered-height: 40PX !default;
+$--checkbox-bordered-padding: 9PX 20PX 9PX 10PX !default;
+$--checkbox-bordered-medium-padding: 7PX 20PX 7PX 10PX !default;
+$--checkbox-bordered-small-padding: 5PX 15PX 5PX 10PX !default;
+$--checkbox-bordered-mini-padding: 3PX 15PX 3PX 10PX !default;
+$--checkbox-bordered-medium-input-height: 14PX !default;
+$--checkbox-bordered-medium-input-width: 14PX !default;
+$--checkbox-bordered-medium-height: 36PX !default;
+$--checkbox-bordered-small-input-height: 12PX !default;
+$--checkbox-bordered-small-input-width: 12PX !default;
+$--checkbox-bordered-small-height: 32PX !default;
+$--checkbox-bordered-mini-input-height: 12PX !default;
+$--checkbox-bordered-mini-input-width: 12PX !default;
+$--checkbox-bordered-mini-height: 28PX !default;
 
 $--checkbox-button-font-size: $--font-size-base !default;
 $--checkbox-button-checked-fill: $--color-primary !default;
@@ -186,11 +186,11 @@ $--checkbox-button-checked-border-color: $--color-primary !default;
 
 /* Radio
 -------------------------- */
-$--radio-font-size: 14px !default;
+$--radio-font-size: 14PX !default;
 $--radio-font-weight: $--font-weight-primary !default;
 $--radio-color: #0096ba !default;
-$--radio-input-height: 14px !default;
-$--radio-input-width: 14px !default;
+$--radio-input-height: 14PX !default;
+$--radio-input-width: 14PX !default;
 $--radio-input-border-radius: $--border-radius-circle !default;
 $--radio-input-fill: #232525 !default;
 $--radio-input-border: $--border-base !default;
@@ -212,20 +212,20 @@ $--radio-checked-icon-color: #0b5668 !default;
 
 $--radio-input-border-color-hover: $--color-primary !default;
 
-$--radio-bordered-height: 40px !default;
-$--radio-bordered-padding: 12px 20px 0 10px !default;
-$--radio-bordered-medium-padding: 10px 20px 0 10px !default;
-$--radio-bordered-small-padding: 8px 15px 0 10px !default;
-$--radio-bordered-mini-padding: 6px 15px 0 10px !default;
-$--radio-bordered-medium-input-height: 14px !default;
-$--radio-bordered-medium-input-width: 14px !default;
-$--radio-bordered-medium-height: 36px !default;
-$--radio-bordered-small-input-height: 12px !default;
-$--radio-bordered-small-input-width: 12px !default;
-$--radio-bordered-small-height: 32px !default;
-$--radio-bordered-mini-input-height: 12px !default;
-$--radio-bordered-mini-input-width: 12px !default;
-$--radio-bordered-mini-height: 28px !default;
+$--radio-bordered-height: 40PX !default;
+$--radio-bordered-padding: 12PX 20PX 0 10PX !default;
+$--radio-bordered-medium-padding: 10PX 20PX 0 10PX !default;
+$--radio-bordered-small-padding: 8PX 15PX 0 10PX !default;
+$--radio-bordered-mini-padding: 6PX 15PX 0 10PX !default;
+$--radio-bordered-medium-input-height: 14PX !default;
+$--radio-bordered-medium-input-width: 14PX !default;
+$--radio-bordered-medium-height: 36PX !default;
+$--radio-bordered-small-input-height: 12PX !default;
+$--radio-bordered-small-input-width: 12PX !default;
+$--radio-bordered-small-height: 32PX !default;
+$--radio-bordered-mini-input-height: 12PX !default;
+$--radio-bordered-mini-input-width: 12PX !default;
+$--radio-bordered-mini-height: 28PX !default;
 
 $--radio-button-font-size: $--font-size-base !default;
 $--radio-button-checked-fill: $--color-primary !default;
@@ -243,54 +243,54 @@ $--select-close-hover-color: $--color-text-secondary !default;
 $--select-input-color: $--color-text-placeholder !default;
 $--select-multiple-input-color: #666 !default;
 $--select-input-focus-background: $--color-primary !default;
-$--select-input-font-size: 14px !default;
+$--select-input-font-size: 14PX !default;
 
 $--select-option-color: $--color-text-regular !default;                  // 选项颜色
 $--select-option-disabled-color: $--color-text-placeholder !default;     // 选项禁止的字体颜色
 $--select-option-disabled-background: $--color-white !default;           // 选项禁止的背景颜色
-$--select-option-height: 34px !default;
+$--select-option-height: 34PX !default;
 $--select-option-hover-background: $--background-color-bright !default;  // 下拉框的选项hover颜色
 $--select-option-selected: $--color-primary !default;                    // 选项被选择的字体颜色
 $--select-option-selected-hover: $--background-color-base !default;      // 被选择的选项hover颜色
 
 $--select-group-color: $--color-info !default;
-$--select-group-height: 30px !default;
-$--select-group-font-size: 12px !default;
+$--select-group-height: 30PX !default;
+$--select-group-font-size: 12PX !default;
 
 $--select-dropdown-background: $--background-color-dark-transparency !default;  // 下拉框的背景色
 $--select-dropdown-shadow: $--box-shadow-light !default;
 $--select-dropdown-empty-color: #0096ba!default;
-$--select-dropdown-max-height: 274px !default;
-$--select-dropdown-padding: 6px 0 !default;
-$--select-dropdown-empty-padding: 10px 0 !default;
-$--select-dropdown-border: solid 1px $--border-color-light !default;
+$--select-dropdown-max-height: 274PX !default;
+$--select-dropdown-padding: 6PX 0 !default;
+$--select-dropdown-empty-padding: 10PX 0 !default;
+$--select-dropdown-border: solid 1PX $--border-color-light !default;
 
 /* Alert
 -------------------------- */
-$--alert-padding: 8px 16px !default;
+$--alert-padding: 8PX 16PX !default;
 $--alert-border-radius: $--border-radius-base !default;
-$--alert-title-font-size: 13px !default;
-$--alert-description-font-size: 12px !default;
-$--alert-close-font-size: 12px !default;
-$--alert-close-customed-font-size: 13px !default;
+$--alert-title-font-size: 13PX !default;
+$--alert-description-font-size: 12PX !default;
+$--alert-close-font-size: 12PX !default;
+$--alert-close-customed-font-size: 13PX !default;
 
 $--alert-success-color: $--color-success-lighter !default;
 $--alert-info-color: $--color-info-lighter !default;
 $--alert-warning-color: $--color-warning-lighter !default;
 $--alert-danger-color: $--color-danger-lighter !default;
 
-$--alert-icon-size: 16px !default;
-$--alert-icon-large-size: 28px !default;
+$--alert-icon-size: 16PX !default;
+$--alert-icon-large-size: 28PX !default;
 
 /* Message Box
 -------------------------- */
-$--msgbox-width: 420px !default;
-$--msgbox-border-radius: 4px !default;
+$--msgbox-width: 420PX !default;
+$--msgbox-border-radius: 4PX !default;
 $--msgbox-font-size: $--font-size-large !default;
 $--msgbox-content-font-size: $--font-size-base !default;
 $--msgbox-content-color: $--color-text-regular !default;
-$--msgbox-error-font-size: 12px !default;
-$--msgbox-padding-primary: 15px !default;
+$--msgbox-error-font-size: 12PX !default;
+$--msgbox-padding-primary: 15PX !default;
 
 $--msgbox-success-color: $--color-success !default;
 $--msgbox-info-color: $--color-info !default;
@@ -300,12 +300,12 @@ $--msgbox-danger-color: $--color-danger !default;
 /* Message
 -------------------------- */
 $--message-shadow: $--box-shadow-base !default;
-$--message-min-width: 380px !default;
+$--message-min-width: 380PX !default;
 $--message-background-color: #edf2fc !default;
-$--message-padding: 15px 15px 15px 20px !default;
+$--message-padding: 15PX 15PX 15PX 20PX !default;
 $--message-content-color: $--color-text-regular !default;
 $--message-close-color: $--color-text-placeholder !default;
-$--message-close-size: 16px !default;
+$--message-close-size: 16PX !default;
 $--message-close-hover-color: $--color-text-secondary !default;
 
 $--message-success-color: $--color-success !default;
@@ -315,17 +315,17 @@ $--message-danger-color: $--color-danger !default;
 
 /* Notification
 -------------------------- */
-$--notification-width: 330px !default;
-$--notification-padding: 14px 26px 14px 13px !default;
-$--notification-radius: 8px !default;
+$--notification-width: 330PX !default;
+$--notification-padding: 14PX 26PX 14PX 13PX !default;
+$--notification-radius: 8PX !default;
 $--notification-shadow: $--box-shadow-light !default;
 $--notification-border-color: $--border-color-lighter !default;
-$--notification-icon-size: 24px !default;
+$--notification-icon-size: 24PX !default;
 $--notification-close-font-size: $--message-close-size !default;
-$--notification-group-margin: 13px !default;
+$--notification-group-margin: 13PX !default;
 $--notification-font-size: $--font-size-base !default;
 $--notification-color: $--color-text-regular !default;
-$--notification-title-font-size: 16px !default;
+$--notification-title-font-size: 16PX !default;
 $--notification-title-color: $--color-text-primary !default;
 
 $--notification-close-color: $--color-text-secondary !default;
@@ -340,8 +340,8 @@ $--notification-danger-color: $--color-danger !default;
 -------------------------- */
 $--input-font-size: $--font-size-base !default;
 $--input-color: #42daff !default;
-$--input-width: 140px !default;
-$--input-height: 40px !default;
+$--input-width: 140PX !default;
+$--input-height: 40PX !default;
 $--input-border: $--border-base !default;
 $--input-border-color: $--border-color-base !default;
 $--input-border-radius: $--border-radius-base !default;
@@ -351,7 +351,7 @@ $--input-fill-disabled: $--disabled-fill-base !default;
 $--input-color-disabled: $--font-color-disabled-base !default;
 $--input-icon-color: $--color-text-placeholder !default;
 $--input-placeholder-color: #0096ba !default;
-$--input-max-width: 314px !default;
+$--input-max-width: 314PX !default;
 
 $--input-hover-border: $--border-color-hover !default;
 $--input-clear-hover-color: $--color-text-secondary !default;
@@ -364,14 +364,14 @@ $--input-disabled-border: $--disabled-border-base !default;
 $--input-disabled-color: $--disabled-color-base !default;
 $--input-disabled-placeholder-color: $--color-text-placeholder !default;
 
-$--input-medium-font-size: 14px !default;
-$--input-medium-height: 36px !default;
+$--input-medium-font-size: 14PX !default;
+$--input-medium-height: 36PX !default;
 
-$--input-small-font-size: 13px !default;
-$--input-small-height: 32px !default;
+$--input-small-font-size: 13PX !default;
+$--input-small-height: 32PX !default;
 
-$--input-mini-font-size: 12px !default;
-$--input-mini-height: 28px !default;
+$--input-mini-font-size: 12PX !default;
+$--input-mini-height: 28PX !default;
 
 /* Cascader
 -------------------------- */
@@ -390,54 +390,54 @@ $--cascader-menu-option-color-disabled: #999 !default;
 $--cascader-menu-option-fill-disabled: rgba($--color-black, 0.06) !default;
 $--cascader-menu-option-empty-color: #666 !default;
 $--cascader-menu-group-color: #999 !default;
-$--cascader-menu-shadow: 0 1px 2px rgba($--color-black, 0.14), 0 0 3px rgba($--color-black, 0.14) !default;
+$--cascader-menu-shadow: 0 1PX 2PX rgba($--color-black, 0.14), 0 0 3PX rgba($--color-black, 0.14) !default;
 $--cascader-menu-option-pinyin-color: #999 !default;
-$--cascader-menu-submenu-shadow: 1px 1px 2px rgba($--color-black, 0.14), 1px 0 2px rgba($--color-black, 0.14) !default;
+$--cascader-menu-submenu-shadow: 1PX 1PX 2PX rgba($--color-black, 0.14), 1PX 0 2PX rgba($--color-black, 0.14) !default;
 
 /* Group
 -------------------------- */
 $--group-option-flex: 0 0 (1/5) * 100% !default;
-$--group-option-offset-bottom: 12px !default;
+$--group-option-offset-bottom: 12PX !default;
 $--group-option-fill-hover: rgba($--color-black, 0.06) !default;
 $--group-title-color: $--color-black !default;
 $--group-title-font-size: $--font-size-base !default;
-$--group-title-width: 66px !default;
+$--group-title-width: 66PX !default;
 
 /* Tab
 -------------------------- */
 $--tab-font-size: $--font-size-base !default;
-$--tab-border-line: 1px solid #e4e4e4 !default;
+$--tab-border-line: 1PX solid #e4e4e4 !default;
 $--tab-header-color-active: $--color-text-secondary !default;
 $--tab-header-color-hover: $--color-text-regular !default;
 $--tab-header-color: $--color-text-regular !default;
 $--tab-header-fill-active: rgba($--color-black, 0.06) !default;
 $--tab-header-fill-hover: rgba($--color-black, 0.06) !default;
-$--tab-vertical-header-width: 90px !default;
+$--tab-vertical-header-width: 90PX !default;
 $--tab-vertical-header-count-color: $--color-white !default;
 $--tab-vertical-header-count-fill: $--color-text-secondary !default;
 
 /* Button
 -------------------------- */
-$--button-font-size: 14px !default;
+$--button-font-size: 14PX !default;
 $--button-font-weight: $--font-weight-primary !default;
 $--button-border-radius: $--border-radius-base !default;
-$--button-padding-vertical: 12px !default;
-$--button-padding-horizontal: 20px !default;
+$--button-padding-vertical: 12PX !default;
+$--button-padding-horizontal: 20PX !default;
 
-$--button-medium-font-size: 14px !default;
+$--button-medium-font-size: 14PX !default;
 $--button-medium-border-radius: $--border-radius-base !default;
-$--button-medium-padding-vertical: 10px !default;
-$--button-medium-padding-horizontal: 20px !default;
+$--button-medium-padding-vertical: 10PX !default;
+$--button-medium-padding-horizontal: 20PX !default;
 
-$--button-small-font-size: 12px !default;
+$--button-small-font-size: 12PX !default;
 $--button-small-border-radius: #{$--border-radius-base - 1} !default;
-$--button-small-padding-vertical: 9px !default;
-$--button-small-padding-horizontal: 15px !default;
+$--button-small-padding-vertical: 9PX !default;
+$--button-small-padding-horizontal: 15PX !default;
 
-$--button-mini-font-size: 12px !default;
+$--button-mini-font-size: 12PX !default;
 $--button-mini-border-radius: #{$--border-radius-base - 1} !default;
-$--button-mini-padding-vertical: 7px !default;
-$--button-mini-padding-horizontal: 15px !default;
+$--button-mini-padding-vertical: 7PX !default;
+$--button-mini-padding-horizontal: 15PX !default;
 
 /******默认的button样式*******/
 $--button-default-color: $--color-text-regular !default;
@@ -475,7 +475,7 @@ $--button-active-shade-percent: 10% !default;
 
 /* cascader
 -------------------------- */
-$--cascader-height: 200px !default;
+$--cascader-height: 200PX !default;
 
 /* Switch
 -------------------------- */
@@ -485,42 +485,42 @@ $--switch-disabled-color: $--border-color-lighter !default;
 $--switch-disabled-text-color: $--color-text-placeholder !default;
 
 $--switch-font-size: $--font-size-base !default;
-$--switch-core-border-radius: 10px !default;
-$--switch-width: 40px !default;
-$--switch-height: 20px !default;
-$--switch-button-size: 16px !default;
+$--switch-core-border-radius: 10PX !default;
+$--switch-width: 40PX !default;
+$--switch-height: 20PX !default;
+$--switch-button-size: 16PX !default;
 
 /* Dialog
 -------------------------- */
 $--dialog-background-color: #1f2e2e !default;
-$--dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !default;
+$--dialog-box-shadow: 0 1PX 3PX rgba(0, 0, 0, 0.3) !default;
 $--dialog-close-hover-color: $--color-primary !default;
 $--dialog-title-font-size: $--font-size-large !default;
-$--dialog-font-size: 14px !default;
+$--dialog-font-size: 14PX !default;
 $--dialog-line-height: $--font-line-height-primary !default;
-$--dialog-padding-primary: 20px !default;
+$--dialog-padding-primary: 20PX !default;
 
 /* Table
 -------------------------- */
 $--table-border-color: $--border-color-lighter !default;
-$--table-border: 1px solid #42daff !default;
+$--table-border: 1PX solid #42daff !default;
 $--table-text-color: #42daff !default;
 $--table-header-color: #0a4958 !default;
 $--table-row-hover-background: #42daff !default;
 $--table-current-row-background: #42daff !default;
 $--table-header-background: #0a4958 !default;
 $--table-footer-background: $--color-text-placeholder !default;
-$--table-fixed-box-shadow: 0 0 10px rgba(0, 0, 0, .12) !default;
+$--table-fixed-box-shadow: 0 0 10PX rgba(0, 0, 0, .12) !default;
 
 /* Pagination
 -------------------------- */
-$--pagination-font-size: 13px !default;
+$--pagination-font-size: 13PX !default;
 $--pagination-fill: #1a3339 !default;
 $--pagination-color: $--color-text-primary !default;
-$--pagination-border-radius: 3px !default;
+$--pagination-border-radius: 3PX !default;
 $--pagination-button-color: $--color-text-primary !default;
-$--pagination-button-width: 35.5px !default;
-$--pagination-button-height: 28px !default;
+$--pagination-button-width: 35.5PX !default;
+$--pagination-button-height: 28PX !default;
 $--pagination-button-disabled-color: $--color-text-placeholder !default;
 $--pagination-button-disabled-fill: #1a3339 !default;
 $--pagination-hover-fill: $--color-primary !default;
@@ -531,29 +531,29 @@ $--pagination-hover-color: $--color-white !default;
 $--popover-fill: $--color-popover-fill !default;  // 这个是Popper的小三角
 $--popover-font-size: $--font-size-base !default;
 $--popover-border-color: $--color-popover-border !default;
-$--popover-arrow-size: 6px !default;
-$--popover-padding: 12px !default;
-$--popover-padding-large: 18px 20px !default;
-$--popover-title-font-size: 16px !default;
+$--popover-arrow-size: 6PX !default;
+$--popover-padding: 12PX !default;
+$--popover-padding-large: 18PX 20PX !default;
+$--popover-title-font-size: 16PX !default;
 $--popover-title-color: $--color-text-primary !default;
 
 /* Tooltip
 -------------------------- */
 $--tooltip-fill: $--color-text-primary !default;
 $--tooltip-color: black !default;
-$--tooltip-font-size: 12px !default;
+$--tooltip-font-size: 12PX !default;
 $--tooltip-border-color: $--color-text-primary !default;
-$--tooltip-arrow-size: 6px !default;
-$--tooltip-padding: 10px !default;
+$--tooltip-arrow-size: 6PX !default;
+$--tooltip-padding: 10PX !default;
 
 /* Tag
 -------------------------- */
-$--tag-padding: 0 10px !default;
+$--tag-padding: 0 10PX !default;
 $--tag-fill: rgba($--color-primary, 0.10) !default;
 $--tag-color: $--color-primary !default;
 $--tag-border: rgba($--color-primary, 0.20) !default;
-$--tag-font-size: 12px !default;
-$--tag-border-radius: 4px !default;
+$--tag-font-size: 12PX !default;
+$--tag-border-radius: 4PX !default;
 
 $--tag-info-fill: rgba($--color-info, 0.10) !default;
 $--tag-info-border: rgba($--color-info, 0.20) !default;
@@ -590,16 +590,16 @@ $--dropdown-menuItem-hover-color: #b6f0ff !default;
 /* Badge
 -------------------------- */
 $--badge-fill: $--color-danger !default;
-$--badge-radius: 10px !default;
-$--badge-font-size: 12px !default;
-$--badge-padding: 6px !default;
-$--badge-size: 18px !default;
+$--badge-radius: 10PX !default;
+$--badge-font-size: 12PX !default;
+$--badge-padding: 6PX !default;
+$--badge-size: 18PX !default;
 
 /* Card
 --------------------------*/
 $--card-border-color: $--border-color-lighter !default;
-$--card-border-radius: 4px !default;
-$--card-padding: 8px !default;
+$--card-border-radius: 4PX !default;
+$--card-padding: 8PX !default;
 
 /* Slider
 --------------------------*/
@@ -609,18 +609,18 @@ $--slider-button-hover-color: mix($--color-primary, black, 97%) !default;
 $--slider-stop-background-color: $--color-white !default;
 $--slider-disable-color: $--color-text-placeholder !default;
 
-$--slider-margin: 16px 0 !default;
-$--slider-border-radius: 3px !default;
-$--slider-height: 6px !default;
-$--slider-button-size: 16px !default;
-$--slider-button-wrapper-size: 36px !default;
-$--slider-button-wrapper-offset: -15px !default;
+$--slider-margin: 16PX 0 !default;
+$--slider-border-radius: 3PX !default;
+$--slider-height: 6PX !default;
+$--slider-button-size: 16PX !default;
+$--slider-button-wrapper-size: 36PX !default;
+$--slider-button-wrapper-offset: -15PX !default;
 
 /* Steps
 --------------------------*/
 $--steps-border-color: $--disabled-border-base !default;
-$--steps-border-radius: 4px !default;
-$--steps-padding: 20px !default;
+$--steps-border-radius: 4PX !default;
+$--steps-padding: 20PX !default;
 
 /* Menu
 --------------------------*/
@@ -631,10 +631,10 @@ $--menu-item-hover-fill: #42daff !default;
 
 /* Rate
 --------------------------*/
-$--rate-height: 20px !default;
+$--rate-height: 20PX !default;
 $--rate-font-size: $--font-size-base !default;
-$--rate-icon-size: 18px !default;
-$--rate-icon-margin: 6px !default;
+$--rate-icon-size: 18PX !default;
+$--rate-icon-margin: 6PX !default;
 $--rate-icon-color: $--color-text-placeholder !default;
 
 /* DatePicker
@@ -653,8 +653,8 @@ $--datepicker-cell-hover-color: #06404e !default;
 
 /* Loading
 --------------------------*/
-$--loading-spinner-size: 42px !default;
-$--loading-fullscreen-spinner-size: 50px !default;
+$--loading-spinner-size: 42PX !default;
+$--loading-fullscreen-spinner-size: 50PX !default;
 
 /* Scrollbar
 --------------------------*/
@@ -663,59 +663,59 @@ $--scrollbar-hover-background-color: rgba($--color-text-secondary, .5) !default;
 
 /* Carousel
 --------------------------*/
-$--carousel-arrow-font-size: 12px !default;
-$--carousel-arrow-size: 36px !default;
+$--carousel-arrow-font-size: 12PX !default;
+$--carousel-arrow-size: 36PX !default;
 $--carousel-arrow-background: rgba(31, 45, 61, 0.11) !default;
 $--carousel-arrow-hover-background: rgba(31, 45, 61, 0.23) !default;
-$--carousel-indicator-width: 30px !default;
-$--carousel-indicator-height: 2px !default;
-$--carousel-indicator-padding-horizontal: 4px !default;
-$--carousel-indicator-padding-vertical: 12px !default;
+$--carousel-indicator-width: 30PX !default;
+$--carousel-indicator-height: 2PX !default;
+$--carousel-indicator-padding-horizontal: 4PX !default;
+$--carousel-indicator-padding-vertical: 12PX !default;
 $--carousel-indicator-out-color: $--border-color-hover !default;
 
 /* Collapse
 --------------------------*/
 $--collapse-border-color: $--border-color-lighter !default;
-$--collapse-header-height: 48px !default;
-$--collapse-header-padding: 20px !default;
+$--collapse-header-height: 48PX !default;
+$--collapse-header-padding: 20PX !default;
 $--collapse-header-fill: $--color-white !default;
 $--collapse-header-color: $--color-text-primary !default;
-$--collapse-header-size: 13px !default;
+$--collapse-header-size: 13PX !default;
 $--collapse-content-fill: $--color-white !default;
-$--collapse-content-size: 13px !default;
+$--collapse-content-size: 13PX !default;
 $--collapse-content-color: $--color-text-primary !default;
 
 /* Transfer
 --------------------------*/
 $--transfer-border-color: $--border-color-lighter !default;
 $--transfer-border-radius: $--border-radius-base !default;
-$--transfer-panel-width: 200px !default;
-$--transfer-panel-header-height: 40px !default;
+$--transfer-panel-width: 200PX !default;
+$--transfer-panel-header-height: 40PX !default;
 $--transfer-panel-header-background: rgba(31, 46, 46, 0.9) !default;
-$--transfer-panel-footer-height: 40px !default;
-$--transfer-panel-body-height: 246px !default;
-$--transfer-item-height: 30px !default;
+$--transfer-panel-footer-height: 40PX !default;
+$--transfer-panel-body-height: 246PX !default;
+$--transfer-item-height: 30PX !default;
 $--transfer-item-hover-background: #42daff !default;
-$--transfer-filter-height: 32px !default;
+$--transfer-filter-height: 32PX !default;
 
 /* Header
   --------------------------*/
-$--header-padding: 0 20px !default;
+$--header-padding: 0 20PX !default;
 
 /* Footer
 --------------------------*/
-$--footer-padding: 0 20px !default;
+$--footer-padding: 0 20PX !default;
 
 /* Main
 --------------------------*/
-$--main-padding: 20px !default;
+$--main-padding: 20PX !default;
 
 /* Break-point
 --------------------------*/
-$--sm: 768px !default;
-$--md: 992px !default;
-$--lg: 1200px !default;
-$--xl: 1920px !default;
+$--sm: 768PX !default;
+$--md: 992PX !default;
+$--lg: 1200PX !default;
+$--xl: 1920PX !default;
 
 $--breakpoints: (
   'xs' : (max-width: $--sm),
@@ -743,7 +743,7 @@ $--breakpoints-spec: (
 // --------------------------*/
 .board {
   width: 100%;
-  margin-left: 10px;
+  margin-left: 10PX;
   display: flex;
   justify-content: space-around;
   flex-direction: row;
@@ -757,30 +757,30 @@ $--breakpoints-spec: (
   }
 }
 .board-column {
-    min-width: 180px;
-    min-height: 100px;
+    min-width: 180PX;
+    min-height: 100PX;
     height: auto;
     overflow: hidden;
     background: rgba(31,46,46,0.9);
-    border-radius: 3px;
-    border: 1px solid #095569;
+    border-radius: 3PX;
+    border: 1PX solid #095569;
   
     .board-column-header {
-      height: 40px;
-      line-height: 40px;
+      height: 40PX;
+      line-height: 40PX;
       overflow: hidden;
-      padding: 0 10px;
+      padding: 0 10PX;
       text-align: center;
       background: #12424d;
       color: #42daff;
-      border-radius: 3px 3px 0 0;
+      border-radius: 3PX 3PX 0 0;
     }
   
     .board-column-content {
       height: auto;
       overflow: hidden;
-      border: 10px solid transparent;
-      min-height: 60px;
+      border: 10PX solid transparent;
+      min-height: 60PX;
       display: flex;
       justify-content: flex-start;
       flex-direction: column;
@@ -789,12 +789,12 @@ $--breakpoints-spec: (
       .board-item {
         cursor: pointer;
         width: 100%;
-        height: 48px;
-        margin: 5px 0;
+        height: 48PX;
+        margin: 5PX 0;
         // background-color: rgba(31,46,46,0.9);
         text-align: right;
-        line-height: 40px;
-        padding: 1px 1px;
+        line-height: 40PX;
+        padding: 1PX 1PX;
         box-sizing: border-box;
       }
     }
@@ -805,26 +805,26 @@ $--breakpoints-spec: (
 .login-container {
   .el-input {
     display: inline-block;
-    height: 47px;
+    height: 47PX;
     width: 85%;
     input {
       background: transparent;
-      border: 0px;
+      border: 0PX;
       -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
+      border-radius: 0PX;
+      padding: 12PX 5PX 12PX 15PX;
       color: #0096ba;
-      height: 47px;
+      height: 47PX;
       &:-webkit-autofill {
-        // -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
+        // -webkit-box-shadow: 0 0 0PX 1000PX $bg inset !important;
         -webkit-text-fill-color: rgb(0, 0, 0) !important;
       }
     }
   }
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1PX solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    border-radius: 5PX;
     color: #454545;
   }
 }
@@ -840,43 +840,43 @@ $--breakpoints-spec: (
     right: 0;
     //width: 33%;
     width: 20%;
-    min-width: 400px;
-    padding: 35px 35px 15px 35px;
-    margin: 120px auto;
+    min-width: 400PX;
+    padding: 35PX 35PX 15PX 35PX;
+    margin: 120PX auto;
   }
   .tips {
-    font-size: 14px;
+    font-size: 14PX;
     color: #0096ba;
-    margin-bottom: 10px;
+    margin-bottom: 10PX;
     span {
       &:first-of-type {
-        margin-right: 16px;
+        margin-right: 16PX;
       }
     }
   }
   .svg-container {
-    padding: 6px 5px 6px 15px;
+    padding: 6PX 5PX 6PX 15PX;
     color: #42daff;
     vertical-align: middle;
-    width: 30px;
+    width: 30PX;
     display: inline-block;
     &_login {
-      font-size: 20px;
+      font-size: 20PX;
     }
   }
   .title {
-    font-size: 26px;
+    font-size: 26PX;
     font-weight: 400;
     color: #42daff;
-    margin: 0px auto 40px auto;
+    margin: 0PX auto 40PX auto;
     text-align: center;
     font-weight: bold;
   }
   .show-pwd {
     position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
+    right: 10PX;
+    top: 7PX;
+    font-size: 16PX;
     color: #42daff;
     cursor: pointer;
     user-select: none;
@@ -949,24 +949,24 @@ $--breakpoints-spec: (
 
 .el-table--border {
   td, th {
-    border-right: 1px solid #ebeef5;
+    border-right: 1PX solid #ebeef5;
     border-color: #0a4958;
   }
 }
 
 .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
-  border-right: 1px solid #ebeef5;
+  border-right: 1PX solid #ebeef5;
   border-color: #0a4958;
 }
 
 .el-table {
   td, th.is-leaf {
-    border-bottom: 1px solid #0a4958;
+    border-bottom: 1PX solid #0a4958;
   }
 }
 
 .el-table--border, .el-table--group {
-  border: 1px solid #0a4958;
+  border: 1PX solid #0a4958;
 }
 
 .el-table--border::after, .el-table--group::after {
@@ -979,17 +979,17 @@ $--breakpoints-spec: (
   }
   &.el-table--fit.el-table--border.el-table--enable-row-hover.el-table--enable-row-transition {
     width: 100%;
-    border: 1px solid #0a4958;
+    border: 1PX solid #0a4958;
   }
 }
 
 tr {
-  height: 40px;
+  height: 40PX;
 }
 
 .el-table {
   td, th {
-    padding: 0px 0;
+    padding: 0PX 0;
     min-width: 0;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -1002,7 +1002,7 @@ tr {
     box-sizing: border-box;
     white-space: normal;
     word-break: break-all;
-    line-height: 18px;
+    line-height: 18PX;
   }
 }
 
@@ -1033,14 +1033,14 @@ tr {
 }
 
 .el-time-panel {
-  margin: 5px 0;
-  border: solid 1px #0096ba;
+  margin: 5PX 0;
+  border: solid 1PX #0096ba;
   background-color: rgb(14, 73, 87);
-  -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
+  -webkit-box-shadow: 0 2PX 12PX 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2PX 12PX 0 rgba(0, 0, 0, 0.1);
+  border-radius: 2PX;
   position: absolute;
-  width: 180px;
+  width: 180PX;
   left: 0;
   z-index: 1000;
   -webkit-user-select: none;
@@ -1136,7 +1136,7 @@ tr {
 }
 
 .el-tabs__new-tab {
-  border: 1px solid #42daff;
+  border: 1PX solid #42daff;
 }
 
 .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
@@ -1162,14 +1162,14 @@ tr {
 .el-button--default:hover {
   color: #222e2e;
   background: #42daff;
-  border: solid 1px #42daff;
+  border: solid 1PX #42daff;
 }
 
 .el-button--primary {
   &:hover {
     color: #222e2e;
     background: #42daff;
-    border: solid 1px #42daff;
+    border: solid 1PX #42daff;
   }
   &.is-disabled {
     color: #0a6b83;
@@ -1192,7 +1192,7 @@ tr {
   white-space: nowrap;
   cursor: pointer;
   background: #0096ba;
-  border: 1px solid #0096ba;
+  border: 1PX solid #0096ba;
   border-color: #0096ba;
   color: #b6f0ff;
   -webkit-appearance: none;
@@ -1207,9 +1207,9 @@ tr {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  padding: 12px 20px;
-  font-size: 14px;
-  border-radius: 4px;
+  padding: 12PX 20PX;
+  font-size: 14PX;
+  border-radius: 4PX;
 }
 
 .el-button--text {
@@ -1253,8 +1253,8 @@ tr {
 /********************** 滚动条的样式 start ********************/
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 8PX;
+  height: 8PX;
 }
 
 ::-webkit-scrollbar-button {
@@ -1271,7 +1271,7 @@ tr {
 
 ::-webkit-scrollbar-thumb {
   background-color: #40d8ff;
-  border-radius: 5px;
+  border-radius: 5PX;
 }
 
 /*拉条的样式*/
@@ -1293,9 +1293,9 @@ tr {
 
 .el-transfer-panel__list {
   margin: 0;
-  padding: 6px 0;
+  padding: 6PX 0;
   list-style: none;
-  height: 246px;
+  height: 246PX;
   overflow: auto;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -1314,12 +1314,12 @@ tr {
 }
 
 .el-transfer-panel .el-transfer-panel__header {
-  height: 40px;
-  line-height: 40px;
+  height: 40PX;
+  line-height: 40PX;
   background: rgba(31, 46, 46, 1);
   margin: 0;
-  padding-left: 15px;
-  border-bottom: 1px solid #0096b0;
+  padding-left: 15PX;
+  border-bottom: 1PX solid #0096b0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   color: #000;
@@ -1329,8 +1329,8 @@ tr {
 
 .el-dialog {
   background: rgba(31, 46, 46, 0.9);
-  /* border: solid 1px rgba(66, 218, 255, 0.8); */
-  border: solid 1px #0096ba;
+  /* border: solid 1PX rgba(66, 218, 255, 0.8); */
+  border: solid 1PX #0096ba;
 }
 
 .el-dialog__headerbtn .el-dialog__close {
@@ -1355,7 +1355,7 @@ tr {
 }
 
 .el-menu-item {
-  min-width: 220px;
+  min-width: 220PX;
   background-color: #1b2f33;
 }
 
@@ -1372,7 +1372,7 @@ tr {
 /********************** 分割线 ********************/
 
 .el-menu.el-menu--horizontal {
-  border-bottom: solid 1px #0a4958;
+  border-bottom: solid 1PX #0a4958;
 }
 
 .hamburgercolor {
@@ -1411,11 +1411,11 @@ tr {
 /********************** 重新设置左侧菜单的高度，使之与右侧Navar高度相同 ********************/
 
 .el-submenu__title {
-  height: 50px;
-  line-height: 56px;
-  font-size: 14px;
+  height: 50PX;
+  line-height: 56PX;
+  font-size: 14PX;
   color: #42daff;
-  padding: 0 20px;
+  padding: 0 20PX;
   list-style: none;
   cursor: pointer;
   position: relative;
@@ -1430,9 +1430,9 @@ tr {
 
 .borde-style {
   overflow: auto;
-  height: 310px;
-  border: 1px solid;
-  border-width: 1px;
+  height: 310PX;
+  border: 1PX solid;
+  border-width: 1PX;
   border-color: #0a4958;
 }
 
@@ -1447,12 +1447,12 @@ html {
 .el-checkbox__inner {
   display: inline-block;
   position: relative;
-  border: 1px solid #0096ba;
-  border-radius: 2px;
+  border: 1PX solid #0096ba;
+  border-radius: 2PX;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  width: 14px;
-  height: 14px;
+  width: 14PX;
+  height: 14PX;
   background-color: rgba(31, 46, 46, 0.9);
   z-index: 1;
   -webkit-transition: border-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46), background-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46);
@@ -1470,19 +1470,19 @@ html {
 
 .el-message-box__content {
   position: relative;
-  padding: 10px 15px;
+  padding: 10PX 15PX;
   color: #42daff;
-  font-size: 14px;
+  font-size: 14PX;
 }
 
 /********************** 设置主页字体样式 ********************/
 
 .dashboard-container {
   font-style: italic;
-  font-size: 30px;
+  font-size: 30PX;
   color: #42daff;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 20PX;
 }
 
 /********************** 设置dashboard后面文字的样式 ********************/
@@ -1504,9 +1504,9 @@ html {
 
 .el-dropdown-menu__item--divided:before {
   content: '';
-  height: 4px;
+  height: 4PX;
   display: block;
-  margin: 0 -20px;
+  margin: 0 -20PX;
   background-color: #0a4958;
 }
 
@@ -1514,11 +1514,11 @@ html {
 
 #app .sidebar-container {
   .nest-menu .el-submenu > .el-submenu__title, .el-submenu .el-menu-item {
-    min-width: 180px !important;
+    min-width: 180PX !important;
     background-color: #162528 !important;
   }
   .nest-menu .el-submenu > .el-submenu__title, .el-submenu .el-menu-item:hover, .nest-menu .el-submenu > .el-submenu__title, .el-submenu .el-menu-item.is-active {
-    min-width: 180px !important;
+    min-width: 180PX !important;
     background-color: #121f21 !important;
   }
 }
@@ -1555,7 +1555,7 @@ html {
 .el-checkbox {
   color: #0096ba;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 14PX;
   position: relative;
   cursor: pointer;
   display: inline-block;
@@ -1572,19 +1572,19 @@ html {
   position: relative;
   cursor: pointer;
   color: #42daff;
-  font-size: 12px;
+  font-size: 12PX;
   -webkit-transition: -webkit-transform 0.2s ease-in-out;
   transition: -webkit-transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-  height: 20px;
+  height: 20PX;
 }
 
 /********************** 设置选择框多选状态，去除选中的样式 ********************/
 
 .el-select .el-tag__close.el-icon-close {
   background-color: #0096ba;
-  right: -7px;
+  right: -7PX;
   top: 0;
   color: #fff;
 }
@@ -1592,7 +1592,7 @@ html {
 /********************** 设置date下拉框的样式 ********************/
 
 .el-popper[x-placement^="bottom"] {
-  margin-top: 10px;
+  margin-top: 10PX;
 }
 
 /********************** 设置日历的样式 ********************/
@@ -1617,13 +1617,13 @@ html {
 }
 
 .el-picker-panel__icon-btn:hover {
-  font-size: 12px;
+  font-size: 12PX;
   color: #42daff;
   border: 0;
   background: transparent;
   cursor: pointer;
   outline: none;
-  margin-top: 8px;
+  margin-top: 8PX;
 }
 
 .el-month-table td.current:not(.disabled) .cell {
@@ -1631,28 +1631,28 @@ html {
 }
 
 .el-year-table td .cell {
-  width: 48px;
-  height: 32px;
+  width: 48PX;
+  height: 32PX;
   display: block;
-  line-height: 32px;
+  line-height: 32PX;
   color: #b6f0ff;
   margin: 0 auto;
 }
 
 .el-month-table td .cell:hover, .el-year-table td .cell:hover {
-  width: 48px;
-  height: 32px;
+  width: 48PX;
+  height: 32PX;
   display: block;
-  line-height: 32px;
+  line-height: 32PX;
   color: #0096ba;
   margin: 0 auto;
 }
 
 .el-date-picker__header-label:hover {
-  font-size: 16px;
+  font-size: 16PX;
   font-weight: 500;
-  padding: 0 5px;
-  line-height: 22px;
+  padding: 0 5PX;
+  line-height: 22PX;
   text-align: center;
   cursor: pointer;
   color: #b6f0ff;
@@ -1713,7 +1713,7 @@ html {
   white-space: nowrap;
   cursor: pointer;
   background: #0096ba;
-  border: 1px solid #0096ba;
+  border: 1PX solid #0096ba;
   border-color: #0096ba;
   color: #fff;
   -webkit-appearance: none;
@@ -1728,16 +1728,16 @@ html {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  padding: 12px 20px;
-  font-size: 14px;
-  border-radius: 4px;
+  padding: 12PX 20PX;
+  font-size: 14PX;
+  border-radius: 4PX;
   &:hover {
     display: inline-block;
     line-height: 1;
     white-space: nowrap;
     cursor: pointer;
     background: #0096ba;
-    border: 1px solid #0096ba;
+    border: 1PX solid #0096ba;
     border-color: #0096ba;
     color: #fff;
     -webkit-appearance: none;
@@ -1752,9 +1752,9 @@ html {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    padding: 12px 20px;
-    font-size: 14px;
-    border-radius: 4px;
+    padding: 12PX 20PX;
+    font-size: 14PX;
+    border-radius: 4PX;
   }
 }
 .noSelected{
@@ -1779,7 +1779,7 @@ html {
 }
 .iconfont {
   font-family:"iconfont" !important;
-  font-size:40px;
+  font-size:40PX;
   text-align:center;
   font-weight:500;
   color: #fff;

@@ -162,10 +162,11 @@ export const constantRouterMapOfLogin = [{
   }]
 },
 {
-  path: '/faultrecord',
+  path: '/',
   component: compose,
   children: [{
-    path: '',
+    name: 'faultMgr',
+    path: '/faultrecord',
     component: () => import('@/views/FaultRecord/index')
   }]
 },
@@ -192,6 +193,12 @@ export const constantRouterMapOfLogin = [{
     path: '',
     component: () => import('@/views/bottleneckControl/index')
   }]
+},
+{
+  name: 'refresh',
+  path: `/refresh`,
+  component: () => import('@/views/Refresh/index')
+
 },
 {
   path: '/404',

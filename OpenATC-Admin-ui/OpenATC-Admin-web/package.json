@@ -38,11 +38,12 @@
     "leaflet": "^1.6.0",
     "leaflet-polylinedecorator": "^1.6.0",
     "leaflet.chinatmsproviders": "^3.0.4",
+    "lib-flexible": "^0.3.2",
     "localStorage": "^1.0.4",
     "moment": "^2.29.1",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
-    "openatc-components": "0.0.15",
+    "openatc-components": "0.0.16",
     "scss-loader": "0.0.1",
     "sortablejs": "^1.10.1",
     "style-loader": "^0.23.1",
@@ -54,7 +55,9 @@
     "vuedraggable": "^2.16.0",
     "vuex": "3.0.1",
     "websocket-as-promised": "^1.1.0",
-    "xlsx": "^0.16.9"
+    "xlsx": "^0.16.9",
+    "amfe-flexible": "^2.2.1",
+    "postcss-pxtorem": "^5.0.0"
   },
   "devDependencies": {
     "autoprefixer": "7.2.3",
