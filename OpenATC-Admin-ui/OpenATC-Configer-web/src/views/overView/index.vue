@@ -542,13 +542,13 @@ export default {
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
-      this.registerMessage() // 注册消息
       this.agentId = this.$route.query.agentid
       setIframdevid(this.agentId)
       // this.ip = this.$route.query.IP
       // this.port = this.$route.query.port
       // this.protocol = this.$route.query.protocol
       this.resetCrossDiagram()
+      this.registerMessage() // 注册消息
     } else {
       // setIframdevid('23080400311210000088')
       // setIframdevid('8011')

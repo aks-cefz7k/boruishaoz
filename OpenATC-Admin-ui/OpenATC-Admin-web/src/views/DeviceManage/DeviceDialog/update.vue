@@ -395,7 +395,7 @@ export default {
         return false
       }
       if (this.deviceInfo.tags) {
-        if (this.deviceTag) {
+        if (this.deviceTag && !this.deviceInfo.tags.includes(this.deviceTag)) {
           this.deviceInfo.tags = this.deviceInfo.tags + ',' + this.deviceTag
         }
         this.addDicts()
@@ -442,14 +442,14 @@ export default {
     },
     submitDeviceInfo (formName) {
       // 提交表单
-      if (this.deviceInfo.ip === '' || this.deviceInfo.port === '') {
-        this.$message.error(this.$t('openatc.devicemanager.enterrequired'))
-        return
-      }
-      if (!this.ip_status) {
-        this.$message.error(this.$t('openatc.devicemanager.correctIp'))
-        return
-      }
+      // if (this.deviceInfo.ip === '' || this.deviceInfo.port === '') {
+      //   this.$message.error(this.$t('openatc.devicemanager.enterrequired'))
+      //   return
+      // }
+      // if (!this.ip_status) {
+      //   this.$message.error(this.$t('openatc.devicemanager.correctIp'))
+      //   return
+      // }
       if (!this.port_status) {
         this.$message.error(this.$t('openatc.devicemanager.correctport'))
         return

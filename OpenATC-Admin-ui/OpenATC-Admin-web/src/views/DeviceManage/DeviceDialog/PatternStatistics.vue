@@ -244,6 +244,7 @@ export default {
     },
     closeFormDialog () {
       this.dialogFormVisible = false
+      this.date = this.getDefaultDate()
     },
     onDateChange () {
       if (this.$refs.patternCharts === undefined) return

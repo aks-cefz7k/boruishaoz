@@ -49,7 +49,7 @@ public class UdpCommunicationStaticPort implements Communication {
     private static Map<String, UdpCommunicationStaticPort> messageMap = new HashMap();
     public static ICommHandler hanlder;
     private static Map<String, ReentrantLock> lockMap = new HashMap();     // 同步锁Map
-    private static ReentrantLock globalLock = new ReentrantLock();
+//    private static ReentrantLock globalLock = new ReentrantLock();
 
     // 成员变量
     private String agentid; // 当前请求的设备KEY
@@ -128,17 +128,14 @@ public class UdpCommunicationStaticPort implements Communication {
         else if (exangeType == EXANGE_TYPE_CENTER)
             messageKey = agentid + sendmsgtype;
 
-//        this.sendmsgtype = sendmsgtype;
         thread = Thread.currentThread();
 
-        // 按顺序进行消息通讯
-        globalLock.lock();
+        // 如果同一个路口的同一种消息同时发送，按顺序进行消息通讯
         if (lockMap.containsKey(messageKey)) {
             lock = lockMap.get(messageKey);
         } else {
             lock = new ReentrantLock();
         }
-        globalLock.unlock();
         lock.lock();
         lockMap.put(messageKey, lock);
 
@@ -189,8 +186,8 @@ public class UdpCommunicationStaticPort implements Communication {
 
 
         messageMap.remove(messageKey);
-        lockMap.remove(messageKey);
         lock.unlock();
+        lockMap.remove(messageKey);
         return responceData;
     }
 
