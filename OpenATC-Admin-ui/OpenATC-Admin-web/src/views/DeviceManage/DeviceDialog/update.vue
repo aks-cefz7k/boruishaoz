@@ -391,6 +391,7 @@ export default {
     },
     handleInputConfirm () {
       if (!this.deviceTag) {
+        this.inputVisible = false
         return false
       }
       if (this.deviceInfo.tags) {
