@@ -370,11 +370,19 @@ const zh = {
       'deviceid': '设备ID',
       'messagetype': '消息类型',
       'subInfoType': '消息子类型',
-      'reponsestatus': '返回状态',
+      'reponsestatus': '返回类型',
       'errorReason': '错误原因',
       'opera': '操作',
       'export': '导出',
-      'view': '查看'
+      'view': '查看',
+      'get-request': '查询请求',
+      'set-request': '设置请求',
+      'report': '主动上报',
+      'get-response': '查询应答',
+      'set-response': '设置应答',
+      'error-response': '错误应答',
+      'error-request': '错误请求',
+      'other': '其他'
     },
     'organization': {
       'viewdevice': '查看设备',

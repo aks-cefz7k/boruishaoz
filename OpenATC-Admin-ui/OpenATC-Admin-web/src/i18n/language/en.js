@@ -370,11 +370,19 @@ const en = {
       'deviceid': 'Device Id',
       'messagetype': 'Infotype',
       'subInfoType': 'Sub InfoType',
-      'reponsestatus': 'Response Status',
+      'reponsestatus': 'Response Type',
       'errorReason': 'Error Reason',
       'opera': 'Operation',
       'export': 'Export',
-      'view': 'View'
+      'view': 'View',
+      'get-request': 'get-request',
+      'set-request': 'set-request',
+      'report': 'report',
+      'get-response': 'get-response',
+      'set-response': 'set-response',
+      'error-response': 'error-response',
+      'error-request': 'error-request',
+      'other': 'other'
     },
     'organization': {
       'viewdevice': 'ViewDevice',
