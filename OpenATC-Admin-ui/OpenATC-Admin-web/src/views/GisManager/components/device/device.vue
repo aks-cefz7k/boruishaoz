@@ -227,7 +227,7 @@ export default {
       }
       let content =
       `
-        <div>设备${agentid}</div>
+        <div>路口${agentid}</div>
         <div>${status}</div>
         <div>${date}</div>
       `
