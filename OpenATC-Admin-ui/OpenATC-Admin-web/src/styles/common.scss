@@ -1801,6 +1801,7 @@ table td {
   }
   .atooltip {
     background: $--background-color-base !important;
+    border: 1px solid $--color-text-primary;
   }
 // 瓶颈控制页面样式
 .overflow-detector-page {
