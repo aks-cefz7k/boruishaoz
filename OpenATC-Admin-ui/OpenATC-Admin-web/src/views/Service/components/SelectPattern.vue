@@ -94,9 +94,7 @@ export default {
     },
     getCurPattern (agentid) {
       // 获取当前设备所有可选方案
-      this.loading = true
       getTscControl(agentid).then(res => {
-        this.loading = false
         if (!res.data.success) {
           let msg = getMessageByCode(res.data.code, this.$i18n.locale)
           let errorCode = res.data.data.errorCode

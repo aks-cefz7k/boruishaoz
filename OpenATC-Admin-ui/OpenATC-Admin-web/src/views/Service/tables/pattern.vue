@@ -32,12 +32,21 @@
         align="center"
       >
         <template slot-scope="scope">
-          <select-control
-            :defaultValue="scope.row.control"
-            :agentid="scope.row.agentid"
-            ref="selectControl"
-            @onChange="onSelectControlChange"
-          ></select-control>
+          <el-select
+            v-model="scope.row.control"
+            collapse-tags
+            clearable
+            filterable
+            :placeholder="$t('openatc.common.placeholder')"
+          >
+            <el-option
+              v-for="(item, index) in controlOptions"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column
@@ -45,14 +54,22 @@
         align="center"
       >
         <template slot-scope="scope">
-          <select-pattern
-            :agentid="scope.row.agentid"
-            :defaultValue="scope.row.patternid"
-            :defaultLabel="scope.row.patterndesc"
-            :isAutoLoad="false"
-            @onChange="onSelectPatternChange"
-            ref="selectPattern"
-          ></select-pattern>
+          <el-select
+            v-model="scope.row.patternid"
+            collapse-tags
+            clearable
+            filterable
+            :placeholder="$t('openatc.common.placeholder')"
+            @click.native="onPatternSelectClick(scope.row)"
+          >
+            <el-option
+              v-for="(item, index) in scope.row.patternOptions"
+              :key="index"
+              :label="item.patterndesc"
+              :value="item.patternid"
+            >
+            </el-option>
+          </el-select>
         </template>
       </el-table-column>
       <el-table-column
@@ -93,20 +110,26 @@
       <span class="pattern-explain" style="margin-right: 15px"
         >P{{ $t("openatc.greenwaveoptimize.phase") }}</span
       >
-      <PatternStatus
-        style="margin-bottom: 70px"
-        :patternStatusList="patternStatusList"
-        :barrierList="barrierList"
-      ></PatternStatus>
+      <div style="margin-top:5px;">
+        <PatternStatus
+          style="margin-bottom: 70px"
+          :patternStatusList="patternStatusList"
+          :barrierList="barrierList"
+          ></PatternStatus>
+      </div>
     </div>
+     <select-control
+        v-show="false"
+        ref="selectControl"></select-control>
   </div>
 </template>
 <script>
 import SelectControl from '@/views/Service/components/SelectControl'
 import SelectPattern from '@/views/Service/components/SelectPattern'
 import PatternStatus from '@/components/PatternStatus'
-import { getTscPhase } from '@/api/route'
+import { getTscPhase, getTscControl } from '@/api/route'
 import { getMessageByCode } from '@/utils/responseMessage'
+// import { getTscControl } from '@/api/route'
 export default {
   name: 'patterns',
   components: {
@@ -119,8 +142,12 @@ export default {
       type: Array
     }
   },
+  mounted () {
+    this.controlOptions = this.$refs.selectControl.options
+  },
   data () {
     return {
+      controlOptions: [],
       patternTableData: [], // 方案数据
       loading: false,
       phaseList: [],
@@ -140,6 +167,13 @@ export default {
           } else {
             pattern[i].patterndesc = ''
           }
+          pattern[i].patternid = pattern[i].patternid === '' ? 0 : pattern[i].patternid
+          pattern[i].patternOptions = [
+            {
+              patternid: pattern[i].patternid,
+              patterndesc: pattern[i].patterndesc
+            }
+          ]
         }
         this.patternTableData = pattern
         this.isShowPatternStatus = false
@@ -150,36 +184,42 @@ export default {
     }
   },
   methods: {
-    onSelectControlChange (control, resAgentid) {
-      let index = 0
-      for (let i = 0; i < this.patternData.length; i++) {
-        let agentid = this.patternData[i].agentid
-        if (agentid === resAgentid) {
-          index = i
-          break
-        }
+    async onPatternSelectClick (row) {
+      let options = await this.getCurPattern(row.agentid)
+      if (options && options.length > 0) {
+        row.patternOptions = options
       }
-      let row = Object.assign({}, this.patternTableData[index])
-      row.control = control
-      this.patternTableData.splice(index, 1, row)
     },
-    onSelectPatternChange (val) {
-      let res = val
-      let index = 0
-      for (let i = 0; i < this.patternData.length; i++) {
-        let agentid = this.patternData[i].agentid
-        if (res.agentid === agentid) {
-          index = i
-          break
-        }
-      }
-      let row = Object.assign({}, this.patternTableData[index])
-      row.patternid = res.patternid
-      row.patterndes = res.patterndes
-      row.patterndesc = res.patterndesc
-      row.pattern = res.pattern
-      row.patternList = res.patternList
-      this.patternTableData.splice(index, 1, row)
+    getCurPattern (agentid) {
+      // 获取当前设备所有可选方案
+      return new Promise((resolve, reject) => {
+        getTscControl(agentid).then(res => {
+          if (!res.data.success) {
+            let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+            let errorCode = res.data.data.errorCode
+            if (errorCode) {
+              msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+            }
+            this.$message.error(msg)
+            return
+          }
+          let options = []
+          let list = res.data.data.data.patternList
+          for (let item of list) {
+            let res = {
+              ...item,
+              agentid: this.agentid,
+              pattern: item,
+              patternList: list,
+              patternid: item.id,
+              patterndes: item.desc,
+              patterndesc: item.desc === '' ? `${this.$t('openatc.greenwaveoptimize.pattern')}${item.id}` : item.desc
+            }
+            options.push(res)
+          }
+          resolve(options)
+        })
+      })
     },
     getCurPhase (agentid, key) {
       // 获取当前上行/下行相位选项
@@ -202,18 +242,16 @@ export default {
       })
     },
     async handleCurrentChange (row) {
+      this.isShowPatternStatus = false
       if (row.isNew) { // 避免新增数据触发
         return false
       }
-      await this.getCurPhase(row.agentid)
-      this.patternList = row.patternList
-      if (!this.patternList) {
-        this.$message.error(this.$t('openatc.dutyroute.getpatternfailed'))
-        return false
-      }
-      this.isShowPatternStatus = true
-      if (row.patterndesc === '') {
-        this.currPatternName = 'pattern' + row.patternid
+      let phaseList = await this.getCurPhase(row.agentid)
+      let patternList = await this.getCurPattern(row.agentid)
+      let patterns = patternList.filter(item => item.patternid === row.patternid)
+      row.pattern = patterns.length > 0 ? patterns[0] : []
+      if (!row.patterndesc || row.patterndesc === '') {
+        this.currPatternName = `${this.$t('openatc.greenwaveoptimize.pattern')}${row.patternid}`
       } else {
         this.currPatternName = row.patterndesc
       }
@@ -229,6 +267,10 @@ export default {
           if (phase.value === 0) {
             continue
           }
+          let currPhase = phaseList.filter(p => p.id === phase.id)[0]
+          if (currPhase) {
+            phase.desc = currPhase.direction
+          }
           let obj = {}
           let split = phase.value
           obj.id = phase.id
@@ -239,15 +281,15 @@ export default {
               color: '#454545'
             }
           })
-          let currPhase = this.phaseList.filter((item) => {
-            return item.id === phase.id
-          })[0]
           obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
           obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
           list.push(obj)
         }
         this.patternStatusList.push(list)
+      }
+      if (this.patternStatusList.length > 0) {
+        this.isShowPatternStatus = true
       }
       this.handleBarrier(this.patternStatusList, this.phaseList)
     },
@@ -290,27 +332,4 @@ export default {
 .serviceroute-pattern .el-table .cell {
   line-height: 32px;
 }
-</style>
-
-<style lang="scss" scoped>
-// .serviceroute-pattern {
-//   border: solid 1px $--border-color-lighter;
-// }
-// .pattern-figure {
-//   position: fixed;
-//   width: 39%;
-//   bottom: 40px;
-// }
-// .pattern-status {
-//   display: inline;
-//   font-size: 20px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 22px;
-//   letter-spacing: 0px;
-//   color: #303133;
-// }
-// .pattern-explain {
-//   float: right;
-// }
 </style>
