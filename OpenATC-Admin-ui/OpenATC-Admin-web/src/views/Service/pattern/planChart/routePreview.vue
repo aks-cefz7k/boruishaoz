@@ -88,6 +88,7 @@ export default {
           setTimeout(() => {
             _this.$emit('research')
           }, 1 * 1000)
+          break
         }
       }
       // if (!isOn) {
