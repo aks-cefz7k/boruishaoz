@@ -541,10 +541,16 @@ export default {
       let newPhaselist = []
       phaseList.forEach(i => {
         let rangeArr = i.split('-').map(Number)
-        newPhaselist.push([
-          rangeArr[1],
-          rangeArr[2]
-        ])
+        if (rangeArr.length > 2) {
+          newPhaselist.push([
+            rangeArr[1],
+            rangeArr[2]
+          ])
+        } else {
+          newPhaselist.push([
+            rangeArr[1]
+          ])
+        }
       })
       for (let i = this.stateList.length - 1; i >= 1; i--) {
         this.narr.push(this.stateList[i] - this.stateList[i - 1])
