@@ -19,16 +19,16 @@
         <el-form-item>
           <el-input
             :placeholder="$t('openatc.main.organization')"
-            @keyup.enter.native="handleFilter"
+            @change="handleFilter"
             v-model="schfilter"
             style="width: 200px;"
           />
-          <el-button
+          <!-- <el-button
             type="primary"
             icon="el-icon-search"
             @click="handleFilter"
             >{{ $t("openatc.button.search") }}</el-button
-          >
+          > -->
           <el-button
             type="primary"
             v-if="isOpen == true"
