@@ -58,9 +58,13 @@
           </CommonKanban>
         </div>
     </el-row>
-    <div class="footer">
+    <div class="footer" v-if="realtimeStatusModalvisible">
         <el-button @click="handleClose()">{{$t('edge.button.Back')}}</el-button>
         <el-button type="primary" @click="handleManualControl()">{{$t('edge.overview.implement')}}</el-button>
+    </div>
+    <div class="footer" v-if="!realtimeStatusModalvisible">
+        <el-button @click="handleClose()">{{$t('edge.button.Back')}}</el-button>
+        <el-button type="primary" @click="handleManualControl()">{{$t('edge.overview.comfirm')}}</el-button>
     </div>
   </div>
 </template>
@@ -102,6 +106,10 @@ export default {
     },
     closePhaseRings: {
       type: Array
+    },
+    realtimeStatusModalvisible: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {

@@ -128,6 +128,7 @@ const zh = {
       'phaseclose': '相位关断',
       'phaselocking': '相位锁定',
       'implement': '执行',
+      'comfirm': '确定',
       'ipaddress': 'IP地址',
       'deviceport': '设备端口',
       'agreement': '协议',

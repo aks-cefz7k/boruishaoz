@@ -279,19 +279,6 @@ const subRouter = [{
   }]
 },
 {
-  path: '/demo',
-  component: Layout,
-  children: [{
-    path: 'index',
-    name: 'demo',
-    component: () => import('@/views/demo/index'),
-    meta: {
-      title: 'edge.route.statistics',
-      icon: 'statistics'
-    }
-  }]
-},
-{
   path: '*',
   redirect: '/404',
   hidden: true

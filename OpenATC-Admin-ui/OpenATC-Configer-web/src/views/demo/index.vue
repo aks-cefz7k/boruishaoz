@@ -11,7 +11,7 @@
  **/
 <template>
   <div>
-    <el-button @click="handleOpenConfigPanel">{{$t('edge.button.confirm')}}</el-button>
+    <el-button type="primary" @click="handleOpenConfigPanel" style="margin: 20px;">打开控制面板</el-button>
     <el-dialog
       class="abow_dialog"
       :width="dialogWidth"
@@ -20,13 +20,19 @@
       @close="oncancle"
       append-to-body>
       <RightPanel
-            ref="rightpanel"
-            :realtimeStatusModalvisible="false" />
+        ref="rightpanel"
+        :statusData="crossStatusData"
+        :realtimeStatusModalvisible="false" />
     </el-dialog>
   </div>
 </template>
 <script>
 import RightPanel from '@/components/SchemeConfig'
+import { getTscControl } from '@/api/control'
+import { getMessageByCode } from '../../utils/responseMessage'
+import {
+  getIframdevid
+} from '@/utils/auth'
 export default {
   name: 'demo',
   components: {
@@ -35,7 +41,8 @@ export default {
   data () {
     return {
       boxVisible: false,
-      dialogWidth: '100%'
+      dialogWidth: '100%',
+      crossStatusData: {} // 路口状态数据
     }
   },
   watch: {
@@ -51,7 +58,6 @@ export default {
       this.boxVisible = true
     },
     setDialogWidth () {
-      console.log(document.body.clientWidth)
       var val = document.body.clientWidth
       const def = 450 // 默认宽度
       if (val < def) {
@@ -59,12 +65,39 @@ export default {
       } else {
         this.dialogWidth = def + 'px'
       }
+    },
+    initData () {
+      let iframdevid = getIframdevid()
+      getTscControl(iframdevid).then((data) => {
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
+          }
+          return
+        }
+        this.crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
+      }).catch(error => {
+        console.log(error)
+      })
     }
   },
   created () {
     this.setDialogWidth()
   },
   mounted () {
+    this.initData()
     window.onresize = () => {
       return (() => {
         this.setDialogWidth()
