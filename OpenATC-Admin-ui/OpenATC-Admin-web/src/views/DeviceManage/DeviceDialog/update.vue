@@ -355,7 +355,7 @@ export default {
         label: 'HiCon',
         value: 'HiCon'
       }],
-      platformCheck: false,
+      platformCheck: true,
       innerForm: {},
       showModifyIdButton: false,
       sockettypeOptions: [
