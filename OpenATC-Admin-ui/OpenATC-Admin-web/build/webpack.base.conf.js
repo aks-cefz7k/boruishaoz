@@ -62,8 +62,9 @@ module.exports = {
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test') ,resolve('node_modules/webpack-dev-server/client'),
         resolve('node_modules/@openatc/edgebase-front/src/lib'),
-        resolve('../OpenATC-Configer-web/src/lib'),
-        resolve('../components/src/lib')
+        resolve('../OpenATC-Configer-web/src/lib')
+        // ,
+        // resolve('../components/src/lib')
       ]
       },
       {
