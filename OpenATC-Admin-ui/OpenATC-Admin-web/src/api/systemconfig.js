@@ -27,6 +27,11 @@ class Systemconfig {
     let paramList = [id]
     return api.Send({}, {}, paramList)
   }
+  GetSystemconfigList (data) {
+    // 获取所有配置
+    let api = new Authapi('systemconfig_getList')
+    return api.Send({}, data, [])
+  }
 }
 
 export const SystemconfigApi = new Systemconfig()

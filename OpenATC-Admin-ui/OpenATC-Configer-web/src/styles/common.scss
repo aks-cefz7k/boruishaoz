@@ -783,8 +783,12 @@ border: 1px solid $--border-color-base;
     background-color: $--color-white;
     border: solid 1px $--border-color-lighter;
     position: relative;
-    overflow-x: hidden;
+    overflow-x: auto;
     // min-height: 700px;
+  }
+  .right-control-part {
+    min-width: 300px;
+    overflow: auto;
   }
   .cross-mess {
     margin-left: 15px;
@@ -924,6 +928,66 @@ border: 1px solid $--border-color-base;
       float: right;
       color: $--color-text-regular;
   }
+  // 信号机控制状态模块样式
+  .controlStatePart {
+    color: $--color-text-primary;
+    padding-right: 13px;
+    .el-row {
+      height: 100%;
+    }
+    .el-col {
+      height: 100%;
+      min-width: 90px;
+      text-align: center;
+    }
+    .bg-base {
+      height: 100%;
+      background: $--background-color-base;
+    }
+    .bigPart {
+      width: 100%;
+      height: 90px;
+      margin-bottom: 5px;
+      .grid-content {
+        padding-top: 22px;
+        border-radius: 6px;
+        .value {
+          margin-bottom: 5px;
+          font-size: 18px;
+          line-height: 22px;
+          height: 22px;
+          color: $--color-text-primary;
+        }
+        .name {
+          font-size: 14px;
+          line-height: 22px;
+          color: $--color-text-secondary;
+        }
+      }
+      
+    }
+    .smallPart {
+      width: 100%;
+      .grid-content {
+        height: 70px;
+        padding-top: 10px;
+        margin-bottom: 5px;
+        border-radius: 6px;
+        .value {
+          margin-bottom: 5px;
+          font-size: 14px;
+          line-height: 22px;
+          color: $--color-text-primary;
+          height: 22px;
+        }
+        .name {
+          font-size: 14px;
+          line-height: 22px;
+          color: $--color-text-secondary;
+        }
+      }
+    }
+  }
 // 小屏幕打开首页适配样式
   .minifont {
     font-size: 12px;
@@ -985,6 +1049,8 @@ border: 1px solid $--border-color-base;
 // 手动控制弹框
 .manual-control-modal{
   padding: 21px 0px 21px 28px;
+  min-width: 360px;
+  overflow: auto;
   .title {
     margin-bottom: 24px;
     font-size: 20px;
@@ -1047,12 +1113,39 @@ border: 1px solid $--border-color-base;
 
 .closephase-control{
   height: 100%;
+  min-width: 250px;
+  overflow: auto;
   .closephasekanban {
     width: 60%;
     margin: 0 auto;
     margin-bottom: 13px;
   }
+  .el-form-item__content {
+    min-width: 120px;
+  }
 } 
+
+.lockingphase-control {
+  height: 100%;
+  min-width: 430px;
+  overflow: auto;
+  .closephasekanban {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 13px;
+  }
+  .el-form-item {
+    width: 45%;
+    min-width: 180px;
+  }
+  .el-input {
+    width: 100%;
+  }
+  .el-form-item__content {
+    width: calc(100% - 120px);
+    min-width: 80px;
+  }
+}
 
 // 公共面板组件通用样式
 .common-board-column {
@@ -1061,7 +1154,7 @@ border: 1px solid $--border-color-base;
     max-width: 350px;
     height: auto;
     overflow: hidden;
-    background: #f0f0f0;
+    // background: #f0f0f0;
     // border: 1px solid $--border-color-base;
   .common-phase-description {
     background: rgb(217, 236, 255);

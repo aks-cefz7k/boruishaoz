@@ -42,6 +42,7 @@
             <el-select
               style="width: 100px;"
               v-model="plats"
+              @focus="onPlatFocus"
               @change="getDeviceRanges('search')"
               clearable
               filterable>
@@ -279,6 +280,7 @@ import { GetFaultRange } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
 import SelectAgentid from '@/components/SelectAgentid'
 import SelectCrossPhase from '@/components/SelectCrossPhase'
+import { DictApi } from '@/api/dict.js'
 import { setCrossFilter, getCrossFilter, setCrossTag, getCrossTag, setCrossStates, getCrossStates, setCrossProtocols, getCrossProtocols, setCrossPlats, getCrossPlats, setCrossDevicetypes, getCrossDevicetypes } from '@/utils/crossFilterMgr'
 export default {
   name: 'device',
@@ -701,6 +703,29 @@ export default {
         case 'traffic':
           break
       }
+    },
+    getAllPlatform () {
+      let tag = 'platform'
+      DictApi.getDictListByTag(tag).then((data) => {
+        let res = data.data
+        if (!res.success) {
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return false
+        }
+        let list = data.data.data
+        this.plat = []
+        let record = []
+        for (let item of list) {
+          record = {
+            label: item.key,
+            value: item.key
+          }
+          this.plat.push(record)
+        }
+      })
+    },
+    onPlatFocus () {
+      this.getAllPlatform()
     },
     getStatusFilterParams () {
       // 获取从首页跳转过来的设备状态过滤参数

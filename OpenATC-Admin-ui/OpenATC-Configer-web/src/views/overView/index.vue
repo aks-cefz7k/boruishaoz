@@ -176,8 +176,15 @@
           leave-active-class="animated fadeOutRight">
             <div style="position: absolute;width: 100%;" v-show="(isOperation && isClosePhase)">
               <ClosePhaseControlModal
+                v-if="specialPage === 'closephase'"
                 :controlData="controlData"
-                :closePhaseRings="closePhaseRings"
+                :closePhaseRings="phaseRings"
+                @closePhaseBack="closePhaseBack"
+                @closePhaseControl= "closePhaseControl" />
+              <LockingPhaseControlModal
+                v-if="specialPage === 'lockingphase'"
+                :controlData="controlData"
+                :closePhaseRings="phaseRings"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
             </div>
@@ -186,7 +193,8 @@
           <transition name="fade-left" mode="out-in"
           enter-active-class="animated fadeInLeft"
           leave-active-class="animated fadeOutLeft">
-            <div style="position: absolute;width: 100%;" v-show="!isOperation">
+
+            <div class="right-control-part" style="position: absolute;width: 100%;" v-show="!isOperation">
               <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
               <div class="cross-module">
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
@@ -217,14 +225,14 @@
                 <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
               </div>
               <div class="cross-module">
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
-                </div>
+                </div> -->
                 <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div> -->
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
-                </div>
+                </div> -->
 
                 <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
@@ -234,17 +242,71 @@
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
                 </div> -->
 
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
                 </div>
 
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
+                </div> -->
+
+                <!-- 信号机控制状态模块 Start-->
+                <div class="controlStatePart">
+                  <div class="bigPart">
+                    <el-row :gutter="7">
+                      <el-col :span="12">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.mode}}</div>
+                          <div class="name">{{$t('edge.overview.controlmodel')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
+                          <div class="name">{{$t('edge.overview.curModel')}}</div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <div class="smallPart">
+                    <el-row :gutter="7">
+                      <el-col :span="8" v-if="controlData.patternid !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.patternid}}</div>
+                          <div class="name">{{$t('edge.overview.controlnumber')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="responseTime !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{responseTime + ' ms'}}</div>
+                          <div class="name">{{$t('edge.overview.responseTime')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="controlData.duration !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.duration + ' s'}}</div>
+                          <div class="name">{{$t('edge.overview.duration')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="controlData.delay !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.delay}}</div>
+                          <div class="name">{{$t('edge.overview.delay')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="currentStage !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{currentStage}}</div>
+                          <div class="name">{{$t('edge.overview.curStage')}}</div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
                 </div>
-                <div class="cross-content" v-show="closePhase && closePhase.length > 0">
-                  <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
-                </div>
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.currentstage')}}:</div>
+                <!-- 信号机控制状态模块 End-->
+
+                <div class="cross-content">
+                  <div style="float: left;" class="cross-name">{{$t('edge.overview.currentstage')}}:</div>
                   <div style="margin-left: 85PX;" >
                     <div style="width: 100%; height: auto;">
                       <div class="control-model" v-for="(item, index) in stagesList" :key="index">
@@ -265,6 +327,12 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="cross-content" v-show="closePhase && closePhase.length > 0">
+                  <div style="float: left;margin-right: 16px;" class="cross-name">{{$t('edge.overview.phaseclose')}}:</div>
+                  <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
+                </div>
+
               </div>
             </div>
           </transition>
@@ -288,6 +356,7 @@ import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
 import ClosePhaseControlModal from './closePhaselControlModal'
+import LockingPhaseControlModal from './lockingPhaselControlModal'
 import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
 import { GetAllFaultRange } from '@/api/fault'
@@ -309,6 +378,7 @@ export default {
     CurPhase,
     ManualControlModal,
     ClosePhaseControlModal,
+    LockingPhaseControlModal,
     FaultDetailModal,
     xdrdirselector
   },
@@ -479,14 +549,17 @@ export default {
       toPage: 1, // 与哪一个页面交互，1 代表路口信息页面，3代表 相位关断页面
       specialcontrolList: [{ // 特殊控制
         id: 23,
-        iconClass: 'closephase',
-        iconName: '关断相位'
+        iconClass: 'closephase'
+      }, {
+        id: 22,
+        iconClass: 'lockingphase'
       }],
-      closePhaseRings: [],
+      phaseRings: [],
       curFaultList: [],
       confirmedFault: [],
       ignoredFault: [],
-      untreatedFault: []
+      untreatedFault: [],
+      specialPage: '' // 哪一个特殊控制页面
     }
   },
   computed: {
@@ -1226,7 +1299,8 @@ export default {
         this.crossStatusData.phase = this.crossStatusData.phase.map(ele => {
           return {
             ...ele,
-            close: ele.close || 0
+            close: ele.close || 0,
+            locktype: 0 // 默认所有相位显示解锁状态
           }
         })
         // 相位关断标签
@@ -1256,8 +1330,15 @@ export default {
         this.toPage = 3
         this.isClosePhase = true
         this.initRingPhaseData()
+        this.specialPage = 'closephase'
+      } else if (id === 22) {
+        this.toPage = 3
+        this.isClosePhase = true
+        this.initRingPhaseData()
+        this.specialPage = 'lockingphase'
       } else {
         this.isClosePhase = false
+        this.specialPage = ''
       }
     },
     closePhaseBack () {
@@ -1280,28 +1361,70 @@ export default {
       })
     },
     initRingPhaseData () {
-      this.closePhaseRings = []
-      if (!this.crossStatusData.rings) return
-      this.crossStatusData.rings.forEach(ring => {
-        let obj = {}
-        obj.num = ring.num
-        obj.phases = []
-        for (let i = 0; i < ring.sequence.length; i++) {
-          let phaseid = ring.sequence[i]
-          let originphase = this.crossStatusData.phase.filter(phase => phase.id === phaseid)[0]
-          let addphse = this.getPhasesInfo(phaseid)
-          obj.phases.push({...originphase, ...addphse})
+      // 环信息从单独上载相位信息里获取，以免相位锁定后，方案状态数据里没有rings，导致相位锁定控制列表无法显示
+      this.phaseRings = []
+      let map = {}
+      let dest = []
+      for (let i = 0; i < this.phaseList.length; i++) {
+        let ai = this.phaseList[i]
+        if (!map[ai.ring]) {
+          let addphse = this.addPhaseInfo(ai)
+          dest.push({
+            num: ai.ring,
+            phases: [{...ai, ...addphse}]
+          })
+          map[ai.ring] = ai
+        } else {
+          for (var j = 0; j < dest.length; j++) {
+            var dj = dest[j]
+            if (dj.num === ai.ring) {
+              let addphse = this.addPhaseInfo(ai)
+              dj.phases.push({...ai, ...addphse})
+              break
+            }
+          }
         }
-        this.closePhaseRings.push(obj)
-      })
+      }
+      this.phaseRings = JSON.parse(JSON.stringify(dest))
     },
-    getPhasesInfo (phaseid) {
-      if (this.phaseList === undefined || this.phaseList.filter(phase => phase.id === phaseid).length === 0) return
-      let phaseinfo = this.phaseList.filter(phase => phase.id === phaseid)[0]
-      phaseinfo.name = this.$t('edge.overview.phase') + phaseinfo.id
-      phaseinfo.desc = this.getPhaseDescription(phaseinfo.direction)
-      return phaseinfo
+    addPhaseInfo (phase) {
+      let addphse = {}
+      addphse.name = this.$t('edge.overview.phase') + phase.id
+      addphse.desc = this.getPhaseDescription(phase.direction)
+      if (this.crossStatusData !== null) {
+        // 如果方案状态相位有close字段，这边就需要对应close状态进相位关断控制的选项里
+        let phaseStatus = this.crossStatusData.phase.filter(ele => ele.id === phase.id)[0]
+        addphse = {...addphse, ...phaseStatus}
+      }
+      // 相位锁定选项默认都按照解锁状态显示
+      addphse.locktype = 0
+      return addphse
     },
+    // initRingPhaseData () {
+    // 从方案状态里获取环信息，对应显示相位关断控制列表
+    //   if (this.crossStatusData === null) return
+    //   this.phaseRings = []
+    //   if (!this.crossStatusData.rings) return
+    //   this.crossStatusData.rings.forEach(ring => {
+    //     let obj = {}
+    //     obj.num = ring.num
+    //     obj.phases = []
+    //     for (let i = 0; i < ring.sequence.length; i++) {
+    //       let phaseid = ring.sequence[i]
+    //       let originphase = this.crossStatusData.phase.filter(phase => phase.id === phaseid)[0]
+    //       let addphse = this.getClosePhasesInfo(phaseid)
+    //       obj.phases.push({...originphase, ...addphse})
+    //     }
+    //     this.phaseRings.push(obj)
+    //   })
+    // },
+    // getClosePhasesInfo (phaseid) {
+    //   if (this.phaseList === undefined || this.phaseList.filter(phase => phase.id === phaseid).length === 0) return
+    //   let phaseinfo = this.phaseList.filter(phase => phase.id === phaseid)[0]
+    //   phaseinfo.name = this.$t('edge.overview.phase') + phaseinfo.id
+    //   phaseinfo.desc = this.getPhaseDescription(phaseinfo.direction)
+    //   return phaseinfo
+    // },
     getPhaseDescription (phaseList) {
       let list = []
       for (let id of phaseList) {

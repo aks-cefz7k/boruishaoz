@@ -20,6 +20,7 @@
         <el-dialog
           width="700px"
           :title="$t('openatc.devicemanager.updateDeviceId')"
+          :close-on-click-modal="false"
           :visible.sync="innerVisible"
           append-to-body>
           <el-form ref="deviceId" :model="innerForm">
@@ -103,6 +104,15 @@
             </el-input>
         </el-form-item>
         <el-form-item
+            :label="$t('openatc.devicemanager.gbid')"
+            prop="gbid">
+            <el-input
+            type="text"
+            v-model="deviceInfo.gbid"
+            @keyup.enter.native="submitDeviceInfo('device')">
+            </el-input>
+        </el-form-item>
+        <el-form-item
             :label="$t('openatc.devicemanager.devicename')"
             prop="name">
             <el-input
@@ -161,7 +171,7 @@
         <el-form-item
             :label="$t('openatc.devicemanager.platform')"
             prop="platform">
-            <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%" :disabled="platformCheck">
+            <el-select v-model="deviceInfo.platform" @focus="onPlatFocus" placeholder="" style="width:100%" :disabled="platformCheck">
                 <el-option v-for="firm in platformList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
             </el-select>
         </el-form-item>
@@ -214,6 +224,7 @@
 <script>
 import { AddDevice, UpdateDevice, UpdateDeviceId, getDict, addDict } from '@/api/device'
 import { getMessageByCode } from '@/utils/responseMessage'
+import { DictApi } from '@/api/dict.js'
 export default {
   name: 'deviceUpdate',
   props: {
@@ -281,6 +292,7 @@ export default {
       tempDevice: {
         agentid: '',
         thirdplatformid: '',
+        gbid: '',
         name: '',
         descs: '',
         tags: '',
@@ -622,6 +634,29 @@ export default {
         this.platformCheck = false
         this.deviceInfo.platform = ''
       }
+    },
+    getAllPlatform () {
+      let tag = 'platform'
+      DictApi.getDictListByTag(tag).then((data) => {
+        let res = data.data
+        if (!res.success) {
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return false
+        }
+        let list = data.data.data
+        this.platformList = []
+        let record = []
+        for (let item of list) {
+          record = {
+            label: item.key,
+            value: item.key
+          }
+          this.platformList.push(record)
+        }
+      })
+    },
+    onPlatFocus () {
+      this.getAllPlatform()
     }
   }
 }

@@ -10,11 +10,11 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="system-settings">
+  <div class="platform">
     <el-dialog
-      :title="$t('openatc.main.systemsettings')"
+      :title="$t('openatc.devicemanager.thirdPlatform')"
       :visible.sync="dialogTableVisible"
-      width="53%"
+      width="43%"
       height="700px"
       @close='closeTableDialog'>
       <el-button
@@ -23,81 +23,57 @@
             icon="el-icon-plus"
             @click="handleAdd">{{$t('openatc.common.add')}}</el-button>
       <el-dialog
-          width="33%"
-          :title="isEdit ? $t('openatc.systemsettings.updateconfig') : $t('openatc.systemsettings.addconfig')"
-          :visible.sync="innerVisible"
-          append-to-body>
-          <el-form ref="configUpdate" :model="innerForm">
-            <el-form-item :label="$t('openatc.systemsettings.module')" label-width="15%">
-              <el-input v-model="innerForm.module" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('openatc.systemsettings.name')" label-width="15%">
-              <el-input v-model="innerForm.key" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('openatc.systemsettings.content')" label-width="15%">
-              <el-input v-model="innerForm.value" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('openatc.token.isValid')" label-width="15%">
-              <el-switch
-                style="padding-left: 5px;"
-                v-model="innerForm.isValid"
-                active-color="#409EFF">
-              </el-switch>
-            </el-form-item>
-             <el-form-item :label="$t('openatc.systemsettings.desc')" label-width="15%">
-              <el-input type="textarea" v-model="innerForm.description" :rows="3"></el-input>
-            </el-form-item>
-          </el-form>
-          <div
-            slot="footer"
-            class="dialog-footer">
-                <el-button @click="resetInnerForm()">{{$t('openatc.button.Cancel')}}</el-button>
-                <el-button type="primary" @click="submitConfig()">{{$t('openatc.button.OK')}}</el-button>
-            </div>
-        </el-dialog>
+        width="33%"
+        :title="isEdit ? $t('openatc.common.edit') : $t('openatc.common.add')"
+        :visible.sync="innerVisible"
+        append-to-body>
+        <el-form ref="configUpdate" :model="innerForm">
+          <el-form-item :label="$t('openatc.devicemanager.platform')" label-width="15%">
+            <el-input v-model="innerForm.key" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('openatc.devicemanager.IP')" label-width="15%">
+            <el-input v-model="innerForm.ip" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('openatc.devicemanager.port')" label-width="15%">
+            <el-input v-model="innerForm.port" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div
+          slot="footer"
+          class="dialog-footer">
+              <el-button @click="resetInnerForm()">{{$t('openatc.button.Cancel')}}</el-button>
+              <el-button type="primary" @click="submitConfig()">{{$t('openatc.button.OK')}}</el-button>
+          </div>
+      </el-dialog>
       <div class="config-table">
         <el-table
         :data="settingList"
         style="width: 100%"
         max-height="540"
-        :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
         >
         <el-table-column
-          prop="id"
-          :label="$t('openatc.systemsettings.id')"
+          type="index"
+          label="#"
           align="center"
           min-width="5%">
         </el-table-column>
         <el-table-column
-          prop="module"
-          :label="$t('openatc.systemsettings.module')"
+          prop="key"
+          :label="$t('openatc.devicemanager.platform')"
           align="center"
-          min-width="15%">
+          min-width="25%">
         </el-table-column>
         <el-table-column
-          prop="key"
-          :label="$t('openatc.systemsettings.name')"
+          prop="ip"
+          :label="$t('openatc.devicemanager.IP')"
           align="center"
           min-width="17%">
         </el-table-column>
         <el-table-column
-          prop="value"
-          :label="$t('openatc.systemsettings.content')"
+          prop="port"
+          :label="$t('openatc.devicemanager.port')"
           align="center"
           min-width="22%">
-        </el-table-column>
-        <el-table-column
-          prop="description"
-          :label="$t('openatc.systemsettings.desc')"
-          align="center"
-          min-width="20%">
-        </el-table-column>
-        <el-table-column
-          prop="isValid"
-          :label="$t('openatc.token.isValid')"
-          :formatter="formatIsValid"
-          align="center"
-          min-width="10%">
         </el-table-column>
         <el-table-column
           :label="$t('openatc.systemsettings.operate')"
@@ -107,7 +83,7 @@
               <el-button type="text" @click="handleEdit(scope.row)">{{
                 $t("openatc.common.edit")
               }}</el-button>
-              <el-button type="text" @click="handleDelete(scope.row.id)">{{
+              <el-button type="text" @click="handleDelete(scope.row)">{{
                 $t("openatc.common.delete")
               }}</el-button>
             </template>
@@ -119,10 +95,10 @@
 </template>
 
 <script>
-import { SystemconfigApi } from '@/api/systemconfig.js'
-import { HandleMenuVisible } from '@/utils/menuControl'
+import { DictApi } from '@/api/dict.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
-  name: 'systemsettings',
+  name: 'ThirdPlatform',
   data () {
     return {
       dialogTableVisible: false,
@@ -130,11 +106,11 @@ export default {
       innerVisible: false,
       isEdit: false, // 区别新增、编辑
       innerForm: {
-        module: '',
+        type: 'platform',
         key: '',
         value: '',
-        isValid: true,
-        description: ''
+        ip: '',
+        port: ''
       }
     }
   },
@@ -147,30 +123,50 @@ export default {
       this.dialogTableVisible = true
     },
     getAllConfig () {
-      SystemconfigApi.GetAllSystemconfig().then((data) => {
+      let tag = 'platform'
+      DictApi.getDictListByTag(tag).then((data) => {
         let res = data.data
         if (!res.success) {
           console.log('datas:' + res)
-          throw new Error('get system config error')
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return false
         }
-        this.settingList = data.data.data
-        // 根据配置控制菜单显示/隐藏
-        HandleMenuVisible(this.settingList)
+        let list = data.data.data
+        for (let item of list) {
+          this.setIpPort(item)
+        }
+        this.settingList = list
       })
+    },
+    setIpPort (item) {
+      let port = ''
+      let ip = ''
+      if (item.value.includes('_')) {
+        let arr = item.value.split('_')
+        ip = arr[0]
+        port = arr[1]
+      }
+      item.ip = ip
+      item.port = port
+    },
+    setValue (item) {
+      item.value = item.ip + '_' + item.port
     },
     handleAdd () {
       this.isEdit = false
       this.innerVisible = true
       this.innerForm = {
-        module: '',
+        type: 'platform',
         key: '',
-        isValid: true,
-        value: ''
+        value: '',
+        ip: '',
+        port: ''
       }
     },
     handleEdit (row) {
       this.isEdit = true
       this.innerVisible = true
+      this.setIpPort(row)
       this.innerForm = JSON.parse(JSON.stringify(row))
     },
     handleDelete (id) {
@@ -183,6 +179,7 @@ export default {
       })
     },
     submitConfig () {
+      this.setValue(this.innerForm)
       if (this.isEdit) {
         this.updateConfig(this.innerForm)
       } else {
@@ -192,55 +189,45 @@ export default {
     resetInnerForm () {
       this.innerVisible = false
       this.innerForm = {
-        module: '',
+        type: 'platform',
         key: '',
-        value: ''
+        value: '',
+        ip: '',
+        port: ''
       }
     },
     deleteConfig (id) {
-      SystemconfigApi.DeleteSystemconfigById(id).then((data) => {
+      DictApi.deleteDict(id).then((data) => {
         let res = data.data
         if (!res.success) {
-          console.log('datas:' + res)
-          throw new Error('delete system config error')
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return false
         }
-        this.$message({
-          message: this.$t('openatc.common.deletesuccess'),
-          type: 'success',
-          duration: 1 * 1000
-        })
+        this.$message.success(this.$t('openatc.common.deletesuccess'))
         this.getAllConfig()
       })
     },
     addConfig (config) {
-      SystemconfigApi.AddSystemconfig(config).then((data) => {
+      DictApi.addDict(config).then((data) => {
         let res = data.data
         if (!res.success) {
-          console.log('datas:' + res)
-          throw new Error('add system config error')
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return false
         }
         this.innerVisible = false
-        this.$message({
-          message: this.$t('openatc.common.addsuccess'),
-          type: 'success',
-          duration: 1 * 1000
-        })
+        this.$message.success(this.$t('openatc.common.addsuccess'))
         this.getAllConfig()
       })
     },
     updateConfig (config) {
-      SystemconfigApi.UpdateSystemconfig(config).then((data) => {
+      DictApi.updateDict(config).then((data) => {
         let res = data.data
         if (!res.success) {
-          console.log('datas:' + res)
-          throw new Error('add system config error')
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return false
         }
         this.innerVisible = false
-        this.$message({
-          message: this.$t('openatc.common.updatesuccess'),
-          type: 'success',
-          duration: 1 * 1000
-        })
+        this.$message.success(this.$t('openatc.common.updatesuccess'))
         this.getAllConfig()
       })
     },
@@ -251,14 +238,11 @@ export default {
       }
       return res
     }
-  },
-  mounted () {
-    // this.getAllConfig()
   }
 }
 </script>
 <style lang="scss">
-.system-settings .el-dialog__body {
+.platform .el-dialog__body {
   padding-top: 13px;
   padding-bottom: 43px;
 }
