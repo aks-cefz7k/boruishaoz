@@ -112,70 +112,33 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.1.5.RELEASE</version>
             </plugin>
-            <!--&lt;!&ndash;            Docker 打包插件&ndash;&gt;-->
-            <!--            <plugin>-->
-            <!--                <groupId>com.spotify</groupId>-->
-            <!--                <artifactId>dockerfile-maven-plugin</artifactId>-->
-            <!--                <version>1.4.4</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>default</id>-->
-            <!--                        <goals>-->
-            <!--                            <goal>build</goal>-->
-            <!--                            <goal>push</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                    <execution>-->
-            <!--                        <id>tag-version</id>-->
-            <!--                        <goals>-->
-            <!--                            <goal>tag</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <tag>${project.version}</tag>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                    <execution>-->
-            <!--                        <id>tag-latest</id>-->
-            <!--                        <goals>-->
-            <!--                            <goal>tag</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <tag>latest</tag>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                    <execution>-->
-            <!--                        <id>push-latest</id>-->
-            <!--                        <phase>none</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>push</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <tag>latest</tag>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                    <execution>-->
-            <!--                        <id>push-version</id>-->
-            <!--                        <phase>none</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>push</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <tag>${project.version}</tag>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--                <configuration>-->
-            <!--&lt;!&ndash;                    <repository>kiss-registry:5000/${project.artifactId}</repository>&ndash;&gt;-->
-            <!--                    <repository>nexus.kedacom.com/content/repositories/yuanqu-snapshot/${project.artifactId}</repository>-->
-            <!--                    <tag>${project.version}</tag>-->
-            <!--                    <tag>latest</tag>-->
-            <!--                    <buildArgs>-->
-            <!--                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
-            <!--                    </buildArgs>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>copy-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>${project.packaging}</type>
+                                    <destFileName>${project.artifactId}.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>../target</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
