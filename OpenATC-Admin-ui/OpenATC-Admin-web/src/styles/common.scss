@@ -312,6 +312,9 @@
           height: calc(100% - 52px);
           .system-status {
             height: calc(100% - 30px);
+            .system-status-table {
+              font-size: 14px !important;
+            }
           }
         } 
       }
