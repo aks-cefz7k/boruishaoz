@@ -93,6 +93,9 @@ public class RedisTemplateUtil {
         StatusPattern statusPattern = new StatusPattern();
         String key = agenttype + ":" + "status/pattern" + ":" + agentId;
         String s = redisTemplate.opsForValue().get(key);
+        if (s == null){
+            return null;
+        }
         MessageData messageData = gson.fromJson(s, MessageData.class);
         statusPattern = gson.fromJson(messageData.getData().getAsJsonObject(),StatusPattern.class);
         return statusPattern;
