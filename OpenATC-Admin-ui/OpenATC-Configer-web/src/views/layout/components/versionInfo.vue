@@ -21,7 +21,7 @@
           <span>{{$t('edge.about.version')}}：</span><span>{{version}}</span>
       </div>
       <div class="banben" style="margin-top: 10px;">
-          <span>{{$t('edge.about.copyright')}}©1995-2021 {{$t('edge.about.company')}}</span>
+          <span>{{$t('edge.about.copyright')}}©1995-2022 {{$t('edge.about.company')}}</span>
       </div>
       <div class="banben" style="margin-top: 10px;">
           <span>{{$t('edge.about.packedtime')}}：{{ packedtime }}</span>
