@@ -53,7 +53,7 @@ const en = {
       'submit': 'Submit'
     },
     'login': {
-      'username': 'user_name',
+      'username': 'User Name',
       'password': 'Password',
       'login': 'Login',
       'usernamenotnull': 'The user name cannot be empty!',
