@@ -1,6 +1,7 @@
 package com.openatc.comm.handler;
 
 import com.openatc.comm.data.MessageData;
+import com.openatc.core.model.RESTRet;
 
 /**
  * @Classname IMsgPostHandler
@@ -9,5 +10,5 @@ import com.openatc.comm.data.MessageData;
  * @Created by panleilei
  */
 public interface IMsgPostHandler {
-    void process(MessageData msg);
+    RESTRet process(MessageData request, RESTRet response);
 }
