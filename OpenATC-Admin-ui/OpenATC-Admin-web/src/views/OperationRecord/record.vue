@@ -18,7 +18,7 @@
       <el-row  :gutter="10"
                type="flex"
                justify="end"
-               style="margin-right:16px;">
+               style="margin-right:16px;flex-wrap:wrap;flex-direction:row; justify-content:flex-end">
         <el-col :span="3">
           <div>
             <span class="header-span">{{$t('openatc.record.originadress') }}：</span>
