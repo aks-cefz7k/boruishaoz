@@ -59,9 +59,9 @@ public class VipRouteController {
     @GetMapping(value = "/viproute")
     public RESTRetBase getVipRoute() throws ParseException {
         List<VipRoute> vipRoutes = vipRouteDao.findAll(sort);
-//        for (VipRoute vipRoute : vipRoutes) {
-//            addGeometryToVipRoute(vipRoute);
-//        }
+        for (VipRoute vipRoute : vipRoutes) {
+            addGeometryToVipRoute(vipRoute);
+        }
         return RESTRetUtils.successObj(vipRoutes);
     }
 
@@ -69,6 +69,7 @@ public class VipRouteController {
     @GetMapping(value = "/viproute/{id}")
     public RESTRetBase getVipRouteById(@PathVariable int id) {
         VipRoute vipRoute = vipRouteDao.findById(id);
+        addGeometryToVipRoute(vipRoute);
         List<VipRouteDeviceVO> vipRouteDeviceVOList = new ArrayList<>();
         List<VipRouteDeviceStatus> stateList = this.getVipRouteList(id);
         for (VipRouteDevice device : vipRoute.getDevs()) {
@@ -85,21 +86,21 @@ public class VipRouteController {
     }
 
 
-//    private void addGeometryToVipRoute(VipRoute vipRoute)  {
-//        Set<VipRouteDevice> vipRouteDevs = vipRoute.getDevs();
-//        if(vipRouteDevs == null){
-//            return;
-//        }
-//        for (VipRouteDevice vipRouteDev : vipRouteDevs) {
-//            if(vipRouteDev == null){
-//                return;
-//            }
-//            String agentid = vipRouteDev.getAgentid();
-//            AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
-//            if(ascsBaseModel == null) return;
-//            vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
-//        }
-//    }
+    private void addGeometryToVipRoute(VipRoute vipRoute)  {
+        Set<VipRouteDevice> vipRouteDevs = vipRoute.getDevs();
+        if(vipRouteDevs == null){
+            return;
+        }
+        for (VipRouteDevice vipRouteDev : vipRouteDevs) {
+            if(vipRouteDev == null){
+                return;
+            }
+            String agentid = vipRouteDev.getAgentid();
+            AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
+            if(ascsBaseModel == null) return;
+            vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
+        }
+    }
 
 
     // 查询所有勤务路线的简略信息
