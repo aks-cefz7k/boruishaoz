@@ -11,8 +11,8 @@
  **/
 <template>
   <div class="overflowDeviceList">
-    <el-table :data="deviceList" highlight-current-row height="100%" style="width: 100%">
-      <el-table-column prop="intersectionid" :label="$t('openatc.bottleneckcontrol.deviceid')" width="90" align="center"></el-table-column>
+    <el-table :data="deviceList" height="100%" style="width: 100%">
+      <el-table-column prop="name" :label="$t('openatc.bottleneckcontrol.devicename')" width="90" align="center"></el-table-column>
       <el-table-column prop="phaseid" :label="$t('openatc.bottleneckcontrol.phaseid')" width="250" align="center">
         <template slot-scope="scope">
           <el-select
@@ -120,7 +120,6 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-
 import DeviceAdd from './deviceAdd'
 import { images } from '@/utils/phaseList.js'
 import { getTscPhase } from '@/api/route'

@@ -25,11 +25,17 @@
           align="center">
           </el-table-column>
           <el-table-column
+          prop="name"
+          :label="$t('openatc.devicemanager.devicename')"
+          sortable
+          align="center">
+          </el-table-column>
+          <!-- <el-table-column
           prop="agentid"
           :label="$t('openatc.devicemanager.crossid')"
           sortable
           align="center">
-          </el-table-column>
+          </el-table-column> -->
            <el-table-column
           prop="m_wFaultID"
           :label="$t('openatc.faultrecord.faultid')"
@@ -115,9 +121,9 @@
 
 <script>
 import { getMessageByCode } from '@/utils/responseMessage'
-import { GetAllCurrentFault, DeleteFault } from '@/api/fault'
+import { GetAllFaultRange, DeleteFault } from '@/api/fault'
 import Messagebox from '../../components/MessageBox'
-import { getMainFaultType, getMainFaultTypeEn } from '@/model/EventModal/utils.js'
+import { formatFaultDescValue, formatBoardType, formatEnumerate, formatSubFaultType, formatFaultLevel, formatFaultTypes } from '@/utils/fault.js'
 export default {
   components: { Messagebox },
   data () {
@@ -174,99 +180,35 @@ export default {
       }
       this.messageboxVisible = true
     },
-    formatterBoardType (row, column) {
-      let boardType = row.m_byFaultBoardType
-      let res = ''
-      if (boardType === 1) {
-        res = this.$t('openatc.faultrecord.maincontrolboard')
-      } else if (boardType === 2) {
-        res = this.$t('openatc.faultrecord.lightcontrolversion')
-      } else if (boardType === 3) {
-        res = this.$t('openatc.faultrecord.carinspectionboard')
-      } else if (boardType === 4) {
-        res = this.$t('openatc.faultrecord.ioboard')
-      }
-      return res
+    formatterBoardType (row) {
+      return formatBoardType(row)
     },
-    formatterEnumerate (row, column) {
-      let enumerate = row.enumerate
-      let res = ''
-      if (enumerate === '0') {
-        res = this.$t('openatc.faultrecord.untreated')// 未处理
-      } else if (enumerate === '1') {
-        res = this.$t('openatc.faultrecord.ignored')// 忽略
-      } else if (enumerate === '2') {
-        res = this.$t('openatc.faultrecord.confirmed')// 确认
-      }
-      return res
+    formatterEnumerate (row) {
+      return formatEnumerate(row)
     },
-    m_wSubFaultType (row, column) {
-      let wSubFaultType = row.m_wSubFaultType
-      let res = ''
-      if (wSubFaultType === 0) {
-        res = ''
-      } else if (wSubFaultType === 1) {
-        res = this.$t('openatc.faultrecord.powerup')
-      } else if (wSubFaultType === 2) {
-        res = this.$t('openatc.faultrecord.powerdown')
-      } else if (wSubFaultType === 3) {
-        res = this.$t('openatc.faultrecord.powerno')
-      } else if (wSubFaultType === 4) {
-        res = this.$t('openatc.faultrecord.powerfault')
-      }
-      return res
+    m_wSubFaultType (row) {
+      return formatSubFaultType(row)
     },
-    m_byFaultLevel (row, column) {
-      let byFaultLevel = row.m_byFaultLevel
-      let res = ''
-      if (byFaultLevel === 1) {
-        res = this.$t('openatc.faultrecord.general')
-      } else if (byFaultLevel === 2) {
-        res = this.$t('openatc.faultrecord.degradation')
-      } else if (byFaultLevel === 3) {
-        res = this.$t('openatc.faultrecord.serious')
-      }
-      return res
+    m_byFaultLevel (row) {
+      return formatFaultLevel(row)
     },
-    m_wFaultTypes (row, column) {
-      // 故障主类型需要显示具体类型，不要按范围判断
-      let faultType = row.m_wFaultType
-      let res = ''
-      if (this.$i18n.locale === 'en') {
-        res = getMainFaultTypeEn(faultType)
-      } else {
-        res = getMainFaultType(faultType)
-      }
-      return res
+    m_wFaultTypes (row) {
+      return formatFaultTypes(row)
     },
+
     m_byFaultDescValue (row, column) {
-      let res = ''
-      let faultDesc = row.m_byFaultDescValue
-      let boardType = row.m_byFaultBoardType
-      if (faultDesc && faultDesc.length) {
-        res = faultDesc.join(',')
-        if (boardType === 2) {
-          res = this.$t('openatc.faultrecord.channel') + res
-        } else if (boardType === 3) {
-          res = this.$t('openatc.faultrecord.detector') + res
-        } else if (boardType === 4) {
-          res = this.$t('openatc.faultrecord.port') + res
-        }
-      }
-      return res
+      return formatFaultDescValue(row)
     },
     getAllRecord () {
       this.listLoading = true
-      GetAllCurrentFault(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
+      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, true).then(data => {
+        this.listLoading = false
         if (data.data.success !== true) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        if (data.data.success) {
-          this.listLoading = false
-          this.tableData = data.data.data.content
-          this.totalCount = data.data.data.total
-        }
+        this.tableData = data.data.data.content
+        this.totalCount = data.data.data.total
       })
     },
     handleSizeChange (val) {

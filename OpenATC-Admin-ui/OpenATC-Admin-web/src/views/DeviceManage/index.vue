@@ -357,7 +357,6 @@ export default {
       let _this = this
       let reqData = {
         'agentId': row.agentid,
-        'enumerate': '0',
         'isCurrentFault': true
       }
       GetFaultRange(reqData).then(res => {

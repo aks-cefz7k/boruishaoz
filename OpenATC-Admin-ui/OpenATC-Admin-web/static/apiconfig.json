@@ -396,7 +396,7 @@
   },
   {
     "key": "off_overflow_control",
-    "url": "/overflow/control",
+    "url": "/overflow/control/off",
     "method": "post"
   },
   {

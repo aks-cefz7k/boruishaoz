@@ -16,7 +16,7 @@
         <div class="text">
             {{$t('openatc.home.faultsum')}}
         </div>
-        <div class="num">{{maxValue}}</div>
+        <div class="num" @click="jumpToCurrentFault">{{maxValue}}</div>
     </div>
     <div class="content" :style="{maxHeight: maxListHeight}">
       <el-table
@@ -110,6 +110,9 @@ export default {
       this.faultNumWidth = (295 / 1920 * viewW).toFixed(0) + 'px'
       this.chartWidth = (400 / 1920 * viewW).toFixed(0) + 'px'
       this.totalHeight = (54 / 1080 * viewH).toFixed(0) + 'px'
+    },
+    jumpToCurrentFault () {
+      this.$router.push({ path: '/faultrecord' })
     }
   },
   created () {

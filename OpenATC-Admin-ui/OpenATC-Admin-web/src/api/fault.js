@@ -84,11 +84,14 @@ export const enumerateCheck = (agentid, id, enumerate) => {
   return api.Send({}, param)
 }
 
-export const GetAllFaultRange = (pageNum, pageSize, id, beginTime, endTime, faultBoardType, faultType, enumerate, type) => {
+export const GetAllFaultRange = (pageNum, pageSize, isCurrentFault, id, beginTime, endTime, faultBoardType, faultType, enumerate) => {
   let api = new Authapi('GetAllFaultRange')
   let param = {
     'pageNum': pageNum,
     'pageRow': pageSize
+  }
+  if (isCurrentFault) {
+    param.isCurrentFault = isCurrentFault
   }
   if (id && id !== '') {
     param.agentId = id

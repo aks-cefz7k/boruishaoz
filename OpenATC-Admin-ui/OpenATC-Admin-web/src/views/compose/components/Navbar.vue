@@ -243,6 +243,7 @@ import { getInfo } from '@/api/login'
 import { setLanguage, getTheme, setTheme } from '@/utils/auth'
 import { getMessageByCode } from '@/utils/responseMessage'
 import { SystemconfigApi } from '@/api/systemconfig.js'
+import { formatFaultDescValue } from '@/utils/fault.js'
 export default {
   name: 'navbar',
   components: { modifypasswd, versioninfo, SystemSettings },
@@ -406,25 +407,25 @@ export default {
       this.model = this.formatterModel(data.model)
       if (this.$i18n.locale === 'en') {
         if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
-          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 208 || data.data.m_FaultDeque[0].m_wFaultType === 207 || data.data.m_FaultDeque[0].m_wFaultType === 206) {
-          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
-          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
-          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data.m_FaultDeque[0])
         } else {
           this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType)
         }
       } else {
         if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
-          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 208 || data.data.m_FaultDeque[0].m_wFaultType === 207 || data.data.m_FaultDeque[0].m_wFaultType === 206) {
-          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
-          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
-          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + formatFaultDescValue(data.data)
         } else {
           this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType)
         }
