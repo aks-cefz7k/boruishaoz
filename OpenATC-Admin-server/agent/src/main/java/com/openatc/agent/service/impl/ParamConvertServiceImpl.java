@@ -30,10 +30,10 @@ public class ParamConvertServiceImpl implements ParamConvertService {
     /**
      * 环转阶段
      * @param agentid
-     * @param patternList
+     * @param ringsList
      * @return
      */
-    public List<StageParam> convertPatternRingToStage(String agentid, List<Pattern> patternList) {
+    public List<StageParam> convertPatternRingToStage(String agentid, List<List<List<Split>>> ringsList) {
         // 将相位保存起来，供后面取阶段中实际相位信息使用
 //        Map<Integer,Phase> phaseMap = new HashMap<>();
         // 获取相位信息
@@ -50,8 +50,8 @@ public class ParamConvertServiceImpl implements ParamConvertService {
         }
 
         List<StageParam> stageParamList = new ArrayList<>();
-        for (Pattern pattern : patternList){
-            List<List<Split>> rings = pattern.getRings();
+        for (List<List<Split>> rings : ringsList){
+//            List<List<Split>> rings = pattern.getRings();
                 // 保存环数据
                 Map<Integer,List<Split>> splitListMap = new HashMap<>();
                 for (int i = 0; i < rings.size(); i++){

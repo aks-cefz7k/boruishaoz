@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface ParamConvertService {
 
-     List<StageParam> convertPatternRingToStage(String agentid,List<Pattern> patternList);
+     List<StageParam> convertPatternRingToStage(String agentid,List<List<List<Split>>> ringsList);
 
      List<List<Split>> convertStageToPattern(List<StageParam> stageParamList);
 }

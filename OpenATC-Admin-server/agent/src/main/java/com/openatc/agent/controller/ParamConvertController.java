@@ -7,6 +7,7 @@ import com.openatc.agent.service.ParamConvertService;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.Pattern;
+import com.openatc.model.model.Split;
 import com.openatc.model.model.StageParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +31,12 @@ public class ParamConvertController {
 
     @PostMapping(value = "/param/ringtostage/{agentid}")
     public RESTRet convertRingToStage(@PathVariable String agentid, @RequestBody JsonObject jsonObject){
-        List<Pattern> patternList = gson.fromJson(jsonObject.get("patternList"), new TypeToken<List<Pattern>>(){}.getType());
-        if (patternList == null){
+//        List<Pattern> patternList = gson.fromJson(jsonObject.get("patternList"), new TypeToken<List<Pattern>>(){}.getType());
+        List<List<List<Split>>> ringsList = gson.fromJson(jsonObject.get("ringsList"),new TypeToken<List<List<List<Split>>>>(){}.getType());
+        if (ringsList == null){
             return RESTRetUtils.errorObj(false,E_1001);
         }else {
-            return RESTRetUtils.successObj(paramConvertService.convertPatternRingToStage(agentid,patternList));
+            return RESTRetUtils.successObj(paramConvertService.convertPatternRingToStage(agentid,ringsList));
         }
     }
 
