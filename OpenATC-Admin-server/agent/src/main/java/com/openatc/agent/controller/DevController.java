@@ -117,8 +117,8 @@ public class DevController {
 
     @PostMapping(value = "/devs/range")
     public RESTRetBase getDevsRange(@RequestBody JsonObject jsonObject) {
-        return devService.getRangeDevs(jsonObject);
-//        return RESTRetUtils.successObj(mDao.getAscsRange(jsonObject));
+//        return devService.getRangeDevs(jsonObject);
+        return RESTRetUtils.successObj(mDao.getAscsRange(jsonObject));
     }
     // 按列表中的路口ID获取路口
     @PostMapping(value = "/devs/list")

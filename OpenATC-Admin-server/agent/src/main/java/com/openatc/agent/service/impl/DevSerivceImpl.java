@@ -99,26 +99,26 @@ public class DevSerivceImpl implements DevService {
      * @param jsonObject
      * @return
      */
-    @Override
-    public RESTRetBase getRangeDevs(JsonObject jsonObject) {
-        PageOR<AscsBaseModel> ascsRange = mDao.getAscsRange(jsonObject);
-        if (ascsRange == null){
-            return RESTRetUtils.successObj(null);
-        }
-
-        // 没有记录
-        Long total = ascsRange.getTotal();
-        if (total == 0){
-            return RESTRetUtils.successObj(ascsRange);
-        }
-
-        RESTRet ret = getDevs(ascsRange.getContent());
-        if (ret.isSuccess()){
-            List<AscsBaseModel> ascsBaseModels = (List<AscsBaseModel>) ret.getData();
-            ascsRange.setContent(ascsBaseModels);
-            ascsRange.setTotal((long)(ascsBaseModels.size()));
-            return RESTRetUtils.successObj(ascsRange);
-        }
-        return ret;
-    }
+//    @Override
+//    public RESTRetBase getRangeDevs(JsonObject jsonObject) {
+//        PageOR<AscsBaseModel> ascsRange = mDao.getAscsRange(jsonObject);
+//        if (ascsRange == null){
+//            return RESTRetUtils.successObj(null);
+//        }
+//
+//        // 没有记录
+//        Long total = ascsRange.getTotal();
+//        if (total == 0){
+//            return RESTRetUtils.successObj(ascsRange);
+//        }
+//
+//        RESTRet ret = getDevs(ascsRange.getContent());
+//        if (ret.isSuccess()){
+//            List<AscsBaseModel> ascsBaseModels = (List<AscsBaseModel>) ret.getData();
+//            ascsRange.setContent(ascsBaseModels);
+//            ascsRange.setTotal((long)(ascsBaseModels.size()));
+//            return RESTRetUtils.successObj(ascsRange);
+//        }
+//        return ret;
+//    }
 }
