@@ -10,6 +10,10 @@ import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import i18n from './i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 
+// 深浅主题按需加载
+import('../static/styles/dark/index.scss')
+// import('../static/styles/light/index.scss')
+
 Vue.use(kissui)
 Vue.use(ElementUI)
 // Vue.use(chosen)

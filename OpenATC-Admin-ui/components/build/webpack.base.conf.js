@@ -54,10 +54,6 @@ module.exports = {
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
-      },
-      {
         test: /\.less$/,
         loader: ['style', 'css', 'less'],
       },
