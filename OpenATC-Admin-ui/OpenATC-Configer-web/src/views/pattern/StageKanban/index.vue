@@ -25,6 +25,16 @@
           </el-col>
           <el-col :span="12">
             <el-input-number
+              v-if="contrloType"
+              class="stage-value"
+              :controls="false"
+              size="small"
+              :disabled="true"
+              ref="type"
+              v-model.number="stage.stageSplit">
+            </el-input-number>
+            <el-input-number
+              v-if="!contrloType"
               class="stage-value"
               :controls="false"
               size="small"
@@ -40,7 +50,16 @@
             {{this.$t('edge.pattern.phase')}}
           </el-col>
           <el-col :span="12">
+            <el-select v-if="contrloType" v-model="stage.phases" multiple :placeholder="$t('edge.common.select')">
+              <el-option
+                v-for="item in coordphaseOption"
+                :key="item.value"
+                :label="$t('edge.pattern.phase') + item.value"
+                :value="item.value">
+              </el-option>
+            </el-select>
             <el-input
+              v-if="!contrloType"
               class="stage-value"
               size="small"
               :value="stage.stages.join(',')"
@@ -50,7 +69,49 @@
             </el-input>
           </el-col>
         </el-row>
-        <el-row :gutter="0">
+        <el-row :gutter="0" v-if="contrloType">
+          <el-col :span="12">
+            {{this.$t('edge.pattern.green')}}
+          </el-col>
+          <el-col :span="12">
+            <el-input-number
+              class="stage-value"
+              size="small"
+              :controls="false"
+              v-model.number="stage.green"
+              @change="stageSplitChange">
+            </el-input-number>
+          </el-col>
+        </el-row>
+        <el-row :gutter="0" v-if="contrloType">
+          <el-col :span="12">
+            {{this.$t('edge.pattern.yellow')}}
+          </el-col>
+          <el-col :span="12">
+            <el-input-number
+              class="stage-value"
+              size="small"
+              :controls="false"
+              v-model.number="stage.yellow"
+              @change="stageSplitChange">
+            </el-input-number>
+          </el-col>
+        </el-row>
+        <el-row :gutter="0" v-if="contrloType">
+          <el-col :span="12">
+            {{this.$t('edge.pattern.red')}}
+          </el-col>
+          <el-col :span="12">
+            <el-input-number
+              class="stage-value"
+              size="small"
+              :controls="false"
+              v-model.number="stage.red"
+              @change="stageSplitChange">
+            </el-input-number>
+          </el-col>
+        </el-row>
+        <!-- <el-row :gutter="0">
           <el-col :span="12">
             {{this.$t('edge.pattern.delaystart')}}
           </el-col>
@@ -65,8 +126,8 @@
               @change="onDelaystartChange">
             </el-input-number>
           </el-col>
-        </el-row>
-        <el-row :gutter="0">
+        </el-row> -->
+        <!-- <el-row :gutter="0">
           <el-col :span="12">
             {{this.$t('edge.pattern.advanceend')}}
           </el-col>
@@ -81,7 +142,7 @@
               @change="onAdvanceendChange">
             </el-input-number>
           </el-col>
-        </el-row>
+        </el-row> -->
       </div>
     </div>
   </div>
@@ -104,6 +165,16 @@ export default {
       type: String,
       default: 'Header'
     },
+    coordphaseOption: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    contrloType: {
+      type: Boolean,
+      default: false
+    },
     options: {
       type: Object,
       default () {
@@ -116,6 +187,11 @@ export default {
         return {
           split: 0,
           stages: [],
+          phases: [],
+          stageSplit: 0,
+          green: 0,
+          yellow: 0,
+          red: 0,
           delaystart: 0,
           advanceend: 0
         }
@@ -128,15 +204,47 @@ export default {
       type: Number
     }
   },
+  created () {
+  },
+  watch: {
+    stage: {
+      handler: function () {
+        if (this.contrloType) {
+          let n = this.rowIndex
+          const globalParamModel = this.$store.getters.globalParamModel
+          let pattern = globalParamModel.getParamsByType('patternList')[n]
+          globalParamModel.getParamsByType('patternList')[n].cycle = this.getMaxCycle(pattern)
+        }
+      },
+      deep: true
+    }
+  },
   mounted () {
   },
   methods: {
+    getMaxCycle (pattern) {
+      let rings = pattern.stagesList
+      let stageCycleList = rings.map(item => {
+        return item.stageSplit
+      })
+      let maxCycle = stageCycleList.reduce((a, b) => {
+        return a + b
+      }, 0)
+      return maxCycle
+    },
     onSplitChange (newVal, oldVal) {
       let diff = newVal - (oldVal || 0)
       if (diff === 0) {
         return false
       }
       this.$emit('onStageSplitChange', diff, this.rowIndex, this.subIndex)
+    },
+    stageSplitChange (newVal, oldVal) {
+      let diff = newVal - (oldVal || 0)
+      if (diff === 0) {
+        return false
+      }
+      this.$emit('stageSplitChange', diff, this.rowIndex, this.subIndex)
     },
     onDelaystartChange (newVal, oldVal) {
       let diff = newVal - (oldVal || 0)
