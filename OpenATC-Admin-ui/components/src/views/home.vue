@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <kiss-button></kiss-button>
     <xdr-dir-selector Width="300px"
                       Height="300px"
                       :showlist="dirshow"></xdr-dir-selector>
