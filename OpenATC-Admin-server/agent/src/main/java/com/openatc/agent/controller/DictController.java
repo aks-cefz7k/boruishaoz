@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.openatc.core.common.IErrorEnumImplOuter.E_1003;
+
 
 /**
  * Copyright (c) 2020 kedacom
@@ -58,7 +60,12 @@ public class DictController {
     // 设置配置
     @PostMapping(value = "/dict")
     public RESTRetBase setDictConfig(@RequestBody DictConfig dictConfig) {
-        List<DictConfig> find = dictConfigRepository.findByConfigtypeAndKeyAndVale(dictConfig.getType(),dictConfig.getKey(), dictConfig.getValue());
+        String key = dictConfig.getKey();
+        String value = dictConfig.getValue();
+        if(key.isEmpty() || value.isEmpty())
+            return RESTRetUtils.errorObj(E_1003);
+
+        List<DictConfig> find = dictConfigRepository.findByConfigtypeAndKeyAndVale(dictConfig.getType(),key, value);
         if(find.size() == 0 )
             return RESTRetUtils.successObj(dictConfigRepository.save(dictConfig));
         else{

@@ -1,5 +1,5 @@
 <template>
-<div class="overLap" v-if="checked" :style="{'width':'870px','margin':this.controlData ? '20px 0 0 0' : '0 5% 0 38%'}">
+<div class="overLap" v-if="checked" :style="{'width':'852px','margin':this.controlData ? '20px 0 0 0' : '0 0 0 618px'}">
     <div class="ring-first" v-for="(list, index1) in this.overlapDatas" :key="index1">
         <div v-for="(item,index2) in list.stageLists" :key="index2" >
             <div class="first-2">
@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import PhaseDataModel from '../../views/overView/crossDirection/utils'
+import PhaseDataModel from '../IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import xdrdirselector from '@/components/XRDDirSelector'
-import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkSvg'
+import PatternWalkSvg from '../IntersectionMap/crossDirection/baseImg/PatternWalkSvg'
 export default {
   name: 'OverLap',
   components: {

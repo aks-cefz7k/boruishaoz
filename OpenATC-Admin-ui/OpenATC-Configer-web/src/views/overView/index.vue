@@ -41,12 +41,15 @@
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
             :controlData="controlData"
+            :contrloType="contrloType"
+            :localPatternList="patternList"
             :phaseList="phaseList"
             :isPhase="true"
             :agentId="agentId"
               >
             </BoardCard>
             <OverLap
+            v-if="!contrloType"
             :checked="checked"
             :overlap="overlap"
             :stageList="stagesListOver"
@@ -76,15 +79,12 @@
 import { mapState } from 'vuex'
 import { getTscControl, queryDevice } from '@/api/control'
 import { registerMessage, uploadSingleTscParam } from '@/api/param'
-import { setIframdevid } from '@/utils/auth'
-import FloatImgBtn from '@/components/FloatImgBtn'
-import CrossDiagram from './crossDirection/crossDiagram'
+import { setIframdevid, getStageTypes } from '@/utils/auth'
 import BoardCard from '@/components/BoardCard'
-
 import OverLap from '@/components/OverLap'
 // import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
-import PhaseDataModel from '@/views/overView/crossDirection/utils'
+import PhaseDataModel from '../../components/IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import RightPanel from '@/components/SchemeConfig'
 import TextPage from './textPage/index'
@@ -92,8 +92,6 @@ import IntersectionMap from '@/components/IntersectionMap'
 export default {
   name: 'overview',
   components: {
-    FloatImgBtn,
-    CrossDiagram,
     BoardCard,
     RightPanel,
     OverLap,
@@ -105,6 +103,7 @@ export default {
       controlData: {},
       checked: false,
       overlap: [],
+      contrloType: false,
       narr: [],
       stagesListOver: [],
       sidewalkPhaseData: [],
@@ -136,6 +135,9 @@ export default {
     }
   },
   computed: {
+    patternList () {
+      return this.$store.state.globalParam.tscParam.patternList
+    },
     ...mapState({
       curBodyWidth: state => state.globalParam.curBodyWidth,
       curBodyHeight: state => state.globalParam.curBodyHeight,
@@ -172,6 +174,11 @@ export default {
   created () {
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
+    if (getStageTypes('contrloType') === 'true') {
+      this.contrloType = true
+    } else {
+      this.contrloType = false
+    }
     this.globalParamModel = this.$store.getters.globalParamModel
     this.overlap = this.globalParamModel.getParamsByType('overlaplList')
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
@@ -316,6 +323,7 @@ export default {
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
         // this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
+        console.log(this.controlData, 'this.controlData')
         this.checkStage(this.controlData)
       }).catch(error => {
         this.$message.error(error)
@@ -529,7 +537,6 @@ export default {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
-
         let devParams = res.data.data.jsonparam
         this.ip = devParams.ip
         this.port = String(devParams.port)

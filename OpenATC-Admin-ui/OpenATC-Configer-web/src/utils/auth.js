@@ -24,6 +24,10 @@ export function getToken () {
   return localStorage.getStorage(LoginKey)
 }
 
+export function setStageType (filter) {
+  localStorage.setStorage('contrloType', filter)
+}
+
 export function setToken (token) {
   return localStorage.setStorage(LoginKey, token)
 }
@@ -34,6 +38,14 @@ export function SetSimuUserKey (key) {
 
 export function removeToken () {
   return localStorage.setStorage(LoginKey, '')
+}
+
+export function getStageTypes () {
+  let ret = localStorage.getStorage('contrloType')
+  if (ret === undefined || ret === null) {
+    return ''
+  }
+  return ret
 }
 
 export function getHost () {

@@ -11,6 +11,7 @@
  **/
 <template>
     <div class="main-patternstatus">
+      <!-- 环模式true -->
       <div v-if="!contrloType">
         <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
           <div v-for="(item,index2) in list" :key="index2" :class="item.controltype===99?'direction': ''">
@@ -57,13 +58,13 @@
                 <el-tooltip placement="top-start" effect="light">
                   <div slot="content">
                     <span class="ring-nums" v-for="(pha,index) in list.phases" :key="index">
-                      p:{{pha}}
+                      P:{{pha}}
                       </span>
                   </div>
                   <div style="cursor:pointer;">
-                    <div class="box" style="ling-height:28px">
+                    <div class="box" style="line-height:28px">
                       <span class="ring-nums" v-for="(pha,index) in list.phases" :key="index">
-                      p:{{pha}}
+                    P:{{pha}}
                       </span>
                     </div>
                   </div>
@@ -79,9 +80,9 @@
 </template>
 <script>
 import xdrdirselector from '@/components/XRDDirSelector'
-import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkSvg'
-// import BusMapSvg from '@/views/overView/crossDirection/busIcon/busMapSvg'
-import PhaseDataModel from '../../views/overView/crossDirection/utils'
+import PatternWalkSvg from '../IntersectionMap/crossDirection/baseImg/PatternWalkSvg'
+// import BusMapSvg from '../IntersectionMap/crossDirection/busIcon/busMapSvg'
+import PhaseDataModel from '../IntersectionMap/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 // import { getIntersectionInfo } from '@/api/template'
 // import { getMessageByCode } from '@/utils/responseMessage'
@@ -103,7 +104,6 @@ export default {
       sidewalkPhaseData: [],
       controlDatas: this.controlData,
       max: '',
-      stageList: this.stagesChange,
       stageLists: [],
       busPhaseData: [], // 公交相位数据
       pattern: this.patternStatusList
@@ -113,11 +113,16 @@ export default {
     stagesChange: {
       type: Array
     },
+    // controlTypeIndex: {
+    //   type: Boolean
+    // },
     contrloType: {
-      type: Boolean,
-      default: false
+      type: Boolean
     },
     phaseList: {
+      type: Array
+    },
+    localPatternList: {
       type: Array
     },
     controlData: {
@@ -160,8 +165,13 @@ export default {
     controlData: {
       handler: function (val, oldVal) {
         this.controlDatas = this.controlData
-        this.handlePatternData()
+        // this.handlePatternData()
         this.handleBarrierHeight() // 计算屏障高度
+        if (this.contrloType) {
+          this.getIndexStage()
+        } else {
+          this.handlePatternData()
+        }
       },
       // 深度观察监听
       deep: true
@@ -252,14 +262,35 @@ export default {
     }
   },
   methods: {
+    getIndexStage () {
+      for (let i = 0; i < this.localPatternList.length; i++) {
+        if (this.controlData.patternid === this.localPatternList[i].id) {
+          let stageCycleList = this.localPatternList[i].stagesList.map(item => {
+            return item.stageSplit ? item.stageSplit : 0
+          })
+          let stageMaxCyle = stageCycleList.reduce((a, b) => {
+            return a + b
+          }, 0)
+          this.stageLists = this.localPatternList[i].stagesList.map(item => {
+            return {
+              ...item,
+              greenWidth: (item.green / stageMaxCyle * 100).toFixed(3) + '%',
+              yellowWidth: (item.yellow / stageMaxCyle * 100).toFixed(3) + '%',
+              redWidth: (item.red / stageMaxCyle * 100).toFixed(3) + '%'
+            }
+          })
+        }
+      }
+    },
     getStage () {
-      let stageCycleList = this.stageList.map(item => {
-        return item.stageSplit
+      if (!this.stagesChange) return
+      let stageCycleList = this.stagesChange.map(item => {
+        return item.stageSplit ? item.stageSplit : 0
       })
       let stageMaxCyle = stageCycleList.reduce((a, b) => {
         return a + b
       }, 0)
-      this.stageLists = this.stageList.map(item => {
+      this.stageLists = this.stagesChange.map(item => {
         return {
           ...item,
           greenWidth: (item.green / stageMaxCyle * 100).toFixed(3) + '%',
@@ -392,7 +423,7 @@ export default {
         this.barrierList = barrier.map(j => {
           return (j / (this.max ? this.max : this.newCycle) * 100) + '%'
         })
-        this.barrierList.unshift(0)
+        // this.barrierList.unshift(0)
       }
       for (let rings of val) {
         if (rings.length === 0) continue
@@ -402,7 +433,7 @@ export default {
           let obj = {}
           let split = ring.value
           obj.id = ring.id
-          obj.split = split
+          // obj.split = split
           if (ring.desc) {
             obj.direction = ring.desc.map(item => { // 虚相位desc为空
               return {
@@ -418,11 +449,11 @@ export default {
             return item.id === ring.id
           })[0]
           if (ring.sum) {
-            // obj.split = split + ring.sum
+            obj.split = split + ring.sum
             obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
             // obj.hideWidth = (ring.sum / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           } else {
-            // obj.split = split
+            obj.split = split
             obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           }
           obj.flashgreen = (currPhase.flashgreen / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
