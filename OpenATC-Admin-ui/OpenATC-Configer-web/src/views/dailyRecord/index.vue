@@ -33,6 +33,7 @@
         </el-table-column>
         <el-table-column
         prop="infotype"
+        :formatter="formatterInfotype"
         :label="$t('edge.dailyrecord.infotype')"
         align="center">
         </el-table-column>
@@ -44,6 +45,7 @@
         </el-table-column>
         <el-table-column
         prop="object"
+        :formatter="formatterObject"
         :label="$t('edge.dailyrecord.object')"
         align="center">
         </el-table-column>
@@ -54,6 +56,8 @@
         align="center">
         </el-table-column>
     </el-table>
+    <!-- <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum" :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" style='margin:0px;'>
+    </el-pagination> -->
   </div>
 </div>
 </template>
@@ -61,7 +65,7 @@
 <script>
 import { getDailyRecord } from '@/api/param'
 import { getMessageByCode } from '@/utils/responseMessage'
-import { formatStatus, formatSubject } from '@/utils/fault.js'
+import { formatStatus, formatSubject, formatInfotype, formatObject } from '@/utils/fault.js'
 export default {
   name: 'dailyRecord',
   components: {},
@@ -69,6 +73,11 @@ export default {
     return {
       tableHeight: 700,
       schfilter: '',
+      // listQuery: {
+      //   pageNum: 1, // 页码
+      //   pageRow: 50 // 每页条数
+      // },
+      // totalCount: 0, // 分页组件--数据总条数
       recordList: []
     }
   },
@@ -87,18 +96,29 @@ export default {
     }
   },
   methods: {
+    // handleSizeChange (val) {
+    //   // 改变每页数量，默认返回第一页
+    //   this.listQuery.pageNum = 1
+    //   this.listQuery.pageRow = val
+    //   this.getAllDailyRecord()
+    // },
+    // handleCurrentChange (val) {
+    //   // 改变页码
+    //   this.listQuery.pageNum = val
+    //   this.getAllDailyRecord()
+    // },
     formatterStatus (row) {
       return formatStatus(row)
     },
     formatterSubject (row) {
       return formatSubject(row)
     },
-    // formatterInfotype (row) {
-    //   return formatInfotype(row)
-    // },
-    // formatterObject (row) {
-    //   return formatObject(row)
-    // },
+    formatterInfotype (row) {
+      return formatInfotype(row)
+    },
+    formatterObject (row) {
+      return formatObject(row)
+    },
     getAllDailyRecord () {
       this.lockScreen()
       this.dataTimeoutTimer = setTimeout(() => {
@@ -119,6 +139,7 @@ export default {
           return
         }
         this.recordList = this.formateDateForAllFault(res.data.operationrecord)
+        // this.totalCount = res
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
