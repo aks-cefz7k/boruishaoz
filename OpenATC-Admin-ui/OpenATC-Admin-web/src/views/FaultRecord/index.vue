@@ -1,6 +1,6 @@
 <template>
 <div class="faultPage openatc-faultrecord">
-  <div class="tabButton">
+  <div class="tabButton" id="tabButton" :style="{'top': btnTop + 'px'}">
     <el-button-group>
         <span v-for="(item, index) in chooseButtons"
           :key="index" v-on:click="()=>handleSwitchPage(item.key)"
@@ -9,8 +9,8 @@
           :style="{'borderRadius': item.borderRadius}">{{item.value}}</span>
     </el-button-group>
   </div>
-  <CurrentFault v-if="curpagekey === 'realtimefault'"/>
-  <HistoryFault v-if="curpagekey === 'historicalfault'"/>
+  <CurrentFault v-if="curpagekey === 'realtimefault'" @changeBtnPosition="changeBtnPosition"/>
+  <HistoryFault v-if="curpagekey === 'historicalfault'" @changeBtnPosition="changeBtnPosition"/>
 </div>
 </template>
 
@@ -35,10 +35,9 @@ export default {
           active: false,
           borderRadius: '0px 4px 4px 0'
         }
-      ]
+      ],
+      btnTop: 94
     }
-  },
-  created () {
   },
   methods: {
     changeBtnStyle (key) {
@@ -53,6 +52,10 @@ export default {
     },
     handleSwitchPage (key) {
       this.changeBtnStyle(key)
+    },
+    changeBtnPosition (offsetTop) {
+      // 按钮位置不能通过给父元素设置relative用定位实现，定位会让刷新时表格获取的offsetTop值不准，因此计算的自适应高度也就不准。
+      this.btnTop = offsetTop + 20
     }
   }
 }
