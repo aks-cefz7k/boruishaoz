@@ -90,8 +90,9 @@ public class DevController {
     //得到所有设备
     @GetMapping(value = { "/devs" ,  "/devs/all"})
     public RESTRet GetDevs() {
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
-        List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
+//        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
+//        List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
+        List<AscsBaseModel> ascsBaseModels = mDao.getAscs();
         mDao.alterStatus(ascsBaseModels);
         return RESTRetUtils.successObj(ascsBaseModels);
     }

@@ -4,6 +4,7 @@ package com.openatc.agent.controller;
 import com.openatc.agent.model.Overflow;
 import com.openatc.agent.model.OverflowDetector;
 import com.openatc.agent.model.OverflowStatus;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.OptService;
 import com.openatc.agent.service.OverflowDetectorRepository;
 import com.openatc.agent.service.OverflowRepository;
@@ -43,15 +44,14 @@ public class OverflowController {
     private OptService optService;
 
     @Autowired
-    private DevController devController;
+    AscsDao ascsDao;
 
     //查询整个区域
     @GetMapping(value = "/overflowdetector")
     public RESTRetBase GetOverflowdetetor() {
         List<OverflowDetector> OverflowDetectors = overflowDetectorRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
 
-        RESTRet<List<AscsBaseModel>> ret = devController.GetDevs();
-        List<AscsBaseModel> ascs = ret.getData();
+        List<AscsBaseModel> ascs = ascsDao.getAscs();
 
         // 查询路口名和路口状态
         for (OverflowDetector OverflowDetector : OverflowDetectors) {
@@ -231,14 +231,21 @@ public class OverflowController {
             String agentid = ov.getIntersectionid();
             overflowStatus.setAgentid(agentid);
 
-            StatusPattern statusPattern = optService.curStatusPattern(agentid);
-            if (statusPattern == null) {
-                //没有取到方案
+            AscsBaseModel devs = ascsDao.getAscsByID(agentid);
+            if(devs.getState().equals("DOWN")) {
                 overflowStatus.setControl(-1);
             }
-            else{ // 设置当前控制方式
-                overflowStatus.setControl(statusPattern.getControl());
+            else{
+                StatusPattern statusPattern = optService.curStatusPattern(agentid);
+                if (statusPattern == null) {
+                    //没有取到方案
+                    overflowStatus.setControl(-1);
+                }
+                else{ // 设置当前控制方式
+                    overflowStatus.setControl(statusPattern.getControl());
+                }
             }
+
             overflowStatusList.add(overflowStatus);
         }
 

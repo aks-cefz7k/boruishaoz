@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.VipRoute;
 import com.openatc.agent.model.VipRouteDevice;
+import com.openatc.agent.model.VipRouteDeviceDevState;
 import com.openatc.agent.model.VipRouteDeviceStatus;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
@@ -23,7 +24,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +46,8 @@ public class VipRouteController {
     @Autowired
     MessageController messageController;
 
-//    @Autowired
-//    AscsDao ascsDao;
+    @Autowired
+    AscsDao ascsDao;
 
     private static final String ASC_VIPROUTE_STATUS = "asc:viproute/status:";
     private static final String ZEROSECONDS = "00:00";
@@ -228,17 +228,16 @@ public class VipRouteController {
                         } else {
                             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
                             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
-                        }
-                        if (totaltime <= 0) {
-                            // 回自主控制
-                            backSelfControl(agentid);
                             onExcuteDevlist.remove(agentid);
                             log.info("Vip road thread end! agentid:" + agentid);
+                            // 回自主控制
+                            backSelfControl(agentid);
                             break;
                         }
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         log.warn("Vip road thread interrupted! agentid:" + agentid);
+                        break;
                     }
                 }
             });
@@ -246,25 +245,24 @@ public class VipRouteController {
         }
         // 取消勤务路线
         else if (operation == 0) {
-            data.addProperty("control", 0);
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
-            RESTRet restRet = messageController.postDevsMessage(null, messageData);
-            if (restRet.getData() instanceof InnerError) return restRet;
+
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
             log.info("取消执行，存入redis");
-            // 回自主控制
-            backSelfControl(agentid);
             onExcuteDevlist.remove(agentid);
+            // 回自主控制
+            RESTRet restRet = backSelfControl(agentid);
+            if (restRet.getData() instanceof InnerError)
+                return restRet;
         }
         return RESTRetUtils.successObj();
     }
 
-    private void backSelfControl(String agentid) {
+    private RESTRet backSelfControl(String agentid) {
         JsonObject selfControl = new JsonObject();
         selfControl.addProperty("control", 0);
         MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, selfControl);
-        messageController.postDevsMessage(null, selfMessage);
+        return messageController.postDevsMessage(null, selfMessage);
     }
 
     // 查询勤务路线路口状态
@@ -282,10 +280,19 @@ public class VipRouteController {
         }
 
         // 查询路线中的路口信息，并修改状态
+        List<VipRouteDeviceDevState> VipRouteDevices =  vipRouteDao.findVipRouteWithDevStateById(id);
+        int a = VipRouteDevices.get(0).getStatus();
+
         VipRoute vipRoute = vipRouteDao.findById(id);
         for(VipRouteDevice vipRouteDevice : vipRoute.getDevs()){
             String agentid = vipRouteDevice.getAgentid();
             VipRouteDeviceStatus vipRouteDeviceStatus = GetVipRouteDeviceStatusbyID(vriss, agentid);
+            AscsBaseModel devs = ascsDao.getAscsByID(agentid);
+            if(devs.getState().equals("DOWN")) {
+                vipRouteDeviceStatus.setControl(-1);
+                continue;
+            }
+
             StatusPattern statusPattern = messageController.GetStatusPattern(agentid);
             if(statusPattern == null){ // 无法获取到方案状态，设备不在线
                 vipRouteDeviceStatus.setControl(-1);
