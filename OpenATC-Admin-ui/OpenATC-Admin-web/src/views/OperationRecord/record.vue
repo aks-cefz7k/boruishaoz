@@ -18,7 +18,7 @@
       <el-row  :gutter="10"
                type="flex"
                justify="end"
-               style="margin-right:16px;">
+               style="margin-right:16px;flex-wrap:wrap;flex-direction:row; justify-content:flex-end">
         <el-col :span="3">
           <div>
             <span class="header-span">{{$t('openatc.record.originadress') }}：</span>
@@ -226,6 +226,10 @@ export default {
   },
   methods: {
     onConditionChange (val) {
+      this.listQuery = {
+        pageNum: 1, // 页码
+        pageRow: 50 // 每页条数
+      }
       this.getList()
     },
     onSearchClick () {

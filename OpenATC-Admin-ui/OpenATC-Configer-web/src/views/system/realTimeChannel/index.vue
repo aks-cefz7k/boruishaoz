@@ -33,7 +33,7 @@
   <div class="channeltest" ref="channeltest">
     <el-button class="controlbtn" type="primary" @click="getTesting">{{$t('edge.system.test')}}</el-button>
     <div class="list">
-      <div class="title">通道信息</div>
+      <div class="title">{{$t('edge.channellock.channelinfo')}}</div>
       <el-table
         :data="list"
         :max-height="tableHeight"

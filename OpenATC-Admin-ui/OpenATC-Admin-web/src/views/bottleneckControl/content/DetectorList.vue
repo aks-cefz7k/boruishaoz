@@ -24,7 +24,8 @@
       >
         <!-- <el-table-column prop="id" :label="$t('openatc.bottleneckcontrol.detectorid')" width="120" align="center"></el-table-column> -->
         <el-table-column prop="description" :label="$t('openatc.bottleneckcontrol.detectorname')" align="center"></el-table-column>
-        <el-table-column prop="type" :label="$t('openatc.bottleneckcontrol.type')" align="center"></el-table-column>
+        <el-table-column prop="type" :formatter="formatterType"
+        :label="$t('openatc.bottleneckcontrol.type')" align="center"></el-table-column>
         <!-- <el-table-column prop="status" :label="$t('openatc.bottleneckcontrol.status')" align="center"></el-table-column> -->
         <el-table-column :label="$t('openatc.common.operation')" align="center">
           <template slot-scope="scope">
@@ -113,9 +114,9 @@ export default {
             }
             this.loading = false
             this.detectorList = data.data.data.map(ele => ({
-              ...ele,
-              type: this.typeMap.get(ele.type),
-              status: this.statusMap.get(ele.status)
+              ...ele
+              // type: this.typeMap.get(ele.type),
+              // status: this.statusMap.get(ele.status)
             }))
             this.loading = false
             resolve(this.detectorList)
@@ -183,7 +184,7 @@ export default {
               if (data.data.data && data.data.data.data) {
                 success = data.data.data.data.success
                 if (success !== 0) {
-                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  let errormsg = 'edge.overview.putTscControlError' + success
                   this.$message.error(this.$t(errormsg))
                   return
                 }
@@ -224,7 +225,7 @@ export default {
               if (data.data.data && data.data.data.data) {
                 success = data.data.data.data.success
                 if (success !== 0) {
-                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  let errormsg = 'edge.overview.putTscControlError' + success
                   this.$message.error(this.$t(errormsg))
                   return
                 }
@@ -318,6 +319,9 @@ export default {
           }
         }
       }
+    },
+    formatterType (row) {
+      return this.typeMap.get(row.type)
     }
   },
   mounted () {

@@ -51,6 +51,46 @@
             </el-input>
         </el-form-item>
         <el-form-item
+          :label="$t('openatc.devicemanager.tags')"
+          prop="tags"
+          >
+          <el-tag
+              :key="tag"
+              v-for="tag in deviceInfo.tags?deviceInfo.tags.split(','):currentTags"
+              closable
+              :disable-transitions="false"
+              @close="handleClose(tag)">
+              {{tag}}
+            </el-tag>
+            <el-input
+              class="input-new-tag"
+              v-if="inputVisible"
+              v-model="deviceTag"
+              ref="saveTagInput"
+              size="small"
+              @keyup.enter.native="handleInputConfirm"
+              @blur="handleInputConfirm"
+            >
+            </el-input>
+          <el-popover
+            placement="bottom"
+            width="460"
+            v-model="visible2"
+            trigger="click"
+           >
+            <el-tag
+              :key="index"
+              v-for="(select,index) in selectTags"
+              :disable-transitions="false"
+              :class="(deviceInfo.tags?deviceInfo.tags.split(',').includes(select):currentTags.includes(select)) ? 'phaseSelected' : 'phaseNoSelected'"
+              @click="selectItem(select)"
+              >
+              {{select}}
+            </el-tag>
+            <el-button slot="reference" class="button-new-tag"  v-model="name" size="small" @click="showInput">+ 新标签</el-button>
+          </el-popover>
+        </el-form-item>
+        <el-form-item
             :label="$t('openatc.devicemanager.deviceid')"
             prop="thirdplatformid">
             <el-input
@@ -87,7 +127,7 @@
         </el-form-item>
         <el-form-item
             :label="$t('openatc.devicemanager.IP')"
-            prop="ip" class="ipLabel">
+            prop="ip">
             <el-input
             type="text"
             v-model="deviceInfo.ip"
@@ -169,7 +209,7 @@
 </template>
 
 <script>
-import { AddDevice, UpdateDevice, UpdateDeviceId } from '@/api/device'
+import { AddDevice, UpdateDevice, UpdateDeviceId, getDict, addDict } from '@/api/device'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'deviceUpdate',
@@ -224,6 +264,12 @@ export default {
       }, 100)
     }
     return {
+      currentTags: [],
+      selectTags: [],
+      inputVisible: false,
+      visible2: false,
+      deviceTag: '',
+      name: '',
       dialogFormVisible: false,
       innerVisible: false,
       ip_status: true,
@@ -234,6 +280,7 @@ export default {
         thirdplatformid: '',
         name: '',
         descs: '',
+        tags: '',
         type: 'asc',
         protocol: 'ocp',
         ip: '',
@@ -307,7 +354,85 @@ export default {
       ]
     }
   },
+  created () {
+    this.getDicts()
+  },
   methods: {
+    getDicts () {
+      getDict().then(res => {
+        this.selectTags = res.data.data.filter(it => it.value).map(it => it.value)
+      })
+    },
+    addDicts () {
+      let resData = {
+        type: 'tags',
+        key: 'tag1',
+        value: this.deviceTag
+      }
+      addDict(resData).then(res => {
+      })
+    },
+    handleClose (tag) {
+      if (this.deviceInfo.tags) {
+        this.deviceInfo.tags = this.deviceInfo.tags.split(',').filter(item => { return item !== tag }).toString()
+      } else {
+        this.currentTags.splice(this.currentTags.indexOf(tag), 1)
+      }
+    },
+    showInput () {
+      this.getDicts()
+      this.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    handleInputConfirm () {
+      if (this.deviceInfo.tags) {
+        if (this.deviceTag) {
+          this.deviceInfo.tags = this.deviceInfo.tags + ',' + this.deviceTag
+        }
+        this.addDicts()
+      } else {
+        if (this.deviceTag) {
+          this.currentTags.push(this.deviceTag)
+        }
+        this.addDicts()
+      }
+      this.deviceTag = ''
+      this.inputVisible = false
+    },
+    selectItem (select) {
+      if (this.deviceInfo.tags) {
+        if (this.deviceInfo.tags.split(',').includes(select)) {
+          this.deviceInfo.tags = this.deviceInfo.tags.split(',').filter(item => { return item !== select }).toString()
+        } else {
+          this.deviceInfo.tags = this.deviceInfo.tags + ',' + select
+        }
+      } else {
+        if (this.currentTags.includes(select)) {
+          this.currentTags.splice(this.currentTags.indexOf(select), 1)
+        } else {
+          this.currentTags.push(select)
+        }
+      }
+    },
+    getName () {
+      let name = ''
+      if (this.deviceInfo.tags) {
+        for (let i = 0; i < this.deviceInfo.tags.split(',').length; i++) {
+          name = name + ',' + this.deviceInfo.tags.split(',')[i]
+        }
+      } else {
+        for (let i = 0; i < this.currentTags.length; i++) {
+          name = name + ',' + this.currentTags[i]
+        }
+      }
+      if (name !== '') {
+        return name.substr(1)
+      } else {
+        return ''
+      }
+    },
     submitDeviceInfo (formName) {
       // 提交表单
       if (this.deviceInfo.ip === '' || this.deviceInfo.port === '') {
@@ -364,7 +489,7 @@ export default {
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
-            _vue.$parent.getList()
+            _vue.$parent.getDeviceRanges()
           }
         })
       })
@@ -376,6 +501,8 @@ export default {
         coordinates: [this.deviceInfo.lng, this.deviceInfo.lat]
       }
       let devInfo = this.deviceInfo
+      devInfo.tags = this.getName()
+      this.currentTags = []
       devInfo.geometry = geometry
       delete devInfo.lng
       delete devInfo.lat
@@ -390,7 +517,7 @@ export default {
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
-            _vue.$parent.getList()
+            _vue.$parent.getDeviceRanges()
           }
         })
       })
@@ -402,6 +529,7 @@ export default {
         coordinates: [this.deviceInfo.lng, this.deviceInfo.lat]
       }
       let devInfo = this.deviceInfo
+      devInfo.tags = this.getName()
       devInfo.geometry = geometry
       delete devInfo.lng
       delete devInfo.lat
@@ -421,7 +549,7 @@ export default {
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
-            _vue.$parent.getList()
+            _vue.$parent.getDeviceRanges()
           }
         })
       })
@@ -433,6 +561,7 @@ export default {
       this.dialogFormVisible = !this.dialogFormVisible
       if (!dev) {
         // 新增置空
+        this.currentTags = []
         this.deviceInfo = JSON.parse(JSON.stringify(this.tempDevice))
         this.showModifyIdButton = false
         return
@@ -447,6 +576,7 @@ export default {
       }
       // 编辑
       const device = JSON.parse(JSON.stringify(dev))
+      delete device.lastTime
       let lng = 0
       let lat = 0
       if (device.geometry !== undefined) {
@@ -490,9 +620,43 @@ export default {
 }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" scoped rel="stylesheet/scss">
 .dev-update .el-dialog__body {
   padding: 30px 72px 30px 0;
+}
+.el-tag + .el-tag {
+  margin: 4px 4px;
+  // margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
+.phaseNoSelected{
+  // width: 23%;
+  /* padding-bottom: 23%; */
+  // background-color: #edf6ff;
+  border-radius: 3%;
+  float: left;
+  margin: 1%;
+  cursor: pointer;
+}
+.phaseSelected{
+  // width: 23%;
+  /* padding-bottom: 23%; */
+  background-color: #a2cfff;
+  border-radius: 3%;
+  float: left;
+  margin: 1%;
+  cursor: pointer;
 }
 .el-dialog__footer {
   padding: 10px 72px 38px 0;

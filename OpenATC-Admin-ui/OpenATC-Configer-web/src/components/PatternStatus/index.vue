@@ -12,25 +12,26 @@
 <template>
     <div class="main-patternstatus">
       <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
-        <!-- <div v-for="(item,index2) in list" :key="index2" :class="cycles && item.controltype===99?'direction': ''"> -->
         <div v-for="(item,index2) in list" :key="index2" :class="item.controltype===99?'direction': ''">
           <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
               <el-tooltip placement="top-start" effect="light">
                 <div slot="content">P{{item.id}}:{{item.split}}</div>
                 <div style="cursor:pointer;">
                   <div class="ring-phase">
-                    <xdrdirselector Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
+                    <xdrdirselector  Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
                   </div>
+                  <div class="box">
+                    <div class="ring-nums">P{{item.id}}</div>
+                    <div class="ring-nums">{{item.split}}</div>
+                  </div>
+                  <!-- 人行道 -->
+                  <SidewalkSvg v-if="item.peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'38'" :Height="'34'" />
                 </div>
               </el-tooltip>
-              <div class="box">
-                <div class="ring-nums">P{{item.id}}</div>
-                <div class="ring-nums">{{item.split}}</div>
-              </div>
             </div>
+            <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left', 'background':'repeating-linear-gradient(to right, #7CCC66 20%, #ffffff 50%)'}"></div>
             <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
             <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
-            <!-- <div class="first-1" v-show="pattern.length > 1" :style="{'padding-right':item.hideWidth,'height':'34px'}"></div> -->
           </div>
         </div>
       <div v-for="(item, index) in barrierList" :key="index + '1'">
@@ -43,11 +44,14 @@
     </div>
 </template>
 <script>
-
 import xdrdirselector from '@/components/XRDDirSelector'
+import SidewalkSvg from '@/views/overView/crossDirection/baseImg/SidewalkSvg'
+import PhaseDataModel from '../../views/overView/crossDirection/utils'
+import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 export default {
   name: 'patternstatus',
   components: {
+    SidewalkSvg,
     xdrdirselector
   },
   data () {
@@ -58,6 +62,7 @@ export default {
       patternIds: this.patternId,
       newPatterns: [],
       newList: [],
+      sidewalkPhaseData: [],
       controlDatas: this.controlData,
       max: '',
       pattern: this.patternStatusList
@@ -144,6 +149,9 @@ export default {
       this.handleCurrentChange(this.patternStatusList)
       this.handleBarrierHeight()
     }
+    this.PhaseDataModel = new PhaseDataModel()
+    this.CrossDiagramMgr = new CrossDiagramMgr()
+    this.getPedPhasePos()
   },
   mounted () {
   },
@@ -156,6 +164,27 @@ export default {
     }
   },
   methods: {
+    getPedPhasePos () {
+      // 行人相位信息
+      this.sidewalkPhaseData = []
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      phaseList.forEach((ele, i) => {
+        if (ele.peddirection) {
+          ele.peddirection.forEach((dir, index) => {
+          // 行人相位
+            if (this.PhaseDataModel.getSidePos(dir)) {
+              this.sidewalkPhaseData.push({
+                key: this.CrossDiagramMgr.getUniqueKey('pedphase'),
+                phaseid: ele.id, // 相位id，用于对应相位状态
+                id: dir,
+                name: this.PhaseDataModel.getSidePos(dir).name
+              })
+            }
+            console.log(this.sidewalkPhaseData, 'this.sidewalkPhaseData')
+          })
+        }
+      })
+    },
     handlePatternData () {
       this.newList = []
       if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
@@ -175,7 +204,9 @@ export default {
           })[0]
           obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
+          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / cycle * 100).toFixed(3) + '%'
+          obj.flashgreen = (currPhase.flashgreen / cycle * 100).toFixed(3) + '%'
+          obj.peddirection = currPhase.peddirection
           obj.split = split
           obj.direction = currPhase.direction.map(item => {
             return {
@@ -250,13 +281,17 @@ export default {
             return item.id === ring.id
           })[0]
           if (ring.sum) {
-            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+            // obj.split = split + ring.sum
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
             // obj.hideWidth = (ring.sum / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           } else {
-            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+            // obj.split = split
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           }
+          obj.flashgreen = (currPhase.flashgreen / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           obj.redWidth = (currPhase.redclear / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          obj.peddirection = currPhase.peddirection
           // 忽略相位不显示
           let mode = ring.mode
           if (mode !== 7) { // 忽略相位不显示

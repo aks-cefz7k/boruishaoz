@@ -70,6 +70,21 @@
     "method": "get"
   },
   {
+    "key": "getDeviceRange",
+    "url": "/devs/range",
+    "method": "post"
+  },
+  {
+    "key": "getDict",
+    "url": "/dict",
+    "method": "get"
+  },
+  {
+    "key": "addDict",
+    "url": "/dict",
+    "method": "post"
+  },
+  {
     "key": "getDeviceByIds",
     "url": "/devs/list",
     "method": "post"
@@ -418,5 +433,20 @@
     "key": "getHisParamsRange",
     "url": "/devs/hisparams/range",
     "method": "post"
+  },
+  {
+    "key": "getTokenList",
+    "url": "/token/findAll",
+    "method": "get"
+  },
+  {
+    "key": "updateToken",
+    "url": "/token/modify",
+    "method": "post"
+  },
+  {
+    "key": "deleteToken",
+    "url": "/token/deleteById",
+    "method": "delete"
   }
 ]

@@ -135,7 +135,7 @@
           </div>
           <div class="pattern-status" v-if="!graphicMode">
             <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
-            <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
+            <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.patternoffset')}}: {{controlData.patternoffset}} {{$t('edge.overview.coordinationtime')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
             <BoardCard
@@ -602,20 +602,20 @@ export default {
           }
           return
         }
-        let res = data.data.data.data
-        let obj = {
-          ip: '',
-          port: '',
-          protocol: ''
-        }
-        let newRes = {...obj, ...res}
+        // let res = data.data.data.data
+        // let obj = {
+        //   ip: '',
+        //   port: '',
+        //   protocol: ''
+        // }
+        // let newRes = {...obj, ...res}
         this.devStatus = 3
-        this.ip = newRes.ip
-        this.port = newRes.port
-        this.protocol = newRes.protocol
-        if (newRes.fault) {
-          this.faultArr = this.getFaultMes(newRes.fault)
-        }
+        // this.ip = newRes.ip
+        // this.port = newRes.port
+        // this.protocol = newRes.protocol
+        // if (newRes.fault) {
+        //   this.faultArr = this.getFaultMes(newRes.fault)
+        // }
         this.clearPatternInterval() // 清除其他定时器
         this.clearVolumeInterval()
         this.phaseControlTimer = setInterval(() => {

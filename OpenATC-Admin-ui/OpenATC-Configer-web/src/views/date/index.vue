@@ -236,7 +236,7 @@ export default {
       }
       let newDateItem = {}
       newDateItem.id = this.id
-      newDateItem.desc = ''
+      newDateItem.desc = `${this.$t('edge.date.date')}${this.id}`
       newDateItem.month = []
       newDateItem.day = []
       newDateItem.date = []

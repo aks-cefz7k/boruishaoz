@@ -10,20 +10,94 @@
  * See the Mulan PSL v2 for more details.
  **/
 import i18n from '@/i18n/index.js'
-import { getMainFaultType, getMainFaultTypeEn } from '@/model/EventModal/utils.js'
-export const BoardType = [{
-  label: i18n.t('edge.fault.tab1'),
-  value: 1
-}, {
-  label: i18n.t('edge.fault.tab2'),
-  value: 2
-}, {
-  label: i18n.t('edge.fault.tab3'),
-  value: 3
-}, {
-  label: i18n.t('edge.fault.tab4'),
-  value: 4
-}]
+import { faultCodeMap,
+  faultCodeMapEn,
+  TZParamSubtypeMap,
+  TZParamSubtypeMapEn,
+  greenLampSubtypeMap,
+  greenLampSubtypeMapEn,
+  lampPowerSubtypeMap,
+  lampPowerSubtypeMapEn,
+  LampGroupSubtypeMap,
+  LampGroupSubtypeMapEn
+} from './faultcode.js'
+
+export function getFaultType (type) {
+  if (type >= 101 && type <= 199) {
+    return i18n.t('edge.faultrecord.maincontrolboardfault')
+  } else if (type >= 201 && type <= 299) {
+    return i18n.t('edge.faultrecord.lightcontrolversionfault')
+  } else if (type >= 301 && type <= 399) {
+    return i18n.t('edge.faultrecord.carinspectionboardfault')
+  } else if (type >= 401 && type <= 499) {
+    return i18n.t('edge.faultrecord.ioboardfault')
+  } else if (type >= 501 && type <= 599) {
+    return this.$t('openatc.fault.tab5')
+  } else if (type >= 601 && type <= 699) {
+    return this.$t('openatc.fault.tab6')
+  } else {
+    return undefined
+  }
+}
+
+export function getMainFaultType (type) {
+  return faultCodeMap.get(type)
+}
+
+export function getMainFaultTypeEn (type) {
+  return faultCodeMapEn.get(type)
+}
+
+export function getAllMainFaultTypeArr (keyfield, valuefield) {
+  let typeArr = []
+  let label = 'label'
+  let val = 'value'
+  if (keyfield && keyfield !== '') {
+    label = keyfield
+  }
+  if (valuefield && valuefield !== '') {
+    val = valuefield
+  }
+  if (i18n.locale === 'en') {
+    for (let [key, value] of faultCodeMapEn.entries()) {
+      typeArr.push({
+        [label]: key,
+        [val]: value
+      })
+    }
+  } else {
+    for (let [key, value] of faultCodeMap) {
+      typeArr.push({
+        [label]: key,
+        [val]: value
+      })
+    }
+  }
+  return typeArr
+}
+
+export function getBoardType () {
+  let BoardType = [{
+    label: i18n.t('edge.fault.tab1'),
+    value: 1
+  }, {
+    label: i18n.t('edge.fault.tab2'),
+    value: 2
+  }, {
+    label: i18n.t('edge.fault.tab3'),
+    value: 3
+  }, {
+    label: i18n.t('edge.fault.tab4'),
+    value: 4
+  }, {
+    label: i18n.t('edge.fault.tab5'),
+    value: 5
+  }, {
+    label: i18n.t('edge.fault.tab6'),
+    value: 6
+  }]
+  return BoardType
+}
 export function formatBoardType (dev) {
   let boardType = dev.m_byFaultBoardType
   let res = ''
@@ -35,6 +109,10 @@ export function formatBoardType (dev) {
     res = i18n.t('openatc.faultrecord.carinspectionboard')
   } else if (boardType === 4) {
     res = i18n.t('openatc.faultrecord.ioboard')
+  } else if (boardType === 5) {
+    res = i18n.t('openatc.faultrecord.faultboard')
+  } else if (boardType === 6) {
+    res = i18n.t('openatc.faultrecord.characteristicparams')
   }
   return res
 }
@@ -67,18 +145,33 @@ export function formatEnumerate (dev) {
   return res
 }
 export function formatSubFaultType (dev) {
+  let wFaultType = dev.m_wFaultType
   let wSubFaultType = dev.m_wSubFaultType
   let res = ''
-  if (wSubFaultType === 0) {
-    res = ''
-  } else if (wSubFaultType === 1) {
-    res = i18n.t('openatc.faultrecord.powerup')
-  } else if (wSubFaultType === 2) {
-    res = i18n.t('openatc.faultrecord.powerdown')
-  } else if (wSubFaultType === 3) {
-    res = i18n.t('openatc.faultrecord.powerno')
-  } else if (wSubFaultType === 4) {
-    res = i18n.t('openatc.faultrecord.powerfault')
+  if (i18n.locale === 'en') {
+    if (wFaultType === 601) {
+      res = TZParamSubtypeMapEn.get(wSubFaultType)
+    } else if (wFaultType === 208 || wFaultType === 207 || wFaultType === 206) {
+      res = greenLampSubtypeMapEn.get(wSubFaultType)
+    } else if (wFaultType === 211 || wFaultType === 210 || wFaultType === 209) {
+      res = lampPowerSubtypeMapEn.get(wSubFaultType)
+    } else if (wFaultType === 212) {
+      res = LampGroupSubtypeMapEn.get(wSubFaultType)
+    } else {
+      res = ''
+    }
+  } else {
+    if (wFaultType === 601) {
+      res = TZParamSubtypeMap.get(wSubFaultType)
+    } else if (wFaultType === 208 || wFaultType === 207 || wFaultType === 206) {
+      res = greenLampSubtypeMap.get(wSubFaultType)
+    } else if (wFaultType === 211 || wFaultType === 210 || wFaultType === 209) {
+      res = lampPowerSubtypeMap.get(wSubFaultType)
+    } else if (wFaultType === 212) {
+      res = LampGroupSubtypeMap.get(wSubFaultType)
+    } else {
+      res = ''
+    }
   }
   return res
 }
@@ -98,15 +191,6 @@ export function formatFaultTypes (dev, column) {
   // 故障主类型需要显示具体类型，不要按范围判断
   let faultType = dev.m_wFaultType
   let res = ''
-  // if (faultType >= 101 && faultType <= 199) {
-  //   res = i18n.t('openatc.faultrecord.maincontrolboardfault')
-  // } else if (faultType >= 201 && faultType <= 299) {
-  //   res = i18n.t('openatc.faultrecord.lightcontrolversionfault')
-  // } else if (faultType >= 301 && faultType <= 399) {
-  //   res = i18n.t('openatc.faultrecord.carinspectionboardfault')
-  // } else if (faultType >= 401 && faultType <= 499) {
-  //   res = i18n.t('openatc.faultrecord.ioboardfault')
-  // }
   if (i18n.locale === 'en') {
     res = getMainFaultTypeEn(faultType)
   } else {

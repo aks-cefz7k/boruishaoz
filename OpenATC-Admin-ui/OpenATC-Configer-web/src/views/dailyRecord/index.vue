@@ -19,6 +19,7 @@
         :data="recordList"
         size="mini"
         :max-height="tableHeight"
+        :default-sort = "{prop: 'starttime', order: 'descending'}"
         style="width: 100%"
         id="footerBtn">
         <el-table-column
@@ -56,8 +57,6 @@
         align="center">
         </el-table-column>
     </el-table>
-    <!-- <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum" :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" style='margin:0px;'>
-    </el-pagination> -->
   </div>
 </div>
 </template>
@@ -65,7 +64,7 @@
 <script>
 import { getDailyRecord } from '@/api/param'
 import { getMessageByCode } from '@/utils/responseMessage'
-import { formatStatus, formatSubject, formatInfotype, formatObject } from '@/utils/fault.js'
+import { formatStatus, formatSubject, formatInfotype, formatObject } from '@/utils/daily.js'
 export default {
   name: 'dailyRecord',
   components: {},
@@ -73,11 +72,6 @@ export default {
     return {
       tableHeight: 700,
       schfilter: '',
-      // listQuery: {
-      //   pageNum: 1, // 页码
-      //   pageRow: 50 // 每页条数
-      // },
-      // totalCount: 0, // 分页组件--数据总条数
       recordList: []
     }
   },
@@ -96,17 +90,6 @@ export default {
     }
   },
   methods: {
-    // handleSizeChange (val) {
-    //   // 改变每页数量，默认返回第一页
-    //   this.listQuery.pageNum = 1
-    //   this.listQuery.pageRow = val
-    //   this.getAllDailyRecord()
-    // },
-    // handleCurrentChange (val) {
-    //   // 改变页码
-    //   this.listQuery.pageNum = val
-    //   this.getAllDailyRecord()
-    // },
     formatterStatus (row) {
       return formatStatus(row)
     },

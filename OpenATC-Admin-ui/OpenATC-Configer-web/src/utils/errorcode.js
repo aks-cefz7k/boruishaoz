@@ -73,13 +73,14 @@ let errorCodeMap = new Map([
   [1104, '未支持的参数类型'],
   [1201, '权重因子值域应为[0, 100]'],
   [1202, '环相位权重因子和不为100'],
+  [1203, '相位权重因子未配置'],
   [2001, '地址码未配置'],
   [2002, '信号机两个网卡都未配置'],
   [2003, '信号机地址码配置错误'],
   [2004, '参数JSON格式解析错误'],
   [2005, '设备参数同步失败'],
   [2006, '信号机配置非法网卡信息'],
-  [2007, '路口ID不在0-65535之间'],
+  [2007, '设备ID不在0-65535之间'],
   [3001, 'U盘挂载失败'],
   [3002, '未找到U盘']
 ])
@@ -159,6 +160,7 @@ let errorCodeMapEn = new Map([
   [1104, 'Unsupported parameter type'],
   [1201, 'Static weight range should be[0, 100]'],
   [1202, 'The sum of ring phase static weight is not 100'],
+  [1203, 'Phase static weight factor not configured'],
   [2001, 'Address code is not configured'],
   [2002, 'The signal is not configured with either network card'],
   [2003, 'Address code configuration error of signal machine'],

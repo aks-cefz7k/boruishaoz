@@ -63,6 +63,7 @@
 </template>
 
 <script>
+/*eslint-disable*/
 import SchemeConfiguration from './components/schemeConfiguration'
 import PatternTable from './pattern/patternTable'
 import PlanChart from './pattern/planChart/routePreview'
@@ -177,26 +178,30 @@ export default {
         return false
       }
       await this.getSingleViproute()
-      await this.getViprouteStatus()
-      await this.getDeviceByIds()
+      // await this.getViprouteStatus()
+      // await this.getDeviceByIds()
       for (let item of this.routeData.devs) {
-        for (let state of this.stateList) {
-          if (item.agentid === state.agentid) {
-            item.state = state.state
-            item.resttime = state.resttime
-            item.currentControl = state.control ? state.control : -1
+        // for (let state of this.stateList) {
+          // if (item.agentid === state.agentid) {
+            // item.state = state.state
+            // item.resttime = state.resttime
+            // item.currentControl = state.control ? state.control : -1
             item.currentControlName = this.getControlName(item.currentControl)
             let controlName = this.getControlName(item.control)
             item.controlName = controlName
-            for (let dev of this.devicesData) {
-              if (item.agentid === dev.agentid) {
-                item.stateName = dev.state
-                break
-              }
+            if (!item.terminalname && item.terminal > 0) {
+              item.terminalname = this.$t('openatc.greenwaveoptimize.pattern') + item.terminal
             }
-            break
-          }
-        }
+            // for (let dev of this.devicesData) {
+            //   if (item.agentid === dev.agentid) {
+            //     item.stateName = dev.state
+            //     break
+            //   }
+            // }
+            // item.stateName = state.stateName
+            // break
+          // }
+        // }
       }
       if (!this.routeData || this.routeData.devs.length === 0) {
         this.maskVisible = true

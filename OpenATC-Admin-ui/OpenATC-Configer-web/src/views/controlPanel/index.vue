@@ -421,6 +421,14 @@ export default {
       putTscControl(control).then(data => {
         let success = 0
         if (!data.data.success) {
+          if (data.data.code === '4002') { // 错误应答
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              this.$message.error(getMessageByCode(data.data.data.errorCode, this.$i18n.locale))
+            }
+            return
+          }
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }

@@ -37,7 +37,9 @@
         </span>
         <el-input class="login-input" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" auto-complete="on"
           :placeholder="$t('openatc.login.password')"></el-input>
-          <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
+          <span class="show-pwd" @click="showPwd">
+             <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
@@ -197,10 +199,33 @@ export default {
         }
       })
     },
+    loadMenuConfig () {
+      // 从接口获取是否显示地图菜单（可扩展为其他菜单是否显示）
+      SystemconfigApi.GetSystemconfigByModule('gis').then((data) => {
+        if (data.data.success !== true) {
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        }
+        let controlMenu = {
+          gis: false
+        }
+        for (let config of data.data.data) {
+          if (config['key'] === 'isShowGisMenu') {
+            if (config['value'] === 'true') {
+              controlMenu.gis = true
+            } else {
+              controlMenu.gis = false
+            }
+          }
+        }
+        this.$store.dispatch('SetMenuVisible', controlMenu)
+      })
+    },
     loadDefaultConfig  () {
       // 加载系统默认配置
       this.loadLanguageConfig()
       this.loadThemeConfig()
+      this.loadMenuConfig()
     },
     switchLanguage (command) {
       switch (command) {

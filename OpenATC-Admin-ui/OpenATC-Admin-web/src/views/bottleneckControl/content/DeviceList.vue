@@ -225,10 +225,12 @@ export default {
       // 判断是否有正在执行的路口
       let isHasExecute = false
       let areaOverflows = JSON.parse(JSON.stringify(this.curDetectorDevs.overflows))
-      if (areaOverflows && areaOverflows.length) {
+      if (areaOverflows && areaOverflows.length) { // 至少存在一个路口
         areaOverflows.forEach(cross => {
-          if (cross.statedata && cross.statedata.state === 1) {
-            isHasExecute = true
+          if (cross.statedata) {
+            if (cross.statedata.control === 20 || cross.statedata.control === 13) {
+              isHasExecute = true
+            }
           }
         })
       }

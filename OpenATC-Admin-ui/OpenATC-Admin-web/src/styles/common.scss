@@ -694,25 +694,36 @@
   }
 }
 // 设备管理页面样式
-.openatc-device {
+.openatc-device {    
   margin-top: 15px;
   .tag-container {
-      float: left;
-      max-width: 70%;
-      overflow: hidden;
-    }
+    position: absolute;
+    // float: left;
+    max-width: 70%;
+    overflow: hidden;
+  }
     .filter-container {
       float: right;
+      padding-left: 400px;
       margin-top: 10px;
-      margin-right: 20px;
+      .filter {
+        float: left;
+        margin-left: 20px;
+        margin-bottom: 10px;
+        .header-span {
+          color: $--color-text-secondary;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 14px;
+        } 
+      }
     }
     .devs-table {
-      position: absolute;
-      top: 130px;
-      left: 20px;
-      right: 20px;
-      border: solid 1px $--border-color-lighter;
-      overflow: auto;
+      padding: 0 20px;
+    .el-table {
+        border: solid 1px $--border-color-lighter;
+      }
     }
   }
   .state-search {
@@ -2337,7 +2348,8 @@ table td {
     // top需要自适应计算
     .btn {
       float: left;
-      width: 100px;
+      min-width: 100px;
+      padding: 0px 20px;
       height: 40px;
       line-height: 40px;
       text-align: center;
@@ -2358,7 +2370,7 @@ table td {
   .openatc-historyfaultrecord {
     .filter-container {
       float: right;
-      padding-left: 280px;
+      padding-left: 340px;
       margin-bottom: 20px;
       .filter {
         float: left;

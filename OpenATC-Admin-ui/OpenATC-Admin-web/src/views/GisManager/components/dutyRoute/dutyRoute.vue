@@ -342,7 +342,7 @@ export default {
       })
     },
     getPopupContent (devData) {
-      let agentid = devData.agentid
+      let agentid = devData.name
       let content =
       `
         <div> ${this.$t('openatc.gis.crossRoad')}${agentid}</div>

@@ -150,7 +150,8 @@ const zh = {
       'cycle': '周期',
       'phasesplit': '绿信比',
       'phase': '相位',
-      'phasedifference': '相位差',
+      'patternoffset': '相位差',
+      'coordinationtime': '协调时间',
       'getintersectionmapagain': '重新获取路口图',
       'ring': '环',
       'phaseid': '相位id',
@@ -190,6 +191,7 @@ const zh = {
       'modelList13': '方案恢复过渡',
       'modelList15': '通道检测',
       'modelList20': '方案干预',
+      'modelList100': '方案干预',
       'modelList22': '优先控制',
       'modelList19': '感应式行人过街',
       'modelList23': '相位关断',
@@ -211,6 +213,8 @@ const zh = {
       'putTscControlError4': '设备初始化中，无法执行',
       'putTscControlError5': '优先级更高的方案控制中，无法执行',
       'putTscControlError6': '优先级更高的用户控制中，无法执行',
+      'putTscControlError7': '方案编号对应的方案不存在',
+      'putTscControlError8': '配置包含绿冲突',
       'nofault': '无',
       'extendedContent': '扩展内容',
       'JSONFormatError': 'JSON格式错误!',
@@ -339,7 +343,8 @@ const zh = {
       'stage': '阶段',
       'phase': '相位',
       'agentidError': '获取设备ID失败!',
-      'splitCheckMsg': '绿信比需大于相位过渡时间或绿信比需大于行人过街+行人过渡时间!'
+      'splitCheckMsg': '绿信比需大于相位过渡时间或绿信比需大于行人过街+行人过渡时间!',
+      'pattern': '方案'
     },
     'plan': {
       'tipcontext': '请输入计划名！',
@@ -368,7 +373,8 @@ const zh = {
       'ControlOption9': '自适应控制',
       'ControlOption10': '无电缆控制',
       'ControlOption12': '行人过街控制',
-      'ControlOption19': '感应式行人过街控制'
+      'ControlOption19': '感应式行人过街控制',
+      'plan': '计划'
     },
     'date': {
       'desc': '描述',
@@ -434,9 +440,17 @@ const zh = {
       'transitiongreenflashtime': '过渡绿闪时间',
       'transitionyellowtime': '过渡黄灯时间',
       'channelstats': '通道状态',
+      'lockinperiod': '锁定时段',
       'channel': '通道',
       'channelinfo': '通道信息',
       'status': '状态',
+      'status1': '默认',
+      'status2': '红灯',
+      'status3': '黄灯',
+      'status4': '绿灯',
+      'status5': '绿闪',
+      'status6': '灭灯',
+      'status7': '红闪',
       'maxlength': '最多添加24个通道锁定记录!'
     },
     'channelControl': {
@@ -519,6 +533,8 @@ const zh = {
       'startOrderParams': '启动时序参数 ',
       'netcardInfo': '网络信息: ',
       'stepType': '步进类型',
+      'step0': '阶段',
+      'step1': '色步',
       'seeCutEffect': '查看剪断效果',
       'siteIdLimit': '地址码规定范围是 0 ~ 99999',
       'siteIdCutEffect': '地址码剪断效果',
@@ -669,6 +685,8 @@ const zh = {
       'tab2': '灯控板',
       'tab3': '车检板',
       'tab4': 'I/O板',
+      'tab5': '故障板',
+      'tab6': '特征参数',
       'maintype': '主类型',
       'subtype': '子类型',
       'occurtime': '发生时间',
@@ -989,7 +1007,7 @@ const zh = {
       '8001': '通过路口ID未找到路口!',
       '8002': '路口位于协调路线上',
       '8003': '路口位于特勤路线上',
-      '8004': 'Agentid重复',
+      '8004': '路口ID重复',
       // 错误类型子类型，返回码第二层
       '8101': '路口不允许删除!',
       // 瓶颈控制错误
@@ -1033,6 +1051,8 @@ const zh = {
       'lightcontrolversion': '灯控版',
       'carinspectionboard': '车检板',
       'ioboard': 'I/O板',
+      'faultboard': '故障板',
+      'characteristicparams': '特征参数',
       'maincontrolboardfault': '主控板故障',
       'lightcontrolversionfault': '灯控版故障',
       'carinspectionboardfault': '车检板故障',
