@@ -5,10 +5,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.Fault;
 import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.service.DevService;
 import com.openatc.agent.service.FaultDao;
 import com.openatc.comm.data.MessageData;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.openatc.core.model.RESTRet;
+import com.openatc.model.model.AscsBaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,9 @@ public class FaultServiceImpl {
 
     @Value("${fault.filepath}")
     private String faultFilePath;
+
+    @Autowired
+    private DevService devService;
 
     @Value("${ftpclient.port}")
     private int port;
@@ -80,5 +87,25 @@ public class FaultServiceImpl {
         jeData.getAsJsonObject().add("m_FaultDeque", gson.toJsonTree(targetFaultList, Fault[].class));
         msg.setData(jeData);
         return msg;
+    }
+
+    /**
+     * 根据用户角色获取设备id
+     * @return
+     */
+    public List<String> getAgentidListByUserRole() {
+
+        List<String> agentids = new ArrayList<>();
+        List<AscsBaseModel> ascs = ascsDao.getAscs();
+        RESTRet ret = devService.getDevs(ascs);
+        if (ret.isSuccess()){
+            List<AscsBaseModel> ascsBaseModels = (List<AscsBaseModel>) ret.getData();
+            if (ascsBaseModels != null){
+                for (AscsBaseModel ascsBaseModel : ascsBaseModels){
+                    agentids.add(ascsBaseModel.getAgentid());
+                }
+            }
+        }
+        return agentids;
     }
 }
