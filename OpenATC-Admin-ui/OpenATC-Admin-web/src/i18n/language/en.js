@@ -410,7 +410,7 @@ const en = {
       'executenow': 'Execute Now',
       'cancelexecute': 'Cancel Execute',
       'unknowControl': 'Unknow Control',
-      'autonomouscontrol': 'Auto Control',
+      'autonomouscontrol': 'Multi Period',
       'yellowflash': 'Yellow Flash',
       'allred': 'All Red',
       'turnofflights': 'Turn Off Lights',

@@ -410,7 +410,7 @@ const zh = {
       'executenow': '立即执行',
       'cancelexecute': '取消执行',
       'unknowControl': '未知',
-      'autonomouscontrol': '恢复自主控制',
+      'autonomouscontrol': '多时段',
       'yellowflash': '黄闪',
       'allred': '全红',
       'turnofflights': '关灯',
