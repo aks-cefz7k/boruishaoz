@@ -259,6 +259,9 @@ export default {
             return item.id === sequ
           })[0].split
           let currPhase = this.phaseList.filter((item) => {
+            if (item.id === sequ && item.controltype === 99) {
+              obj.controltype = item.controltype
+            }
             return item.id === sequ
           })[0]
           if (currPhase) {
@@ -402,7 +405,24 @@ export default {
       newMap.forEach((value, key) => {
         ret.push(Array.from(new Set(key.split(',').map(Number).concat(value))))
       })
-      return ret
+      const result = []
+      for (const a of ret) {
+        let merged = false
+        for (const r of result) {
+          if (this.check([...r], a)) {
+            a.forEach(item => r.add(item))
+            merged = true
+          }
+        }
+        if (!merged) {
+          result.push(new Set(a))
+        }
+        merged = false
+      }
+      return result.map(s => [...s])
+    },
+    check (arr1, arr2) {
+      return arr1.some(a1 => arr2.some(a2 => a1 === a2))
     },
     step1 (list, arr) { // 各个环包含的相位
       const ret = []
