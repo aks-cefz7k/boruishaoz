@@ -485,7 +485,8 @@ const zh = {
       'putTscControlError3': '不支持的控制参数',
       'putTscControlError4': '设备初始化中，无法执行',
       'putTscControlError5': '优先级更高的方案控制中，无法执行',
-      'putTscControlError6': '优先级更高的用户控制中，无法执行'
+      'putTscControlError6': '优先级更高的用户控制中，无法执行',
+      'entername': '请输入区域名称'
     },
     'about': {
       'version': '版本',

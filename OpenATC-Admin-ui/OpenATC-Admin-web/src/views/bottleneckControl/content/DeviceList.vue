@@ -12,7 +12,7 @@
 <template>
   <div class="overflowDeviceList">
     <el-table :data="deviceList" height="100%" style="width: 100%">
-      <el-table-column prop="name" :label="$t('openatc.bottleneckcontrol.devicename')" width="90" align="center"></el-table-column>
+      <el-table-column prop="intersectionname" :label="$t('openatc.bottleneckcontrol.devicename')" width="90" align="center"></el-table-column>
       <el-table-column prop="phaseid" :label="$t('openatc.bottleneckcontrol.phaseid')" width="250" align="center">
         <template slot-scope="scope">
           <el-select
@@ -216,7 +216,8 @@ export default {
         controltime: ele.controltime,
         level: ele.level
       }))
-      OverflowDecApi.UpdateOverflows(submitData)
+      let patternid = this.curDetectorDevs.id
+      OverflowDecApi.UpdateOverflows(patternid, submitData)
         .then(data => {
           if (!data.data.success) {
             this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
@@ -248,6 +249,7 @@ export default {
       let addDevs = multiDevs.map(ele => ({
         ...ele,
         intersectionid: ele.agentid,
+        intersectionname: ele.name,
         phaseoptions: []
       }))
       this.deviceList = this.deviceList.concat(addDevs)

@@ -2323,16 +2323,15 @@ table td {
 }
 // 故障记录
 .faultPage {
-  position: relative;
+  // position: relative; // 父元素定位会影响子元素的offset高度计算
   height: 100%;
   .tabButton {
-    margin: 20px 16px;
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 16px;
+    // top需要自适应计算
     .btn {
       float: left;
-      width: 124px;
+      width: 100px;
       height: 40px;
       line-height: 40px;
       text-align: center;
@@ -2354,6 +2353,7 @@ table td {
     .filter-container {
       float: right;
       padding-left: 280px;
+      margin-bottom: 20px;
       .filter {
         float: left;
         margin-left: 20px;
@@ -2370,13 +2370,12 @@ table td {
   }
   .openatc-realtimefaultrecord {
     padding-top: 90px;
-    margin: 0 20px;
   }
 }  //故障记录页面样式
 .openatc-faultrecord {
   margin-top: 15px;
   .el-range-editor .el-range-input {
-    background-color: $--background-color-base;
+    background-color: $--color-white;
   }
   .el-date-editor .el-range-separator {
     padding: 0
@@ -2385,16 +2384,14 @@ table td {
     line-height: 32px;
   }
   .devs-table {
-    position: absolute;
-    top: 130px;
-    left: 20px;
-    right: 20px;
-    border: solid 1px $--border-color-lighter;
-    overflow: auto;
+    padding: 0 20px;
+    .el-table {
+      border: solid 1px $--border-color-lighter;
+    }
   }
   .filter-container {
     float: right;
-    margin-top: 20px;
-    margin-right: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
   }
 }
