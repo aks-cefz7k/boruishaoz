@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.LogUtil.CreateErrorRequestData;
 import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
 import static com.openatc.core.common.IErrorEnumImplInner.*;
 
@@ -174,7 +175,7 @@ public class UdpCommunicationStaticPort implements Communication {
             try {
                 Thread.sleep(TIMEOUT);
                 InnerError devCommError = RESTRetUtils.innerErrorObj(agentid,E_109,null);
-                responceData = CreateErrorResponceData(agentid, devCommError);
+                responceData = CreateErrorRequestData(agentid, devCommError);
 
                 logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
             } catch (InterruptedException e) {// 触发中断则说明消息已接收到

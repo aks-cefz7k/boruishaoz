@@ -12,8 +12,6 @@
 package com.openatc.comm.model;
 
 import com.openatc.comm.data.MessageData;
-import com.openatc.core.model.InnerError;
-import com.openatc.core.util.RESTRetUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -22,11 +20,6 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.logging.Logger;
-
-import static com.openatc.comm.common.LogUtil.CreateErrorRequestData;
-import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
-import static com.openatc.core.common.IErrorEnumImplInner.E_107;
-import static com.openatc.core.common.IErrorEnumImplInner.E_208;
 
 // 使用随机端口发送和监听UDP数据，适用于配置工具的直连网络，不含监听主动上报消息功能
 public class UdpCommunicationForConfiger implements Communication {
