@@ -13,4 +13,6 @@ public interface VipRouteDeviceDao extends JpaRepository<VipRouteDevice, Integer
     VipRouteDevice findByViprouteidAndAgentid(int vipagentid, String agentid);
 
     List<VipRouteDevice> findByViprouteid(int id);
+
+    List<VipRouteDevice> findByAgentid(String agentId);
 }
