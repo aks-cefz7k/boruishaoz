@@ -14,17 +14,9 @@ package com.openatc.agent.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.DevCover;
-import com.openatc.agent.model.Overflow;
-import com.openatc.agent.model.SysOrg;
-import com.openatc.agent.model.User;
-import com.openatc.agent.model.VipRouteDevice;
+import com.openatc.agent.model.*;
 import com.openatc.agent.resmodel.PageOR;
-import com.openatc.agent.service.AscsDao;
-import com.openatc.agent.service.OrgService;
-import com.openatc.agent.service.OverflowRepository;
-import com.openatc.agent.service.UserDao;
-import com.openatc.agent.service.VipRouteDeviceDao;
+import com.openatc.agent.service.*;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnumImplOuter;
@@ -60,6 +52,8 @@ public class DevController {
     VipRouteDeviceDao vipRouteDeviceDao;
     @Autowired
     OverflowRepository overflowRepository;
+    @Autowired
+    RouteIntersectionDao routeIntersectionDao;
     @Autowired
     private MessageController messageController;
 
@@ -163,11 +157,15 @@ public class DevController {
     public IErrorEnumImplOuter checkDevInUse (String oldAgentid) {
         List<Overflow> overflowList = overflowRepository.findByIntersectionid(oldAgentid);
         if(overflowList !=null && overflowList.size() > 0) {
-            return IErrorEnumImplOuter.E_8002;
+            return IErrorEnumImplOuter.E_8008;
         }
         List<VipRouteDevice> vipRouteDeviceList =  vipRouteDeviceDao.findByAgentid(oldAgentid);
         if(vipRouteDeviceList !=null && vipRouteDeviceList.size() > 0) {
             return IErrorEnumImplOuter.E_8003;
+        }
+        List<RouteIntersection> routeIntersectionList =  routeIntersectionDao.findByAgentid(oldAgentid);
+        if(routeIntersectionList !=null && routeIntersectionList.size() > 0) {
+            return IErrorEnumImplOuter.E_8002;
         }
         return null;
     }

@@ -37,6 +37,7 @@
               :value="item.value">
             </el-option>
           </el-select>
+            <el-button type="primary" @click="doSave" size="mini">{{$t('edge.main.save')}}</el-button>
             <el-button type="primary" @click="upload" size="mini">{{$t('edge.main.upload')}}</el-button>
             <el-button type="primary" @click="download" size="mini">{{$t('edge.main.download')}}</el-button>
             <span class="dividing-line"></span>
@@ -162,7 +163,7 @@ import router from '@/router'
 import { mapGetters, mapState } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import { uploadTscParam, downloadTscParam, uploadSingleTscParam, downloadSingleTscParam, checkCode } from '@/api/param'
+import { uploadTscParam, downloadTscParam, saveTscParam, uploadSingleTscParam, downloadSingleTscParam, checkCode } from '@/api/param'
 import { setLanguage } from '@/utils/auth'
 import Messagebox from '@/components/MessageBox/index'
 import ImportTempDialog from '../../importTempDialog/index'
@@ -585,6 +586,58 @@ export default {
         ...singleTscParam
       }
       return curTscParam
+    },
+    doSave () {
+      // 下发数据前的基本校验
+      if (!this.baseCheck()) {
+        return
+      }
+      let tscParam = this.globalParamModel.getGlobalParams()
+      let targetTscParam = this.normalData(tscParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
+      this.lockScreen()
+      saveTscParam(newTscParam).then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          if (data.data.code === '4002') { // 错误应答
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              this.$message.error(getMessageByCode(data.data.data.errorCode, this.$i18n.locale))
+            }
+            if (data.data.data.errorCode === '4207') {
+              // 信号机参数校验
+              let codeList = data.data.data.content.errorCode
+              if (codeList.length === 0) {
+                this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
+                return
+              }
+              let errorMes = this.$t('edge.common.downloaderror')
+              for (let code of codeList) {
+                if (this.$i18n.locale === 'en') {
+                  errorMes = getErrorMesEn(errorMes, code)
+                } else {
+                  errorMes = getErrorMesZh(errorMes, code)
+                }
+              }
+              this.$message({
+                message: errorMes,
+                type: 'error',
+                dangerouslyUseHTMLString: true
+              })
+            }
+            return
+          }
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        }
+        // downloadTscParam(this.$store.state.user.name, tscParam)
+        this.$alert(this.$t('edge.common.save'), { type: 'success' })
+      }).catch(error => {
+        this.unlockScreen()
+        this.$message.error(error)
+        console.log(error)
+      })
     },
     download () {
       let typeStr = this.value

@@ -577,10 +577,10 @@ export default {
       this.resetForm('device')
     },
     onUpdateClick (dev) {
+      this.currentTags = []
       this.dialogFormVisible = !this.dialogFormVisible
       if (!dev) {
         // 新增置空
-        this.currentTags = []
         this.deviceInfo = JSON.parse(JSON.stringify(this.tempDevice))
         this.showModifyIdButton = false
         return

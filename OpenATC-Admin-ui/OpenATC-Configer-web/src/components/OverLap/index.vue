@@ -1,5 +1,5 @@
 <template>
-<div class="overLap" v-if="checked" :style="{'width':'852px','margin':this.controlData ? '20px 0 0 0' : '0 0 0 618px'}">
+<div class="overLap" v-if="checked" :style="{'width':'852px','margin':this.controlData ? '20px 0 0 0' : '0 0 0 377px'}">
     <div class="ring-first" v-for="(list, index1) in this.overlapDatas" :key="index1">
         <div v-for="(item,index2) in list.stageLists" :key="index2" >
             <div class="first-2">
@@ -162,7 +162,7 @@ export default {
     padding-top: 10px;
     padding-left: 43px;
     font-size: 12px;
-    height: 17px;
+    height: 14px;
     font-weight: normal;
     font-stretch: normal;
     // line-height: 22px;

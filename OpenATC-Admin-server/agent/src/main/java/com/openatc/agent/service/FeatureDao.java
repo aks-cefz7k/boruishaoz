@@ -1,9 +1,13 @@
 package com.openatc.agent.service;
 
+import com.google.gson.Gson;
 import com.openatc.comm.data.MessageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Classname FeatureDao
@@ -17,9 +21,38 @@ public class FeatureDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public int saveFeatureAll(MessageData requestData) {
-        String sql = String.format("INSERT INTO featureall (agentid,time,data) VALUES ('%s','%s','%s')", requestData.getAgentid(),requestData.getCreatetime(),requestData.getData().toString());
-        int rows = jdbcTemplate.update(sql);
+    private Gson gson = new Gson();
+
+    public int saveFeatureAll(MessageData requestData){
+        String agentid = requestData.getAgentid();
+        String time = requestData.getCreatetime();
+        String data = gson.toJson(requestData);
+        // 保证数据库中每个设备最多有一条记录
+        String sql = String.format("INSERT INTO featureall (agentid,time,data) VALUES ('%s','%s','%s')",agentid,time,data);
+        sql = sql + String.format("ON CONFLICT(agentid) DO UPDATE SET time='%s',data='%s'",time,data);
+        int rows;
+        try {
+            rows = jdbcTemplate.update(sql);
+        } catch (Exception e){
+            rows = 0;
+        }
         return rows;
     }
+
+    public String selectFeatureAll(String agentid) {
+        String sql = String.format("select data from featureall where agentid='%s'",agentid);
+        return jdbcTemplate.queryForObject(sql, String.class);
+    }
+
+    public int deleteFeatureByAgentid(String agentid) {
+        String sql = String.format("delete from featureall where agentid='%s'",agentid);
+        int rows;
+        try {
+            rows = jdbcTemplate.update(sql);
+        }catch (Exception e){
+            rows = 0;
+        }
+        return rows;
+    }
+
 }

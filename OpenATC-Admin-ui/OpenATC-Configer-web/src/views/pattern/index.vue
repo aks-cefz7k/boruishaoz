@@ -34,9 +34,6 @@
                   </div>
                 </el-col>
                 <el-col :span="12">
-                  <FollowPhase>
-
-                  </FollowPhase>
                 </el-col>
               </el-row>
             </el-tab-pane>
@@ -121,22 +118,22 @@
           </el-tabs>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="ID" width="140">
+      <el-table-column align="center" label="ID">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc" width="140">
+      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc">
         <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"></el-input>
         </template>
       </el-table-column>
-      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset" width="140">
+      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset">
         <template slot-scope="scope">
           <el-input size="small" v-model.number="scope.row.offset" @blur="checkOffset(scope.row.offset, scope.row)"></el-input>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle" width="140">
+      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" width="870px">
         <template slot-scope="scope">
@@ -154,7 +151,7 @@
             </div>
          </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">
+      <el-table-column align="center" :label="$t('edge.pattern.operation')">
         <template slot-scope="scope">
           <el-button type="text"  @click="handleDelete(scope.$index, scope.row)">{{$t('edge.common.delete')}}</el-button>
         </template>
@@ -168,7 +165,6 @@ import Kanban from '@/components/Kanban'
 import StageKanban from '@/views/pattern/StageKanban'
 // import StageAdd from '@/views/pattern/StageAdd'
 import BoardCard from '@/components/BoardCard'
-import FollowPhase from '@/components/FollowPhase'
 import ExpendConfig from '@/components/ExpendConfig'
 import OverLap from '@/components/OverLap'
 import { uploadSingleTscParam } from '@/api/param'
@@ -181,7 +177,6 @@ export default {
   components: {
     Kanban,
     BoardCard,
-    FollowPhase,
     ExpendConfig,
     OverLap,
     StageKanban
@@ -272,7 +267,6 @@ export default {
       const globalParamModel = this.$store.getters.globalParamModel
       let pattern = globalParamModel.getParamsByType('patternList')
       for (let i = 0; i < pattern.length; i++) {
-        // globalParamModel.getParamsByType('patternList')[i].type = ''
         this.handleStageData(pattern[i].rings, pattern[i].id, pattern[i].stagesList)
       }
     },
@@ -285,7 +279,6 @@ export default {
       let pattern = globalParamModel.getParamsByType('patternList')
       for (let i = 0; i < pattern.length; i++) {
         globalParamModel.getParamsByType('patternList')[i].cycle = this.getMaxCycle(pattern[i])
-        globalParamModel.getParamsByType('patternList')[i].type = 'stage'
         this.handleStageData(pattern[i].rings, pattern[i].id, pattern[i].stagesList)
       }
     },
@@ -406,6 +399,7 @@ export default {
         desc: `${this.$t('edge.pattern.pattern')}${this.id}`,
         offset: 0,
         cycle: 0,
+        stagesList: [],
         rings: [[], [], [], []]
       }
       var newPattern = JSON.parse(JSON.stringify(Pattern))
@@ -689,22 +683,13 @@ export default {
       for (let i = this.stateList.length - 1; i >= 1; i--) {
         this.narr.push(this.stateList[i] - this.stateList[i - 1])
       }
+      // newPhaselist
       this.narr.reverse()// 阶段差
-      // if (this.contrloType) {
       for (let i = 0; i < stageChange.length; i++) {
         let stage = JSON.parse(JSON.stringify(stageChange[i]))
         let stageItem = this.getStageItem(stage.phases ? stage.phases : stage.stages, rings, i, stageChange)
         stagesList.push(JSON.parse(JSON.stringify(stageItem)))
       }
-      // } else {
-      //   for (let i = 0; i < newPhaselist.length; i++) {
-      //     let stage = JSON.parse(JSON.stringify(newPhaselist[i]))
-      //     let stageItem = this.getStageItem(stage, rings, i, stageChange)
-      //     stagesList.push(JSON.parse(JSON.stringify(stageItem)))
-      //     debugger
-      //   }
-      // }
-
       patternList.map(item => { // 添加特征参数stage
         if (item.id === id) {
           item.stagesList = JSON.parse(JSON.stringify(stagesList))

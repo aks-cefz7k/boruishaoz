@@ -48,7 +48,8 @@
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
             :controlData="controlData"
             :contrloType="contrloType"
-            :localPatternList="patternList"
+            :patternStatusList="patternList"
+            :localPatternList="allPatternList"
             :phaseList="phaseList"
             :isPhase="true"
             :agentId="agentId"
@@ -97,6 +98,7 @@ import { registerMessage, uploadSingleTscParam } from '@/api/param'
 import { setIframdevid, getStageTypes } from '@/utils/auth'
 import BoardCard from '@/components/BoardCard'
 import OverLap from '@/components/OverLap'
+import { getIntersectionInfo } from '@/api/template'
 // import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
 import PhaseDataModel from '../../components/IntersectionMap/crossDirection/utils.js'
@@ -120,6 +122,8 @@ export default {
       overlap: [],
       contrloType: false,
       narr: [],
+      patternList: [],
+      allPatternList: [],
       stagesListOver: [],
       sidewalkPhaseData: [],
       phaseControlTimer: null, // 定时器
@@ -150,9 +154,9 @@ export default {
     }
   },
   computed: {
-    patternList () {
-      return this.$store.state.globalParam.tscParam.patternList
-    },
+    // patternList () {
+    //   return this.$store.state.globalParam.tscParam.patternList
+    // },
     ...mapState({
       curBodyWidth: state => state.globalParam.curBodyWidth,
       curBodyHeight: state => state.globalParam.curBodyHeight,
@@ -195,7 +199,6 @@ export default {
       this.contrloType = false
     }
     this.globalParamModel = this.$store.getters.globalParamModel
-    this.overlap = this.globalParamModel.getParamsByType('overlaplList')
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
       this.agentId = this.$route.query.agentid
       setIframdevid(this.agentId)
@@ -218,6 +221,17 @@ export default {
     }
   },
   methods: {
+    getIntersectionInfo (agentid, id) {
+      // 获取路口信息
+      getIntersectionInfo(agentid).then(res => {
+        this.allPatternList = res.data.data.param.patternList
+        this.overlap = res.data.data.param.overlaplList
+        this.phaseList = res.data.data.param.phaseList
+        this.patternList = res.data.data.param.patternList.filter(item => {
+          return item.id === id
+        })[0].rings
+      })
+    },
     getPedPhasePos () {
       // 行人相位信息
       this.sidewalkPhaseData = []
@@ -335,13 +349,13 @@ export default {
           return
         }
         this.crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
+        this.getIntersectionInfo(this.agentId, this.crossStatusData.patternid)
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
         // this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
-        console.log(this.controlData, 'this.controlData')
         this.checkStage(this.controlData)
       }).catch(error => {
-        this.$message.error(error)
+        // this.$message.error(error)
         console.log(error)
       })
     },
@@ -529,7 +543,8 @@ export default {
         }
         this.platform = res.data.data.platform
         this.$refs.intersectionMap.resetCrossDiagram()
-        this.registerMessage() // 注册消息
+        this.registerMessage(this.agentId) // 注册消息
+        // this.getIntersectionInfo(this.agentId)
       })
     },
     getPhase () {

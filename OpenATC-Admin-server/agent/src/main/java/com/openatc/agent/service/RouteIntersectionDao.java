@@ -15,9 +15,12 @@ import com.openatc.agent.model.RouteIntersection;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 public interface RouteIntersectionDao extends JpaRepository<RouteIntersection, Integer> {
 
     @Transactional
     void deleteByRouteid(Long id);
+
+    List<RouteIntersection> findByAgentid(String agentid);
 }

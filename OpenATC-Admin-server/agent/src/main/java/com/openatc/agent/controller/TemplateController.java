@@ -12,6 +12,7 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.JsonObject;
+import com.openatc.agent.service.FeatureService;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnumImplInner;
@@ -43,6 +44,10 @@ public class TemplateController {
     @Autowired
     private MessageController messageController;
 
+
+    @Autowired
+    private FeatureService featureService;
+
     private TemplateService templateService = new TemplateService();
 
     /**
@@ -73,10 +78,15 @@ public class TemplateController {
     @GetMapping(value = "/intersection/info/{agentid}")
     public RESTRetBase getTemplate(@PathVariable String agentid) throws SocketException, ParseException {
 
-        //使用设备通讯接口获取相位
-        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
+        // 尝试从数据库中获取
+        RESTRet retBase = featureService.getFeatureAll(agentid);
+
+        if (!retBase.isSuccess()){
+            //使用设备通讯接口获取相位
+            MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
 //        RESTRet<MessageData> retBase = null;
-        RESTRet retBase = messageController.postDevsMessage(null, messageData);
+            retBase = messageController.postDevsMessage(null, messageData);
+        }
 
 
         if(! retBase.isSuccess()){

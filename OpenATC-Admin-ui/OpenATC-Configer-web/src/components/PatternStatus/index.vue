@@ -13,7 +13,7 @@
     <div class="main-patternstatus">
       <!-- 环模式true -->
       <div v-if="!contrloType">
-        <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
+        <div class="ring-first" v-for="(list, index1) in patternInfo" :key="index1">
           <div v-for="(item,index2) in list" :key="index2" :class="item.controltype===99?'direction': ''">
             <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
                 <el-tooltip placement="top-start" effect="light">
@@ -62,6 +62,12 @@
                       </span>
                   </div>
                   <div style="cursor:pointer;">
+                    <div class="ring-phase">
+                      <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
+                        <PatternWalkSvg v-if="list.peddirection.includes(side.id)"  :Data="side" :Width="'32'" :Height="'34'" />
+                      </div>
+                      <xdrdirselector  Width="36px" Height="34px" :showlist="list.direction"></xdrdirselector>
+                    </div>
                     <div class="box" style="line-height:28px">
                       <span class="ring-nums" v-for="(pha,index) in list.phases" :key="index">
                     P:{{pha}}
@@ -102,20 +108,17 @@ export default {
       newPatterns: [],
       newList: [],
       sidewalkPhaseData: [],
-      controlDatas: this.controlData,
+      // controlDatas: this.controlData,
       max: '',
       stageLists: [],
       busPhaseData: [], // 公交相位数据
-      pattern: this.patternStatusList
+      patternInfo: []
     }
   },
   props: {
     stagesChange: {
       type: Array
     },
-    // controlTypeIndex: {
-    //   type: Boolean
-    // },
     contrloType: {
       type: Boolean
     },
@@ -164,14 +167,11 @@ export default {
   watch: {
     controlData: {
       handler: function (val, oldVal) {
-        this.controlDatas = this.controlData
-        // this.handlePatternData()
-        this.handleBarrierHeight() // 计算屏障高度
         if (this.contrloType) {
           this.getIndexStage()
-        } else {
-          this.handlePatternData()
         }
+        // this.controlDatas = this.controlData
+        this.handlePatternData()
       },
       // 深度观察监听
       deep: true
@@ -180,6 +180,7 @@ export default {
       handler: function (val, oldVal) {
         this.getPedPhasePos()
         this.getBusPos()
+        this.getStage()
       },
       // 深度观察监听
       deep: true
@@ -240,8 +241,10 @@ export default {
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
     if (this.patternStatusList && this.newCycle && !this.controlData) {
-      this.handleCurrentChange(this.patternStatusList)
-      this.handleBarrierHeight()
+      setTimeout(() => {
+        this.handleCurrentChange(this.patternStatusList)
+        this.handleBarrierHeight()
+      }, 200)
     }
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
@@ -251,17 +254,46 @@ export default {
       this.getStage()
     }
   },
-  mounted () {
-  },
-  updated () {
-    if (this.patternStatusList && this.cycle) {
-      this.$nextTick(() => {
-        this.handleBarrierHeight()
-        this.pattern = this.patternStatusList
-      })
-    }
-  },
   methods: {
+    getPed (data) {
+      let ped = []
+      for (let stg of data) {
+        let peddirections = []
+        let currPhase = this.phaseList.filter((item) => {
+          return item.id === stg
+        })[0]
+        for (let walk of this.sidewalkPhaseData) {
+          if (stg === walk.phaseid) {
+            peddirections.push(...currPhase.peddirection)
+            peddirections = Array.from(new Set(peddirections))
+          }
+        }
+        ped.push(...peddirections)
+      }
+      return ped
+    },
+    handleStageData (data) {
+      if (!data) return
+      let stagesTemp = []
+      let tempList = []
+      for (let stg of data) {
+        let directionList = []
+        let currPhase = this.phaseList.filter((item) => {
+          return item.id === stg
+        })[0]
+        if (currPhase !== undefined) {
+          directionList.push(...currPhase.direction)
+          directionList = Array.from(new Set(directionList))
+        }
+        // if (directionList.length === 0) return
+        tempList = directionList.map(dir => ({
+          id: dir,
+          color: '#606266'
+        }))
+        stagesTemp.push(...tempList)
+      }
+      return stagesTemp
+    },
     getIndexStage () {
       for (let i = 0; i < this.localPatternList.length; i++) {
         if (this.controlData.patternid === this.localPatternList[i].id) {
@@ -274,6 +306,8 @@ export default {
           this.stageLists = this.localPatternList[i].stagesList.map(item => {
             return {
               ...item,
+              peddirection: this.getPed(item.phases ? item.phases : item.stages),
+              direction: this.handleStageData(item.phases ? item.phases : item.stages),
               greenWidth: (item.green / stageMaxCyle * 100).toFixed(3) + '%',
               yellowWidth: (item.yellow / stageMaxCyle * 100).toFixed(3) + '%',
               redWidth: (item.red / stageMaxCyle * 100).toFixed(3) + '%'
@@ -293,6 +327,8 @@ export default {
       this.stageLists = this.stagesChange.map(item => {
         return {
           ...item,
+          peddirection: this.getPed(item.phases ? item.phases : item.stages),
+          direction: this.handleStageData(item.phases ? item.phases : item.stages),
           greenWidth: (item.green / stageMaxCyle * 100).toFixed(3) + '%',
           yellowWidth: (item.yellow / stageMaxCyle * 100).toFixed(3) + '%',
           redWidth: (item.red / stageMaxCyle * 100).toFixed(3) + '%'
@@ -346,12 +382,12 @@ export default {
     },
     handlePatternData () {
       this.newList = []
-      if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
-      if (!this.controlDatas.phase) return
-      let cycle = this.controlDatas.cycle
-      if (!this.controlDatas.rings) return
-      for (let rings of this.controlDatas.rings) {
-        let phase = this.controlDatas.phase
+      if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
+      if (!this.controlData.phase) return
+      let cycle = this.controlData.cycle
+      if (!this.controlData.rings) return
+      for (let rings of this.controlData.rings) {
+        let phase = this.controlData.phase
         let list = []
         for (let sequ of rings.sequence) {
           let obj = {}
@@ -382,27 +418,27 @@ export default {
           }
         }
         this.newList.push(list)
-        this.pattern = [...this.newList]
+        this.patternInfo = [...this.newList]
       }
     },
     handleBarrierHeight () { // 屏障高度
-      if (!this.pattern) return
-      let patternLength = this.pattern.length
+      if (!this.patternInfo) return
+      let patternLength = this.patternInfo.length
       this.barrierHeight = (patternLength * 35 + 21) + 'px'
     },
     handleCurrentChange (val) { // 两个ring的数据
-      this.pattern = []
+      if (val === null || val.length === 0) return
+      this.patternInfo = []
       this.barrierList = []
       let currentArr = []
       let newPattern = []
       val.map(i => {
         newPattern.push(...i)
       })
-      if (val === null) return
-      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      if (this.phaseList.length === 0) return
       for (let patternStatus of val[0]) {
         if (patternStatus.mode !== 7) {
-          let concurrent = phaseList.filter((item) => {
+          let concurrent = this.phaseList.filter((item) => {
             return item.id === patternStatus.id // patternStatus.id当前相位id concurrent当前相位的并发相位
           })[0].concurrent// 当前相位的并发相位
           if (concurrent) {
@@ -416,7 +452,7 @@ export default {
       }
       if (currentArr.length !== 0) {
         let newCurrent = this.tranform(currentArr)
-        let ringTeam = this.step1(phaseList, newCurrent)
+        let ringTeam = this.step1(this.phaseList, newCurrent)
         this.setBarrier(ringTeam, val)
         this.fillGap(ringTeam, val)
         let barrier = this.step2(ringTeam, newPattern)
@@ -434,6 +470,12 @@ export default {
           let split = ring.value
           obj.id = ring.id
           // obj.split = split
+          let currPhase = this.phaseList.filter((item) => {
+            if (item.id === ring.id && item.controltype === 99) {
+              obj.controltype = item.controltype
+            }
+            return item.id === ring.id
+          })[0]
           if (ring.desc) {
             obj.direction = ring.desc.map(item => { // 虚相位desc为空
               return {
@@ -441,13 +483,14 @@ export default {
                 color: '#454545'
               }
             })
+          } else {
+            obj.direction = currPhase.direction.map(item => {
+              return {
+                id: item,
+                color: '#454545'
+              }
+            })
           }
-          let currPhase = phaseList.filter((item) => {
-            if (item.id === ring.id && item.controltype === 99) {
-              obj.controltype = item.controltype
-            }
-            return item.id === ring.id
-          })[0]
           if (ring.sum) {
             obj.split = split + ring.sum
             obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
@@ -466,12 +509,12 @@ export default {
             list.push(obj)
           }
         }
-        this.pattern.push(list)
+        this.patternInfo.push(list)
       }
     },
     setBarrier (ringTeam, val) { // 添加特征参数barrier
-      let patternList = this.globalParamModel.getParamsByType('patternList')
-      patternList.map(item => {
+      // let patternList = this.globalParamModel.getParamsByType('patternList')
+      this.patternStatusList.map(item => {
         if (item.id === this.patternIds) {
           const patternObjs = {}
           val.forEach(l => {
