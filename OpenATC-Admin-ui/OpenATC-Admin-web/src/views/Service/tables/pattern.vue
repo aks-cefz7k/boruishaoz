@@ -188,7 +188,12 @@ export default {
         getTscPhase(agentid).then(res => {
           this.loading = false
           if (!res.data.success) {
-            this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+            let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+            let errorCode = res.data.data.errorCode
+            if (errorCode) {
+              msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+            }
+            this.$message.error(msg)
             return
           }
           this.phaseList = res.data.data.data.phaseList
