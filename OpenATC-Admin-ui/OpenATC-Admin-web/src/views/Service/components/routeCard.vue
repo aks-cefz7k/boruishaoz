@@ -13,122 +13,36 @@
   <el-card class="serviceroute-routeCard" v-show="isShow">
     <div slot="header" class="clearfix">
       <span style="vertical-align:middle;">
-        <span class="grid-content-label">{{ $t("openatc.dutyroute.currentControl") }} : </span> {{node.currentControlName}}
+        <span class="grid-content-label" style="display:inline-block;margin-right:10px;">{{ $t("openatc.dutyroute.currentControl") }} : </span> {{node.currentControlName}}
       </span>
       <el-button
+        v-show="tabName === 'second'"
         style="float: right; padding: 3px 0"
         type="text"
-        icon="el-icon-close"
-        @click.stop="onCloseClick"
-      ></el-button>
+        @click="executeViproute"
+        >
+        <template v-if="!node.state || node.state === 0">
+          {{ $t("openatc.dutyroute.executenow") }}
+        </template>
+        <template v-else>
+          {{ $t("openatc.dutyroute.cancelexecute") }}
+        </template>
+      </el-button>
     </div>
-    <div class="text item">
-      <!-- <el-tag type="info" class="tag">已执勤</el-tag> -->
+    <div class="text item" style="border:0px solid red;">
       <el-row :gutter="20">
-        <el-col :span="8">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t("openatc.greenwaveoptimize.deviceid") }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div class="grid-content bg-purple">{{ node.agentid }}</div>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="8">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t("openatc.dutyroute.executionway") }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div class="grid-content bg-purple">
-                {{ node.controlName }}
-              </div>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="8">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t("openatc.dutyroute.residentphase") }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div class="grid-content bg-purple">{{ node.value }}</div>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t('openatc.devicemanager.state') }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div class="grid-content bg-purple">
-                <template>
-                  <div>
-                      <el-tag size="medium" effect="plain" :type="getTag(node).type">{{ getTag(node).label }}</el-tag>
-                  </div>
-                </template>
-                <!-- {{ getDeviceState (node)}} -->
-              </div>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="8">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t("openatc.greenwaveoptimize.pattern") }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div class="grid-content bg-purple">{{ node.terminalname }}</div>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="8">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t("openatc.dutyroute.lasttime") }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <template class="grid-content bg-purple">{{ node.totaltime }}</template>
-              <el-button
-                v-show="tabName === 'second'"
-                style="float: right;"
-                type="primary"
-                size="small"
-                @click="executeViproute"
-                >
-                <template v-if="!node.state || node.state === 0">
-                  {{ $t("openatc.dutyroute.executenow") }}
-                </template>
-                <template v-else>
-                  {{ $t("openatc.dutyroute.cancelexecute") }}
-                </template>
-                </el-button
-              >
-            </el-col>
-            <!-- <div class="btn-bottom" v-show="tabName === 'second'">
-            </div> -->
-          <!-- </el-row>
-          <el-row :gutter="10"> -->
-          </el-row>
-        </el-col>
-        <!-- <el-col :span="8">
-        </el-col> -->
+        <div class="grid-content-label" style="display:inline-block;margin-right:10px;margin-left:10px;">
+          {{ $t("openatc.dutyroute.executionway") }} :
+        </div>
+        <div class="grid-content bg-purple" style="display:inline-block;margin-right:80px;">
+          {{ getContent(node) }}
+        </div>
+        <div class="grid-content-label" style="display:inline-block;margin-right:10px;">
+          {{ $t("openatc.dutyroute.lasttime") }} :
+        </div>
+        <div class="grid-content bg-purple" style="display:inline-block;margin-right:10px;">
+          {{ node.totaltime }}
+        </div>
       </el-row>
     </div>
   </el-card>
@@ -137,6 +51,7 @@
 <script>
 import { ExecuteViproute } from '@/api/service'
 import { getMessageByCode } from '@/utils/responseMessage'
+import ServiceUtil from '../ServiceUtil.js'
 export default {
   name: 'nodeCard',
   props: {
@@ -150,9 +65,12 @@ export default {
   },
   data () {
     return {
-      isShow: false,
+      isShow: true,
       isBtnDisabled: false
     }
+  },
+  created () {
+    this.serviceUtil = new ServiceUtil()
   },
   methods: {
     onCloseClick () {
@@ -214,8 +132,14 @@ export default {
           type: 'danger'
         }
       }
+    },
+    getContent (row) {
+      let res = this.serviceUtil.getContent(row)
+      // if (res === '') {
+      //   res = row.controlName
+      // }
+      return res
     }
-
   }
 }
 </script>

@@ -21,9 +21,12 @@ import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.DictConfigRepository;
 import com.openatc.agent.service.HisParamServiceImpl;
+import com.openatc.agent.service.MessageService;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
+import com.openatc.comm.handler.IMsgPostHandler;
+import com.openatc.comm.handler.IMsgPreHandler;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.comm.ocp.DataParamMD5;
 import com.openatc.core.model.InnerError;
@@ -75,6 +78,13 @@ public class MessageController {
     @Autowired
     private DictConfigRepository dictConfigRepository;
 
+
+    @Autowired
+    private IMsgPostHandler msgPostHandler;
+
+    @Autowired
+    private IMsgPreHandler msgPreHandler;
+
     Gson gson = new Gson();
 
     @PostConstruct
@@ -92,6 +102,10 @@ public class MessageController {
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) {
+        RESTRet ret = msgPreHandler.process(requestData);
+        if (ret.getData() != null){
+            return ret;
+        }
         AscsBaseModel ascsBaseModel = mDao.getAscsByID(requestData.getAgentid());
         return postDevsMessageByAscsBaseModel(ascsBaseModel,httpServletRequest,requestData);
     }
@@ -163,8 +177,16 @@ public class MessageController {
             }
         }
 
+
         // 发送请求，并把应答返回
         RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
+
+        // 处理应答后的请求
+        RESTRet ret = msgPostHandler.process(requestData, responceData);
+        if (ret.getData() != null) {
+            responceData = ret;
+        }
+
 
         // 把设置请求set-request的操作保存到历史记录中
         if (requestData.getOperation().equals("set-request")) {

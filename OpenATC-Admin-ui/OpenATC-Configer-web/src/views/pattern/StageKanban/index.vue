@@ -12,8 +12,11 @@
 <template>
 <div class="components-container board">
   <div class="board-column">
-    <div class="board-column-header">
-      {{headerText}}
+    <div class="board-column-header" style="position:relative">
+      <span>{{$t('edge.pattern.stage')+(subIndex+1)}}</span>
+      <span v-if="contrloType" style="position: absolute;right: 0;">
+        <el-button type="primary" @click="deleteStage(subIndex)" icon="el-icon-close"></el-button>
+      </span>
     </div>
     <div
       class="board-column-content"
@@ -25,6 +28,16 @@
           </el-col>
           <el-col :span="12">
             <el-input-number
+              v-if="contrloType"
+              class="stage-value"
+              :controls="false"
+              size="small"
+              :disabled="true"
+              ref="type"
+              v-model.number="stage.stageSplit">
+            </el-input-number>
+            <el-input-number
+              v-if="!contrloType"
               class="stage-value"
               :controls="false"
               size="small"
@@ -40,7 +53,16 @@
             {{this.$t('edge.pattern.phase')}}
           </el-col>
           <el-col :span="12">
+            <el-select v-if="contrloType" v-model="stage.phases" multiple :placeholder="$t('edge.common.select')">
+              <el-option
+                v-for="item in coordphaseOption"
+                :key="item.value"
+                :label="$t('edge.pattern.phase') + item.value"
+                :value="item.value">
+              </el-option>
+            </el-select>
             <el-input
+              v-if="!contrloType"
               class="stage-value"
               size="small"
               :value="stage.stages.join(',')"
@@ -50,35 +72,45 @@
             </el-input>
           </el-col>
         </el-row>
-        <el-row :gutter="0">
+        <el-row :gutter="0" v-if="contrloType">
           <el-col :span="12">
-            {{this.$t('edge.pattern.delaystart')}}
+            {{this.$t('edge.pattern.green')}}
           </el-col>
           <el-col :span="12">
             <el-input-number
               class="stage-value"
-              :controls="false"
               size="small"
-              v-model.number="stage.delaystart"
-              ref="type"
-              :disabled="true"
-              @change="onDelaystartChange">
+              :controls="false"
+              v-model.number="stage.green"
+              @change="stageSplitChange">
             </el-input-number>
           </el-col>
         </el-row>
-        <el-row :gutter="0">
+        <el-row :gutter="0" v-if="contrloType">
           <el-col :span="12">
-            {{this.$t('edge.pattern.advanceend')}}
+            {{this.$t('edge.pattern.yellow')}}
           </el-col>
           <el-col :span="12">
             <el-input-number
               class="stage-value"
-              :controls="false"
               size="small"
-              v-model.number="stage.advanceend"
-              ref="type"
-              :disabled="true"
-              @change="onAdvanceendChange">
+              :controls="false"
+              v-model.number="stage.yellow"
+              @change="stageSplitChange">
+            </el-input-number>
+          </el-col>
+        </el-row>
+        <el-row :gutter="0" v-if="contrloType">
+          <el-col :span="12">
+            {{this.$t('edge.pattern.red')}}
+          </el-col>
+          <el-col :span="12">
+            <el-input-number
+              class="stage-value"
+              size="small"
+              :controls="false"
+              v-model.number="stage.red"
+              @change="stageSplitChange">
             </el-input-number>
           </el-col>
         </el-row>
@@ -100,9 +132,22 @@ export default {
     }
   },
   props: {
-    headerText: {
-      type: String,
-      default: 'Header'
+    // headerText: {
+    //   type: String,
+    //   default: 'Header'
+    // },
+    stageInfo: {
+      type: Array
+    },
+    coordphaseOption: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    contrloType: {
+      type: Boolean,
+      default: false
     },
     options: {
       type: Object,
@@ -116,6 +161,11 @@ export default {
         return {
           split: 0,
           stages: [],
+          phases: [],
+          stageSplit: 0,
+          green: 0,
+          yellow: 0,
+          red: 0,
           delaystart: 0,
           advanceend: 0
         }
@@ -128,15 +178,50 @@ export default {
       type: Number
     }
   },
+  created () {
+  },
+  watch: {
+    stage: {
+      handler: function () {
+        if (this.contrloType) {
+          let n = this.rowIndex
+          const globalParamModel = this.$store.getters.globalParamModel
+          let pattern = globalParamModel.getParamsByType('patternList')[n]
+          globalParamModel.getParamsByType('patternList')[n].cycle = this.getMaxCycle(pattern)
+        }
+      },
+      deep: true
+    }
+  },
   mounted () {
   },
   methods: {
+    deleteStage (index) {
+      this.stageInfo.splice(index, 1)
+    },
+    getMaxCycle (pattern) {
+      let rings = pattern.stagesList
+      let stageCycleList = rings.map(item => {
+        return item.stageSplit
+      })
+      let maxCycle = stageCycleList.reduce((a, b) => {
+        return a + b
+      }, 0)
+      return maxCycle
+    },
     onSplitChange (newVal, oldVal) {
       let diff = newVal - (oldVal || 0)
       if (diff === 0) {
         return false
       }
       this.$emit('onStageSplitChange', diff, this.rowIndex, this.subIndex)
+    },
+    stageSplitChange (newVal, oldVal) {
+      let diff = newVal - (oldVal || 0)
+      if (diff === 0) {
+        return false
+      }
+      this.$emit('stageSplitChange', diff, this.rowIndex, this.subIndex)
     },
     onDelaystartChange (newVal, oldVal) {
       let diff = newVal - (oldVal || 0)
@@ -165,6 +250,11 @@ export default {
     line-height: 40px;
     padding: 1px 1px;
     box-sizing: border-box;
+  }
+  .el-button--primary:hover, .el-button--primary:focus{
+    background: #409EFF;
+    border-color: #409EFF;
+    color: #FFFFFF;
   }
   .stage-value {
     text-align: left;

@@ -104,6 +104,19 @@ export const downloadTscParam = (operator, tscParams) => {
   return api.Send({}, data)
 }
 
+export const saveTscParam = (tscParams) => {
+  var iframdevid = getIframdevid()
+  let api = new Authapi('saveTscParam')
+  let param = JSON.stringify(tscParams)
+  let params = JSON.parse(param)
+  let data = {}
+  data.agentid = iframdevid
+  data.operation = 'set-request'
+  data.infotype = 'feature/all'
+  data.data = params
+  return api.Send({}, data)
+}
+
 export const downloadSingleTscParam = (type, typeParams) => {
   var iframdevid = getIframdevid()
   let api = new Authapi('downloadSingleTscParam')

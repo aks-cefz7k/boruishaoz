@@ -79,18 +79,18 @@ export default {
   text-align: center;
 }
 .MessageBox .el-dialog__title {
-  font-size: 16px;
+  font-size: 16PX;
 }
 .MessageBox .text {
-  font-size: 14px;
+  font-size: 14PX;
 }
 .MessageBox .boxFooter .btn {
-  font-size: 14px;
-  width: 64px;
-  height: 34px;
-  padding: 2px 10px;
+  font-size: 14PX;
+  width: 64PX;
+  height: 34PX;
+  padding: 2PX 10PX;
 }
 .MessageBox .el-dialog__footer {
-  padding: 10px 20px 20px;
+  padding: 10PX 20PX 20PX;
 }
 </style>

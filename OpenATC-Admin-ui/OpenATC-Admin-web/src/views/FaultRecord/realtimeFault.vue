@@ -140,11 +140,16 @@ export default {
         pageNum: 1, // 页码
         pageRow: 50 // 每页条数
       },
-      totalCount: 0 // 分页组件--数据总条数
+      totalCount: 0, // 分页组件--数据总条数
+      faultBoardType: ''
     }
   },
   created () {
-    this.getAllRecord()
+    if (this.$route.params.filter) {
+      this.getStatusFilterParams()
+    } else {
+      this.getAllRecord()
+    }
   },
   mounted: function () {
     var _this = this
@@ -193,7 +198,7 @@ export default {
     },
     getAllRecord () {
       this.listLoading = true
-      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, true).then(data => {
+      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, true, undefined, undefined, undefined, this.faultBoardType).then(data => {
         this.listLoading = false
         if (data.data.success !== true) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
@@ -234,8 +239,14 @@ export default {
         this.messageboxVisible = false
         this.getAllRecord()
       })
+    },
+    getStatusFilterParams () {
+      // 获取从首页跳转过来的设备状态过滤参数
+      if (this.$route.params.filter !== undefined) {
+        this.faultBoardType = this.$route.params.filter
+        this.getAllRecord()
+      }
     }
-
   }
 }
 </script>

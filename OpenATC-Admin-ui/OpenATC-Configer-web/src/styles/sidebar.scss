@@ -15,20 +15,20 @@
     // height: 92.7%;
     height: 100%;
     transition: margin-left .28s;
-    margin-left: 180px;
+    margin-left: 180PX;
   }
   //main-container全局样式
  .edge-app-main{
-    height: calc(100% - 70px)
+    height: calc(100% - 70PX)
   }
   // 侧边栏
   .sidebar-container {
     transition: width 0.28s;
-    width: 180px;
+    width: 180PX;
     height: 100%;
     position: absolute !important;
-    font-size: 0px;
-    border-right: 1px solid $--border-color-base;
+    font-size: 0PX;
+    border-right: 1PX solid $--border-color-base;
     top: 0;
     bottom: 0;
     left: 0;
@@ -55,7 +55,7 @@
       overflow: hidden;
     }
     .svg-icon {
-      margin-right: 16px;
+      margin-right: 16PX;
     }
     .el-menu {
       border: none;
@@ -65,23 +65,23 @@
   }
   .hideSidebar {
     .sidebar-container {
-      width: 36px;
+      width: 36PX;
     }
     .edge-main-container {
-      margin-left: 36px;
+      margin-left: 36PX;
       height: 100%;
     }
     .submenu-title-noDropdown {
-      padding-left: 10px !important;
+      padding-left: 10PX !important;
       position: relative;
       .el-tooltip {
-        padding: 0 10px !important;
+        padding: 0 10PX !important;
       }
     }
     .el-submenu {
       overflow: hidden;
       &>.el-submenu__title {
-        padding-left: 10px !important;
+        padding-left: 10PX !important;
         .el-submenu__icon-arrow {
           display: none;
         }
@@ -103,29 +103,29 @@
   }
   // .sidebar-container .nest-menu .el-submenu>.el-submenu__title,
   // .sidebar-container .el-submenu .el-menu-item {
-  //   min-width: 180px !important;
+  //   min-width: 180PX !important;
   //   background-color: $subMenuBg !important;
   //   &:hover {
   //     background-color: $menuHover !important;
   //   }
   // }
   // .el-menu--collapse .el-menu .el-submenu {
-  //   min-width: 180px !important;
+  //   min-width: 180PX !important;
   // }
 
   //适配移动端
   .mobile {
     .edge-main-container {
-      margin-left: 0px;
+      margin-left: 0PX;
     }
     .sidebar-container {
       transition: transform .28s;
-      width: 180px !important;
+      width: 180PX !important;
     }
     &.hideSidebar {
       .sidebar-container {
         transition-duration: 0.3s;
-        transform: translate3d(-180px, 0, 0);
+        transform: translate3d(-180PX, 0, 0);
       }
     }
   }

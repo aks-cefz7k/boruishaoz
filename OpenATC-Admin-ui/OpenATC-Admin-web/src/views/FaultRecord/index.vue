@@ -51,6 +51,10 @@ export default {
       })
     },
     handleSwitchPage (key) {
+      if (this.$route.params.filter !== undefined && key === 'realtimefault') {
+        // 再次点击实时故障，需要显示全部，清除已有的路由过滤参数。由于路由没变化，只能刷新
+        this.$router.replace('/refresh')
+      }
       this.changeBtnStyle(key)
     },
     changeBtnPosition (offsetTop) {

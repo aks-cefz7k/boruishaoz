@@ -12,14 +12,18 @@
 <template>
   <div class="app-container" ref="pattern-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
+    <el-button style="margin-bottom:10px" type="primary" @click="changeRing">{{$t('edge.common.ringStyle')}}</el-button>
+    <el-button style="margin-bottom:10px" type="primary" @click="changeStage">{{$t('edge.common.stageStyle')}}</el-button>
     <el-table :data="patternList" :max-height="tableHeight" highlight-current-row  ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
         <template slot-scope="scope">
           <el-tabs v-model="activeList[scope.$index]"  @tab-click="handleClick" type="card">
-            <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
-              <!-- <el-row :gutter="20"> -->
-                <!-- <el-col :span="24" > -->
-                  <div style="padding-left:36%;padding-right:2%;">
+            <el-tab-pane v-if="!contrloType" :label="$t('edge.pattern.ringConfig')" name="ring">
+              <el-row :gutter="20">
+                <el-col :span="12" >
+                  <!-- style="padding-left:36%;padding-right:2%;" -->
+                  <!-- <div> -->
+                  <div class="components-container board" >
                     <Kanban v-for="n in ringCount"
                     :key="n" class="kanban todo"
                     :list="scope.row.rings[n-1]"
@@ -28,33 +32,37 @@
                     :index="scope.$index"
                     @handleSplit="handleSplit"/>
                   </div>
-                <!-- </el-col> -->
-                <!-- <el-col :span="12">
-                  <FollowPhase>
-
-                  </FollowPhase>
-                </el-col> -->
-              <!-- </el-row> -->
+                </el-col>
+                <el-col :span="12">
+                </el-col>
+              </el-row>
             </el-tab-pane>
-            <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="stage">
+            <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="kanban">
               <el-scrollbar :vertical="false">
                 <div class="stage-panel-contener">
                   <StageKanban v-for="(stage,index) in scope.row.stagesList"
                     class="kanban todo"
                     :key="index"
                     :stage="stage"
+                    :stageInfo="scope.row.stagesList"
+                    :contrloType="contrloType"
                     :options="scope.row.options"
-                    :header-text="$t('edge.pattern.stage') + Number(index + 1)"
+                    :coordphaseOption="coordphaseOption"
                     :rowIndex="scope.$index"
                     :subIndex="index"
                     @onStageSplitChange="onStageSplitChange"
+                    @stageSplitChange="stageSplitChange"
                     @onStageDelaystartChange="onStageDelaystartChange"
                     @onStageAdvanceendChange="onStageAdvanceendChange"
                     />
+                    <!-- :header-text="$t('edge.pattern.stage') + Number(index + 1)" -->
+                    <div v-if="contrloType" style="margin-left: 20px;">
+                      <el-button type="primary" @click="addStage(scope.row.stagesList)" icon="el-icon-plus" circle></el-button>
+                    </div>
                 </div>
               </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane :label="$t('edge.pattern.parameters')" name="parame">
+            <el-tab-pane v-if="!contrloType" :label="$t('edge.pattern.parameters')" name="parame">
               <el-row :gutter="20">
                 <el-col :span="12">
                  <div class="components-container board">
@@ -91,17 +99,18 @@
                 </el-col>
               </el-row>
             </el-tab-pane>
-            <el-tab-pane :label="$t('edge.pattern.overLap')" name="overlap">
+            <el-tab-pane v-if="!contrloType" :label="$t('edge.pattern.overLap')" name="overlap">
               <el-row :gutter="20">
                 <el-col :span="24" >
                   <el-scrollbar :vertical="false">
                     <div class="stage-panel-contener">
-                      <OverLap
+                      <over-lap
                       :stageList="scope.row.stagesList"
                       :checked="true"
                       :overlap="overlap"
                       :cycle="scope.row.cycle"
-                      />
+                      >
+                      </over-lap>
                     </div>
                   </el-scrollbar>
                 </el-col>
@@ -110,38 +119,40 @@
           </el-tabs>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="ID" width="140">
+      <el-table-column align="center" label="ID">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc" width="140">
+      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc">
         <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"></el-input>
         </template>
       </el-table-column>
-      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset" width="140">
+      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset">
         <template slot-scope="scope">
           <el-input size="small" v-model.number="scope.row.offset" @blur="checkOffset(scope.row.offset, scope.row)"></el-input>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle" width="140">
+      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" width="870px">
         <template slot-scope="scope">
             <div class="pattern-figure">
-              <BoardCard
+              <pattern-list
               :patternId="scope.row.id"
+              :contrloType="contrloType"
+              :stagesChange="scope.row.stagesList"
               :patternStatusList="scope.row.rings"
               :cycles="scope.row.cycle"
               :phaseList="phaseList"
               :agentId="agentId"
               >
-              </BoardCard>
+              </pattern-list>
             </div>
          </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">
+      <el-table-column align="center" :label="$t('edge.pattern.operation')">
         <template slot-scope="scope">
           <el-button type="text"  @click="handleDelete(scope.$index, scope.row)">{{$t('edge.common.delete')}}</el-button>
         </template>
@@ -153,23 +164,20 @@
 <script>
 import Kanban from '@/components/Kanban'
 import StageKanban from '@/views/pattern/StageKanban'
-import BoardCard from '@/components/BoardCard'
-import FollowPhase from '@/components/FollowPhase'
+// import StageAdd from '@/views/pattern/StageAdd'
+// import BoardCard from '@/components/BoardCard'
 import ExpendConfig from '@/components/ExpendConfig'
-import OverLap from '@/components/OverLap'
+// import OverLap from '@/components/OverLap'
 import { uploadSingleTscParam } from '@/api/param'
 import { getMessageByCode } from '../../utils/responseMessage'
 // import { mapState } from 'vuex'
 // import { getTscControl } from '@/api/control'
-import { getIframdevid } from '@/utils/auth'
+import { getIframdevid, setStageType, getStageTypes } from '@/utils/auth'
 export default {
   name: 'patterns',
   components: {
     Kanban,
-    BoardCard,
-    FollowPhase,
     ExpendConfig,
-    OverLap,
     StageKanban
   },
   data () {
@@ -178,16 +186,20 @@ export default {
       ringCount: 1,
       ringCounts: 1,
       addId: 1,
+      // stageTypes: '',
+      // ringTypes: '',
+      contrloType: false,
       options: {
         group: 'pattern'
       },
       id: 1,
       agentId: '',
       barrierList: [],
+      coordphaseOption: [],
       phaseList: [], // 当前相位集合
       currPatternName: '--',
       patternStatusIndex: -1,
-      // activeName: 'ring',
+      activeName: '',
       stagesList: [],
       concurrentList: [],
       barrId: [],
@@ -205,14 +217,26 @@ export default {
       return this.$store.state.globalParam.tscParam.patternList
     },
     activeList () {
-      return this.patternList.map(i => 'ring')
+      if (this.contrloType) {
+        return this.patternList.map(i => 'kanban')
+      } else {
+        return this.patternList.map(i => 'ring')
+      }
     }
   },
   created () {
+    if (getStageTypes('contrloType') === 'true') {
+      this.contrloType = true
+    } else {
+      this.contrloType = false
+    }
     this.globalParamModel = this.$store.getters.globalParamModel
     this.initData()
     this.getPhase()
-    this.getPattern()
+    // this.getPattern()
+    if (!this.contrloType) {
+      this.changeRing()
+    }
   },
   mounted: function () {
     var _this = this
@@ -224,23 +248,77 @@ export default {
     })
   },
   watch: {
+    contrloType: {
+      handler: (filter) => {
+        setStageType(filter)
+      },
+      deep: true
+    },
     patternList (val, oldVal) {
       if (!val.length) return
       this.getPattern()
     }
   },
   methods: {
+    changeRing () {
+      this.contrloType = false
+      this.getCycle()
+      const globalParamModel = this.$store.getters.globalParamModel
+      let pattern = globalParamModel.getParamsByType('patternList')
+      for (let i = 0; i < pattern.length; i++) {
+        this.handleStageData(pattern[i].rings, pattern[i].id, pattern[i].stagesList)
+      }
+    },
+    changeStage () {
+      this.contrloType = true
+      this.getStageCycle()
+    },
+    getStageCycle () {
+      const globalParamModel = this.$store.getters.globalParamModel
+      let pattern = globalParamModel.getParamsByType('patternList')
+      for (let i = 0; i < pattern.length; i++) {
+        globalParamModel.getParamsByType('patternList')[i].cycle = this.getMaxCycle(pattern[i])
+        this.handleStageData(pattern[i].rings, pattern[i].id, pattern[i].stagesList)
+      }
+    },
+    addStage (row) {
+      row.push(
+        {
+          key: row.length,
+          green: 0,
+          yellow: 0,
+          red: 0,
+          phases: [],
+          stageSplit: 0
+        }
+      )
+    },
+    getMaxCycle (pattern) {
+      let rings = pattern.stagesList
+      let stageCycleList = rings.map(item => {
+        return item.stageSplit ? item.stageSplit : 0
+      })
+      let maxCycle = stageCycleList.reduce((a, b) => {
+        return a + b
+      }, 0)
+      return maxCycle
+    },
     getPattern () {
       let patternList = this.$store.state.globalParam.tscParam.patternList
       if (!patternList.length) return
       this.initData()
       for (let i = 0; i < patternList.length; i++) {
-        this.handleStageData(patternList[i].rings, patternList[i].id)
+        this.handleStageData(patternList[i].rings, patternList[i].id, patternList[i].stagesList)
       }
     },
     initData () {
       // 判断有几个环，就创建几个看板
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      this.coordphaseOption = phaseList.map(ele => {
+        return {
+          value: ele.id
+        }
+      })
       this.overlap = this.globalParamModel.getParamsByType('overlaplList')
       this.agentId = getIframdevid()
       let rings = []
@@ -320,6 +398,7 @@ export default {
         desc: `${this.$t('edge.pattern.pattern')}${this.id}`,
         offset: 0,
         cycle: 0,
+        stagesList: [],
         rings: [[], [], [], []]
       }
       var newPattern = JSON.parse(JSON.stringify(Pattern))
@@ -401,6 +480,7 @@ export default {
     getOptionsOfRing () {
       let patternList = this.globalParamModel.getParamsByType('patternList')
       for (let pattern of patternList) {
+        if (pattern.rings.length === 0) return
         for (let rings of pattern.rings) {
           for (let ring of rings) {
             ring.options = this.getDecimalSystem(ring.options)
@@ -422,6 +502,7 @@ export default {
       let patternList = this.globalParamModel.getParamsByType('patternList')
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
       for (let pattern of patternList) {
+        if (pattern.rings.length === 0) return
         for (let phase of phaseList) {
           if (phase.ring === 1) {
             let list = this.getPhaseDescription(phase.direction)
@@ -513,7 +594,7 @@ export default {
     handleSplit (index) {
       let currPattern = this.patternList[index]
       setTimeout(() => {
-        this.handleStageData(currPattern.rings, this.patternList[index].id)
+        this.handleStageData(currPattern.rings, this.patternList[index].id, currPattern.stagesList)
       }, 50)
     },
     handleClick (tab, event) {
@@ -544,7 +625,7 @@ export default {
     //     console.log(error)
     //   })
     // },
-    handleStageData (rings, id) { // stagesList
+    handleStageData (rings, id, stageChange) { // stagesList
       let phaseList = []
       let stagesList = []
       let patternList = this.globalParamModel.getParamsByType('patternList')
@@ -603,10 +684,11 @@ export default {
       for (let i = this.stateList.length - 1; i >= 1; i--) {
         this.narr.push(this.stateList[i] - this.stateList[i - 1])
       }
+      // newPhaselist
       this.narr.reverse()// 阶段差
-      for (let i = 0; i < newPhaselist.length; i++) {
-        let stage = JSON.parse(JSON.stringify(newPhaselist[i]))
-        let stageItem = this.getStageItem(stage, rings, i)
+      for (let i = 0; i < stageChange.length; i++) {
+        let stage = JSON.parse(JSON.stringify(stageChange[i]))
+        let stageItem = this.getStageItem(stage.phases ? stage.phases : stage.stages, rings, i, stageChange)
         stagesList.push(JSON.parse(JSON.stringify(stageItem)))
       }
       patternList.map(item => { // 添加特征参数stage
@@ -617,7 +699,7 @@ export default {
       })
       this.stagesList = JSON.parse(JSON.stringify(stagesList))
     },
-    getStageItem (stageArr, ringsList, i) {
+    getStageItem (stageArr, ringsList, i, stageChange) {
       let res = {
         key: i,
         split: this.narr[i], // 阶段绿性比
@@ -640,6 +722,16 @@ export default {
           }
         }
       }
+      for (let rings of stageChange) {
+        if (i === rings.key) {
+          res.green = rings.green ? rings.green : 0
+          res.yellow = rings.yellow ? rings.yellow : 0
+          res.red = rings.red ? rings.red : 0
+          res.phases = rings.phases ? rings.phases : stageArr
+          res.stageSplit = rings.stageSplit ? rings.stageSplit : 0
+        }
+      }
+
       // splitArr.sort(function (a, b) { return a - b })
       delaystartArr.sort(function (a, b) { return b - a })
       advanceendArr.sort(function (a, b) { return a - b })
@@ -658,6 +750,16 @@ export default {
             ring.value = (ring.value ? ring.value : 0) + diff
             continue
           }
+        }
+      }
+    },
+    stageSplitChange (diff, rowIndex, subIndex) {
+      let row = this.patternList[rowIndex]
+      let ringsList = row.stagesList
+      for (let rings of ringsList) {
+        if (subIndex === rings.key) {
+          rings.stageSplit = (rings.green ? rings.green : 0) + (rings.yellow ? rings.yellow : 0) + (rings.red ? rings.red : 0)
+          continue
         }
       }
     },
@@ -692,6 +794,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.stage-item {
+    cursor: pointer;
+    width: 100%;
+    height: auto;
+    margin: 5px 0;
+    text-align: left;
+    line-height: 40px;
+    padding: 1px 1px;
+    box-sizing: border-box;
+    .el-select .el-input__inner {
+      vertical-align: bottom !important;
+    }
+  }
+  .stageAdds{
+    margin-left: 30px;
+  }
+  .board-column-header {
+    position: relative;
+  }
   .board {
     width: 100%;
     margin-left: 10px;
@@ -704,6 +826,11 @@ export default {
     overflow: unset;
     line-height: unset;
   }
+  .deleteIcon{
+    position:absolute;
+    top: 0;
+    right: -10px;
+  }
   .kanban {
     &.todo {
       .board-column-header {
@@ -715,5 +842,6 @@ export default {
     display: flex;
     flex-direction: row;
     align-content:flex-start;
+    align-items: center;
   }
 </style>

@@ -24,40 +24,46 @@
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
         <div class="tuxing-left" :class="{'changeWidth': graphicMode}" ref="tuxingLeft">
-          <IntersectionMap
-              ref="intersectionMap"
-              :crossStatusData="crossStatusData"
-              :devStatus="devStatus"
-              :agentId="agentId"
-              :graphicMode="graphicMode" />
+          <intersection-base-map
+            ref="intersectionMap"
+            :crossStatusData="crossStatusData"
+            :devStatus="devStatus"
+            :agentId="agentId"
+            :graphicMode="graphicMode"
+            :roadDirection="roadDirection" />
           <div class="pattern-status" v-if="!graphicMode">
             <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.patternoffset')}}: {{controlData.patternoffset}} {{$t('edge.overview.coordinationtime')}}: {{controlData.offset}})</div>
               <!-- <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span> -->
               <span class="pattern-explain"><el-checkbox v-model="checked">{{$t('edge.pattern.overLap')}}</el-checkbox></span>
               <!-- P{{$t('edge.overview.phase')}} -->
-            <BoardCard
+            <pattern-list
             ref="boardCard"
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
             :controlData="controlData"
+            :contrloType="contrloType"
+            :patternStatusList="patternList"
+            :localPatternList="allPatternList"
             :phaseList="phaseList"
             :isPhase="true"
             :agentId="agentId"
-              >
-            </BoardCard>
-            <OverLap
+            >
+            </pattern-list>
+            <over-lap
+            v-if="!contrloType"
             :checked="checked"
             :overlap="overlap"
             :stageList="stagesListOver"
             :cycle="controlData.cycle"
             :controlData="controlData"
-            />
+            >
+            </over-lap>
           </div>
         </div>
 
         <div ref="tuxingRight" class="tuxing-right" >
-          <RightPanel
+          <scheme-config
             ref="rightpanel"
             :statusData="crossStatusData"
             :agentName="agentName"
@@ -65,7 +71,9 @@
             :devStatus="devStatus"
             :agentId="agentId"
             :ip="ip"
-            :platform="platform" />
+            :platform="platform"
+            :funcSort="FuncSort"
+            :roadDirection="roadDirection" />
         </div>
       </div>
     </div>
@@ -76,36 +84,29 @@
 import { mapState } from 'vuex'
 import { getTscControl, queryDevice } from '@/api/control'
 import { registerMessage, uploadSingleTscParam } from '@/api/param'
-import { setIframdevid } from '@/utils/auth'
-import FloatImgBtn from '@/components/FloatImgBtn'
-import CrossDiagram from './crossDirection/crossDiagram'
-import BoardCard from '@/components/BoardCard'
-
-import OverLap from '@/components/OverLap'
+import { setIframdevid, getStageTypes } from '@/utils/auth'
+// import BoardCard from '@/components/BoardCard'
+// import OverLap from '@/components/OverLap'
+import { getIntersectionInfo } from '@/api/template'
 // import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
-import PhaseDataModel from '@/views/overView/crossDirection/utils'
+import PhaseDataModel from 'openatc-components/package/kisscomps/components/IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
-import RightPanel from '@/components/SchemeConfig'
 import TextPage from './textPage/index'
-import IntersectionMap from '@/components/IntersectionMap'
 export default {
   name: 'overview',
   components: {
-    FloatImgBtn,
-    CrossDiagram,
-    BoardCard,
-    RightPanel,
-    OverLap,
-    TextPage,
-    IntersectionMap
+    TextPage
   },
   data () {
     return {
       controlData: {},
       checked: false,
       overlap: [],
+      contrloType: false,
       narr: [],
+      patternList: [],
+      allPatternList: [],
       stagesListOver: [],
       sidewalkPhaseData: [],
       phaseControlTimer: null, // 定时器
@@ -136,13 +137,17 @@ export default {
     }
   },
   computed: {
+    // patternList () {
+    //   return this.$store.state.globalParam.tscParam.patternList
+    // },
     ...mapState({
       curBodyWidth: state => state.globalParam.curBodyWidth,
       curBodyHeight: state => state.globalParam.curBodyHeight,
       FuncSort: state => state.globalParam.FuncSort,
       hideMenu: state => state.globalParam.hideMenu,
       graphicMode: state => state.globalParam.graphicMode,
-      isShowGui: state => state.globalParam.isShowGui
+      isShowGui: state => state.globalParam.isShowGui,
+      roadDirection: state => state.globalParam.roadDirection
     })
   },
   watch: {
@@ -172,8 +177,12 @@ export default {
   created () {
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
+    if (getStageTypes('contrloType') === 'true') {
+      this.contrloType = true
+    } else {
+      this.contrloType = false
+    }
     this.globalParamModel = this.$store.getters.globalParamModel
-    this.overlap = this.globalParamModel.getParamsByType('overlaplList')
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
       this.agentId = this.$route.query.agentid
       setIframdevid(this.agentId)
@@ -196,6 +205,18 @@ export default {
     }
   },
   methods: {
+    getIntersectionInfo (agentid, id) {
+      // 获取路口信息
+      getIntersectionInfo(agentid).then(res => {
+        this.globalParamModel.setGlobalParams(res.data.data.param)
+        this.allPatternList = res.data.data.param.patternList
+        this.overlap = res.data.data.param.overlaplList
+        this.phaseList = res.data.data.param.phaseList
+        this.patternList = res.data.data.param.patternList.filter(item => {
+          return item.id === id
+        })[0].rings
+      })
+    },
     getPedPhasePos () {
       // 行人相位信息
       this.sidewalkPhaseData = []
@@ -313,12 +334,13 @@ export default {
           return
         }
         this.crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
+        this.getIntersectionInfo(this.agentId, this.crossStatusData.patternid)
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
         // this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
         this.checkStage(this.controlData)
       }).catch(error => {
-        this.$message.error(error)
+        // this.$message.error(error)
         console.log(error)
       })
     },
@@ -506,7 +528,8 @@ export default {
         }
         this.platform = res.data.data.platform
         this.$refs.intersectionMap.resetCrossDiagram()
-        this.registerMessage() // 注册消息
+        this.registerMessage(this.agentId) // 注册消息
+        // this.getIntersectionInfo(this.agentId)
       })
     },
     getPhase () {
@@ -529,7 +552,6 @@ export default {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
-
         let devParams = res.data.data.jsonparam
         this.ip = devParams.ip
         this.port = String(devParams.port)

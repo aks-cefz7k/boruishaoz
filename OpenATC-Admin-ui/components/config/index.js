@@ -10,7 +10,21 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/': {
+        // target:  'http://192.168.13.103:8012/openatc',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
+        // target:  'http://192.168.14.2:8012/openatc',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
+        // target:  'https://dolphin-test.kedacom.com/openatc',
+        target:  'http://192.168.13.105:11003/openatc',
+        // target:  'http://192.168.13.103:10003/openatc',
+        // target:  'http://192.168.13.103:9999',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
+        // target:  'http://192.168.13.103:9999/kissapi',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
+        changeOrigin: true,     //跨域
+        pathRewrite: {
+          '^/': '/'//这里理解成用‘/api’代替target里面的地址，后面组件中我们掉接口时直接用api代替 比如我要调用'http://10.1.5.11:8080/xxx/duty?time=2017-07-07 14:57:22'，直接写‘/api/xxx/duty?time=2017-07-07 14:57:22’即可
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -26,7 +40,7 @@ module.exports = {
     useEslint: true,
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
-    showEslintErrorsInOverlay: false,
+    showEslintErrorsInOverlay: true,
 
     /**
      * Source Maps
@@ -38,9 +52,9 @@ module.exports = {
     // If you have problems debugging vue-files in devtools,
     // set this to false - it *may* help
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
-    cacheBusting: true,
+    cacheBusting: false,
 
-    cssSourceMap: true
+    cssSourceMap: false
   },
 
   build: {
@@ -49,7 +63,7 @@ module.exports = {
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: './',
     assetsPublicPath: './',
 
     /**

@@ -34,6 +34,7 @@ import adaptiveParameter from '../views/adaptiveParameter/index'
 import controlPanel from '../views/controlPanel/index'
 import en from '../i18n/language/en'
 import zh from '../i18n/language/zh'
+import openatcComponents from 'openatc-components'
 import Layout from '../views/layout/Layout'
 // import LoginFunc from '../views/login/loginInterface'
 import optimize from '../views/optimize/index'
@@ -79,7 +80,8 @@ const components = {
 
 const language = {
   en,
-  zh
+  zh,
+  openatcComponentsLang: openatcComponents.language
 }
 const Store = {
   app,

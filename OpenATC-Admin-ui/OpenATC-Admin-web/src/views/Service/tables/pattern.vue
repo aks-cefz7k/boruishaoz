@@ -27,33 +27,20 @@
       >
       </el-table-column>
       <el-table-column
+        prop="control"
         :label="$t('openatc.dutyroute.controlpattern')"
+        :formatter="formatControl"
         align="center"
       >
-        <template slot-scope="scope">
-          <el-select
-            v-model="scope.row.control"
-            collapse-tags
-            clearable
-            filterable
-            :placeholder="$t('openatc.common.placeholder')"
-          >
-            <el-option
-              v-for="(item, index) in controlOptions"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </template>
       </el-table-column>
       <el-table-column
+        prop="patterndesc"
         :label="$t('openatc.greenwaveoptimize.pattern')"
         align="center"
       >
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <el-select
+            prop="terminal"
             v-model="scope.row.patternid"
             collapse-tags
             clearable
@@ -69,7 +56,7 @@
             >
             </el-option>
           </el-select>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column
         prop="state"
@@ -77,18 +64,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <div v-show="scope.row.control === 4">
-            <el-input-number
-              size="small"
-              v-model="scope.row.state"
-              :min="0"
-              :max="99"
-              :controls="true"
-            ></el-input-number>
-          </div>
-          <div v-show="scope.row.control === 22">
-            <xdrdirselector Width="40px" Height="40px" :showlist="dirshow"></xdrdirselector>
-          </div>
+          {{ getContent(scope.row)}}
         </template>
       </el-table-column>
       <el-table-column
@@ -96,14 +72,6 @@
         :label="$t('openatc.dutyroute.lasttime')"
         align="center"
       >
-        <template slot-scope="scope">
-          <el-input-number
-            size="small"
-            v-model="scope.row.totaltime"
-            :min="0"
-            :step="60"
-          ></el-input-number>
-        </template>
       </el-table-column>
       <el-table-column
         :label="$t('openatc.greenwaveoptimize.operation')"
@@ -122,18 +90,26 @@
      <select-control
         v-show="false"
         ref="selectControl"></select-control>
+        <device ref="config"
+                @closePhaseControl="closePhaseControl"
+                @patternCommit="patternCommit">
+        </device>
   </div>
 </template>
 <script>
 import SelectControl from '@/views/Service/components/SelectControl'
 import SelectPattern from '@/views/Service/components/SelectPattern'
-import { getTscPhase, getTscControl } from '@/api/route'
+import { getTscPhase, getPatternList } from '@/api/route'
 import { getMessageByCode } from '@/utils/responseMessage'
 import xdrdirselector from '@/components/XRDDirSelector'
-// import { getTscControl } from '@/api/route'
+import device from './device'
+import { getTheme } from '@/utils/auth'
+import { getTscControl } from '@/api/control'
+import ServiceUtil from '../ServiceUtil.js'
 export default {
   name: 'patterns',
   components: {
+    device,
     SelectControl,
     SelectPattern,
     xdrdirselector
@@ -145,9 +121,12 @@ export default {
   },
   mounted () {
     this.controlOptions = this.$refs.selectControl.options
+    this.serviceUtil = new ServiceUtil()
   },
   data () {
     return {
+      patternStatus: {},
+      row: {},
       dirshow: [
         {
           id: 1,
@@ -202,21 +181,23 @@ export default {
     },
     getCurPattern (agentid) {
       // 获取当前设备所有可选方案
+      let _this = this
       return new Promise((resolve, reject) => {
-        getTscControl(agentid).then(res => {
+        getPatternList(agentid).then(res => {
           if (!res.data.success) {
-            let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+            let msg = getMessageByCode(res.data.code, _this.$i18n.locale)
             if (res.data.data) {
               let errorCode = res.data.data.errorCode
               if (errorCode) {
-                msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+                msg = msg + ' - ' + getMessageByCode(errorCode, _this.$i18n.locale)
               }
             }
-            this.$message.error(msg)
+            _this.$message.error(msg)
             return
           }
           let options = []
           let list = res.data.data.data.patternList
+          // _this.patternStatus = JSON.parse(JSON.stringify(list[_this.row.patternid]))
           for (let item of list) {
             let res = {
               ...item,
@@ -225,7 +206,7 @@ export default {
               patternList: list,
               patternid: item.id,
               patterndes: item.desc,
-              patterndesc: item.desc === '' ? `${this.$t('openatc.greenwaveoptimize.pattern')}${item.id}` : item.desc
+              patterndesc: item.desc === '' ? `${_this.$t('openatc.greenwaveoptimize.pattern')}${item.id}` : item.desc
             }
             options.push(res)
           }
@@ -255,8 +236,92 @@ export default {
         })
       })
     },
-    handleConfig (row) {
+    getContent (row) {
+      let res = this.serviceUtil.getContent(row)
+      return res
+    },
+    getShowList (row) {
+      let phases = row.phases
+      let res = []
+      let color = 'black'
+      if (getTheme() === 'dark') {
+        color = 'white'
+      }
+      if (phases) {
+        for (let dir of phases) {
+          if (dir.type !== 0) {
+            let phaseId = dir.id
+            let phase = this.phaseList.filter(ph => ph.id === phaseId)[0]
+            if (!phase) {
+              continue
+            }
+            let direction = phase.direction
+            for (let directionId of direction) {
+              let item = {
+                id: directionId,
+                color: color
+              }
+              res.push(item)
+            }
+          }
+        }
+      }
+      return res
+    },
+    async handleConfig (row) {
       console.log(row)
+      this.row = row
+      // await this.getCurPhase(row.agentid)
+      await this.getCurrentPatternStatus(row.agentid)
+      this.$refs.config.handleAdd(this.phaseList, this.patternStatus)
+      // let data = {
+      //   'greenflash': 6,
+      //   'duration': 600,
+      //   'yellow': 3,
+      //   'redclear': 2,
+      //   'mingreen': 15,
+      //   'phases': [
+      //     {
+      //       'id': 1,
+      //       'type': 0
+      //     },
+      //     {
+      //       'id': 2,
+      //       'type': 0
+      //     },
+      //     {
+      //       'id': 3,
+      //       'type': 0
+      //     },
+      //     {
+      //       'id': 4,
+      //       'type': 0
+      //     },
+      //     {
+      //       'id': 5,
+      //       'type': 1
+      //     },
+      //     {
+      //       'id': 6,
+      //       'type': 0
+      //     },
+      //     {
+      //       'id': 7,
+      //       'type': 0
+      //     },
+      //     {
+      //       'id': 8,
+      //       'type': 0
+      //     }
+      //   ]
+      // }
+      // // item.data = data
+      // row.greenflash = data.greenflash
+      // row.duration = data.duration
+      // row.yellow = data.yellow
+      // row.redclear = data.redclear
+      // row.mingreen = data.mingreen
+      // row.phases = data.phases
     },
     handleDelete (agentid) {
       let comfirmMsg = this.$t('openatc.greenwaveoptimize.deletedevice') + agentid
@@ -272,6 +337,73 @@ export default {
         this.$message.warning(this.$t('openatc.common.canceloperate'))
       })
       // this.$emit('deleteDevice', agentid)
+    },
+    formatControl (row) {
+      let res = row.control
+      let selectControl = this.$refs.selectControl
+      if (selectControl) {
+        res = selectControl.getNameById(row.control)
+      }
+      return res
+    },
+    async formatTerminal (row) {
+      let res = row.terminal
+
+      return res
+    },
+    closePhaseBack () {
+    },
+    async patternCommit (data) {
+      let row = this.row
+      row.control = data.control
+      row.terminal = data.terminal
+      row.delay = data.delay
+      row.totaltime = data.duration
+      row.duration = data.duration
+      row.value = data.value
+      row.content = this.getContent(row)
+      await this.getCurPattern(row.agentid)
+    },
+    async closePhaseControl (res) {
+      let data = res.data
+      let row = this.row
+      row.control = res.control
+      row.greenflash = data.greenflash
+      row.duration = data.duration
+      row.yellow = data.yellow
+      row.redclear = data.redclear
+      row.mingreen = data.mingreen
+      row.phases = data.phases
+      row.totaltime = data.duration
+      console.log(this.patternTableData)
+      console.log(this.row)
+      row.content = this.getContent(row)
+      await this.getCurPattern(row.agentid)
+    },
+    async getCurrentPatternStatus (iframdevid) {
+      await getTscControl(iframdevid).then((data) => {
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
+          }
+          return
+        }
+        this.patternStatus = JSON.parse(JSON.stringify(data.data.data.data))
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

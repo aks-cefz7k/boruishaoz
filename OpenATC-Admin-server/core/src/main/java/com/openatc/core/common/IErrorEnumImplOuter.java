@@ -31,10 +31,12 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_0005("0005", "ValidationException or MethodArgumentNotValidException"),
     E_0006("0006", "system error"),
 
-    E_1000("10000", "Parameter is null!"),
-    E_1001("10001", "Illegal parameter!"),
+    E_1000("1000", "Parameter is null!"),
+    E_1001("1001", "Illegal parameter!"),
     E_1002("1002", "URL is not correct!"),
-    E_2002("10002", "The record is not exit!"),
+    E_1003("1003", "Dict key or value is NULL!"),
+    E_1004("1004", "Duplicate key !"),
+    E_2002("2002", "The record is not exit!"),
 
     E_2003("20003", "The id is not exit or equal 0 !"),
     E_2004("20004", "No Param Record !"),
@@ -92,6 +94,8 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_8005("8005", "Cannot find DictConfig"),
     E_8006("8006", "Platform is not unique!"),
     E_8007("8007", "IP and port of platform is null!"),
+    E_8008("8008", "device is found By Area Management"),
+    E_8009("8009", "Only Admin can get this data"),
 
     //瓶颈控制相关
     E_9001("9001", "Overflow control failed"),

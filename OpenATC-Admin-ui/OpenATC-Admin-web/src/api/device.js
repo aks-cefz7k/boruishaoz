@@ -87,6 +87,11 @@ export const getAllPatternData = (reqData) => {
   return api.Send({}, reqData, [])
 }
 
+export const getYesterdayStatusCollect = () => {
+  let api = new Authapi('getYesterdayStatusCollect')
+  return api.Send({}, {}, [])
+}
+
 export default {
   GetAllDevice,
   AddDevice,
@@ -97,5 +102,6 @@ export default {
   getAllPatternData,
   getDeviceRange,
   getDict,
-  addDict
+  addDict,
+  getYesterdayStatusCollect
 }

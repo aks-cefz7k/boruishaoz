@@ -63,6 +63,7 @@ const zh = {
     'main': {
       'main': '目录',
       'home': '首页',
+      'save': '保存',
       'logout': '登出',
       'upload': '上载',
       'download': '下载',
@@ -359,7 +360,10 @@ const zh = {
       'phase': '相位',
       'agentidError': '获取设备ID失败!',
       'splitCheckMsg': '绿信比需大于相位过渡时间或绿信比需大于行人过街+行人过渡时间!',
-      'pattern': '方案'
+      'pattern': '方案',
+      'green': '绿灯',
+      'yellow': '黄灯',
+      'red': '红灯清空'
     },
     'plan': {
       'tipcontext': '请输入计划名！',
@@ -791,9 +795,12 @@ const zh = {
     },
     'common': {
       'confirm': '确认',
+      'ringStyle': '环配置',
+      'stageStyle': '阶段配置',
       'query': '查询',
       'cancel': '取消',
       'add': '添加',
+      'save': '参数保存成功!',
       'delete': '删除',
       'clone': '克隆',
       'deleteall': '全部删除',
@@ -1025,6 +1032,10 @@ const zh = {
       '8002': '路口位于协调路线上',
       '8003': '路口位于特勤路线上',
       '8004': '路口ID重复',
+      '8005': '找不到字典配置',
+      '8006': '平台不唯一',
+      '8007': 'IP或端口为空',
+      '8008': '路口位于区域管理上',
       // 错误类型子类型，返回码第二层
       '8101': '路口不允许删除!',
       // 瓶颈控制错误
@@ -1066,7 +1077,7 @@ const zh = {
       'eventtype': '事件类型',
       'detaileddescription': '详细描述',
       'maincontrolboard': '主控板',
-      'lightcontrolversion': '灯控版',
+      'lightcontrolboard': '灯控版',
       'carinspectionboard': '车检板',
       'ioboard': 'I/O板',
       'faultboard': '故障板',

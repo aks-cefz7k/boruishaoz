@@ -14,17 +14,9 @@ package com.openatc.agent.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.DevCover;
-import com.openatc.agent.model.Overflow;
-import com.openatc.agent.model.SysOrg;
-import com.openatc.agent.model.User;
-import com.openatc.agent.model.VipRouteDevice;
+import com.openatc.agent.model.*;
 import com.openatc.agent.resmodel.PageOR;
-import com.openatc.agent.service.AscsDao;
-import com.openatc.agent.service.OrgService;
-import com.openatc.agent.service.OverflowRepository;
-import com.openatc.agent.service.UserDao;
-import com.openatc.agent.service.VipRouteDeviceDao;
+import com.openatc.agent.service.*;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnumImplOuter;
@@ -35,6 +27,7 @@ import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.ControlPattern;
 import com.openatc.model.model.LockDirection;
 import com.openatc.model.service.ManualpanelService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -44,11 +37,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_8004;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_8009;
 
 @RestController
 @CrossOrigin
 public class DevController {
     private static Logger logger = Logger.getLogger(DevController.class.toString());
+
     @Autowired(required = false)
     AscsDao mDao;
 
@@ -61,7 +56,12 @@ public class DevController {
     @Autowired
     OverflowRepository overflowRepository;
     @Autowired
+    RouteIntersectionDao routeIntersectionDao;
+    @Autowired
     private MessageController messageController;
+
+    @Autowired
+    private DevService devService;
 
     private Gson gson = new Gson();
     private Logger log = Logger.getLogger(DevController.class.toString());
@@ -97,10 +97,10 @@ public class DevController {
     //得到所有设备
     @GetMapping(value = { "/devs" ,  "/devs/all"})
     public RESTRet GetDevs() {
-
         List<AscsBaseModel> ascsBaseModels = mDao.getAscs();
-//        mDao.alterStatus(ascsBaseModels);
-        return RESTRetUtils.successObj(ascsBaseModels);
+        return devService.getDevs(ascsBaseModels);
+////        mDao.alterStatus(ascsBaseModels);
+//        return RESTRetUtils.successObj(ascsBaseModels);
     }
 
     // 按ID查询设备
@@ -117,6 +117,7 @@ public class DevController {
 
     @PostMapping(value = "/devs/range")
     public RESTRetBase getDevsRange(@RequestBody JsonObject jsonObject) {
+//        return devService.getRangeDevs(jsonObject);
         return RESTRetUtils.successObj(mDao.getAscsRange(jsonObject));
     }
     // 按列表中的路口ID获取路口
@@ -163,11 +164,15 @@ public class DevController {
     public IErrorEnumImplOuter checkDevInUse (String oldAgentid) {
         List<Overflow> overflowList = overflowRepository.findByIntersectionid(oldAgentid);
         if(overflowList !=null && overflowList.size() > 0) {
-            return IErrorEnumImplOuter.E_8002;
+            return IErrorEnumImplOuter.E_8008;
         }
         List<VipRouteDevice> vipRouteDeviceList =  vipRouteDeviceDao.findByAgentid(oldAgentid);
         if(vipRouteDeviceList !=null && vipRouteDeviceList.size() > 0) {
             return IErrorEnumImplOuter.E_8003;
+        }
+        List<RouteIntersection> routeIntersectionList =  routeIntersectionDao.findByAgentid(oldAgentid);
+        if(routeIntersectionList !=null && routeIntersectionList.size() > 0) {
+            return IErrorEnumImplOuter.E_8002;
         }
         return null;
     }
@@ -246,5 +251,38 @@ public class DevController {
         }
 
         return restRet;
+    }
+
+    /**
+     * 获取昨日0至24点设备统计状态，只返回管理员的数据
+     * @author: zhangwenchao
+     * @return
+     */
+    @GetMapping(value = { "/devs/statuscollect/yesterday"})
+    public RESTRetBase GetDevsStatuscollectYesterday() {
+        // 管理员列表
+        List<String> adminRoles = new ArrayList<>();
+        adminRoles.add("superadmin");
+        adminRoles.add("admin");
+
+        // 获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        // 未开启shiro
+        if (user == null){
+            // 返回所有设备
+            return RESTRetUtils.successObj(mDao.statesCollectYesterday);
+        }
+
+        // 获取用户名
+        String user_name = user.getUser_name();
+        List<String> roles = userDao.getRoleNamesByUsername(user_name);
+        adminRoles.retainAll(roles);
+        // 非管理员
+        if (adminRoles.size() == 0){
+            return RESTRetUtils.errorObj(E_8009);
+        }
+        return RESTRetUtils.successObj(mDao.statesCollectYesterday);
+
     }
 }

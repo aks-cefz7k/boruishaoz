@@ -119,61 +119,73 @@ export default {
       }],
       manualBtnList: [{
         id: 1,
-        name: this.$t('edge.controlpanel.manualbtn1'),
+        desc: this.$t('edge.controlpanel.manualbtn1'), // desc为默认显示的名称，不可修改
+        name: this.$t('edge.controlpanel.manualbtn1'), // name为绑定数据，可修改
         btnNameList: 4,
         style: 'left: 173px; top: 243px;'
       }, {
         id: 2,
+        desc: this.$t('edge.controlpanel.manualbtn2'),
         name: this.$t('edge.controlpanel.manualbtn2'),
         btnNameList: 4,
         style: 'left: 403px; top: 243px;'
       }, {
         id: 3,
+        desc: this.$t('edge.controlpanel.manualbtn3'),
         name: this.$t('edge.controlpanel.manualbtn3'),
         btnNameList: 4,
         style: 'left: 632px; top: 243px;'
       }, {
         id: 4,
+        desc: this.$t('edge.controlpanel.manualbtn4'),
         name: this.$t('edge.controlpanel.manualbtn4'),
         btnNameList: 4,
         style: 'left: 300px; top: 346px;'
       }, {
         id: 5,
+        desc: this.$t('edge.controlpanel.manualbtn5'),
         name: this.$t('edge.controlpanel.manualbtn5'),
         btnNameList: 4,
         style: 'left: 506px; top: 346px;'
       }, {
         id: 6,
+        desc: this.$t('edge.controlpanel.manualbtn6'),
         name: this.$t('edge.controlpanel.manualbtn6'),
         btnNameList: 4,
         style: 'left: 173px; top: 449px;'
       }, {
         id: 7,
+        desc: this.$t('edge.controlpanel.manualbtn7'),
         name: this.$t('edge.controlpanel.manualbtn7'),
         btnNameList: 4,
         style: 'left: 403px; top: 449px;'
       }, {
         id: 8,
+        desc: this.$t('edge.controlpanel.manualbtn8'),
         name: this.$t('edge.controlpanel.manualbtn8'),
         btnNameList: 4,
         style: 'left: 632px; top: 449px;'
       }, {
         id: 9,
+        desc: 'Y1',
         name: 'Y1',
         btnNameList: 2,
         style: 'left: 167px; top: 562px;'
       }, {
         id: 10,
+        desc: 'Y2',
         name: 'Y2',
         btnNameList: 2,
         style: 'left: 320px; top: 562px;'
       }, {
         id: 11,
+        desc: 'Y3',
         name: 'Y3',
         btnNameList: 2,
         style: 'left: 473px; top: 562px;'
       }, {
         id: 12,
+        desc: 'Y4',
         name: 'Y4',
         btnNameList: 2,
         style: 'left: 626px; top: 562px;'
@@ -210,9 +222,11 @@ export default {
     createManualList () {
       // 生成当前的通道状态列表
       this.manualList = []
+      this.contactDescAndBtn()
       let manualval = this.manualBtnList.filter(ele => ele.id === this.currChannelId)
       if (manualval.length > 0) {
         this.handleManualList(manualval[0])
+        this.renderCurrManualDesc(manualval[0])
       }
     },
     getChannelList () {
@@ -256,6 +270,33 @@ export default {
         this.manualList = []
       } else {
         this.handleManualList(val)
+      }
+    },
+    contactDescAndBtn () {
+      // 关联全局数据manualpanel的desc和按钮组数据manualBtnList的name
+      let keyconfig = this.manualpanel.keyconfig
+      if (!keyconfig) return
+      for (let item of keyconfig) {
+        // 上载后desc为空，则显示按钮组的默认描述
+        if (item.desc === '') {
+          // 此处取manualBtnList的desc，不可取name，name是变化的
+          let desc = this.manualBtnList.filter(ele => ele.id === item.keynum)[0].desc
+          item.desc = desc
+        }
+      }
+      for (let btnitem of this.manualBtnList) {
+        // 按钮name按照上载的描述更新
+        let desc = keyconfig.filter(ele => ele.keynum === btnitem.id)[0].desc
+        btnitem.name = desc
+      }
+    },
+    renderCurrManualDesc (val) {
+      // 获取当前名称
+      if (!this.manualpanel.keyconfig || !this.manualpanel.keyconfig.length) {
+        this.currChannelName = val.name
+      } else {
+        let desc = this.manualpanel.keyconfig.filter(ele => ele.keynum === this.currChannelId)[0].desc
+        this.currChannelName = desc
       }
     },
     handleManualList (val) {
@@ -365,6 +406,13 @@ export default {
         }
       }
       this.editStatus = false
+      if (!this.manualpanel.keyconfig) return
+      for (let item of this.manualpanel.keyconfig) {
+        // 修改名称后，同时改变全局参数中的对应描述
+        if (item.keynum === currChannelId) {
+          item.desc = this.currChannelName
+        }
+      }
     },
     getBtnName (name) {
       let nameLength = [...name].length
@@ -654,6 +702,7 @@ export default {
   height: 16px;
   color: #409eff;
   cursor:pointer;
+  font-size: 16px;
 }
 .manual-tables-clear {
   position: absolute;
@@ -662,6 +711,7 @@ export default {
   width: 200px;
   height: 20px;
   color: #409eff;
+  font-size: 16px;
 }
 .manual-tables-qingkong {
   margin-left: 5px;

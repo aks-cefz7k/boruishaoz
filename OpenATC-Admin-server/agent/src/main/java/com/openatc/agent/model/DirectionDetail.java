@@ -15,6 +15,6 @@ public class DirectionDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer detailId;
     private Integer id;
-    private String color;
+    private Integer type;
     private Integer viprouteid;
 }

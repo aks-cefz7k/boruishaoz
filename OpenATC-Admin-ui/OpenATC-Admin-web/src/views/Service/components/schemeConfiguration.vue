@@ -167,6 +167,12 @@ export default {
             item.control = pattern.control
             item.state = pattern.state
             item.totaltime = pattern.totaltime
+            item.greenflash = pattern.greenflash
+            item.duration = pattern.duration
+            item.yellow = pattern.yellow
+            item.redclear = pattern.redclear
+            item.mingreen = pattern.mingreen
+            item.phases = pattern.phases
             break
           }
         }
@@ -195,6 +201,12 @@ export default {
           'value': dev.state,
           'totaltime': dev.totaltime
         }
+        item.greenflash = dev.greenflash
+        item.duration = dev.duration
+        item.yellow = dev.yellow
+        item.redclear = dev.redclear
+        item.mingreen = dev.mingreen
+        item.phases = dev.phases
         let geometry = dev.geometry
         let location = dev.location
         if (geometry && geometry.coordinates && geometry.coordinates.length > 0) {
@@ -233,7 +245,13 @@ export default {
         patternid: ele.terminal,
         state: ele.value,
         control: ele.control,
-        totaltime: ele.totaltime
+        totaltime: ele.totaltime,
+        greenflash: ele.greenflash,
+        duration: ele.duration,
+        yellow: ele.yellow,
+        redclear: ele.redclear,
+        mingreen: ele.mingreen,
+        phases: ele.phases
       }))
     },
     addDevice (devices) {

@@ -63,6 +63,7 @@ const en = {
     'main': {
       'main': 'Main',
       'home': 'Home',
+      'save': 'Save',
       'logout': 'LogOut',
       'upload': 'Upload',
       'download': 'Download',
@@ -361,7 +362,10 @@ const en = {
       'phase': 'Phase',
       'agentidError': 'Failed to get agentid!',
       'splitCheckMsg': 'The green letter ratio must be greater than the phase transition time or the pedestrian crossing + pedestrian transition time!',
-      'pattern': 'Pattern'
+      'pattern': 'Pattern',
+      'green': 'Green',
+      'yellow': 'Yellow',
+      'red': 'Red'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
@@ -793,7 +797,10 @@ const en = {
     },
     'common': {
       'confirm': 'Confirm',
+      'ringStyle': 'Ring Style',
+      'stageStyle': 'Stage Style',
       'query': 'Query',
+      'save': 'Save Success!',
       'cancel': 'Cancel',
       'add': 'Add',
       'delete': 'Delete',
@@ -1026,6 +1033,10 @@ const en = {
       '8002': 'device is found By CoordinateRoute',
       '8003': 'device is found By VipRoute',
       '8004': 'Agentid is duplicated',
+      '8005': 'Cannot find DictConfig',
+      '8006': 'Platform is not unique!',
+      '8007': 'IP and port of platform is null!',
+      '8008': 'device is found By Area Management',
       // 错误类型子类型，返回码第二层
       '8101': 'Device can not delete!',
       // 瓶颈控制错误
@@ -1059,7 +1070,7 @@ const en = {
       'degradation': 'Degradation failure',
       'serious': 'Serious failure',
       'maincontrolboard': 'Main Control Board',
-      'lightcontrolversion': 'Light Control Version',
+      'lightcontrolboard': 'Light Control Board',
       'carinspectionboard': 'Car Inspection Board',
       'eportingmodule': 'Eporting Module',
       'roadname': 'Road Name',

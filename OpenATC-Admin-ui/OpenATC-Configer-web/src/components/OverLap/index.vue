@@ -1,5 +1,5 @@
 <template>
-<div class="overLap" v-if="checked" :style="{'width':'100%','margin':this.controlData ? '20px 0 0 0' : '0 5% 0 38%'}">
+<div class="overLap" v-if="checked" :style="{'width':'852px','margin':this.controlData ? '20px 0 0 0' : '0 0 0 377px'}">
     <div class="ring-first" v-for="(list, index1) in this.overlapDatas" :key="index1">
         <div v-for="(item,index2) in list.stageLists" :key="index2" >
             <div class="first-2">
@@ -7,7 +7,7 @@
                 <div slot="content">
                     O{{list.id}}-
                     <span v-for="(ids,index3) in list.includedphases" :key="index3">
-                        P:{{ids}}
+                        P{{ids}}<span v-if="index3+1!==list.includedphases.length">,</span>
                     </span>
                 </div>
                 <div style="cursor:pointer;">
@@ -19,7 +19,7 @@
                         <div class="ring-nums">
                             O{{list.id}}-
                             <span v-for="(ids,index3) in list.includedphases" :key="index3">
-                                P:{{ids}}
+                                P{{ids}}<span v-if="index3+1!==list.includedphases.length">,</span>
                             </span>
                         </div>
                     </div>
@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import PhaseDataModel from '../../views/overView/crossDirection/utils'
+import PhaseDataModel from 'openatc-components/package/kisscomps/components/IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import xdrdirselector from '@/components/XRDDirSelector'
-import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkSvg'
+import PatternWalkSvg from 'openatc-components/package/kisscomps/components/IntersectionMap/crossDirection/baseImg/PatternWalkSvg'
 export default {
   name: 'OverLap',
   components: {
@@ -162,7 +162,7 @@ export default {
     padding-top: 10px;
     padding-left: 43px;
     font-size: 12px;
-    height: 17px;
+    height: 14px;
     font-weight: normal;
     font-stretch: normal;
     // line-height: 22px;

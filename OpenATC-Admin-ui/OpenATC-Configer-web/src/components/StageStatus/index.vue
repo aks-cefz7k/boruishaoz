@@ -40,6 +40,12 @@ export default {
     patternStatusList: {
       type: Array
     },
+    contrloType: {
+      type: Boolean
+    },
+    localPatternList: {
+      type: Array
+    },
     controlData: {
       type: Object
     }
@@ -48,7 +54,11 @@ export default {
     controlData: {
       handler: function (val, oldVal) {
         // this.handleStages() // 计算屏障高度
-        this.getPhaseId(this.controlData)
+        if (this.contrloType) {
+          this.getStageLine()
+        } else {
+          this.getPhaseId(this.controlData)
+        }
       },
       // 深度观察监听
       deep: true
@@ -66,6 +76,12 @@ export default {
     if (this.patternStatusList && this.patternStatusList.length > 1) {
       this.getPhaseId(this.patternStatusList)
     }
+    if (this.controlData) {
+      this.stageLineStatus = true
+    }
+    if (this.localPatternList) {
+      this.getStageLine()
+    }
   },
   mounted () {
   },
@@ -77,6 +93,53 @@ export default {
     }
   },
   methods: {
+    getStageLine () {
+      for (let i = 0; i < this.localPatternList.length; i++) {
+        if (this.controlData.patternid === this.localPatternList[i].id) {
+          let stageCycleList = this.localPatternList[i].stagesList.map(item => {
+            return item.stageSplit ? item.stageSplit : 0
+          })
+          let stageMaxCyle = stageCycleList.reduce((a, b) => {
+            return a + b
+          }, 0)
+          this.addList(stageCycleList, stageMaxCyle)
+          this.stageLists = this.localPatternList[i].stagesList.map(item => {
+            return {
+              ...item,
+              greenWidth: (item.green / stageMaxCyle * 100).toFixed(3) + '%',
+              yellowWidth: (item.yellow / stageMaxCyle * 100).toFixed(3) + '%',
+              redWidth: (item.red / stageMaxCyle * 100).toFixed(3) + '%'
+            }
+          })
+        }
+      }
+    },
+    addList (baseArr, maxCycle) {
+      this.narr = []
+      this.stageLineStatus = true
+      let setArr = []
+      let currNum = 0
+      baseArr.forEach((item, index) => {
+        if (index === 0) {
+          setArr.push(baseArr[index])
+        } else {
+          if (currNum) {
+            currNum = baseArr[index] + currNum
+          } else {
+            currNum = baseArr[index] + baseArr[index - 1]
+          }
+          setArr.push(currNum)
+        }
+      })
+      this.numList = setArr.map(item => {
+        return (item / maxCycle * 100).toFixed(3) + '%'
+      })
+      this.numList.unshift(0)
+      for (let i = this.numList.length - 1; i >= 1; i--) {
+        this.narr.push((Number.parseFloat(this.numList[i]) - Number.parseFloat(this.numList[i - 1])) / 2 + Number.parseFloat(this.numList[i - 1]) - 1 + '%')
+      }
+      this.narr = JSON.parse(JSON.stringify(this.narr.reverse()))
+    },
     getControl (newList) { // 总揽实时数据
       let currentIds = ''
       let lastCurrentIds = ''

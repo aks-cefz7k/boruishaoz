@@ -1,14 +1,30 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
 <template>
-<svg t="1545378648902" class="icon"
-    style=""
-    viewBox="0 0 1024 1024"
+  <svg
+    t="1545378648902"
+    class="icon"
+    viewBox="0 0 50 50"
+    style="enable-background:new 0 0 50 50;"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
-    p-id="2200"
+    p-id="6773"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    :width="Width" :height="Height">
+    :width="Width"
+    :height="Height"
+  >
     <!-- <mask id="shade"> -->
-    <path d="M893.44 158.72
+    <path
+      d="M893.44 158.72
       H130.56C99.84 158.72 76.8 181.76 76.8 212.48v599.04c0 30.72 23.04 53.76 53.76 53.76
       h762.88c30.72 0 53.76-23.04 53.76-53.76V212.48c0-30.72-23.04-53.76-53.76-53.76z
       M130.56 194.56
@@ -19,127 +35,278 @@
       H130.56c-10.24 0-17.92-7.68-17.92-17.92z
       m780.8 17.92
       h-217.6l-120.32-102.4 143.36-120.32 209.92 189.44v12.8c2.56 12.8-5.12 20.48-15.36 20.48z"
-      :fill="MaskColor" p-id="2761"
-      :class="maskmark ? '' : 'invisible'"></path>
-    <path d="M668.16 463.36c56.32 0 104.96-46.08 104.96-104.96 0-56.32-46.08-104.96-104.96-104.96S563.2 302.08 563.2 358.4c0 56.32 46.08 104.96 104.96 104.96z m0-174.08c38.4 0 69.12 30.72 69.12 69.12 0 38.4-30.72 69.12-69.12 69.12-38.4 0-69.12-30.72-69.12-69.12 0-38.4 30.72-69.12 69.12-69.12z"
-      :fill="MaskColor" p-id="2762"
-      :class="maskmark ? '' : 'invisible'"></path>
+      :fill="MaskColor"
+      p-id="2761"
+      :class="maskmark ? '' : 'invisible'"
+    ></path>
+    <path
+      d="M668.16 463.36c56.32 0 104.96-46.08 104.96-104.96 0-56.32-46.08-104.96-104.96-104.96S563.2 302.08 563.2 358.4c0 56.32 46.08 104.96 104.96 104.96z"
+      :fill="MaskColor"
+      p-id="2762"
+      :class="maskmark ? '' : 'invisible'"
+    ></path>
     <!-- </mask> -->
-    <!-- ====================================[1 East-Straight 东向直行] ============================================= -->
-    <path d="M999.936 316.928h-410.624l23.04-39.936-121.856 50.176 121.856 49.664-23.04-39.424h410.624z"
-        p-id="2201"
-        :stroke-width="PathWidth"
-        :fill="status[0].color"
-        :class="status[0].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[2 East-Left     东向左转]============================================= -->
-    <path d="M825.856 336.896l-5.12-19.968c-2.048 0.512-207.36 55.808-254.464 261.12l-37.376-26.624 38.4 126.464 60.928-117.248-40.96 18.944c45.056-190.464 236.544-242.176 238.592-242.688z"
-        p-id="2202"
-        :stroke-width="PathWidth"
-        :fill="status[1].color"
-        :class="status[1].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[3 East-Right    东向右转]============================================= -->
-    <path d="M617.984 143.872l39.424 22.528-50.176-122.368-49.664 122.368 39.424-23.04c15.872 84.992 77.824 182.784 275.456 193.536l1.024-20.48c-180.736-9.728-239.616-96.256-255.488-172.544z"
-        p-id="2203"
-        :stroke-width="PathWidth"
-        :fill="status[2].color"
-        :class="status[2].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[4 East-Back     东向掉头]============================================= -->
-    <path d="M854.528 337.408h145.408v-20.48h-145.408c-33.28 0-60.416 27.136-60.416 60.416 0 32.768 26.624 59.904 59.392 60.416l-14.848 35.328 108.032-45.568-108.032-45.568 14.848 35.328c-21.504-0.512-38.912-18.432-38.912-39.936 0-22.016 17.92-39.936 39.936-39.936z"
-        p-id="2204"
-        :stroke-width="PathWidth"
-        :fill="status[3].color"
-        :class="status[3].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[5 West-Straight 西向直行]============================================= -->
-    <path d="M533.504 696.832l-121.856-49.664 23.04 39.424H24.064v20.48h410.624l-23.04 39.936z"
-        p-id="2205"
-        :stroke-width="PathWidth"
-        :fill="status[4].color"
-        :class="status[4].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[6 West-Left     西向左转]============================================= -->
-    <path d="M495.616 472.576l-38.4-126.464-61.44 117.248 40.96-18.944c-45.568 190.464-236.544 242.176-238.592 242.688l5.12 19.968c2.048-0.512 207.36-55.808 254.464-261.12l37.888 26.624z"
-        p-id="2206"
+    <!-- <mask id="shade"> -->
+<!-- ====================================右行相位图标合集============================================= -->
+    <g id="右行" v-if="roadDirection === 'right'">
+      <path
+        id="西左转_3_"
         :stroke-width="PathWidth"
         :fill="status[5].color"
         :class="status[5].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[7 West-Right    西向右转]============================================= -->
-    <path d="M427.008 880.128c-15.872-84.992-77.824-182.784-275.456-193.536l-1.024 20.48c181.248 10.24 239.616 96.768 255.488 173.056l-39.424-22.528 50.176 122.368 49.664-122.368-39.424 22.528z"
-        p-id="2207"
+        d="M17.3,36.3H1.4v2h16c2.1,0,3.8-1.7,3.9-3.8l0.3-1.9l2.5,0.3l-2.6-6.4l-4.3,5.4l2.5,0.3
+    l-0.3,2.2C19.2,35.5,18.4,36.3,17.3,36.3L17.3,36.3z"
+      ></path>
+      <path
+        id="西右转"
         :stroke-width="PathWidth"
         :fill="status[6].color"
         :class="status[6].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[8 West-Back     西向掉头]============================================= -->
-    <path d="M170.496 586.752l14.848-35.328-108.032 45.568 108.032 45.568-14.848-35.328c21.504 0.512 38.912 18.432 38.912 39.936 0 22.016-17.92 39.936-39.936 39.936H24.064v20.48h145.408c33.28 0 60.416-27.136 60.416-60.416 0-33.28-26.624-59.904-59.392-60.416z"
-        p-id="2205"
+        d="M17.3,38.3c1.1,0,1.9,0.8,2.1,1.9l0.3,2.2l-2.5,0.3l4.3,5.4l2.6-6.4L21.6,42l-0.3-1.9
+    c-0.1-2.1-1.8-3.8-3.9-3.8h-16v2H17.3L17.3,38.3z"
+      ></path>
+      <polygon
+        id="西直行_1_"
+        :stroke-width="PathWidth"
+        :fill="status[4].color"
+        :class="status[4].isshow ? '' : 'invisible'"
+        points="1.4,38.3 24.6,38.3 24.6,40.8 30.7,37.3 24.6,33.9 24.6,36.3 1.4,36.3"
+      ></polygon>
+      <path
+        id="西调头_1_"
         :stroke-width="PathWidth"
         :fill="status[7].color"
         :class="status[7].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[9 North-Straight北向直行]============================================= -->
-    <path d="M337.408 434.688V24.064h-20.48v410.624l-39.936-23.04 50.176 121.856 49.664-121.856z"
-        p-id="2209"
-        :stroke-width="PathWidth"
-        :fill="status[8].color"
-        :class="status[8].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[10 North-Left   北向左转]============================================= -->
-    <path d="M677.888 457.216l-117.248-60.928 18.944 40.96C389.12 391.68 337.408 200.192 336.896 198.144l-19.968 5.12c0.512 2.048 55.808 207.36 261.12 254.464l-26.624 37.376 126.464-37.888z"
-        p-id="2210"
-        :stroke-width="PathWidth"
-        :fill="status[9].color"
-        :class="status[9].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[11 North-Right  北向右转]============================================ -->
-    <path d="M337.408 151.552l-20.48-1.024c-10.24 181.248-96.768 239.616-173.056 255.488l22.528-39.424-121.856 50.176 122.368 49.664-23.04-39.424c84.48-15.872 182.272-77.824 193.536-275.456z"
-        p-id="2211"
-        :stroke-width="PathWidth"
-        :fill="status[10].color"
-        :class="status[10].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[12 North-Back   北向掉头]============================================= -->
-    <path d="M472.576 185.344l-45.568-108.032-45.568 108.032 35.328-14.848c-0.512 21.504-18.432 38.912-39.936 38.912-22.016 0-39.936-17.92-39.936-39.936V24.064h-20.48v145.408c0 33.28 27.136 60.416 60.416 60.416 32.768 0 59.904-26.624 60.416-59.392l35.328 14.848z"
-        p-id="2212"
-        :stroke-width="PathWidth"
-        :fill="status[11].color"
-        :class="status[11].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[13 South-Straight 南向直行]============================================= -->
-    <path d="M747.008 612.352l-50.176-121.856-49.664 121.856 39.424-23.04v410.624h20.48v-410.624z"
-        p-id="2213"
-        :stroke-width="PathWidth"
-        :fill="status[12].color"
-        :class="status[12].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[14 South-Letf    南向左转]============================================= -->
-    <path d="M445.44 566.272l26.624-37.376-126.464 38.4 117.248 60.928-18.944-40.96c190.464 45.568 242.176 236.544 242.688 238.592l19.968-5.12c0-2.56-55.296-207.36-261.12-254.464z"
-        p-id="2214"
+        d="M11.8,29.2H8.9v-2.4l-6,3.5l6,3.5v-2.5h2.9c1,0,1.9,1.1,1.9,2.5c0,1.3-0.9,2.5-1.9,2.5H1.4
+    v2h10.4c2.1,0,3.9-2,3.9-4.5C15.6,31.2,13.9,29.2,11.8,29.2z"
+      ></path>
+      <path
+        id="南左转_1_"
         :stroke-width="PathWidth"
         :fill="status[13].color"
         :class="status[13].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[15 South-Right   南向右转]============================================= -->
-    <path d="M979.456 607.232l-122.368-49.664 23.04 39.424c-84.992 15.872-182.784 77.824-193.536 275.456l20.48 1.024c10.24-181.248 96.768-239.616 173.056-255.488l-22.528 39.424 121.856-50.176z"
-        p-id="2215"
+        d="M36.8,34.1V50h2V34c0-2.1-1.7-3.8-3.8-3.9l-1.9-0.3l0.3-2.5L27,30l5.4,4.3l0.3-2.5l2.2,0.3
+    C35.9,32.2,36.8,33,36.8,34.1L36.8,34.1z"
+      ></path>
+      <path
+        id="南右转_1_"
         :stroke-width="PathWidth"
         :fill="status[14].color"
         :class="status[14].isshow ? '' : 'invisible'"
-        ></path>
-    <!-- ====================================[16 South-Back    南向掉头]============================================ -->
-    <path d="M646.656 794.112c-32.768 0-59.904 26.624-60.416 59.392l-35.328-14.848 45.568 108.032 45.568-108.032-35.328 14.848c0.512-21.504 18.432-38.912 39.936-38.912 22.016 0 39.936 17.92 39.936 39.936v145.408h20.48v-145.408c0-33.28-27.136-60.416-60.416-60.416z"
-        p-id="2216"
+        d="M40.9,32l2-0.3l0.3,2.5l5.4-4.3l-6.4-2.6l0.3,2.5l-1.9,0.3c-2.1,0-3.8,1.7-3.8,3.9v16h2
+    V33.9c0-1,0.9-1.9,1.9-1.9H40.9z"
+      ></path>
+      <polygon
+        id="南直行_1_"
+        :stroke-width="PathWidth"
+        :fill="status[12].color"
+        :class="status[12].isshow ? '' : 'invisible'"
+        points="38.8,50 38.8,26.8 41.2,26.8 37.8,20.7 34.3,26.8 36.8,26.8 36.8,50"
+      ></polygon>
+      <path
+        id="南调头_1_"
         :stroke-width="PathWidth"
         :fill="status[15].color"
         :class="status[15].isshow ? '' : 'invisible'"
-        ></path>
+        d="M29.8,39.6v2.9h-2.5l3.5,6l3.5-6h-2.5v-2.9c0-1,1.1-1.9,2.5-1.9c1.3,0,2.5,0.9,2.5,1.9V50h2
+    V39.6c0-2.1-2-3.9-4.5-3.9C31.8,35.8,29.8,37.5,29.8,39.6z"
+      ></path>
+      <path
+        id="东左转_3_"
+        :stroke-width="PathWidth"
+        :fill="status[1].color"
+        :class="status[1].isshow ? '' : 'invisible'"
+        d="M32.7,13.7h15.9v-2h-16c-2.1,0-3.8,1.7-3.9,3.8l-0.3,1.9L26,17.1l2.6,6.4l4.3-5.4l-2.5-0.3
+    l0.3-2.2C30.8,14.5,31.6,13.7,32.7,13.7L32.7,13.7z"
+      ></path>
+      <path
+        id="东右转"
+        :stroke-width="PathWidth"
+        :fill="status[2].color"
+        :class="status[2].isshow ? '' : 'invisible'"
+        d="M32.7,11.7c-1.1,0-1.9-0.8-2-1.9l-0.3-2.2l2.5-0.3l-4.3-5.4L26,8.3L28.4,8l0.3,1.9
+    c0.1,2.1,1.8,3.8,3.9,3.8h16v-2H32.7L32.7,11.7z"
+      ></path>
+      <polygon
+        id="东直行_1_"
+        :stroke-width="PathWidth"
+        :fill="status[0].color"
+        :class="status[0].isshow ? '' : 'invisible'"
+        points="48.6,11.7 25.4,11.7 25.4,9.2 19.3,12.7 25.4,16.1 25.4,13.7 48.6,13.7"
+      ></polygon>
+      <path
+        id="东调头_1_"
+        :stroke-width="PathWidth"
+        :fill="status[3].color"
+        :class="status[3].isshow ? '' : 'invisible'"
+        d="M38.2,20.8h2.9v2.4l6-3.5l-6-3.5v2.5h-2.9c-1,0-1.9-1.1-1.9-2.5c0-1.3,0.9-2.5,1.9-2.5h10.4
+    v-2H38.2c-2.1,0-3.9,2-3.9,4.5S36.1,20.8,38.2,20.8z"
+      ></path>
+      <path
+        id="北左转_1_"
+        :stroke-width="PathWidth"
+        :fill="status[9].color"
+        :class="status[9].isshow ? '' : 'invisible'"
+        d="M13.2,15.9V0l-2,0v16c0,2.1,1.7,3.8,3.8,3.9l1.9,0.3l-0.3,2.5L23,20l-5.4-4.3l-0.3,2.5
+    l-2.2-0.3C14.1,17.8,13.2,17,13.2,15.9L13.2,15.9z"
+      ></path>
+      <path
+        id="北右转_1_"
+        :stroke-width="PathWidth"
+        :fill="status[10].color"
+        :class="status[10].isshow ? '' : 'invisible'"
+        d="M9.2,17.9l-2,0.3l-0.3-2.5L1.4,20l6.4,2.6l-0.3-2.5l1.9-0.3c2.1,0,3.8-1.7,3.8-3.9V0l-2,0
+    v16c0,1-0.9,1.9-1.9,1.9C9.3,17.9,9.2,17.9,9.2,17.9z"
+      ></path>
+      <polygon
+        id="北直行_1_"
+        :stroke-width="PathWidth"
+        :fill="status[8].color"
+        :class="status[8].isshow ? '' : 'invisible'"
+        points="11.2,0 11.2,23.2 8.8,23.2 12.2,29.3 15.7,23.2 13.2,23.2 13.2,0"
+      ></polygon>
+      <path
+        id="北调头_1_"
+        :stroke-width="PathWidth"
+        :fill="status[11].color"
+        :class="status[11].isshow ? '' : 'invisible'"
+        d="M20.2,10.4V7.5h2.5l-3.5-6l-3.5,6h2.5v2.9c0,1-1.1,1.9-2.5,1.9s-2.5-0.9-2.5-1.9V0l-2,0
+    v10.4c0,2.1,2,3.9,4.5,3.9C18.2,14.2,20.2,12.5,20.2,10.4z"
+      ></path>
+    </g>
+
+<!-- ====================================左行相位图标合集============================================= -->
+    <g id="组-左行" v-if="roadDirection === 'left'">
+      <path
+        id="东右转-左行"
+        :stroke-width="PathWidth"
+        :fill="status[2].color"
+        :class="status[2].isshow ? '' : 'invisible'"
+        d="M32.7,36.3c-1.1,0-1.9-0.8-2.1-1.9l-0.3-2.2l2.5-0.3l-4.3-5.4l-2.6,6.4l2.5-0.3l0.3,1.9
+    c0.1,2.1,1.8,3.8,3.9,3.8h16v-2H32.7L32.7,36.3z"
+      ></path>
+      <path
+        id="东左转-左行"
+        :stroke-width="PathWidth"
+        :fill="status[1].color"
+        :class="status[1].isshow ? '' : 'invisible'"
+        d="M32.7,38.3h15.9v-2h-16c-2.1,0-3.8,1.7-3.9,3.8L28.4,42l-2.5-0.3l2.6,6.4l4.3-5.4
+    l-2.5-0.3l0.3-2.2C30.8,39.1,31.6,38.3,32.7,38.3L32.7,38.3z"
+      ></path>
+      <polygon
+        id="东直行-左行"
+        :stroke-width="PathWidth"
+        :fill="status[0].color"
+        :class="status[0].isshow ? '' : 'invisible'"
+        points="48.6,36.3 25.4,36.3 25.4,33.9 19.3,37.3 25.4,40.8 25.4,38.3 48.6,38.3"
+      ></polygon>
+      <path
+        id="东调头-左行"
+        class="st0"
+        :stroke-width="PathWidth"
+        :fill="status[3].color"
+        :class="status[3].isshow ? '' : 'invisible'"
+        d="M34.3,33.8c0,2.5,1.8,4.5,3.9,4.5h10.4v-2H38.2c-1,0-1.9-1.2-1.9-2.5
+    c0-1.4,0.9-2.5,1.9-2.5h2.9v2.5l6-3.5l-6-3.5v2.4h-2.9C36.1,29.2,34.4,31.2,34.3,33.8z"
+      ></path>
+      <path
+        id="南左转-左行"
+        :stroke-width="PathWidth"
+        :fill="status[13].color"
+        :class="status[13].isshow ? '' : 'invisible'"
+        d="M9.3,32c1,0,1.9,0.9,1.9,1.9V50h2V34c0-2.2-1.7-3.9-3.8-3.9l-1.9-0.3l0.3-2.5l-6.4,2.6
+    l5.4,4.3l0.3-2.5l2,0.3H9.3z"
+      ></path>
+      <path
+        id="南右转-左行"
+        :stroke-width="PathWidth"
+        :fill="status[14].color"
+        :class="status[14].isshow ? '' : 'invisible'"
+         d="M13.2,34.1c0-1.1,0.9-1.9,1.9-2l2.2-0.3l0.3,2.5L23,30l-6.4-2.7l0.3,2.5L15,30.1
+    c-2.1,0.1-3.8,1.8-3.8,3.9v16h2V34.1L13.2,34.1z"
+      ></path>
+      <polygon
+        id="南直行-左行"
+        :stroke-width="PathWidth"
+        :fill="status[12].color"
+        :class="status[12].isshow ? '' : 'invisible'"
+        points="13.2,50 13.2,26.8 15.7,26.8 12.2,20.7 8.8,26.8 11.2,26.8 11.2,50"
+      ></polygon>
+      <path
+        id="南调头-左行"
+        :stroke-width="PathWidth"
+        :fill="status[15].color"
+        :class="status[15].isshow ? '' : 'invisible'"
+        d="M15.7,35.7c-2.5,0-4.5,1.8-4.5,3.9V50h2V39.6c0-1,1.2-1.9,2.5-1.9
+    c1.4,0,2.5,0.9,2.5,1.9v2.9h-2.5l3.5,6l3.5-6h-2.5v-2.9C20.2,37.5,18.2,35.8,15.7,35.7z"
+      ></path>
+      <path
+        id="西右转-左行"
+        :stroke-width="PathWidth"
+        :fill="status[6].color"
+        :class="status[6].isshow ? '' : 'invisible'"
+        d="M17.3,13.7c1.1,0,1.9,0.8,2,1.9l0.3,2.2l-2.5,0.3l4.3,5.4l2.6-6.4l-2.4,0.3l-0.3-1.9
+    c-0.1-2.1-1.8-3.8-3.9-3.8h-16v2L17.3,13.7L17.3,13.7z"
+      ></path>
+      <path
+        id="西左转-左行"
+        :stroke-width="PathWidth"
+        :fill="status[5].color"
+        :class="status[5].isshow ? '' : 'invisible'"
+        d="M17.3,11.7H1.4v2h16c2.1,0,3.8-1.7,3.9-3.8L21.6,8L24,8.3l-2.6-6.4l-4.3,5.4l2.5,0.3
+    l-0.3,2.2C19.2,10.9,18.4,11.7,17.3,11.7L17.3,11.7z"
+      ></path>
+      <polygon
+        id="西直行-左行"
+        :stroke-width="PathWidth"
+        :fill="status[4].color"
+        :class="status[4].isshow ? '' : 'invisible'"
+        points="1.4,13.7 24.6,13.7 24.6,16.1 30.7,12.7 24.6,9.2 24.6,11.7 1.4,11.7"
+      ></polygon>
+      <path
+        id="西调头-左行"
+        :stroke-width="PathWidth"
+        :fill="status[7].color"
+        :class="status[7].isshow ? '' : 'invisible'"
+        d="M15.7,16.2c0-2.5-1.8-4.5-3.9-4.5H1.4v2h10.4c1,0,1.9,1.2,1.9,2.5
+    c0,1.4-0.9,2.5-1.9,2.5H8.9v-2.5l-6,3.5l6,3.5v-2.4h2.9C13.9,20.8,15.7,18.7,15.7,16.2z"
+      ></path>
+      <path
+        id="北左转-左行"
+        :stroke-width="PathWidth"
+        :fill="status[9].color"
+        :class="status[9].isshow ? '' : 'invisible'"
+        d="M40.7,17.9c-1,0-1.9-0.9-1.9-1.9V0h-2v15.9c0,2.2,1.7,3.9,3.8,3.9l1.9,0.3l-0.3,2.5
+    l6.4-2.6l-5.5-4.3l-0.3,2.5l-2-0.3C40.8,17.9,40.7,17.9,40.7,17.9z"
+      ></path>
+      <path
+        id="北右转-左行"
+        :stroke-width="PathWidth"
+        :fill="status[10].color"
+        :class="status[10].isshow ? '' : 'invisible'"
+        d="M36.8,15.9c0,1.1-0.9,1.9-1.9,2l-2.2,0.3l-0.3-2.5L27,20l6.4,2.7l-0.3-2.5l1.9-0.3
+    c2.1-0.1,3.8-1.8,3.8-3.9V0h-2L36.8,15.9L36.8,15.9z"
+      ></path>
+      <polygon
+        id="北直行-左行"
+        :stroke-width="PathWidth"
+        :fill="status[8].color"
+        :class="status[8].isshow ? '' : 'invisible'"
+        points="36.8,0 36.8,23.2 34.3,23.2 37.8,29.3 41.2,23.2 38.8,23.2 38.8,0"
+      ></polygon>
+      <path
+        id="北调头-左行"
+        :stroke-width="PathWidth"
+        :fill="status[11].color"
+        :class="status[11].isshow ? '' : 'invisible'"
+        d="M34.3,14.3c2.5,0,4.5-1.8,4.5-3.9V0h-2v10.4c0,1-1.1,1.9-2.5,1.9s-2.5-0.9-2.5-1.9V7.5
+    h2.5l-3.5-6l-3.5,6h2.5v2.9C29.8,12.5,31.8,14.2,34.3,14.3z"
+      ></path>
+    </g>
   </svg>
 </template>
 <script>
+// import { mapState } from 'vuex'
 export default {
   name: 'xdr-dir-selector',
   props: {
@@ -177,8 +344,18 @@ export default {
     MaskColor: {
       type: String,
       default: '#0096ba'
+    },
+    roadDirection: {
+      type: String,
+      default: 'right'
     }
+
   },
+  // computed: {
+  //   ...mapState({
+  //     roadDirection: state => state.globalParam.roadDirection
+  //   })
+  // },
   data () {
     return {
       maskmark: false,

@@ -38,7 +38,17 @@ public class VipRouteDeviceVO {
 
     private int totaltime;
 
-    private List<DirectionDetail> directions;
+    private int greenflash;
+
+    private int duration;
+
+    private int yellow;
+
+    private int redclear;
+
+    private int mingreen;
+
+    private List<DirectionDetail> phases;
 
     private int state; // 0待执勤, 1执勤中
     private String resttime;
@@ -57,7 +67,12 @@ public class VipRouteDeviceVO {
         this.terminalname = device.getTerminalname();
         this.value = device.getValue();
         this.totaltime = device.getTotaltime();
-        this.directions = device.getDirections();
+        this.phases = device.getPhases();
+        this.greenflash = device.getGreenflash();
+        this.duration = device.getDuration();
+        this.yellow = device.getYellow();
+        this.redclear = device.getRedclear();
+        this.mingreen = device.getMingreen();
         this.state = status.getState();
         this.resttime = status.getResttime();
         this.currentControl = status.getControl();
