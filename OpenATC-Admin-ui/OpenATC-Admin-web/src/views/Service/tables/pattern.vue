@@ -105,6 +105,7 @@ import xdrdirselector from '@/components/XRDDirSelector'
 import device from './device'
 import { getTheme } from '@/utils/auth'
 import { getTscControl } from '@/api/control'
+import ServiceUtil from '../ServiceUtil.js'
 export default {
   name: 'patterns',
   components: {
@@ -120,6 +121,7 @@ export default {
   },
   mounted () {
     this.controlOptions = this.$refs.selectControl.options
+    this.serviceUtil = new ServiceUtil()
   },
   data () {
     return {
@@ -235,25 +237,7 @@ export default {
       })
     },
     getContent (row) {
-      let control = row.control
-      let res = ''
-      if (control === 22) {
-        res = this.$t('openatc.greenwaveoptimize.phase')
-        let phases = row.phases
-        if (phases) {
-          let phaseIdArr = []
-          for (let dir of phases) {
-            if (dir.type !== 0) {
-              let phaseId = dir.id
-              phaseIdArr.push(phaseId)
-            }
-          }
-          res = res + ' ' + phaseIdArr.join('、')
-        }
-      } else if (control === 4) {
-        let value = row.value ? row.value : 1
-        res = this.$t('openatc.dutyroute.stage') + ' ' + value
-      }
+      let res = this.serviceUtil.getContent(row)
       return res
     },
     getShowList (row) {
@@ -383,6 +367,7 @@ export default {
     async closePhaseControl (res) {
       let data = res.data
       let row = this.row
+      row.control = res.control
       row.greenflash = data.greenflash
       row.duration = data.duration
       row.yellow = data.yellow
