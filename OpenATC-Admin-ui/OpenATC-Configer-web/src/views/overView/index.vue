@@ -1125,7 +1125,6 @@ export default {
           list.push(obj)
         }
         this.patternStatusList.push(list)
-        console.log(this.patternStatusList, 898)
       }
       // this.handleBarrier(this.patternStatusList, this.phaseList)
     },
