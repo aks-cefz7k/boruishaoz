@@ -167,21 +167,20 @@ public class FaultController {
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
+            List<String> agentids = faultService.getAgentidListByUserRole();
+            // 过滤出属于该用户所在组织的设备
+            CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("agentid"));
+            if (!agentids.isEmpty()){
+                for (String agentid : agentids){
+                    in.value(agentid);
+                }
+            } else {
+                in.value("null");
+            }
+            predicateList.add(in);
+            // 路口名称
             if (!agentId.equals("")) {
                 predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
-            }
-            else {
-                List<String> agentids = faultService.getAgentidListByUserRole();
-                CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("agentid"));
-                if (!agentids.isEmpty()){
-                    for (String agentid : agentids){
-                        in.value(agentid);
-                    }
-                }else {
-                    in.value("null");
-                }
-                predicateList.add(in);
-
             }
             // 确认结果
             if (!enumerate.equals("")) {
