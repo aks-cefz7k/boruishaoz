@@ -42,6 +42,8 @@ import './mock'
 import { getTheme } from '@/utils/auth'
 import animate from 'animate.css'
 import KissModel from './model/KissModel'
+import './utils/flexible'
+// import './utils/rem'
 
 window.dev = process.env.NODE_ENV
 

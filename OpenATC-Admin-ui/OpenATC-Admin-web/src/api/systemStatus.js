@@ -9,17 +9,8 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-// https://github.com/michael-ciniawsky/postcss-load-config
-
-module.exports = {
-  "plugins": {
-    "postcss-import": {},
-    "postcss-url": {},
-    // to edit target browsers: use "browserslist" field in package.json
-    "autoprefixer": {},
-    "postcss-px2rem-exclude": {
-      "remUnit": 192,
-      "exclude": /node_modules|element-ui/i
-    }
-  }
+import Authapi from './authapi'
+export function getAllServerStatus () {
+  let api = new Authapi('getAllServerStatus')
+  return api.Send({}, {}, [])
 }

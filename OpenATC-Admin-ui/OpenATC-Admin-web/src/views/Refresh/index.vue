@@ -9,17 +9,16 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-// https://github.com/michael-ciniawsky/postcss-load-config
-
-module.exports = {
-  "plugins": {
-    "postcss-import": {},
-    "postcss-url": {},
-    // to edit target browsers: use "browserslist" field in package.json
-    "autoprefixer": {},
-    "postcss-px2rem-exclude": {
-      "remUnit": 192,
-      "exclude": /node_modules|element-ui/i
-    }
+<template>
+<div></div>
+</template>
+<script>
+export default {
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$router.replace(from.path)
+      // 跳到该路由页面后，再替换为from.path来源路径
+    })
   }
 }
+</script>

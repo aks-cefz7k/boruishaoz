@@ -88,7 +88,7 @@
   }
 }
 .appMain {
-  height: calc(100% - 53px - 15px);
+  height: calc(100% - 60px - 15px);
   background: $--color-white;
 }
 //commom 样式
@@ -121,23 +121,315 @@
 }
 
  // 主页样式
+ .system-status-pop-content {
+   padding: 17px 23px;
+   .tittle {
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: bold;
+    color: $--color-text-primary;
+    line-height: 14px;
+    margin-bottom: 8px;
+   }
+   .detail {
+     .detail-item {
+       overflow: hidden;
+       >span {
+         float: left;
+         margin-top: 14px;
+       }
+      .label {
+        min-width: 80px;
+        margin-right: 26px;
+        color: $--color-text-regular;
+      }
+      .content {
+        color: $--color-text-primary;
+      }
+     }
+   }
+ }
  .homeLayout {
     padding: 19px;
+    padding-top: 4px;
+    margin-top: 15px;
     background-color: $--background-color-base;
     height: 100%;
+    .panel {
+      height: 190px;
+      margin-bottom: 19px;
+      .crossStatusNum {
+        height: 190px;
+        .status-type {
+          height: 190px;
+          padding: 34px 0px;
+          box-sizing: border-box;
+          .el-row, .el-col {
+            height: 190px;
+          }
+          .tpye-item {
+            height: 116px;
+            padding: 0 30px;
+            // padding-left: 54px;
+            border-radius: 10px;
+            .state {
+              float: left;
+              font-size: 14px;
+              margin-top: 30px;
+              .type {
+                height: 18px;
+                font-size: 18px;
+                font-weight: bold;
+                color: $--color-text-primary;
+              }
+              .compYest {
+                height: 14px;
+                font-size: 14px;
+                font-weight: 500;
+                color: $--color-text-regular;
+                margin-top: 12px;
+                .compnum {
+                  display: inline-block;
+                  min-width: 44px;
+                  height: 24px;
+                  background: $--color-black;
+                  border-radius: 4px;
+                  margin-left: 14px;
+                  text-align: center;
+                  line-height: 24px;
+                }
+              }
+            }
+            .num {
+              float: left;
+              width: 59px;
+              font-size: 56px;
+              font-weight: bold;
+              color: $--color-text-primary;
+              margin-top: 23px;
+              margin-left: 35px;
+            }
+            .pointernum {
+              cursor: pointer;
+            }
+            .Img {
+              float: left;
+              height: 77px;
+              width: 77px;
+              background-size: 77px 77px;
+              background-repeat: no-repeat;
+              background-position:center center;
+              margin-right: 32px;
+              margin-top: 23px;
+            }
+            .upImg {
+              background-image: url('../../assets/home/online.png');
+              }
+            .downImg {
+              background-image: url('../../assets/home/offline.png');
+              }  
+            .troubleImg {
+              background-image: url('../../assets/home/trouble.png');
+            }
+            .interveneImg {
+              background-image: url('../../assets/home/intervene.png');
+            } 
+          }
+        }
+      }
+    }
+    .cardlayout {
+      margin-right: 19px;
+      width: calc(100% - 19px);
+      height: 100%;
+    }
     .top {
-        height: 53%;
-        margin-bottom: 20px;
+        height: 380px;
+        margin-bottom: 19px;
         .chart {
           height: calc(100% - 52px);
+          .mode-charts-panel-en {
+            .mode-charts {
+              width: 40% !important;
+            }
+            .legend {
+              width: 59% !important;
+              .name {
+                width: 235px !important;
+                margin-right: 20px !important;
+              }
+            }
+          }
+          .mode-charts-panel {
+            height: 100%;
+            .mode-charts {
+              float: left;
+              height: calc(100% - 46px - 52px);
+              width: 46%;
+              margin-top: 46px;
+            }
+            .legend {
+              width: 53%;
+              float: left;
+              margin-top: 10px;
+              .mode-item {
+                float: left;
+                width: 50%;
+                margin-bottom: 24px;
+                height: 35px;
+                > span {
+                  float: left;
+                }
+                .mark {
+                  float: left;
+                  width: 10px;
+                  height: 10px;
+                  margin-top: 11px;
+                  margin-right: 7px;
+                }
+                .name {
+                  width: 120px;
+                  font-size: 14px;
+                  font-weight: 400;
+                  color: $--color-text-regular;
+                  line-height: 35px;
+                  margin-right: 29px;
+                }
+                .num {
+                  font-size: 24px;
+                  font-weight: bold;
+                  color: $--color-text-primary;
+                  line-height: 35px;
+                }
+              }
+            }
+          }
         }
-        .list {
+        .system-list {
           height: calc(100% - 52px);
+          .system-status {
+            height: 100%;
+          }
+        } 
+      }
+    .bottom {
+      height: 380px;
+      margin-bottom: 19px;
+      .chart {
+        height: calc(100% - 52px);
+        .control-charts-panel-en {
+          .control-charts {
+            width: 40% !important;
+          }
+          .legend {
+            width: 59% !important;
+            .name {
+              width: 130px !important;
+            }
+          }
+        }
+        .control-charts-panel {
+          height: 100%;
+          .control-charts {
+            float: left;
+            height: calc(100% - 46px - 52px);
+            width: 46%;
+            margin-top: 46px;
+          }
+          .legend {
+            width: 53%;
+            float: left;
+            margin-top: 30px;
+            .title {
+              font-size: 16px;
+              font-weight: 500;
+              color: $--color-text-primary;
+              margin-bottom: 30px;
+            }
+            .control-item {
+              float: left;
+              width: 50%;
+              margin-bottom: 24px;
+              height: 35px;
+              > span {
+                float: left;
+              }
+              .mark {
+                float: left;
+                width: 10px;
+                height: 10px;
+                margin-top: 11px;
+                margin-right: 7px;
+              }
+              .name {
+                width: 100px;
+                font-size: 14px;
+                font-weight: 400;
+                color: $--color-text-regular;
+                line-height: 35px;
+                margin-right: 29px;
+              }
+              .num {
+                font-size: 24px;
+                font-weight: bold;
+                color: $--color-text-primary;
+                line-height: 35px;
+              }
+            }
+          }
         }
       }
-      .bottom {
-        height: calc(47% - 20px);
+      .cross-abnormal-en {
+        width: 80% !important;
+        .odd-item {
+          margin-right: 100px !important;
+          .content {
+            min-width: 160px !important;
+          }
+        }
       }
+      .cross-abnormal {
+        width: 64%;
+        overflow: hidden;
+        margin: 0 auto;
+        margin-top: 50px;
+        .odd-item {
+          margin-right: 158px;
+        }
+        .abnormal-item {
+          float: left;
+          margin-bottom: 32px;
+          height: 35px;
+          margin-bottom: 50px;
+          .markIcon {
+            float: left;
+            width: 48px;
+            height: 48px;
+            background-size: 48px 48px;
+            background-repeat: no-repeat;
+            background-position:center center;
+            margin-right: 18px;
+          }
+          .interveneImg {
+            background-image: url('../../assets/home/intervene.png');
+          } 
+          .content {
+            float: left;
+            cursor: pointer;
+            .name {
+              font-size: 14px;
+              font-weight: 400;
+              color: $--color-text-regular;
+            }
+            .num {
+              font-size: 24px;
+              font-weight: bold;
+              color: $--color-text-primary;
+            }
+          }
+        }
+      }
+    }
       .el-row {
           height: 100%;
           &:last-child {
@@ -378,9 +670,9 @@
     .cardTitle {
         height: 52px;
         line-height: 52px;
-        border-bottom: 1px solid $--border-color-base;
+        // border-bottom: 1px solid $--border-color-base;
         font-size: 18px;
-        color: $--color-text-regular;
+        color: $--color-text-primary;
       }
   }
 // GIS页面样式
@@ -1757,7 +2049,7 @@ table td {
     margin-bottom: 10px;
   }
   .laber-name {
-    width: 48px;
+    // width: 48px;
     height: 13px;
     font-size: 12px;
     font-weight: normal;

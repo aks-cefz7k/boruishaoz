@@ -101,7 +101,17 @@ const en = {
       'devicemaneger': 'Cross Maneger',
       'usermanager': 'User Manager',
       'operationrecord': 'Operation Record',
-      'fault': 'Fault'
+      'fault': 'Fault',
+      'intervene': 'Intervene',
+      'intersectionmode': 'Intersection Mode',
+      'intersectioncontrol': 'Intersection Control',
+      'systemstate': 'System State',
+      'intersectionabnormalstate': 'Intersection Abnormal State',
+      'compareyesterday': 'Comp yday',
+      'server': 'Server',
+      'state': 'State',
+      'detail': 'Detail',
+      'view': 'View'
     },
     'faultrecord': {
       'asc': 'Asc',

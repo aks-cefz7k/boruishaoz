@@ -101,7 +101,17 @@ const zh = {
       'devicemaneger': '路口管理',
       'usermanager': '用户管理',
       'operationrecord': '操作记录',
-      'fault': '故障'
+      'fault': '故障',
+      'intervene': '干预',
+      'intersectionmode': '路口控制模式',
+      'intersectioncontrol': '路口控制方式',
+      'systemstate': '系统状态',
+      'intersectionabnormalstate': '路口异常状态',
+      'compareyesterday': '对比昨天',
+      'server': '服务',
+      'state': '状态',
+      'detail': '详情',
+      'view': '查看'
     },
     'faultrecord': {
       'asc': '信号机',
