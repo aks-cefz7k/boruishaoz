@@ -306,7 +306,7 @@
   </svg>
 </template>
 <script>
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'xdr-dir-selector',
   props: {
@@ -344,17 +344,13 @@ export default {
     MaskColor: {
       type: String,
       default: '#0096ba'
-    },
-    roadDirection: {
-      type: String,
-      default: 'right'
     }
   },
-  // computed: {
-  //   ...mapState({
-  //     roadDirection: state => state.globalParam.roadDirection
-  //   })
-  // },
+  computed: {
+    ...mapState({
+      roadDirection: state => state.globalParam.roadDirection
+    })
+  },
   data () {
     return {
       maskmark: false,

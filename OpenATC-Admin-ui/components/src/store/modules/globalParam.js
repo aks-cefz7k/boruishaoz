@@ -66,7 +66,7 @@ const Global = {
     FuncSort: 'allFunc',
     hideMenu: false,
     graphicMode: false, // 为true时，切换到图形界面模式，只显示路口图部分
-    // roadDirection: 'right', // 当前路口行车方向：默认右行
+    roadDirection: 'right', // 当前路口行车方向：默认右行
     channelDescMap: new Map(), // 管理实时通道描述数据
     isShowGui: true, // 总览当前是否是图形界面
     isRefreshTankuang: 'norefresh' // 刷新某个页面的相位弹框组件
@@ -114,9 +114,9 @@ const Global = {
     SET_GRAPHIC_MODE: (state, isSwitchGraphicMode) => {
       state.graphicMode = isSwitchGraphicMode
     },
-    // SET_ROAD_RIRECTION: (state, DIR) => {
-    //   state.roadDirection = DIR
-    // },
+    SET_ROAD_RIRECTION: (state, DIR) => {
+      state.roadDirection = DIR
+    },
     SET_CHANNEL_DESC: (state, descmap) => {
       state.channelDescMap = descmap
     },
@@ -176,9 +176,9 @@ const Global = {
     SetGraphicMode ({ commit }, isSwitchGraphicMode) {
       commit('SET_GRAPHIC_MODE', isSwitchGraphicMode)
     },
-    // SetRoadDirection ({ commit }, DIR) {
-    //   commit('SET_ROAD_RIRECTION', DIR)
-    // },
+    SetRoadDirection ({ commit }, DIR) {
+      commit('SET_ROAD_RIRECTION', DIR)
+    },
     SetChannelDesc ({ commit }, descmap) {
       commit('SET_CHANNEL_DESC', descmap)
     },

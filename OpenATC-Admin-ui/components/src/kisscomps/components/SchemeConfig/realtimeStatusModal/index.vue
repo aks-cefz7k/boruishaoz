@@ -161,7 +161,7 @@
                 :Width="'44'"
                 :Height="'44'"
               />
-              <xdrdirselector Width="40PX" Height="40PX" :showlist="item" :roadDirection="roadDirection"></xdrdirselector>
+              <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
               <div
                 style="display:flex;flex-direction:row;justify-content:center;align-items:center;"
               >
@@ -274,9 +274,6 @@ export default {
     },
     untreatedFault: {
       type: Array
-    },
-    roadDirection: {
-      type: String
     }
   },
   data () {

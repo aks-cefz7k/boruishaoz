@@ -27,7 +27,6 @@
                :currentStage="currentStage"
                :preselectStages="preselectStages"
                :realtimeStatusModalvisible="realtimeStatusModalvisible"
-               :roadDirection="roadDirection"
                @closeManualModal="closeManualModal"
                @selectModel="selectModel"
                @selectStages="selectStages"
@@ -45,7 +44,6 @@
                 :closePhaseRings="phaseRings"
                 :sidewalkPhaseData="sidewalkPhaseData"
                 :realtimeStatusModalvisible="realtimeStatusModalvisible"
-                :roadDirection="roadDirection"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
               <LockingPhaseControlModal
@@ -54,7 +52,6 @@
                 :closePhaseRings="phaseRings"
                 :sidewalkPhaseData="sidewalkPhaseData"
                 :realtimeStatusModalvisible="realtimeStatusModalvisible"
-                :roadDirection="roadDirection"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
             </div>
@@ -81,7 +78,6 @@
                 :agentId="agentId"
                 :stagesList="stagesList"
                 :sidewalkPhaseData="sidewalkPhaseData"
-                :roadDirection="roadDirection"
                 @changeStatus="changeStatus"
                 @showFaultDetail="showFaultDetail"/>
             </div>
@@ -145,10 +141,6 @@ export default {
     Token: {
       type: String,
       default: ''
-    },
-    roadDirection: {
-      type: String,
-      default: 'right'
     }
   },
   data () {
@@ -280,17 +272,10 @@ export default {
       handler: function (val) {
         this.setPropsToken(val)
       }
-    },
-    roadDirection: {
-      handler: function (val) {
-        if (val === 'left' || val === 'right') {
-          this.PhaseDataModel = new PhaseDataModel(val)
-        }
-      }
     }
   },
   created () {
-    this.PhaseDataModel = new PhaseDataModel(this.roadDirection)
+    this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
     if (this.realtimeStatusModalvisible === false) {
       this.changeStatus()

@@ -54,7 +54,7 @@
         <div style="width: 100%; height: auto;overflow: hidden;">
           <div class="control-model" v-for="(item, index) in stagesList" :key="index">
             <div class="single-model" @click="selectStages(index + 1)" :class="preselectStages == index + 1 ? 'single-model-select' : ''">
-              <xdrdirselector Width="40px" Height="40px" :showlist="item" :roadDirection="roadDirection"></xdrdirselector>
+              <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
               <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
                 <div class="current-stage-num" style="width:20%;">{{index + 1}}</div>
                 <div style="width:70%;">
@@ -126,9 +126,6 @@ export default {
     realtimeStatusModalvisible: {
       type: Boolean,
       default: true
-    },
-    roadDirection: {
-      type: String
     }
   },
   computed: {
