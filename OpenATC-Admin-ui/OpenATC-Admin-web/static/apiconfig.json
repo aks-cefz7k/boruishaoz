@@ -271,8 +271,8 @@
   },
   {
     "key": "GetUntreated",
-    "url": "/fault/uncheck",
-    "method": "get"
+    "url": "/fault/range",
+    "method": "post"
   },
   {
     "key": "GetAllHistoryFault",
