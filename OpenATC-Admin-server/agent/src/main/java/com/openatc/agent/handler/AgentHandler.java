@@ -93,6 +93,14 @@ public class AgentHandler extends ICommHandler {
         String key = agenttype + ":" + infotype + ":" + agentid;
         msg.setModel(agenttype);
         String value = null;
+
+        // 如果开启Redis，则将消息存入Redis
+        if (isRedisEnable) {
+            value = gson.toJson(msg);
+            stringRedisTemplate.opsForValue().set(key, value);
+            stringRedisTemplate.convertAndSend(key, value);
+        }
+
         // ** 以下为消息的特殊处理 **
 
         // 收到注册消息，更新设备信息
@@ -117,11 +125,5 @@ public class AgentHandler extends ICommHandler {
             historyDataDao.SaveFlowData(msg);
         }
 
-        // 如果开启Redis，则将消息存入Redis
-        if (isRedisEnable) {
-            value = gson.toJson(msg);
-            stringRedisTemplate.opsForValue().set(key, value);
-            stringRedisTemplate.convertAndSend(key, value);
-        }
     }
 }
