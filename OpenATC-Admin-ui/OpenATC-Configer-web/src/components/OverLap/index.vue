@@ -1,5 +1,5 @@
 <template>
-<div class="overLap" v-if="checked" :style="{'width':'100%','margin':this.controlData ? '20px 0 0 0' : '0 5% 0 38%'}">
+<div class="overLap" v-if="checked" :style="{'width':'870px','margin':this.controlData ? '20px 0 0 0' : '0 5% 0 38%'}">
     <div class="ring-first" v-for="(list, index1) in this.overlapDatas" :key="index1">
         <div v-for="(item,index2) in list.stageLists" :key="index2" >
             <div class="first-2">
@@ -7,7 +7,7 @@
                 <div slot="content">
                     O{{list.id}}-
                     <span v-for="(ids,index3) in list.includedphases" :key="index3">
-                        P:{{ids}}
+                        P{{ids}}<span v-if="index3+1!==list.includedphases.length">,</span>
                     </span>
                 </div>
                 <div style="cursor:pointer;">
@@ -19,7 +19,7 @@
                         <div class="ring-nums">
                             O{{list.id}}-
                             <span v-for="(ids,index3) in list.includedphases" :key="index3">
-                                P:{{ids}}
+                                P{{ids}}<span v-if="index3+1!==list.includedphases.length">,</span>
                             </span>
                         </div>
                     </div>
