@@ -29,7 +29,7 @@
         </template>
       </el-button>
     </div>
-    <div class="text item" style="border:0px solid red;">
+    <div class="text item" style="border:0px solid red;height:10px;">
       <el-row :gutter="20">
         <div class="grid-content-label" style="display:inline-block;margin-right:10px;margin-left:10px;">
           {{ $t("openatc.dutyroute.executionway") }} :
