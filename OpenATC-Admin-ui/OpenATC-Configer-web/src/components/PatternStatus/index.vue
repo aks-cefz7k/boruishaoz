@@ -108,7 +108,7 @@ export default {
       newPatterns: [],
       newList: [],
       sidewalkPhaseData: [],
-      controlDatas: this.controlData,
+      // controlDatas: this.controlData,
       max: '',
       stageLists: [],
       busPhaseData: [], // 公交相位数据
@@ -119,9 +119,6 @@ export default {
     stagesChange: {
       type: Array
     },
-    // controlTypeIndex: {
-    //   type: Boolean
-    // },
     contrloType: {
       type: Boolean
     },
@@ -170,20 +167,11 @@ export default {
   watch: {
     controlData: {
       handler: function (val, oldVal) {
-        // this.controlDatas = this.controlData
-        // this.handlePatternData()
-        // setTimeout(() => {
-        // this.handleCurrentChange(this.patternStatusList)
-        // }, 100)
-
-        // this.handleBarrierHeight() // 计算屏障高度
         if (this.contrloType) {
           this.getIndexStage()
-        } else {
-          // this.handleCurrentChange(this.patternStatusList)
-          // this.handleBarrierHeight()
-          // this.handlePatternData()
         }
+        // this.controlDatas = this.controlData
+        this.handlePatternData()
       },
       // 深度观察监听
       deep: true
@@ -238,29 +226,26 @@ export default {
     },
     patternStatusList: {
       handler: function (val, oldVal) {
-        this.handleCurrentChange(this.patternStatusList)
-        // this.handleCurrentChange(val)
-        this.handleBarrierHeight()
-        // this.handleBarrierHeight() // 计算屏障高度
-        // if (this.patternStatusList && this.newCycle) {
-        // setTimeout(() => {
-        //   this.handleCurrentChange(val)
-        // }, 10)
-        // this.handleBarrierHeight()
-        // }
+        this.handleBarrierHeight() // 计算屏障高度
+        if (this.patternStatusList && this.newCycle) {
+          setTimeout(() => {
+            this.handleCurrentChange(this.patternStatusList)
+          }, 10)
+          this.handleBarrierHeight()
+        }
       },
       // 深度观察监听
       deep: true
     }
   },
   created () {
-    setTimeout(() => {
-      this.handleCurrentChange(this.patternStatusList)
-      this.handleBarrierHeight()
-    }, 200)
     this.globalParamModel = this.$store.getters.globalParamModel
-    // if (this.patternStatusList && this.newCycle && !this.controlData) {
-    // }
+    if (this.patternStatusList && this.newCycle && !this.controlData) {
+      setTimeout(() => {
+        this.handleCurrentChange(this.patternStatusList)
+        this.handleBarrierHeight()
+      }, 200)
+    }
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
     this.getPedPhasePos()
@@ -268,17 +253,6 @@ export default {
     if (this.contrloType) {
       this.getStage()
     }
-  },
-  mounted () {
-
-  },
-  updated () {
-    // if (this.patternStatusList && this.cycle) {
-    // this.$nextTick(() => {
-    //   this.handleBarrierHeight()
-    //   this.patternInfo = this.patternStatusList
-    // })
-    // }
   },
   methods: {
     getPed (data) {
@@ -406,47 +380,47 @@ export default {
         }
       })
     },
-    // handlePatternData () {
-    //   this.newList = []
-    //   if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
-    //   if (!this.controlDatas.phase) return
-    //   let cycle = this.controlDatas.cycle
-    //   if (!this.controlDatas.rings) return
-    //   for (let rings of this.controlDatas.rings) {
-    //     let phase = this.controlDatas.phase
-    //     let list = []
-    //     for (let sequ of rings.sequence) {
-    //       let obj = {}
-    //       obj.id = sequ
-    //       let split = phase.filter((item) => {
-    //         return item.id === sequ
-    //       })[0].split
-    //       let currPhase = this.phaseList.filter((item) => {
-    //         if (item.id === sequ && item.controltype === 99) {
-    //           obj.controltype = item.controltype
-    //         }
-    //         return item.id === sequ
-    //       })[0]
-    //       if (currPhase) {
-    //         obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-    //         obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-    //         obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / cycle * 100).toFixed(3) + '%'
-    //         obj.flashgreen = (currPhase.flashgreen / cycle * 100).toFixed(3) + '%'
-    //         obj.peddirection = currPhase.peddirection
-    //         obj.split = split
-    //         obj.direction = currPhase.direction.map(item => {
-    //           return {
-    //             id: item,
-    //             color: '#454545'
-    //           }
-    //         })
-    //         list.push(obj)
-    //       }
-    //     }
-    //     this.newList.push(list)
-    //     this.pattern = [...this.newList]
-    //   }
-    // },
+    handlePatternData () {
+      this.newList = []
+      if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
+      if (!this.controlData.phase) return
+      let cycle = this.controlData.cycle
+      if (!this.controlData.rings) return
+      for (let rings of this.controlData.rings) {
+        let phase = this.controlData.phase
+        let list = []
+        for (let sequ of rings.sequence) {
+          let obj = {}
+          obj.id = sequ
+          let split = phase.filter((item) => {
+            return item.id === sequ
+          })[0].split
+          let currPhase = this.phaseList.filter((item) => {
+            if (item.id === sequ && item.controltype === 99) {
+              obj.controltype = item.controltype
+            }
+            return item.id === sequ
+          })[0]
+          if (currPhase) {
+            obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
+            obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / cycle * 100).toFixed(3) + '%'
+            obj.flashgreen = (currPhase.flashgreen / cycle * 100).toFixed(3) + '%'
+            obj.peddirection = currPhase.peddirection
+            obj.split = split
+            obj.direction = currPhase.direction.map(item => {
+              return {
+                id: item,
+                color: '#454545'
+              }
+            })
+            list.push(obj)
+          }
+        }
+        this.newList.push(list)
+        this.patternInfo = [...this.newList]
+      }
+    },
     handleBarrierHeight () { // 屏障高度
       if (!this.patternInfo) return
       let patternLength = this.patternInfo.length

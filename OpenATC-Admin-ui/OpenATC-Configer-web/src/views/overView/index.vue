@@ -24,12 +24,18 @@
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
         <div class="tuxing-left" :class="{'changeWidth': graphicMode}" ref="tuxingLeft">
-          <IntersectionMap
+          <intersection-map
+            ref="intersectionMap"
+            :crossStatusData="crossStatusData"
+            :devStatus="devStatus"
+            :agentId="agentId"
+            :graphicMode="graphicMode" />
+          <!-- <IntersectionMap
               ref="intersectionMap"
               :crossStatusData="crossStatusData"
               :devStatus="devStatus"
               :agentId="agentId"
-              :graphicMode="graphicMode" />
+              :graphicMode="graphicMode" /> -->
           <div class="pattern-status" v-if="!graphicMode">
             <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.patternoffset')}}: {{controlData.patternoffset}} {{$t('edge.overview.coordinationtime')}}: {{controlData.offset}})</div>
@@ -61,7 +67,7 @@
         </div>
 
         <div ref="tuxingRight" class="tuxing-right" >
-          <RightPanel
+          <scheme-config
             ref="rightpanel"
             :statusData="crossStatusData"
             :agentName="agentName"
@@ -70,6 +76,15 @@
             :agentId="agentId"
             :ip="ip"
             :platform="platform" />
+          <!-- <RightPanel
+            ref="rightpanel"
+            :statusData="crossStatusData"
+            :agentName="agentName"
+            :responseTime="responseTime"
+            :devStatus="devStatus"
+            :agentId="agentId"
+            :ip="ip"
+            :platform="platform" /> -->
         </div>
       </div>
     </div>

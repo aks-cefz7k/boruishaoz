@@ -18,11 +18,13 @@ export default {
   en: {
     ...en,
     ...Edgebase.language.en,
+    ...Edgebase.language.openatcComponentsLang.en,
     ...enLocale
   },
   zh: {
     ...zh,
     ...Edgebase.language.zh,
+    ...Edgebase.language.openatcComponentsLang.zh,
     ...zhLocale
   }
 }

@@ -13,13 +13,16 @@ import en from './en'
 import zh from './zh'
 import enLocale from 'element-ui/lib/locale/lang/en'
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
+import openatcComponents from 'openatc-components'
 export default {
   en: {
     ...en,
+    ...openatcComponents.language.en,
     ...enLocale
   },
   zh: {
     ...zh,
+    ...openatcComponents.language.zh,
     ...zhLocale
   }
 }
