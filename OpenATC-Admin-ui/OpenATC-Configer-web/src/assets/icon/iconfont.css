@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 815552 */
-  src: url('iconfont.woff2?t=1643080812201') format('woff2'),
-       url('iconfont.woff?t=1643080812201') format('woff'),
-       url('iconfont.ttf?t=1643080812201') format('truetype');
+  src: url('iconfont.woff2?t=1643340827009') format('woff2'),
+       url('iconfont.woff?t=1643340827009') format('woff'),
+       url('iconfont.ttf?t=1643340827009') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-xuxiangwei:before {
+  content: "\e6cd";
 }
 
 .icon-hangren:before {

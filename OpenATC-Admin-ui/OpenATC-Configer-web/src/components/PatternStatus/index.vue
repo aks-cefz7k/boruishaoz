@@ -28,10 +28,10 @@
                 </div>
               </el-tooltip>
               <div style="position:relative; width:50px;" v-for="(bus,index3) in busPhaseData" :key="index3">
-                 <i class="iconfont icon-BRT" v-if="bus.controltype === 4 && bus.phaseid===item.id"></i>
-                 <i class="iconfont icon-feijidongche" v-if="bus.controltype === 6 && bus.phaseid===item.id"></i>
-                 <i class="iconfont icon-gongjiaoche" v-if="bus.controltype === 3 && bus.phaseid===item.id"></i>
-                 <i class="iconfont icon-youguidianche" v-if="bus.controltype === 5 && bus.phaseid===item.id"></i>
+                 <i class="iconfont icon-BRT" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 4 && bus.phaseid===item.id"></i>
+                 <i class="iconfont icon-feijidongche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 6 && bus.phaseid===item.id"></i>
+                 <i class="iconfont icon-gongjiaoche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 3 && bus.phaseid===item.id"></i>
+                 <i class="iconfont icon-youguidianche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 5 && bus.phaseid===item.id"></i>
               </div>
             </div>
             <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left','background': 'linear-gradient(to right, #ffffff 50%, #7ccc66 0)','background-size': '4px 100%'}"></div>
@@ -561,12 +561,6 @@ export default {
   margin-top: 1px;
   width: 100%;
   height: 34px;
-}
-.iconfont{
-  color:#454545;
-  font-size: 12px;
-  position: absolute;
-  top: 8px;
 }
 .direction {
   opacity: 0.6;
