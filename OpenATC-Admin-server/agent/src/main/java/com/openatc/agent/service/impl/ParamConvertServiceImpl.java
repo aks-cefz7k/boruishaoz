@@ -105,63 +105,74 @@ public class ParamConvertServiceImpl implements ParamConvertService {
 
     /**
      * 阶段转环
-     * @param stageParamList
+     * @param stageParamLists
      * @return rings
      */
     @Override
-    public List<List<Split>> convertStageToPattern(List<StageParam> stageParamList) {
+    public List<List<List<Split>>> convertStageToPattern(List<List<StageParam>> stageParamLists) {
+        List<List<List<Split>>> ringsList = new ArrayList<>();
+        for (List<StageParam> stageParamList : stageParamLists){
+            List<List<Split>> rings = new ArrayList<>();
+            List<Integer> SplitNumList = new ArrayList<>(); // 用于确定环数
+            List<List<PhaseNo>> pList = new ArrayList<>();  // 保存每个阶段中的相位列表
+            Map<Integer,Integer> splitValueMap = new HashMap<>();   // 保存每个相位的绿信比
+            for (int i = 0; i < stageParamList.size(); i++){
+                // 所有阶段包含的相位列表
+                SplitNumList.add(stageParamList.get(i).getPhaseNoList().size());
+                pList.add(stageParamList.get(i).getPhaseNoList());
 
-        List<List<Split>> rings = new ArrayList<>();
-        List<Integer> SplitNumList = new ArrayList<>(); // 用于确定环数
-        List<List<PhaseNo>> pList = new ArrayList<>();  // 保存每个阶段中的相位列表
-        Map<Integer,Integer> splitValueMap = new HashMap<>();   // 保存每个相位的绿信比
-        for (int i = 0; i < stageParamList.size(); i++){
-            // 所有阶段包含的相位列表
-            SplitNumList.add(stageParamList.get(i).getPhaseNoList().size());
-            pList.add(stageParamList.get(i).getPhaseNoList());
-
-            // 确定每个相位的绿信比
-           int value = stageParamList.get(i).getAllRed() + stageParamList.get(i).getGreen() + stageParamList.get(i).getYellow();
-           for (int j = 0; j < stageParamList.get(i).getPhaseNoList().size(); j++){
-               if (stageParamList.get(i).getPhaseNoList().get(j).getId() == null){
-                   continue;
-               }
-               String id = stageParamList.get(i).getPhaseNoList().get(j).getId();
-               // 先从map中取数据
-               if (splitValueMap.get(Integer.valueOf(id)) != null){
-                   int newValue = value + splitValueMap.get(Integer.valueOf(id));
-                   splitValueMap.put(Integer.valueOf(id),newValue);
-               }else {
-                   splitValueMap.put(Integer.valueOf(id),value);
-               }
-           }
-        }
-
-        // 确定环的数量
-        Collections.sort(SplitNumList);
-        int ringNum = SplitNumList.get(SplitNumList.size() - 1);
-        for (int i = 0; i < ringNum; i++){  // 控制环的数量
-            List<Split> ring = new ArrayList<>();
-            List<Integer> idList = new ArrayList<>();
-            for (int k = 0; k < pList.size(); k++){ // 控制相位的数量
-                int id = Integer.valueOf(pList.get(k).get(i).getId());
-                int value = splitValueMap.get(id);
-                int mode = 2;
-                if (!idList.contains(id)){  // id重复则不创建Split
-                    Split split = new Split(id,value,mode);
-                    List<Integer> options = new ArrayList<>();
-                    options.add(0);
-                    options.add(0);
-                    options.add(0);
-                    split.setOptions(options);
-                    ring.add(split);
+                // 确定每个相位的绿信比
+                int value = stageParamList.get(i).getAllRed() + stageParamList.get(i).getGreen() + stageParamList.get(i).getYellow();
+                for (int j = 0; j < stageParamList.get(i).getPhaseNoList().size(); j++){
+                    if (stageParamList.get(i).getPhaseNoList().get(j).getId() == null){
+                        continue;
+                    }
+                    String id = stageParamList.get(i).getPhaseNoList().get(j).getId();
+                    // 先从map中取数据
+                    if (splitValueMap.get(Integer.valueOf(id)) != null){
+                        int newValue = value + splitValueMap.get(Integer.valueOf(id));
+                        splitValueMap.put(Integer.valueOf(id),newValue);
+                    }else {
+                        splitValueMap.put(Integer.valueOf(id),value);
+                    }
                 }
-                idList.add(id);
             }
 
-            rings.add(ring);
+            // 确定环的数量
+            Collections.sort(SplitNumList);
+            int ringNum = SplitNumList.get(SplitNumList.size() - 1);
+            for (int i = 0; i < ringNum; i++){  // 控制环的数量
+                List<Split> ring = new ArrayList<>();
+                List<Integer> idList = new ArrayList<>();
+                for (int k = 0; k < pList.size(); k++){ // 控制相位的数量
+                    int id = Integer.valueOf(pList.get(k).get(i).getId());
+                    int value = splitValueMap.get(id);
+                    int mode = 2;
+                    if (!idList.contains(id)){  // id重复则不创建Split
+                        Split split = new Split(id,value,mode);
+                        List<Integer> options = new ArrayList<>();
+                        options.add(0);
+                        options.add(0);
+                        options.add(0);
+                        split.setOptions(options);
+                        ring.add(split);
+                    }
+                    idList.add(id);
+                }
+
+                rings.add(ring);
+            }
+            // 固定返回四个环
+            if (ringNum < 4){
+                for (int i = ringNum; i < 4; i++){
+                    List<Split> ring = new ArrayList<>();
+                    rings.add(ring);
+                }
+            }
+            ringsList.add(rings);
         }
-        return rings;
+
+        return ringsList;
     }
 
 

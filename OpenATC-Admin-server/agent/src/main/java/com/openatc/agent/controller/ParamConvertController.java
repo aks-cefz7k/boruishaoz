@@ -42,7 +42,7 @@ public class ParamConvertController {
 
     @PostMapping(value = "/param/stagetoring")
     public RESTRet convertStageToRing(@RequestBody JsonObject jsonObject){
-        List<StageParam> stageParamList = gson.fromJson(jsonObject.get("stageParamList"), new TypeToken<List<StageParam>>() {}.getType());
+        List<List<StageParam>> stageParamList = gson.fromJson(jsonObject.get("stageParamList"), new TypeToken<List<List<StageParam>>>() {}.getType());
         if (stageParamList == null){
             return RESTRetUtils.errorObj(false,E_1001);
         }else {
