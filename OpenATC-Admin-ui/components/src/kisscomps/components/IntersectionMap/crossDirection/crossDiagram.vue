@@ -136,7 +136,7 @@ import RampSouthRoadsSvg from './baseImg/RampSouthSvg'
 import RampPhaseIconSvg from './phaseIcon/rampPhaseIconSvg'
 import PedSectionEWSvg from './baseImg/PedSectionEWSvg'
 import PedSectionSNSvg from './baseImg/PedSectionSNSvg'
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 import LCrossRoadsSvg from './baseImg/leftroad/LCrossRoadsSvg'
 import LTShapeEastRoadsSvg from './baseImg/leftroad/LTShapeEastRoadsSvg'
 import LTShapeWestRoadsSvg from './baseImg/leftroad/LTShapeWestRoadsSvg.vue'
@@ -186,13 +186,16 @@ export default {
     isShowInterval: {
       type: Boolean,
       devault: true
+    },
+    roadDirection: {
+      type: String
     }
   },
-  computed: {
-    ...mapState({
-      roadDirection: state => state.globalParam.roadDirection
-    })
-  },
+  // computed: {
+  //   ...mapState({
+  //     roadDirection: state => state.globalParam.roadDirection
+  //   })
+  // },
   watch: {
     tempType: {
       handler: function (val) {
@@ -296,7 +299,7 @@ export default {
     init () {
       this.CrossDiagramMgr = new CrossDiagramMgr()
       this.getRoadDirection()
-      this.PhaseDataModel = new PhaseDataModel()
+      this.PhaseDataModel = new PhaseDataModel(this.roadDirection)
       this.getIntersectionInfo() // 获取路口信息
     },
     comparePhaseStatus () {

@@ -12,7 +12,8 @@
       <intersection-with-interface
         ref="intersectionWithInterface"
         :AgentId="agentId"
-        Token="eyJraWQiOiIxNjQ4NDMyMTY5NjExIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNDgzMjE2OSwiaWF0IjoxNjQ4NDMyMTY5fQ.yNM6N0STwcNHE9tYi7fTfb0vqYLabjPntx7pQDS2zy4"
+        roadDirection="left"
+        Token="eyJraWQiOiIxNjQ4Nzk4ODM4OTU5IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTE5ODgzOSwiaWF0IjoxNjQ4Nzk4ODM5fQ.EqUqiAJ_7FaVDj2u7bHb5VbCWDXwy0348LhrEvj4Vs0"
         ></intersection-with-interface>
     </el-dialog>
   </div>

@@ -23,6 +23,7 @@
       <scheme-config
         ref="rightpanel"
         agentId="10001-928"
+        roadDirection="right"
         :statusData="crossStatusData"
         :realtimeStatusModalvisible="false" />
     </el-dialog>

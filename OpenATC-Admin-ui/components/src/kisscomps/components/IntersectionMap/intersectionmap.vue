@@ -27,7 +27,8 @@
       :crossStatusData="crossStatusData"
       :agentId="agentId"
       :isShowInterval="isShowInterval"
-      :devStatus="devStatus"/>
+      :devStatus="devStatus"
+      :roadDirection="roadDirection" />
   </div>
 </div>
 </template>
@@ -75,6 +76,10 @@ export default {
       handler: function (val) {
         this.setPropsToken(val)
       }
+    },
+    roadDirection: {
+      type: String,
+      default: 'right'
     }
   },
   watch: {

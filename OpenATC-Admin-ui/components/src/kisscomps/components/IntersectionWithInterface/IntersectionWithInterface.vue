@@ -17,7 +17,8 @@
         :crossStatusData="crossStatusData"
         :devStatus="devStatus"
         :agentId="agentId"
-        :graphicMode="true"/>
+        :graphicMode="true"
+        :roadDirection="roadDirection" />
   </div>
 </template>
 <script>
@@ -51,6 +52,10 @@ export default {
     Token: {
       type: String,
       default: ''
+    },
+    roadDirection: {
+      type: String,
+      default: 'right'
     }
   },
   watch: {
