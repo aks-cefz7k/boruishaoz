@@ -123,6 +123,10 @@
 | gis  | isShowVideo | gis勤务路线是否显示视频：true代表显示视频（前提是有视频资源），不填或false代表不显示视频 | true/false |
 | gis  | isShowGisMenu | 菜单栏是否显示地图菜单：true代表显示地图菜单，不填或false代表不显示地图菜单 | true/false |
 
+### 注意: 
+    isShowGisMenu 控制地图是否显示，默认不显示。
+    gisNormal 是2D地图服务参数，需要自行配置OSM地图或高德地图。
+    gisStatellite 是3D地图服务参数，需要自行配置OSM地图或高德地图。
 
 #### 界面展示
 
