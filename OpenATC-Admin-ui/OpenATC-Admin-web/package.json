@@ -43,8 +43,7 @@
     "moment": "^2.29.1",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
-    "openatc-components": "0.0.9",
-    "postcss-px2rem-exclude": "0.0.6",
+    "openatc-components": "0.0.15",
     "scss-loader": "0.0.1",
     "sortablejs": "^1.10.1",
     "style-loader": "^0.23.1",
@@ -56,7 +55,8 @@
     "vuedraggable": "^2.16.0",
     "vuex": "3.0.1",
     "websocket-as-promised": "^1.1.0",
-    "xlsx": "^0.16.9"
+    "xlsx": "^0.16.9",
+    "postcss-px2rem-exclude": "0.0.6"
   },
   "devDependencies": {
     "autoprefixer": "7.2.3",

@@ -17,7 +17,8 @@
         :crossStatusData="crossStatusData"
         :devStatus="devStatus"
         :agentId="agentId"
-        :graphicMode="true" />
+        :graphicMode="true"
+        :roadDirection="roadDirection" />
   </div>
 </template>
 <script>
@@ -51,6 +52,10 @@ export default {
     Token: {
       type: String,
       default: ''
+    },
+    roadDirection: {
+      type: String,
+      default: 'right'
     }
   },
   watch: {
@@ -185,7 +190,7 @@ export default {
     },
     queryDevParams () {
       let _this = this
-      queryDevice().then(res => {
+      queryDevice(this.agentid).then(res => {
         if (!res.data.success) {
           _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
           return

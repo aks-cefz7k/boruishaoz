@@ -11,7 +11,7 @@
  **/
 <template>
 <div class="intersection-map">
-  <div class="crossDirection-display" :class="{
+  <div class="crossDirection-display openatc-intersection-base-map" :class="{
     'superlargeCrossImg': bodyDomWidth <= 1680 && bodyDomWidth > 1440,
     'largeCrossImg': bodyDomWidth <= 1440 && bodyDomWidth > 1280,
     'middleCrossImg': bodyDomWidth <= 1280 && bodyDomWidth > 960,
@@ -27,7 +27,8 @@
       :crossStatusData="crossStatusData"
       :agentId="agentId"
       :isShowInterval="isShowInterval"
-      :devStatus="devStatus" />
+      :devStatus="devStatus"
+      :roadDirection="roadDirection" />
   </div>
 </div>
 </template>
@@ -36,7 +37,7 @@
 import CrossDiagram from './crossDirection/crossDiagram'
 import { setToken } from '../../../utils/auth.js'
 export default {
-  name: 'intersection-map',
+  name: 'intersection-base-map',
   components: {
     CrossDiagram
   },
@@ -75,6 +76,10 @@ export default {
       handler: function (val) {
         this.setPropsToken(val)
       }
+    },
+    roadDirection: {
+      type: String,
+      default: 'right'
     }
   },
   watch: {

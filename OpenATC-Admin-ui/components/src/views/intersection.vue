@@ -12,7 +12,8 @@
       <intersection-with-interface
         ref="intersectionWithInterface"
         :AgentId="agentId"
-        Token="eyJraWQiOiIxNjQ4ODAyNTk2Nzc4IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTIwMjU5NiwiaWF0IjoxNjQ4ODAyNTk2fQ.TMA7MaKDDwGxOrzyRIFbfrsH-_UyPGFz2Uqnnwsc8nk"
+        roadDirection="left"
+        :Token="Token"
         ></intersection-with-interface>
     </el-dialog>
   </div>
@@ -22,9 +23,10 @@ export default {
   name: 'demo',
   data () {
     return {
+      Token: 'eyJraWQiOiIxNjQ5MzM4NzA5MTA0IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTczODcwOSwiaWF0IjoxNjQ5MzM4NzA5fQ.JDSkpT1SbB61dEKvorhVdZJHKJzoQZEY5DPKHs1Imo0',
       boxVisible: false,
       dialogWidth: '80%',
-      agentId: '10001-928'
+      agentId: '40003-132'
     }
   },
   methods: {

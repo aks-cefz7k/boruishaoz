@@ -86,9 +86,9 @@
 </template>
 <script>
 import xdrdirselector from '@/components/XRDDirSelector'
-import PatternWalkSvg from '../IntersectionMap/crossDirection/baseImg/PatternWalkSvg'
+import PatternWalkSvg from 'openatc-components/package/kisscomps/components/IntersectionMap/crossDirection/baseImg/PatternWalkSvg'
 // import BusMapSvg from '../IntersectionMap/crossDirection/busIcon/busMapSvg'
-import PhaseDataModel from '../IntersectionMap/crossDirection/utils'
+import PhaseDataModel from 'openatc-components/package/kisscomps/components/IntersectionMap/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 // import { getIntersectionInfo } from '@/api/template'
 // import { getMessageByCode } from '@/utils/responseMessage'

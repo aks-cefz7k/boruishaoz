@@ -968,6 +968,12 @@
       color: $--color-text-secondary;
     }
   }
+  .block {
+    .resttime {
+      font-size: 14px;
+      color: $--color-text-secondary;
+    }
+  }
 }
 //gis coordination tab
 .gis-planchart {
@@ -1626,6 +1632,7 @@
   }
   .serviceroute-addDeviceDrawer {
     height: 100%;
+    width: 450px;;
     position: relative;
     .btnGroup {
         position: absolute;

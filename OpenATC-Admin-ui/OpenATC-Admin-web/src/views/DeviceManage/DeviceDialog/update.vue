@@ -258,25 +258,25 @@ export default {
     //     )
     //   }
     // }
-    var checkPort = (rule, value, callback) => {
-      if (value === '') {
-        return callback(
-          new Error(this.$t('openatc.devicemanager.enterport'))
-        )
-      }
-      const portReg = /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
-      setTimeout(() => {
-        if (portReg.test(value)) {
-          this.port_status = true
-          callback()
-        } else {
-          this.port_status = false
-          callback(
-            new Error(this.$t('openatc.devicemanager.correctport'))
-          )
-        }
-      }, 100)
-    }
+    // var checkPort = (rule, value, callback) => {
+    //   if (value === '') {
+    //     return callback(
+    //       new Error(this.$t('openatc.devicemanager.enterport'))
+    //     )
+    //   }
+    //   const portReg = /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
+    //   setTimeout(() => {
+    //     if (portReg.test(value)) {
+    //       this.port_status = true
+    //       callback()
+    //     } else {
+    //       this.port_status = false
+    //       callback(
+    //         new Error(this.$t('openatc.devicemanager.correctport'))
+    //       )
+    //     }
+    //   }, 100)
+    // }
     return {
       currentTags: [],
       selectTags: [],
@@ -316,9 +316,9 @@ export default {
         // ip: [
         //   { validator: checkIp, trigger: 'blur' }
         // ],
-        port: [
-          { validator: checkPort, trigger: 'blur' }
-        ],
+        // port: [
+        //   { validator: checkPort, trigger: 'blur' }
+        // ],
         agentid: [
           { required: true, message: this.$t('openatc.devicemanager.enterId'), trigger: 'blur' }
         ],

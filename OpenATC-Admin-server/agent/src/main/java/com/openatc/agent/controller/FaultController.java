@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -41,9 +42,9 @@ public class FaultController {
 
     @Autowired
     FaultServiceImpl faultService;
-
-    @Autowired
-    AscsDao ascsDao;
+//
+//    @Autowired
+//    AscsDao ascsDao;
 
     @Autowired
     protected TokenUtil tokenUtil;
@@ -166,6 +167,18 @@ public class FaultController {
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
+            List<String> agentids = faultService.getAgentidListByUserRole();
+            // 过滤出属于该用户所在组织的设备
+            CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("agentid"));
+            if (!agentids.isEmpty()){
+                for (String agentid : agentids){
+                    in.value(agentid);
+                }
+            } else {
+                in.value("null");
+            }
+            predicateList.add(in);
+            // 路口名称
             if (!agentId.equals("")) {
                 predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
             }

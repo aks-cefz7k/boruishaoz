@@ -15,11 +15,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.model.StatesCollectYesterday;
+import com.openatc.agent.model.SysOrg;
+import com.openatc.agent.model.User;
 import com.openatc.agent.resmodel.PageOR;
+import com.openatc.agent.utils.RedisTemplateUtil;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.MyGeometry;
+import com.openatc.model.model.StatusPattern;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,16 +45,20 @@ import java.util.logging.Logger;
 public class AscsDao {
 
     private static Logger logger = Logger.getLogger(AscsDao.class.toString());
+    public static  StatesCollectYesterday statesCollectYesterday = new StatesCollectYesterday();
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private RedisTemplateUtil redisTemplate;
 
     private Map<String, String> thirdidToAgentidOcp = new HashMap<>();
 
     Gson gson = new Gson();
+
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 初始化OCP设备的真实ID和平台ID的映射关系
@@ -69,7 +79,7 @@ public class AscsDao {
         }
     }
     public List<AscsBaseModel> getAscs() {
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype,tags FROM dev ORDER BY agentid";
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, code, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype,tags FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = getDevByPara(sql);
 
         return ascsBaseModels;
@@ -218,7 +228,7 @@ public class AscsDao {
                 String devs_video = "update devs_video set agentid=? where agentid=?";
                 jdbcTemplate.update(devs_video, newAgentid, oldAgentid);
             }
-            redisTemplate.convertAndSend("updateIdMap", "UpdateDev:" + newAgentid);
+            redisTemplate.publish("updateIdMap", "UpdateDev:" + newAgentid);
             initMap();
 
         } catch (Exception e) {
@@ -347,39 +357,45 @@ public class AscsDao {
 
     public List<AscsBaseModel> getDevByPara(String sql)  {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //使用Sqlite数据库时，两个请求同时访问会将数据库锁定，因此添加此处添加一个锁
         List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
         List<AscsBaseModel> abm = new ArrayList<>();
         for (Map map : lvRet) {
-            AscsBaseModel tt = new AscsBaseModel();
-            tt.setId((int) map.get("id"));
-            tt.setThirdplatformid((String) map.get("thirdplatformid"));
-            tt.setPlatform((String) map.get("platform"));
-            tt.setGbid((String) map.get("gbid"));
-            tt.setFirm((String) map.get("firm"));
-            tt.setAgentid((String) map.get("agentid"));
-            tt.setProtocol((String) map.get("protocol"));
-            tt.setType((String) map.get("type"));
-            tt.setDescs((String) map.get("descs"));
-            tt.setStatus((int) map.get("status"));
+            AscsBaseModel ascsBaseModel = new AscsBaseModel();
+            ascsBaseModel.setId((int) map.get("id"));
+            ascsBaseModel.setThirdplatformid((String) map.get("thirdplatformid"));
+            ascsBaseModel.setPlatform((String) map.get("platform"));
+            ascsBaseModel.setGbid((String) map.get("gbid"));
+            ascsBaseModel.setFirm((String) map.get("firm"));
+            ascsBaseModel.setAgentid((String) map.get("agentid"));
+            ascsBaseModel.setProtocol((String) map.get("protocol"));
+            ascsBaseModel.setType((String) map.get("type"));
+            ascsBaseModel.setDescs((String) map.get("descs"));
+            ascsBaseModel.setStatus((int) map.get("status"));
             String geometry = (String) map.get("geometry");
-            tt.setCode((String) map.get("code"));
-            tt.setGeometry(gson.fromJson(geometry, MyGeometry.class));
-            tt.setState((String) map.get("state"));
-            tt.setTags((String) map.get("tags"));
+            ascsBaseModel.setCode((String) map.get("code"));
+            ascsBaseModel.setGeometry(gson.fromJson(geometry, MyGeometry.class));
+            ascsBaseModel.setState((String) map.get("state"));
+            ascsBaseModel.setTags((String) map.get("tags"));
             if (map.get("lastTime") != null) {
                 try {
-                    tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
+                    ascsBaseModel.setLastTime(sdf.parse(map.get("lastTime").toString()));
                 } catch (ParseException e) {
-                    tt.setLastTime(null);
+                    ascsBaseModel.setLastTime(null);
                 }
             }
-            tt.setName((String) map.get("name"));
+            ascsBaseModel.setName((String) map.get("name"));
             JsonObject jsonparam = new JsonParser().parse(map.get("jsonparam").toString()).getAsJsonObject();
-            tt.setJsonparam(jsonparam);
+            ascsBaseModel.setJsonparam(jsonparam);
             Integer integer = (Integer) map.get("sockettype");
-            tt.setSockettype(integer == null ? 0 : integer.intValue());
-            abm.add(tt);
+            ascsBaseModel.setSockettype(integer == null ? 0 : integer.intValue());
+            abm.add(ascsBaseModel);
+            // 从Redis中获取当前控制方式
+            StatusPattern statusPattern = redisTemplate.getStatusPatternFromRedis(ascsBaseModel.getAgentid());
+            if(statusPattern != null){
+                ascsBaseModel.setMode(statusPattern.getMode());
+                ascsBaseModel.setControl(statusPattern.getControl());
+            }
+
         }
         return abm;
     }
@@ -411,7 +427,7 @@ public class AscsDao {
                 ascs.getJsonparam().toString()
                 );
 
-        redisTemplate.convertAndSend("updateIdMap", "UpdateDev:" + ascs.getAgentid());
+        redisTemplate.publish("updateIdMap", "UpdateDev:" + ascs.getAgentid());
         initMap();
         
         return ascs;
@@ -422,6 +438,20 @@ public class AscsDao {
         String sql = "SELECT count(id) FROM dev where agentid = ?";
         int count = jdbcTemplate.queryForObject(sql, int.class, agentid);
         return count;
+    }
+
+    // 查询数据库连接数
+    public int getConnectCount() {
+        String sql = "select count(1) from pg_stat_activity";
+        int count = jdbcTemplate.queryForObject(sql, int.class);
+        return count;
+    }
+
+    // 查询数据库大小
+    public String getDBSize(String db) {
+        String sql = "select pg_size_pretty(pg_database_size( ? ));";
+        String size = jdbcTemplate.queryForObject(sql, String.class, db);
+        return size;
     }
 
 
@@ -540,7 +570,7 @@ public class AscsDao {
                     ascsModel.getGeometry().toString(),
                     ascsModel.getJsonparam().toString());
 
-            redisTemplate.convertAndSend("updateIdMap", "UpdateDev:" + ascsModel.getAgentid());
+            redisTemplate.publish("updateIdMap", "UpdateDev:" + ascsModel.getAgentid());
         }
         return rows;
     }
@@ -583,6 +613,12 @@ public class AscsDao {
 
         // 查询条件
         String whereCondition = "";
+        // 根据用户角色返回对应sql
+        String sql = getSqlByUserRole();
+        if (sql != null){
+            String temp = sql;
+            whereCondition = addWhereCondition(whereCondition,temp);
+        }
         String search = jsonObject.get("search").getAsString();
         if( !search.isEmpty()){
             String temp = String.format("( agentid like '%%%s%%' or name like '%%%s%%' or thirdplatformid like '%%%s%%' or jsonparam::text like '%%%s%%' ) ",search,search,search,search);
@@ -629,7 +665,7 @@ public class AscsDao {
         }
 
         // 获取分页记录
-        String searchsql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, " +
+        String searchsql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, code, status, descs, name,jsonparam, " +
                 "case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype,tags " +
                 "FROM dev ";
         searchsql = searchsql.concat(whereCondition);
@@ -639,6 +675,75 @@ public class AscsDao {
         pageOR.setContent(ascsBaseModels);
         return pageOR;
     }
+
+    /**
+     * 根据用户角色返回不同的sql
+     * @return
+     */
+    private String getSqlByUserRole() {
+        // 管理员列表
+        List<String> adminRoles = new ArrayList<>();
+        adminRoles.add("superadmin");
+        adminRoles.add("admin");
+
+        // 获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        // 未开启shiro
+        if (user == null){
+            return null;
+        }
+        // 获取用户名
+        String user_name = user.getUser_name();
+        List<String> roles = userDao.getRoleNamesByUsername(user_name);
+        adminRoles.retainAll(roles);
+
+        // 非管理员
+        if (adminRoles.size() == 0){
+            user = userDao.getUserByUserName(user_name);
+            String organization = user.getOrganization();
+            // 该用户不属于任何组织机构
+            if (organization.equals("")){
+                String sql = "code is null";
+                return sql;
+            }
+            // 用户属于多个组织（前端只能选中一个或所有）
+            if (organization.equals("*")){  // * 代表所有组织（“”除外）
+                String selectsql = "select orgnization_code from t_orgnization";
+                List<String> strings = jdbcTemplate.queryForList(selectsql, String.class);
+                if (strings.isEmpty()){
+                    return null;
+                }
+
+                StringBuffer sb = getBuffer(strings);
+
+                String sql = String.format("code in (%s)",sb);
+
+                return sql;
+            }
+            // 用户属于一个组织
+            else {
+                String sql = String.format("code='%s'",organization);
+                return sql;
+            }
+
+        }
+
+        return null;
+    }
+
+    // 拼接sql中in后面的字符
+    private StringBuffer getBuffer(List<String> strings) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < strings.size(); i++){
+            if (i != strings.size() - 1){
+                sb.append("'" + strings.get(i) + "',");
+            }else {
+                sb.append("'"+ strings.get(i) + "'");
+            }
+        }
+        return sb;
+    }
+
 
     /**
      * @Author zhangwenchao
@@ -660,4 +765,35 @@ public class AscsDao {
 
         return  whereCondition;
     }
+
+
+    /**
+     * 根据组织机构代码查询设备
+     * @param ascss
+     * @param orgnization_code
+     * @return
+     */
+    public List<AscsBaseModel> getAscsByOrgCode(List<AscsBaseModel> ascss, String orgnization_code) {
+        List<AscsBaseModel> ascsBaseModels = new ArrayList<>();
+        // 用户不属于任何组织机构
+        if (orgnization_code.equals("")){
+            for (AscsBaseModel ascs : ascss){
+                String code = ascs.getCode();
+                if (code == null){
+                    ascsBaseModels.add(ascs);
+                }
+            }
+            return ascsBaseModels;
+        }
+        // 用户属于某个组织机构
+        for (AscsBaseModel ascs : ascss){
+            String code = ascs.getCode();
+            if (orgnization_code.equals(code)){
+                ascsBaseModels.add(ascs);
+            }
+        }
+        return ascsBaseModels;
+
+    }
+
 }
