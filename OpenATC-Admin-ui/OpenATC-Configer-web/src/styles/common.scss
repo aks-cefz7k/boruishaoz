@@ -1047,6 +1047,8 @@ border: 1px solid $--border-color-base;
 // 手动控制弹框
 .manual-control-modal{
   padding: 21px 0px 21px 28px;
+  min-width: 360px;
+  overflow: auto;
   .title {
     margin-bottom: 24px;
     font-size: 20px;
@@ -1109,12 +1111,39 @@ border: 1px solid $--border-color-base;
 
 .closephase-control{
   height: 100%;
+  min-width: 250px;
+  overflow: auto;
   .closephasekanban {
     width: 60%;
     margin: 0 auto;
     margin-bottom: 13px;
   }
+  .el-form-item__content {
+    min-width: 120px;
+  }
 } 
+
+.lockingphase-control {
+  height: 100%;
+  min-width: 430px;
+  overflow: auto;
+  .closephasekanban {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 13px;
+  }
+  .el-form-item {
+    width: 45%;
+    min-width: 180px;
+  }
+  .el-input {
+    width: 100%;
+  }
+  .el-form-item__content {
+    width: calc(100% - 120px);
+    min-width: 80px;
+  }
+}
 
 // 公共面板组件通用样式
 .common-board-column {
@@ -1123,7 +1152,7 @@ border: 1px solid $--border-color-base;
     max-width: 350px;
     height: auto;
     overflow: hidden;
-    background: #f0f0f0;
+    // background: #f0f0f0;
     // border: 1px solid $--border-color-base;
   .common-phase-description {
     background: rgb(217, 236, 255);

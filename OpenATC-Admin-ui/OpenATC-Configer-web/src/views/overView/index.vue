@@ -1357,6 +1357,7 @@ export default {
       })
     },
     initRingPhaseData () {
+      if (this.crossStatusData === null) return
       this.phaseRings = []
       if (!this.crossStatusData.rings) return
       this.crossStatusData.rings.forEach(ring => {

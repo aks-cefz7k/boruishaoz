@@ -10,11 +10,12 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="manual-control-modal closephase-control">
+  <div class="manual-control-modal lockingphase-control">
     <div class="title" style="margin-bottom: 18px;">{{$t('edge.overview.phaselocking')}}</div>
     <el-row>
       <el-col :span="24">
          <el-form
+          :inline="true"
            ref="manual"
            label-position="left"
            :model="manualInfo"
