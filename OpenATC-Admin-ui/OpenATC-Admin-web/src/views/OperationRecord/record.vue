@@ -14,8 +14,11 @@
     <div style="float:left;margin:15px 20px;">
       <div class="common-table-title">{{$t('openatc.main.operationrecord')}}</div>
     </div>
-    <div class="filter-container" style="border: 0px solid red;width:90%;">
-      <el-row  :gutter="10">
+    <div class="filter-container" style="width:90%;">
+      <el-row  :gutter="10"
+               type="flex"
+               justify="end"
+               style="margin-right:16px;">
         <el-col :span="3">
           <div>
             <span class="header-span">{{$t('openatc.record.originadress') }}：</span>
@@ -70,7 +73,6 @@
             <span class="header-span">{{$t('openatc.record.opertime') }}：</span>
             <template >
               <el-date-picker
-                style="width:80%"
                 v-model="timeValue"
                 popper-class="common-date-popper"
                 type="datetimerange"
