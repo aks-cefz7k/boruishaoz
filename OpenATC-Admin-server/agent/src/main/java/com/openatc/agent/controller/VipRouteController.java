@@ -7,6 +7,8 @@ import com.openatc.agent.model.VipRoute;
 import com.openatc.agent.model.VipRouteDevice;
 import com.openatc.agent.model.VipRouteDeviceOnline;
 import com.openatc.agent.model.VipRouteDeviceStatus;
+import com.openatc.agent.model.VipRouteDeviceVO;
+import com.openatc.agent.model.VipRouteVO;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
@@ -49,6 +51,7 @@ public class VipRouteController {
     @Autowired
     AscsDao ascsDao;
 
+    private String agenttype = "asc";
     private static final String ASC_VIPROUTE_STATUS = "asc:viproute/status:";
     private static final String ZEROSECONDS = "00:00";
     private Sort.Order order = Sort.Order.asc("id");
@@ -70,8 +73,19 @@ public class VipRouteController {
     @GetMapping(value = "/viproute/{id}")
     public RESTRetBase getVipRouteById(@PathVariable int id) {
         VipRoute vipRoute = vipRouteDao.findById(id);
-//        addGeometryToVipRoute(vipRoute);
-        return RESTRetUtils.successObj(vipRoute);
+        List<VipRouteDeviceVO> vipRouteDeviceVOList = new ArrayList<>();
+        List<VipRouteDeviceStatus> stateList = this.getVipRouteList(id);
+        for (VipRouteDevice device : vipRoute.getDevs()) {
+            for (VipRouteDeviceStatus status: stateList) {
+                if (device.getAgentid().equals(status.getAgentid())) {
+                    VipRouteDeviceVO vo = new VipRouteDeviceVO(device, status);
+                    vipRouteDeviceVOList.add(vo);
+                    break;
+                }
+            }
+        }
+        VipRouteVO vipRouteVO = new VipRouteVO(vipRoute, vipRouteDeviceVOList);
+        return RESTRetUtils.successObj(vipRouteVO);
     }
 
 
@@ -270,42 +284,61 @@ public class VipRouteController {
     public RESTRetBase getVipRouteStatus(@PathVariable int id) {
 
         // 获取路线状态
+        List<VipRouteDeviceStatus> vriss = getVipRouteList(id);
+        return RESTRetUtils.successObj(vriss);
+    }
+
+    /**
+     * @Author: yangyi
+     * @Date: 2022/1/5 17:45
+     * @Description: get vip route detail
+     */
+    public List<VipRouteDeviceStatus> getVipRouteList (int id) {
         List<VipRouteDeviceStatus> vriss = new ArrayList<>();
         String fuzzykeys = ASC_VIPROUTE_STATUS + id + ":*";
         Set<String> vrstatuskeys = stringRedisTemplate.keys(fuzzykeys);
+        List<String> agentIdList = new ArrayList<>();
         for (String vrstatus : vrstatuskeys) {
             String s = stringRedisTemplate.opsForValue().get(vrstatus);
             VipRouteDeviceStatus vipRouteDeviceStatus = gson.fromJson(s, VipRouteDeviceStatus.class);
             vriss.add(vipRouteDeviceStatus);
+            agentIdList.add(vipRouteDeviceStatus.getAgentid());
         }
-
         // 查询路线中的路口信息，并修改状态
         List<VipRouteDeviceOnline> VipRouteDevices =  vipRouteDao.findVipRouteWithDevStateById(id);
-
-//        VipRoute vipRoute = vipRouteDao.findById(id);
         for(VipRouteDeviceOnline vipRouteDeviceOnline : VipRouteDevices){
             String agentid = vipRouteDeviceOnline.getAgentid();
             VipRouteDeviceStatus vipRouteDeviceStatus = GetVipRouteDeviceStatusbyID(vriss, agentid);
-//            AscsBaseModel devs = ascsDao.getAscsByID(agentid);
             String online = vipRouteDeviceOnline.getState();
+            vipRouteDeviceStatus.setStateName(online);
             if(online.equals("DOWN")) {
                 vipRouteDeviceStatus.setControl(-1);
                 continue;
             }
-
-            StatusPattern statusPattern = messageController.GetStatusPattern(agentid);
+//            StatusPattern statusPattern = messageController.GetStatusPattern(agentid);
+            StatusPattern statusPattern = getDevStateFromCache(agentid);
             if(statusPattern == null){ // 无法获取到方案状态，设备不在线
                 vipRouteDeviceStatus.setControl(-1);
-            }
-            else{ // 设备在线,设置设备当前状态
+            } else{ // 设备在线,设置设备当前状态
                 int curControl = statusPattern.getControl();
-//                int routeControl = vipRouteDevice.getControl();
-//                if( curControl != routeControl )
                 vipRouteDeviceStatus.setControl(curControl);
             }
         }
+        return vriss;
+    }
 
-        return RESTRetUtils.successObj(vriss);
+    /**
+     * @Author: yangyi
+     * @Date: 2022/1/5 9:42
+     * @Description: get current pattern from cache
+     */
+    public StatusPattern getDevStateFromCache (String agentId) {
+        StatusPattern statusPattern = new StatusPattern();
+        String key = agenttype + ":" + "status/pattern" + ":" + agentId;
+        String s = stringRedisTemplate.opsForValue().get(key);
+        MessageData messageData = gson.fromJson(s, MessageData.class);
+        statusPattern = gson.fromJson(messageData.getData().getAsJsonObject(),StatusPattern.class);
+        return statusPattern;
     }
 
     /**

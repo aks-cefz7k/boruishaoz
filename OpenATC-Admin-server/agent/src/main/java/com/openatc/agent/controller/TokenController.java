@@ -15,17 +15,15 @@ import com.google.gson.JsonObject;
 import com.openatc.agent.model.Token;
 import com.openatc.agent.model.TokenModel;
 import com.openatc.agent.service.TokenDao;
-import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.TokenUtil;
-import com.openatc.core.common.IErrorEnum;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
-import io.swagger.models.auth.In;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +47,7 @@ public class TokenController {
      */
     @GetMapping("/findAll")
     public RESTRetBase findAll() {
-        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        Sort sort = new Sort(Direction.DESC, "id");
         List<TokenModel> list =  tokenDao.findAll(sort);
         return RESTRetUtils.successObj(list);
     }
