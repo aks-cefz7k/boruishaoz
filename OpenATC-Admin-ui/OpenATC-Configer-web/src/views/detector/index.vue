@@ -352,7 +352,7 @@ export default {
       this.increaseId()
       if (this.globalParamModel.getParamLength('detectorList') >= 72) {
         this.$message.error(
-          this.$t('edge.detector.mostdata')
+          this.$t('edge.detector.mostclonedata')
         )
         return
       }

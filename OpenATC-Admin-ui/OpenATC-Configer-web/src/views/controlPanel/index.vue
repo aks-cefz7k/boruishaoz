@@ -14,11 +14,11 @@
   <div class="manual-top">
     <div class="control-model">
       <div class="control-model-name">{{$t('edge.controlpanel.controlmode')}}：</div><div class="control-model-value">{{$t('edge.controlpanel.manualpanel' + manualpanel.controlmode)}}</div>
-      <div class="control-model-name">{{$t('edge.controlpanel.duration')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.duration" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">{{$t('edge.controlpanel.transitiongreenflashtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.greenflash" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">{{$t('edge.controlpanel.transitionyellowtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.yellow" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">{{$t('edge.controlpanel.transitionredtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.redclear" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">{{$t('edge.controlpanel.mingreen')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.mingreen" placeholder="" size="small"></el-input></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.duration')}}：</div><div class="control-model-input"><el-input-number :min="0" :max="65535" :controls="false" v-model="manualpanel.duration" placeholder="" size="small"></el-input-number></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitiongreenflashtime')}}：</div><div class="control-model-input"><el-input-number :min="0" :controls="false" :max="65535" v-model="manualpanel.greenflash" placeholder="" size="small"></el-input-number></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitionyellowtime')}}：</div><div class="control-model-input"><el-input-number :min="0" :controls="false" :max="65535" v-model="manualpanel.yellow" placeholder="" size="small"></el-input-number></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitionredtime')}}：</div><div class="control-model-input"><el-input-number :min="0" :controls="false" :max="65535" v-model="manualpanel.redclear" placeholder="" size="small"></el-input-number></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.mingreen')}}：</div><div class="control-model-input"><el-input-number :min="0" :max="65535" :controls="false" v-model="manualpanel.mingreen" placeholder="" size="small"></el-input-number></div>
     </div>
   </div>
   <div class="manual-bottom" style="display: inline-block">
