@@ -16,11 +16,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.Role;
 import com.openatc.agent.model.Token;
+import com.openatc.agent.model.TokenModel;
 import com.openatc.agent.model.User;
 import com.openatc.agent.model.UserRole;
 import com.openatc.agent.realm.JwtToken;
 import com.openatc.agent.service.PermissionDao;
 import com.openatc.agent.service.RoleDao;
+import com.openatc.agent.service.TokenDao;
 import com.openatc.agent.service.UserDao;
 import com.openatc.agent.service.UserRoleDao;
 import com.openatc.agent.utils.DateUtil;
@@ -77,6 +79,8 @@ public class UserController {
     protected TokenUtil tokenUtil;
     @Value("${default.user.password}")
     private String initialPassword;
+    @Autowired
+    protected TokenDao tokenDao;
 
     /**
      * 根据用户创建授权token
@@ -86,9 +90,17 @@ public class UserController {
         String userName = jsonObject.get("user_name").getAsString();
         String endtime = jsonObject.get("end_time").getAsString();
         String starttime = jsonObject.get("start_time").getAsString();
+        String description = jsonObject.get("description").getAsString();
         Date enddate = DateUtil.stringToDate(endtime);
         Date startdate = DateUtil.stringToDate(starttime);
         String token = tokenUtil.generateToken(userName, System.currentTimeMillis());
+        TokenModel tokenModel = new TokenModel();
+        tokenModel.setToken(token);
+        tokenModel.setStartTime(startdate);
+        tokenModel.setEndTime(enddate);
+        tokenModel.setDescription(description);
+        tokenModel.setRelateUser(userName);
+        tokenDao.save(tokenModel);
         tokenUtil.tokenMap.put(token, new Token(token, 1, startdate.getTime(), enddate.getTime()));
         Map resultmap = new HashMap();
         resultmap.put("token", token);
