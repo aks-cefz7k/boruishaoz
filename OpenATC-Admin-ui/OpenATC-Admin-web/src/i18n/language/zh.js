@@ -215,7 +215,7 @@ const zh = {
       'last4hour': '最近4小时',
       'last1day': '最近1天',
       'last2day': '最近2天',
-      'last1week': '最近一周',
+      'last1week': '最近1周',
       'last1month': '最近一个月',
       'today': '今天',
       'thisWeek': '本周',
