@@ -106,6 +106,7 @@ export default {
       }
     },
     getPhaseId (rings) { // 画阶段方法
+      if (!rings.rings) return
       rings = JSON.parse(JSON.stringify(rings))
       if (rings.length === 0) {
         this.stageLineStatus = false

@@ -72,7 +72,7 @@ export default {
           this.GreenFlashColor = '#77fb65'
           this.GreenIntervalId = setInterval(() => {
             this.GreenFlashColor = !this.GreenFlashColor || this.GreenFlashColor === '#828282' ? '#77fb65' : '#828282'
-          }, 1000)
+          }, 500)
           this.lastType = val.type
         }
         if (this.GreenIntervalId && val.type !== 4 && val.type !== this.lastType) {

@@ -15,9 +15,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.ControlInterrupt;
+import com.openatc.agent.model.DictConfig;
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.service.DictConfigRepository;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
@@ -40,12 +42,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.logging.Logger;
 import com.alibaba.fastjson.JSONObject;
 
 import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
 import static com.openatc.comm.common.CommunicationType.COMM_SERVER_TYPE_CENTER;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_8001;
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 
 /**
@@ -66,8 +69,11 @@ public class MessageController {
 //  @Autowired
     protected CommClient commClient = new CommClient();
 
-    @Autowired(required = false)
+    @Autowired
     protected AscsDao mDao;
+
+    @Autowired
+    private DictConfigRepository dictConfigRepository;
 
     Gson gson = new Gson();
 
@@ -86,9 +92,29 @@ public class MessageController {
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) {
-
         AscsBaseModel ascsBaseModel = mDao.getAscsByID(requestData.getAgentid());
+        return postDevsMessageByAscsBaseModel(ascsBaseModel,httpServletRequest,requestData);
+    }
 
+    /**
+     * @param requestData 发送给设备的请求消息
+     * @return RESTRetBase
+     * @Title: postDevsMessagegbid
+     * @Description: 通过gbid发送设备消息
+     */
+    @PostMapping(value = "/devs/messagegbid")
+    public RESTRet postDevsMessagegbid(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) {
+        AscsBaseModel ascsBaseModel = mDao.getAscsByGBID(requestData.getAgentid());
+        return postDevsMessageByAscsBaseModel(ascsBaseModel,httpServletRequest,requestData);
+    }
+
+    /**
+     * @param requestData 发送给设备的请求消息
+     * @return RESTRet
+     * @Title: postDevsMessageByAscsBaseModel
+     * @Description: 发送设备消息
+     */
+    private RESTRet postDevsMessageByAscsBaseModel(AscsBaseModel ascsBaseModel,HttpServletRequest httpServletRequest, MessageData requestData){
         //获取主机ip，如果没有传入httpServletRequest，则设置ip为localhost
         String OperatorIp = null;
         if (httpServletRequest == null) {
@@ -96,31 +122,60 @@ public class MessageController {
         } else {
             OperatorIp = getIpAddress(httpServletRequest);
         }
-
-        // 发送请求，并把应答返
         if (ascsBaseModel == null) {
             logger.info("GetDevById is null, request = " + requestData.toString());
             return RESTRetUtils.errorObj(false,E_8001);
         }
-//        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-//        int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
-//        String protocol = ascsBaseModel.getProtocol();
 
-        RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
+        // 判断设备是否平台对接，如果是平台对接的设备，将平台地址填入通行IP
+        String platform = ascsBaseModel.getPlatform();
+        if(platform != null){
+            if(!platform.isEmpty() && !platform.equals("OpenATC")){ // 目前平台配置为OpenATC的设备，也认为是直连的
+                // 配置了平台类型，找到该平台的信息，并填入设备IP中
+                List<DictConfig> DictConfigList = dictConfigRepository.findByConfigtypeAndKey("platform",platform);
+                // 找不到平台信息
+                if(DictConfigList.size() == 0){
+                    logger.info("Cannot find DictConfig! " + platform + " requestData:" + requestData.toString());
+                    return RESTRetUtils.errorObj(false,E_8005);
 
-        // 把设置请求的操作保存到历史记录中
-        String token = null;
-        if (httpServletRequest != null) {
-            token = httpServletRequest.getHeader("Authorization");
+                }
+                // 平台信息找到，但大于1个
+                else if(DictConfigList.size() > 1){
+                    logger.info("Platform is not unique! " + platform + " requestData:" + requestData.toString());
+                    return RESTRetUtils.errorObj(false,E_8006);
+
+                }
+                // 找到了唯一的平台信息
+                else{
+                    String platformIPStr = DictConfigList.get(0).getValue();
+                    if(platformIPStr == null){
+                        logger.info("IP and port of platform is null!" + platform + " DictConfigList:" + DictConfigList);
+                        return RESTRetUtils.errorObj(false,E_8007);
+
+                    }
+                    String[] array = platformIPStr.split("_");
+                    String ip = array[0];
+                    int port = Integer.parseInt(array[1]);
+                    JsonObject ascsParam = ascsBaseModel.getJsonparam();
+                    ascsParam.addProperty("ip",ip);
+                    ascsParam.addProperty("port",port);
+                }
+            }
         }
 
-        if (requestData.getOperation().equals("set-request")) {
-            if (token == null) {
-                logger.warning("token of set-request is null;");
-            }
-//            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
+        // 发送请求，并把应答返回
+        RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
 
-            User subject = (User)SecurityUtils.getSubject().getPrincipal();
+        // 把设置请求set-request的操作保存到历史记录中
+        if (requestData.getOperation().equals("set-request")) {
+            String token = null;
+            User subject = null;
+            if (httpServletRequest != null) {
+                token = httpServletRequest.getHeader("Authorization");
+                if (token != null) {
+                    subject = (User)SecurityUtils.getSubject().getPrincipal();
+                }
+            }
             THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, subject);
             hisParamService.insertHisParam(tParams);
             return responceData;
@@ -173,7 +228,7 @@ public class MessageController {
         return restRet;    }
 
     @PostMapping(value = "/md5")
-    public RESTRet postDevsMessage(@RequestBody MessageData messageData) throws UnsupportedEncodingException {
+    public RESTRet getmd5(@RequestBody MessageData messageData) throws UnsupportedEncodingException {
         JsonElement data = messageData.getData();
         DataParamMD5 dataMD5 = new DataParamMD5();
         String datamd5value = null;

@@ -39,7 +39,11 @@ export default {
     getJupyterUrl () {
       // 从系统配置中获取jupyter notebook 跳转url
       return new Promise((resolve, reject) => {
-        SystemconfigApi.GetSystemconfigByModule('jupyter').then((data) => {
+        let reqData = {
+          module: 'jupyter',
+          isValid: true
+        }
+        SystemconfigApi.GetSystemconfigList(reqData).then((data) => {
           let res = data.data
           if (!res.success) {
             console.log('datas:' + res)

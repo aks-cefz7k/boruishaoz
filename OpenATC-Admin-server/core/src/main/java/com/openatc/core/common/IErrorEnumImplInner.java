@@ -31,6 +31,7 @@ public enum IErrorEnumImplInner implements IErrorEnum {
     E_107("4107","Unknown infotype!"),
     E_108("4108","protocol is null!"),
     E_109("4109", "Receive Time Out or Receive Incorrect Data!"),
+    E_110("4110","Last sendData is not finished!"),
 
     //error-response
     E_200("4200","response is null!"),

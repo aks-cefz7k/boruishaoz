@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SystemConfigDao extends JpaRepository<SystemConfig, Long> {
     List<SystemConfig> findAllByModule(String Module);
+
+    List<SystemConfig> findAllByModuleAndAndIsValid(String Module, Boolean isValid);
 }

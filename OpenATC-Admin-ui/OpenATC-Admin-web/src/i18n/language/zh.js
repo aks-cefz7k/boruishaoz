@@ -166,6 +166,7 @@ const zh = {
       'crossid': '路口ID',
       'tags': '标签',
       'deviceid': '设备ID',
+      'gbid': '国标ID',
       'devicename': '路口名称',
       'firm': '厂商',
       'platform': '平台',
@@ -211,6 +212,7 @@ const zh = {
       'deviceNotNull': '设备ID不能为空！',
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
       'thirdplatformid': '第三方ID',
+      'thirdPlatform': '第三方平台',
       'timeSpaceGraph': '实时时距图',
       'keyintersection': '关键路口：',
       'sockettype': '通讯类型',
@@ -570,7 +572,9 @@ const zh = {
       'tokenManage': 'Token管理',
       'timeStart': '有效期开始',
       'timeEnd': '有效期截止',
-      'isValid': '是否启用'
+      'isValid': '是否启用',
+      'yes': '是',
+      'no': '否'
     }
   }
 }

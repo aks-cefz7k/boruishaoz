@@ -125,6 +125,8 @@ const en = {
       'stage': 'Stage',
       'specialcontrol': 'Special Control',
       'phaseclosecontrol': 'Phase Close Control',
+      'phaseclose': 'Close Phase',
+      'phaselocking': 'Priority Control',
       'implement': 'Execute',
       'ipaddress': 'IP',
       'deviceport': 'Port',
@@ -232,6 +234,10 @@ const en = {
       'closeOption1': 'close',
       'closeOption2': 'only vehicle close',
       'closeOption3': 'only pedestrian close',
+      'lockingOption0': 'unlock',
+      'lockingOption1': 'locking',
+      'lockingOption2': 'only vehicle locking',
+      'lockingOption3': 'only pedestrian locking',
       'vehicle': 'vehicle',
       'pedestrian': 'pedestrian',
       'confirmed': 'confirmed',
@@ -936,6 +942,7 @@ const en = {
       'opensourceagreement': 'Opensource Agreement'
     },
     'message': {
+      'errorcode': 'Error code',
       '10000': 'Parameter is empty',
       '10001': 'Parameter length error',
       '1002': 'Error',

@@ -120,6 +120,7 @@
             </el-dropdown-item>
             <el-dropdown-item divided command="changepass">{{$t('openatc.main.changepass')}}</el-dropdown-item>
             <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
+            <el-dropdown-item command="thirdPlatform">{{$t('openatc.devicemanager.thirdPlatform')}}</el-dropdown-item>
             <el-dropdown-item command="help">{{$t('openatc.main.help')}}</el-dropdown-item>
             <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
             <el-dropdown-item command="signout">{{$t('openatc.main.signout')}}</el-dropdown-item>
@@ -219,6 +220,7 @@
   <modifypasswd ref="modifypasswdChild"></modifypasswd>
   <versioninfo ref="versioninfoChild"></versioninfo>
   <SystemSettings ref="settinngChild"></SystemSettings>
+  <ThirdPlatform ref="thirdPlatform"></ThirdPlatform>
   </div>
 </template>
 <script>
@@ -228,6 +230,7 @@ import { GetFaultRange, searchRoadName, enumerateCheck } from '@/api/fault.js'
 import modifypasswd from './modifyPasswd'
 import versioninfo from './versionInfo'
 import SystemSettings from './SystemSettings'
+import ThirdPlatform from './ThirdPlatform'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
 import { setLanguage, getTheme, setTheme } from '@/utils/auth'
@@ -236,7 +239,7 @@ import { SystemconfigApi } from '@/api/systemconfig.js'
 import { formatFaultDescValue, getMainFaultType, getMainFaultTypeEn } from '@/utils/fault.js'
 export default {
   name: 'navbar',
-  components: { modifypasswd, versioninfo, SystemSettings },
+  components: { modifypasswd, versioninfo, SystemSettings, ThirdPlatform },
   data () {
     return {
       faultData: [],
@@ -534,6 +537,8 @@ export default {
           break
         case 'systemsettings': this.showSettings()
           break
+        case 'thirdPlatform': this.showThirdPlatform()
+          break
         case 'switchTheme':
           break
         case 'switchLanguage':
@@ -543,7 +548,11 @@ export default {
     },
     getSystemConfig () {
       return new Promise((resolve, reject) => {
-        SystemconfigApi.GetSystemconfigByModule('system').then((data) => {
+        let reqData = {
+          module: 'system',
+          isValid: true
+        }
+        SystemconfigApi.GetSystemconfigList(reqData).then((data) => {
           if (data.data.success !== true) {
             this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
@@ -588,6 +597,10 @@ export default {
     showSettings () {
       let settinngChild = this.$refs.settinngChild
       settinngChild.show()
+    },
+    showThirdPlatform () {
+      let thirdPlatform = this.$refs.thirdPlatform
+      thirdPlatform.show()
     },
     setActive (path) {
       // 设置当前激活导航栏

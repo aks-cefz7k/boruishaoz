@@ -307,7 +307,11 @@ export default {
     },
     getGisConfig () {
       return new Promise((resolve, reject) => {
-        SystemconfigApi.GetSystemconfigByModule('gis').then((data) => {
+        let reqData = {
+          module: 'gis',
+          isValid: true
+        }
+        SystemconfigApi.GetSystemconfigList(reqData).then((data) => {
           let res = data.data
           if (!res.success) {
             console.log('datas:' + res)

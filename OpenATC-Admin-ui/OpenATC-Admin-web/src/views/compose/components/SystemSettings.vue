@@ -37,6 +37,13 @@
             <el-form-item :label="$t('openatc.systemsettings.content')" label-width="15%">
               <el-input v-model="innerForm.value" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item :label="$t('openatc.token.isValid')" label-width="15%">
+              <el-switch
+                style="padding-left: 5px;"
+                v-model="innerForm.isValid"
+                active-color="#409EFF">
+              </el-switch>
+            </el-form-item>
              <el-form-item :label="$t('openatc.systemsettings.desc')" label-width="15%">
               <el-input type="textarea" v-model="innerForm.description" :rows="3"></el-input>
             </el-form-item>
@@ -58,27 +65,39 @@
         <el-table-column
           prop="id"
           :label="$t('openatc.systemsettings.id')"
-          min-width="13%">
+          align="center"
+          min-width="5%">
         </el-table-column>
         <el-table-column
           prop="module"
           :label="$t('openatc.systemsettings.module')"
+          align="center"
           min-width="15%">
         </el-table-column>
         <el-table-column
           prop="key"
           :label="$t('openatc.systemsettings.name')"
-          min-width="19%">
+          align="center"
+          min-width="17%">
         </el-table-column>
         <el-table-column
           prop="value"
           :label="$t('openatc.systemsettings.content')"
+          align="center"
           min-width="22%">
         </el-table-column>
         <el-table-column
           prop="description"
           :label="$t('openatc.systemsettings.desc')"
+          align="center"
           min-width="20%">
+        </el-table-column>
+        <el-table-column
+          prop="isValid"
+          :label="$t('openatc.token.isValid')"
+          :formatter="formatIsValid"
+          align="center"
+          min-width="10%">
         </el-table-column>
         <el-table-column
           :label="$t('openatc.systemsettings.operate')"
@@ -114,6 +133,7 @@ export default {
         module: '',
         key: '',
         value: '',
+        isValid: true,
         description: ''
       }
     }
@@ -144,6 +164,7 @@ export default {
       this.innerForm = {
         module: '',
         key: '',
+        isValid: true,
         value: ''
       }
     },
@@ -222,6 +243,13 @@ export default {
         })
         this.getAllConfig()
       })
+    },
+    formatIsValid (row) {
+      let res = this.$t('openatc.token.no')
+      if (row.isValid) {
+        res = this.$t('openatc.token.yes')
+      }
+      return res
     }
   },
   mounted () {
