@@ -1,16 +1,14 @@
 package com.openatc.agent.controller;
 
-import com.openatc.agent.service.SysConfigRepository;
+import com.google.gson.JsonObject;
+import com.openatc.agent.model.DictConfig;
+import com.openatc.agent.service.DictConfigRepository;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -35,27 +33,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-public class SysConfigController {
+public class DictController {
 
-    private Logger logger = LoggerFactory.getLogger(SysConfigController.class);
+    private Logger logger = LoggerFactory.getLogger(DictController.class);
 
     @Autowired(required = false)
-    private SysConfigRepository sysConfigRepository;
+    private DictConfigRepository dictConfigRepository;
 
     // 查询全部配置
     @GetMapping(value = "/dict")
-    public RESTRetBase getSysConfig() {
-        logger.info("GetSysConfig");
+    public RESTRetBase getDictConfig() {
         //获取全部配置
-        return RESTRetUtils.successObj(sysConfigRepository.findAll());
+        return RESTRetUtils.successObj(dictConfigRepository.findAll());
     }
 
     // 按照类型配置查询
     @GetMapping(value = "/dict/{configtype}")
-    public RESTRetBase getSysConfigByType(@PathVariable int configtype) {
-        logger.info("GetSysConfigByType");
+    public RESTRetBase getDictConfigByType(@PathVariable int configtype) {
         //获取配置
-        return RESTRetUtils.successObj(sysConfigRepository.findByConfigtype(configtype));
+        return RESTRetUtils.successObj(dictConfigRepository.findByConfigtype(configtype));
+    }
+
+    // 设置配置
+    @PostMapping(value = "/dict")
+    public RESTRetBase setDictConfig(@RequestBody DictConfig dictConfig) {
+        //获取全部配置
+        return RESTRetUtils.successObj(dictConfigRepository.save(dictConfig));
+    }
+
+    // 删除配置
+    @DeleteMapping(value = "/dict")
+    public RESTRetBase delDictConfig(@RequestBody DictConfig dictConfig) {
+        //获取全部配置
+        dictConfigRepository.delete(dictConfig);
+        return RESTRetUtils.successObj();
     }
 
 }

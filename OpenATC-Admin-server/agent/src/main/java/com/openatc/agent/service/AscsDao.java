@@ -15,15 +15,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.resmodel.PageOR;
+import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.MyGeometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,11 +69,9 @@ public class AscsDao {
         }
     }
     public List<AscsBaseModel> getAscs() {
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype,tags FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = getDevByPara(sql);
 
-//        String sql = "SELECT id, agentid,protocol, geometry, lastTime, descs,type,status,jsonparam, code FROM dev where code  = '" + code + "'";
-//        List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return ascsBaseModels;
     }
 
@@ -246,6 +244,15 @@ public class AscsDao {
         return ascsBaseModel;
     }
 
+
+    public List<AscsBaseModel> getAscsByType(String type) throws EnumConstantNotPresentException {
+
+        String sql = "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '1 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='" + type + "'";
+        List<AscsBaseModel> listAscs = getDevByPara(sql);
+
+        return listAscs;
+    }
+
     /**
      * @Author: yangyi
      * @Date: 2021/12/21 10:25
@@ -314,29 +321,6 @@ public class AscsDao {
         return  agentName;
     }
 
-//    public int updatePattern(Params ps) {
-//        //判断是否存在该agentid的记录
-//        String sql = "SELECT count(id) FROM parameters where agentid = ?";
-//        long count = jdbcTemplate.queryForObject(sql, Long.class, ps.getAgentid());
-//        if (count != 0) {
-//            sql = "update parameters set name=?,operator=?,params=(to_json(?::json)),opertime=LOCALTIMESTAMP where agentid=?";
-//            int rows = jdbcTemplate.update(sql,
-//                    ps.getName(),
-//                    ps.getOperator(),
-//                    ps.getParams().toString(),
-//                    ps.getAgentid());
-//            return rows;
-//
-//        } else {
-//            sql = "INSERT INTO parameters(name,agentid,operator,params,opertime) VALUES (?,?,?,to_json(?::json),LOCALTIMESTAMP)";
-//            int rows = jdbcTemplate.update(sql,
-//                    ps.getName(),
-//                    ps.getAgentid(),
-//                    ps.getOperator(),
-//                    ps.getParams().toString());
-//            return rows;
-//        }
-//    }
 
     public List<String> getFaultDev() {
         String sql = "select DISTINCT(agentid) from fault where m_un_fault_renew_time = 0";
@@ -392,51 +376,21 @@ public class AscsDao {
 
     public AscsBaseModel insertDev(AscsBaseModel ascs) {
 
-        int id = ascs.getId();
-        String sql = "INSERT INTO dev(platform, gbid, firm, agentid,protocol,type,descs,status,geometry,jsonparam,name,sockettype,lasttime) VALUES (?, ?,?,?,?,?,?,?,?,to_json(?::json),?,?,LOCALTIMESTAMP)";
-        if (id == 0) {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-            String finalSql = sql;
-            jdbcTemplate.update(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(finalSql, new String[]{"id"});
-                    ps.setObject(1, ascs.getPlatform());
-                    ps.setObject(2, ascs.getGbid());
-                    ps.setObject(3, ascs.getFirm());
-                    ps.setObject(4, ascs.getAgentid());
-                    ps.setObject(5, ascs.getProtocol());
-                    ps.setObject(6, ascs.getType());
-                    ps.setObject(7, ascs.getDescs());
-                    ps.setObject(8, ascs.getStatus());
-                    if (ascs.getGeometry() != null) {
-                        ps.setObject(9, ascs.getGeometry().toString());
-                    } else {
-                        ps.setObject(9, null);
-                    }
-                    ps.setObject(10, ascs.getJsonparam().toString());
-                    ps.setObject(11, ascs.getName());
-                    ps.setObject(12, ascs.getSockettype());
-                    return ps;
-                }
-            }, keyHolder);
-            ascs.setId(keyHolder.getKey().intValue());
-        } else {
-            sql = "INSERT INTO dev(gbid,firm,name,id,agentid,protocol,type,descs,status,geometry,jsonparam,sockettype,lasttime) VALUES (?,?,?,?,?,?,?,?,?,?,to_json(?::json),?,LOCALTIMESTAMP)";
-            jdbcTemplate.update(sql,
-                    ascs.getGbid(),
-                    ascs.getFirm(),
-                    ascs.getName(),
-                    ascs.getId(),
-                    ascs.getAgentid(),
-                    ascs.getProtocol(),
-                    ascs.getType(),
-                    ascs.getDescs(),
-                    ascs.getStatus(),
-                    ascs.getGeometry().toString(),
-                    ascs.getJsonparam().toString(),
-                    ascs.getSockettype());
-        }
+        String sql = "INSERT INTO dev(agentid,thirdplatformid,name,descs,type,protocol,sockettype,firm,platform,geometry,tags,jsonparam) VALUES (?,?,?,?,?,?,?,?,?,?,?,to_json(?::json))";
+        jdbcTemplate.update(sql,
+                ascs.getAgentid(),
+                ascs.getThirdplatformid(),
+                ascs.getName(),
+                ascs.getDescs(),
+                ascs.getType(),
+                ascs.getProtocol(),
+                ascs.getSockettype(),
+                ascs.getFirm(),
+                ascs.getPlatform(),
+                ascs.getGeometry().toString(),
+                ascs.getTags(),
+                ascs.getJsonparam().toString()
+                );
 
         redisTemplate.convertAndSend("updateIdMap", "UpdateDev:" + ascs.getAgentid());
         initMap();
@@ -445,7 +399,7 @@ public class AscsDao {
     }
 
 
-    public int getDevByAgentid(String agentid) {
+    public int getCountByAgentid(String agentid) {
         String sql = "SELECT count(id) FROM dev where agentid = ?";
         int count = jdbcTemplate.queryForObject(sql, int.class, agentid);
         return count;
@@ -454,11 +408,10 @@ public class AscsDao {
 
     public int updateDev(AscsBaseModel ascs) {
         //判断是否存在
-        String sql = "SELECT count(id) FROM dev where agentid = ?";
-        long count = jdbcTemplate.queryForObject(sql, Long.class, ascs.getAgentid());
+        long count = getCountByAgentid(ascs.getAgentid());
         //ID已存在，更新注册信息,不存在，返回；
         if (count == 0) return 0;
-        sql = "update dev set thirdplatformid=?,platform=?, gbid=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,status=? ,geometry= ?,jsonparam=(to_json(?::json)),code=?,sockettype=? where agentid=?";
+        String sql = "update dev set thirdplatformid=?,platform=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,geometry= ?,jsonparam=(to_json(?::json)),code=?,sockettype=?,tags=? where agentid=?";
         String geometry = null;
         if (ascs.getGeometry() != null) {
             geometry = ascs.getGeometry().toString();
@@ -466,17 +419,16 @@ public class AscsDao {
         int res = jdbcTemplate.update(sql,
                 ascs.getThirdplatformid(),
                 ascs.getPlatform(),
-                ascs.getGbid(),
                 ascs.getFirm(),
                 ascs.getName(),
                 ascs.getType(),
                 ascs.getProtocol(),
                 ascs.getDescs(),
-                ascs.getStatus(),
                 geometry,
                 ascs.getJsonparam().toString(),
                 ascs.getCode(),
                 ascs.getSockettype(),
+                ascs.getTags(),
                 ascs.getAgentid()
         );
         return res;
@@ -589,5 +541,96 @@ public class AscsDao {
         }
 
         return agentid;
+    }
+
+    /**
+     * @Author zhangwenchao
+     * @Description 获取分页过滤路口列表
+     * @Date 2022/1/12 16:48
+    */
+    public PageOR<AscsBaseModel> getAscsRange(JsonObject jsonObject) {
+        PageOR<AscsBaseModel> pageOR = new PageOR<>();
+        if (jsonObject == null) {
+            return null;
+        }
+
+        // 分页条件
+        int pageNum = jsonObject.get("pageNum").getAsInt();
+        int pageRow = jsonObject.get("pageRow").getAsInt();
+        String limitCondition = String.format(" limit  %d  offset  %d ",pageRow, pageNum*pageRow );
+
+        // 查询条件
+        String whereCondition = null;
+        String search = jsonObject.get("search").getAsString();
+        if( !search.isEmpty()){
+            String temp = String.format("( agentid like '%%%s%%' or name like '%%%s%%' or thirdplatformid like '%%%s%%' or jsonparam::text like '%%%s%%' ) ",search,search,search,search);
+            whereCondition = addWhereCondition(whereCondition,temp);
+        }
+        String type = jsonObject.get("type").getAsString();
+        if( !type.isEmpty()){
+            String temp = String.format("type = '%s'",type);
+            whereCondition = addWhereCondition(whereCondition,temp);
+        }
+        String platform = jsonObject.get("platform").getAsString();
+        if( !platform.isEmpty()){
+            String temp = String.format("platform = '%s'",platform);
+            whereCondition = addWhereCondition(whereCondition,temp);
+        }
+        String protocol = jsonObject.get("protocol").getAsString();
+        if( !protocol.isEmpty()){
+            String temp = String.format("protocol = '%s'",protocol);
+            whereCondition = addWhereCondition(whereCondition,temp);
+        }
+        String state = jsonObject.get("state").getAsString();
+        if( !state.isEmpty()){
+            String temp;
+            if(state.equals("DOWN"))
+                temp = "(LOCALTIMESTAMP - lastTime)> '1 min')";
+            else
+                temp = "(LOCALTIMESTAMP - lastTime)< '1 min')";
+            whereCondition = addWhereCondition(whereCondition,temp);
+
+        }
+
+        // 获取总数
+        String countsql = "SELECT count(*) FROM dev ";
+        countsql = countsql.concat(whereCondition);
+        int count = jdbcTemplate.queryForObject(countsql, int.class);
+        pageOR.setTotal((long) count);
+        if(count == 0){ //没有查询记录直接返回
+            return pageOR;
+        }
+
+        // 获取分页记录
+        String searchsql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, " +
+                "case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype,tags " +
+                "FROM dev ";
+        searchsql = searchsql.concat(whereCondition);
+        searchsql = searchsql.concat(" ORDER BY agentid");
+        searchsql = searchsql.concat(limitCondition);
+        List<AscsBaseModel> ascsBaseModels = getDevByPara(searchsql);
+        pageOR.setContent(ascsBaseModels);
+        return pageOR;
+    }
+
+    /**
+     * @Author zhangwenchao
+     * @Description 添加where过滤条件
+     * @Date 2022/1/13 10:16
+    */
+    private String addWhereCondition(String whereCondition, String temp) {
+        if(whereCondition == null)
+            whereCondition = "";
+
+        if(whereCondition.isEmpty()) {
+            whereCondition = whereCondition.concat(" where ");
+            whereCondition = whereCondition.concat(temp);
+        }
+        else{
+            whereCondition = whereCondition.concat(" and ");
+            whereCondition = whereCondition.concat(temp);
+        }
+
+        return  whereCondition;
     }
 }

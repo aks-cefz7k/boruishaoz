@@ -1,10 +1,3 @@
-package com.openatc.agent.service;
-
-import org.springframework.data.jpa.repository.Query;
-import com.openatc.agent.model.SysConfig;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 /**
  * Copyright (c) 2020 kedacom
@@ -20,16 +13,32 @@ import java.util.List;
 
 /**
  * @author ：zhangwenchao
- * @date ：Created in 2022/1/4 16:43
- * @description：字典配置服务
+ * @date ：Created in 2022/1/4 16:46
+ * @description：字典配置实体
  * @modified By：
  * @version: $
  */
 
+package com.openatc.agent.model;
 
+import lombok.Data;
+import javax.persistence.*;
+import java.util.Date;
 
-public interface SysConfigRepository extends JpaRepository<SysConfig, Long> {
+@Entity
+@Data
+public class DictConfig {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    private String type;
+    private String key;
+    private String value;
+    private int sort;
+    private String description;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date ceattime;
 
-    @Query(nativeQuery=true,value=" SELECT * from sysconfig where configtype = :configtype ")
-    List<SysConfig> findByConfigtype(int configtype);
+    private String creatby;
+
 }
