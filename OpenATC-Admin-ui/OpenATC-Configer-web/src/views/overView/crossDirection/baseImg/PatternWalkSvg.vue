@@ -290,4 +290,6 @@ export default {
 .invisible {
   visibility: hidden;
 }
+.st0{opacity:0.5;}
+.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#303133;}
 </style>
