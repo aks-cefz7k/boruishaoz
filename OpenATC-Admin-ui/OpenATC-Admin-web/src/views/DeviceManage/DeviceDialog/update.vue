@@ -65,7 +65,7 @@
             <el-input
               class="input-new-tag"
               v-if="inputVisible"
-              v-model="deviceTag"
+              v-model.trim="deviceTag"
               maxlength="10"
               ref="saveTagInput"
               size="small"
