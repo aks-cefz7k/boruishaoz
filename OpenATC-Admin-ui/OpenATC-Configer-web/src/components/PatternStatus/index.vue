@@ -11,44 +11,71 @@
  **/
 <template>
     <div class="main-patternstatus">
-      <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
-        <div v-for="(item,index2) in list" :key="index2" :class="item.controltype===99?'direction': ''">
-          <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
-              <el-tooltip placement="top-start" effect="light">
-                <div slot="content">P{{item.id}}:{{item.split}}</div>
-                <div style="cursor:pointer;">
-                  <div class="ring-phase">
-                    <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
-                      <PatternWalkSvg v-if="item.peddirection.includes(side.id)"  :Data="side" :Width="'32'" :Height="'34'" />
+      <div v-if="!contrloType">
+        <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
+          <div v-for="(item,index2) in list" :key="index2" :class="item.controltype===99?'direction': ''">
+            <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
+                <el-tooltip placement="top-start" effect="light">
+                  <div slot="content">P{{item.id}}:{{item.split}}</div>
+                  <div style="cursor:pointer;">
+                    <div class="ring-phase">
+                      <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
+                        <PatternWalkSvg v-if="item.peddirection.includes(side.id)"  :Data="side" :Width="'32'" :Height="'34'" />
+                      </div>
+                      <xdrdirselector  Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
                     </div>
-                    <xdrdirselector  Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
+                    <div class="box">
+                      <div class="ring-nums">P{{item.id}}</div>
+                      <div class="ring-nums">{{item.split}}</div>
+                    </div>
                   </div>
-                  <div class="box">
-                    <div class="ring-nums">P{{item.id}}</div>
-                    <div class="ring-nums">{{item.split}}</div>
-                  </div>
+                </el-tooltip>
+                <div style="position:relative; width:50px;" v-for="(bus,index3) in busPhaseData" :key="index3">
+                  <i class="iconfont icon-BRT" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 4 && bus.phaseid===item.id"></i>
+                  <i class="iconfont icon-feijidongche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 6 && bus.phaseid===item.id"></i>
+                  <i class="iconfont icon-gongjiaoche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 3 && bus.phaseid===item.id"></i>
+                  <i class="iconfont icon-youguidianche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 5 && bus.phaseid===item.id"></i>
                 </div>
-              </el-tooltip>
-              <div style="position:relative; width:50px;" v-for="(bus,index3) in busPhaseData" :key="index3">
-                 <i class="iconfont icon-BRT" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 4 && bus.phaseid===item.id"></i>
-                 <i class="iconfont icon-feijidongche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 6 && bus.phaseid===item.id"></i>
-                 <i class="iconfont icon-gongjiaoche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 3 && bus.phaseid===item.id"></i>
-                 <i class="iconfont icon-youguidianche" style="position: absolute;top: 8px;font-size:12px;color:#454545;" v-if="bus.controltype === 5 && bus.phaseid===item.id"></i>
               </div>
-            </div>
-            <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left','background': 'linear-gradient(to right, #ffffff 50%, #7ccc66 0)','background-size': '4px 100%'}"></div>
-            <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
-            <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
-            </div>
+              <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left','background': 'linear-gradient(to right, #ffffff 50%, #7ccc66 0)','background-size': '4px 100%'}"></div>
+              <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
+              <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
+              </div>
+          </div>
+        <div v-for="(item, index) in barrierList" :key="index + '1'">
+          <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
         </div>
-      <div v-for="(item, index) in barrierList" :key="index + '1'">
-        <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
+        <div v-show="syncTime && cycle && cycle > 0">
+          <div class="curTimeDiv" :style="{'left':paddingLeft, 'background-color': '#409EFF'}">{{ timeNumDevide }}</div>
+          <div class="curTimeLine" :style="{'left':paddingLeft, 'height':barrierHeight}"></div>
+        </div>
       </div>
-      <div v-show="syncTime && cycle && cycle > 0">
-        <div class="curTimeDiv" :style="{'left':paddingLeft, 'background-color': '#409EFF'}">{{ timeNumDevide }}</div>
-        <div class="curTimeLine" :style="{'left':paddingLeft, 'height':barrierHeight}"></div>
+      <div v-if="contrloType">
+        <div v-for="(list, index1) in stageLists" :key="index1">
+          <!-- <div> -->
+            <div class="first-1" :style="{'width':list.greenWidth,'height':'34px','background':'#7ccc66'}">
+                <el-tooltip placement="top-start" effect="light">
+                  <div slot="content">
+                    <span class="ring-nums" v-for="(pha,index) in list.phases" :key="index">
+                      p:{{pha}}
+                      </span>
+                  </div>
+                  <div style="cursor:pointer;">
+                    <div class="box" style="ling-height:28px">
+                      <span class="ring-nums" v-for="(pha,index) in list.phases" :key="index">
+                      p:{{pha}}
+                      </span>
+                    </div>
+                  </div>
+                </el-tooltip>
+              </div>
+              <!-- <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left','background': 'linear-gradient(to right, #ffffff 50%, #7ccc66 0)','background-size': '4px 100%'}"></div> -->
+              <div class="first-1" :style="{'width':list.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
+              <div class="first-1" :style="{'width':list.redWidth,'height':'34px','background':'#f27979'}"></div>
+            </div>
+          </div>
+        <!-- </div> -->
       </div>
-    </div>
 </template>
 <script>
 import xdrdirselector from '@/components/XRDDirSelector'
@@ -76,11 +103,20 @@ export default {
       sidewalkPhaseData: [],
       controlDatas: this.controlData,
       max: '',
+      stageList: this.stagesChange,
+      stageLists: [],
       busPhaseData: [], // 公交相位数据
       pattern: this.patternStatusList
     }
   },
   props: {
+    stagesChange: {
+      type: Array
+    },
+    contrloType: {
+      type: Boolean,
+      default: false
+    },
     phaseList: {
       type: Array
     },
@@ -159,6 +195,24 @@ export default {
       // 深度观察监听
       deep: true
     },
+    contrloType: {
+      handler: function (val, oldVal) {
+        if (this.contrloType) {
+          this.getStage()
+        }
+      },
+      // 深度观察监听
+      deep: true
+    },
+    stagesChange: {
+      handler: function (val, oldVal) {
+        if (this.contrloType) {
+          this.getStage()
+        }
+      },
+      // 深度观察监听
+      deep: true
+    },
     patternStatusList: {
       handler: function (val, oldVal) {
         this.handleBarrierHeight() // 计算屏障高度
@@ -183,6 +237,9 @@ export default {
     this.CrossDiagramMgr = new CrossDiagramMgr()
     this.getPedPhasePos()
     this.getBusPos()
+    if (this.contrloType) {
+      this.getStage()
+    }
   },
   mounted () {
   },
@@ -195,6 +252,22 @@ export default {
     }
   },
   methods: {
+    getStage () {
+      let stageCycleList = this.stageList.map(item => {
+        return item.stageSplit
+      })
+      let stageMaxCyle = stageCycleList.reduce((a, b) => {
+        return a + b
+      }, 0)
+      this.stageLists = this.stageList.map(item => {
+        return {
+          ...item,
+          greenWidth: (item.green / stageMaxCyle * 100).toFixed(3) + '%',
+          yellowWidth: (item.yellow / stageMaxCyle * 100).toFixed(3) + '%',
+          redWidth: (item.red / stageMaxCyle * 100).toFixed(3) + '%'
+        }
+      })
+    },
     getBusPos () {
       // 公交相位信息
       this.busPhaseData = []
