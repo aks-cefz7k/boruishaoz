@@ -24,7 +24,7 @@ export default {
     return {
       boxVisible: false,
       dialogWidth: '80%',
-      agentId: '1640244524086'
+      agentId: '10001-928'
     }
   },
   methods: {

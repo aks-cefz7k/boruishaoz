@@ -57,6 +57,7 @@
             :list="ring.phases"
             :header-text="$t('openatccomponents.pattern.ring') + ring.num"
             :Draggable="false"
+            :sidewalkPhaseData="sidewalkPhaseData"
             @handleSort="handleSort">
               <template v-slot:kanbantitle>
                 <div class="col-title" v-text="$t('openatccomponents.overview.closemode')"></div>
@@ -122,6 +123,9 @@ export default {
     realtimeStatusModalvisible: {
       type: Boolean,
       default: true
+    },
+    sidewalkPhaseData: {
+      type: Array
     }
   },
   data () {

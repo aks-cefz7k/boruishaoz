@@ -22,7 +22,7 @@
       append-to-body>
       <scheme-config
         ref="rightpanel"
-        agentId="1640244524086"
+        agentId="10001-928"
         :statusData="crossStatusData"
         :realtimeStatusModalvisible="false" />
     </el-dialog>

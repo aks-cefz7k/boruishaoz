@@ -43,6 +43,9 @@
             <el-tooltip class="item" effect="dark" placement="left">
               <div slot="content">{{element.name}}</div>
               <div class="common-phase-description">
+                <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
+                  <PatternWalkSvg v-if="element.peddirection.includes(side.id)" :Data="side" Width="38" Height="40" />
+                </div>
                 <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
               </div>
             </el-tooltip>
@@ -57,12 +60,14 @@
 <script>
 import xdrdirselector from '../XRDDirSelector/XRDDirSelector'
 import draggable from 'vuedraggable'
+import PatternWalkSvg from '../IntersectionMap/crossDirection/baseImg/PatternWalkSvg'
 
 export default {
   name: 'common-kanban',
   components: {
     draggable,
-    xdrdirselector
+    xdrdirselector,
+    PatternWalkSvg
   },
   props: {
     headerText: {
@@ -86,7 +91,11 @@ export default {
     Draggable: { // 是否开启拖动调整顺序
       type: Boolean,
       default: true
+    },
+    sidewalkPhaseData: {
+      type: Array
     }
+
   },
   methods: {
     end () {
