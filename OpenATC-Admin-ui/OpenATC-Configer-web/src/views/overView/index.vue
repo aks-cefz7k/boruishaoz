@@ -53,8 +53,7 @@
             <OverLap
             :checked="checked"
             :overlap="overlap"
-            :stageList="this.stagesListOver"
-            :phaseList="phaseList"
+            :stageList="stagesListOver"
             :cycle="controlData.cycle"
             :controlData="controlData"
             />

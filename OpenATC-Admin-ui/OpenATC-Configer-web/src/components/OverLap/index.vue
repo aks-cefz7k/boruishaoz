@@ -59,14 +59,8 @@ export default {
     stageList: {
       type: Array
     },
-    phaseList: {
-      type: Array
-    },
     checked: {
       type: Boolean
-    },
-    patternStatusList: {
-      type: Array
     },
     cycle: {
       type: Number

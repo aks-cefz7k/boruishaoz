@@ -100,9 +100,7 @@
                       :stageList="scope.row.stagesList"
                       :checked="true"
                       :overlap="overlap"
-                      :phaseList="phaseList"
                       :cycle="scope.row.cycle"
-                      :patternStatusList="scope.row.rings"
                       />
                     </div>
                   </el-scrollbar>
