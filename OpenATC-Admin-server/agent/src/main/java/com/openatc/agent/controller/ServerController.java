@@ -48,14 +48,10 @@ public class ServerController {
     /**
      * @param
      * @return
-     * @descripation 获取服务状态
+     * @descripation 从Redis中，获取服务状态
      **/
     @GetMapping(value = "/system/status/server/all")
     public RESTRetBase GetServerState() {
-
-        UpdateMainServerStaus();
-        UpdateRedisStaus();
-        UpdateDBStaus();
 
         Set<String> keyset =  redisTemplate.getKeys("server:status:*");
         Set<ServerState> ValueSet = new HashSet();
