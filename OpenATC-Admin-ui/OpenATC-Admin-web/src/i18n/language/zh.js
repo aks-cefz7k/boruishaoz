@@ -15,12 +15,15 @@ const zh = {
       'add': '新增',
       'delete': '删除',
       'edit': '编辑',
+      'copy': '复制',
       'detail': '详情',
+      'copySuccess': '复制成功！',
       'searchdeviceid': '输入设备ID搜索',
       'searchplaceholder': '输入关键字搜索',
       'addfailed': '新增失败!',
       'addsuccess': '新增成功!',
       'addcancel': '新增取消!',
+      'sureToDelete': '是否确认删除？',
       'deletefailed': '删除失败!',
       'deletesuccess': '删除成功!',
       'deletecancel': '删除取消!',
@@ -540,6 +543,13 @@ const zh = {
       'mode4': '遥控器控制',
       'mode5': '黄闪器触发',
       'pattern': '方案'
+    },
+    'token': {
+      'username': '用户名',
+      'tokenManage': 'Token管理',
+      'timeStart': '有效期开始',
+      'timeEnd': '有效期截止',
+      'isValid': '是否启用'
     }
   }
 }

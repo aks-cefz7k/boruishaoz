@@ -418,5 +418,20 @@
     "key": "getHisParamsRange",
     "url": "/devs/hisparams/range",
     "method": "post"
+  },
+  {
+    "key": "getTokenList",
+    "url": "/token/findAll",
+    "method": "get"
+  },
+  {
+    "key": "updateToken",
+    "url": "/token/modify",
+    "method": "post"
+  },
+  {
+    "key": "deleteToken",
+    "url": "/token/deleteById",
+    "method": "delete"
   }
 ]
