@@ -20,19 +20,15 @@
       :close-on-click-modal="false"
       @close="oncancle"
       append-to-body>
-      <IntersectionWithInterface
+      <intersection-with-interface
         ref="intersectionWithInterface"
         :AgentId="agentId"/>
     </el-dialog>
   </div>
 </template>
 <script>
-import IntersectionWithInterface from '@/components/IntersectionWithInterface'
 export default {
   name: 'demo',
-  components: {
-    IntersectionWithInterface
-  },
   data () {
     return {
       boxVisible: false,

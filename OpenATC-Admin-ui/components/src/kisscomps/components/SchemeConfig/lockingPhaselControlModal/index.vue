@@ -58,6 +58,7 @@
             :header-text="$t('openatccomponents.pattern.ring') + ring.num"
             :Draggable="false"
             :sidewalkPhaseData="sidewalkPhaseData"
+            :roadDirection="roadDirection"
             @handleSort="handleSort">
               <template v-slot:kanbantitle>
                 <div class="col-title" v-text="$t('openatccomponents.overview.closemode')"></div>
@@ -98,6 +99,9 @@ export default {
       default () {
         return this.$t('openatccomponents.overview.implement')
       }
+    },
+    roadDirection: {
+      type: String
     }
   },
   data () {

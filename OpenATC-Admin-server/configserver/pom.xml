@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.openatc.admin</groupId>
             <artifactId>comm</artifactId>
-            <version>2.2.0-snapshot</version>
+            <version>2.3.0-snapshot</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>

@@ -1,22 +1,42 @@
 <template>
   <div class="block">
     <el-scrollbar style="height: 100%">
-      <el-timeline>
+        <el-row
+          v-for="(step, index) in route.devs"
+          ref="timeline"
+          :key="index">
+      <!-- <el-timeline>
         <el-timeline-item
           v-for="(step, index) in route.devs"
           ref="timeline"
           :key="index"
-          :timestamp="step.name"
           placement="top"
           icon="icon success"
           :type="getType(step.state, index)"
           size="large"
-          @click.native="onStepClick(index)" >
+          @click.native="onStepClick(index)" > -->
           <div class="resttime"
                v-if="step.name != ''">
-               <i class="el-icon-location-outline" type="primary"></i>
-            {{ $t("openatc.gis.crossRoad") }}{{ step.agentid }}
-            <el-tag size="medium" effect="plain" style="float:right;" :type="getTag(step).type">{{ getTag(step).label }}</el-tag>
+               <strong>
+                 <i class="el-icon-location-outline" type="primary"></i>
+                  {{ step.name }}
+               </strong>
+            <!-- <el-tag size="medium" effect="plain" style="float:right;" :type="getTag(step).type">{{ getTag(step).label }}</el-tag> -->
+            <div style="float:right;">
+              <div style="display:inline-block;margin-right:40px;" class="grid-content bg-purple">{{ $t("openatc.greenwaveoptimize.pattern") }}: {{ step.terminalname }}</div>
+              <el-button  v-show="tabName === 'second'"
+                          style="float: right;margin-bottom:5px;margin-top:-5px;"
+                          :type="getButtonType(step)"
+                          size="small"
+                          @click="executeViproute(step)">
+                <template v-if="!step.state || step.state === 0">
+                  {{ $t("openatc.dutyroute.executen") }}
+                </template>
+                <template v-else>
+                  {{ $t("openatc.dutyroute.cancel") }}
+                </template>
+              </el-button>
+            </div>
           </div>
           <div>
           </div>
@@ -33,14 +53,17 @@
               @research="research"
             ></route-card>
           </div>
-        </el-timeline-item>
-      </el-timeline>
+        <!-- </el-timeline-item>
+      </el-timeline> -->
+      </el-row>
     </el-scrollbar>
   </div>
 </template>
 
 <script>
 import RouteCard from './routeCard'
+import { ExecuteViproute } from '@/api/service'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'routeState',
   components: {
@@ -143,6 +166,32 @@ export default {
           type: 'danger'
         }
       }
+    },
+    executeViproute (node) {
+      let reqData = {
+        'agentid': node.agentid,
+        'viprouteid': node.viprouteid,
+        'operation': 1
+      }
+      if (node.state === 1) {
+        reqData.operation = 0
+      }
+      // this.isBtnDisabled = true
+      ExecuteViproute(reqData).then(res => {
+        // this.isBtnDisabled = false
+        if (!res.data.success) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return false
+        }
+        this.$emit('research')
+      })
+    },
+    getButtonType (node) {
+      let res = 'warning'
+      if (!node.state || node.state === 0) {
+        res = 'primary'
+      }
+      return res
     }
   }
 }
@@ -153,7 +202,7 @@ export default {
   width: auto;
   height: 750px;
   /* margin: 0 -30px 0 -30px; */
-  margin-left: -30px;
+  /* margin-left: -30px; */
   /* border: 1px solid red; */
 }
 .card-div {
@@ -178,5 +227,6 @@ export default {
 }
 .resttime {
   padding: 5px;
+  margin-top: 5px;
 }
 </style>

@@ -20,12 +20,18 @@
       :close-on-click-modal="false"
       @close="oncancle"
       append-to-body>
+      <!-- <scheme-config
+        ref="rightpanel"
+        agentId="10001-928"
+        :statusData="crossStatusData"
+        :realtimeStatusModalvisible="false" /> -->
       <scheme-config
         ref="rightpanel"
         :agentId="agentId"
         :lockPhaseBtnName="lockPhaseBtnName"
         :statusData="crossStatusData"
-        :realtimeStatusModalvisible="false" />
+        roadDirection="left"
+        funcSort="basicFunc" />
     </el-dialog>
   </div>
 </template>

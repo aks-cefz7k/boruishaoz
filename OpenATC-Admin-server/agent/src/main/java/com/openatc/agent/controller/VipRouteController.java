@@ -7,6 +7,7 @@ import com.openatc.agent.model.*;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
+import com.openatc.agent.utils.RedisTemplateUtil;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.model.InnerError;
@@ -18,7 +19,6 @@ import com.openatc.model.model.StatusPattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +35,8 @@ public class VipRouteController {
     @Autowired
     VipRouteDao vipRouteDao;
     @Autowired
-    public StringRedisTemplate stringRedisTemplate;
+//    public StringRedisTemplate stringRedisTemplate;
+    public RedisTemplateUtil redisTemplate;
     @Autowired
     VipRouteDeviceDao vipRouteDeviceDao;
     @Autowired
@@ -135,7 +136,7 @@ public class VipRouteController {
         // 0 执行前先判断一下是否存在执行中的设备，如果存在，应答错误
         List<VipRouteDevice> vipRouteDevices = vipRouteDeviceDao.findByViprouteid(id);
         for (VipRouteDevice vipRouteDevice : vipRouteDevices) {
-            String vrStatus = stringRedisTemplate.opsForValue().get(ASC_VIPROUTE_STATUS + id + ":" + vipRouteDevice.getAgentid());
+            String vrStatus = redisTemplate.getValue(ASC_VIPROUTE_STATUS + id + ":" + vipRouteDevice.getAgentid());
             if (vrStatus == null) continue;
             VipRouteDeviceStatus vipRouteDeviceStatus = gson.fromJson(vrStatus, VipRouteDeviceStatus.class);
             if (vipRouteDeviceStatus.getState() == 1) return RESTRetUtils.errorObj(E_6002);
@@ -148,9 +149,9 @@ public class VipRouteController {
         if (devs != null && devs.size() != 0) {
             // 3 将设备信息更新到redis中
             for (VipRouteDevice vipRouteDevice : devs) {
-                stringRedisTemplate.delete(ASC_VIPROUTE_STATUS + vipRouteDevice.getViprouteid() + ":*");
+                redisTemplate.delete(ASC_VIPROUTE_STATUS + vipRouteDevice.getViprouteid() + ":*");
                 VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(vipRouteDevice.getAgentid(), 0, "00:00");
-                stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + vipRouteDevice.getViprouteid() + ":" + vipRouteDevice.getAgentid(), gson.toJson(vipRouteDeviceStatus));
+                redisTemplate.setValue(ASC_VIPROUTE_STATUS + vipRouteDevice.getViprouteid() + ":" + vipRouteDevice.getAgentid(), gson.toJson(vipRouteDeviceStatus));
             }
         }
 
@@ -242,10 +243,10 @@ public class VipRouteController {
                             String sec = String.format("%2d", totaltime % 60).replace(" ", "0");
                             String resttime = min + ":" + sec;
                             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 1, resttime);
-                            stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
+                            redisTemplate.setValue(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
                         } else {
                             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
-                            stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
+                            redisTemplate.setValue(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
                             onExcuteDevlist.remove(agentid);
                             log.info("Vip road thread end! agentid:" + agentid);
                             // 回自主控制
@@ -266,7 +267,7 @@ public class VipRouteController {
             // 回自主控制
             RESTRet restRet = backSelfControl(agentid);
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
-            stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
+            redisTemplate.setValue(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
             log.info("取消执行，存入redis");
             onExcuteDevlist.remove(agentid);
 
@@ -300,10 +301,10 @@ public class VipRouteController {
     public List<VipRouteDeviceStatus> getVipRouteList (int id) {
         List<VipRouteDeviceStatus> vriss = new ArrayList<>();
         String fuzzykeys = ASC_VIPROUTE_STATUS + id + ":*";
-        Set<String> vrstatuskeys = stringRedisTemplate.keys(fuzzykeys);
+        Set<String> vrstatuskeys = redisTemplate.getKeys(fuzzykeys);
         List<String> agentIdList = new ArrayList<>();
         for (String vrstatus : vrstatuskeys) {
-            String s = stringRedisTemplate.opsForValue().get(vrstatus);
+            String s = redisTemplate.getValue(vrstatus);
             VipRouteDeviceStatus vipRouteDeviceStatus = gson.fromJson(s, VipRouteDeviceStatus.class);
             vriss.add(vipRouteDeviceStatus);
             agentIdList.add(vipRouteDeviceStatus.getAgentid());
@@ -320,7 +321,7 @@ public class VipRouteController {
                 continue;
             }
 //            StatusPattern statusPattern = messageController.GetStatusPattern(agentid);
-            StatusPattern statusPattern = getDevStateFromCache(agentid);
+            StatusPattern statusPattern = redisTemplate.getStatusPatternFromRedis(agentid);
             if(statusPattern == null){ // 无法获取到方案状态，设备不在线
                 vipRouteDeviceStatus.setControl(-1);
             } else{ // 设备在线,设置设备当前状态
@@ -331,19 +332,6 @@ public class VipRouteController {
         return vriss;
     }
 
-    /**
-     * @Author: yangyi
-     * @Date: 2022/1/5 9:42
-     * @Description: get current pattern from cache
-     */
-    public StatusPattern getDevStateFromCache (String agentId) {
-        StatusPattern statusPattern = new StatusPattern();
-        String key = agenttype + ":" + "status/pattern" + ":" + agentId;
-        String s = stringRedisTemplate.opsForValue().get(key);
-        MessageData messageData = gson.fromJson(s, MessageData.class);
-        statusPattern = gson.fromJson(messageData.getData().getAsJsonObject(),StatusPattern.class);
-        return statusPattern;
-    }
 
     /**
      * 根据路口ID，从vip路线中，获取路口的状态

@@ -11,24 +11,14 @@
  **/
 import Vue from 'vue'
 import Vuex from 'vuex'
-import app from './modules/app'
-import user from './modules/user'
 import getters from './getters'
-import agent from './modules/saveAgent'
-import globalParam from './modules/globalParam'
-import globalParamModel from './modules/globalParamModel'
-import permissionRoutes from './modules/permissionRoutes'
+// import globalParam from './modules/globalParam'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    app,
-    user,
-    agent,
-    globalParam,
-    globalParamModel,
-    permissionRoutes
+    // globalParam
   },
   getters
 })

@@ -27,6 +27,7 @@ const language = {
   zh
 }
 
+const requireAll = requireContext => requireContext.keys().map(requireContext)
 const install = function (Vue) {
   if (install.installed) return
   Vue.use(VTooltip)
@@ -34,6 +35,15 @@ const install = function (Vue) {
   Object.keys(components).forEach(key => {
     Vue.component(components[key].name, components[key])
   })
+
+  const req = require.context('../icons/svg', false, /\.svg$/)
+  requireAll(req)
+
+  const urlMgr = require('../lib/publicjs/HttpurlMgr')
+  if (urlMgr.HttpUrlMgr.urlMap === undefined) {
+    let data = require('../../static/apiconfig.json')
+    urlMgr.HttpUrlMgr.init(data)
+  }
 }
 
 if (typeof window !== 'undefined' && window.Vue) {

@@ -12,10 +12,13 @@
 package com.openatc.agent.service;
 
 import com.openatc.agent.model.THisParams;
+import com.openatc.core.model.RESTRet;
+import com.openatc.model.model.AscsBaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,6 +36,11 @@ public class HisParamServiceImpl {
 
     @Autowired(required = false)
     private THisParamsDao thisParamsDao;
+
+    @Autowired
+    private DevService devService;
+    @Autowired
+    private AscsDao ascsDao;
 
     /**
      * @param tParams 历史记录
@@ -81,4 +89,23 @@ public class HisParamServiceImpl {
         return 0;
     }
 
+
+    /**
+     * 根据路口角色获取对应设备id
+     * @return
+     */
+    public List<String> getAgentidListByUserRole() {
+        List<String> agentids = new ArrayList<>();
+        List<AscsBaseModel> ascs = ascsDao.getAscs();
+        RESTRet ret = devService.getDevs(ascs);
+        if (ret.isSuccess()){
+            List<AscsBaseModel> ascsBaseModels = (List<AscsBaseModel>) ret.getData();
+            if (ascsBaseModels != null){
+                for (AscsBaseModel ascsBaseModel : ascsBaseModels){
+                    agentids.add(ascsBaseModel.getAgentid());
+                }
+            }
+        }
+        return agentids;
+    }
 }

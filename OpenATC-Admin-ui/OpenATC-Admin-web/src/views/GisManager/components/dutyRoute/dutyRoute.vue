@@ -10,8 +10,8 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="gis-duteRoute">
-    <div class="title">{{route ? route.name : this.$t('openatc.gis.deviceState')}}</div>
+  <div class="gis-duteRoute" style="border:0px solid red;">
+    <!-- <div class="title">{{route ? route.name : this.$t('openatc.gis.deviceState')}}</div> -->
     <div>
       <div class="devicePanel">
         <routePreview ref="updateChild"
@@ -104,6 +104,9 @@ export default {
     }
   },
   mounted () {
+    var w = document.getElementsByClassName('showLayout')[0]
+    this.containerWidth = w.style.width
+    w.style.width = '800px'
     let _this = this
     this.getAllAdevice()
     this.$nextTick(() => {
