@@ -75,8 +75,8 @@ export default {
       loadingBg: '#202940',
       chooseButtons: [
         {
-          key: 'model',
-          value: this.$t('openatc.patternstatistic.controlmodel'),
+          key: 'mode',
+          value: this.$t('openatc.patternstatistic.controlmode'),
           active: true
         },
         {
@@ -111,8 +111,8 @@ export default {
         }
       ],
       curChart: {
-        key: 'model',
-        value: this.$t('openatc.patternstatistic.controlmodel')
+        key: 'mode',
+        value: this.$t('openatc.patternstatistic.controlmode')
       },
       periodicSeleted: undefined,
       strengthSeleted: undefined,
@@ -262,7 +262,7 @@ export default {
       this.refreshStrengthChart()
       this.refreshTimingChart()
       this.unlockScreen()
-      this.changeBtnStyle('model')
+      this.changeBtnStyle('mode')
     },
     renderStrengthChart () {
       // 渲染
