@@ -37,6 +37,8 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import { OverflowDecApi } from '@/api/overflowDetector.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 import DeviceList from './content/DeviceList'
 import DetectorList from './content/DetectorList'
 
@@ -50,7 +52,34 @@ export default {
       curChoosedId: '',
       curChoosedCrossname: '',
       isModify: false,
-      resetflag: true
+      resetflag: true,
+      // statusMock: {
+      //   'data': [{
+      //     'agentid': '2',
+      //     'state': 1,
+      //     'time': '3:52',
+      //     'control': 20
+      //   },
+      //   {
+      //     'agentid': '10005',
+      //     'state': 1,
+      //     'time': '00:00',
+      //     'control': 13
+      //   },
+      //   {
+      //     'agentid': '10503',
+      //     'state': 0,
+      //     'time': '1:52',
+      //     'control': 3
+      //   }
+      //   ],
+      //   'success': true,
+      //   'code': '0',
+      //   'message': 'Success',
+      //   'timestamp': 1600068706005
+      // },
+      stateMap: new Map(),
+      intervalFlag: true
     }
   },
   computed: {
@@ -76,6 +105,7 @@ export default {
         )
           .then(() => {
             this.setDeviceList(choosedRow)
+            this.GetCrossExecuteStatus(choosedRow.id)
           })
           .catch(() => {
             this.$message({
@@ -86,6 +116,63 @@ export default {
         return
       }
       this.setDeviceList(choosedRow)
+      this.GetCrossExecuteStatus(choosedRow.id)
+    },
+    GetCrossExecuteStatus (areaid) {
+      if (areaid !== this.lastChoosedId) {
+        if (this.timer) {
+          clearInterval(this.timer)
+        }
+        this.timer = setInterval(() => {
+          if (this.intervalFlag) {
+            this.GetStatusData(areaid)
+          }
+        }, 1000)
+        this.lastChoosedId = this.curChoosedId
+      }
+    },
+    GetStatusData (areaid) {
+      this.intervalFlag = false
+      OverflowDecApi.GetOverflowsExecuteStatus(areaid)
+        .then(data => {
+          this.intervalFlag = true
+          if (!data.data.success) {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          this.statusList = data.data.data
+          this.statusList.forEach(ele => {
+            this.stateMap.set(ele.agentid, ele)
+          })
+          let areaOverflows = JSON.parse(JSON.stringify(this.curDetectorDevs.overflows))
+          if (areaOverflows && areaOverflows.length) {
+            for (let i = 0; i < areaOverflows.length; i++) {
+              let crossState = this.stateMap.get(areaOverflows[i].intersectionid)
+              if (crossState) {
+                areaOverflows[i].statedata = crossState
+              }
+            }
+          }
+          this.curDetectorDevs.overflows = JSON.parse(JSON.stringify(areaOverflows))
+        })
+        .catch(error => {
+          this.$message.error(error)
+        })
+
+      // this.statusList = this.statusMock.data
+      // this.statusList.forEach(ele => {
+      //   this.stateMap.set(ele.agentid, ele)
+      // })
+      // let areaOverflows = JSON.parse(JSON.stringify(this.curDetectorDevs.overflows))
+      // if (areaOverflows && areaOverflows.length) {
+      //   for (let i = 0; i < areaOverflows.length; i++) {
+      //     let crossState = this.stateMap.get(areaOverflows[i].intersectionid)
+      //     if (crossState) {
+      //       areaOverflows[i].statedata = crossState
+      //     }
+      //   }
+      // }
+      // this.curDetectorDevs.overflows = JSON.parse(JSON.stringify(areaOverflows))
     },
     setDeviceList (choosedRow) {
       // if (choosedRow.id === this.curChoosedId) return;
@@ -101,10 +188,28 @@ export default {
           ele => ele.id === this.curChoosedId
         )[0]
         this.setDeviceList(curData)
+        this.GetCrossExecuteStatus(this.curChoosedId)
       })
     },
     handleModify () {
+      if (!this.isModify && this.isHasExecutingCross()) {
+        this.$message.error(this.$t('openatc.bottleneckcontrol.hasexecutecross'))
+        return
+      }
       this.isModify = !this.isModify
+    },
+    isHasExecutingCross () {
+      // 判断是否有正在执行的路口
+      let isHasExecute = false
+      let areaOverflows = JSON.parse(JSON.stringify(this.curDetectorDevs.overflows))
+      if (areaOverflows && areaOverflows.length) {
+        areaOverflows.forEach(cross => {
+          if (cross.statedata && cross.statedata.state === 1) {
+            isHasExecute = true
+          }
+        })
+      }
+      return isHasExecute
     },
     resetRightComponent () {
       this.resetflag = false
@@ -114,6 +219,11 @@ export default {
       this.$nextTick(() => {
         this.resetflag = true
       })
+    }
+  },
+  destroyed () {
+    if (this.timer) {
+      clearInterval(this.timer)
     }
   }
 }
