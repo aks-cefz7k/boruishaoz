@@ -1017,6 +1017,12 @@ border: 1px solid $--border-color-base;
   .el-input {
     width: 50%;
   }
+  .el-input-number {
+    width: 100%;
+    .el-input__inner {
+      text-align: left;
+    }
+  }
   .footer {
     button {
       width: 56px;

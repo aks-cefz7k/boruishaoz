@@ -22,17 +22,17 @@
             <el-form-item
                 :label="$t('edge.overview.controlnumber') + ':'"
                 prop="shape">
-                <el-input v-model="manualInfo.tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input>
+                <el-input-number v-model="manualInfo.tempPatternid" :controls="false" size="mini" :max="65535" :min="0" :precision="0" :step="1" :placeholder="$t('edge.common.input')"></el-input-number>
             </el-form-item>
             <el-form-item
                 :label="$t('edge.overview.delay') + ':'"
                 prop="intersection">
-               <el-input v-model="manualInfo.tempDelay" size="mini" :placeholder="$t('edge.common.input')"></el-input>
+              <el-input-number v-model="manualInfo.tempDelay" :controls="false" size="mini" :max="65535" :min="0" :precision="0" :step="1" :placeholder="$t('edge.common.input')"></el-input-number>
             </el-form-item>
             <el-form-item
                 :label="$t('edge.overview.duration') + ':'"
                 prop="count">
-               <el-input v-model="manualInfo.tempDuration" size="mini" :placeholder="$t('edge.common.input')"></el-input>
+              <el-input-number v-model="manualInfo.tempDuration" :controls="false" size="mini" :max="65535" :min="0" :precision="0" :step="1" :placeholder="$t('edge.common.input')"></el-input-number>
             </el-form-item>
            </el-form>
       </el-col>
