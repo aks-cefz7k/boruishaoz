@@ -68,7 +68,7 @@
       </el-table-column>
       <el-table-column  align="center" :label="$t('edge.singleoptim.staticWeight')">
         <template slot-scope="scope">
-          <el-input-number size="small" :max="1" :min="0" :controls="false" v-model.number="scope.row.staticweight"></el-input-number>
+          <el-input-number size="small" :max="100" :min="0" :precision="0" :step="1" :controls="false" v-model.number="scope.row.staticweight"></el-input-number>
         </template>
       </el-table-column>
       <el-table-column  align="center" :label="$t('edge.singleoptim.cycleAdjustmentFactor')">
