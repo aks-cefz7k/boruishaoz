@@ -163,6 +163,7 @@ export default {
         if (!res.success) {
           throw new Error('get language error')
         } else {
+          setLanguage(this.$i18n.locale)
           for (let config of data.data.data) {
             if (config['value'] === 'zh') {
               this.$i18n.locale = 'zh'
