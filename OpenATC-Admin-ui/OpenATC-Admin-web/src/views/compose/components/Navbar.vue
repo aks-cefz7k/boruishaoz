@@ -132,7 +132,6 @@
         :title="$t('openatc.faultrecord.faultlist')"
         :visible.sync="drawer"
         :modal="false"
-        :wrapperClosable="false"
         :with-header="true">
         <!-- <span> -->
           <div class="empty" v-show="faultData.length === 0">
@@ -274,6 +273,7 @@ export default {
       pageNum: '1',
       pageSize: '10',
       enumerate: '0',
+      isCurrentFault: false,
       infotype: '',
       model: '',
       notify: undefined,
@@ -499,16 +499,16 @@ export default {
     },
     getUntreated () {
       this.enumerate = 0
-      GetUntreated(this.pageNum, this.pageSize, this.enumerate).then(data => {
+      this.isCurrentFault = true
+      GetUntreated(this.pageNum, this.pageSize, this.enumerate, this.isCurrentFault).then(data => {
         if (data.data.success) {
-          for (let i = 0; i < data.data.data.content.length; i++) {
-            searchRoadName(data.data.data.content[i].agentid).then(j => {
-              data.data.data.content[i].name = j.data.data.name
-              data.data.data.content[i].id = j.data.data.id
-            })
-          }
+          // for (let i = 0; i < data.data.data.content.length; i++) {
+          // searchRoadName(data.data.data.content[i].agentid).then(j => {
+          //   data.data.data.content[i].name = j.data.data.name
+          //   data.data.data.content[i].id = j.data.data.id
+          // })
+          // }
           this.faultData = data.data.data.content
-          console.log(this.faultData, 'this.faultData')
         }
       })
     },

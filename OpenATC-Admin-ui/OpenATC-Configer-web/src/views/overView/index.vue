@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="container-main">
-    <FaultDetailModal ref="faultDetail" :agentId="agentId"></FaultDetailModal>
+    <FaultDetailModal ref="faultDetail" :agentId="agentId" @refreshFault="getFaultById"></FaultDetailModal>
     <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
       <div class="wenzijiemian" v-show="!isShowGui">
         <div class="container-left">
@@ -200,9 +200,9 @@
                 <div class="cross-content">
                   <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
                   <div style="margin-left: 85px;" v-if="curFaultList.length">
-                    <el-tag type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span></el-tag>
-                    <el-tag>{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span></el-tag>
-                    <el-tag type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span></el-tag>
+                    <el-tag v-if="confirmedFault.length" type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span></el-tag>
+                    <el-tag v-if="untreatedFault.length">{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span></el-tag>
+                    <el-tag v-if="ignoredFault.length" type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span></el-tag>
                     <span class="fault-detail-btn" @click="showFaultDetail">{{$t('edge.overview.details')}} >></span>
                   </div>
                   <div style="margin-left: 85px;" class="cross-value" v-if="!curFaultList.length">{{$t('edge.overview.nofault')}}</div>
@@ -325,6 +325,7 @@ export default {
       phaseControlTimer: null, // 定时器
       registerMessageTimer: null, // 延时器
       volumeControlTimer: null, // 流量定时器
+      faultTimer: null, // 当前故障定时器
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
       ParamsMode: new Map([[0, '自主控制'], [1, '本地手动'], [2, '系统控制'], [3, '配置软件控制'], [4, '遥控器控制'], [5, '黄闪器触发']]),
       ParamsModeEn: new Map([[0, 'Autonomous Control'], [1, 'Local Manual'], [2, 'System Control'], [3, 'Configuration Software Control'], [4, 'Remote Control'], [5, 'Yellow Flasher Trigger']]),
@@ -517,7 +518,7 @@ export default {
   },
   mounted () {
     this.getPlatform()
-    this.getFaultById()
+    this.getFault()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
     }
@@ -540,6 +541,12 @@ export default {
           break
         default: break
       }
+    },
+    getFault () {
+      this.getFaultById()
+      this.faultTimer = setInterval(() => {
+        this.getFaultById()
+      }, 30000)
     },
     getVolume () {
       getTscCurrentVolume(this.agentId).then((data) => {
@@ -653,6 +660,12 @@ export default {
       if (this.registerMessageTimer !== null) {
         clearTimeout(this.registerMessageTimer) // 清除延时器
         this.registerMessageTimer = null
+      }
+    },
+    clearFaultInterval () {
+      if (this.faultTimer !== null) {
+        clearInterval(this.faultTimer) // 清除流量定时器
+        this.faultTimer = null
       }
     },
     initData () {
@@ -1112,7 +1125,6 @@ export default {
           list.push(obj)
         }
         this.patternStatusList.push(list)
-        console.log(this.patternStatusList, 898)
       }
       // this.handleBarrier(this.patternStatusList, this.phaseList)
     },
@@ -1342,6 +1354,7 @@ export default {
     this.clearPatternInterval() // 清除定时器
     this.clearVolumeInterval()
     this.clearRegisterMessageTimer() // 清除定时器
+    this.clearFaultInterval()
     this.getPlatform()
   }
 }

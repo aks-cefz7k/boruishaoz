@@ -48,6 +48,8 @@
           <select-pattern
             :agentid="scope.row.agentid"
             :defaultValue="scope.row.patternid"
+            :defaultLabel="scope.row.patterndesc"
+            :isAutoLoad="false"
             @onChange="onSelectPatternChange"
             ref="selectPattern"
           ></select-pattern>
@@ -186,11 +188,12 @@ export default {
         getTscPhase(agentid).then(res => {
           this.loading = false
           if (!res.data.success) {
-            if (res.data.code === '4003') {
-              this.$message.error(this.$t('openatc.common.devicenotonline'))
-              return
+            let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+            let errorCode = res.data.data.errorCode
+            if (errorCode) {
+              msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
             }
-            this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+            this.$message.error(msg)
             return
           }
           this.phaseList = res.data.data.data.phaseList

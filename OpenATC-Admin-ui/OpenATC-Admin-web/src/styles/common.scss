@@ -88,7 +88,7 @@
   }
 }
 .appMain {
-  height: calc(100% - 57px);
+  height: calc(100% - 53px - 15px);
   background: $--color-white;
 }
 //commom 样式
@@ -1784,10 +1784,11 @@ table td {
   margin-top: 15px;
   // height: calc(100% - 30px);
   height: 100%;
-  position: relative;
-  padding: 19px;
+  // position: relative;
+  // padding-bottom: 19px;
   // margin: 15px;
   box-sizing: border-box;
+  background: $--background-color-base;
   .title {
     height: 60px;
     line-height: 60px;
@@ -1802,7 +1803,8 @@ table td {
     width: 46%;
     background: $--color-white;
     margin-right: 15px;
-    box-shadow: 0px 0px 4px 0px rgba(0, 32, 60, 0.06);
+    // box-shadow: 0px 0px 4px 0px rgba(0, 32, 60, 0.06);
+    border: 1px solid $--border-color-lighter;
     border-radius: 4px;
     .tool {
       padding: 15px 20px;
@@ -1846,8 +1848,6 @@ table td {
           padding: 0;
         }
         .overflow-detector-list {
-          // border: 1px solid #ebeef5;
-          // border-bottom: none;
           height: calc(100% - 90px);
         }
       }
@@ -1858,7 +1858,8 @@ table td {
     height: 100%;
     width: calc(54% - 15px);
     background: $--color-white;
-    box-shadow: 0px 0px 4px 0px rgba(0, 32, 60, 0.06);
+    // box-shadow: 0px 0px 4px 0px rgba(0, 32, 60, 0.06);
+    border: 1px solid $--border-color-lighter;
     border-radius: 4px;
     padding: 0 20px;
     box-sizing: border-box;
@@ -1870,6 +1871,7 @@ table td {
       position: absolute;
       right: 20px;
       top: 20px;
+      // float: right;
       line-height: 36px;
       padding: 0;
     }

@@ -46,8 +46,8 @@
                     <el-row :gutter="0" style="hight:80%">
                       <el-col :span="6" v-for="(num,index2) of numberList" :key="index2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                     </el-row>
@@ -77,50 +77,50 @@
                       </el-col>
                       <el-col :span="2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                       <el-col :span="2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                       <el-col :span="2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                       <el-col :span="2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                       <el-col :span="2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                       <el-col :span="2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                       <el-col :span="2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                       <el-col :span="2">
                         <div class="icon-content">
-                           <svg-icon v-if="num===1" icon-class="cutRed"></svg-icon>
-                           <svg-icon v-else icon-class="connectBlue"></svg-icon>
+                           <svg-icon style="height:7em;" v-if="num===1" icon-class="cutRed"></svg-icon>
+                           <svg-icon style="height:7em;" v-else icon-class="connectBlue"></svg-icon>
                         </div>
                       </el-col>
                     </el-row>

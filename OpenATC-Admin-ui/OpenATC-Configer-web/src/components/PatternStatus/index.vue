@@ -157,16 +157,68 @@ export default {
         let concurrent = phaseList.filter((item) => {
           return item.id === patternStatus.id // patternStatus.id当前相位id concurrent当前相位的并发相位
         })[0].concurrent// 当前相位的并发相位
-        let obj = {
-          id: patternStatus.id,
-          current: concurrent.sort()
+        if (concurrent) {
+          let obj = {
+            id: patternStatus.id,
+            current: concurrent.sort()
+          }
+          currentArr.push(obj)
         }
-        currentArr.push(obj)
       }
-      let newCurrent = this.tranform(currentArr)
-      let ringTeam = this.step1(phaseList, newCurrent)
+      if (currentArr.length !== 0) {
+        let newCurrent = this.tranform(currentArr)
+        let ringTeam = this.step1(phaseList, newCurrent)
+        this.setBarrier(ringTeam, val)
+        this.fillGap(ringTeam, val)
+        let barrier = this.step2(ringTeam, newPattern)
+        this.barrierList = barrier.map(j => {
+          return (j / (this.max ? this.max : this.newCycle) * 100) + '%'
+        })
+        this.barrierList.unshift(0)
+      }
+      for (let rings of val) {
+        if (rings.length === 0) continue
+        let list = []
+        for (let ring of rings) {
+          if (ring.value === 0) continue
+          let obj = {}
+          let split = ring.value
+          obj.id = ring.id
+          obj.split = split
+          if (ring.desc) {
+            obj.direction = ring.desc.map(item => { // 虚相位desc为空
+              return {
+                id: item.id,
+                color: '#454545'
+              }
+            })
+          }
+          let currPhase = phaseList.filter((item) => {
+            if (item.id === ring.id && item.controltype === 99) {
+              obj.controltype = item.controltype
+            }
+            return item.id === ring.id
+          })[0]
+          if (ring.sum) {
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+            // obj.hideWidth = (ring.sum / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          } else {
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          }
+          obj.redWidth = (currPhase.redclear / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          obj.yellowWidth = (currPhase.yellow / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          // 忽略相位不显示
+          let mode = ring.mode
+          if (mode !== 7) { // 忽略相位不显示
+            list.push(obj)
+          }
+        }
+        this.pattern.push(list)
+      }
+    },
+    setBarrier (ringTeam, val) { // 添加特征参数barrier
       let patternList = this.globalParamModel.getParamsByType('patternList')
-      patternList.map(item => { // 添加特征参数barrier
+      patternList.map(item => {
         if (item.id === this.patternIds) {
           const patternObjs = {}
           val.forEach(l => {
@@ -192,49 +244,6 @@ export default {
           item.barriers = ret
         }
       })
-      this.fillGap(ringTeam, val)
-      let barrier = this.step2(ringTeam, newPattern)
-      this.barrierList = barrier.map(j => {
-        return (j / (this.max ? this.max : this.newCycle) * 100) + '%'
-      })
-      this.barrierList.unshift(0)
-      for (let rings of val) {
-        if (rings.length === 0) continue
-        let list = []
-        for (let ring of rings) {
-          if (ring.value === 0) continue
-          let obj = {}
-          let split = ring.value
-          obj.id = ring.id
-          obj.split = split
-          obj.direction = ring.desc.map(item => { // 虚相位desc为空
-            return {
-              id: item.id,
-              color: '#454545'
-            }
-          })
-          let currPhase = phaseList.filter((item) => {
-            if (item.id === ring.id && item.controltype === 99) {
-              obj.controltype = item.controltype
-            }
-            return item.id === ring.id
-          })[0]
-          if (ring.sum) {
-            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
-            // obj.hideWidth = (ring.sum / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
-          } else {
-            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
-          }
-          obj.redWidth = (currPhase.redclear / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
-          // 忽略相位不显示
-          let mode = ring.mode
-          if (mode !== 7) { // 忽略相位不显示
-            list.push(obj)
-          }
-        }
-        this.pattern.push(list)
-      }
     },
     tranform (arr) { // 分barrier
       let newMap = new Map()
@@ -336,8 +345,14 @@ export default {
             if (n.length === maxNum) {
               pattern.map(h => {
                 h.map(d => {
-                  if (d.id === n.data[1]) {
-                    delete d.sum
+                  if (n.data.length > 1) {
+                    if (d.id === n.data[1]) {
+                      delete d.sum
+                    }
+                  } else {
+                    if (d.id === n.data[0]) {
+                      delete d.sum
+                    }
                   }
                 })
               })

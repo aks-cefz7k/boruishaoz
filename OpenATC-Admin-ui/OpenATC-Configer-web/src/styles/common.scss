@@ -968,6 +968,14 @@ border: 1px solid $--border-color-base;
     max-height:300px;
   }
  }
+ .wenzijiemian {
+   .container-left {
+     margin-top: 0;
+   }
+   .container-right {
+     margin-top: 0;
+   }
+ }
 }
 // 手动控制弹框
 .manual-control-modal{
@@ -1436,9 +1444,6 @@ border: 1px solid $--border-color-base;
   .icon-content {
     width: 100%;
     height: 100%;
-  }
-  .svg-icon[data-v-5d4549d3] {
-      height: 7em;
   }
 }
 // 手动面板
