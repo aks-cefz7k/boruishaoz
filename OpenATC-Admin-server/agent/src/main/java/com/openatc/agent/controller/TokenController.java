@@ -22,6 +22,7 @@ import com.openatc.core.util.RESTRetUtils;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -65,6 +66,7 @@ public class TokenController {
      * @Description: 
      */
     @GetMapping("/findAll")
+    @RequiresPermissions({"sys:auth:role:view"})
     public RESTRetBase findAll() {
         Sort sort = new Sort(Direction.DESC, "id");
         List<TokenModel> list =  tokenDao.findAll(sort);
@@ -77,6 +79,7 @@ public class TokenController {
      * @Description:
      */ 
     @PostMapping("/modify")
+    @RequiresPermissions({"sys:auth:role:view"})
     public RESTRetBase modify(@RequestBody JsonObject jsonObject) {
         Integer id = jsonObject.get("id").getAsInt();
         String description = jsonObject.get("description").getAsString();
@@ -106,6 +109,7 @@ public class TokenController {
      * @Description: 
      */ 
     @DeleteMapping("/deleteById/{id}")
+    @RequiresPermissions({"sys:auth:role:view"})
     public RESTRetBase deleteById (@PathVariable Integer id) {
         TokenModel tokenModel = tokenDao.getOne(id);
         if (tokenModel != null) {
