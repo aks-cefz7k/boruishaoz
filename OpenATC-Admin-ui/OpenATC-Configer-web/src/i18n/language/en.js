@@ -361,7 +361,10 @@ const en = {
       'phase': 'Phase',
       'agentidError': 'Failed to get agentid!',
       'splitCheckMsg': 'The green letter ratio must be greater than the phase transition time or the pedestrian crossing + pedestrian transition time!',
-      'pattern': 'Pattern'
+      'pattern': 'Pattern',
+      'green': 'Green',
+      'yellow': 'Yellow',
+      'red': 'Red'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
@@ -793,6 +796,8 @@ const en = {
     },
     'common': {
       'confirm': 'Confirm',
+      'ringStyle': 'Ring Style',
+      'stageStyle': 'Stage Style',
       'query': 'Query',
       'cancel': 'Cancel',
       'add': 'Add',

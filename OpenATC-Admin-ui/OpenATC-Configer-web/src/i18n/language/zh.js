@@ -359,7 +359,10 @@ const zh = {
       'phase': '相位',
       'agentidError': '获取设备ID失败!',
       'splitCheckMsg': '绿信比需大于相位过渡时间或绿信比需大于行人过街+行人过渡时间!',
-      'pattern': '方案'
+      'pattern': '方案',
+      'green': '绿灯',
+      'yellow': '黄灯',
+      'red': '红灯清空'
     },
     'plan': {
       'tipcontext': '请输入计划名！',
@@ -791,6 +794,8 @@ const zh = {
     },
     'common': {
       'confirm': '确认',
+      'ringStyle': '环配置',
+      'stageStyle': '阶段配置',
       'query': '查询',
       'cancel': '取消',
       'add': '添加',
