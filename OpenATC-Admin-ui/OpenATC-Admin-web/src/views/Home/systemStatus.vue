@@ -33,7 +33,6 @@
           <template slot-scope="scope">
             <el-popover
               placement="bottom"
-              width="200"
               trigger="click">
               <div class="system-status-pop-content">
                 <div class="tittle">{{scope.row.server}}</div>
