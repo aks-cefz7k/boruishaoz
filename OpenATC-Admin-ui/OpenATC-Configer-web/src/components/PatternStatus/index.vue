@@ -259,9 +259,9 @@ export default {
       if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
       if (!this.controlDatas.phase) return
       let cycle = this.controlDatas.cycle
-      let list = []
       for (let rings of this.controlDatas.rings) {
         let phase = this.controlDatas.phase
+        let list = []
         for (let sequ of rings.sequence) {
           let obj = {}
           obj.id = sequ
@@ -288,7 +288,7 @@ export default {
           }
         }
         this.newList.push(list)
-        this.pattern = this.newList
+        this.pattern = [...this.newList]
       }
     },
     handleBarrierHeight () { // 屏障高度
