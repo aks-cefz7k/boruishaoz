@@ -22,4 +22,5 @@ public class Pattern {
     String desc;
     List<List<Split>> rings;
     List<List<Integer>> stages;
+    List<StageForStageMode> stagesList;
 }
