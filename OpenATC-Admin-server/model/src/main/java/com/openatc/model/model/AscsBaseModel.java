@@ -37,4 +37,6 @@ public class AscsBaseModel {
     private String thirdplatformid;
     private int sockettype;
     private String tags;
+    private Integer mode;
+    private Integer control;
 }

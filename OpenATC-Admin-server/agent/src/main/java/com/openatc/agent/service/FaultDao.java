@@ -43,4 +43,6 @@ public interface FaultDao extends JpaRepository<Fault, Long> {
     @Query(value = "update fault set enumerate = ?1, operator = ?2, operation_time = ?3  where m_w_faultid = ?4 and agentid = ?5", nativeQuery = true)
     void updateFault(String enumerate, String operator, Long operationTime, Long faultId, String agentId);
 
+    @Query(value = "select  count (distinct (agentid)) from fault where m_un_fault_renew_time = 0  and delete_flag <> '1' and enumerate  = '0'", nativeQuery = true)
+    int getCurrentFaultDevCount();
 }

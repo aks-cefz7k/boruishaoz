@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.controller.DevController;
 import com.openatc.comm.data.MessageData;
+import com.openatc.model.model.AscsBaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,6 +32,12 @@ public class HistoryDataDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private AscsDao mDao;
+
+    @Autowired
+    FaultDao faultDao;
 
     // 保存历史流量数据
     public int SaveFlowData(MessageData msg){
@@ -91,8 +98,8 @@ public class HistoryDataDao {
         return hdList;
     }
 
-    // 定时清理历史数据
-    @Scheduled(cron = "0 0 2 * * ?")
+    // 定时清理历史数据并统计设备状态数据
+    @Scheduled(cron = "0 0 0 * * ?")
     public void clearHistoryData() {
         logger.warning("Clearing Schedule Start!");
         // 历史方案数据默认保存7天
@@ -111,6 +118,23 @@ public class HistoryDataDao {
         jdbcTemplate.execute(sql);
         logger.warning("Claer Operation Record From DB Finished!");
 
+        // 统计设备在线数
+        List<AscsBaseModel> ascsBaseModels = mDao.getAscs();
+        int online = 0;
+        int offline = 0;
+        for(AscsBaseModel ascsBaseModel : ascsBaseModels){
+            if(ascsBaseModel.getState().equals("UP"))
+                online++;
+            else if(ascsBaseModel.getState().equals("DOWN"))
+                offline++;
+
+        }
+        mDao.statesCollectYesterday.setOnline(online);
+        mDao.statesCollectYesterday.setOnline(offline);
+
+        // 统计设备故障数
+        int fault = faultDao.getCurrentFaultDevCount();
+        mDao.statesCollectYesterday.setOnline(fault);
     }
 
     class HistoryData {

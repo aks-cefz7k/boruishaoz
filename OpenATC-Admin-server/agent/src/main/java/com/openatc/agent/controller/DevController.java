@@ -27,6 +27,7 @@ import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.ControlPattern;
 import com.openatc.model.model.LockDirection;
 import com.openatc.model.service.ManualpanelService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +37,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_8004;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_8009;
 
 @RestController
 @CrossOrigin
 public class DevController {
     private static Logger logger = Logger.getLogger(DevController.class.toString());
+
     @Autowired(required = false)
     AscsDao mDao;
 
@@ -248,5 +251,37 @@ public class DevController {
         }
 
         return restRet;
+    }
+
+    /**
+     * 获取昨日0至24点设备统计状态，只返回管理员的数据
+     * @author: zhangwenchao
+     * @return
+     */
+    @GetMapping(value = { "/devs/statuscollect/yesterday"})
+    public RESTRetBase GetDevsStatuscollectYesterday() {
+        // 管理员列表
+        List<String> adminRoles = new ArrayList<>();
+        adminRoles.add("superadmin");
+        adminRoles.add("admin");
+
+        // 获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        // 未开启shiro
+        if (user == null){
+            // 返回所有设备
+            return RESTRetUtils.successObj(mDao.statesCollectYesterday);
+        }
+        // 获取用户名
+        String user_name = user.getUser_name();
+        List<String> roles = userDao.getRoleNamesByUsername(user_name);
+        adminRoles.retainAll(roles);
+        // 非管理员
+        if (adminRoles.size() == 0){
+            return RESTRetUtils.errorObj(E_8009);
+        }
+        return RESTRetUtils.successObj(mDao.statesCollectYesterday);
+
     }
 }

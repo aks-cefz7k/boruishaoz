@@ -15,9 +15,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.model.StatesCollectYesterday;
 import com.openatc.agent.resmodel.PageOR;
+import com.openatc.agent.utils.RedisTemplateUtil;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.MyGeometry;
+import com.openatc.model.model.StatusPattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,12 +40,13 @@ import java.util.logging.Logger;
 public class AscsDao {
 
     private static Logger logger = Logger.getLogger(AscsDao.class.toString());
+    public static  StatesCollectYesterday statesCollectYesterday = new StatesCollectYesterday();
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private RedisTemplateUtil redisTemplate;
 
     private Map<String, String> thirdidToAgentidOcp = new HashMap<>();
 
@@ -216,7 +220,7 @@ public class AscsDao {
                 String devs_video = "update devs_video set agentid=? where agentid=?";
                 jdbcTemplate.update(devs_video, newAgentid, oldAgentid);
             }
-            redisTemplate.convertAndSend("updateIdMap", "UpdateDev:" + newAgentid);
+            redisTemplate.publish("updateIdMap", "UpdateDev:" + newAgentid);
             initMap();
 
         } catch (Exception e) {
@@ -345,39 +349,45 @@ public class AscsDao {
 
     public List<AscsBaseModel> getDevByPara(String sql)  {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //使用Sqlite数据库时，两个请求同时访问会将数据库锁定，因此添加此处添加一个锁
         List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
         List<AscsBaseModel> abm = new ArrayList<>();
         for (Map map : lvRet) {
-            AscsBaseModel tt = new AscsBaseModel();
-            tt.setId((int) map.get("id"));
-            tt.setThirdplatformid((String) map.get("thirdplatformid"));
-            tt.setPlatform((String) map.get("platform"));
-            tt.setGbid((String) map.get("gbid"));
-            tt.setFirm((String) map.get("firm"));
-            tt.setAgentid((String) map.get("agentid"));
-            tt.setProtocol((String) map.get("protocol"));
-            tt.setType((String) map.get("type"));
-            tt.setDescs((String) map.get("descs"));
-            tt.setStatus((int) map.get("status"));
+            AscsBaseModel ascsBaseModel = new AscsBaseModel();
+            ascsBaseModel.setId((int) map.get("id"));
+            ascsBaseModel.setThirdplatformid((String) map.get("thirdplatformid"));
+            ascsBaseModel.setPlatform((String) map.get("platform"));
+            ascsBaseModel.setGbid((String) map.get("gbid"));
+            ascsBaseModel.setFirm((String) map.get("firm"));
+            ascsBaseModel.setAgentid((String) map.get("agentid"));
+            ascsBaseModel.setProtocol((String) map.get("protocol"));
+            ascsBaseModel.setType((String) map.get("type"));
+            ascsBaseModel.setDescs((String) map.get("descs"));
+            ascsBaseModel.setStatus((int) map.get("status"));
             String geometry = (String) map.get("geometry");
-            tt.setCode((String) map.get("code"));
-            tt.setGeometry(gson.fromJson(geometry, MyGeometry.class));
-            tt.setState((String) map.get("state"));
-            tt.setTags((String) map.get("tags"));
+            ascsBaseModel.setCode((String) map.get("code"));
+            ascsBaseModel.setGeometry(gson.fromJson(geometry, MyGeometry.class));
+            ascsBaseModel.setState((String) map.get("state"));
+            ascsBaseModel.setTags((String) map.get("tags"));
             if (map.get("lastTime") != null) {
                 try {
-                    tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
+                    ascsBaseModel.setLastTime(sdf.parse(map.get("lastTime").toString()));
                 } catch (ParseException e) {
-                    tt.setLastTime(null);
+                    ascsBaseModel.setLastTime(null);
                 }
             }
-            tt.setName((String) map.get("name"));
+            ascsBaseModel.setName((String) map.get("name"));
             JsonObject jsonparam = new JsonParser().parse(map.get("jsonparam").toString()).getAsJsonObject();
-            tt.setJsonparam(jsonparam);
+            ascsBaseModel.setJsonparam(jsonparam);
             Integer integer = (Integer) map.get("sockettype");
-            tt.setSockettype(integer == null ? 0 : integer.intValue());
-            abm.add(tt);
+            ascsBaseModel.setSockettype(integer == null ? 0 : integer.intValue());
+            abm.add(ascsBaseModel);
+            // 从Redis中获取当前控制方式
+            StatusPattern statusPattern = redisTemplate.getStatusPatternFromRedis(ascsBaseModel.getAgentid());
+            if(statusPattern != null){
+                ascsBaseModel.setMode(statusPattern.getMode());
+                ascsBaseModel.setControl(statusPattern.getControl());
+            }
+
         }
         return abm;
     }
@@ -409,7 +419,7 @@ public class AscsDao {
                 ascs.getJsonparam().toString()
                 );
 
-        redisTemplate.convertAndSend("updateIdMap", "UpdateDev:" + ascs.getAgentid());
+        redisTemplate.publish("updateIdMap", "UpdateDev:" + ascs.getAgentid());
         initMap();
         
         return ascs;
@@ -538,7 +548,7 @@ public class AscsDao {
                     ascsModel.getGeometry().toString(),
                     ascsModel.getJsonparam().toString());
 
-            redisTemplate.convertAndSend("updateIdMap", "UpdateDev:" + ascsModel.getAgentid());
+            redisTemplate.publish("updateIdMap", "UpdateDev:" + ascsModel.getAgentid());
         }
         return rows;
     }
@@ -688,4 +698,5 @@ public class AscsDao {
         return ascsBaseModels;
 
     }
+
 }

@@ -15,7 +15,7 @@ import java.lang.management.ManagementFactory;
  */
 @RestController
 @RequestMapping("/info/")
-public class ServerCPU {
+public class ServerController {
 
     /**
      * @param
