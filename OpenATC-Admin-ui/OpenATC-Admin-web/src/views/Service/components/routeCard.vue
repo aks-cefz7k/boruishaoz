@@ -15,12 +15,6 @@
       <span style="vertical-align:middle;">
         <span class="grid-content-label" style="display:inline-block;margin-right:10px;">{{ $t("openatc.dutyroute.currentControl") }} : </span> {{node.currentControlName}}
       </span>
-      <!-- <el-button
-        style="float: right; padding: 3px 0"
-        type="text"
-        icon="el-icon-close"
-        @click.stop="onCloseClick"
-      ></el-button> -->
       <el-button
         v-show="tabName === 'second'"
         style="float: right; padding: 3px 0"
@@ -35,7 +29,7 @@
         </template>
       </el-button>
     </div>
-    <div class="text item">
+    <div class="text item" style="border:0px solid red;height:12px;">
       <el-row :gutter="20">
         <div class="grid-content-label" style="display:inline-block;margin-right:10px;margin-left:10px;">
           {{ $t("openatc.dutyroute.executionway") }} :
