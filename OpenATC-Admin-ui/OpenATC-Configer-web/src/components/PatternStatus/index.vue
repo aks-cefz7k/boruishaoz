@@ -125,6 +125,13 @@ export default {
       // 深度观察监听
       deep: true
     },
+    phaseList: {
+      handler: function (val, oldVal) {
+        this.getPedPhasePos()
+      },
+      // 深度观察监听
+      deep: true
+    },
     patternId: {
       handler: function (val, oldVal) {
         this.patternIds = this.patternId
@@ -161,7 +168,7 @@ export default {
     }
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
-    this.getPedPhasePos()
+    // this.getPedPhasePos()
     this.getIntersectionInfo()
   },
   mounted () {
@@ -237,8 +244,7 @@ export default {
     getPedPhasePos () {
       // 行人相位信息
       this.sidewalkPhaseData = []
-      let phaseList = this.globalParamModel.getParamsByType('phaseList')
-      phaseList.forEach((ele, i) => {
+      this.phaseList.forEach((ele, i) => {
         if (ele.peddirection) {
           ele.peddirection.forEach((dir, index) => {
           // 行人相位
