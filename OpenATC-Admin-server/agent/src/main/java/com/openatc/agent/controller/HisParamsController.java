@@ -147,11 +147,6 @@ public class HisParamsController {
             if (!agentId.equals("")) {
                 predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
             }
-            // 路口id为空
-            else {
-
-            }
-
             // 源地址
             if (!source.equals("")) {
                 predicateList.add(criteriaBuilder.like(root.get("source"), "%" + source + "%"));
