@@ -39,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void saveStatusPatternToRedis(MessageData responseData) {
         String key = "response:status/pattern:" + responseData.getAgentid();
-        int expire = 750;
+        int expire = 720;
         String value = gson.toJson(responseData);
         stringRedisTemplate.opsForValue().set(key,value,expire, TimeUnit.MILLISECONDS);
     }
