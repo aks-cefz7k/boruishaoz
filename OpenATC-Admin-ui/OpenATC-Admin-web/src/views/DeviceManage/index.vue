@@ -357,7 +357,6 @@ export default {
       let _this = this
       let reqData = {
         'agentId': row.agentid,
-        'enumerate': '0',
         'isCurrentFault': true
       }
       GetFaultRange(reqData).then(res => {
@@ -390,7 +389,6 @@ export default {
     ok () {
       DeleteDevice(this.deleteId).then(res => {
         if (!res.data.success) {
-          debugger
           let msg = getMessageByCode(res.data.code, this.$i18n.locale)
           let errorCode = res.data.data.errorCode
           if (errorCode) {
