@@ -158,6 +158,7 @@ const zh = {
     'devicemanager': {
       'devicelist': '路口列表',
       'crossid': '路口ID',
+      'tags': '标签',
       'deviceid': '设备ID',
       'devicename': '路口名称',
       'firm': '厂商',

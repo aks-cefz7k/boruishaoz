@@ -19,15 +19,19 @@
                 <div slot="content">P{{item.id}}:{{item.split}}</div>
                 <div style="cursor:pointer;">
                   <div class="ring-phase">
-                    <xdrdirselector Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
+                    <xdrdirselector  Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
+                  </div>
+                  <div class="box">
+                    <div class="ring-nums">P{{item.id}}</div>
+                    <div class="ring-nums">{{item.split}}</div>
+                  </div>
+                  <div v-for="(image, index) in arrays" :key="index">
+                    <div v-if="item.peddirection.includes(image.id)" :style="{'backgroundImage': `url(${image.img})`, 'border':'0px', 'background-size': '32px','float':'left', 'width': '34px', 'height': '32px', 'background-repeat': 'no-repeat','background-position': 'center'}"></div>
                   </div>
                 </div>
               </el-tooltip>
-              <div class="box">
-                <div class="ring-nums">P{{item.id}}</div>
-                <div class="ring-nums">{{item.split}}</div>
-              </div>
             </div>
+            <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left', 'background':'repeating-linear-gradient(to right, #7CCC66 20%, #ffffff 50%)'}"></div>
             <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
             <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
             <!-- <div class="first-1" v-show="pattern.length > 1" :style="{'padding-right':item.hideWidth,'height':'34px'}"></div> -->
@@ -45,6 +49,7 @@
 <script>
 
 import xdrdirselector from '@/components/XRDDirSelector'
+import { pedimages } from '../../views/phase/utils.js'
 export default {
   name: 'patternstatus',
   components: {
@@ -58,6 +63,7 @@ export default {
       patternIds: this.patternId,
       newPatterns: [],
       newList: [],
+      arrays: [],
       controlDatas: this.controlData,
       max: '',
       pattern: this.patternStatusList
@@ -144,6 +150,7 @@ export default {
       this.handleCurrentChange(this.patternStatusList)
       this.handleBarrierHeight()
     }
+    this.pedimgs()
   },
   mounted () {
   },
@@ -156,6 +163,13 @@ export default {
     }
   },
   methods: {
+    pedimgs () {
+      pedimages.forEach(v => {
+        let obj = Object.assign({}, v)
+        obj.name = this.$t(obj.name)
+        this.arrays.push(obj)
+      })
+    },
     handlePatternData () {
       this.newList = []
       if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
@@ -175,7 +189,9 @@ export default {
           })[0]
           obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
+          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / cycle * 100).toFixed(3) + '%'
+          obj.flashgreen = (currPhase.flashgreen / cycle * 100).toFixed(3) + '%'
+          obj.peddirection = currPhase.peddirection
           obj.split = split
           obj.direction = currPhase.direction.map(item => {
             return {
@@ -250,13 +266,17 @@ export default {
             return item.id === ring.id
           })[0]
           if (ring.sum) {
-            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+            // obj.split = split + ring.sum
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
             // obj.hideWidth = (ring.sum / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           } else {
-            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+            // obj.split = split
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow - currPhase.flashgreen) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           }
+          obj.flashgreen = (currPhase.flashgreen / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           obj.redWidth = (currPhase.redclear / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          obj.peddirection = currPhase.peddirection
           // 忽略相位不显示
           let mode = ring.mode
           if (mode !== 7) { // 忽略相位不显示

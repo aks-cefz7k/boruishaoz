@@ -158,6 +158,7 @@ const en = {
     'devicemanager': {
       'devicelist': 'Intersection',
       'crossid': 'Intersection Id',
+      'tags': 'Tags',
       'deviceid': 'Device Id',
       'devicename': 'Intersection Name',
       'firm': 'Firm',
