@@ -25,11 +25,17 @@
           align="center">
           </el-table-column>
           <el-table-column
+          prop="name"
+          :label="$t('openatc.devicemanager.devicename')"
+          sortable
+          align="center">
+          </el-table-column>
+          <!-- <el-table-column
           prop="agentid"
           :label="$t('openatc.devicemanager.crossid')"
           sortable
           align="center">
-          </el-table-column>
+          </el-table-column> -->
            <el-table-column
           prop="m_wFaultID"
           :label="$t('openatc.faultrecord.faultid')"
