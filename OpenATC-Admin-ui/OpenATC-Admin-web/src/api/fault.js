@@ -16,12 +16,13 @@ export const GetAllCurrentFault = () => {
   return api.Send({}, {}, [])
 }
 
-export const GetUntreated = (pageNum, pageSize, enumerate) => {
+export const GetUntreated = (pageNum, pageSize, enumerate, isCurrentFault) => {
   let api = new Authapi('GetUntreated')
   let param = {
     'pageNum': pageNum,
     'pageRow': pageSize,
-    'enumerate': enumerate
+    'enumerate': enumerate,
+    'isCurrentFault': isCurrentFault
   }
   return api.Send(param, {})
 }

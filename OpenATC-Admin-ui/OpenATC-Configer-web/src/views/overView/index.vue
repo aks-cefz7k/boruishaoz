@@ -200,9 +200,9 @@
                 <div class="cross-content">
                   <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
                   <div style="margin-left: 85px;" v-if="curFaultList.length">
-                    <el-tag type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span></el-tag>
-                    <el-tag>{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span></el-tag>
-                    <el-tag type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span></el-tag>
+                    <el-tag v-if="confirmedFault.length" type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span></el-tag>
+                    <el-tag v-if="untreatedFault.length">{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span></el-tag>
+                    <el-tag v-if="ignoredFault.length" type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span></el-tag>
                     <span class="fault-detail-btn" @click="showFaultDetail">{{$t('edge.overview.details')}} >></span>
                   </div>
                   <div style="margin-left: 85px;" class="cross-value" v-if="!curFaultList.length">{{$t('edge.overview.nofault')}}</div>

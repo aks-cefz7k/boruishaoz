@@ -479,7 +479,7 @@ const en = {
       'greenextension': 'Green Extension',
       'greenreduction': 'Green Reduction',
       'bottleneckinfo': 'Area management info',
-      'isdeletedetector': 'Are you sure delete the detector',
+      'isdeletedetector': 'Are you sure delete ',
       'putTscControlError1': 'Unsupported control pattern',
       'putTscControlError2': 'Control number not exist',
       'putTscControlError3': 'Unsupported control params',
