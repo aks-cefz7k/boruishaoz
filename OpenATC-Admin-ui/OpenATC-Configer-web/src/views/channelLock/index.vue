@@ -39,7 +39,6 @@
             <span>:</span>
           </el-col>
           <el-col :span="10">
-            {{scope.row.startmin}}
           <el-select style="float:left;width:80px" v-model="scope.row.startmin" size="small">
             <el-option
               v-for="item in MinuteOption"
