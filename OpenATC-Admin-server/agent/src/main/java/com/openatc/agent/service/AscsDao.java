@@ -586,7 +586,7 @@ public class AscsDao {
         }
         String tags = jsonObject.get("tags").getAsString();
         if( !tags.isEmpty()){
-            String temp = String.format("tags = '%s'",tags);
+            String temp = String.format("tags like '%%%s%%'",tags);
             whereCondition = addWhereCondition(whereCondition,temp);
         }
         String state = jsonObject.get("state").getAsString();
