@@ -209,6 +209,7 @@ export default {
     getIntersectionInfo (agentid, id) {
       // 获取路口信息
       getIntersectionInfo(agentid).then(res => {
+        this.globalParamModel.setGlobalParams(res.data.data.param)
         this.allPatternList = res.data.data.param.patternList
         this.overlap = res.data.data.param.overlaplList
         this.phaseList = res.data.data.param.phaseList
