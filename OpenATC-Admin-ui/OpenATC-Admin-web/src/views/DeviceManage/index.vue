@@ -204,11 +204,11 @@
           :label="$t('openatc.devicemanager.protocol')"
           align="center">
           </el-table-column>
-          <!-- <el-table-column
+          <el-table-column
             prop="roles"
             :label="$t('openatc.devicemanager.state')"
             align="center">
-              <template slot="header">
+              <!-- <template slot="header">
                 <el-popover
                   placement="bottom"
                   trigger="click">
@@ -223,20 +223,23 @@
                     {{$t('openatc.devicemanager.state')}}<i class="el-icon-caret-bottom state-search"></i>
                   </el-row>
                 </el-popover>
-              </template>
+              </template> -->
               <template  slot-scope="scope">
                 <div>
-                    <el-tag size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
+                  <el-tooltip placement="top-start" effect="light">
+                    <div slot="content">{{$t('openatc.devicemanager.lastupdatetime')}}:{{scope.row.lastTime}}</div>
+                    <el-tag style="cursor:pointer;"  size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
+                  </el-tooltip>
                 </div>
               </template>
-          </el-table-column> -->
-          <el-table-column
+          </el-table-column>
+          <!-- <el-table-column
           prop="lastTime"
           width="150"
           :label="$t('openatc.devicemanager.lastupdatetime')"
           sortable
           align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column :label="$t('openatc.devicemanager.operation')" align="center" width="240">
           <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">{{$t('openatc.common.edit')}}</el-button>
@@ -289,7 +292,7 @@ export default {
   data () {
     return {
       agentid: 0,
-      // stateList: ['UP', 'FAULT', 'DOWN'],
+      stateList: ['UP', 'DOWN'],
       isOnlineChecked: true,
       isFaultChecked: true,
       isOfflineChecked: true,
@@ -464,7 +467,8 @@ export default {
     },
     // onOnlineChange (val) {
     //   this.isOnlineChecked = val
-    //   this.onStateChange()
+    //   this.getDeviceRanges()
+    //   // this.onStateChange()
     // },
     // onFaultChange (val) {
     //   this.isFaultChecked = val
@@ -472,7 +476,8 @@ export default {
     // },
     // onOfflineChange (val) {
     //   this.isOfflineChecked = val
-    //   this.onStateChange()
+    //   this.getDeviceRanges()
+    //   // this.onStateChange()
     // },
     // onStateChange () {
     //   let stateList = []
@@ -487,32 +492,33 @@ export default {
     //   }
     //   this.stateList = stateList
     // },
-    // getTag (row) {
-    //   if (row.state === 'DOWN') {
-    //     return {
-    //       label: this.$t('openatc.devicemanager.offline'),
-    //       type: 'info'
-    //     }
-    //   } else if (row.state === 'FAULT') {
+    // else if (row.state === 'FAULT') {
     //     return {
     //       label: this.$t('openatc.devicemanager.fault'),
     //       type: 'danger'
     //     }
-    //   } else {
-    //     if (row.status === 0) {
-    //       // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
-    //       return {
-    //         label: this.$t('openatc.devicemanager.online'),
-    //         type: 'success'
-    //       }
-    //     } else {
-    //       return {
-    //         label: this.$t('openatc.devicemanager.fault'),
-    //         type: 'danger'
-    //       }
-    //     }
     //   }
-    // },
+    getTag (row) {
+      if (row.state === 'DOWN') {
+        return {
+          label: this.$t('openatc.devicemanager.offline'),
+          type: 'info'
+        }
+      } else {
+        if (row.status === 0) {
+          // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
+          return {
+            label: this.$t('openatc.devicemanager.online'),
+            type: 'success'
+          }
+        } else {
+          // return {
+          //   label: this.$t('openatc.devicemanager.fault'),
+          //   type: 'danger'
+          // }
+        }
+      }
+    },
     getDeviceRanges (row) {
       this.listLoading = true
       let reqData = {
@@ -667,22 +673,26 @@ export default {
       // 获取从首页跳转过来的设备状态过滤参数
       if (this.$route.params.filter !== undefined) {
         let stateFilter = this.$route.params.filter
-        this.states = stateFilter
-        this.getDeviceRanges()
-        // switch (stateFilter) {
-        //   case 'online': this.onOnlineChange(true)
-        //     this.onOfflineChange(false)
-        //     this.onFaultChange(false)
-        //     break
-        //   case 'offline': this.onOfflineChange(true)
-        //     this.onOnlineChange(false)
-        //     this.onFaultChange(false)
-        //     break
-        // case 'fault': this.onFaultChange(true)
-        //   this.onOnlineChange(false)
-        //   this.onOfflineChange(false)
-        //   break
-        // }
+        // this.states = stateFilter
+        // this.getDeviceRanges()
+        switch (stateFilter) {
+          case 'online': this.states = 'UP'
+            this.getDeviceRanges()
+            // this.onOnlineChange(true)
+            // this.onOfflineChange(false)
+            // this.onFaultChange(false)
+            break
+          case 'offline': this.states = 'DOWN'
+            this.getDeviceRanges()
+            // this.onOfflineChange(true)
+            // this.onOnlineChange(false)
+            // this.onFaultChange(false)
+            break
+          // case 'fault': this.onFaultChange(true)
+          //   this.onOnlineChange(false)
+          //   this.onOfflineChange(false)
+          //   break
+        }
       }
     }
   }
