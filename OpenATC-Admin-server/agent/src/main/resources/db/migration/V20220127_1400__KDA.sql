@@ -1,0 +1,1 @@
+ALTER TABLE "pattern" alter  COLUMN  data  type VARCHAR;
