@@ -44,6 +44,7 @@ const zh = {
     'button': {
       'OK': '确定',
       'Cancel': '取消',
+      'close': '关闭',
       'expandall': '全部展开',
       'collapseall': '全部折叠',
       'search': '搜索',

@@ -44,7 +44,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
             <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
-            <el-button type="primary" @click="dialogFormVisible = false">{{$t('openatc.button.OK')}}</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false">{{$t('openatc.button.close')}}</el-button>
         </span>
     </el-dialog>
   </div>

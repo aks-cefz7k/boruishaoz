@@ -44,6 +44,7 @@ const en = {
     'button': {
       'OK': 'OK',
       'Cancel': 'Cancel',
+      'close': 'Close',
       'expandall': 'Expand All',
       'collapseall': 'Collapse All',
       'search': 'Search',
