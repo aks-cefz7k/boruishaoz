@@ -688,6 +688,10 @@
       }
 }
 // GIS页面样式
+.leaflet-container {
+  font-size: 12px;
+  line-height: 1.5;
+}
 .openatc-gis {
   .header {
     position: fixed;
