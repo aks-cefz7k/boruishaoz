@@ -26,7 +26,7 @@
         <el-table-column prop="description" :label="$t('openatc.bottleneckcontrol.detectorname')" align="center"></el-table-column>
         <el-table-column prop="type" :label="$t('openatc.bottleneckcontrol.type')" align="center"></el-table-column>
         <!-- <el-table-column prop="status" :label="$t('openatc.bottleneckcontrol.status')" align="center"></el-table-column> -->
-        <el-table-column :label="$t('openatc.common.operation')" header-align="left" align="left">
+        <el-table-column :label="$t('openatc.common.operation')" align="center">
           <template slot-scope="scope">
             <el-button
               @click.native.prevent="handleEditDetector(scope.row)"

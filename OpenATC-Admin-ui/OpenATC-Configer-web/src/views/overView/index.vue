@@ -702,7 +702,7 @@ export default {
         this.currModel = TscData.control
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
-        this.handlePatternData() // 计算方案状态展示数据
+        // this.handlePatternData() // 计算方案状态展示数据
         // this.getStageStatusData()
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
