@@ -432,6 +432,20 @@ public class AscsDao {
         return count;
     }
 
+    // 查询数据库连接数
+    public int getConnectCount() {
+        String sql = "select count(1) from pg_stat_activity";
+        int count = jdbcTemplate.queryForObject(sql, int.class);
+        return count;
+    }
+
+    // 查询数据库大小
+    public String getDBSize(String db) {
+        String sql = "select pg_size_pretty(pg_database_size( ? ));";
+        String size = jdbcTemplate.queryForObject(sql, String.class, db);
+        return size;
+    }
+
 
     public int updateDev(AscsBaseModel ascs) {
         //判断是否存在
