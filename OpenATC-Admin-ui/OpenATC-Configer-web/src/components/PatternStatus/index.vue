@@ -12,7 +12,8 @@
 <template>
     <div class="main-patternstatus">
       <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
-        <div v-for="(item,index2) in list" :key="index2" :class="cycles && item.direction.length===0?'direction': ''">
+        <!-- <div v-for="(item,index2) in list" :key="index2" :class="cycles && item.controltype===99?'direction': ''"> -->
+        <div v-for="(item,index2) in list" :key="index2" :class="item.controltype===99?'direction': ''">
           <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
               <el-tooltip placement="top-start" effect="light">
                 <div slot="content">P{{item.id}}:{{item.split}}</div>
@@ -167,7 +168,28 @@ export default {
       let patternList = this.globalParamModel.getParamsByType('patternList')
       patternList.map(item => { // 添加特征参数barrier
         if (item.id === this.patternIds) {
-          item.barriers = ringTeam
+          const patternObjs = {}
+          val.forEach(l => {
+            l.map(k => {
+              patternObjs[k.id] = k.value
+            })
+          })
+          let ret = ringTeam.map((y, index) => {
+            y.map(n => {
+              n.length = n.data.length > 1 ? n.data.reduce((pre, cur) => pre + patternObjs[cur], 0) : patternObjs[n.data[0]]
+            })
+            return {
+              barrier: index + 1,
+              length: y[0].length,
+              items: y.map(j => {
+                return {
+                  ring: j.ring,
+                  data: j.data
+                }
+              })
+            }
+          })
+          item.barriers = ret
         }
       })
       this.fillGap(ringTeam, val)
@@ -192,6 +214,9 @@ export default {
             }
           })
           let currPhase = phaseList.filter((item) => {
+            if (item.id === ring.id && item.controltype === 99) {
+              obj.controltype = item.controltype
+            }
             return item.id === ring.id
           })[0]
           if (ring.sum) {

@@ -512,6 +512,12 @@ export default {
       return channellocKinfoList
     },
     onAdd () {
+      if (this.globalParamModel.getParamLength('channellock') >= 24) {
+        this.$message.error(
+          this.$t('edge.channellock.maxlength')
+        )
+        return
+      }
       this.increaseId()
       var channellockInitData = {
         id: this.id,
