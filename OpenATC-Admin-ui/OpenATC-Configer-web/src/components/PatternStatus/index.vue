@@ -249,6 +249,7 @@ export default {
       if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
       if (!this.controlDatas.phase) return
       let cycle = this.controlDatas.cycle
+      if (!this.controlDatas.rings) return
       for (let rings of this.controlDatas.rings) {
         let phase = this.controlDatas.phase
         let list = []
@@ -285,6 +286,7 @@ export default {
       }
     },
     handleBarrierHeight () { // 屏障高度
+      if (!this.pattern) return
       let patternLength = this.pattern.length
       this.barrierHeight = (patternLength * 35 + 21) + 'px'
     },

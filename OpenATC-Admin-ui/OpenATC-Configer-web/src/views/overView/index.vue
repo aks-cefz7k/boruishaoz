@@ -841,7 +841,7 @@ export default {
         // this.handlePatternData() // 计算方案状态展示数据
         this.handleGetPhaseClose()
       }).catch(error => {
-        this.$message.error(error)
+        // this.$message.error(error)
         console.log(error)
       })
     },
