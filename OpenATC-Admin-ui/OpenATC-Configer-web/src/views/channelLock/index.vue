@@ -128,7 +128,7 @@
               <el-option
                 v-for="item in channelstatusList"
                 :key="item.value"
-                :label="$t('edge.channellock.statu' + item.id)"
+                :label="$t('edge.channellock.status' + item.id)"
                 :value="item.value">
               </el-option>
             </el-select>
