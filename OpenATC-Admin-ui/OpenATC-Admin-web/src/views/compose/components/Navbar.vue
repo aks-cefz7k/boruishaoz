@@ -21,14 +21,14 @@
       <el-menu-item index="device" style="display:inline">
         <i class="iconfont icon-shebeiguanli"></i>{{$t('openatc.main.devicemanager')}}
       </el-menu-item>
-      <el-menu-item index="dutyroute" style="display:inline">
-        <i class="iconfont icon-qinwuluxian"></i>{{$t('openatc.main.dutyroute')}}
-      </el-menu-item>
       <el-menu-item index="greenwave" style="display:inline">
         <i class="iconfont icon-jingtailvbo"></i>{{$t('openatc.main.greenwaveoptimize')}}
       </el-menu-item>
       <el-menu-item index="bottleneckcontrol" style="display:inline">
         <i class="iconfont icon-pingjingkongzhi"></i>{{$t('openatc.main.bottleneckcontrol')}}
+      </el-menu-item>
+      <el-menu-item index="dutyroute" style="display:inline">
+        <i class="iconfont icon-qinwuluxian"></i>{{$t('openatc.main.dutyroute')}}
       </el-menu-item>
       <el-menu-item index="gis" style="display:inline" v-if="isShowGisMenu">
         <el-dropdown trigger="click" @command="handleSelect">
