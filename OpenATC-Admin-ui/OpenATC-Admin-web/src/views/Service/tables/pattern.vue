@@ -86,7 +86,7 @@ import xdrdirselector from '@/components/XRDDirSelector'
 import device from './device'
 import { getTheme } from '@/utils/auth'
 import { getTscControl } from '@/api/control'
-import ServiceUtil from '../ServiceUtil.js'
+import ServiceUtil from '../serviceUtil.js'
 export default {
   name: 'patterns',
   components: {
