@@ -98,7 +98,7 @@ import FaultDetailModal from '@/components/FaultDetailModal'
 import PhaseDataModel from '@/views/overView/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 export default {
-  name: 'schemeConfig',
+  name: 'scheme-config',
   components: {
     RealtimeStatusModal,
     ManualControlModal,
@@ -124,7 +124,8 @@ export default {
       default: 0
     },
     agentId: {
-      type: String
+      type: String,
+      default: '0'
     },
     ip: {
       type: String
@@ -551,7 +552,6 @@ export default {
               _this.$message.error(_this.$t('edge.errorTip.devicenotonline'))
               return
             }
-            _this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
           _this.phaseList = res.data.data.phaseList

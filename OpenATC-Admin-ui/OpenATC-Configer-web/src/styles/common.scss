@@ -699,69 +699,7 @@ border: 1px solid $--border-color-base;
     position: relative;
     overflow-x: auto;
   }
-  .crossDirection-display {
-    // height: 650px;
-    // transform-origin: center top;
-    padding-top: 30px;
-  }
-  .changeWidth {
-    width: 98% !important;
-  }
-  .changePaddingBottom {
-    padding-bottom: 30px;
-  }
-  /*当屏幕小于等于1680px的屏幕样式*/
-  @media only screen and (max-width: 1680px){
-    .crossDirection-display{
-      // transform: scale(0.9);
-      zoom: 0.9;
-      
-    }
-    .centerText .text {
-      font-size: 14px;
-    }
-   }
-  /*当屏幕小于等于1440px的屏幕样式*/
-  @media only screen and (max-width: 1440px){
-    .crossDirection-display{
-      // transform: scale(0.8);
-      zoom: 0.8;
-      
-    }
-    .centerText .text {
-      font-size: 18px;
-    }
-   }
-   /*当屏幕小于等于1280px的屏幕样式*/
-  @media only screen and (max-width: 1280px){
-    .crossDirection-display{
-      // transform: scale(0.65);
-      zoom: 0.65;
-    }
-    .centerText .text {
-      font-size: 20px;
-    }
-   }
-   /*当屏幕小于等于960px的屏幕样式*/
-  @media only screen and (max-width: 960px){
-    .crossDirection-display{
-      // transform: scale(0.5);
-      zoom: 0.5;
-    }
-    .centerText .text {
-      font-size: 14px;
-    }
-   }
-    /*当屏幕小于等于720px的屏幕样式*/
-  @media only screen and (max-width: 720px){
-    .crossDirection-display{
-      // transform: scale(0.45);
-      zoom: 0.45;
-    }
-    .centerText .text {
-      font-size: 14px;
-    }
-   }
+
   .pattern-status {
     height: 200px;
     margin-left: 20px;
@@ -838,50 +776,6 @@ border: 1px solid $--border-color-base;
       letter-spacing: 0px;
     }
   }
-  
-// 小屏幕打开首页适配样式
-  .minifont {
-    font-size: 12px;
-    .cross-mess {
-      font-size: 16px;
-    }
-    .cross-value {
-      font-size: 12px;
-    }
-    .pattern-message {
-      font-size: 12px;
-    }
-  }
- .superlargeCrossImg {
-  //  transform: scale(0.9);
-   zoom: 0.9;
-   
- }
- .largeCrossImg {
-  //  transform: scale(0.8);
-   zoom: 0.8;
-   
- }
- .middleCrossImg {
-  //  transform: scale(0.65);
-  zoom: 0.65;
- }
- .smallCrossImg {
-  //  transform: scale(0.5);
-   zoom: 0.5;
- }
- .miniCrossImg {
-  //  transform: scale(0.45);
-   zoom: 0.45;
- }
- .superminiCrossImg {
-  //  transform: scale(0.35);
-   zoom: 0.35;
- }
- .minimumCrossImg {
-  //  transform: scale(0.25);
-   zoom: 0.25;
- }
  .jsontextarea {
   textarea {
     min-height: 200px !important;
@@ -896,6 +790,149 @@ border: 1px solid $--border-color-base;
      margin-top: 0;
    }
  }
+}
+
+// 路口图组件
+.intersection-map {
+  .crossDirection-display {
+    // height: 650px;
+    // transform-origin: center top;
+    padding-top: 30px;
+  }
+  .changeWidth {
+    width: 98% !important;
+  }
+  .changePaddingBottom {
+    padding-bottom: 30px;
+  }
+  /*当屏幕小于等于1680px的屏幕样式*/
+  @media only screen and (max-width: 1680px){
+    .crossDirection-display{
+      // transform: scale(0.9);
+      zoom: 0.9;
+      
+    }
+    .centerText .text {
+      font-size: 14px;
+    }
+   }
+  /*当屏幕小于等于1440px的屏幕样式*/
+  @media only screen and (max-width: 1440px){
+    .crossDirection-display{
+      // transform: scale(0.8);
+      zoom: 0.8;
+      
+    }
+    .centerText .text {
+      font-size: 18px;
+    }
+   }
+   /*当屏幕小于等于1280px的屏幕样式*/
+  @media only screen and (max-width: 1280px){
+    .crossDirection-display{
+      // transform: scale(0.65);
+      zoom: 0.65;
+    }
+    .centerText .text {
+      font-size: 20px;
+    }
+   }
+   /*当屏幕小于等于960px的屏幕样式*/
+  @media only screen and (max-width: 960px){
+    .crossDirection-display{
+      // transform: scale(0.5);
+      zoom: 0.5;
+    }
+    .centerText .text {
+      font-size: 14px;
+    }
+   }
+    /*当屏幕小于等于720px的屏幕样式*/
+  @media only screen and (max-width: 720px){
+    .crossDirection-display{
+      // transform: scale(0.45);
+      zoom: 0.45;
+    }
+    .centerText .text {
+      font-size: 14px;
+    }
+   }
+  // 小屏幕打开首页适配样式
+  .minifont {
+    font-size: 12px;
+    .cross-mess {
+      font-size: 16px;
+    }
+    .cross-value {
+      font-size: 12px;
+    }
+    .pattern-message {
+      font-size: 12px;
+    }
+  }
+  .superlargeCrossImg {
+  //  transform: scale(0.9);
+   zoom: 1;
+  
+  }
+  .largeCrossImg {
+  //  transform: scale(0.8);
+   zoom: 0.9;
+  
+  }
+  .middleCrossImg {
+  //  transform: scale(0.65);
+  // zoom: 0.65;
+  zoom: 0.8;
+  }
+  .smallCrossImg {
+  //  transform: scale(0.5);
+  //  zoom: 0.5;
+  zoom: 0.65;
+  }
+  .miniCrossImg {
+  //  transform: scale(0.45);
+  //  zoom: 0.45;
+   zoom: 0.5;
+  }
+  .superminiCrossImg {
+  //  transform: scale(0.35);
+  //  zoom: 0.35;
+    zoom: 0.45;
+  }
+  .minimumCrossImg {
+  //  transform: scale(0.25);
+  //  zoom: 0.25;
+    zoom: 0.35;
+  }
+  .transMiddleCrossImg {
+  // -webkit-transform-origin-y: 0;
+  //  transform: scale(0.55);
+  //  margin-top: 3%;
+   padding: 0PX;
+   zoom: 0.24;
+  }
+  .transMiddleCrossImg2 {
+  // -webkit-transform-origin-y: 0;
+  //  transform: scale(0.38);
+  //  margin-top: -1.5%;
+   padding: 0PX;
+   zoom: 0.2;
+  }
+  .transMiddleCrossImg3 {
+  // -webkit-transform-origin-y: 0;
+  //  transform: scale(0.32);
+  //  margin-top: -1%;
+   padding: 0PX;
+   zoom: 0.18;
+  }
+  .transMiniCrossImg {
+  // -webkit-transform-origin-y: 0;
+  //  transform: scale(0.28);
+  //  margin-top: -1.6%;
+   padding: 0PX;
+   zoom: 0.16;
+  }
 }
 
 // 方案配置面板
