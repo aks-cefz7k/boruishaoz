@@ -691,7 +691,11 @@ const zh = {
       'subject': '主体标时',
       'object': '客体标时',
       'operationresults': '操作结果',
-      'uploaddailyrecord': '上载日志'
+      'uploaddailyrecord': '上载日志',
+      'success': '成功',
+      'fault': '失败',
+      'user': '用户操作',
+      'system': '系统操作'
     },
     'control': {
       'mode': '模式:',

@@ -38,6 +38,7 @@
         </el-table-column>
         <el-table-column
         prop="subject"
+        :formatter="formatterSubject"
         :label="$t('edge.dailyrecord.subject')"
         align="center">
         </el-table-column>
@@ -47,6 +48,7 @@
         align="center">
         </el-table-column>
         <el-table-column
+        :formatter="formatterStatus"
         prop="status"
         :label="$t('edge.dailyrecord.operationresults')"
         align="center">
@@ -59,6 +61,7 @@
 <script>
 import { getDailyRecord } from '@/api/param'
 import { getMessageByCode } from '@/utils/responseMessage'
+import { formatStatus, formatSubject } from '@/utils/fault.js'
 export default {
   name: 'dailyRecord',
   components: {},
@@ -84,6 +87,18 @@ export default {
     }
   },
   methods: {
+    formatterStatus (row) {
+      return formatStatus(row)
+    },
+    formatterSubject (row) {
+      return formatSubject(row)
+    },
+    // formatterInfotype (row) {
+    //   return formatInfotype(row)
+    // },
+    // formatterObject (row) {
+    //   return formatObject(row)
+    // },
     getAllDailyRecord () {
       this.lockScreen()
       this.dataTimeoutTimer = setTimeout(() => {

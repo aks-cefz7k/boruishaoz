@@ -190,6 +190,46 @@ export function formatSubFaultType (dev) {
   }
   return res
 }
+export function formatStatus (dev) {
+  let wSubFaultType = dev.status
+  let res = ''
+  if (wSubFaultType === 0) {
+    res = i18n.t('edge.dailyrecord.fault')
+  } else if (wSubFaultType === 1) {
+    res = i18n.t('edge.dailyrecord.success')
+  }
+  return res
+}
+export function formatSubject (dev) {
+  let wSubFaultType = dev.subject
+  let res = ''
+  if (wSubFaultType === 0) {
+    res = i18n.t('edge.dailyrecord.user')
+  } else if (wSubFaultType === 1) {
+    res = i18n.t('edge.dailyrecord.system')
+  }
+  return res
+}
+// export function formatObject (dev) {
+//   let wSubFaultType = dev.subject
+//   let res = ''
+//   if (wSubFaultType === 0) {
+//     res = i18n.t('edge.dailyrecord.user')
+//   } else if (wSubFaultType === 1) {
+//     res = i18n.t('edge.dailyrecord.system')
+//   }
+//   return res
+// }
+// export function formatInfotype (dev) {
+//   let wSubFaultType = dev.subject
+//   let res = ''
+//   if (wSubFaultType === 0) {
+//     res = i18n.t('edge.dailyrecord.user')
+//   } else if (wSubFaultType === 1) {
+//     res = i18n.t('edge.dailyrecord.system')
+//   }
+//   return res
+// }
 export function formatFaultLevel (dev) {
   let byFaultLevel = dev.m_byFaultLevel
   let res = ''

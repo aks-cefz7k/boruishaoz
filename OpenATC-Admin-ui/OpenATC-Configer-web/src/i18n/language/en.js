@@ -693,7 +693,11 @@ const en = {
       'subject': 'Subject',
       'object': 'Object',
       'operationresults': 'Operation Result',
-      'uploaddailyrecord': 'Upload Dailyrecord'
+      'uploaddailyrecord': 'Upload Dailyrecord',
+      'success': 'Success',
+      'fault': 'Fault',
+      'user': 'User Action',
+      'system': 'System Operation'
     },
     'control': {
       'mode': 'Mode:',
