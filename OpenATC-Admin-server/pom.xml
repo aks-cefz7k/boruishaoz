@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>8</java.version>
-        <com.openatc.admin.version>2.0.4-snapshot</com.openatc.admin.version>
+        <com.openatc.admin.version>2.0.5-snapshot</com.openatc.admin.version>
     </properties>
 
     <repositories>
