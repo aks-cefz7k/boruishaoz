@@ -551,7 +551,7 @@ export default {
               _this.$message.error(_this.$t('edge.errorTip.devicenotonline'))
               return
             }
-            _this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            _this.$message.error(getMessageByCode(data.data.code, _this.$i18n.locale))
             return
           }
           _this.phaseList = res.data.data.phaseList

@@ -235,7 +235,7 @@ const en = {
       'closeOption1': 'close',
       'closeOption2': 'only vehicle close',
       'closeOption3': 'only pedestrian close',
-      'lockingOption0': 'unlock',
+      'lockingOption0': 'recovery',
       'lockingOption1': 'locking',
       'lockingOption2': 'only vehicle locking',
       'lockingOption3': 'only pedestrian locking',
