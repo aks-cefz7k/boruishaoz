@@ -211,6 +211,7 @@ const zh = {
       'deviceNotNull': '设备ID不能为空！',
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
       'thirdplatformid': '第三方ID',
+      'thirdPlatform': '第三方平台',
       'timeSpaceGraph': '实时时距图',
       'keyintersection': '关键路口：',
       'sockettype': '通讯类型',

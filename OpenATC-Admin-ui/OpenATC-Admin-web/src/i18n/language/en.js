@@ -211,6 +211,7 @@ const en = {
       'deviceNotNull': 'Device ID cannot be empty!',
       'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
       'thirdplatformid': 'Third party ID',
+      'thirdPlatform': 'Third Platform',
       'timeSpaceGraph': 'Time space graph',
       'keyintersection': 'Key Intersection：',
       'sockettype': 'Socket Type',

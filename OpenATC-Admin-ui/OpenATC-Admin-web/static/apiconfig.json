@@ -85,6 +85,21 @@
     "method": "post"
   },
   {
+    "key": "getDictByTag",
+    "url": "/dict",
+    "method": "get"
+  },
+  {
+    "key": "updateDict",
+    "url": "/dict",
+    "method": "post"
+  },
+  {
+    "key": "deleteDict",
+    "url": "/dict",
+    "method": "delete"
+  },
+  {
     "key": "getDeviceByIds",
     "url": "/devs/list",
     "method": "post"
