@@ -132,7 +132,6 @@
         :title="$t('openatc.faultrecord.faultlist')"
         :visible.sync="drawer"
         :modal="false"
-        :wrapperClosable="false"
         :with-header="true">
         <!-- <span> -->
           <div class="empty" v-show="faultData.length === 0">
