@@ -189,6 +189,9 @@ export default {
             item.currentControlName = this.getControlName(item.currentControl)
             let controlName = this.getControlName(item.control)
             item.controlName = controlName
+            if (!item.terminalname && item.terminal > 0) {
+              item.terminalname = this.$t('openatc.greenwaveoptimize.pattern') + item.terminal
+            }
             // for (let dev of this.devicesData) {
             //   if (item.agentid === dev.agentid) {
             //     item.stateName = dev.state
