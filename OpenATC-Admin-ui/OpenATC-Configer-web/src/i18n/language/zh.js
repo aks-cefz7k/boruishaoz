@@ -539,7 +539,7 @@ const zh = {
       'staticWeight': '静态权重',
       'phaseStaticFactor': '相位静态因子',
       'createPatternFirst': '请先创建方案',
-      'gratterThanOne': '数值之和不能大于1'
+      'gratterThanHundred': '数值之和不能大于100'
     },
     'controlpanel': {
       'controlmode': '控制模式',
