@@ -70,7 +70,7 @@
                 :ignoredFault="ignoredFault"
                 :untreatedFault="untreatedFault"
                 :currentStage="currentStage"
-                :closePhas="closePhase"
+                :closePhase="closePhase"
                 :agentName="agentName"
                 :devStatus="devStatus"
                 :agentId="agentId"
@@ -97,8 +97,9 @@ import { GetAllFaultRange } from '@/api/fault'
 import FaultDetailModal from '@/components/FaultDetailModal'
 import PhaseDataModel from '@/views/overView/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
+import { setToken } from '@/utils/auth'
 export default {
-  name: 'schemeConfig',
+  name: 'scheme-config',
   components: {
     RealtimeStatusModal,
     ManualControlModal,
@@ -124,7 +125,8 @@ export default {
       default: 0
     },
     agentId: {
-      type: String
+      type: String,
+      default: '0'
     },
     ip: {
       type: String
@@ -135,6 +137,10 @@ export default {
     realtimeStatusModalvisible: {
       type: Boolean,
       default: true
+    },
+    Token: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -261,6 +267,11 @@ export default {
       },
       // 深度观察监听
       deep: true
+    },
+    Token: {
+      handler: function (val) {
+        this.setPropsToken(val)
+      }
     }
   },
   created () {
@@ -271,6 +282,7 @@ export default {
     }
   },
   async mounted () {
+    this.setPropsToken(this.Token)
     await this.getPhase()
     this.getFault()
     this.initData()
@@ -537,7 +549,6 @@ export default {
         }
       }).catch(error => {
         that.unlockScreen()
-        that.$message.error(error)
         console.log(error)
       })
     },
@@ -551,7 +562,7 @@ export default {
               _this.$message.error(_this.$t('edge.errorTip.devicenotonline'))
               return
             }
-            _this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            _this.$message.error(getMessageByCode(data.data.code, _this.$i18n.locale))
             return
           }
           _this.phaseList = res.data.data.phaseList
@@ -572,7 +583,7 @@ export default {
           }
         })
         // 相位关断标签
-        this.closePhase = []
+        let closePhase = []
         this.crossStatusData.phase.forEach(phase => {
           if (phase.close !== undefined && phase.close !== 0) {
             let typename
@@ -585,12 +596,13 @@ export default {
                 break
               default:typename = ''
             }
-            this.closePhase.push({
+            closePhase.push({
               id: phase.id,
               typename: typename
             })
           }
         })
+        this.closePhase = JSON.parse(JSON.stringify(closePhase))
       }
     },
     selectSpecialModel (id) {
@@ -621,14 +633,22 @@ export default {
       this.lockScreen()
       putTscControl(controldata).then(data => {
         this.unlockScreen()
+        let success = 0
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
+        }
+        if (data.data.data && data.data.data.data) {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            this.$message.error(this.$t(errormsg))
+            return
+          }
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
       }).catch(error => {
         this.unlockScreen()
-        this.$message.error(error)
         console.log(error)
       })
     },
@@ -701,6 +721,12 @@ export default {
     },
     showFaultDetail () {
       this.$refs.faultDetail.onViewFaultClick()
+    },
+    setPropsToken (token) {
+      // 获取组件外传入的token，便于独立组件调用接口
+      if (token && token !== '') {
+        setToken(token)
+      }
     }
   },
   destroyed () {

@@ -235,7 +235,7 @@ const zh = {
       'closeOption1': '关断',
       'closeOption2': '仅机动车关断',
       'closeOption3': '仅行人关断',
-      'lockingOption0': '解锁',
+      'lockingOption0': '恢复',
       'lockingOption1': '锁定',
       'lockingOption2': '仅机动车锁定',
       'lockingOption3': '仅行人锁定',

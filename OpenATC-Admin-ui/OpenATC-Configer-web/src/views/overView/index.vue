@@ -24,16 +24,12 @@
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
         <div class="tuxing-left" :class="{'changeWidth': graphicMode}" ref="tuxingLeft">
-          <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
-            'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
-            'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
-            'smallCrossImg': curBodyWidth <= 960 && curBodyWidth > 720,
-            'miniCrossImg': curBodyWidth <= 720 && curBodyWidth > 650,
-            'superminiCrossImg': curBodyWidth <= 650 && curBodyWidth > 350,
-            'minimumCrossImg': curBodyWidth <= 350,
-            'changePaddingBottom': graphicMode }">
-            <CrossDiagram v-if="reset" :crossStatusData="crossStatusData" :agentId="agentId" :devStatus="devStatus"/>
-          </div>
+          <IntersectionMap
+              ref="intersectionMap"
+              :crossStatusData="crossStatusData"
+              :devStatus="devStatus"
+              :agentId="agentId"
+              :graphicMode="graphicMode" />
           <div class="pattern-status" v-if="!graphicMode">
             <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.patternoffset')}}: {{controlData.patternoffset}} {{$t('edge.overview.coordinationtime')}}: {{controlData.offset}})</div>
@@ -92,6 +88,7 @@ import PhaseDataModel from '@/views/overView/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import RightPanel from '@/components/SchemeConfig'
 import TextPage from './textPage/index'
+import IntersectionMap from '@/components/IntersectionMap'
 export default {
   name: 'overview',
   components: {
@@ -100,7 +97,8 @@ export default {
     BoardCard,
     RightPanel,
     OverLap,
-    TextPage
+    TextPage,
+    IntersectionMap
   },
   data () {
     return {
@@ -156,7 +154,6 @@ export default {
           }
           this.agentId = this.$route.query.agentid
           setIframdevid(this.agentId)
-          this.resetCrossDiagram()
           this.getPlatform()
           this.$refs.rightpanel.getFaultById()
         }
@@ -180,7 +177,6 @@ export default {
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
       this.agentId = this.$route.query.agentid
       setIframdevid(this.agentId)
-      this.resetCrossDiagram()
       this.registerMessage() // 注册消息
     } else {
       this.queryDevParams() // 查询设备信息
@@ -494,12 +490,6 @@ export default {
     reconnectionDev () {
       this.registerMessage()
     },
-    resetCrossDiagram () {
-      this.reset = false
-      this.$nextTick(() => {
-        this.reset = true
-      })
-    },
     queryDevParams () {
       queryDevice().then(res => {
         if (!res.data.success) {
@@ -515,7 +505,7 @@ export default {
           this.agentName = res.data.data.name
         }
         this.platform = res.data.data.platform
-        this.resetCrossDiagram()
+        this.$refs.intersectionMap.resetCrossDiagram()
         this.registerMessage() // 注册消息
       })
     },
