@@ -78,7 +78,19 @@
           <span v-if="!isModify">{{scope.row.controltime}}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('openatc.common.operation')" header-align="center" width="90" align="center">
+      <el-table-column prop="state" :formatter="formatState" :label="$t('openatc.bottleneckcontrol.executeresults')" v-if="!isModify" align="center"></el-table-column>
+      <el-table-column :label="$t('openatc.bottleneckcontrol.executerestatus')" v-if="!isModify" align="center">
+        <template slot-scope="scope">
+          <div v-if="scope.row.statedata !== undefined">
+            <el-tooltip v-if="scope.row.statedata.control !== 20 && scope.row.statedata.control !== 100" class="item" effect="dark"
+              :content="scope.row.statedata.control > -1 ? $t('edge.overview.modelList' + scope.row.statedata.control) : $t('openatc.bottleneckcontrol.unknow')" placement="bottom">
+              <el-tag size="medium" effect="plain" :type="formatCode(scope.row.statedata.control).type">{{ formatCode(scope.row.statedata.control).label }}</el-tag>
+            </el-tooltip>
+            <el-tag v-if="scope.row.statedata.control === 20 || scope.row.statedata.control === 100" size="medium" effect="plain" :type="formatCode(scope.row.statedata.control).type">{{ formatCode(scope.row.statedata.control).label }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="isModify" :label="$t('openatc.common.operation')" header-align="center" width="90" align="center">
         <template slot-scope="scope">
           <el-button
             @click.native.prevent="handleDelete(scope.row.intersectionid)"
@@ -89,15 +101,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="btngroup-footer">
+    <div class="btngroup-footer" v-show="isModify">
       <el-button
         type="primary"
         @click="onSubmit"
         size="small"
         style="margin-left: 10px;"
-        :disabled="!isModify"
       >{{$t('openatc.button.submit')}}</el-button>
-      <el-button type="primary" @click="onAdd" size="small" :disabled="!isModify">{{$t('openatc.common.add')}}</el-button>
+      <el-button type="primary" @click="onAdd" size="small">{{$t('openatc.common.add')}}</el-button>
     </div>
     <el-drawer
       ref="addDrawer"
@@ -148,6 +159,15 @@ export default {
         })
       },
       deep: true
+    },
+    'curDetectorDevs.overflows': {
+      handler: function (devs) {
+        if (!devs) return
+        if (this.isModify) return
+        this.refreshData()
+      },
+      deep: true,
+      immediate: true
     }
   },
   data () {
@@ -180,7 +200,11 @@ export default {
           value: '2'
         }
       ],
-      controlTypeMap: new Map([['1', this.$t('openatc.bottleneckcontrol.greenextension')], ['2', this.$t('openatc.bottleneckcontrol.greenreduction')]])
+      controlTypeMap: new Map([['1', this.$t('openatc.bottleneckcontrol.greenextension')], ['2', this.$t('openatc.bottleneckcontrol.greenreduction')]]),
+      statusMap: new Map([['0', this.$t('openatc.bottleneckcontrol.controlfailed')],
+        ['1', this.$t('openatc.bottleneckcontrol.controlsuccess')],
+        ['2', this.$t('openatc.bottleneckcontrol.recoveryfailed')],
+        ['3', this.$t('openatc.bottleneckcontrol.recoverysuccess')]])
     }
   },
   computed: {
@@ -197,7 +221,24 @@ export default {
         }
       })
     },
+    isHasExecutingCross () {
+      // 判断是否有正在执行的路口
+      let isHasExecute = false
+      let areaOverflows = JSON.parse(JSON.stringify(this.curDetectorDevs.overflows))
+      if (areaOverflows && areaOverflows.length) {
+        areaOverflows.forEach(cross => {
+          if (cross.statedata && cross.statedata.state === 1) {
+            isHasExecute = true
+          }
+        })
+      }
+      return isHasExecute
+    },
     onSubmit () {
+      if (this.isHasExecutingCross()) {
+        this.$message.error(this.$t('openatc.bottleneckcontrol.hasexecutecross'))
+        return
+      }
       if (this.checkRules(this.deviceList)) {
         // 检验方案和相位是否为空
         return
@@ -326,22 +367,46 @@ export default {
         }
       }
       return false
-    }
-  },
-  mounted () {
-    if (!this.curDetectorDevs) return
-    this.deviceList = JSON.parse(
-      JSON.stringify(this.curDetectorDevs.overflows)
-    ).map(ele => ({
-      ...ele,
-      phasedesc:
+    },
+    refreshData () {
+      if (!this.curDetectorDevs) return
+      if (!this.curDetectorDevs.overflows || !this.curDetectorDevs.overflows.length) return
+      this.deviceList = JSON.parse(
+        JSON.stringify(this.curDetectorDevs.overflows)
+      ).map(ele => ({
+        ...ele,
+        phasedesc:
         !ele.description &&
         typeof ele.description !== 'undefined' &&
         ele.description !== 0
           ? ''
           : this.$t('openatc.bottleneckcontrol.phase') + ele.phaseid + ' ' + this.getPhaseName(ele.description).name,
-      phaseoptions: []
-    }))
+        phaseoptions: []
+      }))
+    },
+    formatState (row, column, cellValue, index) {
+      return this.statusMap.get(String(cellValue))
+    },
+    formatCode (control) {
+      if (control === 20 || control === 100) {
+        return {
+          label: this.$t('openatc.bottleneckcontrol.executed'),
+          type: 'success'
+        }
+      } else if (control === 13) {
+        return {
+          label: this.$t('openatc.bottleneckcontrol.intransition')
+        }
+      } else {
+        return {
+          label: this.$t('openatc.bottleneckcontrol.unexecuted'),
+          type: 'danger'
+        }
+      }
+    }
+  },
+  mounted () {
+    this.refreshData()
   },
   destroyed () {}
 }

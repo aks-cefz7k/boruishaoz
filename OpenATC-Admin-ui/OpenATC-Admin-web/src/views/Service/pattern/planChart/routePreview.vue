@@ -15,9 +15,6 @@
           size="large"
           @click.native="onStepClick(index)"
         >
-          <div class="resttime">
-            {{ $t("openatc.greenwaveoptimize.device") }}{{ step.agentid }}
-          </div>
           <div v-show="tabName === 'second'">
             <el-tag type="info" class="tag" v-show="step.state === 0">{{
               $t("openatc.dutyroute.notonduty")

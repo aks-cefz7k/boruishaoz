@@ -25,8 +25,8 @@
         <!-- <el-table-column prop="id" :label="$t('openatc.bottleneckcontrol.detectorid')" width="120" align="center"></el-table-column> -->
         <el-table-column prop="description" :label="$t('openatc.bottleneckcontrol.detectorname')" align="center"></el-table-column>
         <el-table-column prop="type" :label="$t('openatc.bottleneckcontrol.type')" align="center"></el-table-column>
-        <el-table-column prop="status" :label="$t('openatc.bottleneckcontrol.status')" align="center"></el-table-column>
-        <el-table-column :label="$t('openatc.common.operation')" header-align="left" width="200" align="left">
+        <!-- <el-table-column prop="status" :label="$t('openatc.bottleneckcontrol.status')" align="center"></el-table-column> -->
+        <el-table-column :label="$t('openatc.common.operation')" header-align="left" align="left">
           <template slot-scope="scope">
             <el-button
               @click.native.prevent="handleEditDetector(scope.row)"
@@ -180,11 +180,13 @@ export default {
                 this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
               }
-              success = data.data.data.data.success
-              if (success !== 0) {
-                let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
-                this.$message.error(this.$t(errormsg))
-                return
+              if (data.data.data && data.data.data.data) {
+                success = data.data.data.data.success
+                if (success !== 0) {
+                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  this.$message.error(this.$t(errormsg))
+                  return
+                }
               }
               this.$message({
                 type: 'success',
@@ -219,11 +221,13 @@ export default {
                 this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
               }
-              success = data.data.data.data.success
-              if (success !== 0) {
-                let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
-                this.$message.error(this.$t(errormsg))
-                return
+              if (data.data.data && data.data.data.data) {
+                success = data.data.data.data.success
+                if (success !== 0) {
+                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  this.$message.error(this.$t(errormsg))
+                  return
+                }
               }
               this.$message({
                 type: 'success',

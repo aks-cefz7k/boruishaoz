@@ -141,7 +141,8 @@
             <BoardCard
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
-            :patternStatusList="patternStatusList"
+            :controlData="controlData"
+            :phaseList="phaseList"
             :isPhase="true"
               >
             </BoardCard>
@@ -435,7 +436,7 @@ export default {
       tempDelay: 0, // 控制方式手动操作的情况下的延迟时间的临时值。
       tempDuration: 0, // 控制方式手动操作的情况下的持续时间的临时值。
       phaseList: [], // 当前相位集合
-      patternStatusList: [], // 显示方案状态的相关数据集合
+      // patternStatusList: [], // 显示方案状态的相关数据集合
       stageStatusList: [], // 实时阶段状态的相关数据集合
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
@@ -1015,11 +1016,13 @@ export default {
           that.$message.error(getMessageByCode(data.data.code, that.$i18n.locale))
           return
         }
-        success = data.data.data.data.success
-        if (success !== 0) {
-          let errormsg = 'edge.overview.putTscControlError' + success
-          that.$message.error(this.$t(errormsg))
-          return
+        if (data.data.data && data.data.data.data) {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            that.$message.error(this.$t(errormsg))
+            return
+          }
         }
         // this.closeManualModal()
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
@@ -1094,98 +1097,6 @@ export default {
         this.phaseList = res.data.data.phaseList
       })
     },
-    handlePatternData () {
-      this.patternStatusList = []
-      this.barrierList = []
-      if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
-      if (!this.controlData.phase) return
-      let cycle = this.controlData.cycle
-      for (let rings of this.controlData.rings) {
-        let list = []
-        let phase = this.controlData.phase
-        for (let sequ of rings.sequence) {
-          let obj = {}
-          obj.id = sequ
-          let split = phase.filter((item) => {
-            return item.id === sequ
-          })[0].split
-          let currPhase = this.phaseList.filter((item) => {
-            return item.id === sequ
-          })[0]
-          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          obj.split = split
-          obj.direction = currPhase.direction.map(item => {
-            return {
-              id: item,
-              color: '#454545'
-            }
-          })
-          list.push(obj)
-        }
-        this.patternStatusList.push(list)
-      }
-      // this.handleBarrier(this.patternStatusList, this.phaseList)
-    },
-    // getStageStatusData () {
-    //   this.stageStatusList = []
-    //   this.barrierList = []
-    //   if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
-    //   if (!this.controlData.phase) return
-    //   let cycle = this.controlData.cycle
-    //   // console.log(this.controlData)
-    //   for (let rings of this.controlData.rings) {
-    //     let list = []
-    //     let phase = this.controlData.phase
-    //     for (let sequ of rings.sequence) {
-    //       let obj = {}
-    //       obj.id = sequ
-    //       let split = phase.filter((item) => {
-    //         return item.id === sequ
-    //       })[0].split
-    //       let currPhase = this.phaseList.filter((item) => {
-    //         return item.id === sequ
-    //       })[0]
-    //       obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-    //       obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-    //       obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-    //       obj.split = split
-    //       obj.direction = currPhase.direction.map(item => {
-    //         return {
-    //           id: item,
-    //           color: '#454545'
-    //         }
-    //       })
-    //       list.push(obj)
-    //     }
-    //     this.stageStatusList.push(list)
-    //   }
-    // },
-    // handleBarrier (patternStatusList, phaseList) {
-    //   if (patternStatusList.length < 2) return
-    //   let tempList = []
-    //   let barrierWidth = 0
-    //   let firstPatternStatus = patternStatusList[0]
-    //   for (let patternStatus of firstPatternStatus) {
-    //     let concurrent = phaseList.filter((item) => {
-    //       return item.id === patternStatus.id
-    //     })[0].concurrent
-    //     if (concurrent.length === 0) {
-    //       this.barrierList = []
-    //       return
-    //     }
-    //     if (!this.isEqualsForArray(tempList, concurrent)) {
-    //       tempList = concurrent
-    //       this.barrierList.push(barrierWidth)
-    //     }
-    //     barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
-    //   }
-    //   this.barrierList.push(barrierWidth) // 添加末尾处的屏障
-    // },
-    // isEqualsForArray (listA, listB) {
-    //   return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))
-    // },
     getPlatform () {
       queryDevice().then(res => {
         if (!res.data.success) {

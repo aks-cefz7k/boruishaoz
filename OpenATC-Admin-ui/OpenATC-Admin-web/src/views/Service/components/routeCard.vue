@@ -12,9 +12,9 @@
 <template>
   <el-card class="serviceroute-routeCard" v-show="isShow">
     <div slot="header" class="clearfix">
-      <span
-        ><strong>{{ $t("openatc.dutyroute.attributes") }}</strong></span
-      >
+      <span style="vertical-align:middle;">
+        <span class="grid-content-label">{{ $t("openatc.dutyroute.currentControl") }} : </span> {{node.currentControlName}}
+      </span>
       <el-button
         style="float: right; padding: 3px 0"
         type="text"
@@ -100,11 +100,11 @@
           <el-row :gutter="10">
             <el-col :span="10">
               <div class="grid-content-label">
-                {{ $t("openatc.dutyroute.timeleft") }}:
+                {{ $t("openatc.dutyroute.lasttime") }}:
               </div>
             </el-col>
             <el-col :span="14">
-              <template class="grid-content bg-purple">{{ node.resttime }}</template>
+              <template class="grid-content bg-purple">{{ node.totaltime }}</template>
               <el-button
                 v-show="tabName === 'second'"
                 style="float: right;"
@@ -175,19 +175,23 @@ export default {
         // this.isBtnDisabled = false
         if (!res.data.success) {
           let msg = getMessageByCode(res.data.code, this.$i18n.locale)
-          let errorCode = res.data.data.errorCode
-          if (errorCode) {
-            msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+          if (res.data.data) {
+            let errorCode = res.data.data.errorCode
+            if (errorCode) {
+              msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+            }
           }
           this.$message.error(msg)
           return false
         } else {
-          let success = res.data.data.data.success
-          if (success !== 0) {
-            // 手动面板控制提示
-            let errormsg = 'edge.overview.putTscControlError' + success
-            this.$message.error(this.$t(errormsg))
-            return false
+          if (res.data.data && res.data.data.data) {
+            let success = res.data.data.data.success
+            if (success !== 0) {
+              // 手动面板控制提示
+              let errormsg = 'edge.overview.putTscControlError' + success
+              this.$message.error(this.$t(errormsg))
+              return false
+            }
           }
         }
         this.$emit('research')
