@@ -247,7 +247,8 @@
                   <div style="margin-left: 85PX;" >
                     <div style="width: 100%; height: auto;">
                       <div class="control-model" v-for="(item, index) in stagesList" :key="index">
-                        <div class="single-model" :class="currentStage == index + 1 ? 'single-model-select' : ''">
+                        <div style="position:relative;" class="single-model" :class="currentStage == index + 1 ? 'single-model-select' : ''">
+                          <PatternWalkSvg class="patternWalk" v-if="item[0].peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'55'" :Height="'55'" />
                           <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
                           <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
                             <div class="current-stage-num" style="width:20%;">{{index + 1}}</div>
@@ -291,11 +292,15 @@ import { getMessageByCode } from '../../utils/responseMessage'
 import { GetAllFaultRange } from '@/api/fault'
 import FaultDetailModal from '@/components/FaultDetailModal'
 import xdrdirselector from '@/components/XRDDirSelector'
+import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkSvg'
+import PhaseDataModel from '@/views/overView/crossDirection/utils'
+import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 export default {
   name: 'overview',
   components: {
     FloatImgBtn,
     CrossDiagram,
+    PatternWalkSvg,
     // PatternStatus,
     // StageStatus,
     BoardCard,
@@ -310,6 +315,7 @@ export default {
     return {
       controlData: {},
       control: '',
+      sidewalkPhaseData: [],
       form: {
         // control: '',
         terminal: '',
@@ -512,6 +518,13 @@ export default {
       // 深度观察监听
       deep: true
     },
+    phaseList: {
+      handler: function (val, oldVal) {
+        this.getPedPhasePos()
+      },
+      // 深度观察监听
+      deep: true
+    },
     control: {
       handler: function (val, oldVal) {
         if (val !== oldVal) {
@@ -525,14 +538,17 @@ export default {
     }
   },
   created () {
+    // this.getPedPhasePos()
+    this.PhaseDataModel = new PhaseDataModel()
+    this.CrossDiagramMgr = new CrossDiagramMgr()
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
+      this.registerMessage() // 注册消息
       this.agentId = this.$route.query.agentid
       setIframdevid(this.agentId)
       // this.ip = this.$route.query.IP
       // this.port = this.$route.query.port
       // this.protocol = this.$route.query.protocol
       this.resetCrossDiagram()
-      this.registerMessage() // 注册消息
     } else {
       // setIframdevid('23080400311210000088')
       // setIframdevid('8011')
@@ -571,6 +587,25 @@ export default {
       this.faultTimer = setInterval(() => {
         this.getFaultById()
       }, 30000)
+    },
+    getPedPhasePos () {
+      // 行人相位信息
+      this.sidewalkPhaseData = []
+      this.phaseList.forEach((ele, i) => {
+        if (ele.peddirection) {
+          ele.peddirection.forEach((dir, index) => {
+          // 行人相位
+            if (this.PhaseDataModel.getSidePos(dir)) {
+              this.sidewalkPhaseData.push({
+                key: this.CrossDiagramMgr.getUniqueKey('pedphase'),
+                phaseid: ele.id, // 相位id，用于对应相位状态
+                id: dir,
+                name: this.PhaseDataModel.getSidePos(dir).name
+              })
+            }
+          })
+        }
+      })
     },
     getVolume () {
       getTscCurrentVolume(this.agentId).then((data) => {
@@ -750,12 +785,19 @@ export default {
         let tempList = []
         let directionList = []
         let stageControType = 0
+        let peddirections = []
         for (let stg of stage) {
           let currPhase = this.phaseList.filter((item) => {
             return item.id === stg
           })[0]
           if (currPhase !== undefined) {
             directionList = [...currPhase.direction, ...directionList]
+          }
+          for (let walk of this.sidewalkPhaseData) {
+            if (stg === walk.phaseid) {
+              peddirections.push(...currPhase.peddirection)
+              peddirections = Array.from(new Set(peddirections))
+            }
           }
           for (let busPhase of busPhaseData) {
             if (stg === busPhase.phaseid) {
@@ -767,7 +809,8 @@ export default {
         tempList = directionList.map(dir => ({
           id: dir,
           color: '#606266',
-          controltype: stageControType
+          controltype: stageControType,
+          peddirection: peddirections
         }))
         this.stagesList.push(tempList)
       }

@@ -168,7 +168,7 @@ export default {
     }
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
-    // this.getPedPhasePos()
+    this.getPedPhasePos()
     this.getIntersectionInfo()
   },
   mounted () {
