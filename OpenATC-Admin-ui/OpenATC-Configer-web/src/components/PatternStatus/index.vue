@@ -58,13 +58,13 @@
                 <el-tooltip placement="top-start" effect="light">
                   <div slot="content">
                     <span class="ring-nums" v-for="(pha,index) in list.phases" :key="index">
-                      p:{{pha}}
+                      P:{{pha}}
                       </span>
                   </div>
                   <div style="cursor:pointer;">
                     <div class="box" style="line-height:28px">
                       <span class="ring-nums" v-for="(pha,index) in list.phases" :key="index">
-                      p:{{pha}}
+                    P:{{pha}}
                       </span>
                     </div>
                   </div>
