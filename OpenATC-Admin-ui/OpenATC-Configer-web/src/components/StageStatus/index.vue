@@ -76,6 +76,9 @@ export default {
     if (this.patternStatusList && this.patternStatusList.length > 1) {
       this.getPhaseId(this.patternStatusList)
     }
+    if (this.controlData) {
+      this.stageLineStatus = true
+    }
     if (this.localPatternList) {
       this.getStageLine()
     }
