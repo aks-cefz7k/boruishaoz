@@ -3,6 +3,7 @@ package com.openatc.agent.controller;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.DictConfig;
 import com.openatc.agent.service.DictConfigRepository;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.slf4j.Logger;
@@ -64,7 +65,16 @@ public class DictController {
         String value = dictConfig.getValue();
         if(key.isEmpty() || value.isEmpty())
             return RESTRetUtils.errorObj(E_1003);
-
+        String type = dictConfig.getType();
+        if (type.equals("platform")) {
+            List<DictConfig> list = dictConfigRepository.findByConfigtypeAndKey(type,key);
+            if (list.size() > 0) {
+                int id = dictConfig.getId();
+                if (list.get(0).getId() != id) {
+                    return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_1004);
+                }
+            }
+        }
         List<DictConfig> find = dictConfigRepository.findByConfigtypeAndKeyAndVale(dictConfig.getType(),key, value);
         if(find.size() == 0 )
             return RESTRetUtils.successObj(dictConfigRepository.save(dictConfig));

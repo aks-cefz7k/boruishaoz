@@ -31,7 +31,7 @@
           <el-form-item :label="$t('openatc.devicemanager.platform')" label-width="15%">
             <el-input v-model="innerForm.key" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('openatc.devicemanager.IP')" label-width="15%">
+          <el-form-item :label="$t('openatc.devicemanager.address')" label-width="15%">
             <el-input v-model="innerForm.ip" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('openatc.devicemanager.port')" label-width="15%">
@@ -65,7 +65,7 @@
         </el-table-column>
         <el-table-column
           prop="ip"
-          :label="$t('openatc.devicemanager.IP')"
+          :label="$t('openatc.devicemanager.address')"
           align="center"
           min-width="17%">
         </el-table-column>
@@ -180,6 +180,13 @@ export default {
     },
     submitConfig () {
       this.setValue(this.innerForm)
+      if (this.innerForm.port !== '') {
+        const portReg = /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
+        if (!portReg.test(this.innerForm.port)) {
+          this.$message.warning(this.$t('openatc.devicemanager.correctport'))
+          return false
+        }
+      }
       if (this.isEdit) {
         this.updateConfig(this.innerForm)
       } else {
