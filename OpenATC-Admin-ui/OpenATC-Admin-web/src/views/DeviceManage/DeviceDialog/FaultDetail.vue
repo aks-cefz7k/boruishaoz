@@ -28,42 +28,48 @@
           prop="m_unFaultOccurTime"
           :label="$t('openatc.devicemanager.faultOccurtime')"
           sortable
-          width="180">
+          width="180"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="m_byFaultBoardType"
           :formatter="formatterBoardType"
           :label="$t('openatc.devicemanager.boardCardType')"
           sortable
-          width="150">
+          width="150"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="m_wFaultType"
           :formatter="m_wFaultTypes"
           :label="$t('openatc.devicemanager.faultMaintype')"
           sortable
-          width="180">
+          width="180"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="m_wSubFaultType"
           :formatter="m_wSubFaultType"
           :label="$t('openatc.devicemanager.faultSubtype')"
           sortable
-          width="160">
+          width="160"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="m_byFaultDescValue"
           :formatter="m_byFaultDescValue"
           :label="$t('openatc.devicemanager.faultValue')"
           sortable
-          width="100">
+          width="100"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="m_byFaultLevel"
           :formatter="m_byFaultLevel"
           :label="$t('openatc.devicemanager.faultGrade')"
           sortable
-          width="120">
+          width="120"
+          align="center">
         </el-table-column>
         <el-table-column
           sortable
