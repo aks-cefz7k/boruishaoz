@@ -219,7 +219,7 @@
           </el-card>
         <!-- </span> -->
       </el-drawer>
-    <div class="alarm-message" @click="drawer = true, isDot=false">
+    <div class="alarm-message" @click="drawer = true, isDot=false, getCurrent()">
       <el-badge :is-dot="isDot" class="item">
         <img style ="width: 18px;" src="../../../assets/home/notice.png">
       </el-badge>
@@ -434,6 +434,9 @@ export default {
         this.notify.close()
       }
       this.open2()
+    },
+    getCurrent () {
+      this.getUntreated()
     },
     open2 () {
       const h = this.$createElement

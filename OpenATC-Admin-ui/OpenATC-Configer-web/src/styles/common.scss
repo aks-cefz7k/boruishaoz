@@ -1730,6 +1730,7 @@ border: 1px solid $--border-color-base;
     float: left;
     // margin-left: 5px;
     height: 34px;
+    z-index: 999;
     background: rgba(30, 96, 12, 0.2);
     // margin-top:1px;
   }

@@ -17,11 +17,29 @@ export const GetAllDevice = () => {
   return api.Send({}, {}, [])
 }
 
+export const getDict = () => {
+  let api = new Authapi('getDict')
+
+  return api.Send({}, {}, [])
+}
+// 添加字典
+export const addDict = (data) => {
+  let api = new Authapi('addDict')
+  const params = JSON.parse(JSON.stringify(data))
+  return api.Send({}, params, [])
+}
+
 export const GetDeviceByIds = (ids) => {
   let api = new Authapi('getDeviceByIds')
   const params = {
     routeIntersectionIdList: ids
   }
+  return api.Send({}, params, [])
+}
+
+export const getDeviceRange = (data) => {
+  let api = new Authapi('getDeviceRange')
+  const params = JSON.parse(JSON.stringify(data))
   return api.Send({}, params, [])
 }
 
@@ -76,5 +94,8 @@ export default {
   DeleteDevice,
   UpdateDeviceId,
   getAllTrafficData,
-  getAllPatternData
+  getAllPatternData,
+  getDeviceRange,
+  getDict,
+  addDict
 }

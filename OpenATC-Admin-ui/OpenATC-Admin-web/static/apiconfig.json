@@ -70,6 +70,21 @@
     "method": "get"
   },
   {
+    "key": "getDeviceRange",
+    "url": "/devs/range",
+    "method": "post"
+  },
+  {
+    "key": "getDict",
+    "url": "/dict",
+    "method": "get"
+  },
+  {
+    "key": "addDict",
+    "url": "/dict",
+    "method": "post"
+  },
+  {
     "key": "getDeviceByIds",
     "url": "/devs/list",
     "method": "post"
