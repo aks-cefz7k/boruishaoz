@@ -54,9 +54,9 @@ import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkS
 // import BusMapSvg from '@/views/overView/crossDirection/busIcon/busMapSvg'
 import PhaseDataModel from '../../views/overView/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
-import { getIntersectionInfo } from '@/api/template'
-import { getMessageByCode } from '@/utils/responseMessage'
-import { queryDevice } from '@/api/control'
+// import { getIntersectionInfo } from '@/api/template'
+// import { getMessageByCode } from '@/utils/responseMessage'
+// import { queryDevice } from '@/api/control'
 export default {
   name: 'patternstatus',
   components: {
@@ -87,6 +87,9 @@ export default {
     },
     cycle: {
       type: Number
+    },
+    agentId: {
+      type: String
     },
     cycles: {
       type: Number
@@ -128,6 +131,14 @@ export default {
     phaseList: {
       handler: function (val, oldVal) {
         this.getPedPhasePos()
+        this.getBusPos()
+      },
+      // 深度观察监听
+      deep: true
+    },
+    agentId: {
+      handler: function (val, oldVal) {
+        this.getBusPos()
       },
       // 深度观察监听
       deep: true
@@ -169,7 +180,7 @@ export default {
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
     this.getPedPhasePos()
-    this.getIntersectionInfo()
+    this.getBusPos()
   },
   mounted () {
   },
@@ -182,38 +193,11 @@ export default {
     }
   },
   methods: {
-
-    getIntersectionInfo () {
-      // 获取路口信息
-      queryDevice().then(res => {
-        if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          return
-        }
-        getIntersectionInfo(res.data.data.agentid || '0').then(data => {
-          if (!data.data.success) {
-            if (data.data.code === '4003') {
-              this.$message.error(this.$t('edge.common.deviceoffline'))
-              return
-            }
-            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-            return
-          }
-          this.crossInfo = data.data.data
-          this.tempType = this.crossInfo.type
-          // 获取车道相位、行人相位信息（坐标、名称）
-          this.mainType = this.tempType.split('-')[0]
-          if (this.mainType === '100' || this.mainType === '101' || this.mainType === '104') {
-          // 城市道路加载车道相位坐标和人行道坐标
-            this.getBusPos()
-          }
-        })
-      })
-    },
     getBusPos () {
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
       // 公交相位信息
       this.busPhaseData = []
-      this.crossInfo.phaseList.forEach((ele, i) => {
+      phaseList.forEach((ele, i) => {
         if (ele.controltype >= 3 && ele.controltype <= 5) {
           ele.direction.forEach((dir, index) => {
           // 车道相位
