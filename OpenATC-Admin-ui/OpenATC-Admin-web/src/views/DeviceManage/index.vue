@@ -59,7 +59,7 @@
             <el-select
               style="width: 100px;"
               v-model="protocols"
-              @change="getDeviceRanges('search')"
+              @change="getDeviceRanges()"
               clearable
               filterable>
               <el-option
@@ -76,7 +76,7 @@
             <el-select
               style="width: 100px;"
               v-model="states"
-              @change="getDeviceRanges('search')"
+              @change="getStates()"
               clearable
               filterable>
               <el-option
@@ -548,7 +548,11 @@ export default {
         }
       }
     },
-    getDeviceRanges (row) {
+    getStates () {
+      this.listQuery.pageNum = 1
+      this.getDeviceRanges()
+    },
+    getDeviceRanges () {
       this.listLoading = true
       let reqData = {
         'pageNum': this.listQuery.pageNum,
