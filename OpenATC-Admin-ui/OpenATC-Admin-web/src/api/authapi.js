@@ -13,7 +13,7 @@ import {
   getHost
 } from '../utils/auth'
 // import axios from 'axios'
-const kissApi = require('edgebase-front/src/lib/publicjs/KissApi')
+const kissApi = require('@openatc/edgebase-front/src/lib/publicjs/KissApi')
 
 export default class authApi extends kissApi.KissApi {
   constructor (key) {
