@@ -968,6 +968,14 @@ border: 1px solid $--border-color-base;
     max-height:300px;
   }
  }
+ .wenzijiemian {
+   .container-left {
+     margin-top: 0;
+   }
+   .container-right {
+     margin-top: 0;
+   }
+ }
 }
 // 手动控制弹框
 .manual-control-modal{
