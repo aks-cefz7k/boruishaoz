@@ -5,6 +5,11 @@ import IntersectionMap from './components/IntersectionMap/index'
 import SchemeConfig from './components/SchemeConfig/index'
 import FaultDetailModal from './components/FaultDetailModal/index'
 import CommonKanban from './components/CommonKanban/index'
+import patternList from './components/patternList/index'
+import PatternStatus from './components/PatternStatus/index'
+import BoardCard from './components/BoardCard/index'
+import StageStatus from './components/StageStatus/index'
+import OverLap from './components/OverLap/index'
 
 import en from '../i18n/language/en'
 import zh from '../i18n/language/zh'
@@ -17,6 +22,11 @@ const components = {
   IntersectionMap,
   SchemeConfig,
   FaultDetailModal,
+  PatternStatus,
+  BoardCard,
+  OverLap,
+  StageStatus,
+  patternList,
   CommonKanban
 }
 
