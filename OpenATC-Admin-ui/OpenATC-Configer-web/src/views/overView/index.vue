@@ -728,9 +728,19 @@ export default {
             }
             return
           }
-          this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
           if (this.isResend) {
             this.reSend()
+          }
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
           }
           return
         }
@@ -820,7 +830,17 @@ export default {
             }
             return
           }
-          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
+          }
           this.clearPatternInterval() // 清除其他定时器
           this.clearVolumeInterval()
           if (this.isResend) {

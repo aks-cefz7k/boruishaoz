@@ -941,6 +941,7 @@ const en = {
       'opensourceagreement': 'Opensource Agreement'
     },
     'message': {
+      'errorcode': 'Error code',
       '10000': 'Parameter is empty',
       '10001': 'Parameter length error',
       '1002': 'Error',

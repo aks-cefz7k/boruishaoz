@@ -492,11 +492,17 @@ export default {
       getIntersectionInfo(agentid).then(res => {
         if (!res.data.success) {
           this.isLoaded = false
-          if (res.data.code === '4003') {
-            this.$message.error(this.$t('edge.common.deviceoffline'))
-            return
+          let parrenterror = getMessageByCode(res.data.code, this.$i18n.locale)
+          if (res.data.data) {
+            // 子类型错误
+            let childErrorCode = res.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(res.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
           }
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.isLoaded = true

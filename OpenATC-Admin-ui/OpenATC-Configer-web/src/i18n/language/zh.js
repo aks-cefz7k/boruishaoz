@@ -940,6 +940,7 @@ const zh = {
       'opensourceagreement': '开源协议'
     },
     'message': {
+      'errorcode': '错误码',
       '10000': '参数为空',
       '10001': '参数长度错误',
       '1002': '错误',
