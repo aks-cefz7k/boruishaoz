@@ -1,0 +1,211 @@
+<template>
+  <!-- <vue-draggable-resizable
+    ref="drag"
+    :w="dragAreaW"
+    :h="dragAreaH"
+    @dragging="onDrag"
+    @resizing="onResize"
+    :draggable="dragable"
+    :resizable="resizeable"> -->
+  <div
+    :class="kisstipsbgclass"
+    :value="value"
+    v-if="visable"
+    :style="bgstyle"
+    ref="main"
+  >
+    <div
+      class="kiss-tips-close"
+      @click="handleClose"
+      v-if="isClose"
+      ref="close"
+      style=""
+    ></div>
+    <div class="kiss-tips-contents">
+      <slot></slot>
+    </div>
+  </div>
+  <!-- </vue-draggable-resizable> -->
+</template>
+<script>
+import $ from 'jquery'
+import './Tdrag.js'
+// import VueDraggableResizable from '../TragResize/index'
+export default {
+  // components: {
+  //   VueDraggableResizable
+  // },
+  name: 'kiss-tip',
+  data () {
+    return {
+      visable: true,
+      bgstyle: {
+        width: '',
+        height: ''
+      },
+      // dragAreaW: 0,
+      // dragAreaH: 0,
+      kisstipsbgclass: ''
+    }
+  },
+  props: {
+    value: {
+      type: Boolean,
+      default: true
+    },
+    isClose: {
+      type: Boolean,
+      default: true
+    },
+    width: {
+      type: String,
+      default: '523px'
+    },
+    height: {
+      type: String,
+      default: '364px'
+    },
+    type: {
+      type: String,
+      default: 'default' // alarm
+    },
+    zindex: {
+      type: Number,
+      default: 100
+    }
+    // dragable: {
+    //   type: Boolean,
+    //   default: false
+    // },
+    // resizeable: {
+    //   type: Boolean,
+    //   default: false
+    // }
+  },
+  watch: {
+    value: function (val) {
+      this.visable = val
+    },
+    visable: function (val) {
+      this.change(val)
+    },
+    deep: true,
+    immediate: true
+  },
+  methods: {
+    handleClose () {
+      this.visable = false
+    },
+    // onDrag () {
+    // },
+    change (val) {
+      this.$emit('input', val)
+    }
+    // onResize (x, y, width, height) {
+    //   this.bgstyle.width = width + 'px'
+    //   this.bgstyle.height = height + 'px'
+    // }
+  },
+  // created () {
+  //   this.dragAreaW = parseInt(this.width)
+  //   this.dragAreaH = parseInt(this.height)
+  // },
+  mounted () {
+    this.visable = this.value
+    let zindex = 100
+    switch (this.type) {
+      case 'default':
+        this.bgstyle.height = this.height + 'px'
+        this.bgstyle.width = this.width + 'px'
+        this.kisstipsbgclass = 'kiss-tips-bg'
+        zindex = this.zindex === undefined ? 100 : this.zindex
+        break
+      case 'alarm':
+        this.bgstyle.height = '99px'
+        this.bgstyle.width = '276px'
+        this.kisstipsbgclass = 'kiss-alarm-tips-bg'
+        this.$refs.close.style.marginRight = '-1px'
+        this.$refs.close.style.marginTop = '0.5px'
+        zindex = 9999
+        break
+      default: break
+    }
+    this.$refs.main.style.zIndex = zindex
+    console.log(this.$refs.main.style)
+
+    var self = this
+    if (this.isTrag) {
+      $(function () {
+        $('.' + self.kisstipsbgclass).Tdrag({})
+      })
+    }
+  },
+  updated () {
+    // this.bgstyle.height = '99px'
+    // this.bgstyle.width = '276px'
+    if (this.type === 'alarm') {
+      if (this.$refs.close === undefined) {
+        return false
+      }
+      this.$refs.close.style.marginRight = '-1px'
+      this.$refs.close.style.marginTop = '0.5px'
+    }
+  }
+}
+</script>
+
+<style scoped>
+.kiss-tips-bg {
+  /* display: inline-block; */
+  display: block;
+  /* text-align: center; */
+  position: relative;
+  /* z-index: 100; */
+  margin: 0;
+  padding: none;
+  /* background: #1f2e2e;
+    opacity: 0.8; */
+  background: rgb(31, 46, 46, 0.8);
+  border: 1px solid #0096ba;
+  box-shadow: 0.1 0.1 0.1 0.1 #0096ba;
+}
+/* alarm 报警的弹框 */
+.kiss-alarm-tips-bg {
+  /* display: inline-block; */
+  display: block;
+  /* text-align: center; */
+  position: relative;
+  /* z-index: 9999; */
+  margin: 0;
+  padding: none;
+  background: url("../image/tipdlg/alarmbg.png");
+  background-repeat: no-repeat;
+}
+/* .kips-tips-header{
+    padding-top: 1px;
+    display: block;
+    width:522px;
+    height: 50;
+} */
+.kiss-tips-close {
+  width: 47px;
+  height: 47px;
+  margin-right: -2px;
+  margin-top: -1px;
+  /* position: relative; */
+  cursor: pointer;
+  float: right;
+  background: url("../image/tipdlg/close.png");
+  background-repeat: no-repeat;
+}
+
+.kiss-tips-close:hover {
+  background: url("../image/tipdlg/closehover.png");
+  background-repeat: no-repeat;
+}
+
+.kiss-tips-contents {
+  width: 100%;
+  height: 100%;
+}
+</style>

@@ -352,7 +352,8 @@ const en = {
       'delaystart': 'Delay Start ',
       'advanceend': 'Advance End',
       'stageConfig': 'Stage Config',
-      'parameters': 'Pparameters',
+      'parameters': 'Parameters',
+      'overLap': 'Over Lap',
       'plan': 'Plan',
       'ringConfig': 'Ring Config',
       'stage': 'Stage',
@@ -941,6 +942,7 @@ const en = {
       'opensourceagreement': 'Opensource Agreement'
     },
     'message': {
+      'errorcode': 'Error code',
       '10000': 'Parameter is empty',
       '10001': 'Parameter length error',
       '1002': 'Error',

@@ -158,8 +158,8 @@
                 v-for="(side, index) in sidewalkPhaseData"
                 :key="side.key + '-' + index"
                 :Data="side"
-                :Width="'55'"
-                :Height="'55'"
+                :Width="'44'"
+                :Height="'44'"
               />
               <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
               <div

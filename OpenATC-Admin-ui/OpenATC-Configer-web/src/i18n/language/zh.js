@@ -351,6 +351,7 @@ const zh = {
       'advanceend': '早结束时间',
       'stageConfig': '阶段配置',
       'parameters': '扩展参数配置',
+      'overLap': '跟随相位',
       'plan': '方案',
       'ringConfig': '环配置',
       'stage': '阶段',
@@ -940,6 +941,7 @@ const zh = {
       'opensourceagreement': '开源协议'
     },
     'message': {
+      'errorcode': '错误码',
       '10000': '参数为空',
       '10001': '参数长度错误',
       '1002': '错误',

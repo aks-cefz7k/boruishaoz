@@ -135,8 +135,9 @@
           <div class="pattern-status" v-if="!graphicMode">
             <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.patternoffset')}}: {{controlData.patternoffset}} {{$t('edge.overview.coordinationtime')}}: {{controlData.offset}})</div>
-            <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
-            <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
+              <!-- <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span> -->
+              <span class="pattern-explain"><el-checkbox v-model="checked">{{$t('edge.pattern.overLap')}}</el-checkbox></span>
+              <!-- P{{$t('edge.overview.phase')}} -->
             <BoardCard
             ref="boardCard"
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
@@ -147,6 +148,14 @@
             :agentId="agentId"
               >
             </BoardCard>
+            <OverLap
+            :checked="checked"
+            :overlap="overlap"
+            :stageList="this.stagesListOver"
+            :phaseList="phaseList"
+            :cycle="controlData.cycle"
+            :controlData="controlData"
+            />
           </div>
         </div>
 
@@ -179,6 +188,7 @@ import CrossDiagram from './crossDirection/crossDiagram'
 import BoardCard from '@/components/BoardCard'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
+import OverLap from '@/components/OverLap'
 // import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
 import PhaseDataModel from '@/views/overView/crossDirection/utils'
@@ -192,12 +202,17 @@ export default {
     BoardCard,
     CurVolume,
     CurPhase,
-    RightPanel
+    RightPanel,
+    OverLap
   },
   data () {
     return {
       controlData: {},
       control: '',
+      checked: false,
+      overlap: [],
+      narr: [],
+      stagesListOver: [],
       sidewalkPhaseData: [],
       form: {
         // control: '',
@@ -352,6 +367,8 @@ export default {
   created () {
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
+    this.globalParamModel = this.$store.getters.globalParamModel
+    this.overlap = this.globalParamModel.getParamsByType('overlaplList')
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
       this.agentId = this.$route.query.agentid
       setIframdevid(this.agentId)
@@ -392,7 +409,7 @@ export default {
       this.phaseList.forEach((ele, i) => {
         if (ele.peddirection) {
           ele.peddirection.forEach((dir, index) => {
-          // 行人相位
+            // 行人相位
             if (this.PhaseDataModel.getSidePos(dir)) {
               this.sidewalkPhaseData.push({
                 key: this.CrossDiagramMgr.getUniqueKey('pedphase'),
@@ -527,11 +544,14 @@ export default {
         this.currModel = TscData.control
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
+        this.checkStage(this.controlData)
+        // this.handlePatternData() // 计算方案状态展示数据
+        // this.getStageStatusData()
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
         // this.handleGetPhaseClose()
       }).catch(error => {
-        // this.$message.error(error)
+        this.$message.error(error)
         console.log(error)
       })
     },
@@ -605,6 +625,122 @@ export default {
         stagesTemp.push(tempList)
         this.stagesList = JSON.parse(JSON.stringify(stagesTemp))
       }
+    },
+    getControl (newList) { // 总揽实时数据
+      let currentIds = ''
+      let lastCurrentIds = ''
+      this.stateList = [0]
+      this.narr = []
+      let overstagesList = []
+      let phaseList = []
+      for (let j = 0; j <= this.max; j++) { // 指针长度
+        for (let i = 0; i < newList.length; i++) { // 环列表
+          let ring = newList[i]// 每个环对象
+          let sum = 0
+          for (let n = 0; n < ring.length; n++) { // 相位累计长度
+            sum = sum + ring[n].split
+            if (j < sum) {
+              let phaseId = ring[n].id
+              currentIds = currentIds + '-' + phaseId
+              break
+            }
+          }
+        }
+        if (lastCurrentIds !== currentIds && lastCurrentIds !== '') { // 当前相位id和上一个相比不同说明相位变化了
+          phaseList.push(lastCurrentIds)
+          this.stateList.push(j)// 阶段累计长度的集合
+        }
+        lastCurrentIds = currentIds
+        currentIds = ''
+      }
+      let newPhaselist = []
+      phaseList.forEach(i => {
+        let rangeArr = i.split('-').map(Number)
+        if (rangeArr.length > 2) {
+          newPhaselist.push([
+            JSON.parse(JSON.stringify(rangeArr[1])),
+            JSON.parse(JSON.stringify(rangeArr[2]))
+          ])
+        } else {
+          newPhaselist.push([
+            JSON.parse(JSON.stringify(rangeArr[1]))
+          ])
+        }
+      })
+      for (let i = this.stateList.length - 1; i >= 1; i--) {
+        this.narr.push(this.stateList[i] - this.stateList[i - 1])
+      }
+      this.narr.reverse()// 阶段差
+      for (let i = 0; i < newPhaselist.length; i++) {
+        let stage = JSON.parse(JSON.stringify(newPhaselist[i]))
+        let stageItem = this.getStageItem(stage, newList, i)
+        overstagesList.push(JSON.parse(JSON.stringify(stageItem)))
+      }
+      this.stagesListOver = JSON.parse(JSON.stringify(overstagesList))
+    },
+    getStageItem (stageArr, ringsList, i) {
+      let res = {
+        key: i,
+        split: this.narr[i], // 阶段绿性比
+        stages: stageArr,
+        delaystart: 0,
+        advanceend: 0
+      }
+      // let splitArr = []
+      let delaystartArr = []
+      let advanceendArr = []
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            // let split = ring.value
+            let delaystart = ring.delaystart
+            let advanceend = ring.advanceend
+            // splitArr.push(split)
+            delaystartArr.push(delaystart)
+            advanceendArr.push(advanceend)
+          }
+        }
+      }
+      // splitArr.sort(function (a, b) { return a - b })
+      delaystartArr.sort(function (a, b) { return b - a })
+      advanceendArr.sort(function (a, b) { return a - b })
+      // res.split = splitArr.length > 0 ? splitArr[0] : 0
+      res.delaystart = delaystartArr.length > 0 ? delaystartArr[0] : 0
+      res.advanceend = advanceendArr.length > 0 ? advanceendArr[0] : 0
+      return res
+    },
+    checkStage (rings) {
+      let mapAdd = rings.phase.map(item => {
+        return {
+          id: item.id,
+          split: item.split
+        }
+      })
+      let newRings = rings.rings.map(j => {
+        return j.sequence
+      })
+      let newList = newRings.map(item => {
+        let ret = []
+        item.map(i => {
+          const find = mapAdd.find(j => j.id === i)
+          if (find) {
+            ret.push(find)
+          }
+        })
+        return ret
+      })
+      let mapAdds = newList.map(item => {
+        return item.map(val => {
+          return val.split
+        })
+      })
+      let maxCycle = mapAdds.length > 0 ? mapAdds.map(item => {
+        return item.length > 0 ? item.reduce((a, b) => {
+          return a + b
+        }) : 0
+      }) : 0
+      this.max = Math.max(...maxCycle)// 每个环的周期最大值
+      this.getControl(newList)
     },
     onSubmit () {
       if (this.form.data && !this.isJsonString(this.form.data)) {
@@ -753,7 +889,6 @@ export default {
     handleTableData (value) {
       this.tableData = []
       if (!value.phase) return
-      if (!value.rings) return
       let phaseList = value.phase
       let rings = value.rings
       for (let ring of rings) {

@@ -292,6 +292,20 @@ $light_gray: #eee;
 }
 
 /********************** 设置kanban样式 ********************/
+.kanbanRing{
+  margin-top:20px;
+  height:42px;
+  line-height:42px;
+  .board-title {
+    float:left;
+    width:25px;
+  }
+  .board-content {
+    float:left;
+    width:22%;
+    margin-left:10px
+  }
+}
 .phase-description {
   border-radius: 4px;
   background: rgb(217, 236, 255);
@@ -871,8 +885,7 @@ border: 1px solid $--border-color-base;
     border-radius: 6px;
     line-height: 1.15;
     .patternWalk{
-      left: 8px !important;
-      top: 5px !important;
+      left: 14px !important;
     }
   }
   .single-model-select {
@@ -925,8 +938,16 @@ border: 1px solid $--border-color-base;
     border-right: 1px solid #e5e5e5;
   }
   .pattern-explain {
-      float: right;
+    float: right;
+    color: $--color-text-regular;
+    .el-checkbox__label {
+      font-size: 16px;
       color: $--color-text-regular;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 22px;
+      letter-spacing: 0px;
+    }
   }
   // 信号机控制状态模块样式
   .controlStatePart {
