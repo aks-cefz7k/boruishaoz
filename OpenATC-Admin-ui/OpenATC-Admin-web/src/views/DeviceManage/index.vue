@@ -15,127 +15,129 @@
     <SelectCrossPhase :agentid="agentid" @onChange="onSelectCrossPhaseChange"></SelectCrossPhase> -->
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
     <div class="devs-container" style="position:relative">
+      <div style="display: inline-block;width: 100%;">
         <div class="tag-container">
-        <DeviceTags />
-      </div>
-      <div class="filter-container">
-        <!-- <el-form>
-          <el-form-item> -->
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.devicetype') }}：</span>
-            <el-select
-              style="width: 100px;"
-              v-model="devicetypes"
-              @change="getDeviceRanges('search')"
-              clearable
-              filterable>
-              <el-option
-                v-for="(item, index) in devicetype"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.plat') }}：</span>
-            <el-select
-              style="width: 100px;"
-              v-model="plats"
-              @change="getDeviceRanges('search')"
-              clearable
-              filterable>
-              <el-option
-                v-for="(item, index) in plat"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.protocol') }}：</span>
-            <el-select
-              style="width: 100px;"
-              v-model="protocols"
-              @change="getDeviceRanges('search')"
-              clearable
-              filterable>
-              <el-option
-                v-for="(item, index) in protocol"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.state') }}：</span>
-            <el-select
-              style="width: 100px;"
-              v-model="states"
-              @change="getDeviceRanges('search')"
-              clearable
-              filterable>
-              <el-option
-                v-for="(item, index) in state"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.tag') }}：</span>
-            <el-popover
-                placement="bottom"
-                width="460"
-                v-model="visible2"
-                trigger="click"
-              >
-              <el-tag
-                :key="index"
-                v-for="(select,index) in selectTags"
-                :disable-transitions="false"
-                @click="selectItem(select)"
+          <DeviceTags />
+        </div>
+        <div class="filter-container">
+          <!-- <el-form>
+            <el-form-item> -->
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.devicetype') }}：</span>
+              <el-select
+                style="width: 100px;"
+                v-model="devicetypes"
+                @change="getDeviceRanges('search')"
+                clearable
+                filterable>
+                <el-option
+                  v-for="(item, index) in devicetype"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
                 >
-                {{select}}
-              </el-tag>
-              <el-input
-                @keyup.enter.native="getDeviceRanges()"
-                @blur="getDeviceRanges()"
-                v-model="selectTag"
-                slot="reference"
-                style="width: 100px;"/>
-              </el-popover>
-          </div>
-        <!-- </el-form-item>
-          <el-form-item> -->
-            <div class="filter" style="margin-right:20px">
-              <el-input
-                @keyup.enter.native="getDeviceRanges()"
-                @blur="getDeviceRanges()"
-                v-model="devsfilter"
-                :placeholder="$t('openatc.common.searchplaceholder')"
-                prefix-icon="el-icon-search"
-                style="width: 200px;"/>
-                  <el-button
-                    type="primary"
-                    icon="el-icon-plus"
-                    @click="handleAdd">
-                    {{$t('openatc.common.add')}}
-                  </el-button>
-
-                <!-- slot="reference"
-            </el-popover> -->
+                </el-option>
+              </el-select>
+            </div>
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.plat') }}：</span>
+              <el-select
+                style="width: 100px;"
+                v-model="plats"
+                @change="getDeviceRanges('search')"
+                clearable
+                filterable>
+                <el-option
+                  v-for="(item, index) in plat"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.protocol') }}：</span>
+              <el-select
+                style="width: 100px;"
+                v-model="protocols"
+                @change="getDeviceRanges('search')"
+                clearable
+                filterable>
+                <el-option
+                  v-for="(item, index) in protocol"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.state') }}：</span>
+              <el-select
+                style="width: 100px;"
+                v-model="states"
+                @change="getDeviceRanges('search')"
+                clearable
+                filterable>
+                <el-option
+                  v-for="(item, index) in state"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.tag') }}：</span>
+              <el-popover
+                  placement="bottom"
+                  width="460"
+                  v-model="visible2"
+                  trigger="click"
+                >
+                <el-tag
+                  :key="index"
+                  v-for="(select,index) in selectTags"
+                  :disable-transitions="false"
+                  @click="selectItem(select)"
+                  >
+                  {{select}}
+                </el-tag>
+                <el-input
+                  @keyup.enter.native="getDeviceRanges()"
+                  @blur="getDeviceRanges()"
+                  v-model="selectTag"
+                  slot="reference"
+                  style="width: 100px;"/>
+                </el-popover>
             </div>
           <!-- </el-form-item>
-        </el-form> -->
+            <el-form-item> -->
+              <div class="filter" style="margin-right:20px">
+                <el-input
+                  @keyup.enter.native="getDeviceRanges()"
+                  @blur="getDeviceRanges()"
+                  v-model="devsfilter"
+                  :placeholder="$t('openatc.common.searchplaceholder')"
+                  prefix-icon="el-icon-search"
+                  style="width: 200px;"/>
+                    <el-button
+                      type="primary"
+                      icon="el-icon-plus"
+                      @click="handleAdd">
+                      {{$t('openatc.common.add')}}
+                    </el-button>
+
+                  <!-- slot="reference"
+              </el-popover> -->
+              </div>
+            <!-- </el-form-item>
+          </el-form> -->
         </div>
+      </div>
     <div class="devs-table">
       <el-table
           :data="computedTable"
