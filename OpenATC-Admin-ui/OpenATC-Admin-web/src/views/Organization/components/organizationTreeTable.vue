@@ -221,13 +221,6 @@ export default {
         this.$message.error(this.$t('openatc.organization.emptyname'))
         return false
       }
-      if (this.dialogStatus === 'update') {
-        if (label === this.tempOrganization.label &&
-          description === this.tempOrganization.description) {
-          this.$message.error(this.$t('edge.common.nochangeserror'))
-          return false
-        }
-      }
       return true
     },
     showRow: function (row) {
