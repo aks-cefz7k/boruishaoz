@@ -27,6 +27,9 @@
             <el-tooltip class="item" effect="dark" placement="left">
               <div slot="content">{{element.name}}</div>
               <div class="common-phase-description">
+                <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
+                  <PatternWalkSvg v-if="element.peddirection.includes(side.id)" :Data="side" Width="38" Height="40" />
+                </div>
                 <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
               </div>
             </el-tooltip>
@@ -43,6 +46,9 @@
             <el-tooltip class="item" effect="dark" placement="left">
               <div slot="content">{{element.name}}</div>
               <div class="common-phase-description">
+                <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
+                  <PatternWalkSvg v-if="element.peddirection.includes(side.id)" :Data="side" Width="38" Height="40" />
+                </div>
                 <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
               </div>
             </el-tooltip>
@@ -56,13 +62,15 @@
 </template>
 <script>
 import xdrdirselector from '@/components/XRDDirSelector'
+import PatternWalkSvg from '@/components/IntersectionMap/crossDirection/baseImg/PatternWalkSvg'
 import draggable from 'vuedraggable'
 
 export default {
   name: 'commonkanban',
   components: {
     draggable,
-    xdrdirselector
+    xdrdirselector,
+    PatternWalkSvg
   },
   props: {
     headerText: {
@@ -73,6 +81,9 @@ export default {
       default () {
         return []
       }
+    },
+    sidewalkPhaseData: {
+      type: Array
     },
     ISActiveMask: {
       type: Boolean,

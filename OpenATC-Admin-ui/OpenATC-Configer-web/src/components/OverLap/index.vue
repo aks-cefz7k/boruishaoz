@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import PhaseDataModel from '../../views/overView/crossDirection/utils'
+import PhaseDataModel from '../IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import xdrdirselector from '@/components/XRDDirSelector'
-import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkSvg'
+import PatternWalkSvg from '../IntersectionMap/crossDirection/baseImg/PatternWalkSvg'
 export default {
   name: 'OverLap',
   components: {

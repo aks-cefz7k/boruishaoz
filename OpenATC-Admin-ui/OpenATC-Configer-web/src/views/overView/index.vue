@@ -81,14 +81,12 @@ import { mapState } from 'vuex'
 import { getTscControl, queryDevice } from '@/api/control'
 import { registerMessage, uploadSingleTscParam } from '@/api/param'
 import { setIframdevid, getStageTypes } from '@/utils/auth'
-import FloatImgBtn from '@/components/FloatImgBtn'
-import CrossDiagram from './crossDirection/crossDiagram'
 import BoardCard from '@/components/BoardCard'
 import OverLap from '@/components/OverLap'
 import { getIntersectionInfo } from '@/api/template'
 // import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
-import PhaseDataModel from '@/views/overView/crossDirection/utils'
+import PhaseDataModel from '../../components/IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import RightPanel from '@/components/SchemeConfig'
 import TextPage from './textPage/index'
@@ -96,8 +94,6 @@ import IntersectionMap from '@/components/IntersectionMap'
 export default {
   name: 'overview',
   components: {
-    FloatImgBtn,
-    CrossDiagram,
     BoardCard,
     RightPanel,
     OverLap,
