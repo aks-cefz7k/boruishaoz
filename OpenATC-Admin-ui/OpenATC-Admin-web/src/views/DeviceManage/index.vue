@@ -203,7 +203,7 @@
           :label="$t('openatc.devicemanager.protocol')"
           align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="roles"
             :label="$t('openatc.devicemanager.state')"
             align="center">
@@ -228,7 +228,7 @@
                     <el-tag size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
                 </div>
               </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           prop="lastTime"
           width="150"
@@ -288,7 +288,7 @@ export default {
   data () {
     return {
       agentid: 0,
-      stateList: ['UP', 'FAULT', 'DOWN'],
+      // stateList: ['UP', 'FAULT', 'DOWN'],
       isOnlineChecked: true,
       isFaultChecked: true,
       isOfflineChecked: true,
@@ -427,8 +427,11 @@ export default {
   created () {
     // this.devsfilter = getCrossFilter('deviceFilter')
     this.getDicts()
-    this.getDeviceRanges()
-    this.getStatusFilterParams()
+    if (this.$route.params.filter) {
+      this.getStatusFilterParams()
+    } else {
+      this.getDeviceRanges()
+    }
   },
   methods: {
     getDicts () {
@@ -458,57 +461,57 @@ export default {
     onSelectCrossPhaseChange (dir) {
       // console.log(dir)
     },
-    onOnlineChange (val) {
-      this.isOnlineChecked = val
-      this.onStateChange()
-    },
-    onFaultChange (val) {
-      this.isFaultChecked = val
-      this.onStateChange()
-    },
-    onOfflineChange (val) {
-      this.isOfflineChecked = val
-      this.onStateChange()
-    },
-    onStateChange () {
-      let stateList = []
-      if (this.isOnlineChecked) {
-        stateList.push('UP')
-      }
-      if (this.isFaultChecked) {
-        stateList.push('FAULT')
-      }
-      if (this.isOfflineChecked) {
-        stateList.push('DOWN')
-      }
-      this.stateList = stateList
-    },
-    getTag (row) {
-      if (row.state === 'DOWN') {
-        return {
-          label: this.$t('openatc.devicemanager.offline'),
-          type: 'info'
-        }
-      } else if (row.state === 'FAULT') {
-        return {
-          label: this.$t('openatc.devicemanager.fault'),
-          type: 'danger'
-        }
-      } else {
-        if (row.status === 0) {
-          // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
-          return {
-            label: this.$t('openatc.devicemanager.online'),
-            type: 'success'
-          }
-        } else {
-          return {
-            label: this.$t('openatc.devicemanager.fault'),
-            type: 'danger'
-          }
-        }
-      }
-    },
+    // onOnlineChange (val) {
+    //   this.isOnlineChecked = val
+    //   this.onStateChange()
+    // },
+    // onFaultChange (val) {
+    //   this.isFaultChecked = val
+    //   this.onStateChange()
+    // },
+    // onOfflineChange (val) {
+    //   this.isOfflineChecked = val
+    //   this.onStateChange()
+    // },
+    // onStateChange () {
+    //   let stateList = []
+    //   if (this.isOnlineChecked) {
+    //     stateList.push('UP')
+    //   }
+    //   // if (this.isFaultChecked) {
+    //   //   stateList.push('FAULT')
+    //   // }
+    //   if (this.isOfflineChecked) {
+    //     stateList.push('DOWN')
+    //   }
+    //   this.stateList = stateList
+    // },
+    // getTag (row) {
+    //   if (row.state === 'DOWN') {
+    //     return {
+    //       label: this.$t('openatc.devicemanager.offline'),
+    //       type: 'info'
+    //     }
+    //   } else if (row.state === 'FAULT') {
+    //     return {
+    //       label: this.$t('openatc.devicemanager.fault'),
+    //       type: 'danger'
+    //     }
+    //   } else {
+    //     if (row.status === 0) {
+    //       // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
+    //       return {
+    //         label: this.$t('openatc.devicemanager.online'),
+    //         type: 'success'
+    //       }
+    //     } else {
+    //       return {
+    //         label: this.$t('openatc.devicemanager.fault'),
+    //         type: 'danger'
+    //       }
+    //     }
+    //   }
+    // },
     getDeviceRanges (row) {
       this.listLoading = true
       let reqData = {
@@ -663,20 +666,22 @@ export default {
       // 获取从首页跳转过来的设备状态过滤参数
       if (this.$route.params.filter !== undefined) {
         let stateFilter = this.$route.params.filter
-        switch (stateFilter) {
-          case 'online': this.onOnlineChange(true)
-            this.onOfflineChange(false)
-            this.onFaultChange(false)
-            break
-          case 'offline': this.onOfflineChange(true)
-            this.onOnlineChange(false)
-            this.onFaultChange(false)
-            break
-          case 'fault': this.onFaultChange(true)
-            this.onOnlineChange(false)
-            this.onOfflineChange(false)
-            break
-        }
+        this.states = stateFilter
+        this.getDeviceRanges()
+        // switch (stateFilter) {
+        //   case 'online': this.onOnlineChange(true)
+        //     this.onOfflineChange(false)
+        //     this.onFaultChange(false)
+        //     break
+        //   case 'offline': this.onOfflineChange(true)
+        //     this.onOnlineChange(false)
+        //     this.onFaultChange(false)
+        //     break
+        // case 'fault': this.onFaultChange(true)
+        //   this.onOnlineChange(false)
+        //   this.onOfflineChange(false)
+        //   break
+        // }
       }
     }
   }

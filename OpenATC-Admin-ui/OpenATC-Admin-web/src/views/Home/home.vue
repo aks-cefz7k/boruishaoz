@@ -199,9 +199,6 @@ export default {
         _this.Visible = true
       })
     }
-    // 订阅故障测试
-    // this.FaultEventData = new FaultEventData()
-    // this.FaultEventData.Init(this.handleFaultEventData)
   },
   destroyed () {
     clearInterval(this.getDevsDataTimer)
