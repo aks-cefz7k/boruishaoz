@@ -31,6 +31,7 @@
     </div>
   </div>
   <el-button class="controlbtn" type="primary" @click="toAutoControl">{{$t('edge.system.recovery')}}</el-button>
+  <el-button class="implementbtn" type="primary" @click="handleCheckChannel">{{$t('edge.channelControl.implement')}}</el-button>
 </div>
 </template>
 
@@ -107,7 +108,6 @@ export default {
         }
         this.data.push(lamp)
       }
-      console.log(this.data)
     },
     isHasLampCtrboard (i, channelIdList) {
       let index = i * 4
@@ -140,19 +140,27 @@ export default {
         lampcolor,
         lamp
       }
-      this.handleCheckChannel(this.curClickedLampInfo.lampctrboard, this.curClickedLampInfo.channel, this.curClickedLampInfo.lampcolor, this.curClickedLampInfo.lamp)
     },
-    handleCheckChannel (lampctrboard, channel, lampcolor, lamp) {
+    handleCheckChannel () {
+      if (this.curClickedLampInfo === undefined) {
+        this.$message.error(this.$t('edge.channelControl.noClickedLamp'))
+        return
+      }
       const params = {
-        lampctrboard,
-        channel,
-        lampcolor,
+        lampctrboard: this.curClickedLampInfo.lampctrboard,
+        channel: this.curClickedLampInfo.channel,
+        lampcolor: this.curClickedLampInfo.lampcolor,
         control: 15
       }
       channelcheck(params).then(data => {
         if (!data.data.success) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
         }
+        this.$message({
+          type: 'success',
+          message: this.$t('edge.channelControl.implementsuccess')
+        })
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
@@ -178,13 +186,16 @@ export default {
         lampcolor: 0,
         control: 0
       }
+      this.curClickedLampInfo = undefined
       channelcheck(params).then(data => {
         if (!data.data.success) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        this.$alert(this.$t('edge.channelControl.recoverysuccess'), { type: 'success' })
-        this.curClickedLampInfo = undefined
+        this.$message({
+          type: 'success',
+          message: this.$t('edge.channelControl.recoverysuccess')
+        })
       }).catch(error => {
         this.$message.error(error)
         console.log(error)

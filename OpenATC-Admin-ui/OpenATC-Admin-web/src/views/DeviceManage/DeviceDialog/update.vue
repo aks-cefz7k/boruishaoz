@@ -23,7 +23,7 @@
           :visible.sync="innerVisible"
           append-to-body>
           <el-form ref="deviceId" :model="innerForm">
-            <el-form-item :label="$t('openatc.devicemanager.deviceid')" label-width="15%">
+            <el-form-item :label="$t('openatc.devicemanager.crowsid')" label-width="15%">
               <el-input v-model="innerForm.id" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
@@ -355,11 +355,6 @@ export default {
       UpdateDeviceId(data).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.updatefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
           return
         }
         this.innerVisible = false
@@ -387,11 +382,6 @@ export default {
       AddDevice(devInfo).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: res.data.message,
-            type: 'error',
-            duration: 1 * 1000
-          })
           return
         }
         this.dialogFormVisible = false
@@ -418,11 +408,11 @@ export default {
       UpdateDevice(devInfo).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.updatefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
+          // this.$message({
+          //   message: this.$t('openatc.common.updatefailed'),
+          //   type: 'error',
+          //   duration: 1 * 1000
+          // })
           return
         }
         this.dialogFormVisible = false
@@ -450,10 +440,10 @@ export default {
       this.showModifyIdButton = true
       if (dev.protocol === 'ocp') {
         this.platformCheck = true
-        dev.platform = ''
+        dev.platform = 'OpenATC'
       } else {
         this.platformCheck = false
-        dev.platform = 'OpenATC'
+        // dev.platform = ''
       }
       // 编辑
       const device = JSON.parse(JSON.stringify(dev))
@@ -489,11 +479,11 @@ export default {
     },
     doChangeProtocol (val) {
       if (val === 'ocp') {
-        this.deviceInfo.platform = ''
         this.platformCheck = true
+        this.deviceInfo.platform = 'OpenATC'
       } else {
         this.platformCheck = false
-        this.deviceInfo.platform = 'OpenATC'
+        this.deviceInfo.platform = ''
       }
     }
   }

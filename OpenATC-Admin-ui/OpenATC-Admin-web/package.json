@@ -14,6 +14,7 @@
     "build_theme": "node ./node_modules/element-theme/bin/element-theme -c ./src/ThemeStyle/kisselement.scss"
   },
   "dependencies": {
+    "@openatc/edgebase-front": "file:../OpenATC-Configer-web",
     "ajv": "^6.0.0",
     "animate.css": "^3.7.2",
     "axios": "0.17.1",
@@ -22,7 +23,6 @@
     "chnl": "^1.2.0",
     "concat-map": "^0.0.1",
     "echarts": "^4.5.0",
-    "edgebase-front": "^1.21.0",
     "element-theme": "^2.0.1",
     "element-ui": "^2.13.0",
     "file-saver": "^2.0.5",

@@ -15,7 +15,7 @@
     <sidebar class="sidebar-container" v-if="!hideMenu && !graphicMode"></sidebar>
     <div class="edge-main-container" :class="{'changeMainPosition': hideMenu || graphicMode}">
       <navbar></navbar>
-      <app-main v-if="isload"></app-main>
+      <app-main></app-main>
     </div>
   </div>
 </template>
@@ -28,7 +28,8 @@ import { setIframdevid } from '@/utils/auth'
 // import { AddDevice } from '@/api/control'
 import router from '@/router'
 import { mapState } from 'vuex'
-import axios from 'axios'
+// import axios from 'axios'
+import { GetLRRoadConfig } from '@/api/config'
 
 export default {
   name: 'Layout',
@@ -42,8 +43,7 @@ export default {
       bodyDomSize: {
         width: 1920,
         height: 1080
-      },
-      isload: false
+      }
     }
   },
   mixins: [ResizeMixin],
@@ -132,16 +132,35 @@ export default {
       this.$store.dispatch('CloseSideBar', { withoutAnimation: false })
     },
     getRoadConfig () {
-      axios.get('./LRRoadConfig.json').then(val => {
+      GetLRRoadConfig().then((data) => {
+        if (!data) {
+          this.$store.dispatch('SetRoadDirection', 'right')
+          return
+        }
+        if (!data.data.success) {
+          this.$store.dispatch('SetRoadDirection', 'right')
+          return
+        }
         // 读取左行 右行配置文件
-        let roadDir = val.data.roadDirection
-        if (val.status === 200 && roadDir !== undefined) {
+        let roadDir = data.data.data.roadDirection
+        if (roadDir !== undefined) {
           this.$store.dispatch('SetRoadDirection', roadDir)
         } else {
           this.$store.dispatch('SetRoadDirection', 'right')
         }
-        this.isload = true
+      }).catch(error => {
+        this.$store.dispatch('SetRoadDirection', 'right')
+        this.$message.error(error)
       })
+      // axios.get('./LRRoadConfig.json').then(val => {
+      //   // 读取左行 右行配置文件
+      //   let roadDir = val.data.roadDirection
+      //   if (val.status === 200 && roadDir !== undefined) {
+      //     this.$store.dispatch('SetRoadDirection', roadDir)
+      //   } else {
+      //     this.$store.dispatch('SetRoadDirection', 'right')
+      //   }
+      // })
     }
   }
 }

@@ -15,6 +15,7 @@
 
 const path = require('path')
 const DEV_API_HOST = '192.168.13.103:10003'
+// const DEV_API_HOST = '192.168.14.183:10003'
 
 module.exports = {
   dev: {
@@ -28,6 +29,7 @@ module.exports = {
         // target:  'http://192.168.13.103:9999',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
         // target:  'http://192.168.13.103:9999/kissapi',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
         target:  'http://192.168.13.103:10003/openatc',
+        // target:  'http://192.168.14.187:10003/openatc',
         // target:  'https://dolphin-test.kedacom.com/openatc',
         changeOrigin: true,     //跨域
         pathRewrite: {

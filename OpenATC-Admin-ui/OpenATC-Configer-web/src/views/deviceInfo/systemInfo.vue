@@ -28,11 +28,11 @@
               <el-input v-model="customInfo.areaid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
-              <div class="sub-title">{{$t('edge.deviceinfo.crossid')}}</div>
+              <div class="sub-title">{{$t('edge.deviceinfo.devid')}}</div>
               <el-input v-model="customInfo.intersectionid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
-              <div class="sub-title">{{$t('edge.overview.crossname')}}:</div>
+              <div class="sub-title">{{$t('edge.deviceinfo.devname')}}:</div>
               <el-input v-model="customInfo.fixintersectioninfo" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
@@ -144,15 +144,15 @@
           <el-row class="demo-autocomplete" :gutter="30">
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenandredon')}}</div>
-              <el-input v-model.number="customInfo.faultdetect.detectgapgreenandredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input-number :min="0" :max="65535" :controls="false" v-model="customInfo.faultdetect.detectgapgreenandredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input-number>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapnoredon')}}</div>
-              <el-input v-model.number="customInfo.faultdetect.detectgapnoredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input-number :min="0" :max="65535" :controls="false" v-model="customInfo.faultdetect.detectgapnoredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input-number>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenconflict')}}</div>
-              <el-input v-model.number="customInfo.faultdetect.detectgapgreenconflict" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input-number :min="0" :max="65535" :controls="false" v-model="customInfo.faultdetect.detectgapgreenconflict" :placeholder="$t('edge.common.entercontent')" size="small"></el-input-number>
             </el-col>
           </el-row>
           <el-row class="demo-autocomplete" :gutter="30">
@@ -442,25 +442,34 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          if (data.data.code === '4002') { // 信号机参数校验
-            let codeList = data.data.data.errorCode
-            if (codeList.length === 0) {
-              this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
-              return
+
+          if (data.data.code === '4002') { // 错误应答
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              this.$message.error(getMessageByCode(data.data.data.errorCode, this.$i18n.locale))
             }
-            let errorMes = this.$t('edge.common.downloaderror')
-            for (let code of codeList) {
-              if (this.$i18n.locale === 'en') {
-                errorMes = getErrorMesEn(errorMes, code)
-              } else {
-                errorMes = getErrorMesZh(errorMes, code)
+            if (data.data.data.errorCode === '4207') {
+              // 信号机参数校验
+              let codeList = data.data.data.content.errorCode
+              if (codeList.length === 0) {
+                this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
+                return
               }
+              let errorMes = this.$t('edge.common.downloaderror')
+              for (let code of codeList) {
+                if (this.$i18n.locale === 'en') {
+                  errorMes = getErrorMesEn(errorMes, code)
+                } else {
+                  errorMes = getErrorMesZh(errorMes, code)
+                }
+              }
+              this.$message({
+                message: errorMes,
+                type: 'error',
+                dangerouslyUseHTMLString: true
+              })
             }
-            this.$message({
-              message: errorMes,
-              type: 'error',
-              dangerouslyUseHTMLString: true
-            })
             return
           }
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))

@@ -31,19 +31,22 @@
               <div class="Img upImg"></div>
               <div class="desc">
                   <div class="num">
-                    <span style="color: red;">{{chartData[2].value}}</span>
+                    <span class="toJump" style="color: red;" @click="handleJumpToCrossMgr('fault')">{{chartData[2].value}}</span>
                     <span>/</span>
-                    <span>{{chartData[0].value}}</span>
+                    <span class="toJump" @click="handleJumpToCrossMgr('online')">{{chartData[0].value}}</span>
                   </div>
-                  <!-- <div class="state">{{$t('openatc.home.online')}}</div> -->
-                  <div class="state">{{$t('openatc.home.faultOrOffLine')}}</div>
+                  <div class="stateGroup">
+                    <div class="state toJump" @click="handleJumpToCrossMgr('fault')">{{$t('openatc.home.fault')}}</div>
+                    <div class="state toJump" style="margin: 0 5px;"> / </div>
+                    <div class="state toJump" @click="handleJumpToCrossMgr('online')">{{$t('openatc.home.online')}}</div>
+                  </div>
               </div>
           </div>
           <div class="devsDown" :style="{ height: rightPartHeight }">
               <div class="Img downImg"></div>
               <div class="desc">
-                  <div class="num">{{chartData[1].value}}</div>
-                  <div class="state">{{$t('openatc.home.offline')}}</div>
+                  <div class="num toJump" @click="handleJumpToCrossMgr('offline')">{{chartData[1].value}}</div>
+                  <div class="state offlinestate toJump" @click="handleJumpToCrossMgr('offline')">{{$t('openatc.home.offline')}}</div>
               </div>
           </div>
       </div>
@@ -53,6 +56,7 @@
 </template>
 
 <script>
+import { clearCrossFilter } from '@/utils/crossFilterMgr'
 export default {
   name: 'devsStateChartPanel',
   props: {
@@ -104,6 +108,17 @@ export default {
         this.chartWidth = document.getElementById('leftPart').clientWidth - 30
         this.chartHeight = this.chartWidth
       }
+      let viewH = document.documentElement.clientHeight - 40
+      this.lengendPartPaddingTop = (25 / 1080 * viewH).toFixed(0) + 'px'
+      this.rightPartHeight = (154 / 1080 * viewH).toFixed(0) + 'px'
+      this.rightPartPaddingTop = (88 / 1080 * viewH).toFixed(0) + 'px'
+    },
+    handleJumpToCrossMgr (filter) {
+      clearCrossFilter() // 清除路口管理过滤条件
+      this.$router.push({
+        name: 'deviceMgr',
+        params: {filter}
+      })
     }
   },
   created () {

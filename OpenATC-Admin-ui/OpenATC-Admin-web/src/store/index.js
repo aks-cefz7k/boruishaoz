@@ -17,7 +17,7 @@ import globalVariable from './modules/globalVariable'
 import KissModel from './modules/KissModel'
 import WebsocketModel from './modules/WesocketModel'
 import getters from './getters'
-import Edgebase from 'edgebase-front'
+import Edgebase from '@openatc/edgebase-front'
 
 Vue.use(Vuex)
 const agent = Edgebase.Store.agent

@@ -32,8 +32,10 @@
             <el-input-number
               controls-position="right"
               size="small"
-              :max="1"
+              :max="100"
               :min="0"
+              :precision="0"
+              :step="1"
               v-model.number="subFactorList[index]"
               ref="type"
               @change="onchange">
@@ -116,9 +118,9 @@ export default {
       for (let i = 0; i < this.subFactorList.length; i++) {
         let num = this.subFactorList[i]
         sum = sum + num
-        if (sum > 1) {
-          this.$message.warning(this.$t('edge.singleoptim.gratterThanOne'))
-        } else if (sum === 1) {
+        if (sum > 100) {
+          this.$message.warning(this.$t('edge.singleoptim.gratterThanHundred'))
+        } else if (sum === 100) {
           this.$emit('setSubList', this.rowIndex, this.subIndex, this.subFactorList)
         }
       }

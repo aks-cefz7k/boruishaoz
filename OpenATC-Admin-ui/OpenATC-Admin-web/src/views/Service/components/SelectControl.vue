@@ -60,6 +60,10 @@ export default {
       value: [],
       options: [
         {
+          value: -1,
+          label: this.$t('openatc.dutyroute.unknowControl')
+        },
+        {
           value: 0,
           label: this.$t('openatc.dutyroute.autonomouscontrol')
         },
@@ -113,19 +117,47 @@ export default {
         },
         {
           value: 13,
-          label: this.$t('openatc.dutyroute.channellock')
+          label: this.$t('openatc.dutyroute.reserving13')
         },
         {
           value: 14,
-          label: this.$t('openatc.dutyroute.phaselock')
+          label: this.$t('openatc.dutyroute.reserving14')
         },
         {
-          value: 100,
+          value: 15,
+          label: this.$t('openatc.dutyroute.channelDetector')
+        },
+        {
+          value: 16,
+          label: this.$t('openatc.dutyroute.directionLock')
+        },
+        {
+          value: 17,
+          label: this.$t('openatc.dutyroute.reserving17')
+        },
+        {
+          value: 18,
+          label: this.$t('openatc.dutyroute.reserving18')
+        },
+        {
+          value: 19,
+          label: this.$t('openatc.dutyroute.inductivePedestrianCrossing')
+        },
+        {
+          value: 20,
           label: this.$t('openatc.dutyroute.programIntervention')
         },
         {
-          value: 101,
-          label: this.$t('openatc.dutyroute.channelDetection')
+          value: 21,
+          label: this.$t('openatc.dutyroute.reserving21')
+        },
+        {
+          value: 22,
+          label: this.$t('openatc.dutyroute.priorityControl')
+        },
+        {
+          value: 23,
+          label: this.$t('openatc.dutyroute.phaseReleaseControl')
         }
       ]
     }

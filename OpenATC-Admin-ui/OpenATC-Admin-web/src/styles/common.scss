@@ -11,7 +11,7 @@
  **/
  @charset "UTF-8";
 //  @import './theme/element-variables.scss';
-//  @import '../../node_modules/edgebase-front/src/styles/common.scss';
+//  @import '../../node_modules/@openatc/edgebase-front/src/styles/common.scss';
  @import './mixin.scss';
  // 整体背景色
  .app-wrapper1 {
@@ -88,7 +88,7 @@
   }
 }
 .appMain {
-  height: calc(100% - 57px);
+  height: calc(100% - 53px - 15px);
   background: $--color-white;
 }
 //commom 样式
@@ -116,6 +116,10 @@
     border-color: $--border-color-lighter;
   }
 }
+.el-range-editor .el-range-input {
+  background-color: $--color-white;
+}
+
  // 主页样式
  .homeLayout {
     padding: 19px;
@@ -210,6 +214,7 @@
             font-size: 32px;
             letter-spacing: 0px;
             color: $--color-text-primary;
+            cursor: pointer;
         }
     }
     .title {
@@ -313,9 +318,21 @@
             display: flex;
             align-items: center;
         }
+        .stateGroup {
+          overflow: hidden;
+          width: 75px;
+          margin: 5px auto;
+        }
         .state {
-            font-size: 14px;
-            color: $--color-text-regular;
+          float: left;
+          font-size: 14px;
+          color: $--color-text-regular;
+        }
+        .toJump {
+          cursor: pointer;
+        }
+        .offlinestate {
+          width: 100%;
         }
         .desc {
             text-align: center;
@@ -326,7 +343,7 @@
             background-size: 66px 66px;
             background-repeat: no-repeat;
             background-position:center center;
-            margin: 0 13.5% 0 20%;
+            margin: 0 13.5% 0 18%;
         }
         .devsUp {
             > div {
@@ -701,32 +718,6 @@
   .state-search {
     margin-left: 2px;
   }
-  //故障记录页面样式
-  .openatc-faultrecord {
-    margin-top: 15px;
-    .el-range-editor .el-range-input {
-      background-color: $--background-color-base;
-    }
-    .el-date-editor .el-range-separator {
-      padding: 0
-    }
-    .el-range-editor--small .el-range-separator {
-      line-height: 32px;
-    }
-    .devs-table {
-      position: absolute;
-      top: 130px;
-      left: 20px;
-      right: 20px;
-      border: solid 1px $--border-color-lighter;
-      overflow: auto;
-    }
-    .filter-container {
-      float: right;
-      margin-top: 10px;
-      margin-right: 20px;
-    }
-  }
   // 用户管理页面样式
   .openatc-user {
     margin-top: 15px;
@@ -1088,7 +1079,23 @@
       .filter-container {
         float: right;
         margin-top: 10px;
-        margin-right: 20px;
+        // margin-right: 20px;
+        .header-span {
+          color: $--color-text-secondary;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 14px;
+        }
+        .timepicker {
+          .el-date-editor .el-range-separator {
+            line-height: 29px;
+          }
+          .el-date-editor .el-range-input {
+            color: $--color-text-primary;
+            background-color: $--color-white;
+          }
+        }
       }
   }
   // 组织机构页面样式
@@ -1781,10 +1788,11 @@ table td {
   margin-top: 15px;
   // height: calc(100% - 30px);
   height: 100%;
-  position: relative;
-  padding: 19px;
+  // position: relative;
+  // padding-bottom: 19px;
   // margin: 15px;
   box-sizing: border-box;
+  background: $--background-color-base;
   .title {
     height: 60px;
     line-height: 60px;
@@ -1799,7 +1807,8 @@ table td {
     width: 46%;
     background: $--color-white;
     margin-right: 15px;
-    box-shadow: 0px 0px 4px 0px rgba(0, 32, 60, 0.06);
+    // box-shadow: 0px 0px 4px 0px rgba(0, 32, 60, 0.06);
+    border: 1px solid $--border-color-lighter;
     border-radius: 4px;
     .tool {
       padding: 15px 20px;
@@ -1843,8 +1852,6 @@ table td {
           padding: 0;
         }
         .overflow-detector-list {
-          // border: 1px solid #ebeef5;
-          // border-bottom: none;
           height: calc(100% - 90px);
         }
       }
@@ -1855,7 +1862,8 @@ table td {
     height: 100%;
     width: calc(54% - 15px);
     background: $--color-white;
-    box-shadow: 0px 0px 4px 0px rgba(0, 32, 60, 0.06);
+    // box-shadow: 0px 0px 4px 0px rgba(0, 32, 60, 0.06);
+    border: 1px solid $--border-color-lighter;
     border-radius: 4px;
     padding: 0 20px;
     box-sizing: border-box;
@@ -1867,6 +1875,7 @@ table td {
       position: absolute;
       right: 20px;
       top: 20px;
+      // float: right;
       line-height: 36px;
       padding: 0;
     }
@@ -1931,7 +1940,7 @@ table td {
   .header {
     float:right;
     margin-top: -70px;
-    margin-right:50px;
+    margin-right: 120px;
     .crossName {
       float: left;
       margin-right: 8px;
@@ -2310,3 +2319,85 @@ table td {
     }
   }
 } 
+// 操作记录json弹窗
+.recordJsonModal {
+  width: 900px;
+  pre {
+    max-height: 880px;
+    overflow: auto;
+  }
+}
+// 故障记录
+.faultPage {
+  // position: relative; // 父元素定位会影响子元素的offset高度计算
+  height: 100%;
+  .tabButton {
+    position: absolute;
+    left: 16px;
+    // top需要自适应计算
+    .btn {
+      float: left;
+      width: 100px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      background-color: $--color-white;
+      border: solid 1px $--color-primary;
+      color: $--color-primary;
+      cursor: pointer;
+    }
+    .btnFocus {
+      background-color: $--color-primary;
+      border: solid 1px $--color-primary;
+      color: #fff;
+    }
+  }
+  .openatc-historyfaultrecord {
+    .filter-container {
+      float: right;
+      padding-left: 280px;
+      margin-bottom: 20px;
+      .filter {
+        float: left;
+        margin-left: 20px;
+        margin-bottom: 10px;
+        .header-span {
+          color: $--color-text-secondary;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 14px;
+        } 
+      }
+    }
+  }
+  .openatc-realtimefaultrecord {
+    padding-top: 90px;
+  }
+}  //故障记录页面样式
+.openatc-faultrecord {
+  margin-top: 15px;
+  .el-range-editor .el-range-input {
+    background-color: $--color-white;
+  }
+  .el-date-editor .el-range-separator {
+    padding: 0
+  }
+  .el-range-editor--small .el-range-separator {
+    line-height: 32px;
+  }
+  .devs-table {
+    padding: 0 20px;
+    .el-table {
+      border: solid 1px $--border-color-lighter;
+    }
+  }
+  .filter-container {
+    float: right;
+    padding-top: 20px;
+    padding-right: 20px;
+  }
+}

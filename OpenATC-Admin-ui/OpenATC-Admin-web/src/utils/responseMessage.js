@@ -1,7 +1,7 @@
 
 import en from '../i18n/language/en'
 import zh from '../i18n/language/zh'
-import Edgebase from 'edgebase-front'
+import Edgebase from '@openatc/edgebase-front'
 
 function getMessageByCode (code, language) {
   let res = 'error'

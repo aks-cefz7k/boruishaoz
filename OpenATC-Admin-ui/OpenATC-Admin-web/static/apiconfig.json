@@ -160,6 +160,21 @@
     "method": "put"
   },
   {
+    "key": "uploadSingleTscParam",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
+    "key": "getTscCurrentVolume",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
+    "key": "putTscControl",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
     "key": "getTscControl",
     "url": "/devs/message",
     "method": "post"
@@ -256,8 +271,8 @@
   },
   {
     "key": "GetUntreated",
-    "url": "/fault/uncheck",
-    "method": "get"
+    "url": "/fault/range",
+    "method": "post"
   },
   {
     "key": "GetAllHistoryFault",
@@ -287,6 +302,11 @@
   {
     "key": "DeleteFaultById",
     "url": "/fault",
+    "method": "delete"
+  },
+  {
+    "key": "DeleteFault",
+    "url": "/fault/del",
     "method": "delete"
   },
   {
@@ -376,8 +396,13 @@
   },
   {
     "key": "off_overflow_control",
-    "url": "/overflow/control",
+    "url": "/overflow/control/off",
     "method": "post"
+  },
+  {
+    "key": "get_overflow_execute_status",
+    "url": "/overflow/status",
+    "method": "get"
   },
   {
     "key": "getAllTrafficData",
@@ -387,6 +412,11 @@
   {
     "key": "getHistoryPatternData",
     "url": "/historydata/pattern/range",
+    "method": "post"
+  },
+  {
+    "key": "getHisParamsRange",
+    "url": "/devs/hisparams/range",
     "method": "post"
   }
 ]

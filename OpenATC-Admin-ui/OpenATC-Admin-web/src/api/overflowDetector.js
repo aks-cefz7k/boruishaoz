@@ -30,9 +30,9 @@ class OverflowDetector {
     let api = new Authapi('add_overflow_detector')
     return api.Send({}, data, [])
   }
-  UpdateOverflows (data) {
+  UpdateOverflows (patternid, data) {
     let api = new Authapi('update_overflows')
-    return api.Send({}, data, [data[0].patternid])
+    return api.Send({}, data, [patternid])
   }
   openOverflowsControl (id) {
     let api = new Authapi('open_overflow_control')
@@ -40,6 +40,10 @@ class OverflowDetector {
   }
   offOverflowsControl (id) {
     let api = new Authapi('off_overflow_control')
+    return api.Send({}, {}, [id])
+  }
+  GetOverflowsExecuteStatus (id) {
+    let api = new Authapi('get_overflow_execute_status')
     return api.Send({}, {}, [id])
   }
 }

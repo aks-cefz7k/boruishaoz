@@ -11,6 +11,8 @@
  **/
 <template>
   <div class="openatc-device">
+    <!-- <SelectAgentid @onChange="onSelectAgentidChange"></SelectAgentid>
+    <SelectCrossPhase :agentid="agentid" @onChange="onSelectCrossPhaseChange"></SelectCrossPhase> -->
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
     <div class="devs-container">
       <div class="tag-container">
@@ -110,9 +112,9 @@
                   trigger="click">
                   <div>
                     <template>
-                      <el-checkbox @change="onOnlineChange" :checked="true" :label="$t('openatc.devicemanager.online')"></el-checkbox>
-                      <el-checkbox @change="onFaultChange" :checked="true" :label="$t('openatc.devicemanager.fault')"></el-checkbox>
-                      <el-checkbox @change="onOfflineChange" :checked="true" :label="$t('openatc.devicemanager.offline')"></el-checkbox>
+                      <el-checkbox @change="onOnlineChange" :checked="isOnlineChecked" :label="$t('openatc.devicemanager.online')"></el-checkbox>
+                      <el-checkbox @change="onFaultChange" :checked="isFaultChecked" :label="$t('openatc.devicemanager.fault')"></el-checkbox>
+                      <el-checkbox @change="onOfflineChange" :checked="isOfflineChecked" :label="$t('openatc.devicemanager.offline')"></el-checkbox>
                     </template>
                   </div>
                   <el-row type="text" slot="reference">
@@ -171,14 +173,18 @@ import PatternStatistics from './DeviceDialog/PatternStatistics'
 import TrafficStatistics from './DeviceDialog/TrafficStatistics'
 import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
-import { GetCurrentFaultByAgentid } from '@/api/fault'
+import { GetFaultRange } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
+import SelectAgentid from '@/components/SelectAgentid'
+import SelectCrossPhase from '@/components/SelectCrossPhase'
+import { setCrossFilter, getCrossFilter } from '@/utils/crossFilterMgr'
 export default {
   name: 'device',
-  components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics },
+  components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics, SelectAgentid, SelectCrossPhase },
   data () {
     return {
-      stateList: [],
+      agentid: 0,
+      stateList: ['UP', 'FAULT', 'DOWN'],
       isOnlineChecked: true,
       isFaultChecked: true,
       isOfflineChecked: true,
@@ -211,7 +217,7 @@ export default {
         (data.name !== undefined && data.name.toLowerCase().includes(this.devsfilter.toLowerCase()))
       )
       let stateList = this.stateList
-      if (stateList && stateList.length > 0) {
+      if (stateList && stateList.length >= 0) {
         list = list.filter(dev => {
           return stateList.includes(dev.state)
         })
@@ -223,10 +229,26 @@ export default {
       return list
     }
   },
+  watch: {
+    devsfilter: {
+      handler: (filter) => {
+        setCrossFilter(filter)
+      },
+      deep: true
+    }
+  },
   created () {
+    this.devsfilter = getCrossFilter('deviceFilter')
     this.getList()
+    this.getStatusFilterParams()
   },
   methods: {
+    onSelectAgentidChange (agentid) {
+      this.agentid = agentid
+    },
+    onSelectCrossPhaseChange (dir) {
+      // console.log(dir)
+    },
     onOnlineChange (val) {
       this.isOnlineChecked = val
       this.onStateChange()
@@ -333,12 +355,16 @@ export default {
     },
     handleFault (row) {
       let _this = this
-      GetCurrentFaultByAgentid(row.agentid).then(res => {
+      let reqData = {
+        'agentId': row.agentid,
+        'isCurrentFault': true
+      }
+      GetFaultRange(reqData).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return false
         } else {
-          let list = res.data.data
+          let list = res.data.data.content
           if (list && list.length > 0) {
             this.childTitle = 'faultDetail'
             let component = _this.$refs.faultDetail
@@ -363,18 +389,23 @@ export default {
     ok () {
       DeleteDevice(this.deleteId).then(res => {
         if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.deletefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
-          return
+          let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+          if (res.data.data) {
+            let errorCode = res.data.data.errorCode
+            if (errorCode) {
+              msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+            }
+          }
+          this.$message.error(msg)
+          return false
+          // this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          // return
         }
-        this.$message({
-          message: this.$t('openatc.common.deletesuccess'),
-          type: 'success'
-        })
+        this.$message.success(this.$t('openatc.common.deletesuccess'))
+        // this.$message({
+        //   message: this.$t('openatc.common.deletesuccess'),
+        //   type: 'success'
+        // })
         this.messageboxVisible = false
         this.getList()
       })
@@ -402,6 +433,26 @@ export default {
           break
         case 'traffic':
           break
+      }
+    },
+    getStatusFilterParams () {
+      // 获取从首页跳转过来的设备状态过滤参数
+      if (this.$route.params.filter !== undefined) {
+        let stateFilter = this.$route.params.filter
+        switch (stateFilter) {
+          case 'online': this.onOnlineChange(true)
+            this.onOfflineChange(false)
+            this.onFaultChange(false)
+            break
+          case 'offline': this.onOfflineChange(true)
+            this.onOnlineChange(false)
+            this.onFaultChange(false)
+            break
+          case 'fault': this.onFaultChange(true)
+            this.onOnlineChange(false)
+            this.onOfflineChange(false)
+            break
+        }
       }
     }
   }

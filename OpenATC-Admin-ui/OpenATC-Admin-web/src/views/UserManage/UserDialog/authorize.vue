@@ -20,6 +20,7 @@
             <el-date-picker
                 v-model="value"
                 size="small"
+                popper-class="common-date-popper"
                 type="datetimerange"
                 :range-separator="$t('openatc.usermanager.to')"
                 :start-placeholder="$t('openatc.usermanager.starttime')"

@@ -39,9 +39,20 @@ export default {
   props: {
     patternStatusList: {
       type: Array
+    },
+    controlData: {
+      type: Object
     }
   },
   watch: {
+    controlData: {
+      handler: function (val, oldVal) {
+        // this.handleStages() // 计算屏障高度
+        this.getPhaseId(this.controlData)
+      },
+      // 深度观察监听
+      deep: true
+    },
     patternStatusList: {
       handler: function (val, oldVal) {
         // this.handleStages() // 计算屏障高度
@@ -54,49 +65,26 @@ export default {
   created () {
     if (this.patternStatusList && this.patternStatusList.length > 1) {
       this.getPhaseId(this.patternStatusList)
-      // console.log(this.patternStatusList, 7878)
-    } else {
-      console.log(this.patternStatusList, 8888)
     }
   },
   mounted () {
-    // this.getPhaseId(this.patternStatusList)
   },
   beforeUpdate () {
     if (this.patternStatusList && this.patternStatusList.length > 1) {
       this.getPhaseId(this.patternStatusList)
-      // console.log(this.patternStatusList, 7878)
     } else if (this.patternStatusList && this.patternStatusList.length === 1) {
       this.handleStages()
-      // console.log(this.patternStatusList, 8888)
     }
   },
   methods: {
-    getPhaseId (rings) { // 画阶段方法
-      rings = JSON.parse(JSON.stringify(rings))
-      if (rings.length === 0) {
-        this.stageLineStatus = false
-        return
-      }
-      this.stageLineStatus = true
-      let mapAdd = rings.map(item => {
-        return item.map(val => {
-          return val.split
-        })
-      })
-      let maxCycle = mapAdd.length > 0 ? mapAdd.map(item => {
-        return item.length > 0 ? item.reduce((a, b) => {
-          return a + b
-        }) : 0
-      }) : 0
-      this.max = Math.max(...maxCycle)// 每个环的周期最大值
-      this.stateList = [0]
-      this.narr = []
+    getControl (newList) { // 总揽实时数据
       let currentIds = ''
       let lastCurrentIds = ''
+      this.stateList = [0]
+      this.narr = []
       for (let j = 0; j <= this.max; j++) { // 指针长度
-        for (let i = 0; i < rings.length; i++) { // 环列表
-          let ring = rings[i]// 每个环对象
+        for (let i = 0; i < newList.length; i++) { // 环列表
+          let ring = newList[i]// 每个环对象
           let sum = 0
           for (let n = 0; n < ring.length; n++) { // 相位累计长度
             sum = sum + ring[n].split
@@ -115,6 +103,60 @@ export default {
         this.numList = this.stateList.map(item => {
           return (item / this.max * 100).toFixed(3) + '%'
         })
+      }
+    },
+    getPhaseId (rings) { // 画阶段方法
+      rings = JSON.parse(JSON.stringify(rings))
+      if (rings.length === 0) {
+        this.stageLineStatus = false
+        return
+      }
+      this.stageLineStatus = true
+      if (this.controlData) {
+        let mapAdd = rings.phase.map(item => {
+          return {
+            id: item.id,
+            split: item.split
+          }
+        })
+        let newRings = rings.rings.map(j => {
+          return j.sequence
+        })
+        let newList = newRings.map(item => {
+          let ret = []
+          item.map(i => {
+            const find = mapAdd.find(j => j.id === i)
+            if (find) {
+              ret.push(find)
+            }
+          })
+          return ret
+        })
+        let mapAdds = newList.map(item => {
+          return item.map(val => {
+            return val.split
+          })
+        })
+        let maxCycle = mapAdds.length > 0 ? mapAdds.map(item => {
+          return item.length > 0 ? item.reduce((a, b) => {
+            return a + b
+          }) : 0
+        }) : 0
+        this.max = Math.max(...maxCycle)// 每个环的周期最大值
+        this.getControl(newList)
+      } else {
+        let mapAdd = rings.map(item => {
+          return item.map(val => {
+            return val.value
+          })
+        })
+        let maxCycle = mapAdd.length > 0 ? mapAdd.map(item => {
+          return item.length > 0 ? item.reduce((a, b) => {
+            return a + b
+          }) : 0
+        }) : 0
+        this.max = Math.max(...maxCycle)// 每个环的周期最大值
+        this.getControl(rings)
       }
       for (let i = this.numList.length - 1; i >= 1; i--) {
         this.narr.push((Number.parseFloat(this.numList[i]) - Number.parseFloat(this.numList[i - 1])) / 2 + Number.parseFloat(this.numList[i - 1]) - 1 + '%')

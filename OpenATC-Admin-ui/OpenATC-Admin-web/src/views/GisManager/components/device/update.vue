@@ -27,7 +27,7 @@
         label-width="15%"
       >
         <el-form-item
-          :label="$t('openatc.devicemanager.deviceid')"
+          :label="$t('openatc.devicemanager.crossid')"
           prop="agentid"
         >
           <el-input

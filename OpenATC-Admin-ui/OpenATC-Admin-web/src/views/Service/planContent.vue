@@ -184,6 +184,8 @@ export default {
           if (item.agentid === state.agentid) {
             item.state = state.state
             item.resttime = state.resttime
+            item.currentControl = state.control ? state.control : -1
+            item.currentControlName = this.getControlName(item.currentControl)
             let controlName = this.getControlName(item.control)
             item.controlName = controlName
             for (let dev of this.devicesData) {
@@ -267,84 +269,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-// .serviceroute-plancontent {
-//   position: relative;
-// }
-// .btnGroup {
-//   overflow: hidden;
-//   float: right;
-//   width: 150px;
-//   /* width: 230px; */
-// }
-// /* 蒙层样式 */
-// .mask {
-//   position: fixed;
-//   left: 0;
-//   top: 0;
-//   width: 100%;
-//   height: 100%;
-//   background: #000;
-//   opacity: 0.5;
-//   z-index: 98;
-// }
-// /* 原生按钮样式修改 */
-// .btnGroup button {
-//   width: 70px;
-//   height: 40px;
-//   padding: 0;
-//   line-height: 40px;
-//   border: 1px solid #dcdfe6;
-//   white-space: nowrap;
-//   outline: 0;
-//   transition: 0.1s;
-//   font-size: 14px;
-//   border-radius: 4px;
-//   color: $--color-white;
-//   background-color: $--color-primary;
-//   border-color: $--color-primary;
-//   cursor: pointer;
-// }
-// .btnGroup button:hover {
-//   color: $--color-white;
-//   background-color: #66b1ff;
-//   border-color: #66b1ff;
-// }
-// .btnGroup > button {
-//   float: left;
-//   position: relative;
-//   z-index: 10;
-// }
-// .btnGroup button {
-//   height: 32px;
-//   line-height: 32px;
-// }
-// .btnGroup .editbtn {
-//   float: left;
-//   position: relative;
-//   /* z-index: 98; */
-//   margin-left: 10px;
-// }
-// .btnGroup .editbtn button {
-//   font-weight: 500;
-// }
-// /* 提示框相关 */
-// .tipContent > div {
-//   float: left;
-// }
-// .tipContent div i {
-//   color: $--color-primary;
-//   font-size: 30px;
-// }
-// .tipContent .text {
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 1px;
-//   color: $--color-primary;
-//   margin-left: 7px;
-//   line-height: 42px;
-// }
-</style>

@@ -21,6 +21,7 @@
     filterable
     :placeholder="$t('openatc.common.placeholder')"
     @change="onChange"
+    @click.native="onClick"
   >
     <el-option
       v-for="(item, index) in options"
@@ -56,6 +57,14 @@ export default {
     defaultValue: {
       type: Number,
       default: 0
+    },
+    defaultLabel: {
+      type: String,
+      default: ''
+    },
+    isAutoLoad: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -65,25 +74,39 @@ export default {
     }
   },
   created () {
-    this.onLoad()
+    this.value = this.defaultValue
+    this.options = [
+      {
+        patterndesc: this.defaultLabel,
+        patternid: this.defaultValue
+      }
+    ]
+    if (this.isAutoLoad) {
+      this.onLoad()
+    }
   },
   methods: {
     onLoad () {
       this.getCurPattern(this.agentid)
     },
+    onClick () {
+      this.onLoad()
+    },
     getCurPattern (agentid) {
       // 获取当前设备所有可选方案
-      this.loading = true
       getTscControl(agentid).then(res => {
-        this.loading = false
         if (!res.data.success) {
-          if (res.data.code === '4003') {
-            this.$message.error(this.$t('openatc.common.devicenotonline'))
-            return
+          let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+          if (res.data.data) {
+            let errorCode = res.data.data.errorCode
+            if (errorCode) {
+              msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+            }
           }
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          this.$message.error(msg)
           return
         }
+        this.options = []
         let list = res.data.data.data.patternList
         for (let item of list) {
           let res = {

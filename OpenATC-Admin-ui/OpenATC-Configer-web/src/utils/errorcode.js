@@ -75,7 +75,7 @@ let errorCodeMap = new Map([
   [2004, '参数JSON格式解析错误'],
   [2005, '设备参数同步失败'],
   [2006, '信号机配置非法网卡信息'],
-  [2007, '信号机路口ID超过两个字符'],
+  [2007, '路口ID不在0-65535之间'],
   [3001, 'U盘挂载失败'],
   [3002, '未找到U盘']
 ])
@@ -157,7 +157,7 @@ let errorCodeMapEn = new Map([
   [2004, 'Parsing error of parameters JSON format'],
   [2005, 'Device parameters synchronization failed'],
   [2006, 'Signal configuration illegal network card information'],
-  [2007, 'The signal intersection ID exceeds two characters'],
+  [2007, 'Intersection ID is not between 0-65535'],
   [3001, 'USB disk mount failed'],
   [3002, 'USB disk not found']
 ])

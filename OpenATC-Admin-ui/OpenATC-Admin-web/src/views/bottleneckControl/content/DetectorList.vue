@@ -22,11 +22,11 @@
         height="100%"
         style="width: 100%"
       >
-        <el-table-column prop="overflowDetectorId" :label="$t('openatc.bottleneckcontrol.detectorid')" width="120" align="center"></el-table-column>
-        <el-table-column prop="description" :label="$t('openatc.bottleneckcontrol.desc')" align="center"></el-table-column>
+        <!-- <el-table-column prop="id" :label="$t('openatc.bottleneckcontrol.detectorid')" width="120" align="center"></el-table-column> -->
+        <el-table-column prop="description" :label="$t('openatc.bottleneckcontrol.detectorname')" align="center"></el-table-column>
         <el-table-column prop="type" :label="$t('openatc.bottleneckcontrol.type')" align="center"></el-table-column>
-        <el-table-column prop="status" :label="$t('openatc.bottleneckcontrol.status')" align="center"></el-table-column>
-        <el-table-column :label="$t('openatc.common.operation')" header-align="left" width="200" align="left">
+        <!-- <el-table-column prop="status" :label="$t('openatc.bottleneckcontrol.status')" align="center"></el-table-column> -->
+        <el-table-column :label="$t('openatc.common.operation')" align="center">
           <template slot-scope="scope">
             <el-button
               @click.native.prevent="handleEditDetector(scope.row)"
@@ -42,12 +42,12 @@
               @click.native.prevent="handleOpenControl(scope.row)"
               type="text"
               size="small"
-            >{{$t('openatc.bottleneckcontrol.open')}}</el-button>
+            >{{$t('openatc.bottleneckcontrol.control')}}</el-button>
             <el-button
               @click.native.prevent="handleOffControl(scope.row)"
               type="text"
               size="small"
-            >{{$t('openatc.bottleneckcontrol.off')}}</el-button>
+            >{{$t('openatc.bottleneckcontrol.recovery')}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -55,6 +55,7 @@
     <el-dialog
       :title="modalTitle + $t('openatc.bottleneckcontrol.bottleneckinfo')"
       :visible.sync="visible"
+      :close-on-click-modal="false"
       width="37%"
       @close="oncancle"
       :destroy-on-close="true"
@@ -73,7 +74,7 @@
 import UpdateDetector from './UpdateDetector'
 import { OverflowDecApi } from '@/api/overflowDetector.js'
 import { getMessageByCode } from '@/utils/responseMessage'
-// import Util from 'utils/util'
+import { getTheme } from '@/utils/auth'
 export default {
   name: 'overflowdectorlist',
   components: {
@@ -134,7 +135,7 @@ export default {
       this.visible = true
     },
     handleDeleteDetector (row) {
-      this.$confirm(this.$t('openatc.bottleneckcontrol.isdeletedetector') + row.overflowDetectorId, this.$t('openatc.common.tipsmodaltitle'), {
+      this.$confirm(this.$t('openatc.bottleneckcontrol.isdeletedetector') + row.description, this.$t('openatc.common.tipsmodaltitle'), {
         confirmButtonText: this.$t('openatc.button.OK'),
         cancelButtonText: this.$t('openatc.button.Cancel'),
         type: 'warning'
@@ -166,7 +167,7 @@ export default {
         })
     },
     handleOpenControl (row) {
-      this.$confirm(this.$t('openatc.bottleneckcontrol.isopencontrol') + ' ' + row.overflowDetectorId, this.$t('openatc.common.tipsmodaltitle'), {
+      this.$confirm(this.$t('openatc.bottleneckcontrol.isopencontrol') + ' ' + row.description, this.$t('openatc.common.tipsmodaltitle'), {
         confirmButtonText: this.$t('openatc.button.OK'),
         cancelButtonText: this.$t('openatc.button.Cancel'),
         type: 'warning'
@@ -174,9 +175,18 @@ export default {
         .then(() => {
           OverflowDecApi.openOverflowsControl(row.id)
             .then(data => {
+              let success = 0
               if (!data.data.success) {
                 this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
+              }
+              if (data.data.data && data.data.data.data) {
+                success = data.data.data.data.success
+                if (success !== 0) {
+                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  this.$message.error(this.$t(errormsg))
+                  return
+                }
               }
               this.$message({
                 type: 'success',
@@ -198,7 +208,7 @@ export default {
         })
     },
     handleOffControl (row) {
-      this.$confirm(this.$t('openatc.bottleneckcontrol.isoffcontrol') + ' ' + row.overflowDetectorId, this.$t('openatc.common.tipsmodaltitle'), {
+      this.$confirm(this.$t('openatc.bottleneckcontrol.isoffcontrol') + ' ' + row.description, this.$t('openatc.common.tipsmodaltitle'), {
         confirmButtonText: this.$t('openatc.button.OK'),
         cancelButtonText: this.$t('openatc.button.Cancel'),
         type: 'warning'
@@ -206,9 +216,18 @@ export default {
         .then(() => {
           OverflowDecApi.offOverflowsControl(row.id)
             .then(data => {
+              let success = 0
               if (!data.data.success) {
                 this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
+              }
+              if (data.data.data && data.data.data.data) {
+                success = data.data.data.data.success
+                if (success !== 0) {
+                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  this.$message.error(this.$t(errormsg))
+                  return
+                }
               }
               this.$message({
                 type: 'success',
@@ -235,12 +254,10 @@ export default {
     },
     submitForm (formdata) {
       this.submitData = formdata
-      if (this.submitData.id === '') {
-        delete this.submitData.id
-      }
       delete this.submitData.status
       delete this.submitData.overflows
       if (this.modalTitle === this.$t('openatc.common.add')) {
+        delete this.submitData.id
         this.addOverflowDetector()
       }
       if (this.modalTitle === this.$t('openatc.common.edit')) {
@@ -260,6 +277,7 @@ export default {
           })
           this.visible = false
           this.getData()
+          this.$emit('refresh')
         })
         .catch(error => {
           this.$message.error(error)
@@ -279,6 +297,7 @@ export default {
           })
           this.visible = false
           this.getData()
+          this.$emit('refresh')
         })
         .catch(error => {
           this.$message.error(error)
@@ -286,19 +305,19 @@ export default {
         })
     },
     highlightRow ({ row, rowIndex }) {
-      // let theme = Util.getTheme()
-      // if (this.curDetectorDevs === null) return
-      // if (this.curDetectorDevs.overflowDetectorId === row.overflowDetectorId) {
-      //   if (theme === 'dark') {
-      //     return {
-      //       'background-color': '#191f34'
-      //     }
-      //   } else {
-      //     return {
-      //       'background-color': '#ecf6ff'
-      //     }
-      //   }
-      // }
+      let theme = getTheme()
+      if (this.curDetectorDevs === null) return
+      if (this.curDetectorDevs.id === row.id) {
+        if (theme === 'dark') {
+          return {
+            'background-color': '#191f34'
+          }
+        } else {
+          return {
+            'background-color': '#F5F7FA'
+          }
+        }
+      }
     }
   },
   mounted () {

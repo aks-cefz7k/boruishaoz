@@ -11,6 +11,7 @@
  **/
 <template>
   <div class="container-main">
+    <FaultDetailModal ref="faultDetail" :agentId="agentId" @refreshFault="getFaultById"></FaultDetailModal>
     <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
       <div class="wenzijiemian" v-show="!isShowGui">
         <div class="container-left">
@@ -45,8 +46,8 @@
                   <div class="curr-num">{{$t('edge.overview.patternnum')}}</div>
                 </div>
                 <div style="float: right; height: 50%; width: 50%; text-align: center;">
-                  <div class="curr-grade">{{controlData.name}}</div>
-                  <div class="curr-num">{{$t('edge.overview.patternname')}}</div>
+                  <!-- <div class="curr-grade">{{controlData.name}}</div>
+                  <div class="curr-num">{{$t('edge.overview.patternname')}}</div> -->
                 </div>
               </div>
             </div>
@@ -140,7 +141,8 @@
             <BoardCard
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
-            :patternStatusList="patternStatusList"
+            :controlData="controlData"
+            :phaseList="phaseList"
             :isPhase="true"
               >
             </BoardCard>
@@ -187,7 +189,7 @@
               <div class="cross-module">
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
-                  <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
+                  <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.connected')}}</div>
                   <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
                   <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
                 </div>
@@ -198,18 +200,18 @@
                 <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
                 <div class="cross-content">
                   <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
-                  <div style="margin-left: 85px;" v-if="faultArr.length">
-                    <div style="margin-bottom: 10px;"><el-button type="primary" size="mini" class="faultbtn" @click="handleFaultsVisible">{{ faultvisible ? $t('edge.overview.hideFault') : $t('edge.overview.showFault')}}</el-button></div>
-                    <div v-if="faultvisible">
-                      <el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index" size="small" >{{faultMsg}}</el-tag>
-                    </div>
+                  <div style="margin-left: 85px;" v-if="curFaultList.length">
+                    <el-tag v-if="confirmedFault.length" type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span></el-tag>
+                    <el-tag v-if="untreatedFault.length">{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span></el-tag>
+                    <el-tag v-if="ignoredFault.length" type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span></el-tag>
+                    <span class="fault-detail-btn" @click="showFaultDetail">{{$t('edge.overview.details')}} >></span>
                   </div>
-                  <div style="margin-left: 85px;" class="cross-value" v-if="!faultArr.length">{{$t('edge.overview.nofault')}}</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-if="!curFaultList.length">{{$t('edge.overview.nofault')}}</div>
                 </div>
               </div>
               <div class="control-bottom">
                 <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
-                <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
+                <el-button type="primary" style="float: right; margin-right: 20px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
                 <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
               </div>
               <div class="cross-module">
@@ -217,7 +219,7 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
                 </div>
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div> -->
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
                 </div>
@@ -265,6 +267,8 @@ import ManualControlModal from './manualControlModal'
 import ClosePhaseControlModal from './closePhaselControlModal'
 import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
+import { GetAllFaultRange } from '@/api/fault'
+import FaultDetailModal from '@/components/FaultDetailModal'
 export default {
   name: 'overview',
   components: {
@@ -276,7 +280,8 @@ export default {
     CurVolume,
     CurPhase,
     ManualControlModal,
-    ClosePhaseControlModal
+    ClosePhaseControlModal,
+    FaultDetailModal
   },
   data () {
     return {
@@ -321,6 +326,7 @@ export default {
       phaseControlTimer: null, // 定时器
       registerMessageTimer: null, // 延时器
       volumeControlTimer: null, // 流量定时器
+      faultTimer: null, // 当前故障定时器
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
       ParamsMode: new Map([[0, '自主控制'], [1, '本地手动'], [2, '系统控制'], [3, '配置软件控制'], [4, '遥控器控制'], [5, '黄闪器触发']]),
       ParamsModeEn: new Map([[0, 'Autonomous Control'], [1, 'Local Manual'], [2, 'System Control'], [3, 'Configuration Software Control'], [4, 'Remote Control'], [5, 'Yellow Flasher Trigger']]),
@@ -430,7 +436,7 @@ export default {
       tempDelay: 0, // 控制方式手动操作的情况下的延迟时间的临时值。
       tempDuration: 0, // 控制方式手动操作的情况下的持续时间的临时值。
       phaseList: [], // 当前相位集合
-      patternStatusList: [], // 显示方案状态的相关数据集合
+      // patternStatusList: [], // 显示方案状态的相关数据集合
       stageStatusList: [], // 实时阶段状态的相关数据集合
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
@@ -446,7 +452,11 @@ export default {
         iconClass: 'closephase',
         iconName: '关断相位'
       }],
-      closePhaseRings: []
+      closePhaseRings: [],
+      curFaultList: [],
+      confirmedFault: [],
+      ignoredFault: [],
+      untreatedFault: []
     }
   },
   computed: {
@@ -473,6 +483,7 @@ export default {
           // this.protocol = this.$route.query.protocol
           this.resetCrossDiagram()
           this.getPlatform()
+          this.getFaultById()
         }
       },
       // 深度观察监听
@@ -508,6 +519,7 @@ export default {
   },
   mounted () {
     this.getPlatform()
+    this.getFault()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
     }
@@ -530,6 +542,12 @@ export default {
           break
         default: break
       }
+    },
+    getFault () {
+      this.getFaultById()
+      this.faultTimer = setInterval(() => {
+        this.getFaultById()
+      }, 30000)
     },
     getVolume () {
       getTscCurrentVolume(this.agentId).then((data) => {
@@ -645,6 +663,12 @@ export default {
         this.registerMessageTimer = null
       }
     },
+    clearFaultInterval () {
+      if (this.faultTimer !== null) {
+        clearInterval(this.faultTimer) // 清除流量定时器
+        this.faultTimer = null
+      }
+    },
     initData () {
       this.intervalFlag = false
       let startTime = new Date().getTime()
@@ -678,7 +702,7 @@ export default {
         this.currModel = TscData.control
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
-        this.handlePatternData() // 计算方案状态展示数据
+        // this.handlePatternData() // 计算方案状态展示数据
         // this.getStageStatusData()
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
@@ -693,6 +717,7 @@ export default {
       this.stagesList = []
       this.currentStage = data.current_stage
       let stages = data.stages
+      if (!stages) return
       for (let stage of stages) {
         let tempList = []
         let directionList = []
@@ -990,11 +1015,13 @@ export default {
         if (!data.data.success) {
           that.$message.error(getMessageByCode(data.data.code, that.$i18n.locale))
           return
-        } else {
+        }
+        if (data.data.data && data.data.data.data) {
           success = data.data.data.data.success
           if (success !== 0) {
             let errormsg = 'edge.overview.putTscControlError' + success
             that.$message.error(this.$t(errormsg))
+            return
           }
         }
         // this.closeManualModal()
@@ -1070,99 +1097,6 @@ export default {
         this.phaseList = res.data.data.phaseList
       })
     },
-    handlePatternData () {
-      this.patternStatusList = []
-      this.barrierList = []
-      if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
-      if (!this.controlData.phase) return
-      let cycle = this.controlData.cycle
-      for (let rings of this.controlData.rings) {
-        let list = []
-        let phase = this.controlData.phase
-        for (let sequ of rings.sequence) {
-          let obj = {}
-          obj.id = sequ
-          let split = phase.filter((item) => {
-            return item.id === sequ
-          })[0].split
-          let currPhase = this.phaseList.filter((item) => {
-            return item.id === sequ
-          })[0]
-          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          obj.split = split
-          obj.direction = currPhase.direction.map(item => {
-            return {
-              id: item,
-              color: '#454545'
-            }
-          })
-          list.push(obj)
-        }
-        this.patternStatusList.push(list)
-        console.log(this.patternStatusList, 898)
-      }
-      // this.handleBarrier(this.patternStatusList, this.phaseList)
-    },
-    // getStageStatusData () {
-    //   this.stageStatusList = []
-    //   this.barrierList = []
-    //   if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
-    //   if (!this.controlData.phase) return
-    //   let cycle = this.controlData.cycle
-    //   // console.log(this.controlData)
-    //   for (let rings of this.controlData.rings) {
-    //     let list = []
-    //     let phase = this.controlData.phase
-    //     for (let sequ of rings.sequence) {
-    //       let obj = {}
-    //       obj.id = sequ
-    //       let split = phase.filter((item) => {
-    //         return item.id === sequ
-    //       })[0].split
-    //       let currPhase = this.phaseList.filter((item) => {
-    //         return item.id === sequ
-    //       })[0]
-    //       obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-    //       obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-    //       obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-    //       obj.split = split
-    //       obj.direction = currPhase.direction.map(item => {
-    //         return {
-    //           id: item,
-    //           color: '#454545'
-    //         }
-    //       })
-    //       list.push(obj)
-    //     }
-    //     this.stageStatusList.push(list)
-    //   }
-    // },
-    // handleBarrier (patternStatusList, phaseList) {
-    //   if (patternStatusList.length < 2) return
-    //   let tempList = []
-    //   let barrierWidth = 0
-    //   let firstPatternStatus = patternStatusList[0]
-    //   for (let patternStatus of firstPatternStatus) {
-    //     let concurrent = phaseList.filter((item) => {
-    //       return item.id === patternStatus.id
-    //     })[0].concurrent
-    //     if (concurrent.length === 0) {
-    //       this.barrierList = []
-    //       return
-    //     }
-    //     if (!this.isEqualsForArray(tempList, concurrent)) {
-    //       tempList = concurrent
-    //       this.barrierList.push(barrierWidth)
-    //     }
-    //     barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
-    //   }
-    //   this.barrierList.push(barrierWidth) // 添加末尾处的屏障
-    // },
-    // isEqualsForArray (listA, listB) {
-    //   return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))
-    // },
     getPlatform () {
       queryDevice().then(res => {
         if (!res.data.success) {
@@ -1290,6 +1224,35 @@ export default {
         list.push(obj)
       }
       return list
+    },
+    getFaultById () {
+      // GetCurrentFaultByAgentid(this.agentId).then(res => {
+      //   if (!res.data.success) {
+      //     this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+      //     return false
+      //   } else {
+      //     this.curFaultList = res.data.data
+      //     this.confirmedFault = this.curFaultList.filter(ele => ele.enumerate === '2')
+      //     this.ignoredFault = this.curFaultList.filter(ele => ele.enumerate === '1')
+      //   }
+      // })
+      let param = {
+        agentId: this.agentId,
+        isCurrentFault: true
+      }
+      GetAllFaultRange(param).then(res => {
+        if (res.data.success !== true) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return
+        }
+        this.curFaultList = res.data.data.content
+        this.confirmedFault = this.curFaultList.filter(ele => ele.enumerate === '2')
+        this.ignoredFault = this.curFaultList.filter(ele => ele.enumerate === '1')
+        this.untreatedFault = this.curFaultList.filter(ele => ele.enumerate === '0')
+      })
+    },
+    showFaultDetail () {
+      this.$refs.faultDetail.onViewFaultClick()
     }
   },
   // beforeDestroy () {
@@ -1302,6 +1265,7 @@ export default {
     this.clearPatternInterval() // 清除定时器
     this.clearVolumeInterval()
     this.clearRegisterMessageTimer() // 清除定时器
+    this.clearFaultInterval()
     this.getPlatform()
   }
 }

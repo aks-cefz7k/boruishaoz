@@ -14,71 +14,149 @@
     <div style="float:left;margin:15px 20px;">
       <div class="common-table-title">{{$t('openatc.main.operationrecord')}}</div>
     </div>
-    <div class="filter-container">
-      <el-form>
-        <el-form-item>
-          <el-input
-            v-model="schfilter"
-            :placeholder="$t('openatc.common.searchplaceholder')"
-            prefix-icon="el-icon-search"
-            style="width: 200px;"/>
-        </el-form-item>
-      </el-form>
+    <div class="filter-container" style="width:90%;">
+      <el-row  :gutter="10"
+               type="flex"
+               justify="end"
+               style="margin-right:16px;">
+        <el-col :span="3">
+          <div>
+            <span class="header-span">{{$t('openatc.record.originadress') }}：</span>
+            <el-input
+                clearable
+                v-model="source"
+                style="width:70%"
+                @change="onConditionChange"
+            />
+          </div>
+        </el-col>
+        <el-col :span="3.5">
+          <div>
+            <span class="header-span">{{$t('openatc.record.messagetype') }}：</span>
+            <SelectInfoType ref="selectInfoType"
+                            style="width:63%"
+                            @onChange="onConditionChange"></SelectInfoType>
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div>
+            <span class="header-span">{{$t('openatc.record.reponsestatus') }}：</span>
+            <SelectReponseStatus ref="selectReponseStatus"
+                                 style="width:60%"
+                                 @onChange="onConditionChange"></SelectReponseStatus>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <span class="header-span">{{ $t("openatc.faultrecord.roadname") }}：</span>
+            <SelectAgentid ref="selectAgentid"
+                           style="width:70%"
+                           @onChange="onConditionChange"></SelectAgentid>
+            <SelectControl ref="selectControl"
+                           v-show="false"
+                           style="width:70%"></SelectControl>
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div>
+            <span class="header-span">{{$t('openatc.login.username') }}：</span>
+            <el-input
+                clearable
+                v-model="operator"
+                style="width:70%"
+                @change="onConditionChange"
+            />
+          </div>
+        </el-col>
+        <el-col :span="7.5">
+          <div class="timepicker">
+            <span class="header-span">{{$t('openatc.record.opertime') }}：</span>
+            <template >
+              <el-date-picker
+                v-model="timeValue"
+                popper-class="common-date-popper"
+                type="datetimerange"
+                range-separator="-"
+                :start-placeholder="$t('openatc.usermanager.starttime')"
+                :end-placeholder="$t('openatc.usermanager.endtime')"
+                @change="onConditionChange">
+              </el-date-picker>
+            </template>
+          </div>
+        </el-col>
+        <!-- <el-col :span="1.5">
+          <div>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              @click="onSearchClick()"
+              >{{ $t("openatc.button.search") }}
+            </el-button>
+          </div>
+        </el-col> -->
+      </el-row>
     </div>
-     <div class="atc-table">
-    <el-table
-        :data="tableData.filter(data => !schfilter || (data.operator !== undefined && data.operator.toLowerCase().includes(schfilter.toLowerCase())) || (data.description !== undefined && data.description.toLowerCase().includes(schfilter.toLowerCase())))"
+    <div class="atc-table">
+      <el-table
+        :data="tableData"
         size="mini"
         :max-height="tableHeight"
         style="width: 100%"
         v-loading.body="listLoading"
         id="footerBtn">
         <el-table-column
-        type="index"
-        align="center">
-        </el-table-column>
-        <!-- <el-table-column
-        prop="description"
-        label="描述"
-        align="center">
-        </el-table-column> -->
-        <el-table-column
-        prop="operator"
-        :label="$t('openatc.record.user')"
-        align="center">
+          type="index"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="opertime"
-        :label="$t('openatc.record.updatetime')"
-        sortable
-        align="center">
+          prop="operator"
+          :label="$t('openatc.record.user')"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="source"
-        :label="$t('openatc.record.originadress')"
-        align="center">
+          prop="name"
+          :label="$t('openatc.faultrecord.roadname')"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="agentid"
-        :label="$t('openatc.record.deviceid')"
-        align="center">
+          prop="source"
+          :label="$t('openatc.record.originadress')"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="infotype"
-        :label="$t('openatc.record.messagetype')"
-        align="center">
+          prop="infotypeName"
+          :label="$t('openatc.record.messagetype')"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="status"
-        :label="$t('openatc.record.reponsestatus')"
-        align="center">
+          prop="subInfoType"
+          :label="$t('openatc.record.subInfoType')"
+          :formatter="formatterSubInfoType"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          :label="$t('openatc.record.reponsestatus')"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="responseCode"
+          :formatter="formatterResponseCode"
+          :label="$t('openatc.record.errorReason')"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="opertime"
+          :label="$t('openatc.record.opertime')"
+          sortable
+          align="center">
         </el-table-column>
         <el-table-column :label="$t('openatc.record.opera')" align="center">
         <template slot-scope="scope">
-            <el-button type="text" @click="derive(scope.$index)">{{$t('openatc.record.export')}}</el-button>
+            <el-button type="text" @click="derive(scope.$index)">{{$t('openatc.record.view')}}</el-button>
         </template>
         </el-table-column>
-    </el-table>
+      </el-table>
      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum" :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" style='margin:0px;'>
     </el-pagination>
   </div>
@@ -86,13 +164,24 @@
 </template>
 
 <script>
-import { getHisParamsList, exportHisParams } from '../../api/table'
+import { getHisParamsList, getHisParamsRange, exportHisParams } from '../../api/table'
 import { getMessageByCode } from '@/utils/responseMessage'
+import SelectAgentid from '@/components/SelectAgentid'
+import SelectInfoType from '@/components/SelectInfoType'
+import SelectReponseStatus from '@/components/SelectReponseStatus'
+import SelectControl from '@/views/Service/components/SelectControl'
+import moment from 'moment'
 export default {
   name: 'user',
-  components: {},
+  components: {SelectAgentid, SelectInfoType, SelectReponseStatus, SelectControl},
   data () {
     return {
+      source: '',
+      infotype: '',
+      status: '',
+      agentid: '',
+      operator: '',
+      timeValue: [new Date().getTime() - 3600 * 1000 * 24, new Date()],
       tableHeight: 700,
       screenHeight: window.innerHeight, // 屏幕高度
       schfilter: '',
@@ -100,8 +189,8 @@ export default {
       tableData: [],
       statusMode: new Map([['set-request', '请求错误'], ['set-response', '应答成功'], ['error-response', '应答错误'], ['Communication Error!', '通讯错误']]),
       statusModeEn: new Map([['set-request', 'Request error'], ['set-response', 'Successful response'], ['error-response', 'Response error'], ['Communication Error!', 'Communication error']]),
-      infotypeMode: new Map([['control/pattern', '控制消息'], ['control/interrupt', '方案控制消息'], ['control/preempt', '优先控制'], ['control/channelcheck', '通道检测'], ['control/remote', '远程控制'], ['system/centerip', '中心ip地址'], ['system/ip1', '设备ip地址1'], ['system/ip2', '设备ip地址2'], ['system/serialport', '串口信息'], ['system/time', '系统时间'], ['system/remote', '远程调试'], ['system/update', '系统更新'], ['system/paramversion', '参数版本'], ['system/optstatparam', '优化统计参数'], ['system/faultclear', '故障消除'], ['system/udiskupdate', '更新U盘数据'], ['system/volumelog', '交通流量历史数据'], ['feature/channel', '通道'], ['feature/phase', '相位'], ['feature/overlap', '跟随相位'], ['feature/pattern', '方案'], ['feature/plan', '计划'], ['feature/date', '日期'], ['feature/peddetecter', '行人检测器'], ['feature/devinfo', '设备信息'], ['feature/manualpanel', '手动面板配置'], ['feature/channellock', '通道灯色锁定参数配置'], ['feature/all', '整体参数']]),
-      // infotypeModeEn: new Map([['control/pattern', '控制消息'], ['control/interrupt', '方案控制消息'], ['control/preempt', '优先控制'], ['control/channelcheck', '通道检测'], ['control/remote', '远程控制'], ['system/centerip', '中心ip地址'], ['system/ip1', '设备ip地址1'], ['system/ip2', '设备ip地址2'], ['system/serialport', '串口信息'], ['system/time', '系统时间'], ['system/remote', '远程调试'], ['system/update', '系统更新'], ['system/paramversion', '参数版本'], ['system/optstatparam', '优化统计参数'], ['system/faultclear', '故障消除'], ['system/udiskupdate', '更新U盘数据'], ['system/volumelog', '交通流量历史数据'], ['feature/channel', '通道'], ['feature/phase', '相位'], ['feature/overlap', '跟随相位'], ['feature/pattern', '方案'], ['feature/plan', '计划'], ['feature/date', '日期'], ['feature/peddetecter', '行人检测器'], ['feature/devinfo', '设备信息'], ['feature/manualpanel', '手动面板配置'], ['feature/channellock', '通道灯色锁定参数配置'], ['feature/all', '整体参数']]),
+      infotypeMode: new Map([['control/pattern', '控制消息'], ['control/interrupt', '方案控制消息'], ['control/preempt', '优先控制'], ['system/channelcheck', '通道检测'], ['control/remote', '远程控制'], ['system/centerip', '中心ip地址'], ['system/ip1', '设备ip地址1'], ['system/ip2', '设备ip地址2'], ['system/serialport', '串口信息'], ['system/time', '系统时间'], ['system/remote', '远程调试'], ['system/update', '系统更新'], ['system/paramversion', '参数版本'], ['system/optstatparam', '优化统计参数'], ['system/faultclear', '故障消除'], ['system/udiskupdate', '更新U盘数据'], ['system/volumelog', '交通流量历史数据'], ['feature/channel', '通道'], ['feature/phase', '相位'], ['feature/overlap', '跟随相位'], ['feature/pattern', '方案'], ['feature/plan', '计划'], ['feature/date', '日期'], ['feature/peddetecter', '行人检测器'], ['feature/devinfo', '设备信息'], ['feature/manualpanel', '手动面板配置'], ['feature/channellock', '通道灯色锁定参数配置'], ['feature/all', '整体参数']]),
+      // infotypeModeEn: new Map([['control/pattern', '控制消息'], ['control/interrupt', '方案控制消息'], ['control/preempt', '优先控制'], ['system/channelcheck', '通道检测'], ['control/remote', '远程控制'], ['system/centerip', '中心ip地址'], ['system/ip1', '设备ip地址1'], ['system/ip2', '设备ip地址2'], ['system/serialport', '串口信息'], ['system/time', '系统时间'], ['system/remote', '远程调试'], ['system/update', '系统更新'], ['system/paramversion', '参数版本'], ['system/optstatparam', '优化统计参数'], ['system/faultclear', '故障消除'], ['system/udiskupdate', '更新U盘数据'], ['system/volumelog', '交通流量历史数据'], ['feature/channel', '通道'], ['feature/phase', '相位'], ['feature/overlap', '跟随相位'], ['feature/pattern', '方案'], ['feature/plan', '计划'], ['feature/date', '日期'], ['feature/peddetecter', '行人检测器'], ['feature/devinfo', '设备信息'], ['feature/manualpanel', '手动面板配置'], ['feature/channellock', '通道灯色锁定参数配置'], ['feature/all', '整体参数']]),
       listQuery: {
         pageNum: 1, // 页码
         pageRow: 50 // 每页条数
@@ -109,7 +198,17 @@ export default {
       totalCount: 0 // 分页组件--数据总条数
     }
   },
+  watch: {
+    screenHeight: function () {
+      // 监听屏幕高度变化
+      this.tableHeight =
+                window.innerHeight -
+                document.querySelector('#footerBtn').offsetTop -
+                200
+    }
+  },
   mounted: function () {
+    this.getList()
     var _this = this
     _this.$nextTick(function () {
       // window.innerHeight:浏览器的可用高度
@@ -125,19 +224,74 @@ export default {
       }
     })
   },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-    }
-  },
-  created () {
-    this.getAllRecord()
-  },
   methods: {
+    onConditionChange (val) {
+      this.getList()
+    },
+    onSearchClick () {
+      this.getList()
+    },
+    getReqData () {
+      let reqData = {}
+      let from = moment(this.timeValue[0]).format('YYYY-MM-DD HH:mm:ss')
+      let to = moment(this.timeValue[1]).format('YYYY-MM-DD HH:mm:ss')
+      let agentid = this.$refs.selectAgentid.value
+      let infotype = this.$refs.selectInfoType.value
+      let status = this.$refs.selectReponseStatus.value
+      reqData = {
+        source: this.source,
+        infotype: infotype,
+        status: status,
+        agentId: agentid,
+        operator: this.operator,
+        beginTime: from,
+        endTime: to,
+        pageNum: this.listQuery.pageNum,
+        pageRow: this.listQuery.pageRow
+      }
+      return reqData
+    },
+    getList () {
+      let reqData = this.getReqData()
+      this.listLoading = true
+      getHisParamsRange(reqData).then(data => {
+        if (data.data.success !== true) {
+          this.listLoading = false
+          if (data.data.code === '20004') {
+            this.$message.error('无参数记录!')
+            return
+          }
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        }
+        this.listLoading = false
+        this.tableData = this.handleData(data.data.data.content)
+        this.totalCount = data.data.data.total
+      })
+    },
+    formatterSubInfoType (row, column) {
+      let res = row.subInfoType
+      if (row.infotype === 'control/pattern') {
+        let selectControl = this.$refs.selectControl
+        if (selectControl) {
+          res = selectControl.getNameById(res)
+        }
+      } else {
+        res = ''
+      }
+      return res
+    },
+    formatterResponseCode (row, column) {
+      let res = ''
+      let responseCode = row.responseCode
+      if (responseCode && responseCode !== '0') {
+        let innerErrorCode = row.innerErrorCode
+        let errorMessage = getMessageByCode(responseCode, this.$i18n.locale)
+        let subMessage = getMessageByCode(innerErrorCode, this.$i18n.locale)
+        res = errorMessage + ' - ' + subMessage
+      }
+      return res
+    },
     leadingOut (data) {
       // 定义文件内容，类型必须为Blob 否则createObjectURL会报错
       // const tscParam = this.globalParamModel.getGlobalParams()
@@ -180,7 +334,12 @@ export default {
           return
         }
         let exportData = data.data.data
-        this.leadingOut(exportData)
+        // this.leadingOut(exportData)
+        this.$alert(`<pre>${JSON.stringify(exportData, null, 4)}</pre>`, '', {
+          customClass: 'recordJsonModal',
+          showConfirmButton: false,
+          dangerouslyUseHTMLString: true
+        })
       })
     },
     handleData (data) {
@@ -196,7 +355,8 @@ export default {
           }
           if (key === 'infotype') {
             if (that.$i18n.locale === 'zh') {
-              obj[key] = that.infotypeMode.get(obj[key])
+              // obj[key] = that.infotypeMode.get(obj[key])
+              obj['infotypeName'] = that.infotypeMode.get(obj[key])
             }
           }
         })
@@ -206,17 +366,12 @@ export default {
     handleSizeChange (val) {
       // 改变每页数量
       this.listQuery.pageRow = val
-      this.handleFilter()
+      this.getList()
     },
     handleCurrentChange (val) {
       // 改变页码
       this.listQuery.pageNum = val
-      this.getAllRecord()
-    },
-    handleFilter () {
-      // 查询事件
-      this.listQuery.pageNum = 1
-      this.getAllRecord()
+      this.getList()
     }
   }
 }

@@ -355,9 +355,8 @@ export default {
           message: '导入模版成功！'
         })
         this.$emit('closeImportTemp')
-        // this.globalParamModel.reset()
-        const tscParam = JSON.parse(JSON.stringify(this.globalParamModel.getGlobalParams()))
         this.globalParamModel.reset()
+        const tscParam = JSON.parse(JSON.stringify(this.globalParamModel.getGlobalParams()))
         setTimeout(() => {
           let temp = {
             ...tscParam,

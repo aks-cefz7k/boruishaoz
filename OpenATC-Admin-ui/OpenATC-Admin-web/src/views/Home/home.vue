@@ -55,7 +55,7 @@ import DevsStateChart from './devsStateChart'
 import FaultList from './faultList'
 import router from '@/router'
 import { GetAllDevice } from '@/api/device'
-import { GetAllCurrentFault } from '@/api/fault'
+import { GetFaultRange } from '@/api/fault'
 import LottieAnim from './lottieDemo/index'
 import deviceAnim from '../../../static/lottiejson/deviceManager.json'
 import userAnim from '../../../static/lottiejson/userManager.json'
@@ -168,15 +168,18 @@ export default {
           }
         })
       })
-      GetAllCurrentFault().then(res => {
-        let list = []
+      let reqData = {
+        'isCurrentFault': true
+      }
+      GetFaultRange(reqData).then(res => {
+        let list = {}
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return false
         } else {
           list = res.data.data
         }
-        this.faultList = list
+        this.faultList = list.content || []
       })
     }
   },
