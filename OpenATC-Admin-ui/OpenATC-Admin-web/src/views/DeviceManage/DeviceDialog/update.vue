@@ -355,11 +355,6 @@ export default {
       UpdateDeviceId(data).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.updatefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
           return
         }
         this.innerVisible = false

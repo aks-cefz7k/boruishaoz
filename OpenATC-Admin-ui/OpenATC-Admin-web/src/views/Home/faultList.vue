@@ -26,7 +26,7 @@
         :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
         >
         <el-table-column
-          prop="agentid"
+          prop="name"
           :label="$t('openatc.devicemanager.devicename')"
           width="220">
         </el-table-column>
