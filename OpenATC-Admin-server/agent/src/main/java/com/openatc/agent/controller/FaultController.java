@@ -6,7 +6,6 @@ import com.openatc.agent.model.Fault;
 import com.openatc.agent.resmodel.PageOR;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FaultDao;
-import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.PageInit;
 import com.openatc.agent.utils.TokenUtil;
@@ -39,11 +38,11 @@ public class FaultController {
     @Autowired
     FaultDao faultDao;
 
-    @Autowired
-    FaultServiceImpl faultService;
-
-    @Autowired
-    AscsDao ascsDao;
+//    @Autowired
+//    FaultServiceImpl faultService;
+//
+//    @Autowired
+//    AscsDao ascsDao;
 
     @Autowired
     protected TokenUtil tokenUtil;
