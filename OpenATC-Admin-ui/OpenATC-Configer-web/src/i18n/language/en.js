@@ -436,6 +436,7 @@ const en = {
       'transitiongreenflashtime': 'Green Flashing Time',
       'transitionyellowtime': 'Yellow Time',
       'channelstats': 'Channel Status',
+      'lockinperiod': 'Lock In Period',
       'channel': 'Channel',
       'channelinfo': 'Channel Info',
       'status': 'Status',

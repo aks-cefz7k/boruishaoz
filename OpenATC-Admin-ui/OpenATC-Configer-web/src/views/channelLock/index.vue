@@ -17,7 +17,10 @@
   </div>
   <div class="manual-bottom" style="display: inline-block">
     <div class="manual-control" style="display: inline-block">
-      <el-table :data="channellock" fit highlight-current-row :max-height="tableHeight" border id="footerBtn" style="width: 95%; margin-left: 10px;" @row-click="handdleChannelLock">
+      <div class="manual-tables-top" style="width: 95%; margin-left: 10px;">
+        <div class="channel-status">{{$t('edge.channellock.lockinperiod')}}</div>
+      </div>
+      <el-table :data="channellock" fit highlight-current-row :max-height="tableHeight" border id="footerBtn" style="width: 95%; margin-left: 10px; margin-top:10px" @row-click="handdleChannelLock">
         <el-table-column align="center" label='No' width="40">
           <template slot-scope="scope">
             {{scope.$index + 1}}

@@ -434,6 +434,7 @@ const zh = {
       'transitiongreenflashtime': '过渡绿闪时间',
       'transitionyellowtime': '过渡黄灯时间',
       'channelstats': '通道状态',
+      'lockinperiod': '锁定时段',
       'channel': '通道',
       'channelinfo': '通道信息',
       'status': '状态',
