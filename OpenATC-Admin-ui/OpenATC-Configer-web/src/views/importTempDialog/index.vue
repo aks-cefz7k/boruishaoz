@@ -229,7 +229,7 @@ export default {
       CrossShape: new Map([
         ['100', this.$t('edge.importTemp.crossShapes.tjunction')],
         ['101', this.$t('edge.importTemp.crossShapes.crossroads')],
-        ['102', this.$t('edge.importTemp.crossShapes.Roundabout')],
+        ['102', this.$t('edge.importTemp.crossShapes.roundabout')],
         ['103', this.$t('edge.importTemp.crossShapes.rampintersection')],
         ['104', this.$t('edge.importTemp.crossShapes.pedestriancrossing')],
         ['110', this.$t('edge.importTemp.crossShapes.otherIntersections')],

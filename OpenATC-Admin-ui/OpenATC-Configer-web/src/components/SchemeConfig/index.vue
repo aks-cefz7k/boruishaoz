@@ -97,7 +97,7 @@ import LockingPhaseControlModal from './lockingPhaselControlModal'
 import { getMessageByCode } from '../../utils/responseMessage'
 import { GetAllFaultRange } from '@/api/fault'
 import FaultDetailModal from '@/components/FaultDetailModal'
-import PhaseDataModel from '@/views/overView/crossDirection/utils'
+import PhaseDataModel from '../IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import { setToken } from '@/utils/auth'
 export default {
