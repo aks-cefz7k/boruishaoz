@@ -183,7 +183,7 @@ export default {
   components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics, SelectAgentid, SelectCrossPhase },
   data () {
     return {
-      agentid: 0,
+      agentid: 1489,
       stateList: ['UP', 'FAULT', 'DOWN'],
       isOnlineChecked: true,
       isFaultChecked: true,
