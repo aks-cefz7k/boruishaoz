@@ -239,8 +239,20 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
                 </div>
-                <div class="cross-content">
+                <div class="cross-content" v-show="closePhase && closePhase.length > 0">
                   <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
+                </div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.currentstage')}}:</div>
+                  <div style="margin-left: 85PX;" >
+                    <div style="width: 100%; height: auto;">
+                      <div class="control-model" v-for="(item, index) in stagesList" :key="index">
+                        <div class="single-model" :class="currentStage == index + 1 ? 'single-model-select' : ''">
+                          <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
+                          <div class="current-stage-num">{{index + 1}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -269,6 +281,7 @@ import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
 import { GetAllFaultRange } from '@/api/fault'
 import FaultDetailModal from '@/components/FaultDetailModal'
+import xdrdirselector from '@/components/XRDDirSelector'
 export default {
   name: 'overview',
   components: {
@@ -281,7 +294,8 @@ export default {
     CurPhase,
     ManualControlModal,
     ClosePhaseControlModal,
-    FaultDetailModal
+    FaultDetailModal,
+    xdrdirselector
   },
   data () {
     return {
