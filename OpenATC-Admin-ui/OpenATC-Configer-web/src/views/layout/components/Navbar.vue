@@ -347,7 +347,8 @@ export default {
       }
     },
     copy () {
-      this.$store.dispatch('SetCopy', this.$store.getters.tscParam)
+      let copytscParam = JSON.parse(JSON.stringify(this.$store.getters.tscParam))
+      this.$store.dispatch('SetCopy', copytscParam)
       this.$emit('resetNotify')
       this.createNotify()
     },
