@@ -5,21 +5,20 @@
 </template>
 
 <script>
+import { getLanguage } from './utils/auth.js'
 export default {
-  name: 'App'
+  name: 'App',
+  mounted: function () {
+    let language = getLanguage()
+    console.log('the language is:' + language)
+    if (language === 'en') {
+      this.$i18n.locale = 'en'
+    } else {
+      this.$i18n.locale = 'zh'
+    }
+  }
 }
 </script>
 
 <style>
-body {
-  margin: 0px;
-  padding: 0px;
-}
-#app {
-  /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50; */
-}
 </style>

@@ -3,21 +3,42 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import kissui from './kisscomps/index'
 import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+import animate from 'animate.css'
+import i18n from './i18n'
 import 'element-ui/lib/theme-chalk/index.css'
-// import chosen from 'chosen-js'
+import './icons' // icon
+
+// 深浅主题按需加载
+import('../static/styles/dark/index.scss')
+// import('../static/styles/light/index.scss')
+
 Vue.use(kissui)
 Vue.use(ElementUI)
 // Vue.use(chosen)
 // Vue.use($)
+Vue.use(ElementUI, {
+  locale
+})
+
+/* 使用动画库 */
+Vue.use(animate)
 
 Vue.config.productionTip = false
+
+const urlMgr = require('./lib/publicjs/HttpurlMgr')
+let data = require('../static/apiconfig.json')
+urlMgr.HttpUrlMgr.init(data)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  i18n,
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

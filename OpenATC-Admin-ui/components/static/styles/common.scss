@@ -1,0 +1,18 @@
+@import './intersection.scss';
+@import './schemeconfig.scss';
+@import './commonkanban.scss';
+
+ // 全局滚动条样式
+ ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  // 滚动条的滑块
+  border-radius: 4px;
+  background: rgba(144, 147, 153, 0.3);
+}
+::-webkit-scrollbar-corner{
+  // 横向滚动条和纵向滚动条同时出现，右下角有个小白方格
+  background: transparent;
+}
