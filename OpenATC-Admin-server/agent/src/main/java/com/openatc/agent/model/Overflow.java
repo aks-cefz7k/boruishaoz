@@ -24,6 +24,7 @@ public class Overflow {
     private String updowndirection;   //上下游
     private int controltime;          //时间
     private int level;                //等级
+    @Column(nullable = true)
     private int state=0;                // 执行结果, 0：执行失败, 1：执行成功，2：恢复失败，3：恢复成功
     @Transient
     private String  intersectionname;      //路口名称
