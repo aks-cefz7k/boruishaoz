@@ -181,13 +181,7 @@ export default {
   },
   computed: {
     patternList () {
-      let patternList = this.$store.state.globalParam.tscParam.patternList
-      if (!patternList.length) return
-      this.initData()
-      for (let i = 0; i < patternList.length; i++) {
-        this.handleStageData(patternList[i].rings, patternList[i].id)
-      }
-      return patternList
+      return this.$store.state.globalParam.tscParam.patternList
     },
     activeList () {
       return this.patternList.map(i => 'ring')
@@ -197,6 +191,7 @@ export default {
     this.globalParamModel = this.$store.getters.globalParamModel
     this.initData()
     this.getPhase()
+    this.getPattern()
   },
   mounted: function () {
     var _this = this
@@ -208,8 +203,20 @@ export default {
     })
   },
   watch: {
+    patternList (val, oldVal) {
+      if (!val.length) return
+      this.getPattern()
+    }
   },
   methods: {
+    getPattern () {
+      let patternList = this.$store.state.globalParam.tscParam.patternList
+      if (!patternList.length) return
+      this.initData()
+      for (let i = 0; i < patternList.length; i++) {
+        this.handleStageData(patternList[i].rings, patternList[i].id)
+      }
+    },
     initData () {
       // 判断有几个环，就创建几个看板
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
