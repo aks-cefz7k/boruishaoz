@@ -55,7 +55,7 @@ export default {
     if (this.fromKstpPath.indexOf(this.$store.getters.devicePath) !== -1) return
     if (this.fromKstpPath.indexOf(currRouter) !== -1) {
       this.setCurPath(currRouter)
-      this.setToken()
+      // this.setToken()
     }
   },
   mounted () {
