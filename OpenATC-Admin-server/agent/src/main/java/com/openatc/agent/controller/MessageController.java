@@ -26,6 +26,7 @@ import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.IMsgPostHandler;
+import com.openatc.comm.handler.IMsgPreHandler;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.comm.ocp.DataParamMD5;
 import com.openatc.core.model.InnerError;
@@ -77,11 +78,12 @@ public class MessageController {
     @Autowired
     private DictConfigRepository dictConfigRepository;
 
-    @Autowired
-    private MessageService messageService;
 
     @Autowired
     private IMsgPostHandler msgPostHandler;
+
+    @Autowired
+    private IMsgPreHandler msgPreHandler;
 
     Gson gson = new Gson();
 
@@ -100,6 +102,10 @@ public class MessageController {
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) {
+        RESTRet ret = msgPreHandler.process(requestData);
+        if (ret.getData() != null){
+            return ret;
+        }
         AscsBaseModel ascsBaseModel = mDao.getAscsByID(requestData.getAgentid());
         return postDevsMessageByAscsBaseModel(ascsBaseModel,httpServletRequest,requestData);
     }
@@ -171,35 +177,16 @@ public class MessageController {
             }
         }
 
-        RESTRet responceData;
-        // 处理方案状态请求
-        if (requestData.getInfotype().equals("status/pattern")){
-            // 先从redis中查，如果redis中不存在，向设备请求
-            String agentid = requestData.getAgentid();
-            responceData =  messageService.getStatusPatternFromRedis(agentid);
-            if (responceData.isSuccess()){
-                return responceData;
-            }
-        }
 
         // 发送请求，并把应答返回
-        responceData = commClient.devMessage(requestData, ascsBaseModel);
+        RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
 
-
-        // 处理应答后的get-request请求
-        if (requestData.getOperation().equals("get-request")){
-            if (responceData.isSuccess()){
-                msgPostHandler.process((MessageData) responceData.getData());
-            }
+        // 处理应答后的请求
+        RESTRet ret = msgPostHandler.process(requestData, responceData);
+        if (ret.getData() != null) {
+            responceData = ret;
         }
 
-//        // 处理方案状态请求应答
-//        if (responceData.isSuccess()){
-//            if (requestData.getInfotype().equals("status/pattern")){
-//                // 将消息保存到redis，并设置过期时间1S
-//                messageService.saveStatusPatternToRedis((MessageData)responceData.getData());
-//            }
-//        }
 
         // 把设置请求set-request的操作保存到历史记录中
         if (requestData.getOperation().equals("set-request")) {
@@ -213,9 +200,6 @@ public class MessageController {
             }
             THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, subject);
             hisParamService.insertHisParam(tParams);
-            if (responceData.isSuccess()){
-                msgPostHandler.process(requestData);
-            }
             return responceData;
 
         }

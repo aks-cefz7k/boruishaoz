@@ -12,10 +12,10 @@ import com.openatc.core.model.RESTRet;
 public interface MessageService {
     /**
      * 从redis中获取方案状态
-     * @param agentid 路口id
+     * @param requestData 路口id
      * @return
      */
-    RESTRet getStatusPatternFromRedis(String agentid);
+    RESTRet getStatusPatternFromRedis(MessageData requestData);
 
 
     /**

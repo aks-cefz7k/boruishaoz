@@ -3,7 +3,9 @@ package com.openatc.agent.service.impl;
 import com.google.gson.Gson;
 import com.openatc.agent.service.MessageService;
 import com.openatc.comm.data.MessageData;
+import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,13 @@ public class MessageServiceImpl implements MessageService {
     private Gson gson = new Gson();
 
     @Override
-    public RESTRet getStatusPatternFromRedis(String agentid) {
+    public RESTRet getStatusPatternFromRedis(MessageData requestData) {
+        String agentid = requestData.getAgentid();
         String key = "response:status/pattern:" + agentid;
         String value = stringRedisTemplate.opsForValue().get(key);
         if (value == null){
-            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_4005);
+            InnerError innerError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_109, requestData);
+            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_4001,innerError);
         }
         MessageData responseData = gson.fromJson(value,MessageData.class);
         return RESTRetUtils.successObj(responseData);
