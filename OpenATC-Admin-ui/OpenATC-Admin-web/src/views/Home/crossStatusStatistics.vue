@@ -50,11 +50,17 @@ export default {
         }
         this.list = this.list.map(ele => {
           ele.num = this.CurrStatusMap.get(ele.key)
-          let comparenum = ele.num - ele.yestnum
-          if (comparenum < 0) {
-            ele.comparenum = comparenum
-          } else {
-            ele.comparenum = `+${comparenum}`
+          if (this.CurrStatusMap.get(ele.key) === undefined) {
+            ele.comparenum = '--'
+            return ele
+          }
+          if (ele.num !== undefined && ele.yestnum !== undefined) {
+            let comparenum = ele.num - ele.yestnum
+            if (comparenum < 0) {
+              ele.comparenum = comparenum
+            } else {
+              ele.comparenum = `+${comparenum}`
+            }
           }
           return ele
         })
@@ -123,7 +129,11 @@ export default {
         }
         // console.log(this.YestStatusMap)
         this.list = this.list.map(ele => {
-          ele.yestnum = this.YestStatusMap.get(ele.key) || 0
+          ele.yestnum = this.YestStatusMap.get(ele.key)
+          if (this.YestStatusMap.get(ele.key) === undefined) {
+            ele.comparenum = '--'
+            return ele
+          }
           let comparenum = ele.num - ele.yestnum
           if (comparenum < 0) {
             ele.comparenum = comparenum

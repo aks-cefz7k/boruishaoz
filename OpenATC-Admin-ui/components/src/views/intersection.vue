@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" @click="handleOpenConfigPanel" style="margin: 20px;">打开路口图面板</el-button>
+    <!-- <el-button type="primary" @click="handleOpenConfigPanel" style="margin: 20px;">打开路口图面板</el-button>
     <el-dialog
       refs="intersectionMapDialog"
       class="abow_dialog"
@@ -8,14 +8,14 @@
       :visible.sync="boxVisible"
       :close-on-click-modal="false"
       @close="oncancle"
-      append-to-body>
+      append-to-body> -->
       <intersection-with-interface
         ref="intersectionWithInterface"
         :AgentId="agentId"
         roadDirection="left"
         :Token="Token"
         ></intersection-with-interface>
-    </el-dialog>
+    <!-- </el-dialog> -->
   </div>
 </template>
 <script>
@@ -26,7 +26,7 @@ export default {
       Token: 'eyJraWQiOiIxNjQ5MzM4NzA5MTA0IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTczODcwOSwiaWF0IjoxNjQ5MzM4NzA5fQ.JDSkpT1SbB61dEKvorhVdZJHKJzoQZEY5DPKHs1Imo0',
       boxVisible: false,
       dialogWidth: '80%',
-      agentId: '40003-132'
+      agentId: '10002-994'
     }
   },
   methods: {
