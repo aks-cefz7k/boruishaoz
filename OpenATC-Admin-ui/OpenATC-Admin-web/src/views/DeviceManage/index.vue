@@ -173,7 +173,7 @@ import PatternStatistics from './DeviceDialog/PatternStatistics'
 import TrafficStatistics from './DeviceDialog/TrafficStatistics'
 import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
-import { GetCurrentFaultByAgentid } from '@/api/fault'
+import { GetFaultRange } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
 import SelectAgentid from '@/components/SelectAgentid'
 import SelectCrossPhase from '@/components/SelectCrossPhase'
@@ -355,12 +355,17 @@ export default {
     },
     handleFault (row) {
       let _this = this
-      GetCurrentFaultByAgentid(row.agentid).then(res => {
+      let reqData = {
+        'agentId': row.agentid,
+        'enumerate': '0',
+        'isCurrentFault': true
+      }
+      GetFaultRange(reqData).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return false
         } else {
-          let list = res.data.data
+          let list = res.data.data.content
           if (list && list.length > 0) {
             this.childTitle = 'faultDetail'
             let component = _this.$refs.faultDetail
@@ -385,18 +390,22 @@ export default {
     ok () {
       DeleteDevice(this.deleteId).then(res => {
         if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.deletefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
-          return
+          debugger
+          let msg = getMessageByCode(res.data.code, this.$i18n.locale)
+          let errorCode = res.data.data.errorCode
+          if (errorCode) {
+            msg = msg + ' - ' + getMessageByCode(errorCode, this.$i18n.locale)
+          }
+          this.$message.error(msg)
+          return false
+          // this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          // return
         }
-        this.$message({
-          message: this.$t('openatc.common.deletesuccess'),
-          type: 'success'
-        })
+        this.$message.success(this.$t('openatc.common.deletesuccess'))
+        // this.$message({
+        //   message: this.$t('openatc.common.deletesuccess'),
+        //   type: 'success'
+        // })
         this.messageboxVisible = false
         this.getList()
       })

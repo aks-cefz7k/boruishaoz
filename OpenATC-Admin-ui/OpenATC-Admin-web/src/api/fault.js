@@ -114,7 +114,13 @@ export const GetAllFaultRange = (pageNum, pageSize, isCurrentFault, id, beginTim
   return api.Send({}, param)
 }
 
+export const GetFaultRange = (param) => {
+  let api = new Authapi('GetAllFaultRange')
+  return api.Send({}, param)
+}
+
 export default {
+  GetFaultRange,
   GetAllCurrentFault,
   GetAllHistoryFault,
   GetCurrentFaultByAgentid,

@@ -29,7 +29,7 @@
             </div>
             <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
             <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
-            <div class="first-1" v-show="pattern.length > 1" :style="{'width':item.hideWidth,'height':'34px'}"></div>
+            <!-- <div class="first-1" v-show="pattern.length > 1" :style="{'padding-right':item.hideWidth,'height':'34px'}"></div> -->
           </div>
         </div>
       <div v-for="(item, index) in barrierList" :key="index + '1'">
@@ -53,6 +53,10 @@ export default {
     return {
       barrierHeight: '',
       barrierList: [],
+      newCycle: this.cycles,
+      patternIds: this.patternId,
+      newPatterns: [],
+      max: '',
       pattern: this.patternStatusList
     }
   },
@@ -61,6 +65,9 @@ export default {
       type: Number
     },
     cycles: {
+      type: Number
+    },
+    patternId: {
       type: Number
     },
     patternStatusList: {
@@ -85,11 +92,24 @@ export default {
     }
   },
   watch: {
+    patternId: {
+      handler: function (val, oldVal) {
+        this.patternIds = this.patternId
+      },
+      // 深度观察监听
+      deep: true
+    },
+    cycles: {
+      handler: function (val, oldVal) {
+        this.newCycle = this.cycles
+      },
+      // 深度观察监听
+      deep: true
+    },
     patternStatusList: {
       handler: function (val, oldVal) {
-        // this.pattern = []
         this.handleBarrierHeight() // 计算屏障高度
-        if (this.patternStatusList && this.cycles) {
+        if (this.patternStatusList && this.newCycle) {
           setTimeout(() => {
             this.handleCurrentChange(this.patternStatusList)
           }, 10)
@@ -102,7 +122,7 @@ export default {
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
-    if (this.patternStatusList && this.cycles) {
+    if (this.patternStatusList && this.newCycle) {
       this.handleCurrentChange(this.patternStatusList)
       this.handleBarrierHeight()
     }
@@ -124,8 +144,38 @@ export default {
     },
     handleCurrentChange (val) { // 两个ring的数据
       this.pattern = []
+      this.barrierList = []
+      let currentArr = []
+      let newPattern = []
+      val.map(i => {
+        newPattern.push(...i)
+      })
       if (val === null) return
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      for (let patternStatus of val[0]) {
+        let concurrent = phaseList.filter((item) => {
+          return item.id === patternStatus.id // patternStatus.id当前相位id concurrent当前相位的并发相位
+        })[0].concurrent// 当前相位的并发相位
+        let obj = {
+          id: patternStatus.id,
+          current: concurrent.sort()
+        }
+        currentArr.push(obj)
+      }
+      let newCurrent = this.tranform(currentArr)
+      let ringTeam = this.step1(phaseList, newCurrent)
+      let patternList = this.globalParamModel.getParamsByType('patternList')
+      patternList.map(item => { // 添加特征参数barrier
+        if (item.id === this.patternIds) {
+          item.barriers = ringTeam
+        }
+      })
+      this.fillGap(ringTeam, val)
+      let barrier = this.step2(ringTeam, newPattern)
+      this.barrierList = barrier.map(j => {
+        return (j / (this.max ? this.max : this.newCycle) * 100) + '%'
+      })
+      this.barrierList.unshift(0)
       for (let rings of val) {
         if (rings.length === 0) continue
         let list = []
@@ -144,9 +194,14 @@ export default {
           let currPhase = phaseList.filter((item) => {
             return item.id === ring.id
           })[0]
-          obj.redWidth = (currPhase.redclear / this.cycles * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / this.cycles * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / this.cycles * 100).toFixed(3) + '%'
+          if (ring.sum) {
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow + ring.sum) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+            // obj.hideWidth = (ring.sum / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          } else {
+            obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          }
+          obj.redWidth = (currPhase.redclear / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
+          obj.yellowWidth = (currPhase.yellow / (this.max ? this.max : this.newCycle) * 100).toFixed(3) + '%'
           // 忽略相位不显示
           let mode = ring.mode
           if (mode !== 7) { // 忽略相位不显示
@@ -155,7 +210,6 @@ export default {
         }
         this.pattern.push(list)
       }
-      this.handleBarrier(this.pattern, phaseList)
     },
     tranform (arr) { // 分barrier
       let newMap = new Map()
@@ -179,9 +233,11 @@ export default {
       arr.forEach(a => {
         const retItem = []
         a.forEach(b => {
-          const find = retItem.find(r => r.ring === listObj[b])
-          if (find) find.data.push(b)
-          else retItem.push({ring: listObj[b], data: [b]})
+          if (listObj[b]) {
+            const find = retItem.find(r => r.ring === listObj[b])
+            if (find) find.data.push(b)
+            else retItem.push({ring: listObj[b], data: [b]})
+          }
         })
         ret.push(retItem)
       })
@@ -191,7 +247,7 @@ export default {
       let ret = []
       const patternObj = {}
       pattern.forEach(l => {
-        patternObj[l.id] = l.split
+        patternObj[l.id] = l.value
       })
       newArr.forEach((na, index) => {
         let max = 0
@@ -201,7 +257,7 @@ export default {
             max = total
           }
         })
-        while (index > 0 && max < this.cycles) {
+        while (index > 0) { // && max < _this.newCycle
           index--
           max += ret[index]
         }
@@ -210,62 +266,93 @@ export default {
       return ret
     },
     fillGap (newArr, pattern) {
+      this.newPatterns = []
       const patternObj = {}
       pattern.forEach(l => {
         l.map(k => {
-          patternObj[k.id] = k.split
+          patternObj[k.id] = k.value
         })
       })
+      let newMax = []
+      let newMin = []
       newArr.forEach((na, index) => {
         na.map(n => {
-          n.num = n.data.reduce((pre, cur) => pre + patternObj[cur], 0)
+          n.length = n.data.length > 1 ? n.data.reduce((pre, cur) => pre + patternObj[cur], 0) : patternObj[n.data[0]]
         })
+        let maxNum = Math.max.apply(Math, na.map(item => { return item.length }))
+        let minNum = Math.min.apply(Math, na.map(item => { return item.length }))
+        newMax.push(maxNum)
+        newMin.push(minNum)
+        let newmaxNum = Math.max.apply(Math, newMax)// 每组最大值
+        let newminNum = Math.min.apply(Math, newMin)
+        if (newmaxNum === newminNum) {
+          this.newCycle = newmaxNum + newminNum
+          this.max = newmaxNum + newminNum
+          pattern.map(d => {
+            d.map(r => {
+              if (r.sum) {
+                delete r.sum
+              }
+            })
+          })
+        }
+        if (maxNum === minNum) {
+          na.map(n => {
+            pattern.map(h => {
+              h.map(d => {
+                if (d.id === n.data[1] && d.sum) {
+                  delete d.sum
+                }
+              })
+            })
+          })
+        } else {
+          na.map(n => {
+            if (n.length === maxNum) {
+              pattern.map(h => {
+                h.map(d => {
+                  if (d.id === n.data[1]) {
+                    delete d.sum
+                  }
+                })
+              })
+            }
+          })
+        }
         na.forEach((value, index, array) => {
-          let maxNum = Math.max.apply(Math, na.map(item => { return item.num }))
-          if (value.num !== maxNum) {
+          if (value.length !== maxNum) {
             let newNa = []
             newNa.push(value)
             newNa.forEach(m => {
+              let sum = Number(maxNum - m.length)
               pattern.filter((i) => {
                 i.map(j => {
-                  if (j.id === m.data[1]) {
-                    let sum = Number(maxNum - m.num)
-                    j.hideWidth = (sum / this.cycles * 100).toFixed(3) + '%'
+                  if (m.data.length > 1) {
+                    if (j.id === m.data[1]) {
+                      j.sum = sum
+                    }
+                  } else {
+                    if (j.id === m.data[0]) {
+                      j.sum = sum
+                    }
                   }
                 })
               })
             })
           }
+          let mapAdd = pattern.map(item => {
+            return item.map(val => {
+              return val.value + (val.sum ? val.sum : 0)
+            })
+          })
+          let maxCycle = mapAdd.length > 0 ? mapAdd.map(item => {
+            return item.length > 0 ? item.reduce((a, b) => {
+              return a + b
+            }) : 0
+          }) : 0
+          this.max = Math.max(...maxCycle)// 每个环的周期最大值
         })
       })
-    },
-    handleBarrier (pattern, phaseList) {
-      if (pattern.length < 2) return
-      let newPattern = []
-      pattern.map(i => {
-        newPattern.push(...i)
-      })
-      this.barrierList = []
-      let currentArr = []
-      let firstPatternStatus = pattern[0]
-      for (let patternStatus of firstPatternStatus) {
-        let concurrent = phaseList.filter((item) => {
-          return item.id === patternStatus.id // patternStatus.id当前相位id concurrent当前相位的并发相位
-        })[0].concurrent// 当前相位的并发相位
-        let obj = {
-          id: patternStatus.id,
-          current: concurrent.sort()
-        }
-        currentArr.push(obj)
-      }
-      let newCurrent = this.tranform(currentArr)
-      let ringTeam = this.step1(phaseList, newCurrent)
-      let barrier = this.step2(ringTeam, newPattern)
-      this.barrierList = barrier.map(j => {
-        return (j / this.cycles * 100) + '%'
-      })
-      this.barrierList.unshift(0)
-      // this.fillGap(ringTeam, pattern)
     }
   }
 }
