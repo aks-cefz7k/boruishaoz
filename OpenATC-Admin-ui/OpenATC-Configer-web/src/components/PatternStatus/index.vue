@@ -18,16 +18,21 @@
                 <div slot="content">P{{item.id}}:{{item.split}}</div>
                 <div style="cursor:pointer;">
                   <div class="ring-phase">
+                    <PatternWalkSvg v-if="item.peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'32'" :Height="'34'" />
                     <xdrdirselector  Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
                   </div>
-                  <!-- 人行道 -->
-                  <PatternWalkSvg v-if="item.peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'32'" :Height="'34'" />
                   <div class="box">
                     <div class="ring-nums">P{{item.id}}</div>
                     <div class="ring-nums">{{item.split}}</div>
                   </div>
                 </div>
               </el-tooltip>
+              <div style="position:relative; width:50px;" v-for="(bus,index3) in busPhaseData" :key="index3">
+                 <i class="iconfont icon-BRT" v-if="bus.controltype === 4 && bus.phaseid===item.id"></i>
+                 <i class="iconfont icon-feijidongche" v-if="bus.controltype === 6 && bus.phaseid===item.id"></i>
+                 <i class="iconfont icon-gongjiaoche" v-if="bus.controltype === 3 && bus.phaseid===item.id"></i>
+                 <i class="iconfont icon-youguidianche" v-if="bus.controltype === 5 && bus.phaseid===item.id"></i>
+              </div>
             </div>
             <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left','background': 'linear-gradient(to right, #ffffff 50%, #7ccc66 0)','background-size': '4px 100%'}"></div>
             <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
@@ -46,8 +51,12 @@
 <script>
 import xdrdirselector from '@/components/XRDDirSelector'
 import PatternWalkSvg from '@/views/overView/crossDirection/baseImg/PatternWalkSvg'
+// import BusMapSvg from '@/views/overView/crossDirection/busIcon/busMapSvg'
 import PhaseDataModel from '../../views/overView/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
+import { getIntersectionInfo } from '@/api/template'
+import { getMessageByCode } from '@/utils/responseMessage'
+import { queryDevice } from '@/api/control'
 export default {
   name: 'patternstatus',
   components: {
@@ -65,6 +74,7 @@ export default {
       sidewalkPhaseData: [],
       controlDatas: this.controlData,
       max: '',
+      busPhaseData: [], // 公交相位数据
       pattern: this.patternStatusList
     }
   },
@@ -152,6 +162,7 @@ export default {
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
     this.getPedPhasePos()
+    this.getIntersectionInfo()
   },
   mounted () {
   },
@@ -164,6 +175,65 @@ export default {
     }
   },
   methods: {
+
+    getIntersectionInfo () {
+      // 获取路口信息
+      queryDevice().then(res => {
+        if (!res.data.success) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return
+        }
+        getIntersectionInfo(res.data.data.agentid || '0').then(data => {
+          if (!data.data.success) {
+            if (data.data.code === '4003') {
+              this.$message.error(this.$t('edge.common.deviceoffline'))
+              return
+            }
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          this.crossInfo = data.data.data
+          this.tempType = this.crossInfo.type
+          // 获取车道相位、行人相位信息（坐标、名称）
+          this.mainType = this.tempType.split('-')[0]
+          if (this.mainType === '100' || this.mainType === '101' || this.mainType === '104') {
+          // 城市道路加载车道相位坐标和人行道坐标
+            this.getBusPos()
+          }
+        })
+      })
+    },
+    getBusPos () {
+      // 公交相位信息
+      this.busPhaseData = []
+      this.crossInfo.phaseList.forEach((ele, i) => {
+        if (ele.controltype >= 3 && ele.controltype <= 5) {
+          ele.direction.forEach((dir, index) => {
+          // 车道相位
+            this.busPhaseData.push({
+              // key: this.CrossDiagramMgr.getUniqueKey('busphase'),
+              phaseid: ele.id, // 相位id，用于对应相位状态
+              id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
+              name: this.PhaseDataModel.getBusPhasePos(dir).name,
+              // left: this.PhaseDataModel.getBusPhasePos(dir).x,
+              // top: this.PhaseDataModel.getBusPhasePos(dir).y,
+              // busleft: this.PhaseDataModel.getBusMapPos(dir).x,
+              // bustop: this.PhaseDataModel.getBusMapPos(dir).y,
+              controltype: ele.controltype
+            })
+          })
+        }
+      })
+      let result = []
+      let obj = {}
+      for (var i = 0; i < this.busPhaseData.length; i++) {
+        if (!obj[this.busPhaseData[i].phaseid]) {
+          result.push(this.busPhaseData[i])
+          obj[this.busPhaseData[i].phaseid] = true
+        }
+      }
+      this.busPhaseData = result
+    },
     getPedPhasePos () {
       // 行人相位信息
       this.sidewalkPhaseData = []
@@ -180,7 +250,6 @@ export default {
                 name: this.PhaseDataModel.getSidePos(dir).name
               })
             }
-            console.log(this.sidewalkPhaseData, 'this.sidewalkPhaseData')
           })
         }
       })
@@ -492,6 +561,12 @@ export default {
   margin-top: 1px;
   width: 100%;
   height: 34px;
+}
+.iconfont{
+  color:#454545;
+  font-size: 12px;
+  position: absolute;
+  top: 8px;
 }
 .direction {
   opacity: 0.6;
