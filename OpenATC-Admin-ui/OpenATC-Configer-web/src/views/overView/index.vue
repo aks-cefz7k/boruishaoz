@@ -1361,29 +1361,70 @@ export default {
       })
     },
     initRingPhaseData () {
-      if (this.crossStatusData === null) return
+      // 环信息从单独上载相位信息里获取，以免相位锁定后，方案状态数据里没有rings，导致相位锁定控制列表无法显示
       this.phaseRings = []
-      if (!this.crossStatusData.rings) return
-      this.crossStatusData.rings.forEach(ring => {
-        let obj = {}
-        obj.num = ring.num
-        obj.phases = []
-        for (let i = 0; i < ring.sequence.length; i++) {
-          let phaseid = ring.sequence[i]
-          let originphase = this.crossStatusData.phase.filter(phase => phase.id === phaseid)[0]
-          let addphse = this.getPhasesInfo(phaseid)
-          obj.phases.push({...originphase, ...addphse})
+      let map = {}
+      let dest = []
+      for (let i = 0; i < this.phaseList.length; i++) {
+        let ai = this.phaseList[i]
+        if (!map[ai.ring]) {
+          let addphse = this.addPhaseInfo(ai)
+          dest.push({
+            num: ai.ring,
+            phases: [{...ai, ...addphse}]
+          })
+          map[ai.ring] = ai
+        } else {
+          for (var j = 0; j < dest.length; j++) {
+            var dj = dest[j]
+            if (dj.num === ai.ring) {
+              let addphse = this.addPhaseInfo(ai)
+              dj.phases.push({...ai, ...addphse})
+              break
+            }
+          }
         }
-        this.phaseRings.push(obj)
-      })
+      }
+      this.phaseRings = JSON.parse(JSON.stringify(dest))
     },
-    getPhasesInfo (phaseid) {
-      if (this.phaseList === undefined || this.phaseList.filter(phase => phase.id === phaseid).length === 0) return
-      let phaseinfo = this.phaseList.filter(phase => phase.id === phaseid)[0]
-      phaseinfo.name = this.$t('edge.overview.phase') + phaseinfo.id
-      phaseinfo.desc = this.getPhaseDescription(phaseinfo.direction)
-      return phaseinfo
+    addPhaseInfo (phase) {
+      let addphse = {}
+      addphse.name = this.$t('edge.overview.phase') + phase.id
+      addphse.desc = this.getPhaseDescription(phase.direction)
+      if (this.crossStatusData !== null) {
+        // 如果方案状态相位有close字段，这边就需要对应close状态进相位关断控制的选项里
+        let phaseStatus = this.crossStatusData.phase.filter(ele => ele.id === phase.id)[0]
+        addphse = {...addphse, ...phaseStatus}
+      }
+      // 相位锁定选项默认都按照解锁状态显示
+      addphse.locktype = 0
+      return addphse
     },
+    // initRingPhaseData () {
+    // 从方案状态里获取环信息，对应显示相位关断控制列表
+    //   if (this.crossStatusData === null) return
+    //   this.phaseRings = []
+    //   if (!this.crossStatusData.rings) return
+    //   this.crossStatusData.rings.forEach(ring => {
+    //     let obj = {}
+    //     obj.num = ring.num
+    //     obj.phases = []
+    //     for (let i = 0; i < ring.sequence.length; i++) {
+    //       let phaseid = ring.sequence[i]
+    //       let originphase = this.crossStatusData.phase.filter(phase => phase.id === phaseid)[0]
+    //       let addphse = this.getClosePhasesInfo(phaseid)
+    //       obj.phases.push({...originphase, ...addphse})
+    //     }
+    //     this.phaseRings.push(obj)
+    //   })
+    // },
+    // getClosePhasesInfo (phaseid) {
+    //   if (this.phaseList === undefined || this.phaseList.filter(phase => phase.id === phaseid).length === 0) return
+    //   let phaseinfo = this.phaseList.filter(phase => phase.id === phaseid)[0]
+    //   phaseinfo.name = this.$t('edge.overview.phase') + phaseinfo.id
+    //   phaseinfo.desc = this.getPhaseDescription(phaseinfo.direction)
+    //   return phaseinfo
+    // },
     getPhaseDescription (phaseList) {
       let list = []
       for (let id of phaseList) {
