@@ -14,13 +14,16 @@ package com.openatc.agent.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.*;
-import com.openatc.agent.service.*;
+import com.openatc.agent.model.DevCover;
+import com.openatc.agent.model.SysOrg;
+import com.openatc.agent.model.User;
+import com.openatc.agent.resmodel.PageOR;
+import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.service.OrgService;
+import com.openatc.agent.service.UserDao;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
-import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.common.IErrorEnumImplOuter;
-import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -32,14 +35,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
-import static com.openatc.core.common.IErrorEnumImplOuter.*;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_8004;
 
 @RestController
 @CrossOrigin
@@ -48,10 +48,6 @@ public class DevController {
     @Autowired(required = false)
     AscsDao mDao;
 
-    @Autowired(required = false)
-    private RouteDao routeDao;
-    @Autowired
-    private VipRouteDao vipRouteDao;
     @Autowired(required = false)
     private UserDao userDao;
     @Autowired(required = false)
@@ -62,6 +58,7 @@ public class DevController {
     private Gson gson = new Gson();
     private Logger log = Logger.getLogger(DevController.class.toString());
 
+    // 按用户名查询设备
     @GetMapping(value = "/devs/user/{username}")
     public RESTRetBase GetAllAscsByUsername(@PathVariable String username) {
         User user = userDao.getUserByUserName(username);
@@ -77,11 +74,13 @@ public class DevController {
         return RESTRetUtils.successObj(devices);
     }
 
+    // 按组织机构查询设备
     @GetMapping(value = "/devs/orgnization/{code}")
     public RESTRetBase getAscsByCode(@PathVariable String code) {
         return RESTRetUtils.successObj(mDao.getAscsByCode(code));
     }
 
+    // 查询所有没有组织机构的设备
     @GetMapping(value = "/devs/orgnization/none")
     public RESTRetBase getAscsNoCode() {
         return RESTRetUtils.successObj(mDao.getAscsNoCode());
@@ -90,13 +89,29 @@ public class DevController {
     //得到所有设备
     @GetMapping(value = { "/devs" ,  "/devs/all"})
     public RESTRet GetDevs() {
-//        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
-//        List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
+
         List<AscsBaseModel> ascsBaseModels = mDao.getAscs();
         mDao.alterStatus(ascsBaseModels);
         return RESTRetUtils.successObj(ascsBaseModels);
     }
 
+    // 按ID查询设备
+    @GetMapping(value = { "/devs/{id}" , "/devs/info/{id}" })
+    public RESTRetBase GetAscsInfo(@PathVariable String id) {
+        return RESTRetUtils.successObj(mDao.getAscsByID(id));
+    }
+
+    // 按类型查询设备
+    @GetMapping(value = "/devs/type/{type}")
+    public RESTRetBase GetDevByType(@PathVariable String type) {
+        return RESTRetUtils.successObj(mDao.getAscsByType(type));
+    }
+
+    @PostMapping(value = "/devs/range")
+    public RESTRetBase getDevsRange(@RequestBody JsonObject jsonObject) {
+        return RESTRetUtils.successObj(mDao.getAscsRange(jsonObject));
+    }
+    // 按列表中的路口ID获取路口
     @PostMapping(value = "/devs/list")
     public RESTRetBase getDevList(@RequestBody JsonObject jsonObject) {
         Gson gson = new Gson();
@@ -118,61 +133,16 @@ public class DevController {
         return RESTRetUtils.successObj(devList);
     }
 
-    //得到某一Id设备
-    @GetMapping(value = { "/devs/{id}" , "/devs/info/{id}" })
-    public RESTRetBase GetAscsInfo(@PathVariable String id) {
-        return RESTRetUtils.successObj(mDao.getAscsByID(id));
-    }
-
-    //得到某类型的设备
-    @GetMapping(value = "/devs/type/{ptype}")
-    public RESTRetBase GetDevByType(@PathVariable String ptype) throws ParseException {
-        String sql = "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '1 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='" + ptype + "'";
-        return RESTRetUtils.successObj(mDao.getDevByPara(sql));
-    }
-
-    //删除
+    // 按ID删除设备
     @DeleteMapping(value = "/devs/{id}")
     public RESTRetBase DeleteDev(@PathVariable String id) {
-
-        //删除设备时，应通知所有服务更新映
-        //删除协调路线的id设备
-        List<Route> routes = routeDao.findAll();
-        for (Route route : routes) {
-            Set<RouteIntersection> intersections = route.getDevs();
-            Iterator<RouteIntersection> intersectionIterator = intersections.iterator();
-            while (intersectionIterator.hasNext()) {
-                RouteIntersection next = intersectionIterator.next();
-                if (next.getAgentid().equals(id)) {
-//                    intersectionIterator.remove();
-                    InnerError devCommError = RESTRetUtils.innerErrorObj(id, IErrorEnumImplInner.E_8101, next);
-                    return RESTRetUtils.errorDetialObj(E_8002,devCommError);
-                }
-            }
-        }
-
-        //删除勤务路线的设备
-        List<VipRoute> vipRoutes = vipRouteDao.findAll();
-        for (VipRoute vipRoute : vipRoutes) {
-            Set<VipRouteDevice> devs = vipRoute.getDevs();
-            Iterator<VipRouteDevice> vipRouteDeviceIterator = devs.iterator();
-            while (vipRouteDeviceIterator.hasNext()) {
-                VipRouteDevice next = vipRouteDeviceIterator.next();
-                if (next.getAgentid().equals(id)) {
-//                    vipRouteDeviceIterator.remove();
-                    InnerError devCommError = RESTRetUtils.innerErrorObj(id, IErrorEnumImplInner.E_8101, next);
-
-                    return RESTRetUtils.errorDetialObj(E_8003,devCommError);
-                }
-            }
-        }
 
         AscsBaseModel as = mDao.getAscsByID(id);
         mDao.deleteDevByID(id);
         return RESTRetUtils.successObj(as);
     }
 
-    //添加设备
+    // 添加设备
     @PostMapping(value = "/devs")
     public RESTRetBase InsertDev(@RequestBody AscsBaseModel ascs) {
         //check name
@@ -180,14 +150,14 @@ public class DevController {
         if (name == null || name.equals("")) {
             ascs.setName(ascs.getAgentid());
         }
-        int count = mDao.getDevByAgentid(ascs.getAgentid());
+        int count = mDao.getCountByAgentid(ascs.getAgentid());
         if (count != 0) {
             return RESTRetUtils.errorObj(E_8004);
         }
         return RESTRetUtils.successObj(mDao.insertDev(ascs));
     }
 
-    //更新设备
+    // 更新设备
     @PutMapping(value = "/devs")
     public RESTRetBase UpdateDev(@RequestBody AscsBaseModel ascs) {
         int temp = mDao.updateDev(ascs);
@@ -203,7 +173,7 @@ public class DevController {
         }
     }
 
-    // 注册设备消息处理
+    // 信号机的注册消息处理
     @PutMapping(value = "/devs/discovery")
     public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel){
         mDao.updateAscsByReport(ascsModel);

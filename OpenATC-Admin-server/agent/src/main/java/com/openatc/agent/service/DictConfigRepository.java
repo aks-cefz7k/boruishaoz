@@ -1,3 +1,10 @@
+package com.openatc.agent.service;
+
+import com.openatc.agent.model.DictConfig;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 /**
  * Copyright (c) 2020 kedacom
@@ -13,34 +20,16 @@
 
 /**
  * @author ：zhangwenchao
- * @date ：Created in 2022/1/4 16:46
- * @description：字典配置实体
+ * @date ：Created in 2022/1/4 16:43
+ * @description：字典配置服务
  * @modified By：
  * @version: $
  */
 
-package com.openatc.agent.model;
 
-import lombok.Data;
-import javax.persistence.*;
-import java.util.Date;
 
-@Entity
-@Table(name = "sysconfig")
-@Data
-public class SysConfig {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String configcode;
-    private String configname;
-    private int configtype;
-    private int sort;
-    private String description;
+public interface DictConfigRepository extends JpaRepository<DictConfig, Long> {
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date ceattime;
-
-    private String creatby;
-
+    @Query(nativeQuery=true,value=" SELECT * from sysconfig where configtype = :configtype ")
+    List<DictConfig> findByConfigtype(int configtype);
 }

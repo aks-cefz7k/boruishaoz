@@ -33,43 +33,32 @@ import static com.openatc.core.common.IErrorEnumImplInner.*;
 
 // 使用固定端口发送和监听UDP数据，适用于平台的端口映射网络
 public class UdpCommunicationStaticPort implements Communication {
+    // 全局变量
     private static int TIMEOUT = PropertiesUtil.getIntProperty("agent.comm.timeout");
+    private static int ocpSocketPort = PropertiesUtil.getIntProperty("agent.comm.port.ocp");
+    private static int scpSocketPort = PropertiesUtil.getIntProperty("agent.comm.port.scp");
     private static int RECVBUFFER = 64 * 1024;
     private static Logger logger = Logger.getLogger(UdpCommunicationStaticPort.class.toString());
-
-
     // 发送和接收消息的固定端口ocp-UDP对象
     private static DatagramSocket ocpSocket = null;
     // 发送和接收消息的固定端口scp-UDP对象
     private static DatagramSocket scpSocket = null;
     // 先把发送消息的KEY保存在map中，收到消息后，按KEY保存消息内容，再返回给客户端
     private static Map<String, UdpCommunicationStaticPort> messageMap = new HashMap();
-    // 同步锁Map
-//    private static Map<String, ReentrantLock> lockMap = new HashMap();
+//    private static Map<String, ReentrantLock> lockMap = new HashMap();     // 同步锁Map
+    public static ICommHandler hanlder;
+//    private static ReentrantLock globalLock = new ReentrantLock();
 
+    // 成员变量
     private String agentid; // 当前请求的设备KEY
     private String messageKey; // 当前请求的设备KEY，用于多线程同步
     private Thread thread; // 当前请求的线程对象
     private MessageData responceData = null;
-//    private ReentrantLock lock; // 同步锁，将同一个设备的请求按顺序排队发送
     private DatagramSocket datagramSocket;
     private int exangeType; // 当前设备的通讯平台
-//    private String sendmsgtype;
-
-
-
-    private static int ocpSocketPort = PropertiesUtil.getIntProperty("agent.comm.port.ocp");
-    private static int scpSocketPort = PropertiesUtil.getIntProperty("agent.comm.port.scp");
-
-
-    public static ICommHandler hanlder;
-
     private Message message;
 
-//    private static ReentrantLock globalLock = new ReentrantLock();
-
     static {
-//        logger.setLevel(WARNING);
         //创建socket对象,绑定固定端口
         LogUtil.SetLogLevelfromProp(logger);
 
