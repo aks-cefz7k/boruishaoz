@@ -2,6 +2,7 @@ package com.openatc.agent.model;
 
 import javax.naming.Name;
 import javax.persistence.Column;
+import javax.persistence.Transient;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -36,6 +37,8 @@ public class Fault {
     private String enumerate;  //0:未处理 1:已忽略 2:已处理
     private String deleteFlag = "0";  //0:未删除 1:已删除
 
+    @Transient
+    private Long m_unFaultOccurTime; //扩展属性
 }
 
 @Data
