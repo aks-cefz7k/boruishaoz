@@ -499,7 +499,7 @@ const zh = {
       'entername': '请输入区域名称',
       'executeresults': '执行结果',
       'executerestatus': '执行状态',
-      'hasexecutecross': '存在触发状态中的路口，不可修改！',
+      'hasexecutecross': '存在正在执行中的路口，不可修改！',
       'controlsuccess': '执行成功',
       'controlfailed': '执行失败',
       'recoverysuccess': '恢复成功',

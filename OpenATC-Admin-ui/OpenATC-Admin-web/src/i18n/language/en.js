@@ -499,7 +499,7 @@ const en = {
       'entername': 'Please enter area name',
       'executeresults': 'Execute Results',
       'executerestatus': 'Execute State',
-      'hasexecutecross': 'There are intersections in trigger status, which cannot be modified!',
+      'hasexecutecross': 'There are intersections in execution, which cannot be modified!',
       'controlsuccess': 'Control success',
       'controlfailed': 'Control failed',
       'recoverysuccess': 'Recovery success',
