@@ -10,6 +10,20 @@ export default new Router({
       component: (resolve) => {
         require(['@/views/home'], resolve)
       }
+    },
+    {
+      path: '/cross',
+      name: 'cross',
+      component: (resolve) => {
+        require(['@/views/intersection'], resolve)
+      }
+    },
+    {
+      path: '/config',
+      name: 'config',
+      component: (resolve) => {
+        require(['@/views/schemeconfig'], resolve)
+      }
     }
   ]
 })

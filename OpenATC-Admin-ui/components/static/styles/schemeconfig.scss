@@ -1,0 +1,299 @@
+// 方案配置面板
+.scheme-config {
+  .iconfont {
+    font-family: "iconfont" !important;
+    font-size: 34px;
+    text-align: center;
+    font-weight: 500;
+    color: #000000;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .right-control-part {
+    min-width: 300px;
+    overflow: auto;
+  }
+  .cross-mess {
+    margin-left: 15px;
+    margin-top: 15px;
+    height: 20px;
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+  }
+  .cross-module {
+    float: left;
+    margin-top: 5px;
+    padding-left: 15px;
+    width: 100%;
+    padding-bottom: 20px;
+    // min-width: 600px;
+    // height: 180px;
+    background-color: $--color-white;
+  }
+  .cross-content {
+    margin-top: 19px;
+    // margin-left: 7px;
+    overflow: hidden;
+  }
+  .cross-name {
+    // height: 13px;
+    font-size: 14px;font-weight: normal;
+    font-stretch: normal;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: $--color-text-regular;
+  }
+  .control-model {
+    float: left;
+    margin-top: 10px;
+    // margin-left: 15px;
+  }
+  .model-label, .stage-label {
+    width: 100px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #606266;
+    line-height: 28px;
+    padding-right: 12px;
+  }
+  .single-model {
+    margin-right: 10px;
+    text-align: center;
+    cursor:pointer;
+    width: 70px;
+    height: 65px;
+    background-color: #edf6ff;
+    border-radius: 6px;
+    line-height: 1.15;
+    .patternWalk{
+      left: 14px !important;
+    }
+  }
+  .single-model .closephase-icon {
+    margin-top: 10px;
+    width: 56px;
+    height: 24px;
+  }
+  .single-model .model-icon {
+    margin-top: 10px;
+    width: 24px;
+    height: 24px;
+  }
+  .single-model-select {
+    margin-right: 10px;
+    text-align: center;
+    cursor:pointer;
+    width: 70px;
+    height: 65px;
+    background-color: #a2cfff;
+    border-radius: 6px;
+    // border: solid 1px #409eff;
+  }
+  .single-model-name {
+    margin-top: 3px;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    // line-height: 22px;
+    letter-spacing: 0px;
+    color: #606266;
+  }
+  .current-stage-num {
+    margin-top: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    // color: #303133;
+    color:#606266;
+  }
+  .cross-value {
+    width: 180px;
+    height: 22px;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+  }
+  .el-tag {
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+  .fault-detail-btn {
+    float: right;
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #409EFF;
+    line-height: 32px;
+    margin-right: 20px;
+    cursor: pointer;
+  }
+    // 信号机控制状态模块样式
+    .controlStatePart {
+      color: $--color-text-primary;
+      padding-right: 13px;
+      .el-row {
+        height: 100%;
+      }
+      .el-col {
+        height: 100%;
+        min-width: 90px;
+        text-align: center;
+      }
+      .bg-base {
+        height: 100%;
+        background: $--background-color-base;
+      }
+      .bigPart {
+        width: 100%;
+        height: 90px;
+        margin-bottom: 5px;
+        .grid-content {
+          padding-top: 22px;
+          border-radius: 6px;
+          .value {
+            margin-bottom: 5px;
+            font-size: 18px;
+            line-height: 22px;
+            height: 22px;
+            color: $--color-text-primary;
+          }
+          .name {
+            font-size: 14px;
+            line-height: 22px;
+            color: $--color-text-secondary;
+          }
+        }
+        
+      }
+      .smallPart {
+        width: 100%;
+        .grid-content {
+          height: 70px;
+          padding-top: 10px;
+          margin-bottom: 5px;
+          border-radius: 6px;
+          .value {
+            margin-bottom: 5px;
+            font-size: 14px;
+            line-height: 22px;
+            color: $--color-text-primary;
+            height: 22px;
+          }
+          .name {
+            font-size: 14px;
+            line-height: 22px;
+            color: $--color-text-secondary;
+          }
+        }
+      }
+    }
+}
+// 手动控制弹框
+.manual-control-modal{
+  padding: 21px 0px 21px 28px;
+  min-width: 360px;
+  overflow: auto;
+  .title {
+    margin-bottom: 24px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 22px;
+    color: $--color-text-primary;
+  }
+  .model-label {
+    margin-top: 14px;
+  }
+  .stage-label {
+    margin-top: 30px;
+  }
+  .footer {
+    float: right;
+    margin: 38px 24px 40px 0;
+  }
+  .el-form-item {
+    margin-bottom: 0px;
+  }
+  .el-form-item__label {
+    font-size: 14px;
+    font-weight: 400;
+    color: $--color-text-secondary;
+  }
+  .el-dialog__footer {
+    padding: 10px 72px 38px 0;
+  }
+  .el-dialog__header {
+    padding: 19px 30px;
+  }
+  .el-select {
+    width: 75px;
+  }
+  .el-input {
+    width: 50%;
+  }
+  .el-input-number {
+    width: 100%;
+    .el-input__inner {
+      text-align: left;
+    }
+  }
+  .footer {
+    button {
+      width: 56px;
+      height: 32px;
+      padding: 0;
+      text-align: center;
+      line-height: 30px;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+    }
+  }
+  .model-label, .stage-label {
+    color: $--color-text-secondary;
+  }
+} 
+
+.closephase-control{
+  height: 100%;
+  min-width: 250px;
+  overflow: auto;
+  .closephasekanban {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 13px;
+  }
+  .el-form-item__content {
+    min-width: 120px;
+  }
+} 
+
+.lockingphase-control {
+  height: 100%;
+  min-width: 430px;
+  overflow: auto;
+  .closephasekanban {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 13px;
+  }
+  .el-form-item {
+    width: 45%;
+    min-width: 180px;
+  }
+  .el-input {
+    width: 100%;
+  }
+  .el-form-item__content {
+    width: calc(100% - 120px);
+    min-width: 80px;
+  }
+}
