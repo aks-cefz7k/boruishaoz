@@ -400,7 +400,7 @@ export default {
         }
         this.addDicts()
       } else {
-        if (this.deviceTag) { // && !this.currentTags.includes(this.deviceTag)
+        if (this.deviceTag && !this.currentTags.includes(this.deviceTag)) {
           this.currentTags.push(this.deviceTag)
         }
         this.addDicts()
