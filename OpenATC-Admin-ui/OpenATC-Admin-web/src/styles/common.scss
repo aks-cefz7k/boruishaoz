@@ -151,7 +151,7 @@
    }
  }
  .homeLayout {
-    margin-top: 23PX;
+    margin-top: 19PX;
     padding: 0 19PX;
     background-color: $--background-color-base;
     height: 100%;
@@ -983,6 +983,9 @@
   }
 }
 // 设备管理页面样式
+.device-part {
+  background-color: $--color-white;
+}
 .openatc-device {    
   margin-top: 15px;
   .tag-container {
@@ -1039,15 +1042,15 @@
   // 绿波协调页面样式
   .greenWaveOptimize {
     margin-top: 15px;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 53PX);
     .el-aside {
-        height: calc(100vh - 50px);
+        height: calc(100vh - 53PX);
         color: $--color-text-primary;
         border-right: solid 1px $--border-color-lighter;
         background-color: $--color-white;
     }
     .el-main {
-      height: calc(100vh - 50px);
+      height: calc(100vh - 53PX);
       background-color: $--background-color-base;
     }
   }
@@ -1400,22 +1403,22 @@
   // 勤务路线页面样式
   .openatc-serviceroute {
     margin-top: 15px;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 53PX);
     .el-aside {
-        height: calc(100vh - 50px);
+        height: calc(100vh - 53PX);
         color: $--color-text-primary;
         border-right: solid 1px $--border-color-lighter;
         background-color: $--color-white;
       }
       .el-main {
-        height: calc(100vh - 50px);
+        height: calc(100vh - 53PX);
         background-color: $--background-color-base;
       }
   }
   .serviceroute-planmenu {
     .el-menu {
-        height: calc(100vh - 120px);
-        max-height: calc(100vh - 120px);
+        height: calc(100vh - 120PX);
+        max-height: calc(100vh - 120PX);
         overflow-y: auto;
         border-right: none;
       }
@@ -2107,7 +2110,7 @@ table td {
 .overflow-detector-page {
   margin-top: 15px;
   // height: calc(100% - 30px);
-  height: 100%;
+  height: calc(100vh - 53PX);
   // position: relative;
   // padding-bottom: 19px;
   // margin: 15px;
