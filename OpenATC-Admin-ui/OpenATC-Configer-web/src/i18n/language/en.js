@@ -981,6 +981,7 @@ const en = {
       // 勤务路线错误
       '6001': 'Repeat Route Name',
       '6002': 'The route is on execution',
+      '6003': 'VipRoute Cannot cancel! Control is changed.',
       // 流量错误
       '7001': 'ftp clent connect fail',
       // 组织机构错误
