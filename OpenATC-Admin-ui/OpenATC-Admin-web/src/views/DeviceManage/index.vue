@@ -440,7 +440,7 @@ export default {
   methods: {
     getDicts () {
       getDict().then(res => {
-        this.selectTags = res.data.data.filter(it => it.value).map(it => it.value)
+        this.selectTags = Array.from(new Set(res.data.data.filter(it => it.value).map(it => it.value)))
       })
     },
     selectItem (select) {
