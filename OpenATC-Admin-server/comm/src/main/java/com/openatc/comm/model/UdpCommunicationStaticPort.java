@@ -21,6 +21,7 @@ import com.openatc.core.model.InnerError;
 import com.openatc.core.util.RESTRetUtils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -100,7 +101,9 @@ public class UdpCommunicationStaticPort implements Communication {
         }
     }
 
-    public UdpCommunicationStaticPort(String protype, int exangeType) {
+    // 由于ocp和scp的固定端口号不同，此处根据protype区分发送的socket
+    public UdpCommunicationStaticPort(Message m, String protype, int exangeType) {
+        message = m;
         // 设置Socket对象
         if (protype.equals(OCP_PROTYPE))
             datagramSocket = ocpSocket;
@@ -111,7 +114,21 @@ public class UdpCommunicationStaticPort implements Communication {
     }
 
     @Override
-    public int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) {
+    public int sendData(String agentid, MessageData messageData, String ip, int port, String sendmsgtype) {
+
+        // 打包
+        PackData packData = null;
+        try {
+            packData = message.pack(messageData);
+        } catch (UnsupportedEncodingException e) {
+            // 打包异常，返回消息打包出错
+            logger.warning("Agent ID:" + agentid + " message pack error!" + e.getMessage());
+            return -2;
+        }
+        // packData为空，则返回消息不支持
+        if (packData == null) {
+            return -3;
+        }
 
         // 保存消息的KEY,如果是直连到设备，用IP+端口;如果是通过平台跳转，使用设备ID
         this.agentid = agentid;

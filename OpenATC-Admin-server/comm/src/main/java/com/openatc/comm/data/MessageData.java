@@ -19,7 +19,7 @@ import lombok.Data;
  * @ClassName MessageData.java
  * @Auther zhangwenchao
  * @CreateTime 2019/11/13 13:48
- * @Description
+ * @Description 通讯消息实体
  */
 @Data
 //@Component

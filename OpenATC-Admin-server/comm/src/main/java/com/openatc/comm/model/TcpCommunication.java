@@ -12,13 +12,23 @@
 package com.openatc.comm.model;
 
 import com.openatc.comm.data.MessageData;
+import com.openatc.core.model.InnerError;
+import com.openatc.core.util.RESTRetUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.logging.Logger;
+
+import static com.openatc.comm.common.CommunicationType.EXANGE_TYPE_CENTER;
+import static com.openatc.comm.common.CommunicationType.EXANGE_TYPE_DEVICE;
+import static com.openatc.comm.common.LogUtil.CreateErrorRequestData;
+import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
+import static com.openatc.core.common.IErrorEnumImplInner.E_107;
+import static com.openatc.core.common.IErrorEnumImplInner.E_208;
 
 // 使用随机端口发送和监听UDP数据，适用于配置工具的直连网络，不含监听主动上报消息功能
 public class TcpCommunication implements Communication {
@@ -28,14 +38,38 @@ public class TcpCommunication implements Communication {
 
     private Socket socket = null;
     private OutputStream out = null;
-    private Message message = null;;
+    private Message message = null;
+    private int exangeType; // 当前设备的是直连还是转发
+    private String agentid; // 当前请求的设备KEY
 
-    public TcpCommunication(Message m) {
+    public TcpCommunication(Message m, int type) {
         message = m;
+        exangeType = type;
     }
 
     @Override
-    public int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype){
+    public int sendData(String agentid, MessageData messageData, String ip, int port, String sendmsgtype){
+
+        // 打包
+        PackData packData = null;
+        try {
+            packData = message.pack(messageData);
+        } catch (UnsupportedEncodingException e) {
+            // 打包异常，返回消息打包出错
+            logger.warning("Agent ID:" + agentid + " message pack error!" + e.getMessage());
+            return -2;
+        }
+        // packData为空，则返回消息不支持
+        if (packData == null) {
+            return -3;
+        }
+
+        this.agentid = agentid;
+        // 判断当前设备的是直连还是转发
+        if (exangeType == EXANGE_TYPE_DEVICE)
+            ;
+        else if (exangeType == EXANGE_TYPE_CENTER)
+            ;
 
         socket = new Socket();
         int ret = 0;
