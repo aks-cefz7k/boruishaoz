@@ -198,14 +198,15 @@ export default {
         let patternId = this.singleoptim[i].pattern
         patternIds.push(patternId)
       }
+      let patternList = this.globalParamModel.getParamsByType('patternList')
       let index = 0
-      for (let i = 0; i < this.singleoptim.length; i++) {
-        if (!patternIds.includes(i + 1)) {
+      for (let i = 0; i < patternList.length; i++) {
+        let patternId = patternList[i].id
+        if (!patternIds.includes(patternId)) {
           index = i
           break
         }
       }
-      let patternList = this.globalParamModel.getParamsByType('patternList')
       item.pattern = patternList[index].id
       return item
     },
