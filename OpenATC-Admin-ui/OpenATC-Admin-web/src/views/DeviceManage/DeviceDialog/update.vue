@@ -214,6 +214,7 @@
 <script>
 import { AddDevice, UpdateDevice, UpdateDeviceId, getDict, addDict } from '@/api/device'
 import { getMessageByCode } from '@/utils/responseMessage'
+import { DictApi } from '@/api/dict.js'
 export default {
   name: 'deviceUpdate',
   props: {
@@ -359,6 +360,7 @@ export default {
   },
   created () {
     // this.getDicts()
+    this.getAllPlatform()
   },
   methods: {
     getDicts () {
@@ -622,6 +624,26 @@ export default {
         this.platformCheck = false
         this.deviceInfo.platform = ''
       }
+    },
+    getAllPlatform () {
+      let tag = 'platform'
+      DictApi.getDictListByTag(tag).then((data) => {
+        let res = data.data
+        if (!res.success) {
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return false
+        }
+        let list = data.data.data
+        this.platformList = []
+        let record = []
+        for (let item of list) {
+          record = {
+            label: item.key,
+            value: item.key
+          }
+          this.platformList.push(record)
+        }
+      })
     }
   }
 }
