@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" @click="handleOpenConfigPanel" style="margin: 20px;">打开控制面板</el-button>
+    <el-button type="primary" @click="handleOpenConfigPanel" style="margin: 20px;">打开路口图面板</el-button>
     <el-dialog
       refs="intersectionMapDialog"
       class="abow_dialog"
@@ -24,7 +24,7 @@ export default {
     return {
       boxVisible: false,
       dialogWidth: '80%',
-      agentId: '40003-132'
+      agentId: '1640244524086'
     }
   },
   methods: {

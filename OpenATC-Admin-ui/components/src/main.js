@@ -7,6 +7,7 @@ import store from './store'
 import kissui from './kisscomps/index'
 import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+import animate from 'animate.css'
 import i18n from './i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 import './icons' // icon
@@ -22,6 +23,9 @@ Vue.use(ElementUI)
 Vue.use(ElementUI, {
   locale
 })
+
+/* 使用动画库 */
+Vue.use(animate)
 
 Vue.config.productionTip = false
 
