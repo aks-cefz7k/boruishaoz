@@ -416,6 +416,9 @@ export default {
             minute: 0
           }
         }
+        if (allTscParam.steptype !== 0 && allTscParam.steptype !== 1) {
+          allTscParam.steptype = ''
+        }
         this.customInfo = allTscParam
         // let allTscParam = data.data.data.data
         // if (allTscParam.manualpanel === undefined) {

@@ -153,11 +153,23 @@ export default {
         },
         {
           value: 22,
-          label: this.$t('openatc.dutyroute.priorityControl')
+          label: this.$t('openatc.dutyroute.phaselock')
         },
         {
           value: 23,
-          label: this.$t('openatc.dutyroute.phaseReleaseControl')
+          label: this.$t('openatc.dutyroute.reserving23')
+        },
+        {
+          value: 24,
+          label: this.$t('openatc.dutyroute.emergencyControl')
+        },
+        {
+          value: 99,
+          label: this.$t('openatc.dutyroute.deviceMaintenance')
+        },
+        {
+          value: 100,
+          label: this.$t('openatc.dutyroute.programIntervention')
         }
       ]
     }
