@@ -19,9 +19,11 @@
         <template slot-scope="scope">
           <el-tabs v-model="activeList[scope.$index]"  @tab-click="handleClick" type="card">
             <el-tab-pane v-if="!contrloType" :label="$t('edge.pattern.ringConfig')" name="ring">
-              <!-- <el-row :gutter="20"> -->
-                <!-- <el-col :span="24" > -->
-                  <div style="padding-left:36%;padding-right:2%;">
+              <el-row :gutter="20">
+                <el-col :span="12" >
+                  <!-- style="padding-left:36%;padding-right:2%;" -->
+                  <!-- <div> -->
+                  <div class="components-container board" >
                     <Kanban v-for="n in ringCount"
                     :key="n" class="kanban todo"
                     :list="scope.row.rings[n-1]"
@@ -30,13 +32,13 @@
                     :index="scope.$index"
                     @handleSplit="handleSplit"/>
                   </div>
-                <!-- </el-col> -->
-                <!-- <el-col :span="12">
+                </el-col>
+                <el-col :span="12">
                   <FollowPhase>
 
                   </FollowPhase>
-                </el-col> -->
-              <!-- </el-row> -->
+                </el-col>
+              </el-row>
             </el-tab-pane>
             <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="kanban">
               <el-scrollbar :vertical="false">
@@ -45,10 +47,10 @@
                     class="kanban todo"
                     :key="index"
                     :stage="stage"
+                    :stageInfo="scope.row.stagesList"
                     :contrloType="contrloType"
                     :options="scope.row.options"
                     :coordphaseOption="coordphaseOption"
-                    :header-text="$t('edge.pattern.stage') + Number(index + 1)"
                     :rowIndex="scope.$index"
                     :subIndex="index"
                     @onStageSplitChange="onStageSplitChange"
@@ -56,8 +58,9 @@
                     @onStageDelaystartChange="onStageDelaystartChange"
                     @onStageAdvanceendChange="onStageAdvanceendChange"
                     />
+                    <!-- :header-text="$t('edge.pattern.stage') + Number(index + 1)" -->
                     <div v-if="contrloType" style="margin-left: 20px;">
-                      <el-button type="primary" icon="el-icon-plus" circle></el-button>
+                      <el-button type="primary" @click="addStage(scope.row.stagesList)" icon="el-icon-plus" circle></el-button>
                     </div>
                 </div>
               </el-scrollbar>
@@ -172,7 +175,7 @@ import { uploadSingleTscParam } from '@/api/param'
 import { getMessageByCode } from '../../utils/responseMessage'
 // import { mapState } from 'vuex'
 // import { getTscControl } from '@/api/control'
-import { getIframdevid } from '@/utils/auth'
+import { getIframdevid, setStageType, getStageTypes } from '@/utils/auth'
 export default {
   name: 'patterns',
   components: {
@@ -189,6 +192,8 @@ export default {
       ringCount: 1,
       ringCounts: 1,
       addId: 1,
+      // stageTypes: '',
+      // ringTypes: '',
       contrloType: false,
       options: {
         group: 'pattern'
@@ -196,7 +201,6 @@ export default {
       id: 1,
       agentId: '',
       barrierList: [],
-      stageAddList: [],
       coordphaseOption: [],
       phaseList: [], // 当前相位集合
       currPatternName: '--',
@@ -227,10 +231,18 @@ export default {
     }
   },
   created () {
+    if (getStageTypes('contrloType') === 'true') {
+      this.contrloType = true
+    } else {
+      this.contrloType = false
+    }
     this.globalParamModel = this.$store.getters.globalParamModel
     this.initData()
     this.getPhase()
-    this.getPattern()
+    // this.getPattern()
+    if (!this.contrloType) {
+      this.changeRing()
+    }
   },
   mounted: function () {
     var _this = this
@@ -242,6 +254,12 @@ export default {
     })
   },
   watch: {
+    contrloType: {
+      handler: (filter) => {
+        setStageType(filter)
+      },
+      deep: true
+    },
     patternList (val, oldVal) {
       if (!val.length) return
       this.getPattern()
@@ -251,6 +269,12 @@ export default {
     changeRing () {
       this.contrloType = false
       this.getCycle()
+      const globalParamModel = this.$store.getters.globalParamModel
+      let pattern = globalParamModel.getParamsByType('patternList')
+      for (let i = 0; i < pattern.length; i++) {
+        // globalParamModel.getParamsByType('patternList')[i].type = ''
+        this.handleStageData(pattern[i].rings, pattern[i].id, pattern[i].stagesList)
+      }
     },
     changeStage () {
       this.contrloType = true
@@ -261,26 +285,26 @@ export default {
       let pattern = globalParamModel.getParamsByType('patternList')
       for (let i = 0; i < pattern.length; i++) {
         globalParamModel.getParamsByType('patternList')[i].cycle = this.getMaxCycle(pattern[i])
+        globalParamModel.getParamsByType('patternList')[i].type = 'stage'
+        this.handleStageData(pattern[i].rings, pattern[i].id, pattern[i].stagesList)
       }
     },
-    // deleteStage (index) {
-    //   this.stageAddList.splice(index, 1)
-
-    //   console.log(this.stageAddList, 'this.stageAddList1')
-    // },
-    // addStage () {
-    //   this.stageAddList.push(JSON.parse(JSON.stringify(
-    //     {
-    //       title: this.stageAddList.length + 1,
-    //       phase: []
-    //     }
-    //   ))
-    //   )
-    // },
+    addStage (row) {
+      row.push(
+        {
+          key: row.length,
+          green: 0,
+          yellow: 0,
+          red: 0,
+          phases: [],
+          stageSplit: 0
+        }
+      )
+    },
     getMaxCycle (pattern) {
       let rings = pattern.stagesList
       let stageCycleList = rings.map(item => {
-        return item.stageSplit
+        return item.stageSplit ? item.stageSplit : 0
       })
       let maxCycle = stageCycleList.reduce((a, b) => {
         return a + b
@@ -666,11 +690,21 @@ export default {
         this.narr.push(this.stateList[i] - this.stateList[i - 1])
       }
       this.narr.reverse()// 阶段差
-      for (let i = 0; i < newPhaselist.length; i++) {
-        let stage = JSON.parse(JSON.stringify(newPhaselist[i]))
-        let stageItem = this.getStageItem(stage, rings, i, stageChange)
+      // if (this.contrloType) {
+      for (let i = 0; i < stageChange.length; i++) {
+        let stage = JSON.parse(JSON.stringify(stageChange[i]))
+        let stageItem = this.getStageItem(stage.phases, rings, i, stageChange)
         stagesList.push(JSON.parse(JSON.stringify(stageItem)))
       }
+      // } else {
+      //   for (let i = 0; i < newPhaselist.length; i++) {
+      //     let stage = JSON.parse(JSON.stringify(newPhaselist[i]))
+      //     let stageItem = this.getStageItem(stage, rings, i, stageChange)
+      //     stagesList.push(JSON.parse(JSON.stringify(stageItem)))
+      //     debugger
+      //   }
+      // }
+
       patternList.map(item => { // 添加特征参数stage
         if (item.id === id) {
           item.stagesList = JSON.parse(JSON.stringify(stagesList))
@@ -704,6 +738,7 @@ export default {
       }
       for (let rings of stageChange) {
         if (i === rings.key) {
+          res.stageChange = true
           res.green = rings.green ? rings.green : 0
           res.yellow = rings.yellow ? rings.yellow : 0
           res.red = rings.red ? rings.red : 0
@@ -711,6 +746,7 @@ export default {
           res.stageSplit = rings.stageSplit ? rings.stageSplit : 0
         }
       }
+
       // splitArr.sort(function (a, b) { return a - b })
       delaystartArr.sort(function (a, b) { return b - a })
       advanceendArr.sort(function (a, b) { return a - b })
@@ -792,11 +828,6 @@ export default {
   }
   .board-column-header {
     position: relative;
-  }
-  .el-button--primary:hover, .el-button--primary:focus{
-    background: #409EFF;
-    border-color: #409EFF;
-    color: #FFFFFF;
   }
   .board {
     width: 100%;
