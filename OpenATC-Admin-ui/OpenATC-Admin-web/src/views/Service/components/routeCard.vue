@@ -29,7 +29,7 @@
         </template>
       </el-button>
     </div>
-    <div class="text item" style="border:0px solid red;">
+    <div class="text item" style="border:0px solid red;height:10px;">
       <el-row :gutter="20">
         <div class="grid-content-label" style="display:inline-block;margin-right:10px;margin-left:10px;">
           {{ $t("openatc.dutyroute.executionway") }} :
@@ -51,7 +51,7 @@
 <script>
 import { ExecuteViproute } from '@/api/service'
 import { getMessageByCode } from '@/utils/responseMessage'
-import ServiceUtil from '../ServiceUtil.js'
+import ServiceUtil from '../serviceUtil.js'
 export default {
   name: 'nodeCard',
   props: {

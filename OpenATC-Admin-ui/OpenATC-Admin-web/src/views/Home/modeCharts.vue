@@ -50,8 +50,8 @@ export default {
   data () {
     return {
       chartData: [],
-      // ColorMap: new Map([[1, '#3BA272'], [2, '#FAC858'], [3, '#73C0DE'], [4, '#91CC75'], [5, '#EE6666'], [0, '#5470C6']]),
-      Color: ['#3BA272', '#FAC858', '#73C0DE', '#91CC75', '#EE6666', '#5470C6', '#ea7ccc', '#cccc66', '#9a60b4'],
+      // Color: ['#3BA272', '#FAC858', '#73C0DE', '#91CC75', '#EE6666', '#5470C6', '#ea7ccc', '#cccc66', '#9a60b4'],
+      Color: ['#EA7CCC', '#73C0DE', '#f8723a', '#FAC858', '#ee6666', '#9A60B4', '#5470C6', '#00A0E9', '#3BA272'],
       modeMap: new Map(),
       modeList: [
         {
@@ -179,7 +179,7 @@ export default {
         }
         return modeitem
       })
-      console.log(this.modeList)
+      // console.log(this.modeList)
       this.refreshChart()
     },
     getLang () {

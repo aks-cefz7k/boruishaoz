@@ -273,6 +273,7 @@ public class DevController {
             // 返回所有设备
             return RESTRetUtils.successObj(mDao.statesCollectYesterday);
         }
+
         // 获取用户名
         String user_name = user.getUser_name();
         List<String> roles = userDao.getRoleNamesByUsername(user_name);

@@ -95,7 +95,7 @@ export default {
       this.initData()
     },
     registerMessage () {
-      registerMessage(this.agentId).then(data => {
+      registerMessage(this.AgentId).then(data => {
         if (!data.data.success) {
           this.devStatus = 2
           let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
@@ -147,7 +147,7 @@ export default {
       let iframdevid = getIframdevid()
       console.log(iframdevid)
       let startTime = new Date().getTime()
-      getTscControl(this.agentId).then((data) => {
+      getTscControl(this.AgentId).then((data) => {
         let endTime = new Date().getTime()
         let diffTime = endTime - startTime
         this.responseTime = diffTime
@@ -190,7 +190,7 @@ export default {
     },
     queryDevParams () {
       let _this = this
-      queryDevice(this.agentid).then(res => {
+      queryDevice(this.AgentId).then(res => {
         if (!res.data.success) {
           _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
           return
