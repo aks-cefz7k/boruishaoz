@@ -277,15 +277,6 @@ export default {
 }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
-// .configDrawer .el-drawer__header {
-//   text-align: left;
-//   color: $--color-text-regular;
-// }
-// .configDrawer .el-drawer__body {
-//   padding: 0 16px 30px 16px;
-// }
-</style>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .configDrawer {
   position: relative;

@@ -485,9 +485,13 @@ export default {
       uploadTscParam().then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          if (data.data.code === '4003') {
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
-            return
+          if (data.data.code === '4002') { // 错误应答
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              this.$message.error(getMessageByCode(data.data.data.errorCode, this.$i18n.locale))
+              return
+            }
           }
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
@@ -604,25 +608,33 @@ export default {
       downloadTscParam(this.$store.state.user.user_name, newTscParam).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          if (data.data.code === '4002' && data.data.data.errorCode === '4207') { // 信号机参数校验
-            let codeList = data.data.data.content.errorCode
-            if (codeList.length === 0) {
-              this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
-              return
+          if (data.data.code === '4002') { // 错误应答
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              this.$message.error(getMessageByCode(data.data.data.errorCode, this.$i18n.locale))
             }
-            let errorMes = this.$t('edge.common.downloaderror')
-            for (let code of codeList) {
-              if (this.$i18n.locale === 'en') {
-                errorMes = getErrorMesEn(errorMes, code)
-              } else {
-                errorMes = getErrorMesZh(errorMes, code)
+            if (data.data.data.errorCode === '4207') {
+              // 信号机参数校验
+              let codeList = data.data.data.content.errorCode
+              if (codeList.length === 0) {
+                this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
+                return
               }
+              let errorMes = this.$t('edge.common.downloaderror')
+              for (let code of codeList) {
+                if (this.$i18n.locale === 'en') {
+                  errorMes = getErrorMesEn(errorMes, code)
+                } else {
+                  errorMes = getErrorMesZh(errorMes, code)
+                }
+              }
+              this.$message({
+                message: errorMes,
+                type: 'error',
+                dangerouslyUseHTMLString: true
+              })
             }
-            this.$message({
-              message: errorMes,
-              type: 'error',
-              dangerouslyUseHTMLString: true
-            })
             return
           }
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
