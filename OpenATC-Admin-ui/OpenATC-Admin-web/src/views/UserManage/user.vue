@@ -18,6 +18,10 @@
       <el-form>
         <el-form-item>
         <el-button
+          type="primary"
+          @click="onTokenListClick">{{$t('openatc.token.tokenManage')}}
+        </el-button>
+        <el-button
         type="primary"
         icon="el-icon-plus"
         @click="add">{{$t('openatc.common.add')}}</el-button>
@@ -94,6 +98,7 @@
   <add ref="addChild"></add>
   <update ref="updateChild"></update>
   <authorize ref="authorizeChild"></authorize>
+  <TokenList ref="tokenList"></TokenList>
   <Messagebox :visible="messageboxVisible" :text="$t('openatc.usermanager.deleteuser')" @cancle="cancle" @ok="ok"/>
 </div>
 </template>
@@ -102,12 +107,13 @@
 import add from './UserDialog/add'
 import update from './UserDialog/update'
 import authorize from './UserDialog/authorize'
+import TokenList from './UserDialog/tokenList'
 import Messagebox from '../../components/MessageBox'
 import { GetUsrInfoList, DeleteUsr } from '../../api/user'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'user',
-  components: { add, update, Messagebox, authorize },
+  components: { add, update, Messagebox, authorize, TokenList },
   data () {
     return {
       tableHeight: 700,
@@ -169,6 +175,10 @@ export default {
     add () {
       let addChild = this.$refs.addChild
       addChild.onAddClick()
+    },
+    onTokenListClick () {
+      let addChild = this.$refs.tokenList
+      addChild.show()
     },
     edit ($index) {
       let user = this.tableData[$index]

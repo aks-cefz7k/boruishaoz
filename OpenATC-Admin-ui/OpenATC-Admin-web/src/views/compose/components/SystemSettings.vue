@@ -133,7 +133,24 @@ export default {
           throw new Error('get system config error')
         }
         this.settingList = data.data.data
+        this.handleMenuVisible()
       })
+    },
+    handleMenuVisible () {
+      // 根据配置控制菜单显示/隐藏
+      let controlMenu = {
+        gis: false
+      }
+      for (let config of this.settingList) {
+        if (config['key'] === 'isShowGisMenu') {
+          if (config['value'] === 'true') {
+            controlMenu.gis = true
+          } else {
+            controlMenu.gis = false
+          }
+        }
+      }
+      this.$store.dispatch('SetMenuVisible', controlMenu)
     },
     handleAdd () {
       this.isEdit = false

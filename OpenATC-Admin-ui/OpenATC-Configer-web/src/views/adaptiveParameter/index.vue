@@ -193,8 +193,20 @@ export default {
         maxflow: 1600,
         phasestaticweight: []
       }
-      let index = this.singleoptim.length
+      let patternIds = []
+      for (let i = 0; i < this.singleoptim.length; i++) {
+        let patternId = this.singleoptim[i].pattern
+        patternIds.push(patternId)
+      }
       let patternList = this.globalParamModel.getParamsByType('patternList')
+      let index = 0
+      for (let i = 0; i < patternList.length; i++) {
+        let patternId = patternList[i].id
+        if (!patternIds.includes(patternId)) {
+          index = i
+          break
+        }
+      }
       item.pattern = patternList[index].id
       return item
     },

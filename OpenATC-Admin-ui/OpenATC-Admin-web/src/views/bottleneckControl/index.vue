@@ -213,8 +213,10 @@ export default {
       let areaOverflows = JSON.parse(JSON.stringify(this.curDetectorDevs.overflows))
       if (areaOverflows && areaOverflows.length) {
         areaOverflows.forEach(cross => {
-          if (cross.statedata && cross.statedata.state === 1) {
-            isHasExecute = true
+          if (cross.statedata) {
+            if (cross.statedata.control === 20 || cross.statedata.control === 13) {
+              isHasExecute = true
+            }
           }
         })
       }

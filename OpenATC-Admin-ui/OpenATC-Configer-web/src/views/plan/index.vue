@@ -12,9 +12,12 @@
 <template>
   <div class="app-container plan-container">
     <div class="tabs-style">
-      <el-tabs v-model="curTabsValue" type="card" editable @edit="handleTabsEdit">
+      <el-tabs v-model="curTabsValue" type="card" editable @edit="handleTabsEdit" :before-leave="beforeLeave">
         <el-tab-pane v-for="item in planList" :key="item.id" :label="item.desc" :name="String(item.id)">
           <tabPane :plan="item.plan" :planid="item.id" :planname="item.desc"/>
+        </el-tab-pane>
+        <el-tab-pane key="add" name="add" :closable="false">
+          <span slot="label" style="padding: 8px;font-size:20px;font-weight:bold;">+</span>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -161,14 +164,20 @@ export default {
         //   message: 'Input canceled'
         // })
       })
+    },
+    /* 活动标签切换时触发 */
+    beforeLeave (currentName, oldName) {
+      // 如果name是add，则什么都不触发
+      if (currentName === 'add') {
+        this.AddTab()
+        return false
+      }
     }
   }
 }
 </script>
 <style rel="stylesheet/scss" lang="scss">
 .tabs-style .el-icon-plus {
-    // font-family: element-icons!important;
-    // speak: none;
     font-style: normal;
     font-weight: 400;
     font-size: 28px;
@@ -180,18 +189,24 @@ export default {
     -webkit-font-smoothing: antialiased;
 }
 .tabs-style .el-tabs__new-tab {
-    float: right;
-    border: 1px solid #409eff;
-    height: 30px;
-    width: 30px;
-    line-height: 18px;
-    margin: 12px 0 9px 10px;
-    border-radius: 3px;
-    text-align: center;
-    font-size: 12px;
-    color: #409eff;
-    cursor: pointer;
-    -webkit-transition: all .15s;
-    transition: all .15s;
+    display: none;
+    // float: right;
+    // border: 1px solid #409eff;
+    // height: 30px;
+    // width: 30px;
+    // line-height: 18px;
+    // margin: 12px 0 9px 10px;
+    // border-radius: 3px;
+    // text-align: center;
+    // font-size: 12px;
+    // color: #409eff;
+    // cursor: pointer;
+    // -webkit-transition: all .15s;
+    // transition: all .15s;
+}
+#tab-add {
+  .el-icon-close { // 隐藏增加tab的右上角删除图标
+    display: none;
+  }
 }
 </style>

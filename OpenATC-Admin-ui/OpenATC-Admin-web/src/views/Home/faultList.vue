@@ -100,6 +100,10 @@ export default {
         res = this.$t('edge.fault.tab3')
       } else if (typeCode >= 401 && typeCode <= 499) {
         res = this.$t('edge.fault.tab4')
+      } else if (typeCode >= 501 && typeCode <= 599) {
+        res = this.$t('edge.fault.tab5')
+      } else if (typeCode >= 601 && typeCode <= 699) {
+        res = this.$t('edge.fault.tab6')
       }
       return res
     },

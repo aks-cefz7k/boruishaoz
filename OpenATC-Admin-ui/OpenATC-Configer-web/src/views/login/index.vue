@@ -37,7 +37,10 @@
         </span>
         <el-input class="login-input" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" auto-complete="on"
           :placeholder="$t('edge.login.password')" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false"></el-input>
-          <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
+          <span class="show-pwd" @click="showPwd">
+            <!-- <svg-icon icon-class="eye" /> -->
+            <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
       </el-form-item>
       <div>
         <el-checkbox class="expand-text" v-model="isExpand">{{$t('edge.login.networkparam')}}</el-checkbox>

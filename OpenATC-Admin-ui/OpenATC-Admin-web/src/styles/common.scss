@@ -2348,7 +2348,8 @@ table td {
     // top需要自适应计算
     .btn {
       float: left;
-      width: 100px;
+      min-width: 100px;
+      padding: 0px 20px;
       height: 40px;
       line-height: 40px;
       text-align: center;
@@ -2369,7 +2370,7 @@ table td {
   .openatc-historyfaultrecord {
     .filter-container {
       float: right;
-      padding-left: 280px;
+      padding-left: 340px;
       margin-bottom: 20px;
       .filter {
         float: left;

@@ -427,7 +427,8 @@ export default {
         redpulse: 10,
         vehiclethresh: 30,
         pedestrianthresh: 30,
-        controltype: 0 // 控制类型
+        controltype: 0, // 控制类型
+        concurrent: []
       }
       this.globalParamModel.addParamsByType('phaseList', phaseInitData)
       // this.id++
@@ -603,10 +604,11 @@ export default {
             if (listconcurrent.indexOf(curid) === -1) {
               listconcurrent.push(curid)
             }
-          } else if (listid !== curid) {
-            if (listconcurrent.indexOf(curid) && curVal.indexOf(listid) === -1) {
-            }
           }
+          // else if (listid !== curid) {
+          //   if (listconcurrent.indexOf(curid) && curVal.indexOf(listid) === -1) {
+          //   }
+          // }
         }
       })
     },

@@ -15,12 +15,15 @@ const en = {
       'add': 'Add',
       'delete': 'Delete',
       'edit': 'Edit',
+      'copy': '复制',
       'detail': 'Detail',
+      'copySuccess': 'Copy Success !',
       'searchdeviceid': 'Enter deviceid search',
       'searchplaceholder': 'Enter keyword search',
       'addfailed': 'Add Failed!',
       'addsuccess': 'Add Success!',
       'addcancel': 'Add Canceled!',
+      'sureToDelete': 'Sure to delete ?',
       'deletefailed': 'Delete Failed!',
       'deletesuccess': 'Delete Success!',
       'deletecancel': 'Delete Canceled!',
@@ -125,6 +128,8 @@ const en = {
       'realtimealert': 'Real Time Alert',
       'detaileddescription': 'Detailed Description',
       'ioboard': 'I/O board',
+      'faultboard': 'Fault board',
+      'characteristicparams': 'Characteristic params',
       'maincontrolboardfault': 'Main Control Board Fault',
       'lightcontrolversionfault': 'Light Control Version Fault',
       'carinspectionboardfault': 'Car Inspection Board Fault',
@@ -499,7 +504,7 @@ const en = {
       'entername': 'Please enter area name',
       'executeresults': 'Execute Results',
       'executerestatus': 'Execute State',
-      'hasexecutecross': 'There are intersections in trigger status, which cannot be modified!',
+      'hasexecutecross': 'There are intersections in execution, which cannot be modified!',
       'controlsuccess': 'Control success',
       'controlfailed': 'Control failed',
       'recoverysuccess': 'Recovery success',
@@ -545,6 +550,13 @@ const en = {
       'mode4': 'Remote Control',
       'mode5': 'Yellow Flasher Trigger',
       'pattern': 'Pattern'
+    },
+    'token': {
+      'username': 'User Name',
+      'tokenManage': 'Token Management',
+      'timeStart': 'Time Start',
+      'timeEnd': 'Time End',
+      'isValid': 'isValid'
     }
   }
 }

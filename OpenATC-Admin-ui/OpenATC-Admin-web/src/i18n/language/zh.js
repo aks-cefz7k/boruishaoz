@@ -15,12 +15,15 @@ const zh = {
       'add': '新增',
       'delete': '删除',
       'edit': '编辑',
+      'copy': '复制',
       'detail': '详情',
+      'copySuccess': '复制成功！',
       'searchdeviceid': '输入设备ID搜索',
       'searchplaceholder': '输入关键字搜索',
       'addfailed': '新增失败!',
       'addsuccess': '新增成功!',
       'addcancel': '新增取消!',
+      'sureToDelete': '是否确认删除？',
       'deletefailed': '删除失败!',
       'deletesuccess': '删除成功!',
       'deletecancel': '删除取消!',
@@ -125,6 +128,8 @@ const zh = {
       'lightcontrolversion': '灯控版',
       'carinspectionboard': '车检板',
       'ioboard': 'I/O板',
+      'faultboard': '故障板',
+      'characteristicparams': '特征参数',
       'maincontrolboardfault': '主控板故障',
       'lightcontrolversionfault': '灯控版故障',
       'carinspectionboardfault': '车检板故障',
@@ -499,7 +504,7 @@ const zh = {
       'entername': '请输入区域名称',
       'executeresults': '执行结果',
       'executerestatus': '执行状态',
-      'hasexecutecross': '存在触发状态中的路口，不可修改！',
+      'hasexecutecross': '存在正在执行中的路口，不可修改！',
       'controlsuccess': '执行成功',
       'controlfailed': '执行失败',
       'recoverysuccess': '恢复成功',
@@ -544,6 +549,13 @@ const zh = {
       'mode4': '遥控器控制',
       'mode5': '黄闪器触发',
       'pattern': '方案'
+    },
+    'token': {
+      'username': '用户名',
+      'tokenManage': 'Token管理',
+      'timeStart': '有效期开始',
+      'timeEnd': '有效期截止',
+      'isValid': '是否启用'
     }
   }
 }

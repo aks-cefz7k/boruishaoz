@@ -18,7 +18,8 @@ const GlobalVariable = {
     openedDevice: undefined, // 当前操作页的设备参数
     openedPath: undefined, // 当前打开页签对应的路由
     devicePath: '/device', // 当前设备管理页面的路由
-    gisBizType: 'deviceState' // 当前地图业务类型
+    gisBizType: 'deviceState', // 当前地图业务类型
+    isShowGisMenu: false
   },
   mutations: {
     SET_DEV_TAG: (state, tag) => {
@@ -66,6 +67,13 @@ const GlobalVariable = {
     },
     SET_GIS_BIZ_TYPE: (state, path) => {
       state.gisBizType = path
+    },
+    SET_MENU_VISIBLE: (state, controlMenu) => {
+      for (let menu in controlMenu) {
+        if (menu === 'gis') {
+          state.isShowGisMenu = controlMenu[menu]
+        }
+      }
     }
   },
   actions: {
@@ -95,6 +103,9 @@ const GlobalVariable = {
     },
     SetGisBizType ({ commit }, path) {
       commit('SET_GIS_BIZ_TYPE', path)
+    },
+    SetMenuVisible  ({ commit }, controlMenu) {
+      commit('SET_MENU_VISIBLE', controlMenu)
     }
   }
 }

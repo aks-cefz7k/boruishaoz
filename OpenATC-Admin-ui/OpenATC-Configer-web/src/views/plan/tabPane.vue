@@ -18,6 +18,7 @@
       @click="editName"
     >{{$t('edge.plan.editname')}}</el-button>
     <el-table
+      v-if="visible"
       :data="plan"
       v-loading.body="listLoading"
       element-loading-text="Loading"
@@ -26,15 +27,15 @@
       :max-height="tableHeight"
       id="footerBtn"
     >
-      <el-table-column align="center" label="ID" width="60">
+      <!-- <el-table-column align="center" label="ID" width="60">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column :label="$t('edge.plan.time')" min-width="190" align="center">
         <template slot-scope="scope">
           <el-col :span="10">
-            <el-select style="float:right;width:80px" v-model="scope.row.hour" size="small">
+            <el-select style="float:right;width:80px" v-model="scope.row.hour" size="small" @change="handleSort">
               <el-option
                 v-for="item in HoursOption"
                 :key="item.value"
@@ -47,7 +48,7 @@
             <span>:</span>
           </el-col>
           <el-col :span="10">
-            <el-select style="float:left;width:80px" v-model="scope.row.minute" size="small">
+            <el-select style="float:left;width:80px" v-model="scope.row.minute" size="small"  @change="handleSort">
               <el-option
                 v-for="item in MinuteOption"
                 :key="item.value"
@@ -94,7 +95,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('edge.plan.operation')" width="120" align="center">
+      <el-table-column :label="$t('edge.plan.operation')" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="handleDelete(scope.$index)">{{$t('edge.common.delete')}}</el-button>
         </template>
@@ -497,7 +498,8 @@ export default {
           value: 19
         }
       ],
-      controlStatus: true
+      controlStatus: true,
+      visible: true
     }
   },
   // filters: {
@@ -623,7 +625,8 @@ export default {
       this.plan.push(newPlanItem)
       // this.id++
       // 重新排序相位数组
-      this.plan.sort(this.compareProperty('id'))
+      // this.plan.sort(this.compareProperty('id'))
+      this.handleSort()
     },
     compareProperty (property) {
       return function (a, b) {
@@ -687,6 +690,30 @@ export default {
         //   type: 'info',
         //   message: 'Input canceled'
         // })
+      })
+    },
+    handleSort () {
+      this.planList.forEach(plan => {
+        if (plan.id === this.planid) {
+          let curPlanList = plan.plan
+          for (let i = curPlanList.length - 1; i > 0; i--) {
+            for (let j = 0; j < i; j++) {
+              if (curPlanList[j].hour > curPlanList[j + 1].hour) {
+                [curPlanList[j], curPlanList[j + 1]] = [curPlanList[j + 1], curPlanList[j]]
+              } else if (curPlanList[j].hour === curPlanList[j + 1].hour) {
+                if (curPlanList[j].minute > curPlanList[j + 1].minute) {
+                  [curPlanList[j], curPlanList[j + 1]] = [curPlanList[j + 1], curPlanList[j]]
+                }
+              }
+            }
+          }
+        }
+      })
+      // this.$refs.subject.blur()
+      // 解决select聚焦效果未取消
+      this.visible = false
+      this.$nextTick(() => {
+        this.visible = true
       })
     }
   }
