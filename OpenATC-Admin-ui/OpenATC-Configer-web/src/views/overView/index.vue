@@ -145,6 +145,7 @@
             :controlData="controlData"
             :phaseList="phaseList"
             :isPhase="true"
+            :agentId="agentId"
               >
             </BoardCard>
           </div>

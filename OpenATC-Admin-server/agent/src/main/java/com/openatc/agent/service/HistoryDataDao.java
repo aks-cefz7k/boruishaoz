@@ -1,15 +1,20 @@
 package com.openatc.agent.service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.openatc.agent.controller.DevController;
 import com.openatc.comm.data.MessageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author ：zhangwenchao
@@ -21,6 +26,9 @@ import java.util.Map;
 
 @Repository
 public class HistoryDataDao {
+
+    private static Logger logger = Logger.getLogger(HistoryDataDao.class.toString());
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -33,7 +41,25 @@ public class HistoryDataDao {
 
     // 保存历史方案数据
     public int SavePatternData(MessageData msg){
-        String sql = String.format("INSERT INTO pattern (agentid,time,data) VALUES ('%s','%s','%s')", msg.getAgentid(),msg.getCreatetime(),msg.getData().toString());
+        JsonObject msgdata = msg.getData().getAsJsonObject();
+
+        try{
+            msgdata.remove("overlap");
+            JsonArray phases = msgdata.get("phase").getAsJsonArray();
+            for (JsonElement phase : phases) {
+                JsonObject phosedata = phase.getAsJsonObject();
+                phosedata.remove("conphase");
+                phosedata.remove("type");
+                phosedata.remove("countdown");
+                phosedata.remove("pedtype");
+                phosedata.remove("pedcountdown");
+            }
+        }catch (Exception e){
+            logger.warning(e.getMessage());
+            return 0;
+        }
+
+        String sql = String.format("INSERT INTO pattern (agentid,time,data) VALUES ('%s','%s','%s')", msg.getAgentid(),msg.getCreatetime(),msgdata.toString());
         int rows = jdbcTemplate.update(sql);
         return rows;
     }
@@ -62,6 +88,28 @@ public class HistoryDataDao {
             hdList.add(hd);
         }
         return hdList;
+    }
+
+    // 定时清理历史数据
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void clearHistoryData() {
+        logger.warning("Clearing Schedule Start!");
+        // 历史方案数据默认保存7天
+        String sql = String.format("delete from pattern where time < (now() - interval '7 day')");
+        jdbcTemplate.execute(sql);
+        logger.warning("Claer Pattern Data From DB Finished!");
+
+        // 历史流量数据默认保存7天
+        sql = String.format("delete from flow where time < (now() - interval '7 day')");
+        jdbcTemplate.execute(sql);
+        logger.warning("Claer Flow Data From DB Finished!");
+
+
+        // 历史操作记录默认保存30天
+        sql = String.format("delete from operation_record where opertime < (now() - interval '30 day')");
+        jdbcTemplate.execute(sql);
+        logger.warning("Claer Operation Record From DB Finished!");
+
     }
 
     class HistoryData {
