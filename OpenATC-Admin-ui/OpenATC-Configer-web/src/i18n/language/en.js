@@ -1033,6 +1033,10 @@ const en = {
       '8002': 'device is found By CoordinateRoute',
       '8003': 'device is found By VipRoute',
       '8004': 'Agentid is duplicated',
+      '8005': 'Cannot find DictConfig',
+      '8006': 'Platform is not unique!',
+      '8007': 'IP and port of platform is null!',
+      '8008': 'device is found By Area Management',
       // 错误类型子类型，返回码第二层
       '8101': 'Device can not delete!',
       // 瓶颈控制错误

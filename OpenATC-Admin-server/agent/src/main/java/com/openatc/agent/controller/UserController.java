@@ -267,7 +267,7 @@ public class UserController {
 //            return RESTRetUtils.errorObj(E_3005);
 //        }
         String userName = joinUser.getUser_name();
-        String dbPassword = Base64.getEncoder().encodeToString(DigestUtils.md5(userName + initialPassword));
+        String dbPassword = joinUser.getPassword();
         joinUser.setPassword(dbPassword);
         if (userDao.getUserByUserName(joinUser.getUser_name()) != null) {
             return RESTRetUtils.errorObj(E_3003);

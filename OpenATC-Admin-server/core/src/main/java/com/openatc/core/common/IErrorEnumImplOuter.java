@@ -35,6 +35,7 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_1001("1001", "Illegal parameter!"),
     E_1002("1002", "URL is not correct!"),
     E_1003("1003", "Dict key or value is NULL!"),
+    E_1004("1004", "Duplicate key !"),
     E_2002("2002", "The record is not exit!"),
 
     E_2003("20003", "The id is not exit or equal 0 !"),
@@ -93,6 +94,7 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_8005("8005", "Cannot find DictConfig"),
     E_8006("8006", "Platform is not unique!"),
     E_8007("8007", "IP and port of platform is null!"),
+    E_8008("8008", "device is found By Area Management"),
 
     //瓶颈控制相关
     E_9001("9001", "Overflow control failed"),
