@@ -16,11 +16,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.DevCover;
 import com.openatc.agent.model.StatesCollectYesterday;
+import com.openatc.agent.model.SysOrg;
+import com.openatc.agent.model.User;
 import com.openatc.agent.resmodel.PageOR;
 import com.openatc.agent.utils.RedisTemplateUtil;
+import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.MyGeometry;
 import com.openatc.model.model.StatusPattern;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,6 +56,9 @@ public class AscsDao {
     private Map<String, String> thirdidToAgentidOcp = new HashMap<>();
 
     Gson gson = new Gson();
+
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 初始化OCP设备的真实ID和平台ID的映射关系
@@ -605,6 +613,12 @@ public class AscsDao {
 
         // 查询条件
         String whereCondition = "";
+        // 根据用户角色返回对应sql
+        String sql = getSqlByUserRole();
+        if (sql != null){
+            String temp = sql;
+            whereCondition = addWhereCondition(whereCondition,temp);
+        }
         String search = jsonObject.get("search").getAsString();
         if( !search.isEmpty()){
             String temp = String.format("( agentid like '%%%s%%' or name like '%%%s%%' or thirdplatformid like '%%%s%%' or jsonparam::text like '%%%s%%' ) ",search,search,search,search);
@@ -661,6 +675,75 @@ public class AscsDao {
         pageOR.setContent(ascsBaseModels);
         return pageOR;
     }
+
+    /**
+     * 根据用户角色返回不同的sql
+     * @return
+     */
+    private String getSqlByUserRole() {
+        // 管理员列表
+        List<String> adminRoles = new ArrayList<>();
+        adminRoles.add("superadmin");
+        adminRoles.add("admin");
+
+        // 获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        // 未开启shiro
+        if (user == null){
+            return null;
+        }
+        // 获取用户名
+        String user_name = user.getUser_name();
+        List<String> roles = userDao.getRoleNamesByUsername(user_name);
+        adminRoles.retainAll(roles);
+
+        // 非管理员
+        if (adminRoles.size() == 0){
+            user = userDao.getUserByUserName(user_name);
+            String organization = user.getOrganization();
+            // 该用户不属于任何组织机构
+            if (organization.equals("")){
+                String sql = "code is null";
+                return sql;
+            }
+            // 用户属于多个组织（前端只能选中一个或所有）
+            if (organization.equals("*")){  // * 代表所有组织（“”除外）
+                String selectsql = "select orgnization_code from t_orgnization";
+                List<String> strings = jdbcTemplate.queryForList(selectsql, String.class);
+                if (strings.isEmpty()){
+                    return null;
+                }
+
+                StringBuffer sb = getBuffer(strings);
+
+                String sql = String.format("code in (%s)",sb);
+
+                return sql;
+            }
+            // 用户属于一个组织
+            else {
+                String sql = String.format("code='%s'",organization);
+                return sql;
+            }
+
+        }
+
+        return null;
+    }
+
+    // 拼接sql中in后面的字符
+    private StringBuffer getBuffer(List<String> strings) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < strings.size(); i++){
+            if (i != strings.size() - 1){
+                sb.append("'" + strings.get(i) + "',");
+            }else {
+                sb.append("'"+ strings.get(i) + "'");
+            }
+        }
+        return sb;
+    }
+
 
     /**
      * @Author zhangwenchao
