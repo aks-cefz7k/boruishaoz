@@ -311,7 +311,7 @@
                     <div style="width: 100%; height: auto;">
                       <div class="control-model" v-for="(item, index) in stagesList" :key="index">
                         <div style="position:relative;" class="single-model" :class="currentStage == index + 1 ? 'single-model-select' : ''">
-                          <PatternWalkSvg class="patternWalk" v-if="item[0].peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'44'" :Height="'44'" />
+                          <PatternWalkSvg class="patternWalk" v-if="item.length>0&&item[0].peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'44'" :Height="'44'" />
                           <xdrdirselector Width="40PX" Height="40PX" :showlist="item"></xdrdirselector>
                           <div style="display:flex;flex-direction:row;justify-content:center;align-items:center;">
                             <div class="current-stage-num" style="width:20%;">{{index + 1}}</div>
@@ -880,6 +880,7 @@ export default {
           }
         }
         directionList = [...new Set(directionList)]
+        if (directionList.length === 0) return
         tempList = directionList.map(dir => ({
           id: dir,
           color: '#606266',
