@@ -10,15 +10,16 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-import store from '../../../../store'
+// import store from '../../../../store'
 export default class PhaseDataModel {
-  constructor () {
+  constructor (roadDirection = 'right') {
     this.PhasePosMap = new Map()
     this.SidePosMap = new Map()
     this.RampMainPosMap = new Map() // 匝道主路坐标
     this.RampSidePosMap = new Map() // 匝道支路坐标
     this.BusMapMap = new Map() // 公交相位底图坐标
     this.BusPhaseMap = new Map() // 公交相位坐标
+    this.roadDirection = roadDirection
     this.Init()
   }
   Init () {
@@ -27,7 +28,7 @@ export default class PhaseDataModel {
     let rampJson = require('./posJson/rampPos.json')
     let busMapJson = require('./posJson/busPos.json').busMap
     let busPhaseJson = require('./posJson/busPos.json').busphases
-    if (store.getters.roadDirection === 'left') {
+    if (this.roadDirection === 'left') {
       phaseJson = require('./posJson/phasePos.left.json').phaseList
       busMapJson = require('./posJson/busPos.left.json').busMap
       busPhaseJson = require('./posJson/busPos.left.json').busphases

@@ -27,7 +27,12 @@
             <el-tooltip class="item" effect="dark" placement="left">
               <div slot="content">{{element.name}}</div>
               <div class="common-phase-description">
-                <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
+                <xdrdirselector Width="40px"
+                  Height="40px"
+                  :showlist="element.desc"
+                  :ISActiveMask="ISActiveMask"
+                  :MaskColor="MaskColor"
+                  :roadDirection="roadDirection"></xdrdirselector>
               </div>
             </el-tooltip>
         </div>
@@ -46,7 +51,12 @@
                 <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
                   <PatternWalkSvg v-if="element.peddirection.includes(side.id)" :Data="side" Width="38" Height="40" />
                 </div>
-                <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
+                <xdrdirselector Width="40px"
+                  Height="40px"
+                  :showlist="element.desc"
+                  :ISActiveMask="ISActiveMask"
+                  :MaskColor="MaskColor"
+                  :roadDirection="roadDirection"></xdrdirselector>
               </div>
             </el-tooltip>
         </div>
@@ -94,6 +104,9 @@ export default {
     },
     sidewalkPhaseData: {
       type: Array
+    },
+    roadDirection: {
+      type: String
     }
   },
   methods: {

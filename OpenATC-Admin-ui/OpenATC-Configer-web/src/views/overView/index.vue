@@ -24,12 +24,13 @@
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
         <div class="tuxing-left" :class="{'changeWidth': graphicMode}" ref="tuxingLeft">
-          <intersection-map
+          <intersection-base-map
             ref="intersectionMap"
             :crossStatusData="crossStatusData"
             :devStatus="devStatus"
             :agentId="agentId"
-            :graphicMode="graphicMode" />
+            :graphicMode="graphicMode"
+            :roadDirection="roadDirection" />
           <!-- <IntersectionMap
               ref="intersectionMap"
               :crossStatusData="crossStatusData"
@@ -75,7 +76,9 @@
             :devStatus="devStatus"
             :agentId="agentId"
             :ip="ip"
-            :platform="platform" />
+            :platform="platform"
+            :funcSort="FuncSort"
+            :roadDirection="roadDirection" />
           <!-- <RightPanel
             ref="rightpanel"
             :statusData="crossStatusData"
@@ -163,7 +166,8 @@ export default {
       FuncSort: state => state.globalParam.FuncSort,
       hideMenu: state => state.globalParam.hideMenu,
       graphicMode: state => state.globalParam.graphicMode,
-      isShowGui: state => state.globalParam.isShowGui
+      isShowGui: state => state.globalParam.isShowGui,
+      roadDirection: state => state.globalParam.roadDirection
     })
   },
   watch: {
