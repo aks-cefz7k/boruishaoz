@@ -12,7 +12,7 @@
 <template>
   <div class="scheme-config" style="height: 100%;">
     <FaultDetailModal ref="faultDetail" :agentId="agentId" @refreshFault="getFaultById"></FaultDetailModal>
-        <div class="tuxing-right" style="height: 100%;" :style="{'width': panelWidth}">
+        <div style="height: 100%;">
           <transition name="fade-right" mode="out-in"
           :enter-active-class="toPage === 1 ? 'animated fadeInRight' : 'animated fadeInLeft'"
           :leave-active-class="toPage === 1 ? 'animated fadeOutRight' : 'animated fadeOutLeft' ">
@@ -104,20 +104,21 @@ export default {
     FaultDetailModal
   },
   props: {
-    panelWidth: {
-      type: String
-    },
     responseTime: {
-      type: Number
+      type: Number,
+      default: 0
     },
     statusData: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     agentName: {
-      type: String
+      type: String,
+      default: ''
     },
     devStatus: {
-      type: Number
+      type: Number,
+      default: 0
     },
     agentId: {
       type: String
@@ -129,13 +130,16 @@ export default {
       type: String
     },
     stagesList: {
-      type: Array
+      type: Array,
+      default: () => []
     },
     currModel: {
-      type: Number
+      type: Number,
+      default: 0
     },
     currentStage: {
-      type: Number
+      type: Number,
+      default: 0
     },
     realtimeStatusModalvisible: {
       type: Boolean,

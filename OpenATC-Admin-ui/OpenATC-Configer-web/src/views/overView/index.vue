@@ -61,7 +61,7 @@
           </div>
         </div>
 
-        <div ref="tuxingRight">
+        <div ref="tuxingRight" class="tuxing-right" >
           <RightPanel
             ref="rightpanel"
             :statusData="crossStatusData"
