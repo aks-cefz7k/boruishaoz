@@ -136,6 +136,10 @@ export default {
     },
     currentStage: {
       type: Number
+    },
+    realtimeStatusModalvisible: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -264,6 +268,9 @@ export default {
   created () {
     this.PhaseDataModel = new PhaseDataModel()
     this.CrossDiagramMgr = new CrossDiagramMgr()
+    if (this.realtimeStatusModalvisible === false) {
+      this.changeStatus()
+    }
   },
   mounted () {
     this.getPhase()
