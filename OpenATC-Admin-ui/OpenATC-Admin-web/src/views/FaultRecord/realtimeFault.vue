@@ -10,16 +10,15 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<div class="openatc-realtimefaultrecord">
+<div class="openatc-realtimefaultrecord" id="realtimefaultrecord">
   <Messagebox :visible="messageboxVisible" :text="$t('openatc.faultrecord.isdelfaultrecord')" @cancle="cancle" @ok="ok"/>
-  <div class="devs-table">
+  <div class="devs-table" id="realtimetable">
         <el-table
           :data="tableData"
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"
-          style="width: 100%"
-          id="footerBtn">
+          style="width: 100%">
           <el-table-column
           type="index"
           align="center">
@@ -153,24 +152,17 @@ export default {
       // window.innerHeight:浏览器的可用高度
       // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
       // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-      window.onresize = function () {
+      _this.tableHeight = window.innerHeight - document.querySelector('#realtimetable').offsetTop - 60
+      window.addEventListener(
+        'resize',
+        () => {
         // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
-      }
+          _this.tableHeight = window.innerHeight - document.querySelector('#realtimetable').offsetTop - 60
+          // 用于计算按钮组距离顶部高度（因为按钮组不能用定位，会影响表格自适应高度）
+          _this.$emit('changeBtnPosition', document.querySelector('#realtimefaultrecord').offsetTop)
+        }
+      )
     })
-  },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-    }
   },
   methods: {
     handleDelete (row) {
