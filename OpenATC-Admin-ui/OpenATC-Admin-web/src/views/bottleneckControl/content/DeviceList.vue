@@ -78,7 +78,7 @@
           <span v-if="!isModify">{{scope.row.controltime}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="statedata.state" :formatter="formatState" :label="$t('openatc.bottleneckcontrol.executeresults')" v-if="!isModify" align="center"></el-table-column>
+      <el-table-column prop="state" :formatter="formatState" :label="$t('openatc.bottleneckcontrol.executeresults')" v-if="!isModify" align="center"></el-table-column>
       <el-table-column :label="$t('openatc.bottleneckcontrol.executerestatus')" v-if="!isModify" align="center">
         <template slot-scope="scope">
           <div v-if="scope.row.statedata !== undefined">
@@ -201,7 +201,10 @@ export default {
         }
       ],
       controlTypeMap: new Map([['1', this.$t('openatc.bottleneckcontrol.greenextension')], ['2', this.$t('openatc.bottleneckcontrol.greenreduction')]]),
-      statusMap: new Map([['1', this.$t('openatc.bottleneckcontrol.successcode')], ['0', this.$t('openatc.bottleneckcontrol.failed')]])
+      statusMap: new Map([['0', this.$t('openatc.bottleneckcontrol.controlfailed')],
+        ['1', this.$t('openatc.bottleneckcontrol.controlsuccess')],
+        ['2', this.$t('openatc.bottleneckcontrol.recoveryfailed')],
+        ['3', this.$t('openatc.bottleneckcontrol.recoverysuccess')]])
     }
   },
   computed: {
@@ -367,6 +370,7 @@ export default {
     },
     refreshData () {
       if (!this.curDetectorDevs) return
+      if (!this.curDetectorDevs.overflows || !this.curDetectorDevs.overflows.length) return
       this.deviceList = JSON.parse(
         JSON.stringify(this.curDetectorDevs.overflows)
       ).map(ele => ({

@@ -53,31 +53,6 @@ export default {
       curChoosedCrossname: '',
       isModify: false,
       resetflag: true,
-      // statusMock: {
-      //   'data': [{
-      //     'agentid': '2',
-      //     'state': 1,
-      //     'time': '3:52',
-      //     'control': 20
-      //   },
-      //   {
-      //     'agentid': '10005',
-      //     'state': 1,
-      //     'time': '00:00',
-      //     'control': 13
-      //   },
-      //   {
-      //     'agentid': '10503',
-      //     'state': 0,
-      //     'time': '1:52',
-      //     'control': 3
-      //   }
-      //   ],
-      //   'success': true,
-      //   'code': '0',
-      //   'message': 'Success',
-      //   'timestamp': 1600068706005
-      // },
       stateMap: new Map(),
       intervalFlag: true
     }
@@ -105,7 +80,7 @@ export default {
         )
           .then(() => {
             this.setDeviceList(choosedRow)
-            this.GetCrossExecuteStatus(choosedRow.id)
+            this.IsUpdateStatus(choosedRow.id)
           })
           .catch(() => {
             this.$message({
@@ -116,23 +91,69 @@ export default {
         return
       }
       this.setDeviceList(choosedRow)
-      this.GetCrossExecuteStatus(choosedRow.id)
+      this.IsUpdateStatus(choosedRow.id)
     },
-    GetCrossExecuteStatus (areaid) {
+    IsUpdateStatus (areaid, refresh) {
+      if (refresh) {
+        // 如果是刷新，就不能按照重复id判断，因此优先级最高
+        this.GetCrossStatusTimer(areaid)
+        return
+      }
       if (areaid !== this.lastChoosedId) {
-        if (this.timer) {
-          clearInterval(this.timer)
-        }
-        this.timer = setInterval(() => {
-          if (this.intervalFlag) {
-            this.GetStatusData(areaid)
-          }
-        }, 1000)
-        this.lastChoosedId = this.curChoosedId
+        // 非刷新操作，防止重复点击
+        this.firstGet(areaid)
       }
     },
-    GetStatusData (areaid) {
+    GetCrossStatusTimer (areaid) {
+      if (this.timer) {
+        clearInterval(this.timer)
+      }
+      this.timer = setInterval(() => {
+        if (this.intervalFlag) {
+          this.GetStatusData(areaid)
+        }
+      }, 1000)
+    },
+    firstGet (areaid) {
+      if (areaid === '') return
+      if (areaid !== this.lastChoosedId && this.timer) {
+        clearInterval(this.timer)
+      }
+      this.lastChoosedId = this.curChoosedId
+      if (this.curDetectorDevs.overflows === undefined || this.curDetectorDevs.overflows.length === 0) return
+      OverflowDecApi.GetOverflowsExecuteStatus(areaid)
+        .then(data => {
+          if (this.curChoosedId === areaid) {
+            // 由于异步，所以只处理当前页数据请求
+            if (!data.data.success) {
+              this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+              return
+            }
+            this.statusList = data.data.data
+            this.statusList.forEach(ele => {
+              this.stateMap.set(ele.agentid, ele)
+            })
+            let areaOverflows = JSON.parse(JSON.stringify(this.curDetectorDevs.overflows))
+            if (areaOverflows && areaOverflows.length) {
+              for (let i = 0; i < areaOverflows.length; i++) {
+                let crossState = this.stateMap.get(areaOverflows[i].intersectionid)
+                if (crossState) {
+                  areaOverflows[i].statedata = crossState
+                }
+              }
+            }
+            this.curDetectorDevs.overflows = JSON.parse(JSON.stringify(areaOverflows))
+            this.GetCrossStatusTimer(areaid)
+          }
+        })
+        .catch(error => {
+          this.$message.error(error)
+        })
+    },
+    GetStatusData (areaid, firstget) {
+      if (areaid === '') return
       this.intervalFlag = false
+      if (this.curDetectorDevs.overflows === undefined || this.curDetectorDevs.overflows.length === 0) return
       OverflowDecApi.GetOverflowsExecuteStatus(areaid)
         .then(data => {
           this.intervalFlag = true
@@ -158,26 +179,13 @@ export default {
         .catch(error => {
           this.$message.error(error)
         })
-
-      // this.statusList = this.statusMock.data
-      // this.statusList.forEach(ele => {
-      //   this.stateMap.set(ele.agentid, ele)
-      // })
-      // let areaOverflows = JSON.parse(JSON.stringify(this.curDetectorDevs.overflows))
-      // if (areaOverflows && areaOverflows.length) {
-      //   for (let i = 0; i < areaOverflows.length; i++) {
-      //     let crossState = this.stateMap.get(areaOverflows[i].intersectionid)
-      //     if (crossState) {
-      //       areaOverflows[i].statedata = crossState
-      //     }
-      //   }
-      // }
-      // this.curDetectorDevs.overflows = JSON.parse(JSON.stringify(areaOverflows))
     },
     setDeviceList (choosedRow) {
-      // if (choosedRow.id === this.curChoosedId) return;
       this.resetRightComponent()
-      if (JSON.stringify(choosedRow) === '{}' || choosedRow === undefined) { return }
+      if (JSON.stringify(choosedRow) === '{}' || choosedRow === undefined) {
+        this.curChoosedCrossname = ''
+        return
+      }
       this.curDetectorDevs = choosedRow
       this.curChoosedId = choosedRow.id
       this.curChoosedCrossname = choosedRow.description
@@ -188,10 +196,11 @@ export default {
           ele => ele.id === this.curChoosedId
         )[0]
         this.setDeviceList(curData)
-        this.GetCrossExecuteStatus(this.curChoosedId)
+        this.IsUpdateStatus(this.curChoosedId, 'refresh')
       })
     },
     handleModify () {
+      if (!this.curDetectorDevs) return
       if (!this.isModify && this.isHasExecutingCross()) {
         this.$message.error(this.$t('openatc.bottleneckcontrol.hasexecutecross'))
         return
