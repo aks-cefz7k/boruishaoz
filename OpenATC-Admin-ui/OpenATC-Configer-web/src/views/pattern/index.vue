@@ -12,7 +12,7 @@
 <template>
   <div class="app-container" ref="pattern-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
-    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row  @expand-change="expandChange" ref="singleTable" id="footerBtn">
+    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row   @expand-change="expandChange" ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
         <template slot-scope="scope">
           <el-tabs v-model="activeList[scope.$index]" type="card" @tab-click="handleClick">
@@ -39,7 +39,7 @@
             <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="stage">
               <el-scrollbar :vertical="false">
                 <div class="stage-panel-contener">
-                  <StageKanban v-for="(stage,index) in stagesList"
+                  <StageKanban v-for="(stage,index) in scope.row.stagesList"
                     class="kanban todo"
                     :key="index"
                     :stage="stage"
@@ -115,6 +115,7 @@
         <template slot-scope="scope">
             <div class="pattern-figure">
               <BoardCard
+              :patternId="scope.row.id"
               :patternStatusList="scope.row.rings"
               :cycles="scope.row.cycle"
               :isPhase="false"
@@ -185,6 +186,9 @@ export default {
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
+    this.patternList.map(item => {
+      this.getRowStages(item.rings, item.id)
+    })
     this.initData()
   },
   mounted: function () {
@@ -198,7 +202,6 @@ export default {
   },
   watch: {
     patternList: function (val) {
-      console.log(val)
       if (!val.length) return
       this.initData()
     }
@@ -458,21 +461,21 @@ export default {
         this.currPatternName = val1.desc
       }
       // this.handleCurrentChange(val1)
-      if (val2.length > 0) { // 此种情况为收起看板
-        this.getRowStages(val1.rings)
+      if (val2.length > 0) { // 此种情况为收起看板]
+        this.getRowStages(val1.rings, val1.id)
       }
     },
     handleSplit (index) {
       let currPattern = this.patternList[index]
       // this.handleCurrentChange(currPattern)
       // this.currentPattern = this.patternList[index]
-      this.getRowStages(currPattern.rings)
+      this.getRowStages(currPattern.rings, index + 1)
     },
     handleClick (tab, event) {
       if (tab.paneName === 'stage') {
       }
     },
-    getRowStages (rings) {
+    getRowStages (rings, id) {
       let agentId = getIframdevid()
       // agentId = '40001'
       if (!agentId) {
@@ -489,49 +492,104 @@ export default {
           this.$message.error(data.data.message)
           return
         }
-        let TscData = JSON.parse(JSON.stringify(data.data.data.data))
-        this.handleStageData(TscData, rings) // 处理阶段（驻留）stage数据
+        // let TscData = JSON.parse(JSON.stringify(data.data.data.data))
+        this.handleStageData(rings, id) // 处理阶段（驻留）stage数据
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
       })
     },
-    handleStageData (data, rings) {
+    handleStageData (rings, id) { // stagesList
+      let phaseList = []
       let stagesList = []
-      let stages = data.stages
-      for (let i = 0; i < stages.length; i++) {
-        let stage = stages[i]
-        let stageItem = this.getStageItem(stage, rings)
+      rings = JSON.parse(JSON.stringify(rings))
+      let mapAdd = rings.map(item => {
+        return item.map(val => {
+          return val.value + (val.sum ? val.sum : 0)
+        })
+      })
+      let maxCycle = mapAdd.length > 0 ? mapAdd.map(item => {
+        return item.length > 0 ? item.reduce((a, b) => {
+          return a + b
+        }) : 0
+      }) : 0
+      this.max = Math.max(...maxCycle)// 每个环的周期最大值
+      this.stateList = [0]
+      this.narr = []
+      let currentIds = ''
+      let lastCurrentIds = ''
+      for (let j = 0; j <= this.max; j++) { // 指针长度
+        for (let i = 0; i < rings.length; i++) { // 环列表
+          let ring = rings[i]// 每个环对象
+          let sum = 0
+          for (let n = 0; n < ring.length; n++) { // 相位累计长度
+            sum = sum + ring[n].value + (ring[n].sum ? ring[n].sum : 0)
+            if (j < sum) {
+              let phaseId = ring[n].id
+              currentIds = currentIds + '-' + phaseId
+              break
+            }
+          }
+        }
+        if (lastCurrentIds !== currentIds && lastCurrentIds !== '') { // 当前相位id和上一个相比不同说明相位变化了
+          phaseList.push(lastCurrentIds)
+          this.stateList.push(j)// 阶段累计长度的集合
+        }
+        lastCurrentIds = currentIds
+        currentIds = ''
+      }
+      let newPhaselist = []
+      phaseList.forEach(i => {
+        let rangeArr = i.split('-').map(Number)
+        newPhaselist.push([
+          rangeArr[1],
+          rangeArr[2]
+        ])
+      })
+      for (let i = this.stateList.length - 1; i >= 1; i--) {
+        this.narr.push(this.stateList[i] - this.stateList[i - 1])
+      }
+      this.narr.reverse()
+      for (let i = 0; i < newPhaselist.length; i++) {
+        let stage = newPhaselist[i]
+        let stageItem = this.getStageItem(stage, rings, i)
         stagesList.push(stageItem)
       }
+      let patternList = this.globalParamModel.getParamsByType('patternList')
+      patternList.map(item => { // 添加特征参数stage
+        if (item.id === id) {
+          item.stagesList = stagesList
+          item.stages = newPhaselist
+        }
+      })
       this.stagesList = stagesList
     },
-    getStageItem (stageArr, ringsList) {
+    getStageItem (stageArr, ringsList, i) {
       let res = {
-        split: 0, // 阶段绿性比
+        split: this.narr[i], // 阶段绿性比
         stages: stageArr,
         delaystart: 0,
         advanceend: 0
       }
-      let splitArr = []
+      // let splitArr = []
       let delaystartArr = []
       let advanceendArr = []
       for (let rings of ringsList) {
         for (let ring of rings) {
           if (stageArr.includes(ring.id)) {
-            let split = ring.value
+            // let split = ring.value
             let delaystart = ring.delaystart
             let advanceend = ring.advanceend
-            splitArr.push(split)
+            // splitArr.push(split)
             delaystartArr.push(delaystart)
             advanceendArr.push(advanceend)
           }
         }
       }
-      splitArr.sort(function (a, b) { return a - b })
+      // splitArr.sort(function (a, b) { return a - b })
       delaystartArr.sort(function (a, b) { return b - a })
       advanceendArr.sort(function (a, b) { return a - b })
-      res.split = splitArr.length > 0 ? splitArr[0] : 0
+      // res.split = splitArr.length > 0 ? splitArr[0] : 0
       res.delaystart = delaystartArr.length > 0 ? delaystartArr[0] : 0
       res.advanceend = advanceendArr.length > 0 ? advanceendArr[0] : 0
       return res

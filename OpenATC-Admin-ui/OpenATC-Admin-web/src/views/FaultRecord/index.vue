@@ -150,7 +150,6 @@ export default {
       devsfilter: '',
       messageboxVisible: false,
       tableData: [],
-      deleteId: '',
       listQuery: {
         pageNum: 1, // 页码
         pageRow: 50 // 每页条数

@@ -386,17 +386,13 @@ export default {
       DeleteDevice(this.deleteId).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.deletefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
           return
         }
-        this.$message({
-          message: this.$t('openatc.common.deletesuccess'),
-          type: 'success'
-        })
+        this.$message.success(this.$t('openatc.common.deletesuccess'))
+        // this.$message({
+        //   message: this.$t('openatc.common.deletesuccess'),
+        //   type: 'success'
+        // })
         this.messageboxVisible = false
         this.getList()
       })
