@@ -297,6 +297,7 @@ const en = {
       'busonly': 'bus only',
       'BRTonly': 'BRT only',
       'tramonly': 'tram only',
+      'nonvehiclesonly': 'non vehicles only',
       'virtualphase': 'virtual phase',
       'pulsetype': 'PulseType',
       'offpulse': 'Turn off pedestrian and vehicle pulses',
