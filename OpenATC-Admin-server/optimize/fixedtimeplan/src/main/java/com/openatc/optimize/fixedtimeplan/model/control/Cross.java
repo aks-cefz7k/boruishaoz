@@ -104,6 +104,10 @@ public class Cross {
                 }
             }
 
+            /**
+             * 根据最大最小绿调整相位长度
+             * */
+            barrier.adjustPhaseDuration(phaseMap);
 
             /*
             for(List<Integer> ids:barrier.getPhases()){
@@ -149,6 +153,10 @@ public class Cross {
 
 
         assignDurationOfBarrier();
+
+        updateCycle();
+
+        log.info("final cycle of {} is {}", agentid, cycle);
         FixedtimePlan fixedtimePlan = FixedtimePlan.builder()
                 .cycle(Math.round(cycle))
                 .phase(new ArrayList<>(phaseMap.values()))
@@ -160,5 +168,16 @@ public class Cross {
         return fixedtimePlan;
     }
 
+
+    /**
+     * 最大最小绿调整后，重新计算周期长
+     * */
+    private void updateCycle(){
+        int tempcycle = 0;
+        for(Barrier barrier:crossConfig.getBarriers()){
+            tempcycle += barrier.getDuration();
+        }
+        cycle = tempcycle;
+    }
 
 }
