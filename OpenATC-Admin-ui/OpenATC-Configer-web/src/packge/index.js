@@ -291,19 +291,19 @@ const subrouter = [
       }
     }]
   },
-  {
-    path: '/optimize',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'Optimize',
-      component: optimize,
-      meta: {
-        title: 'edge.route.optimize',
-        icon: 'optimize'
-      }
-    }]
-  },
+  // {
+  //   path: '/optimize',
+  //   component: Layout,
+  //   children: [{
+  //     path: 'index',
+  //     name: 'Optimize',
+  //     component: optimize,
+  //     meta: {
+  //       title: 'edge.route.optimize',
+  //       icon: 'optimize'
+  //     }
+  //   }]
+  // },
   {
     path: '/history',
     component: Layout,
