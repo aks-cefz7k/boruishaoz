@@ -480,6 +480,7 @@ export default {
     getOptionsOfRing () {
       let patternList = this.globalParamModel.getParamsByType('patternList')
       for (let pattern of patternList) {
+        if (pattern.rings.length === 0) return
         for (let rings of pattern.rings) {
           for (let ring of rings) {
             ring.options = this.getDecimalSystem(ring.options)
