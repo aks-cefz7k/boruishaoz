@@ -20,24 +20,30 @@
       :close-on-click-modal="false"
       @close="oncancle"
       append-to-body>
-      <IntersectionWithInterface
-        ref="intersectionWithInterface"
-        :AgentId="agentId"/>
+      <!-- <RightPanel
+        ref="rightpanel"
+        :statusData="crossStatusData"
+        :realtimeStatusModalvisible="false" /> -->
     </el-dialog>
   </div>
 </template>
 <script>
-import IntersectionWithInterface from '@/components/IntersectionWithInterface'
+import RightPanel from '@/components/SchemeConfig'
+import { getTscControl } from '@/api/control'
+import { getMessageByCode } from '../../utils/responseMessage'
+import {
+  getIframdevid
+} from '@/utils/auth'
 export default {
-  name: 'demo',
+  name: 'democonfig',
   components: {
-    IntersectionWithInterface
+    RightPanel
   },
   data () {
     return {
       boxVisible: false,
       dialogWidth: '100%',
-      agentId: '10002-994'
+      crossStatusData: {} // 路口状态数据
     }
   },
   methods: {
@@ -49,25 +55,50 @@ export default {
     },
     setDialogWidth () {
       var val = document.body.offsetWidth
-      const def = 1200 // 默认宽度
+      const def = 450 // 默认宽度
       if (val < def) {
         this.dialogWidth = '100%'
       } else {
         this.dialogWidth = def + 'px'
       }
+    },
+    initData () {
+      let iframdevid = getIframdevid()
+      getTscControl(iframdevid).then((data) => {
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
+          }
+          return
+        }
+        this.crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
+      }).catch(error => {
+        console.log(error)
+      })
     }
   },
   created () {
     this.setDialogWidth()
   },
   mounted () {
+    this.initData()
     window.onresize = () => {
       return (() => {
         this.setDialogWidth()
       })()
     }
-  },
-  destroyed () {
   }
 }
 </script>
