@@ -11,21 +11,26 @@
  **/
 <template>
   <div class="mode-charts-panel" :class="{'mode-charts-panel-en': getLang() !== 'zh'}">
-    <div class="mode-charts" id="mode-charts"></div>
-    <div class="legend">
-      <div class="mode-item" v-for="(modeitem, index) in modeList" :key="modeitem.id">
-        <!-- <span class="mark" :style="{'background-color': modeitem.color}"></span> -->
-        <span class="mark" :style="{'background-color': Color[index % 9]}"></span>
-        <span class="name">{{modeitem.name}}</span>
-        <span class="num">{{modeitem.value}}</span>
-      </div>
-    </div>
+    <el-row>
+      <el-col :span="10">
+        <div class="mode-charts" id="mode-charts"></div>
+      </el-col>
+      <el-col :span="14">
+        <el-row class="legend">
+          <el-col :span="12" class="mode-item" v-for="(modeitem, index) in modeList" :key="modeitem.id">
+            <span class="mark" :style="{'background-color': Color[index % 9]}"></span>
+            <span class="name">{{modeitem.name}}</span>
+            <span class="num">{{modeitem.value}}</span>
+          </el-col>
+        </el-row>
+      </el-col>
+     </el-row>
   </div>
 </template>
 
 <script>
 import echart from 'echarts'
-import { getLanguage } from '@/utils/auth'
+import { getLanguage, getTheme } from '@/utils/auth'
 export default {
   name: 'mode-charts',
   props: {
@@ -111,7 +116,7 @@ export default {
           {
             name: 'mode',
             type: 'pie',
-            radius: ['15%', '80%'],
+            radius: ['28%', '80%'],
             emphasis: {
               label: {
                 show: true
@@ -132,11 +137,21 @@ export default {
         if (this.modeList[i].value !== 0) {
           obj.name = this.modeList[i].name
           obj.value = this.modeList[i].value
-          let color = {
+          let itemstyle = {
             color: this.Color[i % 9]
           }
-          obj.itemStyle = color
+          obj.itemStyle = itemstyle
           arr.push(obj)
+        }
+      }
+      if (arr.length > 1) {
+        // 数据大于一个，显示饼图间隔
+        for (let j = 0; j < arr.length; j++) {
+          arr[j].itemStyle = {
+            ...arr[j].itemStyle,
+            borderWidth: 1,
+            borderColor: getTheme() === 'light' ? '#fff' : '#202940'
+          }
         }
       }
       return arr

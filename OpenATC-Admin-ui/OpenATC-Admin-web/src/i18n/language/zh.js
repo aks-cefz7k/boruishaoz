@@ -111,7 +111,8 @@ const zh = {
       'server': '服务',
       'state': '状态',
       'detail': '详情',
-      'view': '查看'
+      'view': '查看',
+      'specialcontrolmode': '特殊控制方式'
     },
     'faultrecord': {
       'asc': '信号机',
@@ -137,13 +138,13 @@ const zh = {
       'eventtype': '事件类型',
       'detaileddescription': '详细描述',
       'maincontrolboard': '主控板',
-      'lightcontrolversion': '灯控版',
+      'lightcontrolboard': '灯控版',
       'carinspectionboard': '车检板',
       'ioboard': 'I/O板',
       'faultboard': '故障板',
       'characteristicparams': '特征参数',
       'maincontrolboardfault': '主控板故障',
-      'lightcontrolversionfault': '灯控版故障',
+      'lightcontrolboardfault': '灯控版故障',
       'carinspectionboardfault': '车检板故障',
       'ioboardfault': 'I/O板故障',
       'fixdetail': '故障描述',

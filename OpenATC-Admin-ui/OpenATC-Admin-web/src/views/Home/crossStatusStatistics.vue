@@ -14,7 +14,8 @@
     <el-row :gutter="26">
       <el-col :span="6" v-for="item in list" :key="item.id">
         <div class="tpye-item" :style="{'background': item.background}">
-            <div class="Img" :class="item.imgClass"></div>
+            <svg-icon :icon-class="item.imgClass" className="Img"></svg-icon>
+            <!-- <div class="Img" :class="item.imgClass"></div> -->
             <div class="state">
               <div class="type">{{item.type}}</div>
               <div class="compYest">
@@ -67,7 +68,7 @@ export default {
         {
           id: 1,
           key: 'online',
-          imgClass: 'upImg',
+          imgClass: 'online',
           background: 'rgba(185, 185, 185, 0.05)',
           type: this.$t('openatc.home.online'),
           num: 0,
@@ -77,7 +78,7 @@ export default {
         {
           id: 2,
           key: 'offline',
-          imgClass: 'downImg',
+          imgClass: 'offline',
           background: 'rgba(185, 185, 185, 0.05)',
           type: this.$t('openatc.home.offline'),
           num: 0,
@@ -87,7 +88,7 @@ export default {
         {
           id: 3,
           key: 'fault',
-          imgClass: 'troubleImg',
+          imgClass: 'fault',
           background: 'rgba(185, 185, 185, 0.05)',
           type: this.$t('openatc.home.fault'),
           num: 0,
@@ -97,7 +98,7 @@ export default {
         {
           id: 4,
           key: 'manual',
-          imgClass: 'interveneImg',
+          imgClass: 'manual',
           background: 'rgba(185, 185, 185, 0.05)',
           type: this.$t('openatc.home.intervene'),
           num: 0,
