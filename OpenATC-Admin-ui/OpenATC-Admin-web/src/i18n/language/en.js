@@ -498,7 +498,16 @@ const en = {
       'putTscControlError4': 'Unable to execute because device is in initialization',
       'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
       'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control',
-      'entername': 'Please enter area name'
+      'entername': 'Please enter area name',
+      'executeresults': 'Execute Results',
+      'executerestatus': 'Execute State',
+      'hasexecutecross': 'There are intersections in trigger status, which cannot be modified!',
+      'successcode': 'success',
+      'failed': 'Failed',
+      'unknow': 'Unknow',
+      'unexecuted': 'Unexecuted',
+      'executed': 'Executed',
+      'intransition': 'In transition'
     },
     'about': {
       'version': 'Version',

@@ -1,7 +1,7 @@
 <template>
     <div class="boradCard">
-        <StageStatus v-show="isPhase" :patternStatusList="patternStatusList"></StageStatus>
-        <PatternStatus :cycle="cycle" :syncTime="syncTime" :style="{'margin-top':cycle ? '25px':'0'}" :patternStatusList="patternStatusList" :patternId="patternId" :cycles="cycles"></PatternStatus>
+        <StageStatus v-show="isPhase" :controlData="controlData" :patternStatusList="patternStatusList"></StageStatus>
+        <PatternStatus :controlData="controlData" :phaseList="phaseList" :cycle="cycle" :syncTime="syncTime" :style="{'margin-top':cycle ? '25px':'0'}" :patternStatusList="patternStatusList" :patternId="patternId" :cycles="cycles"></PatternStatus>
     </div>
 </template>
 
@@ -19,6 +19,12 @@ export default {
     }
   },
   props: {
+    phaseList: {
+      type: Array
+    },
+    controlData: {
+      type: Object
+    },
     patternStatusList: {
       type: Array
     },
@@ -26,7 +32,8 @@ export default {
       type: Number
     },
     isPhase: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     cycles: {
       type: Number

@@ -400,6 +400,11 @@
     "method": "post"
   },
   {
+    "key": "get_overflow_execute_status",
+    "url": "/overflow/status",
+    "method": "get"
+  },
+  {
     "key": "getAllTrafficData",
     "url": "/historydata/flow/range",
     "method": "post"

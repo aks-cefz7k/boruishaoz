@@ -42,6 +42,10 @@ class OverflowDetector {
     let api = new Authapi('off_overflow_control')
     return api.Send({}, {}, [id])
   }
+  GetOverflowsExecuteStatus (id) {
+    let api = new Authapi('get_overflow_execute_status')
+    return api.Send({}, {}, [id])
+  }
 }
 
 export const OverflowDecApi = new OverflowDetector()

@@ -498,7 +498,16 @@ const zh = {
       'putTscControlError4': '设备初始化中，无法执行',
       'putTscControlError5': '优先级更高的方案控制中，无法执行',
       'putTscControlError6': '优先级更高的用户控制中，无法执行',
-      'entername': '请输入区域名称'
+      'entername': '请输入区域名称',
+      'executeresults': '执行结果',
+      'executerestatus': '执行状态',
+      'hasexecutecross': '存在触发状态中的路口，不可修改！',
+      'successcode': '成功',
+      'failed': '失败',
+      'unknow': '未知',
+      'unexecuted': '未执行',
+      'executed': '已执行',
+      'intransition': '过渡中'
     },
     'about': {
       'version': '版本',
