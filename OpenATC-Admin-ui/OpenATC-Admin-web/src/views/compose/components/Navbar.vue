@@ -233,7 +233,7 @@
 <script>
 import router from '@/router'
 import FaultEventData from '@/model/EventModal/faultData.js'
-import { GetUntreated, searchRoadName, enumerateCheck } from '@/api/fault.js'
+import { GetFaultRange, searchRoadName, enumerateCheck } from '@/api/fault.js'
 import modifypasswd from './modifyPasswd'
 import versioninfo from './versionInfo'
 import SystemSettings from './SystemSettings'
@@ -498,16 +498,12 @@ export default {
       })
     },
     getUntreated () {
-      this.enumerate = 0
-      this.isCurrentFault = true
-      GetUntreated(this.pageNum, this.pageSize, this.enumerate, this.isCurrentFault).then(data => {
+      let reqData = {
+        'enumerate': '0',
+        'isCurrentFault': true
+      }
+      GetFaultRange(reqData).then(data => {
         if (data.data.success) {
-          // for (let i = 0; i < data.data.data.content.length; i++) {
-          // searchRoadName(data.data.data.content[i].agentid).then(j => {
-          //   data.data.data.content[i].name = j.data.data.name
-          //   data.data.data.content[i].id = j.data.data.id
-          // })
-          // }
           this.faultData = data.data.data.content
         }
       })
