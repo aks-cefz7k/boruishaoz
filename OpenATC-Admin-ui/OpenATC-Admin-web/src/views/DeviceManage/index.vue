@@ -107,6 +107,7 @@
                 <el-input
                   v-model="selectTag"
                   clearable
+                  @focus="getDicts()"
                   @change="getDeviceRanges()"
                   slot="reference"
                   style="width: 100px;"/>
@@ -115,6 +116,7 @@
               <div class="filter" style="margin-right:20px">
                 <el-input
                   @keyup.enter.native="getDeviceRanges()"
+                  @blur="getDeviceRanges()"
                   v-model="devsfilter"
                   :placeholder="$t('openatc.common.searchplaceholder')"
                   prefix-icon="el-icon-search"
@@ -422,7 +424,7 @@ export default {
   },
   created () {
     // this.devsfilter = getCrossFilter('deviceFilter')
-    this.getDicts()
+    // this.getDicts()
     if (this.$route.params.filter) {
       this.getStatusFilterParams()
     } else {
