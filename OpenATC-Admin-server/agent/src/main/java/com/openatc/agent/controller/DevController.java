@@ -91,7 +91,7 @@ public class DevController {
     public RESTRet GetDevs() {
 
         List<AscsBaseModel> ascsBaseModels = mDao.getAscs();
-        mDao.alterStatus(ascsBaseModels);
+//        mDao.alterStatus(ascsBaseModels);
         return RESTRetUtils.successObj(ascsBaseModels);
     }
 
@@ -129,7 +129,7 @@ public class DevController {
             }
             devList.add(device);
         }
-        mDao.alterStatus(devList);
+//        mDao.alterStatus(devList);
         return RESTRetUtils.successObj(devList);
     }
 
@@ -145,11 +145,10 @@ public class DevController {
     // 添加设备
     @PostMapping(value = "/devs")
     public RESTRetBase InsertDev(@RequestBody AscsBaseModel ascs) {
-        //check name
-        String name = ascs.getName();
-        if (name == null || name.equals("")) {
-            ascs.setName(ascs.getAgentid());
-        }
+//        String name = ascs.getName();
+//        if (name == null || name.equals("")) {
+//            ascs.setName(ascs.getAgentid());
+//        }
         int count = mDao.getCountByAgentid(ascs.getAgentid());
         if (count != 0) {
             return RESTRetUtils.errorObj(E_8004);
@@ -161,11 +160,6 @@ public class DevController {
     @PutMapping(value = "/devs")
     public RESTRetBase UpdateDev(@RequestBody AscsBaseModel ascs) {
         int temp = mDao.updateDev(ascs);
-        //check name
-        String name = ascs.getName();
-        if (name == null || name.equals("")) {
-            ascs.setName(ascs.getAgentid());
-        }
         if (temp == 0) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
         } else {
