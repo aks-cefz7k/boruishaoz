@@ -944,7 +944,16 @@ const en = {
       '6001': 'Repeat Route Name',
       '6002': 'The route is on execution',
       // 流量错误
-      '7001': 'ftp clent connect fail'
+      '7001': 'ftp clent connect fail',
+      // 组织机构错误
+      '11001': 'Repeat Name!',
+      // 路口管理错误
+      '8001': 'device not found By Agentid!',
+      '8002': 'device is found By CoordinateRoute',
+      '8003': 'device is found By VipRoute',
+      '8004': 'Agentid is duplicated',
+      // 错误类型子类型，返回码第二层
+      '8101': 'Device can not delete!'
     }
   }
 }
