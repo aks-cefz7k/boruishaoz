@@ -92,7 +92,7 @@ public class HistoryDataDao {
 
     // 定时清理历史数据
     @Scheduled(cron = "0 0 2 * * ?")
-    private void clearHistoryData() {
+    public void clearHistoryData() {
         logger.warning("Clearing Schedule Start!");
         // 历史方案数据默认保存7天
         String sql = String.format("delete from pattern where time < (now() - interval '7 day')");
