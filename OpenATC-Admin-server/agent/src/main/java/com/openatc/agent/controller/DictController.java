@@ -39,7 +39,7 @@ public class DictController {
 
     private Logger logger = LoggerFactory.getLogger(DictController.class);
 
-    @Autowired(required = false)
+    @Autowired
     private DictConfigRepository dictConfigRepository;
 
     // 查询全部配置

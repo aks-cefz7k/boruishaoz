@@ -17,24 +17,24 @@
         <template slot-scope="scope">
           <el-tabs v-model="activeList[scope.$index]"  @tab-click="handleClick" type="card">
             <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
-              <el-row :gutter="20">
-                <el-col :span="12" >
-                  <div class="components-container board" >
+              <!-- <el-row :gutter="20"> -->
+                <!-- <el-col :span="24" > -->
+                  <div style="padding-left:36%;padding-right:2%;">
                     <Kanban v-for="n in ringCount"
-                            :key="n" class="kanban todo"
-                            :list="scope.row.rings[n-1]"
-                            :options="scope.row.options"
-                            :header-text="$t('edge.pattern.ring')+n"
-                            :index="scope.$index"
-                            @handleSplit="handleSplit"/>
+                    :key="n" class="kanban todo"
+                    :list="scope.row.rings[n-1]"
+                    :options="scope.row.options"
+                    :header-text="$t('edge.pattern.ring')+n"
+                    :index="scope.$index"
+                    @handleSplit="handleSplit"/>
                   </div>
-                </el-col>
-                <el-col :span="12">
+                <!-- </el-col> -->
+                <!-- <el-col :span="12">
                   <FollowPhase>
 
                   </FollowPhase>
-                </el-col>
-              </el-row>
+                </el-col> -->
+              <!-- </el-row> -->
             </el-tab-pane>
             <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="stage">
               <el-scrollbar :vertical="false">
@@ -69,25 +69,41 @@
                 </el-col>
                 <el-col :span="12">
                   <div class="stage-item" style="margin: 30px 50px;">
-                    <el-row style="margin-top:10px">
+                    <el-row v-if="scope.row.forbiddenstage" style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.forbiddenstage')}}
                         <el-input class="stage-value" size="small" v-model="scope.row.forbiddenstage"></el-input>
                       </el-col>
                     </el-row>
-                    <el-row style="margin-top:10px">
+                    <el-row  v-if="scope.row.screenstage" style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.screenstage')}}
                         <el-input class="stage-value" size="small" v-model="scope.row.screenstage"></el-input>
                       </el-col>
                     </el-row>
-                    <el-row style="margin-top:10px">
+                    <el-row  v-if="scope.row.coordinatestage" style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.coordinatestage')}}
                         <el-input class="stage-value" size="small" v-model="scope.row.coordinatestage"></el-input>
                       </el-col>
                     </el-row>
                   </div>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('edge.pattern.overLap')" name="overlap">
+              <el-row :gutter="20">
+                <el-col :span="24" >
+                  <el-scrollbar :vertical="false">
+                    <div class="stage-panel-contener">
+                      <OverLap
+                      :stageList="scope.row.stagesList"
+                      :checked="true"
+                      :overlap="overlap"
+                      :cycle="scope.row.cycle"
+                      />
+                    </div>
+                  </el-scrollbar>
                 </el-col>
               </el-row>
             </el-tab-pane>
@@ -111,7 +127,7 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle" width="140">
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan">
+      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" width="870px">
         <template slot-scope="scope">
             <div class="pattern-figure">
               <BoardCard
@@ -140,6 +156,7 @@ import StageKanban from '@/views/pattern/StageKanban'
 import BoardCard from '@/components/BoardCard'
 import FollowPhase from '@/components/FollowPhase'
 import ExpendConfig from '@/components/ExpendConfig'
+import OverLap from '@/components/OverLap'
 import { uploadSingleTscParam } from '@/api/param'
 import { getMessageByCode } from '../../utils/responseMessage'
 // import { mapState } from 'vuex'
@@ -152,6 +169,7 @@ export default {
     BoardCard,
     FollowPhase,
     ExpendConfig,
+    OverLap,
     StageKanban
   },
   data () {
@@ -178,6 +196,7 @@ export default {
       stateList: [],
       numList: [],
       narr: [],
+      overlap: [],
       redux: ''
     }
   },
@@ -222,6 +241,7 @@ export default {
     initData () {
       // 判断有几个环，就创建几个看板
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      this.overlap = this.globalParamModel.getParamsByType('overlaplList')
       this.agentId = getIframdevid()
       let rings = []
       if (phaseList.length === 0) {
@@ -549,11 +569,13 @@ export default {
           let ring = rings[i]// 每个环对象
           let sum = 0
           for (let n = 0; n < ring.length; n++) { // 相位累计长度
-            sum = sum + ring[n].value + (ring[n].sum ? ring[n].sum : 0)
-            if (j < sum) {
-              let phaseId = ring[n].id
-              currentIds = currentIds + '-' + phaseId
-              break
+            if (ring[n].mode !== 7) {
+              sum = sum + ring[n].value + (ring[n].sum ? ring[n].sum : 0)
+              if (j < sum) {
+                let phaseId = ring[n].id
+                currentIds = currentIds + '-' + phaseId
+                break
+              }
             }
           }
         }
@@ -581,7 +603,7 @@ export default {
       for (let i = this.stateList.length - 1; i >= 1; i--) {
         this.narr.push(this.stateList[i] - this.stateList[i - 1])
       }
-      this.narr.reverse()
+      this.narr.reverse()// 阶段差
       for (let i = 0; i < newPhaselist.length; i++) {
         let stage = JSON.parse(JSON.stringify(newPhaselist[i]))
         let stageItem = this.getStageItem(stage, rings, i)
@@ -597,6 +619,7 @@ export default {
     },
     getStageItem (stageArr, ringsList, i) {
       let res = {
+        key: i,
         split: this.narr[i], // 阶段绿性比
         stages: stageArr,
         delaystart: 0,

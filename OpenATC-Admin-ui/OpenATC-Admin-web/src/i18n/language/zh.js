@@ -51,7 +51,8 @@ const zh = {
       'location': '位置',
       'ignore': '忽略',
       'modify': '修改',
-      'submit': '提交'
+      'submit': '提交',
+      'config': '配置'
     },
     'login': {
       'username': '用户名',
@@ -166,6 +167,7 @@ const zh = {
       'crossid': '路口ID',
       'tags': '标签',
       'deviceid': '设备ID',
+      'gbid': '国标ID',
       'devicename': '路口名称',
       'firm': '厂商',
       'platform': '平台',
@@ -211,6 +213,7 @@ const zh = {
       'deviceNotNull': '设备ID不能为空！',
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
       'thirdplatformid': '第三方ID',
+      'thirdPlatform': '第三方平台',
       'timeSpaceGraph': '实时时距图',
       'keyintersection': '关键路口：',
       'sockettype': '通讯类型',
@@ -407,6 +410,7 @@ const zh = {
       'currentControl': '当前控制',
       'lasttime': '持续时间(秒)',
       'stage': '阶段',
+      'content': '控制内容',
       'greenpercent': '绿信比',
       'getpatternfailed': '获取方案失败!',
       'ring': '环',
@@ -570,7 +574,9 @@ const zh = {
       'tokenManage': 'Token管理',
       'timeStart': '有效期开始',
       'timeEnd': '有效期截止',
-      'isValid': '是否启用'
+      'isValid': '是否启用',
+      'yes': '是',
+      'no': '否'
     }
   }
 }

@@ -154,11 +154,16 @@ export default {
     },
     loadLanguageConfig () {
       // 从接口获取默认语言并设置
-      SystemconfigApi.GetSystemconfigByModule('language').then((data) => {
+      let reqData = {
+        module: 'language',
+        isValid: true
+      }
+      SystemconfigApi.GetSystemconfigList(reqData).then((data) => {
         let res = data.data
         if (!res.success) {
           throw new Error('get language error')
         } else {
+          setLanguage(this.$i18n.locale)
           for (let config of data.data.data) {
             if (config['value'] === 'zh') {
               this.$i18n.locale = 'zh'

@@ -51,7 +51,8 @@ const en = {
       'location': 'Location',
       'ignore': 'Ignore',
       'modify': 'Modify',
-      'submit': 'Submit'
+      'submit': 'Submit',
+      'config': 'Config'
     },
     'login': {
       'username': 'User Name',
@@ -168,6 +169,7 @@ const en = {
       'devicetype': 'Device Type',
       'plat': 'Plat',
       'deviceid': 'Device Id',
+      'gbid': 'GBID',
       'devicename': 'Intersection Name',
       'firm': 'Firm',
       'platform': 'Platform',
@@ -211,6 +213,7 @@ const en = {
       'deviceNotNull': 'Device ID cannot be empty!',
       'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
       'thirdplatformid': 'Third party ID',
+      'thirdPlatform': 'Third Platform',
       'timeSpaceGraph': 'Time space graph',
       'keyintersection': 'Key Intersection：',
       'sockettype': 'Socket Type',
@@ -407,6 +410,7 @@ const en = {
       'currentControl': 'Current Control',
       'lasttime': 'Last Time(second)',
       'stage': 'Stage',
+      'content': 'Content',
       'greenpercent': 'Green Percent',
       'getpatternfailed': 'Get Pattern Failed !',
       'ring': 'Ring',
@@ -571,7 +575,9 @@ const en = {
       'tokenManage': 'Token Management',
       'timeStart': 'Time Start',
       'timeEnd': 'Time End',
-      'isValid': 'isValid'
+      'isValid': 'isValid',
+      'yes': 'Yes',
+      'no': 'No'
     }
   }
 }

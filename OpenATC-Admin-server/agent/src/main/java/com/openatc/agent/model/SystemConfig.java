@@ -19,4 +19,6 @@ public class SystemConfig {
     private String value;
 
     private String description;
+
+    private Boolean isValid = true;
 }

@@ -18,7 +18,9 @@
                 <div slot="content">P{{item.id}}:{{item.split}}</div>
                 <div style="cursor:pointer;">
                   <div class="ring-phase">
-                    <PatternWalkSvg v-if="item.peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'32'" :Height="'34'" />
+                    <div v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index">
+                      <PatternWalkSvg v-if="item.peddirection.includes(side.id)"  :Data="side" :Width="'32'" :Height="'34'" />
+                    </div>
                     <xdrdirselector  Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
                   </div>
                   <div class="box">
@@ -194,22 +196,16 @@ export default {
   },
   methods: {
     getBusPos () {
-      let phaseList = this.globalParamModel.getParamsByType('phaseList')
       // 公交相位信息
       this.busPhaseData = []
-      phaseList.forEach((ele, i) => {
+      this.phaseList.forEach((ele, i) => {
         if (ele.controltype >= 3 && ele.controltype <= 5) {
           ele.direction.forEach((dir, index) => {
           // 车道相位
             this.busPhaseData.push({
-              // key: this.CrossDiagramMgr.getUniqueKey('busphase'),
               phaseid: ele.id, // 相位id，用于对应相位状态
               id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
               name: this.PhaseDataModel.getBusPhasePos(dir).name,
-              // left: this.PhaseDataModel.getBusPhasePos(dir).x,
-              // top: this.PhaseDataModel.getBusPhasePos(dir).y,
-              // busleft: this.PhaseDataModel.getBusMapPos(dir).x,
-              // bustop: this.PhaseDataModel.getBusMapPos(dir).y,
               controltype: ele.controltype
             })
           })
@@ -249,6 +245,7 @@ export default {
       if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
       if (!this.controlDatas.phase) return
       let cycle = this.controlDatas.cycle
+      if (!this.controlDatas.rings) return
       for (let rings of this.controlDatas.rings) {
         let phase = this.controlDatas.phase
         let list = []
@@ -285,6 +282,7 @@ export default {
       }
     },
     handleBarrierHeight () { // 屏障高度
+      if (!this.pattern) return
       let patternLength = this.pattern.length
       this.barrierHeight = (patternLength * 35 + 21) + 'px'
     },
@@ -299,15 +297,17 @@ export default {
       if (val === null) return
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
       for (let patternStatus of val[0]) {
-        let concurrent = phaseList.filter((item) => {
-          return item.id === patternStatus.id // patternStatus.id当前相位id concurrent当前相位的并发相位
-        })[0].concurrent// 当前相位的并发相位
-        if (concurrent) {
-          let obj = {
-            id: patternStatus.id,
-            current: concurrent.sort()
+        if (patternStatus.mode !== 7) {
+          let concurrent = phaseList.filter((item) => {
+            return item.id === patternStatus.id // patternStatus.id当前相位id concurrent当前相位的并发相位
+          })[0].concurrent// 当前相位的并发相位
+          if (concurrent) {
+            let obj = {
+              id: patternStatus.id,
+              current: concurrent.sort()
+            }
+            currentArr.push(obj)
           }
-          currentArr.push(obj)
         }
       }
       if (currentArr.length !== 0) {
@@ -447,7 +447,9 @@ export default {
       let ret = []
       const patternObj = {}
       pattern.forEach(l => {
-        patternObj[l.id] = l.value
+        if (l.mode !== 7) {
+          patternObj[l.id] = l.value
+        }
       })
       newArr.forEach((na, index) => {
         let max = 0
@@ -457,7 +459,7 @@ export default {
             max = total
           }
         })
-        while (index > 0) { // && max < _this.newCycle
+        while (index > 0 && max < this.newCycle) { // && max < _this.newCycle
           index--
           max += ret[index]
         }
@@ -470,7 +472,9 @@ export default {
       const patternObj = {}
       pattern.forEach(l => {
         l.map(k => {
-          patternObj[k.id] = k.value
+          if (k.mode !== 7) {
+            patternObj[k.id] = k.value
+          }
         })
       })
       let newMax = []
@@ -490,7 +494,7 @@ export default {
           this.max = newmaxNum + newminNum
           pattern.map(d => {
             d.map(r => {
-              if (r.sum) {
+              if (r.sum && r.mode !== 7) {
                 delete r.sum
               }
             })
@@ -500,7 +504,7 @@ export default {
           na.map(n => {
             pattern.map(h => {
               h.map(d => {
-                if (d.id === n.data[1] && d.sum) {
+                if (d.id === n.data[1] && d.sum && d.mode !== 7) {
                   delete d.sum
                 }
               })
@@ -512,11 +516,11 @@ export default {
               pattern.map(h => {
                 h.map(d => {
                   if (n.data.length > 1) {
-                    if (d.id === n.data[1]) {
+                    if (d.id === n.data[1] && d.mode !== 7) {
                       delete d.sum
                     }
                   } else {
-                    if (d.id === n.data[0]) {
+                    if (d.id === n.data[0] && d.mode !== 7) {
                       delete d.sum
                     }
                   }
@@ -534,11 +538,11 @@ export default {
               pattern.filter((i) => {
                 i.map(j => {
                   if (m.data.length > 1) {
-                    if (j.id === m.data[1]) {
+                    if (j.id === m.data[1] && j.mode !== 7) {
                       j.sum = sum
                     }
                   } else {
-                    if (j.id === m.data[0]) {
+                    if (j.id === m.data[0] && j.mode !== 7) {
                       j.sum = sum
                     }
                   }
@@ -548,7 +552,7 @@ export default {
           }
           let mapAdd = pattern.map(item => {
             return item.map(val => {
-              return val.value + (val.sum ? val.sum : 0)
+              return val.mode === 7 ? 0 : val.value + (val.sum ? val.sum : 0)
             })
           })
           let maxCycle = mapAdd.length > 0 ? mapAdd.map(item => {

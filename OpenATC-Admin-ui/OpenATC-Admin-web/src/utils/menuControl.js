@@ -18,11 +18,13 @@ export function HandleMenuVisible (sysconfig) {
     gis: false
   }
   for (let config of sysconfig) {
-    if (config['key'] === 'isShowGisMenu') {
-      if (config['value'] === 'true') {
-        controlMenu.gis = true
-      } else {
-        controlMenu.gis = false
+    if (config.isValid) {
+      if (config['key'] === 'isShowGisMenu') {
+        if (config['value'] === 'true') {
+          controlMenu.gis = true
+        } else {
+          controlMenu.gis = false
+        }
       }
     }
     // if ... 从系统配置增加控制项，可扩充

@@ -32,6 +32,7 @@ import './assets/icon/iconfont.css'
 import 'leaflet/dist/leaflet.css'
 
 import Edgebase from '@openatc/edgebase-front'
+// import openatcComponents from 'openatc-components'
 // import './styles/index.scss'
 
 import router from './router'
@@ -75,6 +76,7 @@ Vue.use(ElementUI, {
 
 // Vue.use(kissui)
 
+// Vue.use(openatcComponents)
 Vue.use(Edgebase)
 Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)

@@ -15,6 +15,7 @@
       :title="$t(`edge.faultrecord.faultDetail`)"
       :visible.sync="dialogFormVisible"
       width="60%"
+      :append-to-body="true"
       :close-on-click-modal="false">
     <div class="content">
       <el-table
