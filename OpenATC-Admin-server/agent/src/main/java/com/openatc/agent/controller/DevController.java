@@ -57,6 +57,9 @@ public class DevController {
     @Autowired
     private MessageController messageController;
 
+    @Autowired
+    private DevService devService;
+
     private Gson gson = new Gson();
     private Logger log = Logger.getLogger(DevController.class.toString());
 
@@ -91,10 +94,10 @@ public class DevController {
     //得到所有设备
     @GetMapping(value = { "/devs" ,  "/devs/all"})
     public RESTRet GetDevs() {
-
         List<AscsBaseModel> ascsBaseModels = mDao.getAscs();
-//        mDao.alterStatus(ascsBaseModels);
-        return RESTRetUtils.successObj(ascsBaseModels);
+        return devService.getDevs(ascsBaseModels);
+////        mDao.alterStatus(ascsBaseModels);
+//        return RESTRetUtils.successObj(ascsBaseModels);
     }
 
     // 按ID查询设备
@@ -111,7 +114,8 @@ public class DevController {
 
     @PostMapping(value = "/devs/range")
     public RESTRetBase getDevsRange(@RequestBody JsonObject jsonObject) {
-        return RESTRetUtils.successObj(mDao.getAscsRange(jsonObject));
+        return devService.getRangeDevs(jsonObject);
+//        return RESTRetUtils.successObj(mDao.getAscsRange(jsonObject));
     }
     // 按列表中的路口ID获取路口
     @PostMapping(value = "/devs/list")

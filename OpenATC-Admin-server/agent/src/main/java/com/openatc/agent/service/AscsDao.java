@@ -16,8 +16,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.DevCover;
 import com.openatc.agent.resmodel.PageOR;
-import com.openatc.core.common.IErrorEnumImplOuter;
-import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.MyGeometry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +67,7 @@ public class AscsDao {
         }
     }
     public List<AscsBaseModel> getAscs() {
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype,tags FROM dev ORDER BY agentid";
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, code, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype,tags FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = getDevByPara(sql);
 
         return ascsBaseModels;
@@ -629,7 +627,7 @@ public class AscsDao {
         }
 
         // 获取分页记录
-        String searchsql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, " +
+        String searchsql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, code, status, descs, name,jsonparam, " +
                 "case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype,tags " +
                 "FROM dev ";
         searchsql = searchsql.concat(whereCondition);
@@ -659,5 +657,35 @@ public class AscsDao {
         }
 
         return  whereCondition;
+    }
+
+
+    /**
+     * 根据组织机构代码查询设备
+     * @param ascss
+     * @param orgnization_code
+     * @return
+     */
+    public List<AscsBaseModel> getAscsByOrgCode(List<AscsBaseModel> ascss, String orgnization_code) {
+        List<AscsBaseModel> ascsBaseModels = new ArrayList<>();
+        // 用户不属于任何组织机构
+        if (orgnization_code.equals("")){
+            for (AscsBaseModel ascs : ascss){
+                String code = ascs.getCode();
+                if (code == null){
+                    ascsBaseModels.add(ascs);
+                }
+            }
+            return ascsBaseModels;
+        }
+        // 用户属于某个组织机构
+        for (AscsBaseModel ascs : ascss){
+            String code = ascs.getCode();
+            if (orgnization_code.equals(code)){
+                ascsBaseModels.add(ascs);
+            }
+        }
+        return ascsBaseModels;
+
     }
 }
