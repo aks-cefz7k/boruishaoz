@@ -186,9 +186,6 @@ export default {
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
-    this.patternList.map(item => {
-      this.getRowStages(item.rings, item.id)
-    })
     this.initData()
   },
   mounted: function () {
@@ -204,6 +201,9 @@ export default {
     patternList: function (val) {
       if (!val.length) return
       this.initData()
+      for (let i = 0; i < val.length; i++) {
+        this.handleStageData(val[i].rings, val[i].id)
+      }
     }
   },
   methods: {
@@ -462,20 +462,20 @@ export default {
       }
       // this.handleCurrentChange(val1)
       if (val2.length > 0) { // 此种情况为收起看板]
-        this.getRowStages(val1.rings, val1.id)
+        this.getRowStages(val1.rings)
       }
     },
     handleSplit (index) {
       let currPattern = this.patternList[index]
       // this.handleCurrentChange(currPattern)
       // this.currentPattern = this.patternList[index]
-      this.getRowStages(currPattern.rings, index + 1)
+      this.getRowStages(currPattern.rings)
     },
     handleClick (tab, event) {
       if (tab.paneName === 'stage') {
       }
     },
-    getRowStages (rings, id) {
+    getRowStages (rings) {
       let agentId = getIframdevid()
       // agentId = '40001'
       if (!agentId) {
@@ -493,7 +493,7 @@ export default {
           return
         }
         // let TscData = JSON.parse(JSON.stringify(data.data.data.data))
-        this.handleStageData(rings, id) // 处理阶段（驻留）stage数据
+        this.handleStageData(rings) // 处理阶段（驻留）stage数据
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
@@ -502,7 +502,8 @@ export default {
     handleStageData (rings, id) { // stagesList
       let phaseList = []
       let stagesList = []
-      rings = JSON.parse(JSON.stringify(rings))
+      let patternList = this.globalParamModel.getParamsByType('patternList')
+      // rings = JSON.parse(JSON.stringify(rings))
       let mapAdd = rings.map(item => {
         return item.map(val => {
           return val.value + (val.sum ? val.sum : 0)
@@ -548,7 +549,7 @@ export default {
           ])
         } else {
           newPhaselist.push([
-            rangeArr[1]
+            JSON.parse(JSON.stringify(rangeArr[1]))
           ])
         }
       })
@@ -561,7 +562,6 @@ export default {
         let stageItem = this.getStageItem(stage, rings, i)
         stagesList.push(stageItem)
       }
-      let patternList = this.globalParamModel.getParamsByType('patternList')
       patternList.map(item => { // 添加特征参数stage
         if (item.id === id) {
           item.stagesList = stagesList
