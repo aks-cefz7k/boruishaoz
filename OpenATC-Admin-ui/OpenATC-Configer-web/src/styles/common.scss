@@ -1939,9 +1939,10 @@ border: 1px solid $--border-color-base;
     position: absolute;
     top: -10px;
     // left: 370px;
-    width: 2px;
+    width: 3px;
     // height: 99px;
-    background-color: #787878;
+    z-index: 999;
+    background-color: $--color-text-secondary;
   }
   .curTimeLine {
     position: absolute;
