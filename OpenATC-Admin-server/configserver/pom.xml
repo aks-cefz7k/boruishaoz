@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <com.openatc.admin.version>2.1.1-snapshot</com.openatc.admin.version>
+        <com.openatc.admin.version>2.2.0-snapshot</com.openatc.admin.version>
     </properties>
 
     <repositories>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.openatc.admin</groupId>
             <artifactId>comm</artifactId>
-            <version>2.1.1-snapshot</version>
+            <version>2.2.0-snapshot</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
