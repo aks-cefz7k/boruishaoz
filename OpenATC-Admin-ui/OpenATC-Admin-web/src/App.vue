@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getLanguage } from '@/utils/auth'
+import { getLanguage, getMenuVisible } from '@/utils/auth'
 export default {
   name: 'App',
   data () {
@@ -24,11 +24,27 @@ export default {
     }
   },
   mounted: function () {
-    let language = getLanguage()
-    if (language === 'zh') {
-      this.$i18n.locale = 'zh'
-    } else if (language === 'en') {
-      this.$i18n.locale = 'en'
+    this.reloadLanguage()
+    this.reloadGisMenu()
+  },
+  methods: {
+    reloadLanguage () {
+      let language = getLanguage()
+      if (language === 'zh') {
+        this.$i18n.locale = 'zh'
+      } else if (language === 'en') {
+        this.$i18n.locale = 'en'
+      }
+    },
+    reloadGisMenu () {
+      // 是否显示地图菜单
+      // 从浏览器存储中取值，更新store，因为强制刷新后，store会恢复默认值
+      let isShowGIS = getMenuVisible('gis')
+      if (isShowGIS === 'true') {
+        this.$store.dispatch('SetGisVisible', true)
+      } else {
+        this.$store.dispatch('SetGisVisible', false)
+      }
     }
   }
 }
