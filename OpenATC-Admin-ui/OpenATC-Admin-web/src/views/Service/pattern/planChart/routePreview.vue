@@ -74,23 +74,26 @@ export default {
       if (!devs || devs.length === 0) {
         return false
       }
-      let isOn = false
+      // let isOn = false
       for (let dev of devs) {
         if (dev.state === 1) {
           let _this = this
-          if (_this.intervalId !== 0) { // 已有定时器
-            return false
-          }
-          isOn = true
-          _this.intervalId = setInterval(function () {
+          // if (_this.intervalId !== 0) { // 已有定时器
+          //   return false
+          // }
+          // isOn = true
+          // _this.intervalId = setInterval(function () {
+          //   _this.$emit('research')
+          // }, 2000)
+          setTimeout(() => {
             _this.$emit('research')
-          }, 2000)
+          }, 1 * 1000)
         }
       }
-      if (!isOn) {
-        clearInterval(this.intervalId)
-        this.intervalId = 0
-      }
+      // if (!isOn) {
+      //   clearInterval(this.intervalId)
+      //   this.intervalId = 0
+      // }
     },
     deep: true
   },
