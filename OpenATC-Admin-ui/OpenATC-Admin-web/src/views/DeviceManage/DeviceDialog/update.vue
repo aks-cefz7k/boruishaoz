@@ -69,7 +69,6 @@
               maxlength="10"
               ref="saveTagInput"
               size="small"
-              @keyup.enter.native="handleInputConfirm"
               @blur="handleInputConfirm"
             >
             </el-input>
@@ -391,6 +390,9 @@ export default {
       })
     },
     handleInputConfirm () {
+      if (!this.deviceTag) {
+        return false
+      }
       if (this.deviceInfo.tags) {
         if (this.deviceTag) {
           this.deviceInfo.tags = this.deviceInfo.tags + ',' + this.deviceTag
