@@ -777,9 +777,18 @@ export default {
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
+        let success = 0
         if (!data.data.success) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
+        }
+        if (data.data.data && data.data.data.data) {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            this.$message.error(this.$t(errormsg))
+            return
+          }
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
       }).catch(error => {
