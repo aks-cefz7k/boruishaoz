@@ -292,6 +292,20 @@ $light_gray: #eee;
 }
 
 /********************** 设置kanban样式 ********************/
+.kanbanRing{
+  margin-top:20px;
+  height:42px;
+  line-height:42px;
+  .board-title {
+    float:left;
+    width:25px;
+  }
+  .board-content {
+    float:left;
+    width:22%;
+    margin-left:10px
+  }
+}
 .phase-description {
   border-radius: 4px;
   background: rgb(217, 236, 255);
@@ -921,8 +935,16 @@ border: 1px solid $--border-color-base;
     border-right: 1px solid #e5e5e5;
   }
   .pattern-explain {
-      float: right;
+    float: right;
+    color: $--color-text-regular;
+    .el-checkbox__label {
+      font-size: 16px;
       color: $--color-text-regular;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 22px;
+      letter-spacing: 0px;
+    }
   }
 // 小屏幕打开首页适配样式
   .minifont {

@@ -345,6 +345,7 @@ const zh = {
       'advanceend': '早结束时间',
       'stageConfig': '阶段配置',
       'parameters': '扩展参数配置',
+      'overLap': '跟随相位',
       'plan': '方案',
       'ringConfig': '环配置',
       'stage': '阶段',
