@@ -650,6 +650,7 @@ export default {
   }
   /deep/.el-table .cell {
     overflow: unset;
+    line-height: unset;
   }
   .kanban {
     &.todo {
