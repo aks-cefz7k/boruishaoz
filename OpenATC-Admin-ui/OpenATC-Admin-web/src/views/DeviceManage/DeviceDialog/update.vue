@@ -87,7 +87,7 @@
         </el-form-item>
         <el-form-item
             :label="$t('openatc.devicemanager.IP')"
-            prop="ip" class="ipLabel">
+            prop="ip">
             <el-input
             type="text"
             v-model="deviceInfo.ip"
