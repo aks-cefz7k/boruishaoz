@@ -75,30 +75,39 @@ public class TemplateController {
 
         //使用设备通讯接口获取相位
         MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
-        RESTRet<MessageData> retBase = null;
-        retBase = messageController.postDevsMessage(null, messageData);
+//        RESTRet<MessageData> retBase = null;
+        RESTRet retBase = messageController.postDevsMessage(null, messageData);
 
-        if (retBase.getCode().equals(E_4002.getErrorCode())) {
-            InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_200, retBase);
-            return RESTRetUtils.errorDetialObj(E_4002, devCommError);
+
+        if(! retBase.isSuccess()){
+            if (retBase.getCode().equals(E_4002.getErrorCode())) {
+                InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_200, retBase);
+                return RESTRetUtils.errorDetialObj(E_4002, devCommError);
+            }
+            else if (retBase.getCode().equals(E_4003.getErrorCode())) {
+                InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_301, retBase);
+                return RESTRetUtils.errorDetialObj(E_4003, devCommError);
+            }
+            else if (retBase.getCode().equals(E_4005.getErrorCode())) {
+                InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_200, retBase);
+                return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+            }
+            else{
+                InnerError devCommError = (InnerError) retBase.getData();
+                return RESTRetUtils.errorDetialObj(E_4002, devCommError);
+            }
         }
-        if (retBase.getCode().equals(E_4003.getErrorCode())) {
-            InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_301, retBase);
-            return RESTRetUtils.errorDetialObj(E_4003, devCommError);
-        }
-        if (retBase.getCode().equals(E_4005.getErrorCode())) {
-            InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_200, retBase);
-            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
-        }
+
         if (retBase.getData() == null) {
             return RESTRetUtils.errorDetialObj(E_4005, new InnerError());
         }
-        if (retBase.getData().getData() == null) {
+
+        MessageData responseData = (MessageData) retBase.getData();
+        if (responseData.getData() == null) {
             return RESTRetUtils.errorDetialObj(E_4005, new InnerError());
         }
-
         //返回获取路口类型和相位
-        JsonObject intersectionInfo = templateService.getIntersectionInfo(retBase.getData().getData().getAsJsonObject());
+        JsonObject intersectionInfo = templateService.getIntersectionInfo(responseData.getData().getAsJsonObject());
         return RESTRetUtils.successObj(intersectionInfo);
     }
 
