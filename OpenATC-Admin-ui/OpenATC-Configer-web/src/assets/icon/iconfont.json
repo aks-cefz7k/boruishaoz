@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "27455054",
+      "name": "虚相位",
+      "font_class": "xuxiangwei",
+      "unicode": "e6cd",
+      "unicode_decimal": 59085
+    },
+    {
       "icon_id": "27419588",
       "name": "行人",
       "font_class": "hangren",
