@@ -48,7 +48,8 @@ public class UdpCommunicationStaticPort implements Communication {
     // 先把发送消息的KEY保存在map中，收到消息后，按KEY保存消息内容，再返回给客户端
     private static Map<String, UdpCommunicationStaticPort> messageMap = new HashMap();
     public static ICommHandler hanlder;
-    private static Map<String, ReentrantLock> lockMap = new HashMap();     // 同步锁Map
+//    private static Map<String, ReentrantLock> lockMap = new HashMap();     // 同步锁Map
+//    private ReentrantLock lock;
 //    private static ReentrantLock globalLock = new ReentrantLock();
 
     // 成员变量
@@ -59,7 +60,6 @@ public class UdpCommunicationStaticPort implements Communication {
     private DatagramSocket datagramSocket;
     private int exangeType; // 当前设备的通讯平台
     private Message message;
-    private ReentrantLock lock;
 
     static {
         //创建socket对象,绑定固定端口
@@ -112,11 +112,12 @@ public class UdpCommunicationStaticPort implements Communication {
             packData = message.pack(messageData);
         } catch (UnsupportedEncodingException e) {
             // 打包异常，返回消息打包出错
-            logger.warning("Agent ID:" + agentid + " message pack error!" + e.getMessage());
+            logger.warning("message pack error!" + e.getMessage() + " Agent ID:" + agentid + " MessageData:" + messageData );
             return -2;
         }
         // packData为空，则返回消息不支持
         if (packData == null) {
+            logger.warning("packData is null! Agent ID:" + agentid + " MessageData:" + messageData );
             return -3;
         }
 
@@ -128,16 +129,22 @@ public class UdpCommunicationStaticPort implements Communication {
         else if (exangeType == EXANGE_TYPE_CENTER)
             messageKey = agentid + sendmsgtype;
 
+        // 如果消息map中，已经包含key，则说明上一个消息还未结束
+        if(messageMap.containsKey(messageKey)){
+            logger.warning("Last sendData is not finished! Agent ID:" + agentid + " MessageData:" + messageData );
+            return -4;
+        }
+
         thread = Thread.currentThread();
 
-        // 如果同一个路口的同一种消息同时发送，按顺序进行消息通讯
-        if (lockMap.containsKey(messageKey)) {
-            lock = lockMap.get(messageKey);
-        } else {
-            lock = new ReentrantLock();
-        }
-        lock.lock();
-        lockMap.put(messageKey, lock);
+        // 如果同一个路口的同一种消息同时发送，按顺序进行消息通讯（取消同步锁，同一设备反复访问可能导致服务拒绝响应）
+//        if (lockMap.containsKey(messageKey)) {
+//            lock = lockMap.get(messageKey);
+//        } else {
+//            lock = new ReentrantLock();
+//        }
+//        lock.lock();
+//        lockMap.put(messageKey, lock);
 
         try {
             //socket的发送地址和端口
@@ -183,11 +190,10 @@ public class UdpCommunicationStaticPort implements Communication {
 //                    logger.info("Udp Receive Response Thread#" + thread.getId() + " KEY:" + messageKey + " Agentid:" + responceData.getAgentid() + " Devid:" + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
             }
         }
-
-
         messageMap.remove(messageKey);
-        lock.unlock();
-        lockMap.remove(messageKey);
+
+//        lock.unlock();
+//        lockMap.remove(messageKey);
         return responceData;
     }
 

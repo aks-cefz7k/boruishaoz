@@ -169,6 +169,10 @@ public class CommClient {
             InnerError devCommError = RESTRetUtils.innerErrorObj(agentId, E_107, null);
             return CreateErrorRequestData(agentId,devCommError);
         }
+        else if(sendrev == -4){
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId, E_110, null);
+            return CreateErrorRequestData(agentId,devCommError);
+        }
         else if(sendrev != 0){
             log.warning("Comm Send Data error!" + sendMsg);
             InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_204,null );
