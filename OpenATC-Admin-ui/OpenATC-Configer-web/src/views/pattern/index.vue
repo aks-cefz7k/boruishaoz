@@ -693,7 +693,7 @@ export default {
       // if (this.contrloType) {
       for (let i = 0; i < stageChange.length; i++) {
         let stage = JSON.parse(JSON.stringify(stageChange[i]))
-        let stageItem = this.getStageItem(stage.phases, rings, i, stageChange)
+        let stageItem = this.getStageItem(stage.phases ? stage.phases : stage.stages, rings, i, stageChange)
         stagesList.push(JSON.parse(JSON.stringify(stageItem)))
       }
       // } else {
