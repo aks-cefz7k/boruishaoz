@@ -29,13 +29,13 @@
         </template>
       </el-button>
     </div>
-    <div class="text item" style="border:0px solid red;height:12px;">
+    <div class="text item" style="border:0px solid red;">
       <el-row :gutter="20">
         <div class="grid-content-label" style="display:inline-block;margin-right:10px;margin-left:10px;">
           {{ $t("openatc.dutyroute.executionway") }} :
         </div>
         <div class="grid-content bg-purple" style="display:inline-block;margin-right:80px;">
-          {{ node.controlName }}
+          {{ getContent(node) }}
         </div>
         <div class="grid-content-label" style="display:inline-block;margin-right:10px;">
           {{ $t("openatc.dutyroute.lasttime") }} :
@@ -43,32 +43,6 @@
         <div class="grid-content bg-purple" style="display:inline-block;margin-right:10px;">
           {{ node.totaltime }}
         </div>
-        <!-- <el-col :span="8">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t("openatc.dutyroute.executionway") }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div class="grid-content bg-purple">
-                {{ node.controlName }}
-              </div>
-            </el-col>
-          </el-row>
-        </el-col> -->
-        <!-- <el-col :span="16">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t("openatc.dutyroute.lasttime") }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <template class="grid-content bg-purple">{{ node.totaltime }}</template>
-            </el-col>
-          </el-row>
-        </el-col> -->
       </el-row>
     </div>
   </el-card>
@@ -77,6 +51,7 @@
 <script>
 import { ExecuteViproute } from '@/api/service'
 import { getMessageByCode } from '@/utils/responseMessage'
+import ServiceUtil from '../ServiceUtil.js'
 export default {
   name: 'nodeCard',
   props: {
@@ -93,6 +68,9 @@ export default {
       isShow: true,
       isBtnDisabled: false
     }
+  },
+  created () {
+    this.serviceUtil = new ServiceUtil()
   },
   methods: {
     onCloseClick () {
@@ -154,8 +132,14 @@ export default {
           type: 'danger'
         }
       }
+    },
+    getContent (row) {
+      let res = this.serviceUtil.getContent(row)
+      // if (res === '') {
+      //   res = row.controlName
+      // }
+      return res
     }
-
   }
 }
 </script>

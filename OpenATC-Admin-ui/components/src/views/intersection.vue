@@ -26,7 +26,7 @@ export default {
       Token: 'eyJraWQiOiIxNjQ5MzM4NzA5MTA0IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczNTczODcwOSwiaWF0IjoxNjQ5MzM4NzA5fQ.JDSkpT1SbB61dEKvorhVdZJHKJzoQZEY5DPKHs1Imo0',
       boxVisible: false,
       dialogWidth: '80%',
-      agentId: '10001-928'
+      agentId: '40003-132'
     }
   },
   methods: {

@@ -3,6 +3,7 @@ import XRDDirSelector from './components/XRDDirSelector/index'
 import IntersectionWithInterface from './components/IntersectionWithInterface/index'
 import IntersectionMap from './components/IntersectionMap/index'
 import SchemeConfig from './components/SchemeConfig/index'
+import lockingPhaselControlModal from './components/SchemeConfig/lockingPhaselControlModal/index'
 import FaultDetailModal from './components/FaultDetailModal/index'
 import CommonKanban from './components/CommonKanban/index'
 import patternList from './components/patternList/index'
@@ -21,6 +22,7 @@ const components = {
   IntersectionWithInterface,
   IntersectionMap,
   SchemeConfig,
+  lockingPhaselControlModal,
   FaultDetailModal,
   PatternStatus,
   BoardCard,

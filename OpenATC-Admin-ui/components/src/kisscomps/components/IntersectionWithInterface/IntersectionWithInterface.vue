@@ -190,7 +190,7 @@ export default {
     },
     queryDevParams () {
       let _this = this
-      queryDevice().then(res => {
+      queryDevice(this.agentid).then(res => {
         if (!res.data.success) {
           _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
           return

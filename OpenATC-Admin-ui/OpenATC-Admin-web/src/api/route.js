@@ -49,7 +49,7 @@ export const DeleteRoute = (id) => {
   return api.Send({}, {}, paramList)
 }
 
-export function getTscControl (agentid) {
+export function getPatternList (agentid) {
   let api = new Authapi('getTscControl')
   let data = {}
   data.agentid = agentid
