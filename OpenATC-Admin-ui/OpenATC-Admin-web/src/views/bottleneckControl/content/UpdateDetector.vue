@@ -11,9 +11,9 @@
  **/
 <template>
   <div class="updateDecForm">
-    <el-form ref="form" :model="formData" label-width="20%">
-      <el-form-item :label="$t('openatc.bottleneckcontrol.detectorid')">
-        <el-input v-model="formData.overflowDetectorId" autocomplete="off" :disabled="!!editData"></el-input>
+    <el-form ref="detectorform" :model="formData" label-width="23%" :rules="rules">
+      <el-form-item :label="$t('openatc.bottleneckcontrol.detectorname')" prop="description">
+        <el-input v-model="formData.description" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item :label="$t('openatc.bottleneckcontrol.type')">
         <el-select v-model="formData.type" size="small" style="width:100%">
@@ -25,9 +25,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('openatc.bottleneckcontrol.desc')">
-        <el-input type="textarea" v-model="formData.description"></el-input>
-      </el-form-item>
+
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="onSubmit" size="small" style="margin-left: 10px;">{{$t('openatc.button.OK')}}</el-button>
@@ -48,9 +46,9 @@ export default {
     return {
       formData: {},
       temp: {
-        id: '',
+        // id: '',
         type: '',
-        description: null
+        description: ''
       },
       typeList: [
         {
@@ -61,12 +59,24 @@ export default {
           label: this.$t('openatc.bottleneckcontrol.queue'),
           value: '2'
         }
-      ]
+      ],
+      rules: {
+        description: [
+          { required: true, message: this.$t('openatc.devicemanager.entername'), trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
     onSubmit () {
-      this.$emit('submitForm', this.formData)
+      this.$refs.detectorform.validate((valid) => {
+        if (valid) {
+          this.$emit('submitForm', this.formData)
+        } else {
+          this.$message.error(this.$t('openatc.devicemanager.enterrequired'))
+          return false
+        }
+      })
     },
     cancel () {
       this.$emit('closeModal')
