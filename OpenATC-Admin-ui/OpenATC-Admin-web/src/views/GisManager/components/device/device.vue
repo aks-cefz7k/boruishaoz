@@ -32,14 +32,13 @@
             prop="agentid"
             :label="$t('openatc.devicemanager.crossid')"
             align="center"
-            width="80"
+            width="130"
           >
           </el-table-column>
           <el-table-column
             prop="name"
             :label="$t('openatc.greenwaveoptimize.devicename')"
             align="center"
-            width="80"
           >
           </el-table-column>
           <el-table-column
@@ -62,6 +61,7 @@
           <el-table-column
             :label="$t('openatc.greenwaveoptimize.operation')"
             align="center"
+            width="100"
           >
             <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">{{
