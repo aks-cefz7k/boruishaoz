@@ -229,6 +229,23 @@ public class AscsDao {
         return true;
     }
 
+    public AscsBaseModel getAscsByGBID(String id) throws EnumConstantNotPresentException {
+
+        AscsBaseModel ascsBaseModel = null;
+        String sql =
+                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '1 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE gbid ='"
+                        + id + "'";
+        List<AscsBaseModel> listAscs = getDevByPara(sql);
+
+        if (listAscs.size() != 1) {
+            ascsBaseModel = listAscs.get(0);
+        }else{
+            logger.warning("Search GBID devs error :" + listAscs);
+        }
+
+        return ascsBaseModel;
+    }
+
 
     public AscsBaseModel getAscsByID(String id) throws EnumConstantNotPresentException {
 
@@ -377,10 +394,11 @@ public class AscsDao {
 
     public AscsBaseModel insertDev(AscsBaseModel ascs) {
 
-        String sql = "INSERT INTO dev(agentid,thirdplatformid,name,descs,type,protocol,sockettype,firm,platform,geometry,tags,jsonparam) VALUES (?,?,?,?,?,?,?,?,?,?,?,to_json(?::json))";
+        String sql = "INSERT INTO dev(agentid,thirdplatformid,gbid,name,descs,type,protocol,sockettype,firm,platform,geometry,tags,jsonparam) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,to_json(?::json))";
         jdbcTemplate.update(sql,
                 ascs.getAgentid(),
                 ascs.getThirdplatformid(),
+                ascs.getGbid(),
                 ascs.getName(),
                 ascs.getDescs(),
                 ascs.getType(),
@@ -412,13 +430,14 @@ public class AscsDao {
         long count = getCountByAgentid(ascs.getAgentid());
         //ID已存在，更新注册信息,不存在，返回；
         if (count == 0) return 0;
-        String sql = "update dev set thirdplatformid=?,platform=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,geometry= ?,jsonparam=(to_json(?::json)),code=?,sockettype=?,tags=? where agentid=?";
+        String sql = "update dev set thirdplatformid=?,gbid=?,platform=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,geometry= ?,jsonparam=(to_json(?::json)),code=?,sockettype=?,tags=? where agentid=?";
         String geometry = null;
         if (ascs.getGeometry() != null) {
             geometry = ascs.getGeometry().toString();
         }
         int res = jdbcTemplate.update(sql,
                 ascs.getThirdplatformid(),
+                ascs.getGbid(),
                 ascs.getPlatform(),
                 ascs.getFirm(),
                 ascs.getName(),

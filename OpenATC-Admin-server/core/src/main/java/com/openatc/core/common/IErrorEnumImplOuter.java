@@ -89,6 +89,9 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_8002("8002", "device is found By CoordinateRoute"),
     E_8003("8003", "device is found By VipRoute"),
     E_8004("8004", "Agentid is duplicated"),
+    E_8005("8005", "Cannot find DictConfig"),
+    E_8006("8006", "Platform is not unique!"),
+    E_8007("8007", "IP and port of platform is null!"),
 
     //瓶颈控制相关
     E_9001("9001", "Overflow control failed"),

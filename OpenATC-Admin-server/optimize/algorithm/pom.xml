@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.openatc.admin</groupId>
         <artifactId>optimize</artifactId>
-        <version>2.1.3-snapshot</version>
+        <version>2.2.0-snapshot</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>algorithm</artifactId>
