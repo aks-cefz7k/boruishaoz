@@ -118,7 +118,6 @@
               :patternId="scope.row.id"
               :patternStatusList="scope.row.rings"
               :cycles="scope.row.cycle"
-              :isPhase="false"
               >
               </BoardCard>
             </div>
@@ -469,7 +468,7 @@ export default {
       let currPattern = this.patternList[index]
       // this.handleCurrentChange(currPattern)
       // this.currentPattern = this.patternList[index]
-      this.getRowStages(currPattern.rings, index + 1)
+      this.getRowStages(currPattern.rings, this.patternList[index].id)
     },
     handleClick (tab, event) {
       if (tab.paneName === 'stage') {

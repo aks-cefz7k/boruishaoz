@@ -57,11 +57,19 @@ export default {
       newCycle: this.cycles,
       patternIds: this.patternId,
       newPatterns: [],
+      newList: [],
+      controlDatas: this.controlData,
       max: '',
       pattern: this.patternStatusList
     }
   },
   props: {
+    phaseList: {
+      type: Array
+    },
+    controlData: {
+      type: Object
+    },
     cycle: {
       type: Number
     },
@@ -93,6 +101,15 @@ export default {
     }
   },
   watch: {
+    controlData: {
+      handler: function (val, oldVal) {
+        this.controlDatas = this.controlData
+        this.handlePatternData()
+        this.handleBarrierHeight() // 计算屏障高度
+      },
+      // 深度观察监听
+      deep: true
+    },
     patternId: {
       handler: function (val, oldVal) {
         this.patternIds = this.patternId
@@ -123,7 +140,7 @@ export default {
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
-    if (this.patternStatusList && this.newCycle) {
+    if (this.patternStatusList && this.newCycle && !this.controlData) {
       this.handleCurrentChange(this.patternStatusList)
       this.handleBarrierHeight()
     }
@@ -139,6 +156,39 @@ export default {
     }
   },
   methods: {
+    handlePatternData () {
+      this.newList = []
+      if (Object.keys(this.controlDatas).length === 0 || this.phaseList.length === 0) return
+      if (!this.controlDatas.phase) return
+      let cycle = this.controlDatas.cycle
+      for (let rings of this.controlDatas.rings) {
+        let phase = this.controlDatas.phase
+        let list = []
+        for (let sequ of rings.sequence) {
+          let obj = {}
+          obj.id = sequ
+          let split = phase.filter((item) => {
+            return item.id === sequ
+          })[0].split
+          let currPhase = this.phaseList.filter((item) => {
+            return item.id === sequ
+          })[0]
+          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
+          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
+          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
+          obj.split = split
+          obj.direction = currPhase.direction.map(item => {
+            return {
+              id: item,
+              color: '#454545'
+            }
+          })
+          list.push(obj)
+        }
+        this.newList.push(list)
+        this.pattern = this.newList
+      }
+    },
     handleBarrierHeight () { // 屏障高度
       let patternLength = this.pattern.length
       this.barrierHeight = (patternLength * 35 + 21) + 'px'
