@@ -180,11 +180,13 @@ export default {
                 this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
               }
-              success = data.data.data.data.success
-              if (success !== 0) {
-                let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
-                this.$message.error(this.$t(errormsg))
-                return
+              if (data.data.data && data.data.data.data) {
+                success = data.data.data.data.success
+                if (success !== 0) {
+                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  this.$message.error(this.$t(errormsg))
+                  return
+                }
               }
               this.$message({
                 type: 'success',
@@ -219,11 +221,13 @@ export default {
                 this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
               }
-              success = data.data.data.data.success
-              if (success !== 0) {
-                let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
-                this.$message.error(this.$t(errormsg))
-                return
+              if (data.data.data && data.data.data.data) {
+                success = data.data.data.data.success
+                if (success !== 0) {
+                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  this.$message.error(this.$t(errormsg))
+                  return
+                }
               }
               this.$message({
                 type: 'success',

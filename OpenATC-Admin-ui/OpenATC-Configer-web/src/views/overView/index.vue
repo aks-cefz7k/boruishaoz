@@ -1016,11 +1016,13 @@ export default {
           that.$message.error(getMessageByCode(data.data.code, that.$i18n.locale))
           return
         }
-        success = data.data.data.data.success
-        if (success !== 0) {
-          let errormsg = 'edge.overview.putTscControlError' + success
-          that.$message.error(this.$t(errormsg))
-          return
+        if (data.data.data && data.data.data.data) {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            that.$message.error(this.$t(errormsg))
+            return
+          }
         }
         // this.closeManualModal()
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {

@@ -423,16 +423,16 @@ export default {
         if (!data.data.success) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
-        } else {
+        }
+        if (data.data.data && data.data.data.data) {
           success = data.data.data.data.success
           if (success !== 0) {
             let errormsg = 'edge.overview.putTscControlError' + success
             this.$message.error(this.$t(errormsg))
+            return
           }
         }
-        if (success === 0) {
-          this.$message.success(this.$t('edge.common.download'))
-        }
+        this.$message.success(this.$t('edge.common.download'))
       }).catch(error => {
         this.$message.error(error)
       })
