@@ -697,14 +697,15 @@
 .openatc-device {    
   margin-top: 15px;
   .tag-container {
-    position: absolute;
-    // float: left;
-    max-width: 70%;
-    overflow: hidden;
+    // position: absolute;
+    float: left;
+    max-width: 34%;
+    // overflow: hidden;
   }
     .filter-container {
       float: right;
-      padding-left: 400px;
+      // padding-left: 400px;
+      max-width: 66%;
       margin-top: 10px;
       .filter {
         float: left;
@@ -1585,8 +1586,8 @@
   color: $--color-white;
 }
 .tagsList {
-  height: 84px;
-  padding: 24px 29px;
+  // height: 84px;
+  padding: 16px 0 16px 20px;
   box-sizing: border-box;
   .el-tag {
     cursor: pointer;
