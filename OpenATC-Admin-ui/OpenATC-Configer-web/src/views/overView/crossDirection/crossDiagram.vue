@@ -13,7 +13,7 @@
   <div class="crossImg">
     <!-- 右行道路 B-->
     <div class="right-dir-road" v-if="roadDir === 'right'">
-      <div class="centerText" v-if="crossType !== 'Customroads'" :class="{'countdownBg': isLoaded}">
+      <div class="centerText" v-if="crossType !== 'Customroads' && isHasPhase" :class="{'countdownBg': isLoaded}">
       <!-- 相位倒计时 -->
       <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
         <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
@@ -205,21 +205,17 @@ export default {
         this.compLanePhaseData = JSON.parse(JSON.stringify(this.LanePhaseData))
         this.compSidewalkPhaseData = JSON.parse(JSON.stringify(this.sidewalkPhaseData))
         this.comdireBusPhaseData = JSON.parse(JSON.stringify(this.busPhaseData))
+        if (val.control === 1 || val.control === 2 || val.control === 3) {
+          // 黄闪、全红、关灯属于特殊控制，优先级最高，直接改变灯色，不用判断phase里的type，也不需要考虑跟随相位的灯色优先级
+          this.SpecialControl(val)
+          return
+        }
         if (!val.phase && !this.overlapStatusList) {
-          // 黄闪、全红、关灯状态下，相位字段(跟随相位字段)不存在，此处根据control字段控制车道相位颜色
-          switch (val.control) {
-            case 1: this.handleSpecialControlStatus('黄闪')
-              break
-            case 2: this.handleSpecialControlStatus('全红')
-              break
-            case 3: this.handleSpecialControlStatus('关灯')
-              break
-            default: this.handleSpecialControlStatus('默认')
-          }
+          // 非特殊控制，相位和跟随相位不存在的情况下，灯色恢复默认
+          this.handleSpecialControlStatus('默认')
           this.isHasPhase = false
           return
         }
-
         this.curPhase = val.current_phase
         this.isHasPhase = true
         this.createPhaseStatusMap()
@@ -321,6 +317,18 @@ export default {
       this.$nextTick(() => {
         this.resetflag = true
       })
+    },
+    SpecialControl (data) {
+      switch (data.control) {
+        case 1: this.handleSpecialControlStatus('黄闪')
+          break
+        case 2: this.handleSpecialControlStatus('全红')
+          break
+        case 3: this.handleSpecialControlStatus('关灯')
+          break
+        default: this.handleSpecialControlStatus('默认')
+      }
+      this.isHasPhase = false
     },
     handleDefaultStatus () {
       // 恢复默认状态

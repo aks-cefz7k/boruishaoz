@@ -34,20 +34,20 @@
                     <span class="toJump" style="color: red;">{{chartData[2].value}}</span>
                      <!-- @click="handleJumpToCrossMgr('fault') -->
                     <span>/</span>
-                    <span class="toJump" @click="handleJumpToCrossMgr('UP')">{{chartData[0].value}}</span>
+                    <span class="toJump" @click="handleJumpToCrossMgr('online')">{{chartData[0].value}}</span>
                   </div>
                   <div class="stateGroup">
                     <div class="state toJump">{{$t('openatc.home.fault')}}</div>
                     <div class="state toJump" style="margin: 0 5px;"> / </div>
-                    <div class="state toJump" @click="handleJumpToCrossMgr('UP')">{{$t('openatc.home.online')}}</div>
+                    <div class="state toJump" @click="handleJumpToCrossMgr('online')">{{$t('openatc.home.online')}}</div>
                   </div>
               </div>
           </div>
           <div class="devsDown" :style="{ height: rightPartHeight }">
               <div class="Img downImg"></div>
               <div class="desc">
-                  <div class="num toJump" @click="handleJumpToCrossMgr('DOWN')">{{chartData[1].value}}</div>
-                  <div class="state offlinestate toJump" @click="handleJumpToCrossMgr('DOWN')">{{$t('openatc.home.offline')}}</div>
+                  <div class="num toJump" @click="handleJumpToCrossMgr('offline')">{{chartData[1].value}}</div>
+                  <div class="state offlinestate toJump" @click="handleJumpToCrossMgr('offline')">{{$t('openatc.home.offline')}}</div>
               </div>
           </div>
       </div>
