@@ -1,4 +1,4 @@
-import i18n from '@/i18n/index.js'
+import i18n from '../i18n/index'
 import en from '../i18n/language/en'
 import zh from '../i18n/language/zh'
 

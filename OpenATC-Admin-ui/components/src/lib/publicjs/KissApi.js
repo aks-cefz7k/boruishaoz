@@ -14,7 +14,7 @@ import {
 } from './HttpurlMgr'
 import axios from 'axios'
 import * as localStorge from './localStorage'
-import { removeToken } from '@/utils/auth'
+import { removeToken } from '../../utils/auth'
 
 export const getAxios = () => {
   return axios

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getLanguage } from '@/utils/auth'
+import { getLanguage } from './utils/auth.js'
 export default {
   name: 'App',
   mounted: function () {

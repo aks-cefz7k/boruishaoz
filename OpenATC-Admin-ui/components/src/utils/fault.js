@@ -9,7 +9,7 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-import i18n from '@/i18n/index.js'
+import i18n from '../i18n/index'
 import {faultCodeMap,
   faultCodeMapEn,
   TZParamSubtypeMap,

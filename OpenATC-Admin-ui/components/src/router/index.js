@@ -10,6 +10,13 @@ export default new Router({
       component: (resolve) => {
         require(['@/views/home'], resolve)
       }
+    },
+    {
+      path: '/demo',
+      name: 'demo',
+      component: (resolve) => {
+        require(['@/views/intersection'], resolve)
+      }
     }
   ]
 })
