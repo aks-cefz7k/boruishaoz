@@ -186,7 +186,8 @@
           <transition name="fade-left" mode="out-in"
           enter-active-class="animated fadeInLeft"
           leave-active-class="animated fadeOutLeft">
-            <div style="position: absolute;width: 100%;" v-show="!isOperation">
+
+            <div class="right-control-part" style="position: absolute;width: 100%;" v-show="!isOperation">
               <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
               <div class="cross-module">
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
@@ -217,14 +218,14 @@
                 <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
               </div>
               <div class="cross-module">
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
-                </div>
+                </div> -->
                 <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div> -->
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
-                </div>
+                </div> -->
 
                 <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
@@ -234,13 +235,69 @@
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
                 </div> -->
 
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
                 </div>
 
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
+                </div> -->
+
+                <!-- 信号机控制状态模块 Start-->
+                <div class="controlStatePart">
+                  <div class="bigPart">
+                    <el-row :gutter="7">
+                      <el-col :span="12">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.mode}}</div>
+                          <div class="name">{{$t('edge.overview.controlmodel')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
+                          <div class="name">{{$t('edge.overview.curModel')}}</div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <div class="smallPart">
+                    <el-row :gutter="7">
+                      <el-col :span="8" v-if="controlData.patternid !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.patternid}}</div>
+                          <div class="name">{{$t('edge.overview.controlnumber')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="responseTime !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{responseTime + ' ms'}}</div>
+                          <div class="name">{{$t('edge.overview.responseTime')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="controlData.duration !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.duration + ' s'}}</div>
+                          <div class="name">{{$t('edge.overview.duration')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="controlData.delay !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{controlData.delay}}</div>
+                          <div class="name">{{$t('edge.overview.delay')}}</div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" v-if="currentStage !== undefined">
+                        <div class="grid-content bg-base">
+                          <div class="value">{{currentStage}}</div>
+                          <div class="name">{{$t('edge.overview.curStage')}}</div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
                 </div>
+                <!-- 信号机控制状态模块 End-->
+
                 <div class="cross-content" v-show="closePhase && closePhase.length > 0">
                   <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
                 </div>
