@@ -102,11 +102,11 @@ public class TokenUtil {
             return jwt.getSubject();
         } catch (JWTVerificationException exception) {
             //Invalid signature/claims
-            logger.severe("getUsernameFromToken: " + exception.getMessage());
+            logger.warning("getUsernameFromToken: " + exception.getMessage());
             return null;
         } catch (NullPointerException e) {
             //Invalid signature/claims
-            logger.severe("getUsernameFromToken: " + e.getMessage());
+            logger.warning("getUsernameFromToken: " + e.getMessage());
             return null;
         }
     }
@@ -135,7 +135,7 @@ public class TokenUtil {
             return jwt.getExpiresAt();
         } catch (JWTVerificationException exception) {
             //Invalid signature/claims
-            logger.severe("getExpirationDateFromToken: " + exception.getMessage());
+            logger.warning("getExpirationDateFromToken: " + exception.getMessage());
             return null;
         }
     }
@@ -156,11 +156,11 @@ public class TokenUtil {
             return jwt.getKeyId();
         } catch (JWTVerificationException exception) {
             //Invalid signature/claims
-            logger.severe("getIdFromToken: " + exception.getMessage());
+            logger.warning("getIdFromToken: " + exception.getMessage());
             return null;
         } catch (NullPointerException e) {
             //Invalid signature/claims
-            logger.severe("getIdFromToken: " + e.getMessage());
+            logger.warning("getIdFromToken: " + e.getMessage());
             return null;
         }
     }

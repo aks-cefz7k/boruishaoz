@@ -16,6 +16,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.ControlInterrupt;
 import com.openatc.agent.model.THisParams;
+import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
@@ -29,6 +30,7 @@ import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.ControlPattern;
 import com.openatc.model.model.StatusPattern;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,10 +68,6 @@ public class MessageController {
 
     @Autowired(required = false)
     protected AscsDao mDao;
-
-    @Autowired
-    protected TokenUtil tokenUtil;
-
 
     Gson gson = new Gson();
 
@@ -122,7 +120,8 @@ public class MessageController {
             }
 //            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
 
-            THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, token);
+            User subject = (User)SecurityUtils.getSubject().getPrincipal();
+            THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, subject);
             hisParamService.insertHisParam(tParams);
             return responceData;
 
@@ -191,17 +190,16 @@ public class MessageController {
      * @Title: CreateHisParam
      * @Description: 生成一条操作记录
      */
-    private THisParams CreateHisParam(MessageData requestData, RESTRet res, String ip, String token) {
-        logger.info( "Create History Param - requestData： " + requestData + " token：" + token);
+    private THisParams CreateHisParam(MessageData requestData, RESTRet res, String ip, User user) {
+//        logger.info( "Create History Param - requestData： " + requestData + " user：" + user);
 
         THisParams hisParams = new THisParams();
-        String username = tokenUtil.getUsernameFromToken(token);
 
         //操作者
-        if(username == null){
+        if(user == null){
             hisParams.setOperator("");
         } else {
-            hisParams.setOperator(username);
+            hisParams.setOperator(user.getUser_name());
         }
         //操作时间自动生成
         //操作源地址
@@ -222,14 +220,15 @@ public class MessageController {
                 //消息描述
                 String operation = responceData.getOperation();
                 hisParams.setStatus(operation);
-                //响应内容
-                hisParams.setResponsebody(responceData.getData().toString());
+                //响应内容 todo 这里不一定有值，可能是空指针
+                if(responceData.getData() != null)
+                    hisParams.setResponsebody(responceData.getData().toString());
                 //消息子类型
                 int subInfoType = 0;
                 if (operation.equals("set-response")) {
-                    //控制消息，需要判断子类型
+                    //控制消息，需要判断子类型 todo 这里不一定有值，可能是空指针
                     if(requestData.getInfotype().equals(CosntDataDefine.ControlPattern))
-                        subInfoType = responceData.getData().getAsJsonObject().get("control").getAsInt();
+                        subInfoType = requestData.getData().getAsJsonObject().get("control").getAsInt();
                 }
                 hisParams.setSubInfoType(subInfoType);
                 //请求错误码

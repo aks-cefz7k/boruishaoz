@@ -10,8 +10,8 @@ import lombok.Data;
 @Data
 public class PlanTime {
     private Integer id;
-    private Integer startHour = 0;
-    private Integer startMinute = 0;
+    private Integer hour = 0;
+    private Integer minute = 0;
     private Integer pattern;
     private Integer control;
 }

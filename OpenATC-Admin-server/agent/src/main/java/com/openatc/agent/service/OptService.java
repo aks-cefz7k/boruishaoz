@@ -70,11 +70,14 @@ public class OptService {
         if(restRet.isSuccess()){
             MessageData messageData = (MessageData) restRet.getData();
             JsonObject data = messageData.getData().getAsJsonObject();
-            if(data.get("return").getAsString().equals("success")){
-                JsonObject responsedata = new JsonObject();
-                responsedata.addProperty("success",0);
-                messageData.setData(responsedata);
+            if(data.get("return")!= null){
+                if(data.get("return").getAsString().equals("success")){
+                    JsonObject responsedata = new JsonObject();
+                    responsedata.addProperty("success",0);
+                    messageData.setData(responsedata);
+                }
             }
+
         }
 
         return restRet;
