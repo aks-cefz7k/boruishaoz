@@ -395,7 +395,7 @@ export default {
         return false
       }
       if (this.deviceInfo.tags) {
-        if (this.deviceTag) {
+        if (this.deviceTag && !this.deviceInfo.tags.includes(this.deviceTag)) {
           this.deviceInfo.tags = this.deviceInfo.tags + ',' + this.deviceTag
         }
         this.addDicts()
