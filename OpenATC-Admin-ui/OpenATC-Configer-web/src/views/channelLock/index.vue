@@ -128,7 +128,7 @@
               <el-option
                 v-for="item in channelstatusList"
                 :key="item.value"
-                :label="item.label"
+                :label="$t('edge.channellock.statu' + item.id)"
                 :value="item.value">
               </el-option>
             </el-select>
@@ -154,26 +154,27 @@ export default {
       channelList: [],
       id: 1,
       channelstatusList: [{
-        label: '默认',
-        value: 0
+        value: 'default',
+        //  label: '默认',
+        id: '1'
       }, {
-        label: '红灯',
-        value: 1
+        value: 'red',
+        id: '2'
       }, {
-        label: '黄灯',
-        value: 2
+        value: 'yellow',
+        id: '3'
       }, {
-        label: '绿灯',
-        value: 3
+        value: 'green',
+        id: '4'
       }, {
-        label: '绿闪',
-        value: 4
+        value: 'greenflash',
+        id: '5'
       }, {
-        label: '灭灯',
-        value: 5
+        value: 'off',
+        id: '6'
       }, {
-        label: '红闪',
-        value: 6
+        value: 'redflash',
+        id: '7'
       }],
       HoursOption: [{
         value: 0,

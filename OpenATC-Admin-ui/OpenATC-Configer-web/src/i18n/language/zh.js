@@ -438,6 +438,13 @@ const zh = {
       'channel': '通道',
       'channelinfo': '通道信息',
       'status': '状态',
+      'statu1': '默认',
+      'statu2': '红灯',
+      'statu3': '黄灯',
+      'statu4': '绿灯',
+      'statu5': '绿闪',
+      'statu6': '灭灯',
+      'statu7': '红闪',
       'maxlength': '最多添加24个通道锁定记录!'
     },
     'channelControl': {
@@ -520,6 +527,8 @@ const zh = {
       'startOrderParams': '启动时序参数 ',
       'netcardInfo': '网络信息: ',
       'stepType': '步进类型',
+      'step0': '阶段',
+      'step1': '色步',
       'seeCutEffect': '查看剪断效果',
       'siteIdLimit': '地址码规定范围是 0 ~ 99999',
       'siteIdCutEffect': '地址码剪断效果',
