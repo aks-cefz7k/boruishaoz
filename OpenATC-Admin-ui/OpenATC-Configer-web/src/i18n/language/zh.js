@@ -63,6 +63,7 @@ const zh = {
     'main': {
       'main': '目录',
       'home': '首页',
+      'save': '保存',
       'logout': '登出',
       'upload': '上载',
       'download': '下载',
@@ -799,6 +800,7 @@ const zh = {
       'query': '查询',
       'cancel': '取消',
       'add': '添加',
+      'save': '参数保存成功!',
       'delete': '删除',
       'clone': '克隆',
       'deleteall': '全部删除',

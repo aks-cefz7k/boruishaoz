@@ -63,6 +63,7 @@ const en = {
     'main': {
       'main': 'Main',
       'home': 'Home',
+      'save': 'Save',
       'logout': 'LogOut',
       'upload': 'Upload',
       'download': 'Download',
@@ -799,6 +800,7 @@ const en = {
       'ringStyle': 'Ring Style',
       'stageStyle': 'Stage Style',
       'query': 'Query',
+      'save': 'Save Success!',
       'cancel': 'Cancel',
       'add': 'Add',
       'delete': 'Delete',

@@ -272,7 +272,6 @@ export default {
       const globalParamModel = this.$store.getters.globalParamModel
       let pattern = globalParamModel.getParamsByType('patternList')
       for (let i = 0; i < pattern.length; i++) {
-        // globalParamModel.getParamsByType('patternList')[i].type = ''
         this.handleStageData(pattern[i].rings, pattern[i].id, pattern[i].stagesList)
       }
     },
@@ -285,7 +284,6 @@ export default {
       let pattern = globalParamModel.getParamsByType('patternList')
       for (let i = 0; i < pattern.length; i++) {
         globalParamModel.getParamsByType('patternList')[i].cycle = this.getMaxCycle(pattern[i])
-        globalParamModel.getParamsByType('patternList')[i].type = 'stage'
         this.handleStageData(pattern[i].rings, pattern[i].id, pattern[i].stagesList)
       }
     },
@@ -689,22 +687,13 @@ export default {
       for (let i = this.stateList.length - 1; i >= 1; i--) {
         this.narr.push(this.stateList[i] - this.stateList[i - 1])
       }
+      // newPhaselist
       this.narr.reverse()// 阶段差
-      // if (this.contrloType) {
       for (let i = 0; i < stageChange.length; i++) {
         let stage = JSON.parse(JSON.stringify(stageChange[i]))
         let stageItem = this.getStageItem(stage.phases ? stage.phases : stage.stages, rings, i, stageChange)
         stagesList.push(JSON.parse(JSON.stringify(stageItem)))
       }
-      // } else {
-      //   for (let i = 0; i < newPhaselist.length; i++) {
-      //     let stage = JSON.parse(JSON.stringify(newPhaselist[i]))
-      //     let stageItem = this.getStageItem(stage, rings, i, stageChange)
-      //     stagesList.push(JSON.parse(JSON.stringify(stageItem)))
-      //     debugger
-      //   }
-      // }
-
       patternList.map(item => { // 添加特征参数stage
         if (item.id === id) {
           item.stagesList = JSON.parse(JSON.stringify(stagesList))

@@ -50,6 +50,11 @@
   "method": "post"
 },
 {
+  "key": "saveTscParam",
+  "url": "/feature/savefeature",
+  "method": "post"
+},
+{
   "key": "checkCode",
   "url": "/md5",
   "method": "post"
