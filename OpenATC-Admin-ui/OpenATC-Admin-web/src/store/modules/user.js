@@ -13,7 +13,7 @@ import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken, getHost, setHost } from '@/utils/auth'
 // import axios from 'axios'
 
-const urlMgr = require('edgebase-front/src/lib/publicjs/HttpurlMgr')
+const urlMgr = require('@openatc/edgebase-front/src/lib/publicjs/HttpurlMgr')
 let data = require('../../../static/apiconfig.json')
 urlMgr.HttpUrlMgr.init(data)
 if (getHost() === null || getHost() === undefined || getHost() === '') {
