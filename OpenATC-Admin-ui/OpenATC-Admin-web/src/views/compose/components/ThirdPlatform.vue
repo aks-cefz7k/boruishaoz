@@ -24,7 +24,7 @@
             @click="handleAdd">{{$t('openatc.common.add')}}</el-button>
       <el-dialog
         width="33%"
-        :title="isEdit ? $t('openatc.common.add') : $t('openatc.common.edit')"
+        :title="isEdit ? $t('openatc.common.edit') : $t('openatc.common.add')"
         :visible.sync="innerVisible"
         append-to-body>
         <el-form ref="configUpdate" :model="innerForm">

@@ -171,7 +171,7 @@
         <el-form-item
             :label="$t('openatc.devicemanager.platform')"
             prop="platform">
-            <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%" :disabled="platformCheck">
+            <el-select v-model="deviceInfo.platform" @focus="onPlatFocus" placeholder="" style="width:100%" :disabled="platformCheck">
                 <el-option v-for="firm in platformList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
             </el-select>
         </el-form-item>
@@ -371,7 +371,6 @@ export default {
   },
   created () {
     // this.getDicts()
-    this.getAllPlatform()
   },
   methods: {
     getDicts () {
@@ -655,6 +654,9 @@ export default {
           this.platformList.push(record)
         }
       })
+    },
+    onPlatFocus () {
+      this.getAllPlatform()
     }
   }
 }
