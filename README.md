@@ -315,22 +315,22 @@ PROJECT_FOLDER
 
 ##### 可用参数说明
 
-| 模块 | 名称 | 可选值 | 说明 |
+| 模块 | 名称 | 说明 | 可选值 |
 | -------- | -------- | -------- | -------- |
-| theme | theme | dark/light | 系统默认加载的主题，dark代表加载深色系主题,不填或light加载浅色主题 |
-| language  | language | zh/en | 默认加载的语言：zh代表中文，en代表英文 |
-| media  | mediaWebsocketUrl | wss://192.168.7.183/ | 视频ws流媒体地址 |
-| jupyter  | url | http://192.168.14.168:8888/tree | jupyter跳转地址 |
-| gis  | zoom | 0～18 | 地图默认缩放等级，推荐12 |
-| gis  | maxZoom | 0～18 | 地图最大缩放等级，推荐18 |
-| gis  | minZoom | 0～18 | 地图最小缩放等级，推荐12 |
-| gis  | center | [Lat, Lng] | 地图默认中心点，可填[31.22784056, 121.68148040] |
-| gis  | gisNormal | http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x} | 2D地图本地服务资源地址 |
-| gis  | gisStatellite | http://192.168.14.168:7081/PBS/rest/services/MyPBSService2/MapServer/tile/{z}/{y}/{x} | 卫星图本地服务资源地址 |
-| gis  | gisBoundLeftTop | [Lat, Lng]| 地图边界的左上角纬度经度，可填[31.36360615, 121.30622863]  |
-| gis  | gisBoundRightBottom | [Lat, Lng] | 地图边界的右下角纬度经度，可填[31.11040156, 121.95270538] |
-| gis  | isShowVideo | true/false | gis勤务路线是否显示视频：true代表显示视频（前提是有视频文件），不填或false代表不显示视频 |
-| gis  | isShowGisMenu | true/false | 菜单栏是否显示地图菜单：：true代表显示地图菜单，不填或false代表不显示地图菜单 |
+| theme | theme | 系统默认加载的主题，dark代表加载深色系主题，不填或light加载浅色主题 | dark/light |
+| language  | language | 默认加载的语言：zh代表中文，en代表英文 | zh/en |
+| media  | mediaWebsocketUrl | 视频ws流媒体地址 | wss://192.168.7.183/ |
+| jupyter  | url | jupyter跳转地址 | http://192.168.14.168:8888/tree |
+| gis  | zoom | 地图默认缩放等级，推荐12 | 0～18 |
+| gis  | maxZoom | 地图最大缩放等级，推荐18 | 0～18 |
+| gis  | minZoom | 地图最小缩放等级，推荐12  | 0～18|
+| gis  | center | 地图默认中心点，可填：[31.22784056, 121.68148040] | [Lat, Lng] |
+| gis  | gisNormal | 2D地图本地服务资源地址 | http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x} |
+| gis  | gisStatellite | 卫星图本地服务资源地址 | http://192.168.14.168:7081/PBS/rest/services/MyPBSService2/MapServer/tile/{z}/{y}/{x} |
+| gis  | gisBoundLeftTop | 地图边界的左上角纬度经度，可填：[31.36360615, 121.30622863] | [Lat, Lng] |
+| gis  | gisBoundRightBottom | 地图边界的右下角纬度经度，可填：[31.11040156, 121.95270538] | [Lat, Lng] |
+| gis  | isShowVideo | gis勤务路线是否显示视频：true代表显示视频（前提是有视频资源），不填或false代表不显示视频 | true/false |
+| gis  | isShowGisMenu | 菜单栏是否显示地图菜单：true代表显示地图菜单，不填或false代表不显示地图菜单 | true/false |
 
 
 #### 界面展示
