@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="serviceroute-addDeviceDrawer">
+  <div class="serviceroute-addDeviceDrawer" style="border:0px solid red;">
     <div class="devs-container">
       <!-- <LockPhaselControl
         :phaseList="phaseList"
@@ -22,7 +22,7 @@
         ref="rightpanel"
         :agentId="agentId"
         :lockPhaseBtnName="lockPhaseBtnName"
-        :statusData="crossStatusData"
+        :statusData="patternStatus"
         :realtimeStatusModalvisible="false"
         @patternCommit="patternCommit"
         @closePhaseBack="closePhaseBack"

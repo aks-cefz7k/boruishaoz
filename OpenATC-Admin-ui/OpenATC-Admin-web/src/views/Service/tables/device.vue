@@ -115,9 +115,9 @@ export default {
     handleClose (done) {
       done()
     },
-    handleAdd (phaseList, statusPattern) {
+    handleAdd (phaseList, patternStatus) {
       this.phaseList = phaseList
-      this.statusPattern = statusPattern
+      this.patternStatus = patternStatus
       this.innerDrawer = true
     },
     closePhaseControl (multiDevs) {

@@ -273,7 +273,6 @@ export default {
     },
     Token: {
       handler: function (val) {
-        debugger
         this.setPropsToken(val)
       }
     }
@@ -403,8 +402,7 @@ export default {
         stagesTemp.push(tempList)
       }
       this.stagesList = JSON.parse(JSON.stringify(stagesTemp))
-      console.log(this.stagesList)
-      alert('stagesList')
+      console.log('stagesList', this.stagesList)
     },
     lockScreen () {
       this.loading = this.$loading({
@@ -510,7 +508,6 @@ export default {
       this.$emit('handleManualConfirm', manualInfo)
     },
     patternCommit (manualInfo) {
-      debugger
       let that = this
       let control = {}
       that.ParamsMode.forEach(function (value, key, map) {

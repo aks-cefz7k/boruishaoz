@@ -99,12 +99,12 @@
 <script>
 import SelectControl from '@/views/Service/components/SelectControl'
 import SelectPattern from '@/views/Service/components/SelectPattern'
-import { getTscPhase, getTscControl } from '@/api/route'
+import { getTscPhase, getPatternList } from '@/api/route'
 import { getMessageByCode } from '@/utils/responseMessage'
 import xdrdirselector from '@/components/XRDDirSelector'
 import device from './device'
 import { getTheme } from '@/utils/auth'
-// import { getTscControl } from '@/api/route'
+import { getTscControl } from '@/api/control'
 export default {
   name: 'patterns',
   components: {
@@ -123,6 +123,7 @@ export default {
   },
   data () {
     return {
+      patternStatus: {},
       row: {},
       dirshow: [
         {
@@ -180,7 +181,7 @@ export default {
       // 获取当前设备所有可选方案
       let _this = this
       return new Promise((resolve, reject) => {
-        getTscControl(agentid).then(res => {
+        getPatternList(agentid).then(res => {
           if (!res.data.success) {
             let msg = getMessageByCode(res.data.code, _this.$i18n.locale)
             if (res.data.data) {
@@ -194,7 +195,7 @@ export default {
           }
           let options = []
           let list = res.data.data.data.patternList
-          _this.patternStatus = JSON.parse(JSON.stringify(list[_this.row.patternid]))
+          // _this.patternStatus = JSON.parse(JSON.stringify(list[_this.row.patternid]))
           for (let item of list) {
             let res = {
               ...item,
@@ -286,8 +287,8 @@ export default {
     async handleConfig (row) {
       console.log(row)
       this.row = row
-      await this.getCurPhase(row.agentid)
-      await this.getCurPattern(row.agentid)
+      // await this.getCurPhase(row.agentid)
+      await this.getCurrentPatternStatus(row.agentid)
       this.$refs.config.handleAdd(this.phaseList, this.patternStatus)
       // let data = {
       //   'greenflash': 6,
@@ -373,6 +374,7 @@ export default {
       row.control = data.control
       row.terminal = data.terminal
       row.delay = data.delay
+      row.totaltime = data.duration
       row.duration = data.duration
       row.value = data.value
       row.content = this.getContent(row)
@@ -387,10 +389,36 @@ export default {
       row.redclear = data.redclear
       row.mingreen = data.mingreen
       row.phases = data.phases
+      row.totaltime = data.duration
       console.log(this.patternTableData)
       console.log(this.row)
       row.content = this.getContent(row)
       await this.getCurPattern(row.agentid)
+    },
+    async getCurrentPatternStatus (iframdevid) {
+      await getTscControl(iframdevid).then((data) => {
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
+          }
+          return
+        }
+        this.patternStatus = JSON.parse(JSON.stringify(data.data.data.data))
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
