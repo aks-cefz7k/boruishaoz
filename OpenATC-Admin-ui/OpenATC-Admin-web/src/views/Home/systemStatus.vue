@@ -13,9 +13,10 @@
   <div class="system-status">
     <el-table
         class="system-status-table"
-        :data="list"
         style="width: 100%"
-         height="100%"
+        height="100%"
+        size="small"
+        :data="list"
         >
         <el-table-column
           prop="server"
@@ -33,7 +34,6 @@
           <template slot-scope="scope">
             <el-popover
               placement="bottom"
-              width="200"
               trigger="click">
               <div class="system-status-pop-content">
                 <div class="tittle">{{scope.row.server}}</div>
@@ -93,7 +93,7 @@ export default {
           }
           return ele
         })
-        console.log(this.list)
+        // console.log(this.list)
       })
     },
     diffSecond (start, end) {

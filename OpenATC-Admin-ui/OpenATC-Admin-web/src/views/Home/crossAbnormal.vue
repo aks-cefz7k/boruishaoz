@@ -48,7 +48,6 @@ export default {
   data () {
     return {
       faultCrossMap: new Map(), // 不同故障类型下的路口信息列表
-      faultTypeMap: new Map(),
       mainFaultList: [{
         key: 1,
         name: this.$t('openatc.faultrecord.maincontrolboard'),
@@ -84,6 +83,7 @@ export default {
   },
   methods: {
     removeDuplicateCross () {
+      this.faultCrossMap = new Map()
       this.faultList.forEach(fault => {
         if (fault.m_byFaultBoardType !== undefined) {
           let faultTypeCross = this.faultCrossMap.get(fault.m_byFaultBoardType)
@@ -112,20 +112,7 @@ export default {
     },
     getFaultCross () {
       this.removeDuplicateCross()
-      // this.faultList.forEach(fault => {
-      //   if (fault.m_byFaultBoardType !== undefined) {
-      //     let faultTypeCrossNum = this.faultTypeMap.get(fault.m_byFaultBoardType)
-      //     if (faultTypeCrossNum !== undefined) {
-      //       faultTypeCrossNum = faultTypeCrossNum + 1
-      //       this.faultTypeMap.set(fault.m_byFaultBoardType, faultTypeCrossNum)
-      //     } else {
-      //       this.faultTypeMap.set(fault.m_byFaultBoardType, 1)
-      //     }
-      //   }
-      // })
-      // console.log('faultTypeMap', this.faultTypeMap)
       this.mainFaultList = this.mainFaultList.map(faultitem => {
-        // let value = this.faultTypeMap.get(faultitem.key)
         let value = this.faultCrossMap.get(faultitem.key)
         if (value !== undefined) {
           faultitem.crossnum = value.length

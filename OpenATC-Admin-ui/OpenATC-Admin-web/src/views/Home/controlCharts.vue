@@ -51,10 +51,10 @@ export default {
   data () {
     return {
       chartData: [],
-      // ColorMap: new Map([[1, '#3BA272'], [2, '#FAC858'], [3, '#73C0DE'], [4, '#91CC75'], [5, '#EE6666'], [0, '#5470C6']]),
-      Color: ['#3BA272', '#FAC858', '#73C0DE', '#91CC75', '#EE6666', '#5470C6', '#ea7ccc', '#cccc66', '#9a60b4'],
+      // Color: ['#3BA272', '#FAC858', '#73C0DE', '#91CC75', '#EE6666', '#5470C6', '#ea7ccc', '#cccc66', '#9a60b4'],
+      Color: ['#FAC858', '#ee6666', '#5470C6', '#f8723a', '#EA7CCC', '#3BA272', '#00A0E9', '#73C0DE', '#9A60B4'],
       controlMap: new Map(),
-      allControl: [1, 2, 3, 4, 22, 0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 99, 100],
+      allControl: [1, 2, 3, 4, 22, 9, 0, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 99, 100],
       specialControl: [1, 2, 3, 4, 22],
       allControlList: []
     }
@@ -136,7 +136,7 @@ export default {
           }
         }
       })
-      console.log('controlMap', this.controlMap)
+      // console.log('controlMap', this.controlMap)
       this.allControlList = this.allControlList.map(controlitem => {
         let value = this.controlMap.get(controlitem.id)
         if (value !== undefined) {
@@ -144,7 +144,7 @@ export default {
         }
         return controlitem
       })
-      console.log(this.allControlList)
+      // console.log(this.allControlList)
       this.refreshChart()
     },
     getLang () {

@@ -38,25 +38,6 @@
         :label="$t('openatc.greenwaveoptimize.pattern')"
         align="center"
       >
-        <!-- <template slot-scope="scope">
-          <el-select
-            prop="terminal"
-            v-model="scope.row.patternid"
-            collapse-tags
-            clearable
-            filterable
-            :placeholder="$t('openatc.common.placeholder')"
-            @click.native="onPatternSelectClick(scope.row)"
-          >
-            <el-option
-              v-for="(item, index) in scope.row.patternOptions"
-              :key="index"
-              :label="item.patterndesc"
-              :value="item.patternid"
-            >
-            </el-option>
-          </el-select>
-        </template> -->
       </el-table-column>
       <el-table-column
         prop="state"
@@ -105,7 +86,7 @@ import xdrdirselector from '@/components/XRDDirSelector'
 import device from './device'
 import { getTheme } from '@/utils/auth'
 import { getTscControl } from '@/api/control'
-import ServiceUtil from '../ServiceUtil.js'
+import ServiceUtil from '../serviceUtil.js'
 export default {
   name: 'patterns',
   components: {
@@ -173,12 +154,6 @@ export default {
     }
   },
   methods: {
-    async onPatternSelectClick (row) {
-      let options = await this.getCurPattern(row.agentid)
-      if (options && options.length > 0) {
-        row.patternOptions = options
-      }
-    },
     getCurPattern (agentid) {
       // 获取当前设备所有可选方案
       let _this = this
@@ -269,59 +244,9 @@ export default {
       return res
     },
     async handleConfig (row) {
-      console.log(row)
       this.row = row
-      // await this.getCurPhase(row.agentid)
       await this.getCurrentPatternStatus(row.agentid)
       this.$refs.config.handleAdd(this.phaseList, this.patternStatus)
-      // let data = {
-      //   'greenflash': 6,
-      //   'duration': 600,
-      //   'yellow': 3,
-      //   'redclear': 2,
-      //   'mingreen': 15,
-      //   'phases': [
-      //     {
-      //       'id': 1,
-      //       'type': 0
-      //     },
-      //     {
-      //       'id': 2,
-      //       'type': 0
-      //     },
-      //     {
-      //       'id': 3,
-      //       'type': 0
-      //     },
-      //     {
-      //       'id': 4,
-      //       'type': 0
-      //     },
-      //     {
-      //       'id': 5,
-      //       'type': 1
-      //     },
-      //     {
-      //       'id': 6,
-      //       'type': 0
-      //     },
-      //     {
-      //       'id': 7,
-      //       'type': 0
-      //     },
-      //     {
-      //       'id': 8,
-      //       'type': 0
-      //     }
-      //   ]
-      // }
-      // // item.data = data
-      // row.greenflash = data.greenflash
-      // row.duration = data.duration
-      // row.yellow = data.yellow
-      // row.redclear = data.redclear
-      // row.mingreen = data.mingreen
-      // row.phases = data.phases
     },
     handleDelete (agentid) {
       let comfirmMsg = this.$t('openatc.greenwaveoptimize.deletedevice') + agentid
@@ -362,7 +287,11 @@ export default {
       row.duration = data.duration
       row.value = data.value
       row.content = this.getContent(row)
-      await this.getCurPattern(row.agentid)
+      // this.setPatternDesc()
+      let list = await this.getCurPattern(row.agentid)
+      let pattern = list.filter(item => item.id === row.terminal)[0]
+      let patterndesc = pattern.desc === '' ? `${this.$t('openatc.greenwaveoptimize.pattern')}${pattern.id}` : pattern.desc
+      row.patterndesc = patterndesc
     },
     async closePhaseControl (res) {
       let data = res.data
@@ -378,7 +307,6 @@ export default {
       console.log(this.patternTableData)
       console.log(this.row)
       row.content = this.getContent(row)
-      await this.getCurPattern(row.agentid)
     },
     async getCurrentPatternStatus (iframdevid) {
       await getTscControl(iframdevid).then((data) => {

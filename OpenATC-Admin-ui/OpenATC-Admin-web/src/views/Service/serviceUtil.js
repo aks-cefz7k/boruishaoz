@@ -16,7 +16,7 @@ export default class ServiceUtil {
 
   getContent (row) {
     let control = row.control
-    let res = ''
+    let res = row.controlName
     if (control === 22) {
       res = i18n.t('openatc.greenwaveoptimize.phase')
       let phases = row.phases
