@@ -13,7 +13,7 @@
     <div class="main-patternstatus">
       <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
         <div v-for="(item,index2) in list" :key="index2" :class="item.controltype===99?'direction': ''">
-          <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
+          <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66','position':'relative'}">
               <el-tooltip placement="top-start" effect="light">
                 <div slot="content">P{{item.id}}:{{item.split}}</div>
                 <div style="cursor:pointer;">
@@ -25,14 +25,14 @@
                     <div class="ring-nums">{{item.split}}</div>
                   </div>
                   <!-- 人行道 -->
-                  <SidewalkSvg v-if="item.peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'38'" :Height="'34'" />
+                  <SidewalkSvg v-if="item.peddirection.includes(side.id)" v-for="(side, index) in sidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :Width="'36'" :Height="'34'" />
                 </div>
               </el-tooltip>
             </div>
-            <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left', 'background':'repeating-linear-gradient(to right, #7CCC66 20%, #ffffff 50%)'}"></div>
+            <div class="first-1" :style="{'width':item.flashgreen,'height':'34px','float':'left','background': 'linear-gradient(to right, #ffffff 50%, #7ccc66 0)','background-size': '4px 100%'}"></div>
             <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
             <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
-          </div>
+            </div>
         </div>
       <div v-for="(item, index) in barrierList" :key="index + '1'">
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
