@@ -33,7 +33,7 @@
   </el-select>
 </template>
 <script>
-import { getTscControl } from '@/api/route'
+import { getPatternList } from '@/api/route'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'SelectPattern',
@@ -94,7 +94,7 @@ export default {
     },
     getCurPattern (agentid) {
       // 获取当前设备所有可选方案
-      getTscControl(agentid).then(res => {
+      getPatternList(agentid).then(res => {
         if (!res.data.success) {
           let msg = getMessageByCode(res.data.code, this.$i18n.locale)
           if (res.data.data) {

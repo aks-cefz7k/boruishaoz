@@ -1077,7 +1077,7 @@ const zh = {
       'eventtype': '事件类型',
       'detaileddescription': '详细描述',
       'maincontrolboard': '主控板',
-      'lightcontrolversion': '灯控版',
+      'lightcontrolboard': '灯控版',
       'carinspectionboard': '车检板',
       'ioboard': 'I/O板',
       'faultboard': '故障板',

@@ -6,6 +6,7 @@ import com.openatc.agent.model.Fault;
 import com.openatc.agent.resmodel.PageOR;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FaultDao;
+import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.PageInit;
 import com.openatc.agent.utils.TokenUtil;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -38,8 +40,8 @@ public class FaultController {
     @Autowired
     FaultDao faultDao;
 
-//    @Autowired
-//    FaultServiceImpl faultService;
+    @Autowired
+    FaultServiceImpl faultService;
 //
 //    @Autowired
 //    AscsDao ascsDao;
@@ -165,6 +167,18 @@ public class FaultController {
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
+            List<String> agentids = faultService.getAgentidListByUserRole();
+            // 过滤出属于该用户所在组织的设备
+            CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("agentid"));
+            if (!agentids.isEmpty()){
+                for (String agentid : agentids){
+                    in.value(agentid);
+                }
+            } else {
+                in.value("null");
+            }
+            predicateList.add(in);
+            // 路口名称
             if (!agentId.equals("")) {
                 predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
             }

@@ -48,7 +48,7 @@
 </div>
 </template>
 <script>
-import { getTscControl } from '@/api/route'
+import { getPatternList } from '@/api/route'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'patterns',
@@ -93,7 +93,7 @@ export default {
     getCurPattern (agentid) {
       // 获取当前设备所有可选方案
       this.loading = true
-      getTscControl(agentid).then(res => {
+      getPatternList(agentid).then(res => {
         this.loading = false
         if (!res.data.success) {
           if (res.data.code === '4003') {

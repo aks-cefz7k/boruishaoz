@@ -40,9 +40,9 @@
       </div>
     </div>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane :label="$t('openatc.dutyroute.routePreview')" name="first">
-      </el-tab-pane>
-      <el-tab-pane :label="$t('openatc.dutyroute.routeState')" name="second">
+      <!-- <el-tab-pane :label="$t('openatc.dutyroute.routePreview')" name="first">
+      </el-tab-pane> -->
+      <el-tab-pane :label="$t('openatc.dutyroute.routeIntersectionList')" name="second">
       </el-tab-pane>
       <PlanChart
         ref="planchart"
@@ -98,7 +98,7 @@ export default {
   },
   data () {
     return {
-      activeName: 'first',
+      activeName: 'second',
       maskVisible: false, // 引导遮罩层是否显示
       configurationVisible: false, // 配置界面是否显示
       messageboxVisible: false, // 关闭界面二期确认弹窗是否显示

@@ -39,8 +39,8 @@ export function uploadTscParam () {
   return api.Send({}, data)
 }
 
-export function uploadSingleTscParam (type) {
-  var iframdevid = getIframdevid()
+export function uploadSingleTscParam (type, iframdevid) {
+  // var iframdevid = getIframdevid()
   let api = new Authapi('uploadSingleTscParam')
   let data = {}
   data.agentid = iframdevid

@@ -11,37 +11,52 @@
  **/
 <template>
   <div class="homeLayout">
-    <div class="top">
-      <el-row :gutter="20">
-        <el-col :span="16">
-          <OpenATCCard width="100%" height="100%" :title="$t('openatc.home.devicestatus')">
-            <div slot="cardContent" class="chart">
-              <DevsStateChart :chartData="chartData"/>
+    <div class="panel">
+      <el-row>
+        <el-col :span="24">
+          <OpenATCCard width="100%" height="100%" :ishasTitle="false">
+            <div slot="cardContent" class="crossStatusNum">
+              <CrossStatusStatistics :chartData="chartData" />
             </div>
           </OpenATCCard>
         </el-col>
-        <el-col :span="8">
-          <OpenATCCard width="100%" height="100%" :title="$t('openatc.home.faultlist')">
-            <div slot="cardContent" class="list">
-              <FaultList :faultList="faultList"/>
+      </el-row>
+    </div>
+    <div class="top">
+      <el-row>
+        <el-col :span="14">
+          <div class="cardlayout">
+            <OpenATCCard width="100%" height="100%" :title="$t('openatc.home.intersectionmode')">
+            <div slot="cardContent" class="chart">
+              <ModeCharts :curDevsData="curDevsData" />
+            </div>
+          </OpenATCCard>
+          </div>
+        </el-col>
+        <el-col :span="10">
+          <OpenATCCard width="100%" height="100%" :title="$t('openatc.home.systemstate')">
+            <div slot="cardContent" class="system-list">
+              <SystemStatus />
             </div>
           </OpenATCCard>
         </el-col>
       </el-row>
     </div>
     <div class="bottom">
-      <el-row :gutter="20">
-        <el-col :span="8" v-for="(card, index) in toPagePart" :key="index">
-          <OpenATCCard width="100%" height="100%" :ishasTitle="false">
-            <div slot="cardContent" class="animationPart">
-              <div class="imagebox" id="imagebox">
-                <LottieAnim v-if="Visible" :Width="Width" :Height="Height" :Options="card.options" />
-                <!-- <div :class="card.className" :style="{height: imgHeight, backgroundSize: imgWidth + ' ' + imgHeight}"></div> -->
+      <el-row>
+       <el-col :span="14">
+          <div class="cardlayout">
+            <OpenATCCard width="100%" height="100%" :title="$t('openatc.home.intersectioncontrol')">
+              <div slot="cardContent" class="chart">
+                <ControlCharts :curDevsData="curDevsData" />
               </div>
-              <div class="toPage">
-                <div :style="{ marginTop: toPageMarginTop, marginBottom: toPageMarginBottom }">{{$t(`openatc.home.${[card.name]}`)}}</div>
-                <i class="iconfont icon-qianwang" @click="handleClickToPage(card.name)"></i>
-              </div>
+            </OpenATCCard>
+          </div>
+        </el-col>
+        <el-col :span="10">
+          <OpenATCCard width="100%" height="100%" :title="$t('openatc.home.intersectionabnormalstate')">
+            <div slot="cardContent" class="list">
+              <CrossAbnormal :faultList="faultList" />
             </div>
           </OpenATCCard>
         </el-col>
@@ -56,11 +71,16 @@ import FaultList from './faultList'
 import router from '@/router'
 import { GetAllDevice } from '@/api/device'
 import { GetFaultRange } from '@/api/fault'
-import LottieAnim from './lottieDemo/index'
 import deviceAnim from '../../../static/lottiejson/deviceManager.json'
 import userAnim from '../../../static/lottiejson/userManager.json'
 import operatAnim from '../../../static/lottiejson/operationRecord.json'
 import { getMessageByCode } from '@/utils/responseMessage'
+
+import CrossStatusStatistics from './crossStatusStatistics'
+import ModeCharts from './modeCharts'
+import ControlCharts from './controlCharts'
+import SystemStatus from './systemStatus'
+import CrossAbnormal from './crossAbnormal'
 
 export default {
   data () {
@@ -96,34 +116,37 @@ export default {
       faultTypeMap: new Map([[201, '灯控板在线个数异常'], [202, '灯组红绿同亮'], [203, '所有灯组红灯全灭'], [204, '绿冲突'], [1, '检测器报警'], [2, '灯故障'], [3, '断电故障'], [4, '通讯故障']]),
       faultList: [],
       chartData: [{
+        key: 'online',
         name: '在线',
         value: 0
       },
       {
+        key: 'offline',
         name: '离线',
         value: 0
       }, {
+        key: 'fault',
         name: '故障',
         value: 0
-      }]
+      }, {
+        key: 'manual',
+        name: '干预',
+        value: 0
+      }],
+      curDevsData: [] // 当前全部设备信息
     }
   },
   components: {
     OpenATCCard,
     DevsStateChart,
     FaultList,
-    LottieAnim
+    CrossStatusStatistics,
+    ModeCharts,
+    ControlCharts,
+    SystemStatus,
+    CrossAbnormal
   },
   methods: {
-    calculateHeight () {
-      // 浏览器可视区域的高
-      let viewH = document.documentElement.clientHeight - 10
-      this.toPageMarginTop = (17 / 1080 * viewH).toFixed(0) + 'px'
-      this.toPageMarginBottom = (17 / 1080 * viewH).toFixed(0) + 'px'
-      this.Width = document.getElementById('imagebox').clientWidth - 44
-      this.Height = document.getElementById('imagebox').clientHeight
-      this.Visible = true
-    },
     handleClickToPage (name) {
       switch (name) {
         case 'devicemaneger': router.push({ path: '/device' })
@@ -137,14 +160,21 @@ export default {
     },
     resetData () {
       this.chartData = [{
+        key: 'online',
         name: '在线',
         value: 0
       },
       {
+        key: 'offline',
         name: '离线',
         value: 0
       }, {
+        key: 'fault',
         name: '故障',
+        value: 0
+      }, {
+        key: 'manual',
+        name: '干预',
         value: 0
       }]
     },
@@ -166,7 +196,12 @@ export default {
             this.chartData[0].value++
             this.chartData[2].value++
           }
+          if (ele.mode && ele.mode !== 0) {
+            // 干预
+            this.chartData[3].value++
+          }
         })
+        this.curDevsData = res.data.data
       })
       let reqData = {
         'isCurrentFault': true
@@ -184,21 +219,10 @@ export default {
     }
   },
   mounted () {
-    this.calculateHeight()
     this.getdata()
     this.getDevsDataTimer = setInterval(() => {
       this.getdata()
     }, 60000)
-    const _this = this
-    window.onresize = function () {
-      // 动画大小自适应
-      _this.Width = document.getElementById('imagebox').clientWidth
-      _this.Height = document.getElementById('imagebox').clientHeight
-      _this.Visible = false
-      _this.$nextTick(() => {
-        _this.Visible = true
-      })
-    }
   },
   destroyed () {
     clearInterval(this.getDevsDataTimer)

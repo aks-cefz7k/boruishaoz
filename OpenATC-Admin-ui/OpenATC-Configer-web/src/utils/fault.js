@@ -99,7 +99,7 @@ export function formatBoardType (dev) {
   if (boardType === 1) {
     res = i18n.t('edge.faultrecord.maincontrolboard')
   } else if (boardType === 2) {
-    res = i18n.t('edge.faultrecord.lightcontrolversion')
+    res = i18n.t('edge.faultrecord.lightcontrolboard')
   } else if (boardType === 3) {
     res = i18n.t('edge.faultrecord.carinspectionboard')
   } else if (boardType === 4) {

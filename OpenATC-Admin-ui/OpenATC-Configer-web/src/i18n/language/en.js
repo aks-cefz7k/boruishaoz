@@ -1070,7 +1070,7 @@ const en = {
       'degradation': 'Degradation failure',
       'serious': 'Serious failure',
       'maincontrolboard': 'Main Control Board',
-      'lightcontrolversion': 'Light Control Version',
+      'lightcontrolboard': 'Light Control Board',
       'carinspectionboard': 'Car Inspection Board',
       'eportingmodule': 'Eporting Module',
       'roadname': 'Road Name',

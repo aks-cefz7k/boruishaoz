@@ -8,27 +8,51 @@
           v-for="(step, index) in route.devs"
           ref="timeline"
           :key="index"
-          :timestamp="step.name"
+          timestamp=""
           placement="top"
           icon="icon success"
           :type="getType(step.state, index)"
           size="large"
           @click.native="onStepClick(index)"
         >
-          <div v-show="tabName === 'second'">
-            <el-tag type="info" class="tag" v-show="step.state === 0">{{
-              $t("openatc.dutyroute.notonduty")
-            }}</el-tag>
-            <el-tag type="success" class="tag" v-show="step.state === 1">{{
-              $t("openatc.dutyroute.onduty")
-            }}</el-tag>
+          <div v-show="tabName === 'second'" style="border:0px solid red;margin-top:-20px;margin-left:30px;margin-top:-8px;">
+            <div style="display:inline-block;margin-right:20px;">
+              {{step.name }}
+            </div>
+            <div style="display:inline-block;margin-right:10px;">
+              <template>
+                <div>
+                    <el-tag size="medium" effect="plain" :type="getTag(step).type">{{ getTag(step).label }}</el-tag>
+                </div>
+              </template>
+            </div>
+            <div style="display:inline-block;margin-right:10px;">
+              {{ step.controlName }}
+            </div>
+            <span v-show="tabName === 'second' && step.state === 1">
+              <div style="display:inline-block;margin-right:10px;">
+                {{ '|' }}
+              </div>
+              <div style="display:inline-block;margin-right:10px;">
+                <el-tag type="info" class="tag" v-show="step.state === 0">{{
+                  $t("openatc.dutyroute.notonduty")
+                }}</el-tag>
+                <el-tag type="success" class="tag" v-show="step.state === 1">{{
+                  $t("openatc.dutyroute.onduty")
+                }}</el-tag>
+              </div>
+              <div style="display:inline-block;">
+                {{ step.resttime }}
+              </div>
+            </span>
+
           </div>
-          <div
+          <!-- <div
             class="resttime"
             v-show="tabName === 'second' && step.state === 1"
           >
             {{ step.resttime }}
-          </div>
+          </div> -->
           <div class="card-div">
             <route-card
               :node="step"
@@ -116,6 +140,24 @@ export default {
     },
     research () {
       this.$emit('research')
+    },
+    getTag (row) {
+      if (row.stateName === 'DOWN') {
+        return {
+          label: this.$t('openatc.devicemanager.offline'),
+          type: 'info'
+        }
+      } else if (row.stateName === 'UP') {
+        return {
+          label: this.$t('openatc.devicemanager.online'),
+          type: 'success'
+        }
+      } else {
+        return {
+          label: this.$t('openatc.devicemanager.fault'),
+          type: 'danger'
+        }
+      }
     }
   }
 }
@@ -130,8 +172,10 @@ export default {
 }
 .card-div {
   /* position: absolute; */
-  padding-left: 80px;
-  width: 65%;
+  /* padding-left: 80px; */
+  margin-left: 30px;
+  margin-top: 10px;
+  width: 45%;
 }
 .block >>> .el-scrollbar__wrap {
   overflow-x: hidden;

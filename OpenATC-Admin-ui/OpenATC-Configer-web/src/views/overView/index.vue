@@ -37,7 +37,7 @@
               <!-- <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span> -->
               <span class="pattern-explain"><el-checkbox v-model="checked">{{$t('edge.pattern.overLap')}}</el-checkbox></span>
               <!-- P{{$t('edge.overview.phase')}} -->
-            <BoardCard
+            <pattern-list
             ref="boardCard"
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
@@ -48,16 +48,17 @@
             :phaseList="phaseList"
             :isPhase="true"
             :agentId="agentId"
-              >
-            </BoardCard>
-            <OverLap
+            >
+            </pattern-list>
+            <over-lap
             v-if="!contrloType"
             :checked="checked"
             :overlap="overlap"
             :stageList="stagesListOver"
             :cycle="controlData.cycle"
             :controlData="controlData"
-            />
+            >
+            </over-lap>
           </div>
         </div>
 
@@ -84,8 +85,8 @@ import { mapState } from 'vuex'
 import { getTscControl, queryDevice } from '@/api/control'
 import { registerMessage, uploadSingleTscParam } from '@/api/param'
 import { setIframdevid, getStageTypes } from '@/utils/auth'
-import BoardCard from '@/components/BoardCard'
-import OverLap from '@/components/OverLap'
+// import BoardCard from '@/components/BoardCard'
+// import OverLap from '@/components/OverLap'
 import { getIntersectionInfo } from '@/api/template'
 // import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
@@ -95,8 +96,6 @@ import TextPage from './textPage/index'
 export default {
   name: 'overview',
   components: {
-    BoardCard,
-    OverLap,
     TextPage
   },
   data () {
