@@ -20,6 +20,7 @@
         <el-dialog
           width="700px"
           :title="$t('openatc.devicemanager.updateDeviceId')"
+          :close-on-click-modal="false"
           :visible.sync="innerVisible"
           append-to-body>
           <el-form ref="deviceId" :model="innerForm">
