@@ -440,6 +440,13 @@ const en = {
       'channel': 'Channel',
       'channelinfo': 'Channel Info',
       'status': 'Status',
+      'statu1': 'Default',
+      'statu2': 'Ded Light',
+      'statu3': 'Yellow Light',
+      'statu4': 'Green Light',
+      'statu5': 'Green Flash',
+      'statu6': 'Lights Off',
+      'statu7': 'Red Flash',
       'maxlength': 'There are at most 24 data !'
     },
     'channelControl': {
@@ -522,6 +529,8 @@ const en = {
       'startOrderParams': 'Start Order Params ',
       'netcardInfo': 'Network Info: ',
       'stepType': 'Step Type',
+      'step1': 'stage',
+      'step2': 'step',
       'seeCutEffect': 'See Cut Detail',
       'siteIdLimit': 'SiteId must be whithin 0 ~ 99999',
       'siteIdCutEffect': 'SiteId Cut Detail',
