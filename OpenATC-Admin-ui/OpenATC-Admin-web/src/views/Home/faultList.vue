@@ -28,18 +28,21 @@
         <el-table-column
           prop="name"
           :label="$t('openatc.devicemanager.devicename')"
-          width="220">
+          width="220"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="m_unFaultOccurTime"
           :label="$t('openatc.devicemanager.faultOccurtime')"
           sortable
-          width="180">
+          width="180"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="m_wFaultType"
           :label="$t('openatc.devicemanager.faultMaintype')"
           sortable
+          align="center"
           :formatter="formatterType">
         </el-table-column>
       </el-table>
