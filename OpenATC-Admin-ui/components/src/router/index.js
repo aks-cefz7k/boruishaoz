@@ -12,10 +12,17 @@ export default new Router({
       }
     },
     {
-      path: '/demo',
-      name: 'demo',
+      path: '/cross',
+      name: 'cross',
       component: (resolve) => {
         require(['@/views/intersection'], resolve)
+      }
+    },
+    {
+      path: '/config',
+      name: 'config',
+      component: (resolve) => {
+        require(['@/views/schemeconfig'], resolve)
       }
     }
   ]
