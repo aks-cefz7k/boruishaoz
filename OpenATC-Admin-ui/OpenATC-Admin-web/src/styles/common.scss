@@ -1792,6 +1792,16 @@ table td {
   .menu-icon--right {
     margin-left: -5px;
   }
+  //tooltip样式
+  .atooltip.el-tooltip__popper[x-placement^="top"] .popper__arrow {
+    border-top-color: $--background-color-base;
+  }
+  .atooltip.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
+    border-top-color: $--background-color-base;
+  }
+  .atooltip {
+    background: $--background-color-base !important;
+  }
 // 瓶颈控制页面样式
 .overflow-detector-page {
   margin-top: 15px;
