@@ -315,22 +315,22 @@ PROJECT_FOLDER
 
 ##### 可用参数说明
 
-| 模块 | 名称 | 举例 | 说明 |
+| 模块 | 名称 | 可选值 | 说明 |
 | -------- | -------- | -------- | -------- |
-| theme | theme | dark | 系统默认加载的主题，dark代表深色系主题，不填默认加载浅色主题 |
-| language  | language | zh | 默认加载的语言，有两个可选值：zh代表中文，en代表英文 |
+| theme | theme | dark/light | 系统默认加载的主题，dark代表加载深色系主题,不填或light加载浅色主题 |
+| language  | language | zh/en | 默认加载的语言：zh代表中文，en代表英文 |
 | media  | mediaWebsocketUrl | wss://192.168.7.183/ | 视频ws流媒体地址 |
 | jupyter  | url | http://192.168.14.168:8888/tree | jupyter跳转地址 |
-| gis  | zoom | 12 | 地图默认缩放等级 |
-| gis  | maxZoom | 18 | 地图最大缩放等级 |
-| gis  | minZoom | 12 | 地图最小缩放等级 |
-| gis  | center | [31.22784056, 121.68148040] | 地图默认中心点 |
+| gis  | zoom | 0～18 | 地图默认缩放等级，推荐12 |
+| gis  | maxZoom | 0～18 | 地图最大缩放等级，推荐18 |
+| gis  | minZoom | 0～18 | 地图最小缩放等级，推荐12 |
+| gis  | center | [Lat, Lng] | 地图默认中心点，可填[31.22784056, 121.68148040] |
 | gis  | gisNormal | http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x} | 2D地图本地服务资源地址 |
 | gis  | gisStatellite | http://192.168.14.168:7081/PBS/rest/services/MyPBSService2/MapServer/tile/{z}/{y}/{x} | 卫星图本地服务资源地址 |
-| gis  | gisBoundLeftTop | [31.36360615, 121.30622863] | 地图边界的左上角纬度经度 |
-| gis  | gisBoundRightBottom | [31.11040156, 121.95270538] | 地图边界的右下角纬度经度 |
-| gis  | isShowVideo | true | gis勤务路线是否显示视频 |
-| gis  | isShowGisMenu | true | 是否显示地图菜单 |
+| gis  | gisBoundLeftTop | [Lat, Lng]| 地图边界的左上角纬度经度，可填[31.36360615, 121.30622863]  |
+| gis  | gisBoundRightBottom | [Lat, Lng] | 地图边界的右下角纬度经度，可填[31.11040156, 121.95270538] |
+| gis  | isShowVideo | true/false | gis勤务路线是否显示视频：true代表显示视频（前提是有视频文件），不填或false代表不显示视频 |
+| gis  | isShowGisMenu | true/false | 菜单栏是否显示地图菜单：：true代表显示地图菜单，不填或false代表不显示地图菜单 |
 
 
 #### 界面展示
