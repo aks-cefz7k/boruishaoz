@@ -247,7 +247,7 @@ public final class RESTRetUtils {
 //    }
 
     //返回被包含的具体类型的错误信息，e.g. 101
-    public static InnerError errorDevCommObj(String agentid, IErrorEnumImplInner iErrorEnumImplInner, Object content) {
+    public static InnerError innerErrorObj(String agentid, IErrorEnumImplInner iErrorEnumImplInner, Object content) {
         return InnerError.builder()
                 .agentid(agentid)
                 .content(content)

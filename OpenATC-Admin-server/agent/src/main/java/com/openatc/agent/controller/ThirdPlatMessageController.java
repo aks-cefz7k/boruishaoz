@@ -5,12 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
-
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
-
-
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +18,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.text.ParseException;
 
-import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_UDP;
+import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.CommunicationType.OPERATOER_TYPE_ERROR_RESPONSE;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_4001;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_4002;
 
 
 @RestController
@@ -39,7 +39,6 @@ public class ThirdPlatMessageController {
 
     private String protocolType = "scp";
 
-
     @PostMapping(value = "/centeradapter/custom")
     public RESTRet postDevsMessage(@RequestBody JsonObject jsonObject) throws SocketException, ParseException, UnsupportedEncodingException {
 
@@ -49,13 +48,21 @@ public class ThirdPlatMessageController {
         message.setInfotype("control/pattern");
         message.setOperation("set-request");
         message.setData(jsonObject);
-        MessageData responceData = null;
+        InnerError devCommError;
 
-        try {
-            responceData = commClient
-                    .exange(adapterIP, adapterPort, protocolType, 1, message,COMM_SOCKET_TYPE_UDP);
-        } catch (Exception e) {
-            e.printStackTrace();
+        MessageData responceData = commClient
+                    .exange(adapterIP, adapterPort, protocolType, EXANGE_TYPE_CENTER, message,COMM_SOCKET_TYPE_UDP);
+
+        //判断请求消息是否正确
+        if (responceData.getOperation().equals(OPERATOER_TYPE_ERROR_REQUEST)) {
+            devCommError = gson.fromJson(responceData.getData(), InnerError.class);
+            return RESTRetUtils.errorDetialObj(E_4001, devCommError);
+        }
+
+        //判断应答是否成功
+        if (responceData.getOperation().equals(OPERATOER_TYPE_ERROR_RESPONSE)) {
+            devCommError = gson.fromJson(responceData.getData(), InnerError.class);
+            return RESTRetUtils.errorDetialObj(E_4002, devCommError);
         }
 
         return RESTRetUtils.successObj(responceData);

@@ -11,6 +11,8 @@
  **/
 package com.openatc.agent.controller;
 
+import static com.openatc.core.common.IErrorEnumImplOuter.E_2004;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -26,23 +28,27 @@ import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.DateUtil;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.criteria.Predicate;
-import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
-import static com.openatc.core.common.IErrorEnumImplOuter.E_2004;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -162,15 +168,13 @@ public class HisParamsController {
         pageOR.setTotal(tHisParams.getTotalElements());
         List<THisParams> content = tHisParams.getContent();
         List<THisParamsVO> targetList = new ArrayList<THisParamsVO>();
+        List<String> agentidList = new ArrayList<String>();
         for (THisParams param: content) {
-            AscsBaseModel ascsBaseModel = mDao.getAscsByID(param.getAgentid());
-            String agentName = "";
-            if (ascsBaseModel != null) {
-                agentName = ascsBaseModel.getName();
-                if (agentName.equals("")) {
-                    agentName = ascsBaseModel.getAgentid();
-                }
-            }
+            agentidList.add(param.getAgentid());
+        }
+        List<AscsBaseModel> devList = mDao.getListByAgentids(agentidList);
+        for (THisParams param: content) {
+            String agentName = mDao.getDevNameFromList(devList, param.getAgentid());
             THisParamsVO vo = new THisParamsVO(param, agentName);
             targetList.add(vo);
         }
@@ -183,16 +187,16 @@ public class HisParamsController {
      * @Date: 2021/11/19 13:38
      * @Description: 根据路口名获取路口列表
      */
-    public List<AscsBaseModel> getDeviceListByName (String name) {
-        List<AscsBaseModel> ascsBaseModels = new ArrayList<>();
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev where name like '%" + name+ "%' ORDER BY agentid";
-        try {
-            ascsBaseModels = mDao.getDevByPara(sql);
-        } catch (Exception e){
-            logger.warning("Error: getDeviceListByName");
-        }
-        return ascsBaseModels;
-    }
+//    public List<AscsBaseModel> getDeviceListByName (String name) {
+//        List<AscsBaseModel> ascsBaseModels = new ArrayList<>();
+//        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev where name like '%" + name+ "%' ORDER BY agentid";
+//        try {
+//            ascsBaseModels = mDao.getDevByPara(sql);
+//        } catch (Exception e){
+//            logger.warning("Error: getDeviceListByName");
+//        }
+//        return ascsBaseModels;
+//    }
 
     /**
      * @param request request

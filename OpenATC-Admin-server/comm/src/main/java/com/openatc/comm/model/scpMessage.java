@@ -13,10 +13,7 @@ package com.openatc.comm.model;
 
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.data.MessageDataMD5;
-import com.openatc.comm.ocp.DataParamMD5;
 
 import java.io.UnsupportedEncodingException;
 
@@ -30,20 +27,8 @@ public class scpMessage implements Message {
     @Override
     public PackData pack(MessageData sendMsg) throws UnsupportedEncodingException {
         PackData packData = new PackData();
-        String datastr = "";
-        JsonElement data = sendMsg.getData();
-        if (data != null) {
-            datastr = data.toString();
-        }
-        DataParamMD5 dataMD5 = new DataParamMD5();
-        String datamd5value = dataMD5.getMD5(datastr);
-        MessageDataMD5 md5data = new MessageDataMD5(sendMsg);
-        md5data.setAgentid(sendMsg.getAgentid());
-        md5data.setInfotype(sendMsg.getInfotype());
-        md5data.setOperation(sendMsg.getOperation());
-        md5data.setData(sendMsg.getData());
-        md5data.setMd5(datamd5value);
-        byte[] dataSend = gson.toJson(md5data).getBytes("UTF-8");
+
+        byte[] dataSend = gson.toJson(sendMsg).getBytes("UTF-8");
         packData.setM_packData(dataSend);
         packData.setM_packDataSize(dataSend.length);
 //        logger.info("packing Kedacom MessageData: " + sendMsg);
