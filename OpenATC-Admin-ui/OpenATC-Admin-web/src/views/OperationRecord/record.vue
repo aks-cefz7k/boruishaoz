@@ -226,6 +226,10 @@ export default {
   },
   methods: {
     onConditionChange (val) {
+      this.listQuery = {
+        pageNum: 1, // 页码
+        pageRow: 50 // 每页条数
+      }
       this.getList()
     },
     onSearchClick () {
