@@ -418,7 +418,7 @@ const en = {
       'phaselock': 'Phase Lock',
       'channelDetector': 'Channel Detector',
       'directionLock': 'Direction Lock',
-      'reserving13': 'Reserving13',
+      'reserving13': 'Pattern Recovery',
       'reserving14': 'Reserving14',
       'reserving17': 'Reserving17',
       'reserving18': 'Reserving18',

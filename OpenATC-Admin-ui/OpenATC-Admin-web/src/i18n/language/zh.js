@@ -418,7 +418,7 @@ const zh = {
       'phaselock': '相位锁定',
       'channelDetector': '通道检测',
       'directionLock': '方向锁定',
-      'reserving13': '预留控制13',
+      'reserving13': '方案恢复过渡',
       'reserving14': '预留控制14',
       'reserving17': '预留控制17',
       'reserving18': '预留控制18',
