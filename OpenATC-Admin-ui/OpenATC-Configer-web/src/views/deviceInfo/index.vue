@@ -94,11 +94,11 @@ export default {
       stepTypeOptions: [{
         value: 'stage',
         // label: '阶段',
-        id: '1'
+        id: '0'
       }, {
         value: 'step',
         // label: '色步',
-        id: '2'
+        id: '1'
       }]
       // customInfo: {
       //   areaid: '',
