@@ -835,11 +835,13 @@ border: 1px solid $--border-color-base;
     margin-bottom: 4px;
   }
   .fault-detail-btn {
+    float: right;
     font-size: 14px;
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #409EFF;
-    line-height: 14px;
+    line-height: 32px;
+    margin-right: 20px;
     cursor: pointer;
   }
   .control-model {

@@ -200,17 +200,17 @@
                 <div class="cross-content">
                   <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
                   <div style="margin-left: 85px;" v-if="curFaultList.length">
-                    <el-tag type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span>{{$t('edge.overview.item')}}</el-tag>
-                    <el-tag>{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span>{{$t('edge.overview.item')}}</el-tag>
-                    <el-tag type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span>{{$t('edge.overview.item')}}</el-tag>
-                    <span class="fault-detail-btn" @click="showFaultDetail">{{$t('edge.overview.details')}}>></span>
+                    <el-tag type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span></el-tag>
+                    <el-tag>{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span></el-tag>
+                    <el-tag type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span></el-tag>
+                    <span class="fault-detail-btn" @click="showFaultDetail">{{$t('edge.overview.details')}} >></span>
                   </div>
                   <div style="margin-left: 85px;" class="cross-value" v-if="!curFaultList.length">{{$t('edge.overview.nofault')}}</div>
                 </div>
               </div>
               <div class="control-bottom">
                 <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
-                <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
+                <el-button type="primary" style="float: right; margin-right: 20px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
                 <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
               </div>
               <div class="cross-module">
