@@ -19,6 +19,7 @@ const simuKey = 'simu_key'
 const language = 'intl_language'
 const kisspro = 'kiss_pro'
 const theme = 'kiss_theme'
+const gisMenuKey = 'isShowGisMenu'
 
 export function getToken () {
   return localStorage.getStorage(LoginKey)
@@ -70,6 +71,28 @@ export function getTheme () {
 
 export function setTheme (th) {
   return localStorage.setStorage(theme, th)
+}
+
+export function getMenuVisible (menu) {
+  // 可根据不同menu扩展 else if ...
+  if (menu === 'gis') {
+    let initG = localStorage.getStorage(gisMenuKey)
+    if (initG === undefined || initG === null || initG === '') {
+      return false
+    }
+    return initG
+  } else {
+    return false
+  }
+}
+
+export function setMenuVisible (menu, isShow) {
+  // 可根据不同menu扩展 else if ...
+  if (menu === 'gis') {
+    return localStorage.setStorage(gisMenuKey, isShow)
+  } else {
+    return false
+  }
 }
 
 export const setType = () => {

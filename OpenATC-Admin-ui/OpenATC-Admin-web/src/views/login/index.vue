@@ -58,6 +58,7 @@ import { SystemconfigApi } from '@/api/systemconfig.js'
 import { getMessageByCode } from '@/utils/responseMessage'
 // import axios from 'axios'
 import { clearCrossFilter } from '@/utils/crossFilterMgr'
+import { HandleMenuVisible } from '@/utils/menuControl'
 
 export default {
   name: 'login',
@@ -206,19 +207,7 @@ export default {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        let controlMenu = {
-          gis: false
-        }
-        for (let config of data.data.data) {
-          if (config['key'] === 'isShowGisMenu') {
-            if (config['value'] === 'true') {
-              controlMenu.gis = true
-            } else {
-              controlMenu.gis = false
-            }
-          }
-        }
-        this.$store.dispatch('SetMenuVisible', controlMenu)
+        HandleMenuVisible(data.data.data)
       })
     },
     loadDefaultConfig  () {
