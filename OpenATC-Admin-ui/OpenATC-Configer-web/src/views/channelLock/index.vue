@@ -128,7 +128,7 @@
               <el-option
                 v-for="item in channelstatusList"
                 :key="item.value"
-                :label="$t('edge.channellock.statu' + item.id)"
+                :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
@@ -154,27 +154,26 @@ export default {
       channelList: [],
       id: 1,
       channelstatusList: [{
-        value: 'default',
-        //  label: '默认',
-        id: '1'
+        label: this.$t('edge.channellock.status1'),
+        value: 0
       }, {
-        value: 'red',
-        id: '2'
+        label: this.$t('edge.channellock.status2'),
+        value: 1
       }, {
-        value: 'yellow',
-        id: '3'
+        label: this.$t('edge.channellock.status3'),
+        value: 2
       }, {
-        value: 'green',
-        id: '4'
+        label: this.$t('edge.channellock.status4'),
+        value: 3
       }, {
-        value: 'greenflash',
-        id: '5'
+        label: this.$t('edge.channellock.status5'),
+        value: 4
       }, {
-        value: 'off',
-        id: '6'
+        label: this.$t('edge.channellock.status6'),
+        value: 5
       }, {
-        value: 'redflash',
-        id: '7'
+        label: this.$t('edge.channellock.status7'),
+        value: 6
       }],
       HoursOption: [{
         value: 0,
