@@ -97,6 +97,7 @@ import { GetAllFaultRange } from '@/api/fault'
 import FaultDetailModal from '@/components/FaultDetailModal'
 import PhaseDataModel from '@/views/overView/crossDirection/utils'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
+import { setToken } from '@/utils/auth'
 export default {
   name: 'scheme-config',
   components: {
@@ -136,6 +137,10 @@ export default {
     realtimeStatusModalvisible: {
       type: Boolean,
       default: true
+    },
+    Token: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -262,6 +267,11 @@ export default {
       },
       // 深度观察监听
       deep: true
+    },
+    Token: {
+      handler: function (val) {
+        this.setPropsToken(val)
+      }
     }
   },
   created () {
@@ -272,6 +282,7 @@ export default {
     }
   },
   async mounted () {
+    this.setPropsToken(this.Token)
     await this.getPhase()
     this.getFault()
     this.initData()
@@ -702,6 +713,12 @@ export default {
     },
     showFaultDetail () {
       this.$refs.faultDetail.onViewFaultClick()
+    },
+    setPropsToken (token) {
+      // 获取组件外传入的token，便于独立组件调用接口
+      if (token && token !== '') {
+        setToken(token)
+      }
     }
   },
   destroyed () {

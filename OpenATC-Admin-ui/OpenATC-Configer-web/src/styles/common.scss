@@ -907,33 +907,35 @@ border: 1px solid $--border-color-base;
     zoom: 0.35;
   }
   .transMiddleCrossImg {
-  // -webkit-transform-origin-y: 0;
-  //  transform: scale(0.55);
-  //  margin-top: 3%;
-   padding: 0PX;
-   zoom: 0.24;
-  }
-  .transMiddleCrossImg2 {
-  // -webkit-transform-origin-y: 0;
-  //  transform: scale(0.38);
-  //  margin-top: -1.5%;
-   padding: 0PX;
-   zoom: 0.2;
-  }
-  .transMiddleCrossImg3 {
-  // -webkit-transform-origin-y: 0;
-  //  transform: scale(0.32);
-  //  margin-top: -1%;
-   padding: 0PX;
-   zoom: 0.18;
-  }
-  .transMiniCrossImg {
-  // -webkit-transform-origin-y: 0;
-  //  transform: scale(0.28);
-  //  margin-top: -1.6%;
-   padding: 0PX;
-   zoom: 0.16;
-  }
+    -webkit-transform-origin-y: 0;
+     transform: scale(0.55);
+    //  transform: translateX(0.45) translateY(0.45);
+    //  transform: scale(0.25);
+     margin-top: 3%;
+     padding: 0PX;
+    //  zoom: 0.25;
+   }
+   .transMiddleCrossImg2 {
+    -webkit-transform-origin-y: 0;
+     transform: scale(0.38);
+     margin-top: -1.5%;
+     padding: 0PX;
+    //  zoom: 0.25;
+   }
+   .transMiddleCrossImg3 {
+    -webkit-transform-origin-y: 0;
+     transform: scale(0.32);
+     margin-top: -1%;
+     padding: 0PX;
+    //  zoom: 0.25;
+   }
+   .transMiniCrossImg {
+    -webkit-transform-origin-y: 0;
+     transform: scale(0.28);
+     margin-top: -1.6%;
+     padding: 0PX;
+    //  zoom: 0.25;
+   }
 }
 
 // 方案配置面板
