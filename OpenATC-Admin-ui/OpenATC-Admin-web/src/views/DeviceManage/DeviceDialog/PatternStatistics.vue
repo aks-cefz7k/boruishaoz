@@ -29,12 +29,10 @@
             type="datetimerange"
             popper-class="common-date-popper"
             :picker-options="pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            :unlink-panels="true"
             align="right">
           </el-date-picker>
-          <el-button type="primary" icon="el-icon-search" @click="onDateChange" class="searchbtn">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="onDateChange" class="searchbtn">{{$t(`openatc.common.search`)}}</el-button>
         </div>
 
       </div>
