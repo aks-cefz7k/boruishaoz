@@ -71,7 +71,7 @@
         <div style="width: 100%; height: auto;overflow: hidden;" v-if="FuncSort === 'allFunc'">
           <div class="control-model" v-for="(item, index) in specialcontrolList" :key="index">
             <div class="single-model" @click="selectSpecialStages(item.id)">
-              <svg-icon :icon-class="item.iconClass" :className="item.id === 23 ? 'closephase-icon' : 'model-icon'"></svg-icon>
+              <svg-icon :icon-class="item.iconClass" className="closephase-icon"></svg-icon>
               <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
             </div>
           </div>
