@@ -70,7 +70,7 @@
                 :ignoredFault="ignoredFault"
                 :untreatedFault="untreatedFault"
                 :currentStage="currentStage"
-                :closePhas="closePhase"
+                :closePhase="closePhase"
                 :agentName="agentName"
                 :devStatus="devStatus"
                 :agentId="agentId"
@@ -549,7 +549,6 @@ export default {
         }
       }).catch(error => {
         that.unlockScreen()
-        that.$message.error(error)
         console.log(error)
       })
     },
@@ -584,7 +583,7 @@ export default {
           }
         })
         // 相位关断标签
-        this.closePhase = []
+        let closePhase = []
         this.crossStatusData.phase.forEach(phase => {
           if (phase.close !== undefined && phase.close !== 0) {
             let typename
@@ -597,12 +596,13 @@ export default {
                 break
               default:typename = ''
             }
-            this.closePhase.push({
+            closePhase.push({
               id: phase.id,
               typename: typename
             })
           }
         })
+        this.closePhase = JSON.parse(JSON.stringify(closePhase))
       }
     },
     selectSpecialModel (id) {
@@ -633,14 +633,22 @@ export default {
       this.lockScreen()
       putTscControl(controldata).then(data => {
         this.unlockScreen()
+        let success = 0
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
+        }
+        if (data.data.data && data.data.data.data) {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            this.$message.error(this.$t(errormsg))
+            return
+          }
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
       }).catch(error => {
         this.unlockScreen()
-        this.$message.error(error)
         console.log(error)
       })
     },
