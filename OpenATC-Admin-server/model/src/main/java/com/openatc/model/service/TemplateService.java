@@ -515,8 +515,8 @@ public class TemplateService {
         //返回的json对象
         JsonObject intersectionInfo = new JsonObject();
         intersectionInfo.addProperty("type", type);
-        intersectionInfo.add("phaseList", phaseArray);
-        intersectionInfo.add("overlaplList", overlapArray);
+        intersectionInfo.add("param", asJsonObject);
+//        intersectionInfo.add("overlaplList", overlapArray);
         return intersectionInfo;
     }
 
