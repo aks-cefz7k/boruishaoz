@@ -1,6 +1,8 @@
 <template>
   <div class="wrap">
-    <kiss-button></kiss-button>
+    <kiss-button
+      token="eyJraWQiOiIxNjQ3MzE0NDM3Mjk5IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMzcxNDQzNywiaWF0IjoxNjQ3MzE0NDM3fQ.DYj89Eg3pm4K_4nOnSrtsP5jLTNYpiPVE9Ezg9yxaeA">
+      {{$t('openatccomponents.button.confirm')}}</kiss-button>
     <xdr-dir-selector Width="300px"
                       Height="300px"
                       :showlist="dirshow"></xdr-dir-selector>

@@ -57,6 +57,11 @@ const install = function (Vue) {
   Object.keys(components).forEach(key => {
     Vue.component(components[key].name, components[key])
   })
+  const urlMgr = require('../lib/publicjs/HttpurlMgr')
+  if (urlMgr.HttpUrlMgr.urlMap === undefined) {
+    let data = require('../../static/apiconfig.json')
+    urlMgr.HttpUrlMgr.init(data)
+  }
 }
 
 if (typeof window !== 'undefined' && window.Vue) {

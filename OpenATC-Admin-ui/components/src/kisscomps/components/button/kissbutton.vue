@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { setToken } from '@/utils/auth'
+import { getTscControl } from '@/api/control'
 export default {
   name: 'kiss-button',
   props: {
@@ -24,6 +26,20 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    token: {
+      type: String,
+      default: ''
+    }
+  },
+  watch: {
+    token: {
+      handler: function (val) {
+        if (val && val !== '') {
+          setToken(val)
+          this.getTscdataApi()
+        }
+      }
     }
   },
   data () {
@@ -37,12 +53,28 @@ export default {
   methods: {
     handleClick (evt) {
       this.$emit('click', evt)
+    },
+    getTscdataApi () {
+      getTscControl('1511-154').then((data) => {
+        if (!data.data.success) {
+          console.log('error')
+          return
+        }
+        console.log(data.data.data.data)
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
     }
   },
   mounted () {
     this.inbtnType = this.btnType
     if (this.disabled) {
       this.inbtnType = this.btnType + '-disabled'
+    }
+    if (this.token && this.token !== '') {
+      setToken(this.token)
+      this.getTscdataApi()
     }
   }
 }

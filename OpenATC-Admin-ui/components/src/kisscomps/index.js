@@ -21,6 +21,8 @@ import KissHorizontalChildren from './components/HorizontalChildren/index'
 import KissHorizontalMenu from './components/horizontalMenu/index'
 import KissSimulationProgress from './components/KissSimulationProgress/index'
 import KissMessageBox from './components/KissMessageBox/index'
+import en from '../i18n/language/en'
+import zh from '../i18n/language/zh'
 // 第三方插件
 import VTooltip from 'v-tooltip'
 
@@ -50,6 +52,11 @@ const components = {
   KissMessageBox
 }
 
+const language = {
+  en,
+  zh
+}
+
 const install = function (Vue) {
   if (install.installed) return
   Vue.use(VTooltip)
@@ -65,7 +72,8 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 const API = {
   install,
-  ...components
+  ...components,
+  language
 }
 
 export default API

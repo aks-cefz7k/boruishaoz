@@ -5,18 +5,28 @@ import App from './App'
 import router from './router'
 import kissui from './kisscomps/index'
 import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+import i18n from './i18n'
 import 'element-ui/lib/theme-chalk/index.css'
-// import chosen from 'chosen-js'
+
 Vue.use(kissui)
 Vue.use(ElementUI)
 // Vue.use(chosen)
 // Vue.use($)
+Vue.use(ElementUI, {
+  locale
+})
 
 Vue.config.productionTip = false
+
+const urlMgr = require('./lib/publicjs/HttpurlMgr')
+let data = require('../static/apiconfig.json')
+urlMgr.HttpUrlMgr.init(data)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  i18n,
   router,
   components: { App },
   template: '<App/>'
