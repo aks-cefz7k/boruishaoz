@@ -42,6 +42,7 @@
                 v-if="specialPage === 'closephase'"
                 :controlData="controlData"
                 :closePhaseRings="phaseRings"
+                :sidewalkPhaseData="sidewalkPhaseData"
                 :realtimeStatusModalvisible="realtimeStatusModalvisible"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
@@ -49,6 +50,7 @@
                 v-if="specialPage === 'lockingphase'"
                 :controlData="controlData"
                 :closePhaseRings="phaseRings"
+                :sidewalkPhaseData="sidewalkPhaseData"
                 :realtimeStatusModalvisible="realtimeStatusModalvisible"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
