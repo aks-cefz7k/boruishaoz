@@ -181,6 +181,14 @@ export default {
           }
           this.$message.error(msg)
           return false
+        } else {
+          let success = res.data.data.data.success
+          if (success !== 0) {
+            // 手动面板控制提示
+            let errormsg = 'edge.overview.putTscControlError' + success
+            this.$message.error(this.$t(errormsg))
+            return false
+          }
         }
         this.$emit('research')
       })
