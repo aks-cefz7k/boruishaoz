@@ -16,6 +16,8 @@ public interface OverflowRepository extends JpaRepository<Overflow, Long> {
 
     List<Overflow> findByPatternid(Long patternId);
 
+    List<Overflow> findByIntersectionid(String agentId);
+
     @Transactional
     @Modifying
     @Query("update Overflow o set o.state=?2 where o.intersectionid=?1")

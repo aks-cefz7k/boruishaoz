@@ -547,7 +547,7 @@ const en = {
       'historicalcycle': 'Historical cycle',
       'schemerealtimedata': 'Pattern realtime data',
       'periodicdistribution': 'Periodic distribution',
-      'controlmodel': 'Model',
+      'controlmode': 'Mode',
       'controltype': 'Control',
       'controlscheme': 'Pattern',
       'cycle': 'Cycle',

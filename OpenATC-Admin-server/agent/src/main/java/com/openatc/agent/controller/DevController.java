@@ -15,12 +15,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.model.Overflow;
 import com.openatc.agent.model.SysOrg;
 import com.openatc.agent.model.User;
+import com.openatc.agent.model.VipRouteDevice;
 import com.openatc.agent.resmodel.PageOR;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.OrgService;
+import com.openatc.agent.service.OverflowRepository;
 import com.openatc.agent.service.UserDao;
+import com.openatc.agent.service.VipRouteDeviceDao;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnumImplOuter;
@@ -52,6 +56,10 @@ public class DevController {
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
+    @Autowired
+    VipRouteDeviceDao vipRouteDeviceDao;
+    @Autowired
+    OverflowRepository overflowRepository;
     @Autowired
     private MessageController messageController;
 
@@ -136,10 +144,32 @@ public class DevController {
     // 按ID删除设备
     @DeleteMapping(value = "/devs/{id}")
     public RESTRetBase DeleteDev(@PathVariable String id) {
-
         AscsBaseModel as = mDao.getAscsByID(id);
+        //check oldAgentid if in use
+        String oldAgentid = as.getAgentid();
+        IErrorEnumImplOuter iErrorEnumImplOuter = checkDevInUse(oldAgentid);
+        if(iErrorEnumImplOuter !=null) {
+            return RESTRetUtils.errorObj(false,iErrorEnumImplOuter);
+        }
         mDao.deleteDevByID(id);
         return RESTRetUtils.successObj(as);
+    }
+
+    /**
+     * @Author: yangyi
+     * @Date: 2022/2/16 14:48
+     * @Description: checkDevInUse
+     */
+    public IErrorEnumImplOuter checkDevInUse (String oldAgentid) {
+        List<Overflow> overflowList = overflowRepository.findByIntersectionid(oldAgentid);
+        if(overflowList !=null && overflowList.size() > 0) {
+            return IErrorEnumImplOuter.E_8002;
+        }
+        List<VipRouteDevice> vipRouteDeviceList =  vipRouteDeviceDao.findByAgentid(oldAgentid);
+        if(vipRouteDeviceList !=null && vipRouteDeviceList.size() > 0) {
+            return IErrorEnumImplOuter.E_8003;
+        }
+        return null;
     }
 
     // 添加设备
@@ -180,6 +210,11 @@ public class DevController {
     public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
         String oldAgentid = jsonObject.get("oldAgentid").getAsString();
         String newAgentid = jsonObject.get("newAgentid").getAsString();
+        //check oldAgentid if in use
+        IErrorEnumImplOuter iErrorEnumImplOuter = checkDevInUse(oldAgentid);
+        if(iErrorEnumImplOuter !=null) {
+            return RESTRetUtils.errorObj(false,iErrorEnumImplOuter);
+        }
         AscsBaseModel dev = mDao.getAscsByID(newAgentid);
         if (dev != null) {
             return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_8004);

@@ -546,7 +546,7 @@ const zh = {
       'historicalcycle': '历史周期',
       'schemerealtimedata': '方案实时数据',
       'periodicdistribution': '周期分布',
-      'controlmodel': '控制模式',
+      'controlmode': '控制模式',
       'controltype': '控制方式',
       'controlscheme': '控制方案',
       'cycle': '周期',

@@ -14,7 +14,7 @@
       <div class="title">{{$t('openatc.patternstatistic.schemerealtimedata')}}</div>
       <div class="cross-module">
         <div class="cross-content">
-          <div class="cross-name">{{$t('openatc.patternstatistic.controlmodel')}}:</div>
+          <div class="cross-name">{{$t('openatc.patternstatistic.controlmode')}}:</div>
           <div class="cross-value">{{controlData.mode !==undefined ? $t('openatc.patternstatistic.mode' + controlData.mode) : ''}}</div>
         </div>
         <div class="cross-content">
