@@ -17,13 +17,12 @@
       class="patternTable"
       :data="patternTableData"
       style="width: 100%"
-      @current-change="handleCurrentChange"
       max-height="700px"
     >
-      <el-table-column type="index" label="#" align="center"> </el-table-column>
+      <el-table-column type="index" label="#" align="center" width="20"> </el-table-column>
       <el-table-column
-        prop="agentid"
-        :label="$t('openatc.greenwaveoptimize.deviceid')"
+        prop="name"
+        :label="$t('openatc.greenwaveoptimize.devicename')"
         align="center"
       >
       </el-table-column>
@@ -74,17 +73,22 @@
       </el-table-column>
       <el-table-column
         prop="state"
-        :label="$t('openatc.dutyroute.stage')"
+        :label="$t('openatc.dutyroute.content')"
         align="center"
       >
         <template slot-scope="scope">
-          <el-input-number
-            size="small"
-            v-model="scope.row.state"
-            :min="0"
-            :max="99"
-            :controls="true"
-          ></el-input-number>
+          <div v-show="scope.row.control === 4">
+            <el-input-number
+              size="small"
+              v-model="scope.row.state"
+              :min="0"
+              :max="99"
+              :controls="true"
+            ></el-input-number>
+          </div>
+          <div v-show="scope.row.control === 22">
+            <xdrdirselector Width="40px" Height="40px" :showlist="dirshow"></xdrdirselector>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -101,23 +105,20 @@
           ></el-input-number>
         </template>
       </el-table-column>
+      <el-table-column
+        :label="$t('openatc.greenwaveoptimize.operation')"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleConfig(scope.row)">{{
+            $t("openatc.button.config")
+          }}</el-button>
+          <el-button type="text" @click="handleDelete(scope.row.agentid)">{{
+            $t("openatc.common.delete")
+          }}</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <div class="pattern-figure" v-show="isShowPatternStatus">
-      <div class="pattern-status">{{ currPatternName }}</div>
-      <span class="pattern-explain"
-        >：{{ $t("openatc.dutyroute.greenpercent") }}</span
-      >
-      <span class="pattern-explain" style="margin-right: 15px"
-        >P{{ $t("openatc.greenwaveoptimize.phase") }}</span
-      >
-      <div style="margin-top:5px;">
-        <PatternStatus
-          style="margin-bottom: 70px"
-          :patternStatusList="patternStatusList"
-          :barrierList="barrierList"
-          ></PatternStatus>
-      </div>
-    </div>
      <select-control
         v-show="false"
         ref="selectControl"></select-control>
@@ -126,16 +127,16 @@
 <script>
 import SelectControl from '@/views/Service/components/SelectControl'
 import SelectPattern from '@/views/Service/components/SelectPattern'
-import PatternStatus from '@/components/PatternStatus'
 import { getTscPhase, getTscControl } from '@/api/route'
 import { getMessageByCode } from '@/utils/responseMessage'
+import xdrdirselector from '@/components/XRDDirSelector'
 // import { getTscControl } from '@/api/route'
 export default {
   name: 'patterns',
   components: {
     SelectControl,
     SelectPattern,
-    PatternStatus
+    xdrdirselector
   },
   props: {
     patternData: {
@@ -147,6 +148,15 @@ export default {
   },
   data () {
     return {
+      dirshow: [
+        {
+          id: 1,
+          color: 'yellow'
+        }, {
+          id: 16,
+          color: 'red'
+        }
+      ],
       controlOptions: [],
       patternTableData: [], // 方案数据
       loading: false,
@@ -245,84 +255,23 @@ export default {
         })
       })
     },
-    async handleCurrentChange (row) {
-      this.isShowPatternStatus = false
-      if (row.isNew) { // 避免新增数据触发
-        return false
-      }
-      let phaseList = await this.getCurPhase(row.agentid)
-      let patternList = await this.getCurPattern(row.agentid)
-      let patterns = patternList.filter(item => item.patternid === row.patternid)
-      row.pattern = patterns.length > 0 ? patterns[0] : []
-      if (!row.patterndesc || row.patterndesc === '') {
-        this.currPatternName = `${this.$t('openatc.greenwaveoptimize.pattern')}${row.patternid}`
-      } else {
-        this.currPatternName = row.patterndesc
-      }
-      this.patternStatusList = []
-      let cycle = row.pattern.cycle
-      let ringList = row.pattern.rings
-      for (let ringPhaseList of ringList) {
-        if (ringPhaseList.length === 0) {
-          continue
-        }
-        let list = []
-        for (let phase of ringPhaseList) {
-          if (phase.value === 0) {
-            continue
-          }
-          let currPhase = phaseList.filter(p => p.id === phase.id)[0]
-          if (currPhase) {
-            phase.desc = currPhase.direction
-          }
-          let obj = {}
-          let split = phase.value
-          obj.id = phase.id
-          obj.split = split
-          obj.direction = phase.desc.map(item => {
-            return {
-              id: item.id,
-              color: '#454545'
-            }
-          })
-          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          list.push(obj)
-        }
-        this.patternStatusList.push(list)
-      }
-      if (this.patternStatusList.length > 0) {
-        this.isShowPatternStatus = true
-      }
-      this.handleBarrier(this.patternStatusList, this.phaseList)
+    handleConfig (row) {
+      console.log(row)
     },
-    handleBarrier (patternStatusList, phaseList) {
-      this.barrierList = []
-      if (patternStatusList.length < 2) return
-      let tempList = []
-      let barrierWidth = 0
-      let firstPatternStatus = patternStatusList[0]
-      for (let patternStatus of firstPatternStatus) {
-        let concurrent = phaseList.filter((item) => {
-          return item.id === patternStatus.id
-        })[0].concurrent
-        if (concurrent.length === 0) {
-          this.barrierList = []
-          return
-        }
-        if (!this.isEqualsForArray(tempList, concurrent)) {
-          tempList = concurrent
-          this.barrierList.push(barrierWidth)
-        }
-        barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
-      }
-      this.barrierList.push(barrierWidth) // 添加末尾处的屏障
-    },
-    isEqualsForArray (listA, listB) {
-      return listA.length === listB.length &&
-        listA.every(a => listB.some(b => a === b)) &&
-        listB.every(_b => listA.some(_a => _a === _b))
+    handleDelete (agentid) {
+      let comfirmMsg = this.$t('openatc.greenwaveoptimize.deletedevice') + agentid
+      let infoMsg = this.$t('openatc.common.tipsmodaltitle')
+      this.$confirm(comfirmMsg, infoMsg, {
+        confirmButtonText: this.$t('openatc.button.OK'),
+        cancelButtonText: this.$t('openatc.button.Cancel'),
+        type: 'warning'
+      }).then(() => {
+        this.$emit('deleteDevice', agentid)
+        this.$message.success(this.$t('openatc.common.deletesuccess'))
+      }).catch(() => {
+        this.$message.warning(this.$t('openatc.common.canceloperate'))
+      })
+      // this.$emit('deleteDevice', agentid)
     }
   }
 }

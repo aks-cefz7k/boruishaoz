@@ -128,6 +128,7 @@ const en = {
       'phaseclose': 'Close Phase',
       'phaselocking': 'Priority Control',
       'implement': 'Execute',
+      'comfirm': 'Comfirm',
       'ipaddress': 'IP',
       'deviceport': 'Port',
       'agreement': 'Protocol',

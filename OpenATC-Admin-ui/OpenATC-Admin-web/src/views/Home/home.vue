@@ -11,7 +11,6 @@
  **/
 <template>
   <div class="homeLayout">
-    <!-- <kiss-button></kiss-button> -->
     <div class="top">
       <el-row :gutter="20">
         <el-col :span="16">

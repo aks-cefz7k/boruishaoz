@@ -12,7 +12,7 @@
 <template>
   <div class="scheme-config" style="height: 100%;">
     <FaultDetailModal ref="faultDetail" :agentId="agentId" @refreshFault="getFaultById"></FaultDetailModal>
-        <div class="tuxing-right" style="height: 100%;" :style="{'width': panelWidth}">
+        <div style="height: 100%;">
           <transition name="fade-right" mode="out-in"
           :enter-active-class="toPage === 1 ? 'animated fadeInRight' : 'animated fadeInLeft'"
           :leave-active-class="toPage === 1 ? 'animated fadeOutRight' : 'animated fadeOutLeft' ">
@@ -26,6 +26,7 @@
                :preselectModel="preselectModel"
                :currentStage="currentStage"
                :preselectStages="preselectStages"
+               :realtimeStatusModalvisible="realtimeStatusModalvisible"
                @closeManualModal="closeManualModal"
                @selectModel="selectModel"
                @selectStages="selectStages"
@@ -41,12 +42,14 @@
                 v-if="specialPage === 'closephase'"
                 :controlData="controlData"
                 :closePhaseRings="phaseRings"
+                :realtimeStatusModalvisible="realtimeStatusModalvisible"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
               <LockingPhaseControlModal
                 v-if="specialPage === 'lockingphase'"
                 :controlData="controlData"
                 :closePhaseRings="phaseRings"
+                :realtimeStatusModalvisible="realtimeStatusModalvisible"
                 @closePhaseBack="closePhaseBack"
                 @closePhaseControl= "closePhaseControl" />
             </div>
@@ -104,20 +107,21 @@ export default {
     FaultDetailModal
   },
   props: {
-    panelWidth: {
-      type: String
-    },
     responseTime: {
-      type: Number
+      type: Number,
+      default: 0
     },
     statusData: {
-      type: Object
+      type: Object,
+      required: true
     },
     agentName: {
-      type: String
+      type: String,
+      default: ''
     },
     devStatus: {
-      type: Number
+      type: Number,
+      default: 0
     },
     agentId: {
       type: String
@@ -128,15 +132,6 @@ export default {
     platform: {
       type: String
     },
-    stagesList: {
-      type: Array
-    },
-    currModel: {
-      type: Number
-    },
-    currentStage: {
-      type: Number
-    },
     realtimeStatusModalvisible: {
       type: Boolean,
       default: true
@@ -144,10 +139,12 @@ export default {
   },
   data () {
     return {
-      crossStatusData: {},
+      crossStatusData: null,
       controlData: {},
       control: '',
       sidewalkPhaseData: [],
+      stagesList: [],
+      currentStage: 0,
       list: [{
         iconClass: 'model',
         name: '控制模式',
@@ -223,6 +220,7 @@ export default {
         iconClass: 'ganyingshixingrenguojie',
         iconName: '感应式行人过街控制'
       }],
+      currModel: -1,
       preselectModel: -1, // 预选方案
       preselectStages: -1, // 预选阶段
       closePhase: [],
@@ -272,9 +270,10 @@ export default {
       this.changeStatus()
     }
   },
-  mounted () {
-    this.getPhase()
+  async mounted () {
+    await this.getPhase()
     this.getFault()
+    this.initData()
   },
   methods: {
     getFault () {
@@ -311,12 +310,82 @@ export default {
     initData () {
       this.crossStatusData = JSON.parse(JSON.stringify(this.statusData))
       let TscData = JSON.parse(JSON.stringify(this.crossStatusData))
-      // this.currModel = TscData.control
-      // this.handleStageData(TscData) // 处理阶段（驻留）stage数据
+      this.currModel = TscData.control
+      this.handleStageData(TscData) // 处理阶段（驻留）stage数据
       this.controlData = this.handleGetData(TscData)
       this.handleGetPhaseClose()
     },
-
+    getBusPos () {
+      // 公交相位信息
+      this.busPhaseData = []
+      this.phaseList.forEach((ele, i) => {
+        if (ele.controltype >= 3 && ele.controltype <= 5) {
+          ele.direction.forEach((dir, index) => {
+          // 车道相位
+            this.busPhaseData.push({
+              // key: this.CrossDiagramMgr.getUniqueKey('busphase'),
+              phaseid: ele.id, // 相位id，用于对应相位状态
+              id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
+              name: this.PhaseDataModel.getBusPhasePos(dir).name,
+              controltype: ele.controltype
+            })
+          })
+        }
+      })
+      let result = []
+      let obj = {}
+      for (var i = 0; i < this.busPhaseData.length; i++) {
+        if (!obj[this.busPhaseData[i].phaseid]) {
+          result.push(this.busPhaseData[i])
+          obj[this.busPhaseData[i].phaseid] = true
+        }
+      }
+      this.busPhaseData = result
+    },
+    handleStageData (data) {
+      this.getBusPos()
+      this.stagesList = []
+      let busPhaseData = this.busPhaseData
+      this.currentStage = data.current_stage
+      let stages = data.stages
+      if (!stages) return
+      let stagesTemp = []
+      for (let stage of stages) {
+        let tempList = []
+        let directionList = []
+        let stageControType = 0
+        let peddirections = []
+        for (let stg of stage) {
+          let currPhase = this.phaseList.filter((item) => {
+            return item.id === stg
+          })[0]
+          if (currPhase !== undefined) {
+            directionList = [...currPhase.direction, ...directionList]
+          }
+          for (let walk of this.sidewalkPhaseData) {
+            if (stg === walk.phaseid) {
+              peddirections.push(...currPhase.peddirection)
+              peddirections = Array.from(new Set(peddirections))
+            }
+          }
+          for (let busPhase of busPhaseData) {
+            if (stg === busPhase.phaseid) {
+              stageControType = busPhase.controltype
+            }
+          }
+        }
+        directionList = [...new Set(directionList)]
+        if (directionList.length === 0) return
+        tempList = directionList.map(dir => ({
+          id: dir,
+          color: '#606266',
+          controltype: stageControType,
+          peddirection: peddirections
+        }))
+        stagesTemp.push(tempList)
+        this.stagesList = JSON.parse(JSON.stringify(stagesTemp))
+      }
+    },
     lockScreen () {
       this.loading = this.$loading({
         lock: true,
@@ -419,7 +488,6 @@ export default {
     },
     patternCommit (manualInfo) {
       let that = this
-      this.lockScreen()
       let control = {}
       that.ParamsMode.forEach(function (value, key, map) {
         if (that.controlData.mode === value) {
@@ -435,6 +503,11 @@ export default {
         // 恢复自主控制（多时段）时，value为当前控制方式
         control.value = this.currModel
       }
+      if (!this.realtimeStatusModalvisible) {
+        console.log(control)
+        return
+      }
+      this.lockScreen()
       putTscControl(control).then(data => {
         that.unlockScreen()
         let success = 0
@@ -469,17 +542,21 @@ export default {
       })
     },
     getPhase () {
-      uploadSingleTscParam('phase').then(data => {
-        let res = data.data
-        if (!res.success) {
-          if (res.code === '4003') {
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+      let _this = this
+      return new Promise(function (resolve, reject) {
+        uploadSingleTscParam('phase').then(data => {
+          let res = data.data
+          if (!res.success) {
+            if (res.code === '4003') {
+              _this.$message.error(_this.$t('edge.errorTip.devicenotonline'))
+              return
+            }
+            _this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
-          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-          return
-        }
-        this.phaseList = res.data.data.phaseList
+          _this.phaseList = res.data.data.phaseList
+          resolve()
+        })
       })
     },
     handleFaultsVisible () {
@@ -537,6 +614,10 @@ export default {
       this.isClosePhase = false
     },
     closePhaseControl (controldata) {
+      if (!this.realtimeStatusModalvisible) {
+        console.log(controldata)
+        return
+      }
       this.lockScreen()
       putTscControl(controldata).then(data => {
         this.unlockScreen()
@@ -582,13 +663,14 @@ export default {
       let addphse = {}
       addphse.name = this.$t('edge.overview.phase') + phase.id
       addphse.desc = this.getPhaseDescription(phase.direction)
-      if (this.crossStatusData !== null) {
+      // 相位锁定选项默认都按照解锁状态显示
+      addphse.locktype = 0
+      addphse.close = 0
+      if (this.crossStatusData !== null && this.crossStatusData.phase) {
         // 如果方案状态相位有close字段，这边就需要对应close状态进相位关断控制的选项里
         let phaseStatus = this.crossStatusData.phase.filter(ele => ele.id === phase.id)[0]
         addphse = {...addphse, ...phaseStatus}
       }
-      // 相位锁定选项默认都按照解锁状态显示
-      addphse.locktype = 0
       return addphse
     },
     getPhaseDescription (phaseList) {

@@ -61,7 +61,7 @@
           </div>
         </div>
 
-        <div ref="tuxingRight">
+        <div ref="tuxingRight" class="tuxing-right" >
           <RightPanel
             ref="rightpanel"
             :statusData="crossStatusData"
@@ -70,10 +70,7 @@
             :devStatus="devStatus"
             :agentId="agentId"
             :ip="ip"
-            :platform="platform"
-            :stagesList="stagesList"
-            :currModel="currModel"
-            :currentStage="currentStage" />
+            :platform="platform" />
         </div>
       </div>
     </div>
@@ -131,18 +128,14 @@ export default {
       agentId: '0',
       agentName: '--',
       platform: undefined,
-      currModel: -1,
-      crossStatusData: null, // 路口状态数据
+      crossStatusData: {}, // 路口状态数据
       reset: false,
-      currentStage: 0,
       responseTime: 0,
-      stagesList: [],
       phaseList: [], // 当前相位集合
       intervalFlag: true,
       shrink: 1,
       isResend: true,
-      commonHeight: undefined, // 左右侧面板的高度值
-      busPhaseData: []
+      commonHeight: undefined // 左右侧面板的高度值
     }
   },
   computed: {
@@ -326,8 +319,7 @@ export default {
         }
         this.crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
-        this.currModel = TscData.control
-        this.handleStageData(TscData) // 处理阶段（驻留）stage数据
+        // this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
         this.checkStage(this.controlData)
       }).catch(error => {
@@ -335,78 +327,7 @@ export default {
         console.log(error)
       })
     },
-    getBusPos () {
-      // 公交相位信息
-      this.busPhaseData = []
-      this.phaseList.forEach((ele, i) => {
-        if (ele.controltype >= 3 && ele.controltype <= 5) {
-          ele.direction.forEach((dir, index) => {
-          // 车道相位
-            this.busPhaseData.push({
-              // key: this.CrossDiagramMgr.getUniqueKey('busphase'),
-              phaseid: ele.id, // 相位id，用于对应相位状态
-              id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
-              name: this.PhaseDataModel.getBusPhasePos(dir).name,
-              controltype: ele.controltype
-            })
-          })
-        }
-      })
-      let result = []
-      let obj = {}
-      for (var i = 0; i < this.busPhaseData.length; i++) {
-        if (!obj[this.busPhaseData[i].phaseid]) {
-          result.push(this.busPhaseData[i])
-          obj[this.busPhaseData[i].phaseid] = true
-        }
-      }
-      this.busPhaseData = result
-    },
-    handleStageData (data) {
-      this.getBusPos()
-      this.stagesList = []
-      let busPhaseData = this.busPhaseData
-      this.currentStage = data.current_stage
-      let stages = data.stages
-      if (!stages) return
-      let stagesTemp = []
-      for (let stage of stages) {
-        let tempList = []
-        let directionList = []
-        let stageControType = 0
-        let peddirections = []
-        for (let stg of stage) {
-          let currPhase = this.phaseList.filter((item) => {
-            return item.id === stg
-          })[0]
-          if (currPhase !== undefined) {
-            directionList = [...currPhase.direction, ...directionList]
-          }
-          for (let walk of this.sidewalkPhaseData) {
-            if (stg === walk.phaseid) {
-              peddirections.push(...currPhase.peddirection)
-              peddirections = Array.from(new Set(peddirections))
-            }
-          }
-          for (let busPhase of busPhaseData) {
-            if (stg === busPhase.phaseid) {
-              stageControType = busPhase.controltype
-            }
-          }
-        }
-        directionList = [...new Set(directionList)]
-        if (directionList.length === 0) return
-        tempList = directionList.map(dir => ({
-          id: dir,
-          color: '#606266',
-          controltype: stageControType,
-          peddirection: peddirections
-        }))
-        stagesTemp.push(tempList)
-        this.stagesList = JSON.parse(JSON.stringify(stagesTemp))
-      }
-    },
-    getControl (newList) { // 总揽阶段实时数据
+    getControl (newList) { // 总揽实时数据
       let currentIds = ''
       let lastCurrentIds = ''
       this.stateList = [0]

@@ -151,6 +151,7 @@
           </div>
         </div>
         <div class="tuxing-right" v-if="!graphicMode" ref="tuxingRight">
+          <div class="scheme-config">
           <transition name="fade-right" mode="out-in"
           :enter-active-class="toPage === 1 ? 'animated fadeInRight' : 'animated fadeInLeft'"
           :leave-active-class="toPage === 1 ? 'animated fadeOutRight' : 'animated fadeOutLeft' ">
@@ -336,6 +337,7 @@
               </div>
             </div>
           </transition>
+          </div>
         </div>
       </div>
     </div>
