@@ -120,7 +120,7 @@ export default {
         sum = sum + num
         if (sum > 100) {
           this.$message.warning(this.$t('edge.singleoptim.gratterThanHundred'))
-        } else if (sum === 100) {
+        } else {
           this.$emit('setSubList', this.rowIndex, this.subIndex, this.subFactorList)
         }
       }

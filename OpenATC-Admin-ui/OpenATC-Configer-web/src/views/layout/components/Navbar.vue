@@ -200,6 +200,7 @@ export default {
       manualpanelIsNull: false, // 判断手动面板数据是否为空
       deviceinfo: false, // 校验设备信息的规则
       splitCheck: true,
+      singleoptimCheck: true,
       singleDownloadNotZero: false, // 判断单独下载数据是否为空
       type: false,
       loading: {},
@@ -871,6 +872,7 @@ export default {
       this.overlapRules = true
       this.deviceinfo = true
       this.splitCheck = true
+      this.singleoptimCheck = true
       this.checkPhaseRules()
       if (!this.phaseNotZero) {
         this.$message.error(
@@ -993,6 +995,11 @@ export default {
       //   this.$message.error(this.$t('edge.errorTip.deviceinformationnotnull'))
       //   return false
       // }
+      this.checkSingleoptim()
+      if (!this.singleoptimCheck) {
+        this.$message.warning(this.$t('edge.singleoptim.gratterThanHundred'))
+        return false
+      }
       return true
     },
     checkDeviceInfo () {
@@ -1031,6 +1038,27 @@ export default {
         }
       }
       this.phaseRing = true
+    },
+    checkSingleoptim () {
+      let singleoptim = this.globalParamModel.getParamsByType('singleoptim')
+      if (singleoptim && singleoptim.length > 0) {
+        this.singleoptimCheck = true
+        for (let i = 0; i < singleoptim.length; i++) {
+          let phasestaticweight = singleoptim[i].phasestaticweight
+          for (let j = 0; j < phasestaticweight.length; j++) {
+            let sum = 0
+            let subFactorList = phasestaticweight[j]
+            for (let k = 0; k < subFactorList.length; k++) {
+              let num = subFactorList[k]
+              sum = sum + num
+              if (sum > 100) {
+                this.singleoptimCheck = false
+                return false
+              }
+            }
+          }
+        }
+      }
     },
     cheackPhaseRingNum () {
       // 校验单个环最大16个相位
