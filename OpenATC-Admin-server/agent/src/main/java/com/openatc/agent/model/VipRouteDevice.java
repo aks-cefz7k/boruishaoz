@@ -2,6 +2,7 @@ package com.openatc.agent.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.openatc.model.model.MyGeometry;
 import java.util.List;
 import lombok.Data;
@@ -35,10 +36,26 @@ public class VipRouteDevice {
 
     private int value;
 
+    @Column(columnDefinition="int default 0")
     private int totaltime;
+
+    @Column(columnDefinition="int default 0")
+    private int greenflash;
+
+    @Column(columnDefinition="int default 0")
+    private int duration;
+
+    @Column(columnDefinition="int default 0")
+    private int yellow;
+
+    @Column(columnDefinition="int default 0")
+    private int redclear;
+
+    @Column(columnDefinition="int default 0")
+    private int mingreen;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "viprouteid")
     @OrderBy("detailId ASC")
-    private List<DirectionDetail> directions;
+    private List<DirectionDetail> phases;
 }

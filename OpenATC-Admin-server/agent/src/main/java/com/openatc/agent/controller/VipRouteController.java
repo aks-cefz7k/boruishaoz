@@ -3,12 +3,7 @@ package com.openatc.agent.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.VipRoute;
-import com.openatc.agent.model.VipRouteDevice;
-import com.openatc.agent.model.VipRouteDeviceOnline;
-import com.openatc.agent.model.VipRouteDeviceStatus;
-import com.openatc.agent.model.VipRouteDeviceVO;
-import com.openatc.agent.model.VipRouteVO;
+import com.openatc.agent.model.*;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
@@ -24,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -133,6 +129,7 @@ public class VipRouteController {
 
     // 更新勤务路线
     @PutMapping(value = "/viproute")
+    @Transactional
     public RESTRetBase updateVipRoute(@RequestBody VipRoute routeEntity) {
         int id = routeEntity.getId();
         // 0 执行前先判断一下是否存在执行中的设备，如果存在，应答错误
@@ -144,7 +141,7 @@ public class VipRouteController {
             if (vipRouteDeviceStatus.getState() == 1) return RESTRetUtils.errorObj(E_6002);
         }
         // 1 首先删除这条路线之前的设备
-        vipRouteDeviceDao.deleteByViprouteid(id);
+//        vipRouteDeviceDao.deleteByViprouteid(id);
 
         // 2 保存路线
         Set<VipRouteDevice> devs = routeEntity.getDevs();
@@ -200,6 +197,11 @@ public class VipRouteController {
         data.addProperty("control", vrDevice.getControl());
         data.addProperty("terminal", vrDevice.getTerminal());
         data.addProperty("value", vrDevice.getValue());
+
+        PhaseLockVO phaseLockVO = new PhaseLockVO(vrDevice);
+        JsonElement jeData = gson.toJsonTree(phaseLockVO);
+        data.add("data", jeData);
+
         Thread thread1 = null;
         // 执行勤务路线
         if (operation == 1) {
