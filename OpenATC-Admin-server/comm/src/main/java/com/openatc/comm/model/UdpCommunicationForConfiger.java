@@ -12,13 +12,21 @@
 package com.openatc.comm.model;
 
 import com.openatc.comm.data.MessageData;
+import com.openatc.core.model.InnerError;
+import com.openatc.core.util.RESTRetUtils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.logging.Logger;
+
+import static com.openatc.comm.common.LogUtil.CreateErrorRequestData;
+import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
+import static com.openatc.core.common.IErrorEnumImplInner.E_107;
+import static com.openatc.core.common.IErrorEnumImplInner.E_208;
 
 // 使用随机端口发送和监听UDP数据，适用于配置工具的直连网络，不含监听主动上报消息功能
 public class UdpCommunicationForConfiger implements Communication {
@@ -51,15 +59,21 @@ public class UdpCommunicationForConfiger implements Communication {
 
 
     @Override
-    public int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) {
-//        logger.info("communication start: " + System.currentTimeMillis());
+    public int sendData(String agentid, MessageData messageData, String ip, int port, String sendmsgtype) {
 
-//        if (datagramSocket == null) {
-//            //创建socket对象，绑定随机端口
-//            datagramSocket = new DatagramSocket();
-//            //设置超时
-//            datagramSocket.setSoTimeout(TIMEOUT);
-//        }
+        // 打包
+        PackData packData = null;
+        try {
+            packData = message.pack(messageData);
+        } catch (UnsupportedEncodingException e) {
+            // 打包异常，返回消息打包出错
+            logger.warning("Agent ID:" + agentid + " message pack error!" + e.getMessage());
+            return -2;
+        }
+        // packData为空，则返回消息不支持
+        if (packData == null) {
+            return -3;
+        }
 
         //socket的发送地址和端口
         InetSocketAddress address = new InetSocketAddress(ip, port);
