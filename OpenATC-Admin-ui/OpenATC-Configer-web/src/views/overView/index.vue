@@ -31,12 +31,6 @@
             :agentId="agentId"
             :graphicMode="graphicMode"
             :roadDirection="roadDirection" />
-          <!-- <IntersectionMap
-              ref="intersectionMap"
-              :crossStatusData="crossStatusData"
-              :devStatus="devStatus"
-              :agentId="agentId"
-              :graphicMode="graphicMode" /> -->
           <div class="pattern-status" v-if="!graphicMode">
             <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.patternoffset')}}: {{controlData.patternoffset}} {{$t('edge.overview.coordinationtime')}}: {{controlData.offset}})</div>
@@ -79,15 +73,6 @@
             :platform="platform"
             :funcSort="FuncSort"
             :roadDirection="roadDirection" />
-          <!-- <RightPanel
-            ref="rightpanel"
-            :statusData="crossStatusData"
-            :agentName="agentName"
-            :responseTime="responseTime"
-            :devStatus="devStatus"
-            :agentId="agentId"
-            :ip="ip"
-            :platform="platform" /> -->
         </div>
       </div>
     </div>
@@ -104,19 +89,15 @@ import OverLap from '@/components/OverLap'
 import { getIntersectionInfo } from '@/api/template'
 // import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
-import PhaseDataModel from '../../components/IntersectionMap/crossDirection/utils.js'
+import PhaseDataModel from 'openatc-components/package/kisscomps/components/IntersectionMap/crossDirection/utils.js'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
-import RightPanel from '@/components/SchemeConfig'
 import TextPage from './textPage/index'
-import IntersectionMap from '@/components/IntersectionMap'
 export default {
   name: 'overview',
   components: {
     BoardCard,
-    RightPanel,
     OverLap,
-    TextPage,
-    IntersectionMap
+    TextPage
   },
   data () {
     return {

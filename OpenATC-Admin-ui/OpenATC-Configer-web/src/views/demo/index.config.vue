@@ -20,7 +20,7 @@
       :close-on-click-modal="false"
       @close="oncancle"
       append-to-body>
-      <!-- <RightPanel
+      <!-- <scheme-config
         ref="rightpanel"
         :statusData="crossStatusData"
         :realtimeStatusModalvisible="false" /> -->
@@ -28,7 +28,6 @@
   </div>
 </template>
 <script>
-import RightPanel from '@/components/SchemeConfig'
 import { getTscControl } from '@/api/control'
 import { getMessageByCode } from '../../utils/responseMessage'
 import {
@@ -36,9 +35,6 @@ import {
 } from '@/utils/auth'
 export default {
   name: 'democonfig',
-  components: {
-    RightPanel
-  },
   data () {
     return {
       boxVisible: false,
