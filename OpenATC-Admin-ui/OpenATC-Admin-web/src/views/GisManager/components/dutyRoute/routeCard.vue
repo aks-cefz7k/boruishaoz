@@ -12,7 +12,7 @@
 <template>
   <el-card class="dutyRoute-routeCard" v-show="isShow">
     <div class="text item">
-      <el-row :gutter="20">
+      <!-- <el-row :gutter="20">
         <el-col :span="12">
           <el-row :gutter="0">
             <el-col :span="10">
@@ -81,9 +81,26 @@
             </el-col>
           </el-row>
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-row :gutter="0" v-if="isShowVideo">
-        <el-col :span="24">
+        <el-col :span="12">
+          <!-- <scheme-config
+            ref="rightpanel"
+            agentId="10002-994"
+            :statusData="getCrossStatusData(node.agentid)"
+            :realtimeStatusModalvisible="false" /> -->
+            <div style="border:0px solid red;width:350px;height:260px;">
+              <intersection-with-interface
+                ref="intersectionWithInterface"
+                :AgentId="node.agentid"
+                roadDirection="left"
+                ></intersection-with-interface>
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <!-- <div style="border:1px solid red;width:240px;">
+              <Flv :curDevVideos="node.videos" :autoPlay="autoPlay"></Flv>
+            </div> -->
           <Flv :curDevVideos="node.videos" :autoPlay="autoPlay"></Flv>
         </el-col>
       </el-row>
@@ -93,6 +110,7 @@
 
 <script>
 import { ExecuteViproute } from '@/api/service'
+import { getTscControl } from '@/api/control'
 import Flv from '@/components/Flvjs/index.vue'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
@@ -170,6 +188,33 @@ export default {
         res = 'primary'
       }
       return res
+    },
+    async getCrossStatusData (iframdevid) {
+      let crossStatusData = {}
+      await getTscControl(iframdevid).then((data) => {
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          let parrenterror = getMessageByCode(data.data.code, this.$i18n.locale)
+          if (data.data.data) {
+            // 子类型错误
+            let childErrorCode = data.data.data.errorCode
+            if (childErrorCode) {
+              let childerror = getMessageByCode(data.data.data.errorCode, this.$i18n.locale)
+              this.$message.error(parrenterror + ',' + childerror)
+            }
+          } else {
+            this.$message.error(parrenterror)
+          }
+          return
+        }
+        crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
+      }).catch(error => {
+        console.log(error)
+      })
+      return crossStatusData
     }
   }
 }
