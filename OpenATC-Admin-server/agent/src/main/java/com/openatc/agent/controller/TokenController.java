@@ -21,6 +21,7 @@ import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -39,6 +40,24 @@ public class TokenController {
     protected TokenDao tokenDao;
     @Autowired
     protected TokenUtil tokenUtil;
+
+    /**
+     * @Author: yangyi
+     * @Date: 2022/2/11 13:34
+     * @Description: 初始化数据，把数据库里的有效token都读入缓存的Map里
+     */
+    @PostConstruct
+    public void init() {
+        List<TokenModel> list =  tokenDao.findAll();
+        for (TokenModel tokenModel: list) {
+            if (tokenModel.getIsValid()) {
+                String token = tokenModel.getToken();
+                Long enddate = tokenModel.getEndTime().getTime();
+                Long startdate = tokenModel.getStartTime().getTime();
+                tokenUtil.tokenMap.put(token, new Token(token, 1, startdate, enddate));
+            }
+        }
+    }
 
     /**
      * @Author: yangyi
