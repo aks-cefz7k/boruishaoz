@@ -99,6 +99,7 @@ public class VipRouteController {
             AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
             if(ascsBaseModel == null) return;
             vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
+            vipRouteDev.setName(ascsBaseModel.getName());
         }
     }
 
@@ -106,7 +107,11 @@ public class VipRouteController {
     // 查询所有勤务路线的简略信息
     @GetMapping(value = "/viproute/simple")
     public RESTRetBase getVipRouteByName() {
-        return RESTRetUtils.successObj(vipRouteDao.getSimpleInfoForVipRoute());
+        List<VipRoute> vipRoutes = vipRouteDao.getSimpleInfoForVipRoute();
+        for (VipRoute vipRoute : vipRoutes) {
+            addGeometryToVipRoute(vipRoute);
+        }
+        return RESTRetUtils.successObj(vipRoutes);
     }
 
     // 新增勤务路线
