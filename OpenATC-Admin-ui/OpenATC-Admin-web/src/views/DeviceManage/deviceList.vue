@@ -11,12 +11,12 @@
  **/
 <template>
   <div class="openatc-device">
-    <!-- <SelectAgentid @onChange="onSelectAgentidChange"></SelectAgentid>
-    <SelectCrossPhase :agentid="agentid" @onChange="onSelectCrossPhaseChange"></SelectCrossPhase> -->
+    <SelectAgentid @onChange="onSelectAgentidChange"></SelectAgentid>
+    <SelectCrossPhase :agentid="agentid" @onChange="onSelectCrossPhaseChange"></SelectCrossPhase>
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
     <div class="devs-container" style="position:relative">
       <div style="display: inline-block;width: 100%;">
-        <div class="tag-container" v-show="isShowTag">
+        <div class="tag-container" v-if="isShowTag">
           <DeviceTags />
         </div>
         <div class="filter-container">
@@ -298,7 +298,7 @@ export default {
       // isShowAdd: false,
       // tableHeight: 700,
       multipleSelection: [],
-      agentid: 0,
+      agentid: '10001-928',
       stateList: ['UP', 'DOWN'],
       isOnlineChecked: true,
       isFaultChecked: true,

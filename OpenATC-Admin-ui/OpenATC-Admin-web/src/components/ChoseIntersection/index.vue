@@ -59,6 +59,9 @@ export default {
     show () {
       this.dialogTableVisible = true
     },
+    onSelectionChange (list) {
+      this.multipleSelection = list
+    },
     onCancelClick () {
       this.closeTableDialog()
     },

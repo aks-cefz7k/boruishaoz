@@ -51,7 +51,8 @@ const zh = {
       'location': '位置',
       'ignore': '忽略',
       'modify': '修改',
-      'submit': '提交'
+      'submit': '提交',
+      'config': '配置'
     },
     'login': {
       'username': '用户名',
@@ -409,6 +410,7 @@ const zh = {
       'currentControl': '当前控制',
       'lasttime': '持续时间(秒)',
       'stage': '阶段',
+      'content': '控制内容',
       'greenpercent': '绿信比',
       'getpatternfailed': '获取方案失败!',
       'ring': '环',

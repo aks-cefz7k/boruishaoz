@@ -13,26 +13,23 @@
   <div v-show="configurationVisible" class="configDrawer">
     <el-drawer
       :title="$t('openatc.dutyroute.dutyrouteconfig')"
-      size="41%"
+      size="45%"
       :visible.sync="configurationVisible"
       direction="rtl"
       :wrapperClosable="false"
       :destroy-on-close="true"
       :before-close="handleClose"
+      @opened="onDrawerOpend"
     >
-      <el-tabs v-model="activeTab" type="card" @tab-click="handleClickTab">
-        <el-tab-pane :label="$t('openatc.dutyroute.node')" name="device">
-          <DevicePanel
-            :devicesData="devicesData"
-            ref="devicedPanel"
-            @addDevice="addDevice"
-            @deleteDevice="deleteDevice"
-          />
-        </el-tab-pane>
-        <el-tab-pane :label="$t('openatc.dutyroute.plan')" name="pattern">
-          <PatternPanel :patternData="patternData" ref="patternPanel" />
-        </el-tab-pane>
-      </el-tabs>
+      <div style="display:flex;flex-direction:row;justify-content:flex-end;">
+        <el-button class="addbtn" type="primary" @click="handleAdd">{{
+          $t("openatc.greenwaveoptimize.adddevice")
+        }}</el-button>
+      </div>
+      <PatternPanel :patternData="patternData"
+                    ref="patternPanel"
+                    @addDevice="addDevice"
+                    @deleteDevice="deleteDevice"/>
       <div class="btnGroup">
         <el-button class="btn" @click="handleClose">{{
           $t("openatc.button.Cancel")
@@ -48,6 +45,7 @@
       @cancle="cancle"
       @ok="ok"
     />
+    <ChoseIntersection ref="choseIntersection" @onSureClick="onSureClick"></ChoseIntersection>
   </div>
 </template>
 
@@ -56,6 +54,7 @@ import Messagebox from '../../../components/MessageBox/index'
 import DevicePanel from '../tables/device'
 import PatternPanel from '../tables/pattern'
 import { getMessageByCode } from '@/utils/responseMessage'
+import ChoseIntersection from '@/components/ChoseIntersection'
 import {
   UpdateViproute
 } from '@/api/service'
@@ -64,7 +63,8 @@ export default {
   components: {
     Messagebox,
     DevicePanel,
-    PatternPanel
+    PatternPanel,
+    ChoseIntersection
   },
   props: {
     visible: {
@@ -77,7 +77,7 @@ export default {
   data () {
     return {
       configurationVisible: false, // 配置界面是否显示
-      activeTab: 'device',
+      activeTab: 'pattern',
       messageboxVisible: false, // 关闭界面二期确认弹窗是否显示
       configData: undefined, // 内部可修改的配置数据
       deviceIds: [], // 初始协调线路包含的设备id
@@ -107,21 +107,14 @@ export default {
     }
   },
   methods: {
+    onDrawerOpend () {
+      this.getPattern()
+    },
     handleClose () {
       this.messageboxVisible = true
     },
     reset () {
-      this.activeTab = 'device'
-    },
-    handleClickTab (tab, event) {
-      switch (tab.name) {
-        case 'device':
-          this.setDeviceData()
-          break
-        case 'pattern':
-          this.getPattern()
-          break
-      }
+      this.activeTab = 'pattern'
     },
     checkRules (reqData) {
       // let devs = reqData.devs
@@ -235,6 +228,7 @@ export default {
       this.patternData = this.devicesData.map(ele => ({
         isNew: ele.isNew, // 区分新增
         agentid: ele.agentid,
+        name: ele.name,
         patterndes: ele.terminalname,
         patternid: ele.terminal,
         state: ele.value,
@@ -271,7 +265,16 @@ export default {
       if (index !== -1) {
         this.devicesData.splice(index, 1)
         // this.patternData = [] // 强制清空数据销毁table dom
+        this.getPattern()
       }
+    },
+    onSureClick (list) {
+      this.addDevice(list)
+      this.getPattern()
+    },
+    handleAdd () {
+      let choseIntersection = this.$refs.choseIntersection
+      choseIntersection.show()
     }
   }
 }

@@ -51,7 +51,8 @@ const en = {
       'location': 'Location',
       'ignore': 'Ignore',
       'modify': 'Modify',
-      'submit': 'Submit'
+      'submit': 'Submit',
+      'config': 'Config'
     },
     'login': {
       'username': 'User Name',
@@ -409,6 +410,7 @@ const en = {
       'currentControl': 'Current Control',
       'lasttime': 'Last Time(second)',
       'stage': 'Stage',
+      'content': 'Content',
       'greenpercent': 'Green Percent',
       'getpatternfailed': 'Get Pattern Failed !',
       'ring': 'Ring',
