@@ -232,6 +232,12 @@ export default {
       // let mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
 
       let grayscale = L.tileLayer(this.gisNormal, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1})
+      // let grayscale = L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+      //   attribution: '&copy; 高德地图',
+      //   maxZoom: 15,
+      //   minZoom: 10,
+      //   subdomains: '1234'
+      // })
       let streets = L.tileLayer(this.gisStatellite, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1})
 
       let baseLayers = {
@@ -449,5 +455,12 @@ export default {
 }
 .header-left >>> .el-checkbox__input {
       display: none;
+}
+.openatc-gis >>> .leaflet-container {
+    font: 12PX/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 12PX;
+}
+.openatc-gis >>> .leaflet-popup-content {
+    font-size: 12PX;
 }
 </style>
