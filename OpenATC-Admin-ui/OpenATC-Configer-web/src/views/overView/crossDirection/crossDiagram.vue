@@ -510,8 +510,8 @@ export default {
           return
         }
         this.isLoaded = true
-        this.crossInfo = res.data.data
-        this.tempType = this.crossInfo.type
+        this.crossInfo = res.data.data.param
+        this.tempType = res.data.data.type
         // 获取车道相位、行人相位信息（坐标、名称）
         this.mainType = this.tempType.split('-')[0]
         this.mainDirection = this.tempType.split('-')[1]
