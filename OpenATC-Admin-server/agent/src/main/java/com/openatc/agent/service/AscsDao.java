@@ -560,7 +560,7 @@ public class AscsDao {
         String limitCondition = String.format(" limit  %d  offset  %d ",pageRow, pageNum*pageRow );
 
         // 查询条件
-        String whereCondition = null;
+        String whereCondition = "";
         String search = jsonObject.get("search").getAsString();
         if( !search.isEmpty()){
             String temp = String.format("( agentid like '%%%s%%' or name like '%%%s%%' or thirdplatformid like '%%%s%%' or jsonparam::text like '%%%s%%' ) ",search,search,search,search);
