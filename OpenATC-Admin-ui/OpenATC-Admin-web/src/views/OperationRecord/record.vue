@@ -11,90 +11,65 @@
  **/
 <template>
   <div class="openatc-operationrecord">
-    <div style="float:left;margin:15px 20px;">
-      <div class="common-table-title">{{$t('openatc.main.operationrecord')}}</div>
-    </div>
-    <div class="filter-container" style="width:90%;">
-      <el-row  :gutter="10"
-               type="flex"
-               justify="end"
-               style="margin-right:16px;flex-wrap:wrap;flex-direction:row; justify-content:flex-end">
-        <el-col :span="3">
-          <div>
-            <span class="header-span">{{$t('openatc.record.originadress') }}：</span>
-            <el-input
-                clearable
-                v-model="source"
-                style="width:70%"
-                @change="onConditionChange"
-            />
-          </div>
-        </el-col>
-        <el-col :span="3.5">
-          <div>
-            <span class="header-span">{{$t('openatc.record.messagetype') }}：</span>
-            <SelectInfoType ref="selectInfoType"
-                            style="width:63%"
-                            @onChange="onConditionChange"></SelectInfoType>
-          </div>
-        </el-col>
-        <el-col :span="3">
-          <div>
-            <span class="header-span">{{$t('openatc.record.reponsestatus') }}：</span>
-            <SelectReponseStatus ref="selectReponseStatus"
-                                 style="width:60%"
-                                 @onChange="onConditionChange"></SelectReponseStatus>
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <div>
-            <span class="header-span">{{ $t("openatc.faultrecord.roadname") }}：</span>
-            <SelectAgentid ref="selectAgentid"
-                           style="width:70%"
-                           @onChange="onConditionChange"></SelectAgentid>
-            <SelectControl ref="selectControl"
-                           v-show="false"
-                           style="width:70%"></SelectControl>
-          </div>
-        </el-col>
-        <el-col :span="3">
-          <div>
-            <span class="header-span">{{$t('openatc.login.username') }}：</span>
-            <el-input
-                clearable
-                v-model="operator"
-                style="width:70%"
-                @change="onConditionChange"
-            />
-          </div>
-        </el-col>
-        <el-col :span="7.5">
-          <div class="timepicker">
-            <span class="header-span">{{$t('openatc.record.opertime') }}：</span>
-            <template >
-              <el-date-picker
-                v-model="timeValue"
-                popper-class="common-date-popper"
-                type="datetimerange"
-                range-separator="-"
-                :start-placeholder="$t('openatc.usermanager.starttime')"
-                :end-placeholder="$t('openatc.usermanager.endtime')"
-                @change="onConditionChange">
-              </el-date-picker>
-            </template>
-          </div>
-        </el-col>
-        <!-- <el-col :span="1.5">
-          <div>
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              @click="onSearchClick()"
-              >{{ $t("openatc.button.search") }}
-            </el-button>
-          </div>
-        </el-col> -->
-      </el-row>
+    <div style="display:inline-block;width:100%;">
+      <div style="float:left;margin-top: 15px;margin-left: 20px;">
+        <div class="common-table-title">{{$t('openatc.main.operationrecord')}}</div>
+      </div>
+      <div class="filter-container" style="float:right;margin-right:20px;">
+        <div class="filter">
+          <span class="header-span">{{$t('openatc.record.originadress') }}：</span>
+          <el-input
+              clearable
+              v-model="source"
+              style="width:120px;"
+              @change="onConditionChange"
+          />
+        </div>
+        <div class="filter">
+          <span class="header-span">{{$t('openatc.record.messagetype') }}：</span>
+          <SelectInfoType ref="selectInfoType"
+                          style="width:150px;"
+                          @onChange="onConditionChange"></SelectInfoType>
+        </div>
+        <div class="filter">
+          <span class="header-span">{{$t('openatc.record.reponsestatus') }}：</span>
+          <SelectReponseStatus ref="selectReponseStatus"
+                              style="width:120px;"
+                              @onChange="onConditionChange"></SelectReponseStatus>
+        </div>
+        <div class="filter">
+          <span class="header-span">{{ $t("openatc.faultrecord.roadname") }}：</span>
+          <SelectAgentid ref="selectAgentid"
+                        style="width:200px;"
+                        @onChange="onConditionChange"></SelectAgentid>
+          <SelectControl ref="selectControl"
+                        v-show="false"
+                        style="width:70%"></SelectControl>
+        </div>
+        <div class="filter">
+          <span class="header-span">{{$t('openatc.login.username') }}：</span>
+          <el-input
+              clearable
+              v-model="operator"
+              style="width:120px;"
+              @change="onConditionChange"
+          />
+        </div>
+        <div class="filter timepicker">
+          <span class="header-span">{{$t('openatc.record.opertime') }}：</span>
+          <template >
+            <el-date-picker
+              v-model="timeValue"
+              popper-class="common-date-popper"
+              type="datetimerange"
+              range-separator="-"
+              :start-placeholder="$t('openatc.usermanager.starttime')"
+              :end-placeholder="$t('openatc.usermanager.endtime')"
+              @change="onConditionChange">
+            </el-date-picker>
+          </template>
+        </div>
+      </div>
     </div>
     <div class="atc-table">
       <el-table
@@ -204,7 +179,7 @@ export default {
       this.tableHeight =
                 window.innerHeight -
                 document.querySelector('#footerBtn').offsetTop -
-                200
+                60
     }
   },
   mounted: function () {
@@ -217,7 +192,7 @@ export default {
       _this.tableHeight =
                 window.innerHeight -
                 document.querySelector('#footerBtn').offsetTop -
-                200
+                60
       window.onresize = function () {
         // 定义窗口大小变更通知事件
         _this.screenHeight = window.innerHeight // 窗口高度

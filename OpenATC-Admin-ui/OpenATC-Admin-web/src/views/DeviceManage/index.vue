@@ -15,127 +15,129 @@
     <SelectCrossPhase :agentid="agentid" @onChange="onSelectCrossPhaseChange"></SelectCrossPhase> -->
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
     <div class="devs-container" style="position:relative">
+      <div style="display: inline-block;width: 100%;">
         <div class="tag-container">
-        <DeviceTags />
-      </div>
-      <div class="filter-container">
-        <!-- <el-form>
-          <el-form-item> -->
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.devicetype') }}：</span>
-            <el-select
-              style="width: 100px;"
-              v-model="devicetypes"
-              @change="getDeviceRanges('search')"
-              clearable
-              filterable>
-              <el-option
-                v-for="(item, index) in devicetype"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.plat') }}：</span>
-            <el-select
-              style="width: 100px;"
-              v-model="plats"
-              @change="getDeviceRanges('search')"
-              clearable
-              filterable>
-              <el-option
-                v-for="(item, index) in plat"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.protocol') }}：</span>
-            <el-select
-              style="width: 100px;"
-              v-model="protocols"
-              @change="getDeviceRanges('search')"
-              clearable
-              filterable>
-              <el-option
-                v-for="(item, index) in protocol"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.state') }}：</span>
-            <el-select
-              style="width: 100px;"
-              v-model="states"
-              @change="getDeviceRanges('search')"
-              clearable
-              filterable>
-              <el-option
-                v-for="(item, index) in state"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="filter">
-            <span class="header-span">{{$t('openatc.devicemanager.tag') }}：</span>
-            <el-popover
-                placement="bottom"
-                width="460"
-                v-model="visible2"
-                trigger="click"
-              >
-              <el-tag
-                :key="index"
-                v-for="(select,index) in selectTags"
-                :disable-transitions="false"
-                @click="selectItem(select)"
+          <DeviceTags />
+        </div>
+        <div class="filter-container">
+          <!-- <el-form>
+            <el-form-item> -->
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.devicetype') }}：</span>
+              <el-select
+                style="width: 100px;"
+                v-model="devicetypes"
+                @change="getDeviceRanges('search')"
+                clearable
+                filterable>
+                <el-option
+                  v-for="(item, index) in devicetype"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
                 >
-                {{select}}
-              </el-tag>
-              <el-input
-                @keyup.enter.native="getDeviceRanges()"
-                @blur="getDeviceRanges()"
-                v-model="selectTag"
-                slot="reference"
-                style="width: 100px;"/>
-              </el-popover>
-          </div>
-        <!-- </el-form-item>
-          <el-form-item> -->
-            <div class="filter" style="margin-right:20px">
-              <el-input
-                @keyup.enter.native="getDeviceRanges()"
-                @blur="getDeviceRanges()"
-                v-model="devsfilter"
-                :placeholder="$t('openatc.common.searchplaceholder')"
-                prefix-icon="el-icon-search"
-                style="width: 200px;"/>
-                  <el-button
-                    type="primary"
-                    icon="el-icon-plus"
-                    @click="handleAdd">
-                    {{$t('openatc.common.add')}}
-                  </el-button>
-
-                <!-- slot="reference"
-            </el-popover> -->
+                </el-option>
+              </el-select>
+            </div>
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.plat') }}：</span>
+              <el-select
+                style="width: 100px;"
+                v-model="plats"
+                @change="getDeviceRanges('search')"
+                clearable
+                filterable>
+                <el-option
+                  v-for="(item, index) in plat"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.protocol') }}：</span>
+              <el-select
+                style="width: 100px;"
+                v-model="protocols"
+                @change="getDeviceRanges('search')"
+                clearable
+                filterable>
+                <el-option
+                  v-for="(item, index) in protocol"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.state') }}：</span>
+              <el-select
+                style="width: 100px;"
+                v-model="states"
+                @change="getDeviceRanges('search')"
+                clearable
+                filterable>
+                <el-option
+                  v-for="(item, index) in state"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="filter">
+              <span class="header-span">{{$t('openatc.devicemanager.tag') }}：</span>
+              <el-popover
+                  placement="bottom"
+                  width="460"
+                  v-model="visible2"
+                  trigger="click"
+                >
+                <el-tag
+                  :key="index"
+                  v-for="(select,index) in selectTags"
+                  :disable-transitions="false"
+                  @click="selectItem(select)"
+                  >
+                  {{select}}
+                </el-tag>
+                <el-input
+                  v-model="selectTag"
+                  clearable
+                  @change="getDeviceRanges()"
+                  slot="reference"
+                  style="width: 100px;"/>
+                </el-popover>
             </div>
           <!-- </el-form-item>
-        </el-form> -->
+            <el-form-item> -->
+              <div class="filter" style="margin-right:20px">
+                <el-input
+                  @keyup.enter.native="getDeviceRanges()"
+                  @blur="getDeviceRanges()"
+                  v-model="devsfilter"
+                  :placeholder="$t('openatc.common.searchplaceholder')"
+                  prefix-icon="el-icon-search"
+                  style="width: 200px;"/>
+                    <el-button
+                      type="primary"
+                      icon="el-icon-plus"
+                      @click="handleAdd">
+                      {{$t('openatc.common.add')}}
+                    </el-button>
+
+                  <!-- slot="reference"
+              </el-popover> -->
+              </div>
+            <!-- </el-form-item>
+          </el-form> -->
         </div>
+      </div>
     <div class="devs-table">
       <el-table
           :data="computedTable"
@@ -204,11 +206,11 @@
           :label="$t('openatc.devicemanager.protocol')"
           align="center">
           </el-table-column>
-          <!-- <el-table-column
+          <el-table-column
             prop="roles"
             :label="$t('openatc.devicemanager.state')"
             align="center">
-              <template slot="header">
+              <!-- <template slot="header">
                 <el-popover
                   placement="bottom"
                   trigger="click">
@@ -223,20 +225,23 @@
                     {{$t('openatc.devicemanager.state')}}<i class="el-icon-caret-bottom state-search"></i>
                   </el-row>
                 </el-popover>
-              </template>
+              </template> -->
               <template  slot-scope="scope">
                 <div>
-                    <el-tag size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
+                  <el-tooltip placement="top-start" effect="light">
+                    <div slot="content">{{$t('openatc.devicemanager.lastupdatetime')}}:{{scope.row.lastTime}}</div>
+                    <el-tag style="cursor:pointer;"  size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
+                  </el-tooltip>
                 </div>
               </template>
-          </el-table-column> -->
-          <el-table-column
+          </el-table-column>
+          <!-- <el-table-column
           prop="lastTime"
           width="150"
           :label="$t('openatc.devicemanager.lastupdatetime')"
           sortable
           align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column :label="$t('openatc.devicemanager.operation')" align="center" width="240">
           <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">{{$t('openatc.common.edit')}}</el-button>
@@ -289,7 +294,7 @@ export default {
   data () {
     return {
       agentid: 0,
-      // stateList: ['UP', 'FAULT', 'DOWN'],
+      stateList: ['UP', 'DOWN'],
       isOnlineChecked: true,
       isFaultChecked: true,
       isOfflineChecked: true,
@@ -437,7 +442,7 @@ export default {
   methods: {
     getDicts () {
       getDict().then(res => {
-        this.selectTags = res.data.data.filter(it => it.value).map(it => it.value)
+        this.selectTags = Array.from(new Set(res.data.data.filter(it => it.value).map(it => it.value)))
       })
     },
     selectItem (select) {
@@ -464,7 +469,8 @@ export default {
     },
     // onOnlineChange (val) {
     //   this.isOnlineChecked = val
-    //   this.onStateChange()
+    //   this.getDeviceRanges()
+    //   // this.onStateChange()
     // },
     // onFaultChange (val) {
     //   this.isFaultChecked = val
@@ -472,7 +478,8 @@ export default {
     // },
     // onOfflineChange (val) {
     //   this.isOfflineChecked = val
-    //   this.onStateChange()
+    //   this.getDeviceRanges()
+    //   // this.onStateChange()
     // },
     // onStateChange () {
     //   let stateList = []
@@ -487,32 +494,33 @@ export default {
     //   }
     //   this.stateList = stateList
     // },
-    // getTag (row) {
-    //   if (row.state === 'DOWN') {
-    //     return {
-    //       label: this.$t('openatc.devicemanager.offline'),
-    //       type: 'info'
-    //     }
-    //   } else if (row.state === 'FAULT') {
+    // else if (row.state === 'FAULT') {
     //     return {
     //       label: this.$t('openatc.devicemanager.fault'),
     //       type: 'danger'
     //     }
-    //   } else {
-    //     if (row.status === 0) {
-    //       // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
-    //       return {
-    //         label: this.$t('openatc.devicemanager.online'),
-    //         type: 'success'
-    //       }
-    //     } else {
-    //       return {
-    //         label: this.$t('openatc.devicemanager.fault'),
-    //         type: 'danger'
-    //       }
-    //     }
     //   }
-    // },
+    getTag (row) {
+      if (row.state === 'DOWN') {
+        return {
+          label: this.$t('openatc.devicemanager.offline'),
+          type: 'info'
+        }
+      } else {
+        if (row.status === 0) {
+          // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
+          return {
+            label: this.$t('openatc.devicemanager.online'),
+            type: 'success'
+          }
+        } else {
+          // return {
+          //   label: this.$t('openatc.devicemanager.fault'),
+          //   type: 'danger'
+          // }
+        }
+      }
+    },
     getDeviceRanges (row) {
       this.listLoading = true
       let reqData = {
@@ -667,22 +675,26 @@ export default {
       // 获取从首页跳转过来的设备状态过滤参数
       if (this.$route.params.filter !== undefined) {
         let stateFilter = this.$route.params.filter
-        this.states = stateFilter
-        this.getDeviceRanges()
-        // switch (stateFilter) {
-        //   case 'online': this.onOnlineChange(true)
-        //     this.onOfflineChange(false)
-        //     this.onFaultChange(false)
-        //     break
-        //   case 'offline': this.onOfflineChange(true)
-        //     this.onOnlineChange(false)
-        //     this.onFaultChange(false)
-        //     break
-        // case 'fault': this.onFaultChange(true)
-        //   this.onOnlineChange(false)
-        //   this.onOfflineChange(false)
-        //   break
-        // }
+        // this.states = stateFilter
+        // this.getDeviceRanges()
+        switch (stateFilter) {
+          case 'online': this.states = 'UP'
+            this.getDeviceRanges()
+            // this.onOnlineChange(true)
+            // this.onOfflineChange(false)
+            // this.onFaultChange(false)
+            break
+          case 'offline': this.states = 'DOWN'
+            this.getDeviceRanges()
+            // this.onOfflineChange(true)
+            // this.onOnlineChange(false)
+            // this.onFaultChange(false)
+            break
+          // case 'fault': this.onFaultChange(true)
+          //   this.onOnlineChange(false)
+          //   this.onOfflineChange(false)
+          //   break
+        }
       }
     }
   }
