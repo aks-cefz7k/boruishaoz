@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26107142",
+      "name": "帮助",
+      "font_class": "bangzhu",
+      "unicode": "e6c7",
+      "unicode_decimal": 59079
+    },
+    {
+      "icon_id": "22150952",
+      "name": "南掉头-印尼",
+      "font_class": "nandiaotou-yinni",
+      "unicode": "e6c6",
+      "unicode_decimal": 59078
+    },
+    {
       "icon_id": "22149254",
       "name": "东调头-印尼",
       "font_class": "dongtiaotou-yinni",

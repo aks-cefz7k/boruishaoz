@@ -485,7 +485,8 @@ const en = {
       'putTscControlError3': 'Unsupported control params',
       'putTscControlError4': 'Unable to execute because device is in initialization',
       'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
-      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control'
+      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control',
+      'entername': 'Please enter area name'
     },
     'about': {
       'version': 'Version',
