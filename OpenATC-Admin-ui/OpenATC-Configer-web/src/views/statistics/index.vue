@@ -116,6 +116,16 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.allFlowData = []
+      this.detectorList = []
+    },
+    initChartData () {
+      this.tableData = []
+      this.dateData = []
+      this.flowData = []
+      this.occupancyData = []
+    },
     setTableMaxHeight () {
       var _this = this
       _this.$nextTick(function () {
@@ -161,6 +171,7 @@ export default {
         if (this.dataTimeoutTimer) {
           clearTimeout(this.dataTimeoutTimer)
         }
+        this.initData()
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
@@ -184,6 +195,7 @@ export default {
       })
     },
     handleData (flows) {
+      this.initChartData()
       let index = this.radio
       for (let flow of flows) {
         let tableObj = {}
@@ -191,9 +203,9 @@ export default {
         tableObj.smallvehnum = flow.detector[index].smallvehnum
         tableObj.totalVehtime = flow.detector[index].totalVehtime
         tableObj.occupyrate = flow.detector[index].occupyrate
-        this.dateData.push(flow.time)
         this.tableData.push(tableObj)
-        this.flowData.push(flow.detector[index].totalVehtime)
+        this.dateData.push(flow.time)
+        this.flowData.push(flow.detector[index].smallvehnum)
         this.occupancyData.push(flow.detector[index].occupyrate)
       }
       this.getEchartsData()
