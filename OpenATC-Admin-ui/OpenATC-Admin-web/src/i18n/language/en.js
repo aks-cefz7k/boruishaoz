@@ -571,7 +571,9 @@ const en = {
       'tokenManage': 'Token Management',
       'timeStart': 'Time Start',
       'timeEnd': 'Time End',
-      'isValid': 'isValid'
+      'isValid': 'isValid',
+      'yes': 'Yes',
+      'no': 'No'
     }
   }
 }

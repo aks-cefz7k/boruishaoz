@@ -543,7 +543,11 @@ export default {
     },
     getSystemConfig () {
       return new Promise((resolve, reject) => {
-        SystemconfigApi.GetSystemconfigByModule('system').then((data) => {
+        let reqData = {
+          module: 'system',
+          isValid: true
+        }
+        SystemconfigApi.GetSystemconfigList(reqData).then((data) => {
           if (data.data.success !== true) {
             this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return

@@ -570,7 +570,9 @@ const zh = {
       'tokenManage': 'Token管理',
       'timeStart': '有效期开始',
       'timeEnd': '有效期截止',
-      'isValid': '是否启用'
+      'isValid': '是否启用',
+      'yes': '是',
+      'no': '否'
     }
   }
 }

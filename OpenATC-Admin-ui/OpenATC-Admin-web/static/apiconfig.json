@@ -350,6 +350,11 @@
     "method": "delete"
   },
   {
+    "key": "systemconfig_getList",
+    "url": "/systemconfig/getList",
+    "method": "post"
+  },
+  {
     "key": "GetAllVideos",
     "url": " /video",
     "method": "get"
