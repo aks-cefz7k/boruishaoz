@@ -183,7 +183,7 @@ export default {
               if (data.data.data && data.data.data.data) {
                 success = data.data.data.data.success
                 if (success !== 0) {
-                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  let errormsg = 'edge.overview.putTscControlError' + success
                   this.$message.error(this.$t(errormsg))
                   return
                 }
@@ -224,7 +224,7 @@ export default {
               if (data.data.data && data.data.data.data) {
                 success = data.data.data.data.success
                 if (success !== 0) {
-                  let errormsg = 'openatc.bottleneckcontrol.putTscControlError' + success
+                  let errormsg = 'edge.overview.putTscControlError' + success
                   this.$message.error(this.$t(errormsg))
                   return
                 }

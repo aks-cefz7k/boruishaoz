@@ -211,6 +211,7 @@ const zh = {
       'putTscControlError4': '设备初始化中，无法执行',
       'putTscControlError5': '优先级更高的方案控制中，无法执行',
       'putTscControlError6': '优先级更高的用户控制中，无法执行',
+      'putTscControlError7': '方案编号对应的方案不存在',
       'nofault': '无',
       'extendedContent': '扩展内容',
       'JSONFormatError': 'JSON格式错误!',
