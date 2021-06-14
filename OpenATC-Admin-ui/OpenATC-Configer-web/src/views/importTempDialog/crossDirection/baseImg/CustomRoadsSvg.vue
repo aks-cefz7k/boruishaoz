@@ -1,0 +1,64 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+<template>
+<div class="customRoadsIcon">
+  <svg t="1582534586706" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7961" xmlns:xlink="http://www.w3.org/1999/xlink" width="200px" height="200px">
+    <path d="M397.952607 28.875829H69.88436c-33.72891 0-61.634123 27.662559-61.634123 61.634124v328.068246c0 33.72891 27.662559 61.634123 61.634123 61.634123H397.952607c33.72891 0 61.634123-27.662559 61.634123-61.634123V90.267299c0-33.72891-27.662559-61.391469-61.634123-61.39147zM585.281517 479.969668h328.068246c33.72891 0 61.634123-27.662559 61.634123-61.634123V90.267299c0-33.72891-27.662559-61.634123-61.634123-61.634124H585.281517c-33.72891 0-61.634123 27.662559-61.634124 61.634124v328.068246c0 33.971564 27.662559 61.634123 61.634124 61.634123zM881.319431 794.934597l67.215166 116.23128 67.215166-116.23128h-47.802844v-169.615166c0-41.008531-33.243602-74.252133-74.252132-74.252132h-293.611375c-41.008531 0-74.252133 33.243602-74.252132 74.252132v293.611375c0 41.008531 33.243602 74.252133 74.252132 74.252132h293.611375c10.676777 0 19.169668-8.492891 19.169668-19.169668s-8.492891-19.169668-19.169668-19.169668h-293.611375c-19.654976 0-35.912796-16.015166-35.912796-35.912796v-293.611375c0-19.654976 16.015166-35.912796 35.912796-35.912796h293.611375c19.654976 0 35.912796 16.015166 35.912796 35.912796v169.615166h-48.288152zM397.952607 544.030332H69.88436c-33.72891 0-61.634123 27.662559-61.634123 61.634123v328.068246c0 33.72891 27.662559 61.634123 61.634123 61.634124H397.952607c33.72891 0 61.634123-27.662559 61.634123-61.634124V605.664455c0-33.971564-27.662559-61.634123-61.634123-61.634123z" fill="#D3E6FB" p-id="7962"></path>
+  </svg>
+</div>
+</template>
+<script>
+export default {
+  name: 'customRoads',
+  data () {
+    return {}
+  },
+  props: {
+    Width: {
+      type: String,
+      default: '439px'
+    },
+    Height: {
+      type: String,
+      default: '328px'
+    }
+  },
+  methods: {},
+  mounted () {}
+}
+</script>
+<style scoped>
+.st0 {
+  fill: #3e3a39;
+}
+.st1 {
+  fill: #f2f2f2;
+}
+.st2 {
+  fill: #1eaa39;
+}
+.st3 {
+  fill: #40210f;
+}
+.st4 {
+  fill: #dddddd;
+}
+.st5 {
+  fill: #b38d1b;
+}
+.customRoadsIcon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+</style>

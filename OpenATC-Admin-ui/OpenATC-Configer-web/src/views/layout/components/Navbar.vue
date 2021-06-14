@@ -1,0 +1,1122 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+<template>
+  <div>
+    <Messagebox :visible="readDiologVisible" :text="`是否载入设备${copiedAgentid}的方案信息，到当前设备配置中 ?`" @cancle="cancleRead" @ok="handleRead"/>
+    <ImportTempDialog ref="importTemp" v-if="importVisible" :imortVisible="importVisible" @closeImportTemp="closeImportTemp"/>
+    <el-menu
+      class="navbar"
+      mode="horizontal"
+    >
+      <hamburger
+        class="hamburger-container"
+        :toggleClick="toggleSideBar"
+        :isActive="sidebar.opened"
+      ></hamburger>
+      <!-- <breadcrumb></breadcrumb> -->
+       <!-- <div class="navbar-agentid">
+        <span class="agent-id">{{'设备ID：' + agentid}}</span>
+       </div> -->
+      <div class="operation-button">
+        <div v-show="isShowMenu" style="display: inline;">
+          <el-select v-model="value" placeholder="请选择" size="mini">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+            <el-button type="primary" @click="upload" size="mini">{{$t('edge.main.upload')}}</el-button>
+            <el-button type="primary" @click="download" size="mini">{{$t('edge.main.download')}}</el-button>
+            <span class="dividing-line"></span>
+            <el-dropdown split-button placement="bottom-end" size="mini" type="primary" @click="importtemplate" @command="handleCommand">
+              {{$t('edge.main.importtemplate')}}
+              <el-dropdown-menu slot="dropdown" style="width: 110px">
+                <el-dropdown-item command="import" style="line-height: 32px;text-align: center;">
+                  {{$t('edge.main.import')}}
+                </el-dropdown-item>
+                <el-dropdown-item command="export" style="line-height: 32px;text-align: center;">
+                  {{$t('edge.main.export')}}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <!-- <el-button type="primary" @click="importtemplate" size="mini">{{$t('edge.main.importtemplate')}}</el-button> -->
+            <el-button type="primary" @click="copy" size="mini">{{$t('edge.main.copy')}}</el-button>
+            <!-- <el-dropdown split-button placement="bottom-end" size="mini" type="primary" @click="copy" @command="handleCommand">
+              {{$t('edge.main.copy')}}
+              <el-dropdown-menu slot="dropdown" style="width: 110px">
+                <el-dropdown-item command="import" style="line-height: 32px;text-align: center;">
+                  {{$t('edge.main.import')}}
+                </el-dropdown-item>
+                <el-dropdown-item command="export" style="line-height: 32px;text-align: center;">
+                  {{$t('edge.main.export')}}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown> -->
+            <el-button type="primary" @click="read" size="mini" :disabled="copiedTscParam === null">{{$t('edge.main.read')}}</el-button>
+           </div>
+            <el-dropdown trigger="click" @command="handleLogout" @visible-change="showInfo" style="margin-left: 15px;" v-show="isShowLogout">
+              <span class="el-dropdown-link">
+                {{userInfo.user_name}}<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item disabled>
+                  <div class="user-name">{{userInfo.user_name}}</div>
+                  <div class="pass-expire" v-show="passIsExpire">密码到期 {{userInfo.expiration_time}}</div>
+                  <div style="margin-top: 10px;">
+                    <span v-for="(data, index) in userInfo.roleNames" :key="index">
+                      <el-tag size="medium" :type="roleType[index]">{{ data }}</el-tag>
+                    </span>
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item divided disabled>
+                  <div class="organization">
+                    <div class="laber-name">组织机构</div>
+                    <div class="laber-value">{{userInfo.organization}}</div>
+                  </div>
+                  <div class="real-name">
+                    <div class="laber-name">真实姓名</div>
+                    <div class="laber-value">{{userInfo.nick_name}}</div>
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item divided disabled>
+                  <div class="organization">
+                    <div class="laber-name">联系电话</div>
+                    <div class="laber-value">{{userInfo.mobile_phone}}</div>
+                  </div>
+                  <div class="real-name">
+                    <div class="laber-name">电子邮箱</div>
+                    <div class="laber-value">{{userInfo.email}}</div>
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item divided command="a">修改密码</el-dropdown-item>
+                <el-dropdown-item command="b">登出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+      </div>
+      <!-- <div class="dividing-line"></div> -->
+      <!-- <div class="switch-language">
+        <el-dropdown trigger="click" @command="switchLanguage">
+          <span class="el-dropdown-link">
+            {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="Ch">中文</el-dropdown-item>
+            <el-dropdown-item command="En">English</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div> -->
+    </el-menu>
+    <el-dialog
+      :title="$t('edge.plan.tip')"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <input
+        type="file"
+        id="file"
+      />
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisible = false">{{$t('edge.common.cancel')}}</el-button>
+        <el-button
+          type="primary"
+          @click="readAsText"
+        >{{$t('edge.common.confirm')}}</el-button>
+      </span>
+    </el-dialog>
+    <!--修改密码弹框-->
+    <changePass ref="changepassChild"></changePass>
+  </div>
+</template>
+
+<script>
+import router from '@/router'
+import { mapGetters, mapState } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+import { uploadTscParam, downloadTscParam, uploadSingleTscParam, downloadSingleTscParam, checkCode } from '@/api/param'
+import { setLanguage } from '@/utils/auth'
+import Messagebox from '@/components/MessageBox/index'
+import ImportTempDialog from '../../importTempDialog/index'
+import { getInfo } from '@/api/login'
+import changePass from './ChangePass'
+
+export default {
+  components: {
+    Breadcrumb,
+    Hamburger,
+    Messagebox,
+    ImportTempDialog,
+    changePass
+  },
+  data () {
+    return {
+      dialogVisible: false,
+      phaseNotZero: false, // 判断必须有一个非零相位
+      planNotZero: false, // 判断必须有一个plan
+      patternNotZero: false, // 判断必须有一个pattern
+      dataNotZero: false, // 判断必须有一个data
+      dateIsAll: false, // 判断日期必须为全年
+      planDate: false, // 校验plan里的时刻是否合法
+      patternRing: false, // 判断方案里的环的时间是否相等
+      dataPlan: false, // 判断日期里的计划是否为空
+      planPattern: false, // 判断计划里的方案是否为空
+      overlapRules: false, // 判断跟随相位里的母相位是否为空
+      manualpanelIsNull: false, // 判断手动面板数据是否为空
+      deviceinfo: false, // 校验设备信息的规则
+      type: false,
+      language: 'Language',
+      loading: {},
+      options: [{
+        value: 'all',
+        label: '全部'
+      }, {
+        value: 'phase',
+        label: '相位'
+      }, {
+        value: 'overlap',
+        label: '跟随相位'
+      }, {
+        value: 'pattern',
+        label: '方案'
+      }, {
+        value: 'plan',
+        label: '计划'
+      }, {
+        value: 'date',
+        label: '日期'
+      }, {
+        value: 'channel',
+        label: '通道'
+      }, {
+        value: 'detecter',
+        label: '检测器'
+      }, {
+        value: 'peddetecter',
+        label: '行人检测器'
+      }, {
+        value: 'devinfo',
+        label: '设备信息'
+      }],
+      value: 'all',
+      notify: undefined, // 用于判断关闭多个显示的提示框
+      readDiologVisible: false,
+      curCopyAgentid: '', // 提示框显示复制的设备id
+      copiedAgentid: '', // 缓存方案的设备id
+      importVisible: false,
+      // userInfo: {},
+      roleType: ['', 'success', 'warning'],
+      passIsExpire: false, // 密码是否即将过期
+      isShowLogout: true,
+      isShowMenu: false,
+      planName: '',
+      errorCodeMap: new Map([[101, '相位编号超出限值'], [102, '行人绿闪时间超出限值'], [103, '最小绿应大于行人绿灯时间'], [104, '最大绿1应大于最小绿时间'], [105, '最大绿2应大于最大绿1时间'], [106, '单位延长绿灯时间超出限值'], [107, '黄灯时间超出限值'], [108, '全红时间超出限值'], [109, '绿闪时间应小于最小绿'], [110, '环数量超出限值'], [111, '相位并发配置冲突'], [112, '所有环不能同时配一个相位'], [201, '跟随相位数量超出限值'], [202, '跟随相位的母相位为空'], [203, '跟随相位配置未知母相位'], [301, '方案数量超出限值'], [302, '相位差应小于周期时间'], [303, '环内配置未知相位'], [304, '绿信比应大于相位的最小绿+黄灯+全红'], [401, '计划数量超出限值'], [402, '控制方式不存在'], [403, '时段数量超出限值'], [404, '分钟超出限值'], [405, '小时超出限值'], [406, '时间顺序配置错误'], [407, '计划中配置未知方案'], [408, '计划中方案未配置'], [501, '调度计划数量超出限值'], [502, '月份超出限值'], [503, '星期超出限值'], [504, '日期值超出限值'], [505, '配置未知计划号'], [601, '通道数超出限值'], [602, '通道配置未知控制源'], [603, '通道控制源未配置'], [701, '车辆检测器数量超出限值'], [702, '车辆检测器无响应时间超出限值'], [703, '车辆检测器最大持续时间超出限值'], [704, '车辆检测器最大车辆数超出限值'], [705, '车辆检测器失败时间超出限值'], [706, '车辆检测器配置未知请求相位'], [707, '车辆检测器请求相位未配置'], [801, '行人检测器数量超出限值'], [802, '行人检测器无响应时间超出限值'], [803, '行人检测器最大持续时间超出限值'], [804, '行人检测器最大车辆数超出限值'], [805, '行人检测器失败时间超出限值'], [806, '行人检测器配置未知请求相位'], [807, '行人检测器请求相位未配置'], [901, '手动面板配置未知通道'], [902, '手动面板参数未配置'], [903, '手动面板东西直行按键通道绿冲突'], [904, '手动面板北向通行按键通道绿冲突'], [905, '手动面板东西左转按键通道绿冲突'], [906, '手动面板西向通行按键通道绿冲突'], [907, '手动面板东向通行按键通道绿冲突'], [908, '手动面板南北直行按键通道绿冲突'], [909, '手动面板南向通行按键通道绿冲突'], [910, '手动面板南北左转按键通道绿冲突'], [911, '手动面板Y1自定义按键通道绿冲突'], [912, '手动面板Y2自定义按键通道绿冲突'], [913, '手动面板Y3自定义按键通道绿冲突'], [914, '手动面板Y4自定义按键通道绿冲突'], [1001, '地址码未配置'], [1002, '信号机两个网卡都未配置'], [1003, '信号机地址码配置错误'], [1004, 'MD5码值校验失败']])
+    }
+  },
+  computed: {
+    agentid: function () {
+      return this.$store.state.agent.agentid
+    },
+    ...mapGetters([
+      'sidebar',
+      'avatar'
+    ]),
+    ...mapState({
+      copiedTscParam: state => state.globalParam.copiedTscParam,
+      userInfo: state => state.user.userInfo
+    }),
+    userInfo: {
+      get: function () {
+        return this.$store.state.user.userInfo
+      },
+      set: function (newValue) {
+        this.$store.state.user.userInfo = newValue
+      }
+    }
+  },
+  watch: {
+    $route: {
+      handler: function (val, oldVal) {
+        if (val.path.includes('example')) {
+          this.isShowMenu = true
+        } else {
+          this.isShowMenu = false
+        }
+      },
+      // 深度观察监听
+      deep: true
+    }
+  },
+  mounted () {
+    this.globalParamModel = this.$store.getters.globalParamModel
+    let path = this.$route.path
+    if (path.includes('example')) {
+      this.isShowMenu = true
+    } else {
+      this.isShowMenu = false
+    }
+    if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === true) {
+      this.isShowLogout = false
+    }
+    this.extendErrorCodeMap() // 扩展错误码的map集合
+  },
+  methods: {
+    handleCommand (command) {
+      switch (command) {
+        case 'import': this.leadingIn()
+          break
+        case 'export': this.leadingOut()
+          break
+        default: console.log('no command!')
+      }
+    },
+    copy () {
+      this.$store.dispatch('SetCopy', this.$store.getters.tscParam)
+      this.$emit('resetNotify')
+      this.createNotify()
+    },
+    createNotify () {
+      this.curCopyAgentid = JSON.parse(window.sessionStorage.getItem('curTagDevInfo')) === null ? '' : JSON.parse(window.sessionStorage.getItem('curTagDevInfo')).agentid
+      let tip = `设备${this.curCopyAgentid}的方案已被复制`
+      window.sessionStorage.setItem('copiedAgentid', this.curCopyAgentid)
+      if (this.notify !== undefined) {
+        // 短时间内点击两次复制，前一个复制框还未关闭的情况下，则关闭前一个复制框
+        this.notify.close()
+      }
+      const h = this.$createElement
+      this.notify = this.$notify({
+        title: '提示',
+        duration: 5000,
+        offset: 40,
+        onClose: () => {
+          this.notify = undefined
+        },
+        message: h('div', {style: 'color: #909399'}, tip)
+      })
+    },
+    read () {
+      this.readDiologVisible = true
+      this.copiedAgentid = window.sessionStorage.getItem('copiedAgentid')
+    },
+    readScheme () {
+      this.globalParamModel.reset()
+      setTimeout(() => {
+        let result = JSON.parse(JSON.stringify(this.copiedTscParam))
+        this.globalParamModel.setGlobalParams(result)
+        this.$message.success('读取方案成功！')
+      }, 50)
+    },
+    cancleRead () {
+      this.readDiologVisible = false
+    },
+    handleRead () {
+      this.readScheme()
+      this.readDiologVisible = false
+    },
+    importtemplate () {
+      this.importVisible = true
+    },
+    normalData () {
+      // 去除patternList里的description对象
+      // let patternList = this.globalParamModel.getParamsByType('patternList')
+      // for (let pattern of patternList) {
+      //   for (let rings of pattern.rings) {
+      //     for (let i = 0; i < rings.length; i++) {
+      //       rings[i] = (({ name, id, value }) => ({ name, id, value }))(rings[i])
+      //     }
+      //   }
+      // }
+      // 去除channelList里的typeAndSouce
+      let channelList = this.globalParamModel.getParamsByType('channelList')
+      for (let i = 0; i < channelList.length; i++) {
+        let channel = channelList[i]
+        this.$store.getters.tscParam.channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
+      }
+    },
+    toggleSideBar () {
+      this.$store.dispatch('ToggleSideBar')
+    },
+    logout () {
+      this.$store.dispatch('LogOut').then(() => {
+        location.reload() // 为了重新实例化vue-router对象 避免bug
+      })
+    },
+    upload () {
+      this.globalParamModel.reset()
+      this.lockScreen()
+      let typeStr = this.value
+      if (typeStr !== 'all') {
+        this.singleUpload(typeStr)
+        // this.unlockScreen()
+        return
+      }
+      uploadTscParam().then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error('设备不在线！')
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        this.$store.state.user.route = this.$route.path
+        if (Object.keys(data.data.data.data).length === 0) {
+          this.$message.error('暂没有可上载方案！')
+          return
+        }
+        let allTscParam = data.data.data.data
+        if (allTscParam.manualpanel === undefined) {
+          allTscParam.manualpanel = {}
+        }
+        if (allTscParam.channellock === undefined) {
+          allTscParam.channellock = []
+        }
+        this.globalParamModel.setGlobalParams(allTscParam)
+        this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
+      })
+    },
+    singleUpload (typeStr) {
+      uploadSingleTscParam(typeStr).then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error('设备不在线！')
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        this.$store.state.user.route = this.$route.path
+        if (Object.keys(data.data.data.data).length === 0) {
+          this.$message.error('暂没有可上载方案！')
+          return
+        }
+        this.globalParamModel.setGlobalParams(data.data.data.data)
+        this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
+      })
+    },
+    download () {
+      // const tscParam = this.globalParamModel.getGlobalParams()
+      // this.lockScreen()
+      let typeStr = this.value
+      // if (typeStr !== 'all') {
+      //   this.lockScreen()
+      //   this.singleDownload(typeStr, tscParam)
+      //   return
+      // }
+      // this.normalData() // 规范数据格式
+      // 下发数据前的基本校验
+      if (!this.baseCheck()) {
+        return
+      }
+      this.normalData() // 规范数据格式
+      let tscParam = this.globalParamModel.getGlobalParams()
+      let newTscParam = this.handleTscParam(tscParam)
+      if (typeStr !== 'all') {
+        this.lockScreen()
+        this.singleDownload(typeStr, newTscParam)
+        return
+      }
+      // const tscParam = this.globalParamModel.getGlobalParams()
+      this.lockScreen()
+      downloadTscParam(this.$store.state.user.user_name, newTscParam).then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          if (data.data.code === '4002') { // 信号机参数校验
+            let codeList = data.data.data.errorCode
+            if (codeList.length === 0) {
+              this.$message.error('信号机保存参数失败!')
+              return
+            }
+            let errorMes = ''
+            for (let code of codeList) {
+              errorMes = errorMes + '</br>' + this.errorCodeMap.get(code)
+            }
+            // this.$message.error(errorMes.substr(1))
+            this.$message({
+              message: errorMes.substr(5),
+              type: 'error',
+              dangerouslyUseHTMLString: true
+            })
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        // downloadTscParam(this.$store.state.user.name, tscParam)
+        this.$alert(this.$t('edge.common.download'), { type: 'success' })
+      }).catch(error => {
+        this.unlockScreen()
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    handleTscParam (tscParam) {
+      let newTscParam = this.cloneObjectFn(tscParam)
+      let dateList = newTscParam.dateList
+      for (let dates of dateList) {
+        let date = dates.date
+        let day = dates.day
+        let month = dates.month
+        if (date.includes('全选')) {
+          let index = date.indexOf('全选')
+          date.splice(index, 1) // 排除全选选项
+        }
+        if (day.includes(8)) {
+          let index = day.indexOf(8)
+          day.splice(index, 1) // 排除全选选项
+        }
+        if (month.includes(0)) {
+          let index = month.indexOf(0)
+          month.splice(index, 1) // 排除全选选项
+        }
+      }
+      let patternList = newTscParam.patternList
+      for (let pattern of patternList) {
+        let rings = pattern.rings
+        for (let ring of rings) {
+          if (ring.length === 0) continue
+          for (let rg of ring) {
+            rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+          }
+        }
+      }
+      return newTscParam
+    },
+    cloneObjectFn (obj) {
+      return JSON.parse(JSON.stringify(obj))
+    },
+    getBinarySystem (list) {
+      if (list === undefined) return
+      let arr = [0, 0, 0]
+      if (list.includes(1)) arr[0] = 1
+      if (list.includes(2)) arr[1] = 1
+      if (list.includes(4)) arr[2] = 1
+      return arr
+    },
+    singleDownload (typeStr, tscParam) {
+      downloadSingleTscParam(typeStr, tscParam).then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error('设备不在线！')
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        // downloadTscParam(this.$store.state.user.name, tscParam)
+        this.$alert(this.$t('edge.common.download'), { type: 'success' })
+      }).catch(error => {
+        this.unlockScreen()
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    leadingIn () {
+      this.dialogVisible = true
+    },
+    async leadingOut () {
+      // this.normalData() // 规范数据格式
+      // 下载数据前的基本校验
+      if (!this.baseCheck()) {
+        return
+      }
+      this.normalData() // 规范数据格式
+      // 定义文件内容，类型必须为Blob 否则createObjectURL会报错
+      // const tscParam = this.globalParamModel.getGlobalParams()
+      const tscParam = {}
+      let edgeParam = this.globalParamModel.getGlobalParams()
+      let newTscParam = this.handleTscParam(edgeParam)
+      let md5Param = await this.getMd5ByParams(newTscParam)
+      tscParam.md5 = md5Param
+      tscParam.data = newTscParam
+      let content = new Blob([JSON.stringify(tscParam)])
+      // 生成url对象
+      let urlObject = window.URL || window.webkitURL || window
+      let url = urlObject.createObjectURL(content)
+      // 生成<a></a>DOM元素
+      let el = document.createElement('a')
+      // 链接赋值
+      el.href = url
+      el.download = 'OpenATCTZParam.json'
+      // 必须点击否则不会下载
+      el.click()
+      // 移除链接释放资源
+      urlObject.revokeObjectURL(url)
+    },
+    getMd5ByParams (param) {
+      this.lockScreen()
+      return new Promise((resolve, reject) => {
+        checkCode(param).then((data) => {
+          this.unlockScreen()
+          if (data.data.success) {
+            resolve(data.data.data)
+          } else {
+            console.log(data.data.message)
+            this.$message.error('获取MD5失败！')
+            reject(new Error(data.data.message))
+          }
+        }, () => {
+          this.unlockScreen()
+          console.log('checkCode Error')
+          reject(new Error('checkCode Error'))
+        })
+      })
+    },
+    readAsText () {
+      let _this = this
+      var file = document.getElementById('file').files[0]
+      var reader = new FileReader()
+      reader.async = true
+      // 将文件以文本形式读入页面
+      reader.readAsText(file)
+      reader.onload = function (f) {
+        _this.globalParamModel.reset()
+        setTimeout(() => {
+          // 显示文件
+          _this.$store.state.user.route = _this.$route.path
+          // _this.$router.push('/')
+          _this.dialogVisible = false
+          // _this.$store.dispatch('SaveTscParam', JSON.parse(this.result))
+          let data = JSON.parse(this.result)
+          _this.globalParamModel.setGlobalParams(data.data)
+          _this.$alert(_this.$t('edge.common.uploadsuccess'), { type: 'success' })
+        }, 50)
+      }
+    },
+    baseCheck () {
+      this.phaseNotZero = false
+      this.concurrentRules = false
+      this.planNotZero = false
+      this.patternNotZero = false
+      this.dataNotZero = false
+      this.momthIsNull = false
+      this.dateIsAll = false
+      this.planDate = false
+      this.patternRing = false
+      this.dataPlan = false
+      this.planPattern = false
+      this.overlapRules = true
+      this.deviceinfo = true
+      this.checkPhaseRules()
+      if (!this.phaseNotZero) {
+        this.$message.error(
+          this.$t('edge.errorTip.phaseNotZero')
+        )
+        return false
+      }
+      this.checkConcurrentRules()
+      if (!this.concurrentRules) {
+        this.$message.error(
+          this.$t('edge.errorTip.concurrentRules')
+        )
+        return false
+      }
+      this.checkOverlapRules()
+      if (!this.overlapRules) {
+        this.$message.error(
+          this.$t('edge.errorTip.overlapRules')
+        )
+        return false
+      }
+      this.checkPatternRules()
+      if (!this.patternNotZero) {
+        this.$message.error(
+          this.$t('edge.errorTip.patternNotZero')
+        )
+        return false
+      }
+      this.checkDataRules()
+      if (!this.dataNotZero) {
+        this.$message.error(
+          this.$t('edge.errorTip.dataNotZero')
+        )
+        return false
+      }
+      this.checkPlanRules()
+      if (!this.planNotZero) {
+        this.$message.error(
+          this.$t('edge.errorTip.planNotZero')
+        )
+        return false
+      }
+      // this.checkPlan()
+      // if (!this.planPattern) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.planPattern')
+      //   )
+      //   return false
+      // }
+      // this.checkDateMonth()
+      // if (this.momthIsNull) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.momthIsNull')
+      //   )
+      //   return false
+      // }
+      this.checkDateRules()
+      if (!this.dateIsAll) {
+        this.$message.error(
+          this.$t('edge.errorTip.dateIsAll')
+        )
+        return false
+      }
+      this.checkDatePlan()
+      if (!this.dataPlan) {
+        this.$message.error(
+          this.$t('edge.errorTip.dataPlan')
+        )
+        return false
+      }
+      this.checkPlanTimeRules()
+      if (!this.planDate) {
+        this.$message.error(this.planName + this.$t('edge.errorTip.planDate'))
+        return false
+      }
+      this.checkPatternRing()
+      if (!this.patternRing) {
+        this.$message.error(
+          this.$t('edge.errorTip.patternRing')
+        )
+        return false
+      }
+      this.checkManualpanelIsNull()
+      if (!this.manualpanelIsNull) {
+        this.$message.error(
+          this.$t('edge.errorTip.manualpanel')
+        )
+        return false
+      }
+      this.checkDeviceInfo()
+      if (!this.deviceinfo) {
+        this.$message.error('设备信息中的地址码不能为空！')
+        return false
+      }
+      return true
+    },
+    checkDeviceInfo () {
+      let customInfo = this.globalParamModel.getParamsByType('customInfo')
+      if (customInfo.siteid === '' || customInfo.siteid === undefined) {
+        this.deviceinfo = false
+      }
+    },
+    checkManualpanelIsNull () {
+      let manualpanel = this.globalParamModel.getParamsByType('manualpanel')
+      if (Object.keys(manualpanel).length !== 0) {
+        this.manualpanelIsNull = true
+      } else {
+        this.manualpanelIsNull = false
+      }
+    },
+    checkPhaseRules () {
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      for (let i = 0; i < phaseList.length; i++) {
+        if (phaseList[i].ring === 0) {
+          break
+        }
+        this.phaseNotZero = true
+      }
+    },
+    checkConcurrentRules () {
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      let ringList = []
+      let concurrentIsNull = false
+      for (let phase of phaseList) {
+        if (phase.concurrent.length === 0) {
+          concurrentIsNull = true
+        }
+        ringList.push(phase.ring)
+      }
+      let newRingList = new Set(ringList)
+      if (newRingList.size > 1 && concurrentIsNull) {
+        this.concurrentRules = false
+      } else {
+        this.concurrentRules = true
+      }
+    },
+    checkOverlapRules () {
+      let overlaplList = this.globalParamModel.getParamsByType('overlaplList')
+      for (let i = 0; i < overlaplList.length; i++) {
+        if (overlaplList[i].includedphases.length === 0) {
+          this.overlapRules = false
+          return
+        }
+      }
+    },
+    checkPatternRules () {
+      let patternList = this.globalParamModel.getParamsByType('patternList')
+      for (let i = 0; i < patternList.length; i++) {
+        if (patternList[i].ring === 0) {
+          break
+        }
+        this.patternNotZero = true
+      }
+    },
+    checkDataRules () {
+      let dateList = this.globalParamModel.getParamsByType('dateList')
+      for (let i = 0; i < dateList.length; i++) {
+        if (dateList[i].ring === 0) {
+          break
+        }
+        this.dataNotZero = true
+      }
+    },
+    checkPlanRules () {
+      let planList = this.globalParamModel.getParamsByType('planList')
+      for (let i = 0; i < planList.length; i++) {
+        if (planList[i].plan.length === 0) {
+          break
+        }
+        this.planNotZero = true
+      }
+    },
+    checkPlanTimeRules () {
+      // let hour = 0
+      // let newHour = 0
+      // let minute = -1
+      // let newMinute = 0
+      let planList = this.globalParamModel.getParamsByType('planList')
+      for (let i = 0; i < planList.length; i++) {
+        let hour = 0
+        let newHour = 0
+        let minute = -1
+        let newMinute = 0
+        for (let j = 0; j < planList[i].plan.length; j++) {
+          newHour = Number(planList[i].plan[j].hour)
+          newMinute = Number(planList[i].plan[j].minute)
+          if (newHour > hour) {
+            hour = newHour
+            minute = newMinute
+            this.planDate = true
+          } else if (newHour === hour) {
+            if (newMinute > minute) {
+              hour = newHour
+              minute = newMinute
+              this.planDate = true
+            } else {
+              this.planDate = false
+              this.planName = planList[i].desc
+              return
+            }
+          } else {
+            this.planDate = false
+            this.planName = planList[i].desc
+            return
+          }
+        }
+      }
+    },
+    checkDateMonth () {
+      let dateList = this.globalParamModel.getParamsByType('dateList')
+      for (let i = 0; i < dateList.length; i++) {
+        if (dateList[i].month.length === 0) {
+          this.momthIsNull = true
+        }
+      }
+    },
+    checkDateRules () {
+      let dateList = this.globalParamModel.getParamsByType('dateList')
+      let month = []
+      let day = []
+      let date = []
+      for (let i = 0; i < dateList.length; i++) {
+        month = month.concat(dateList[i].month)
+        day = day.concat(dateList[i].day)
+        date = date.concat(dateList[i].date)
+      }
+      month = Array.from(new Set(month.toString().split(',')))
+      day = Array.from(new Set(day.toString().split(',')))
+      date = Array.from(new Set(date))
+      if (month.length === 12 || month.length === 13) { // 当带有全选，就为13
+        // this.dateIsAll = true
+        if ((day.length === 7 || day.length === 8) || (date.length === 31 || date.length === 32)) {
+          this.dateIsAll = true
+        } else {
+          this.dateIsAll = false
+        }
+      } else {
+        this.dateIsAll = false
+      }
+    },
+    checkDatePlan () {
+      let dateList = this.globalParamModel.getParamsByType('dateList')
+      for (let data of dateList) {
+        if (data.plan === '' || data.plan === undefined) {
+          this.dataPlan = false
+        } else {
+          this.dataPlan = true
+        }
+      }
+    },
+    checkPlan () {
+      let planList = this.globalParamModel.getParamsByType('planList')
+      this.planPattern = true
+      for (let data of planList) {
+        for (let plan of data.plan) {
+          if (plan.pattern === '' || plan.pattern === undefined) {
+            this.planPattern = false
+          }
+        }
+      }
+    },
+    checkPatternRing () {
+      // 先判断有几个环，如果只有一个的话，就不用判断每个环的周期是否相等
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      let ringNum = []
+      for (let phase of phaseList) {
+        ringNum.push(phase.ring)
+      }
+      ringNum = Array.from(new Set(ringNum))
+      if (ringNum.length === 1) {
+        this.patternRing = true
+        return
+      }
+      // 如果有多个环的话，要判断每个环的时间是否相等
+      let patternList = this.globalParamModel.getParamsByType('patternList')
+      this.patternRing = true
+      for (let pattern of patternList) {
+        let list = []
+        for (let rings of pattern.rings) {
+          let num = 0
+          for (let i = 0; i < rings.length; i++) {
+            if (rings[i].length !== 0) {
+              num = num + Number(rings[i].value)
+            }
+          }
+          list.push(num)
+        }
+        list = list.filter(function (i) { return i !== 0 })
+        if (Array.from(new Set(list)).length !== 1) {
+          this.patternRing = false
+        }
+      }
+    },
+    switchLanguage (command) {
+      switch (command) {
+        case 'Ch':
+          this.switchToChinese()
+          break
+        case 'En':
+          this.switchToEngLish()
+          break
+        default:
+          console.log(command)
+          break
+      }
+    },
+    switchToChinese () {
+      this.$i18n.locale = 'zh'
+      setLanguage(this.$i18n.locale)
+    },
+    switchToEngLish () {
+      this.$i18n.locale = 'en'
+      setLanguage(this.$i18n.locale)
+    },
+    lockScreen () {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.5)'
+      })
+    },
+    unlockScreen () {
+      this.loading.close()
+    },
+    closeImportTemp () {
+      this.importVisible = false
+    },
+    handleLogout (command) {
+      switch (command) {
+        case 'a': this.modifyPasswd()
+          break
+        case 'b': this.logout()
+          break
+        default: router.push({ path: '/' })
+      }
+    },
+    showInfo (val) {
+      if (!val) return
+      getInfo().then(data => {
+        if (data.data.success !== true) {
+          this.$message.error(data.data.message)
+          return
+        }
+        this.userInfo = data.data.data
+        this.passIsExpire = this.checkUserIsExpire(data.data.data.expiration_time)
+      })
+    },
+    modifyPasswd () {
+      let changepassChild = this.$refs.changepassChild
+      changepassChild.onChangePassClick(this.userInfo.user_name)
+    },
+    checkUserIsExpire (time) {
+      let expireTime = new Date(time) // 过期时间
+      let nowTime = new Date() // 当前时间
+      let residueDay = Math.floor((expireTime - nowTime) / 1000 / 60 / 60 / 24) // 过期剩余时间
+      if (residueDay < 7) {
+        return true
+      } else {
+        return false
+      }
+    },
+    extendErrorCodeMap () {
+      let patternInitCode = 3000
+      let channelInitCode = 1200
+      let mes = ''
+      for (let i = 1; i < 109; i++) {
+        patternInitCode++
+        mes = '方案' + i + '环内存在相位并发冲突'
+        this.errorCodeMap.set(patternInitCode, mes)
+      }
+      for (let j = 1; j < 41; j++) {
+        channelInitCode++
+        mes = '时段' + j + '锁定通道的控制源未被忽略'
+        this.errorCodeMap.set(channelInitCode, mes)
+      }
+    }
+  }
+}
+</script>
+
+<style lang="css">
+.navbar .el-button {
+  line-height: normal;
+  margin-left: 15px;
+}
+.navbar .el-dropdown {
+  height: 40px;
+}
+</style>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.navbar {
+  height: 50px;
+  line-height: 50px;
+  border-radius: 0px !important;
+  .hamburger-container {
+    line-height: 58px;
+    height: 50px;
+    float: left;
+    padding: 0 10px;
+  }
+  .screenfull {
+    position: absolute;
+    right: 90px;
+    top: 16px;
+    color: red;
+  }
+  .avatar-container {
+    height: 50px;
+    display: inline-block;
+    position: absolute;
+    right: 35px;
+    .avatar-wrapper {
+      cursor: pointer;
+      margin-top: 5px;
+      position: relative;
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
+      .el-icon-caret-bottom {
+        position: absolute;
+        right: -20px;
+        top: 25px;
+        font-size: 12px;
+      }
+    }
+  }
+  .switch-language {
+    cursor: pointer;
+    margin-top: 0px;
+    margin-right: 30px;
+    float: right;
+  }
+  .navbar-agentid {
+    cursor:pointer;
+    margin-top: 0px;
+    margin-right: 15px;
+    float: right;
+  }
+  .operation-button {
+    cursor: pointer;
+    margin-top: 0px;
+    margin-right: 22px;
+    float: right;
+  }
+  .dividing-line {
+    display: inline-block;
+    width: 1px;
+    height: 16px;
+    background-color: #e5e5e5;
+    transform: translateY(4px);
+    margin-left: 15px;
+  }
+}
+.user-name {
+  width: 58px;
+  height: 21px;
+  margin-top: 10px;
+  font-family: MicrosoftYaHei;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 14px;
+  letter-spacing: 0px;
+  color: #409eff;
+}
+.organization {
+  margin-top: 8px;
+}
+.real-name {
+  margin-top: 14px;
+  margin-bottom: 10px;
+}
+.laber-name {
+  width: 48px;
+  height: 13px;
+  font-family: MicrosoftYaHei;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 14px;
+  letter-spacing: 0px;
+  color: #999999;
+}
+.laber-value {
+  margin-top: 5px;
+  font-family: MicrosoftYaHei;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 14px;
+  letter-spacing: 0px;
+  color: #333333;
+}
+.pass-expire {
+  margin-top: 5px;
+  font-family: MicrosoftYaHei;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 14px;
+  letter-spacing: 0px;
+  color: #f56c6c;
+}
+</style>

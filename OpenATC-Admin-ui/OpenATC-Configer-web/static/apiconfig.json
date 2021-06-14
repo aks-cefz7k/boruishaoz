@@ -1,0 +1,271 @@
+[
+  {
+  "key": "login",
+  "url": "/auth/login",
+  "method": "post"
+},
+{
+  "key": "getCurInfo",
+  "url": "/auth/info",
+  "method": "get"
+},
+{
+  "key": "logout",
+  "url": "/auth/logout",
+  "method": "get"
+},
+{
+  "key": "getCaptcha",
+  "url": "/auth/captcha",
+  "method": "get"
+},
+{
+  "key": "postPassword",
+  "url": "/auth/password",
+  "method": "post"
+},
+{
+  "key": "registerMessage",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "uploadTscParam",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "downloadTscParam",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "checkCode",
+  "url": "/md5",
+  "method": "post"
+},
+{
+  "key": "uploadSelectedTscParam",
+  "url": "/devs",
+  "method": "get"
+},
+{
+  "key": "deleteTscParam",
+  "url": "/devs",
+  "method": "delete"
+},
+{
+  "key": "getHisParamsList",
+  "url": "/devs",
+  "method": "get"
+},
+{
+  "key": "downloadOptParam",
+  "url": "/devs",
+  "method": "put"
+},
+{
+  "key": "uploadOptParam",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "putTscControl",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getTscControl",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "addDevice",
+  "url": "/devs",
+  "method": "post"
+},
+{
+  "key": "queryDevice",
+  "url": "/devs",
+  "method": "get"
+},
+{
+  "key": "getTscCurrentVolume",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getSignVersion",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getSystemTime",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getParamVersion",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getCode",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getSignIp",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getSerialPort",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getRemoteDebug",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setSignVersion",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setSystemTime",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setParamVersion",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setCode",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setSignIp",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setSerialPort",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setRemoteControl",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setRemoteDebug",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "uploadSingleTscParam",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "downloadSingleTscParam",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getAllDailyRecord",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getFault",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getManualpanel",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "setManualpanel",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getDefaultManualpanel",
+  "url": "/manualpanel/config",
+  "method": "post"
+},
+{
+  "key": "getChannel",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getSupportedTemplate",
+  "url": "/template",
+  "method": "get"
+},
+{
+  "key": "createTemplate",
+  "url": "/template",
+  "method": "post"
+},{
+  "key": "getIntersectionInfo",
+  "url": "/intersection/info",
+  "method": "get"
+},
+{
+  "key": "updateFile",
+  "url": "/system/update",
+  "method": "post"
+},
+{
+  "key": "udiskupdate",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "channelcheck",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "getUsr",
+  "url": "/auth/user",
+  "method": "get"
+},
+{
+  "key": "addUsrs",
+  "url": "/auth/user",
+  "method": "post"
+},
+{
+  "key": "putUsr",
+  "url": "/auth/user",
+  "method": "put"
+},
+{
+  "key": "delUsr",
+  "url": "/auth/user",
+  "method": "delete"
+},
+{
+  "key": "getAllRoles",
+  "url": "/auth/role",
+  "method": "get"
+},
+{
+  "key": "resetUsr",
+  "url": "/auth/user/reset",
+  "method": "put"
+}
+]

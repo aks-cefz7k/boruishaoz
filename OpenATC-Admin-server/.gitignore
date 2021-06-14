@@ -1,0 +1,10 @@
+/.idea
+/log
+/target
+/KDComm/target
+*.iml
+*.class
+*.lst
+*.gz
+*.jar
+pom.properties

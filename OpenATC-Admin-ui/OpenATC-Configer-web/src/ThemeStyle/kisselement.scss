@@ -1,0 +1,1790 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+/* Element Chalk Variables */
+
+/* Transition
+-------------------------- */
+$--all-transition: all .3s cubic-bezier(.645,.045,.355,1) !default;
+$--fade-transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1) !default;
+$--fade-linear-transition: opacity 200ms linear !default;
+$--md-fade-transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1), opacity 300ms cubic-bezier(0.23, 1, 0.32, 1) !default;
+$--border-transition-base: border-color .2s cubic-bezier(.645,.045,.355,1) !default;
+$--color-transition-base: color .2s cubic-bezier(.645,.045,.355,1) !default;
+
+/* Colors
+-------------------------- */
+$--color-white: #fff !default;
+$--color-black: #000 !default;
+$--fill-color-base: #0a4958 !default;
+$--background-color-dark-transparency: rgba(31, 46, 46, 0.9) !default;
+$--fill-color-bright: #42daff;
+
+$--color-primary: #0b5668 !default;      // 主色调
+$--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default; /* 53a8ff */
+$--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default; /* 66b1ff */
+$--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default; /* 79bbff */
+$--color-primary-light-4: mix($--color-white, $--color-primary, 40%) !default; /* 8cc5ff */
+$--color-primary-light-5: mix($--color-white, $--color-primary, 50%) !default; /* a0cfff */
+$--color-primary-light-6: mix($--color-white, $--color-primary, 60%) !default; /* b3d8ff */
+$--color-primary-light-7: mix($--color-white, $--color-primary, 70%) !default; /* c6e2ff */
+$--color-primary-light-8: mix($--color-white, $--color-primary, 80%) !default; /* d9ecff */
+$--color-primary-light-9: mix($--color-white, $--color-primary, 90%) !default; /* ecf5ff */
+
+$--color-success: #67c23a !default;           // 成功的提示色
+$--color-warning: #e6a23c !default;           // 警告的提示色
+$--color-danger: #f56c6c !default;            // 危险的警告色
+$--color-info: #909399 !default;              // 一般提示性信息的颜色主调
+
+$--color-success-light: mix($--color-white, $--color-success, 80%) !default;
+$--color-warning-light: mix($--color-white, $--color-warning, 80%) !default;
+$--color-danger-light: mix($--color-white, $--color-danger, 80%) !default;
+$--color-info-light: mix($--color-white, $--color-info, 80%) !default;
+
+$--color-success-lighter: mix($--color-white, $--color-success, 90%) !default;
+$--color-warning-lighter: mix($--color-white, $--color-warning, 90%) !default;
+$--color-danger-lighter: mix($--color-white, $--color-danger, 90%) !default;
+$--color-info-lighter: mix($--color-white, $--color-info, 90%) !default;
+
+$--color-text-primary: #42daff !default;          // 文字主色
+$--color-text-regular: #b6f0ff !default;          // 一般的文字 比较常用的
+$--color-text-secondary: #0096ba !default;        // 次级文字 0096ba
+$--color-text-placeholder: #42daff !default;      // 就是输入框等等的默认提示文字颜色
+
+/* popover 颜色
+-------------------------- */
+$--color-popover-fill:  rgba(10, 73, 88, 0.8) !default;
+$--color-popover-border: #42daff !default;
+
+/* Link
+-------------------------- */
+$--link-color: $--color-primary-light-2 !default; //
+$--link-hover-color: $--color-primary !default;
+
+/* Background
+-------------------------- */
+$--background-color-base: #0a4958 !default;      // 背景色的基础色
+$--background-color-dark: #1f2e2e !default;      // 深色背景
+$--background-color-dark-transparency:  rgba(31, 46, 46, 0.8) !default; // 深色背景透明
+$--background-color-bright: #0096ba !default;          // 一般可以用于hover的颜色
+
+/* Border
+-------------------------- */
+$--border-width-base: 1px !default;                 // 边框的所有线宽
+$--border-style-base: solid !default;               // 边框的线的样式的，实线
+$--border-color-base: #0096ba !default;           // 边框的颜色主调
+$--border-color-light: #0096ba !default;          // 次级边框的颜色 较边框主色调浅
+$--border-color-lighter: #0096b0 !default;        // 次次级边框的颜色， 较边框的此色调更浅
+$--border-color-dark: #0a4958 !default;
+$--border-color-extra-light: #0096a9 !default;    // 其他的边框
+$--border-color-hover: $--color-text-placeholder !default;
+$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
+$--border-radius-base: 4px !default;
+$--border-radius-small: 2px !default;
+$--border-radius-circle: 100% !default;
+
+/* Box-shadow   这里是一般边框的阴影样式
+-------------------------- */
+$--box-shadow-base: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) !default;
+$--box-shadow-dark: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .12) !default;
+$--box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
+
+/* Fill
+-------------------------- */
+$--fill-base: $--color-white !default;  // 填充色
+
+/* Font
+-------------------------- */
+$--font-path: 'fonts' !default;
+$--font-size-base: 14px !default;
+$--font-size-small: 13px !default;
+$--font-size-large: 18px !default;
+$--font-color-disabled-base: #42daff !default;   //  字体的基本颜色
+$--font-weight-primary: 500 !default;
+$--font-line-height-primary: 24px !default;
+
+/*************************************** 这个以上需要确定下 *****************************************/
+
+/* Size
+-------------------------- */
+$--size-base: 14px !default;
+
+/* z-index
+-------------------------- */
+$--index-normal: 1 !default;
+$--index-top: 1000 !default;
+$--index-popper: 2000 !default;
+
+/* Disable base
+-------------------------- */
+$--disabled-fill-base: $--background-color-base !default;
+$--disabled-color-base: $--color-text-placeholder !default;
+$--disabled-border-base: $--border-color-light !default;
+
+/* Icon
+-------------------------- */
+$--icon-color: #666 !default;             //图表的颜色
+$--icon-color-base: $--color-info !default;
+
+/* Checkbox
+-------------------------- */
+$--checkbox-font-size: 14px !default;
+$--checkbox-font-weight: $--font-weight-primary !default;
+$--checkbox-color: $--color-text-regular !default;
+$--checkbox-input-height: 14px !default;
+$--checkbox-input-width: 14px !default;
+$--checkbox-input-border-radius: $--border-radius-small !default;
+$--checkbox-input-fill: $--color-white !default;
+$--checkbox-input-border: $--border-base !default;
+$--checkbox-input-border-color: $--border-color-base !default;
+$--checkbox-icon-color: $--color-white !default;
+
+$--checkbox-disabled-input-border-color: $--border-color-base !default;
+$--checkbox-disabled-input-fill: #edf2fc !default;
+$--checkbox-disabled-icon-color: $--color-text-placeholder !default;
+
+$--checkbox-disabled-checked-input-fill: $--border-color-extra-light !default;
+$--checkbox-disabled-checked-input-border-color: $--border-color-base !default;
+$--checkbox-disabled-checked-icon-color: $--color-text-placeholder !default;
+
+$--checkbox-checked-text-color: $--color-primary !default;
+$--checkbox-checked-input-border-color: $--color-primary !default;
+$--checkbox-checked-input-fill: $--color-primary !default;
+$--checkbox-checked-icon-color: $--fill-base !default;
+
+$--checkbox-input-border-color-hover: $--color-primary !default;
+
+$--checkbox-bordered-height: 40px !default;
+$--checkbox-bordered-padding: 9px 20px 9px 10px !default;
+$--checkbox-bordered-medium-padding: 7px 20px 7px 10px !default;
+$--checkbox-bordered-small-padding: 5px 15px 5px 10px !default;
+$--checkbox-bordered-mini-padding: 3px 15px 3px 10px !default;
+$--checkbox-bordered-medium-input-height: 14px !default;
+$--checkbox-bordered-medium-input-width: 14px !default;
+$--checkbox-bordered-medium-height: 36px !default;
+$--checkbox-bordered-small-input-height: 12px !default;
+$--checkbox-bordered-small-input-width: 12px !default;
+$--checkbox-bordered-small-height: 32px !default;
+$--checkbox-bordered-mini-input-height: 12px !default;
+$--checkbox-bordered-mini-input-width: 12px !default;
+$--checkbox-bordered-mini-height: 28px !default;
+
+$--checkbox-button-font-size: $--font-size-base !default;
+$--checkbox-button-checked-fill: $--color-primary !default;
+$--checkbox-button-checked-color: $--color-white !default;
+$--checkbox-button-checked-border-color: $--color-primary !default;
+
+
+
+/* Radio
+-------------------------- */
+$--radio-font-size: 14px !default;
+$--radio-font-weight: $--font-weight-primary !default;
+$--radio-color: #0096ba !default;
+$--radio-input-height: 14px !default;
+$--radio-input-width: 14px !default;
+$--radio-input-border-radius: $--border-radius-circle !default;
+$--radio-input-fill: #232525 !default;
+$--radio-input-border: $--border-base !default;
+$--radio-input-border-color: $--border-color-base !default;
+$--radio-icon-color: $--color-white !default;
+
+$--radio-disabled-input-border-color: $--disabled-border-base !default;
+$--radio-disabled-input-fill: $--disabled-fill-base !default;
+$--radio-disabled-icon-color: $--disabled-fill-base !default;
+
+$--radio-disabled-checked-input-border-color: $--disabled-border-base !default;
+$--radio-disabled-checked-input-fill: $--disabled-fill-base !default;
+$--radio-disabled-checked-icon-color: $--color-text-placeholder !default;
+
+$--radio-checked-text-color: #b6f0ff !default;
+$--radio-checked-input-border-color: $--color-primary !default;
+$--radio-checked-input-fill: $--color-white !default;
+$--radio-checked-icon-color: #0b5668 !default;
+
+$--radio-input-border-color-hover: $--color-primary !default;
+
+$--radio-bordered-height: 40px !default;
+$--radio-bordered-padding: 12px 20px 0 10px !default;
+$--radio-bordered-medium-padding: 10px 20px 0 10px !default;
+$--radio-bordered-small-padding: 8px 15px 0 10px !default;
+$--radio-bordered-mini-padding: 6px 15px 0 10px !default;
+$--radio-bordered-medium-input-height: 14px !default;
+$--radio-bordered-medium-input-width: 14px !default;
+$--radio-bordered-medium-height: 36px !default;
+$--radio-bordered-small-input-height: 12px !default;
+$--radio-bordered-small-input-width: 12px !default;
+$--radio-bordered-small-height: 32px !default;
+$--radio-bordered-mini-input-height: 12px !default;
+$--radio-bordered-mini-input-width: 12px !default;
+$--radio-bordered-mini-height: 28px !default;
+
+$--radio-button-font-size: $--font-size-base !default;
+$--radio-button-checked-fill: $--color-primary !default;
+$--radio-button-checked-color: $--color-white !default;
+$--radio-button-checked-border-color: $--color-primary !default;
+$--radio-button-disabled-checked-fill: $--border-color-extra-light !default;
+
+/* Select
+-------------------------- */
+$--select-border-color-hover: $--border-color-hover  !default;               // 当选择框静态hover时候的颜色
+$--select-disabled-border: $--disabled-border-base !default;
+$--select-font-size: $--font-size-base !default;
+$--select-close-hover-color: $--color-text-secondary !default;
+
+$--select-input-color: $--color-text-placeholder !default;
+$--select-multiple-input-color: #666 !default;
+$--select-input-focus-background: $--color-primary !default;
+$--select-input-font-size: 14px !default;
+
+$--select-option-color: $--color-text-regular !default;                  // 选项颜色
+$--select-option-disabled-color: $--color-text-placeholder !default;     // 选项禁止的字体颜色
+$--select-option-disabled-background: $--color-white !default;           // 选项禁止的背景颜色
+$--select-option-height: 34px !default;
+$--select-option-hover-background: $--background-color-bright !default;  // 下拉框的选项hover颜色
+$--select-option-selected: $--color-primary !default;                    // 选项被选择的字体颜色
+$--select-option-selected-hover: $--background-color-base !default;      // 被选择的选项hover颜色
+
+$--select-group-color: $--color-info !default;
+$--select-group-height: 30px !default;
+$--select-group-font-size: 12px !default;
+
+$--select-dropdown-background: $--background-color-dark-transparency !default;  // 下拉框的背景色
+$--select-dropdown-shadow: $--box-shadow-light !default;
+$--select-dropdown-empty-color: #0096ba!default;
+$--select-dropdown-max-height: 274px !default;
+$--select-dropdown-padding: 6px 0 !default;
+$--select-dropdown-empty-padding: 10px 0 !default;
+$--select-dropdown-border: solid 1px $--border-color-light !default;
+
+/* Alert
+-------------------------- */
+$--alert-padding: 8px 16px !default;
+$--alert-border-radius: $--border-radius-base !default;
+$--alert-title-font-size: 13px !default;
+$--alert-description-font-size: 12px !default;
+$--alert-close-font-size: 12px !default;
+$--alert-close-customed-font-size: 13px !default;
+
+$--alert-success-color: $--color-success-lighter !default;
+$--alert-info-color: $--color-info-lighter !default;
+$--alert-warning-color: $--color-warning-lighter !default;
+$--alert-danger-color: $--color-danger-lighter !default;
+
+$--alert-icon-size: 16px !default;
+$--alert-icon-large-size: 28px !default;
+
+/* Message Box
+-------------------------- */
+$--msgbox-width: 420px !default;
+$--msgbox-border-radius: 4px !default;
+$--msgbox-font-size: $--font-size-large !default;
+$--msgbox-content-font-size: $--font-size-base !default;
+$--msgbox-content-color: $--color-text-regular !default;
+$--msgbox-error-font-size: 12px !default;
+$--msgbox-padding-primary: 15px !default;
+
+$--msgbox-success-color: $--color-success !default;
+$--msgbox-info-color: $--color-info !default;
+$--msgbox-warning-color: $--color-warning !default;
+$--msgbox-danger-color: $--color-danger !default;
+
+/* Message
+-------------------------- */
+$--message-shadow: $--box-shadow-base !default;
+$--message-min-width: 380px !default;
+$--message-background-color: #edf2fc !default;
+$--message-padding: 15px 15px 15px 20px !default;
+$--message-content-color: $--color-text-regular !default;
+$--message-close-color: $--color-text-placeholder !default;
+$--message-close-size: 16px !default;
+$--message-close-hover-color: $--color-text-secondary !default;
+
+$--message-success-color: $--color-success !default;
+$--message-info-color: $--color-info !default;
+$--message-warning-color: $--color-warning !default;
+$--message-danger-color: $--color-danger !default;
+
+/* Notification
+-------------------------- */
+$--notification-width: 330px !default;
+$--notification-padding: 14px 26px 14px 13px !default;
+$--notification-radius: 8px !default;
+$--notification-shadow: $--box-shadow-light !default;
+$--notification-border-color: $--border-color-lighter !default;
+$--notification-icon-size: 24px !default;
+$--notification-close-font-size: $--message-close-size !default;
+$--notification-group-margin: 13px !default;
+$--notification-font-size: $--font-size-base !default;
+$--notification-color: $--color-text-regular !default;
+$--notification-title-font-size: 16px !default;
+$--notification-title-color: $--color-text-primary !default;
+
+$--notification-close-color: $--color-text-secondary !default;
+$--notification-close-hover-color: $--color-text-regular !default;
+
+$--notification-success-color: $--color-success !default;
+$--notification-info-color: $--color-info !default;
+$--notification-warning-color: $--color-warning !default;
+$--notification-danger-color: $--color-danger !default;
+
+/* Input
+-------------------------- */
+$--input-font-size: $--font-size-base !default;
+$--input-color: #42daff !default;
+$--input-width: 140px !default;
+$--input-height: 40px !default;
+$--input-border: $--border-base !default;
+$--input-border-color: $--border-color-base !default;
+$--input-border-radius: $--border-radius-base !default;
+$--input-border-color-hover: $--border-color-hover !default;
+$--input-fill: #1f2e2e !default;
+$--input-fill-disabled: $--disabled-fill-base !default;
+$--input-color-disabled: $--font-color-disabled-base !default;
+$--input-icon-color: $--color-text-placeholder !default;
+$--input-placeholder-color: #0096ba !default;
+$--input-max-width: 314px !default;
+
+$--input-hover-border: $--border-color-hover !default;
+$--input-clear-hover-color: $--color-text-secondary !default;
+
+$--input-focus-border: #42daff !default;
+$--input-focus-fill: $--color-white !default;
+
+$--input-disabled-fill: $--disabled-fill-base !default;
+$--input-disabled-border: $--disabled-border-base !default;
+$--input-disabled-color: $--disabled-color-base !default;
+$--input-disabled-placeholder-color: $--color-text-placeholder !default;
+
+$--input-medium-font-size: 14px !default;
+$--input-medium-height: 36px !default;
+
+$--input-small-font-size: 13px !default;
+$--input-small-height: 32px !default;
+
+$--input-mini-font-size: 12px !default;
+$--input-mini-height: 28px !default;
+
+/* Cascader
+-------------------------- */
+$--cascader-menu-fill: $--fill-base !default;
+$--cascader-menu-font-size: $--font-size-base !default;
+$--cascader-menu-radius: $--border-radius-base !default;
+$--cascader-menu-border: $--border-base !default;
+$--cascader-menu-border-color: $--border-color-base !default;
+$--cascader-menu-border-width: $--border-width-base !default;
+$--cascader-menu-color: $--color-text-regular !default;
+$--cascader-menu-option-color-active: $--color-text-secondary !default;
+$--cascader-menu-option-fill-active: rgba($--color-text-secondary, 0.12) !default;
+$--cascader-menu-option-color-hover: $--color-text-regular !default;
+$--cascader-menu-option-fill-hover: rgba($--color-text-primary, 0.06) !default;
+$--cascader-menu-option-color-disabled: #999 !default;
+$--cascader-menu-option-fill-disabled: rgba($--color-black, 0.06) !default;
+$--cascader-menu-option-empty-color: #666 !default;
+$--cascader-menu-group-color: #999 !default;
+$--cascader-menu-shadow: 0 1px 2px rgba($--color-black, 0.14), 0 0 3px rgba($--color-black, 0.14) !default;
+$--cascader-menu-option-pinyin-color: #999 !default;
+$--cascader-menu-submenu-shadow: 1px 1px 2px rgba($--color-black, 0.14), 1px 0 2px rgba($--color-black, 0.14) !default;
+
+/* Group
+-------------------------- */
+$--group-option-flex: 0 0 (1/5) * 100% !default;
+$--group-option-offset-bottom: 12px !default;
+$--group-option-fill-hover: rgba($--color-black, 0.06) !default;
+$--group-title-color: $--color-black !default;
+$--group-title-font-size: $--font-size-base !default;
+$--group-title-width: 66px !default;
+
+/* Tab
+-------------------------- */
+$--tab-font-size: $--font-size-base !default;
+$--tab-border-line: 1px solid #e4e4e4 !default;
+$--tab-header-color-active: $--color-text-secondary !default;
+$--tab-header-color-hover: $--color-text-regular !default;
+$--tab-header-color: $--color-text-regular !default;
+$--tab-header-fill-active: rgba($--color-black, 0.06) !default;
+$--tab-header-fill-hover: rgba($--color-black, 0.06) !default;
+$--tab-vertical-header-width: 90px !default;
+$--tab-vertical-header-count-color: $--color-white !default;
+$--tab-vertical-header-count-fill: $--color-text-secondary !default;
+
+/* Button
+-------------------------- */
+$--button-font-size: 14px !default;
+$--button-font-weight: $--font-weight-primary !default;
+$--button-border-radius: $--border-radius-base !default;
+$--button-padding-vertical: 12px !default;
+$--button-padding-horizontal: 20px !default;
+
+$--button-medium-font-size: 14px !default;
+$--button-medium-border-radius: $--border-radius-base !default;
+$--button-medium-padding-vertical: 10px !default;
+$--button-medium-padding-horizontal: 20px !default;
+
+$--button-small-font-size: 12px !default;
+$--button-small-border-radius: #{$--border-radius-base - 1} !default;
+$--button-small-padding-vertical: 9px !default;
+$--button-small-padding-horizontal: 15px !default;
+
+$--button-mini-font-size: 12px !default;
+$--button-mini-border-radius: #{$--border-radius-base - 1} !default;
+$--button-mini-padding-vertical: 7px !default;
+$--button-mini-padding-horizontal: 15px !default;
+
+/******默认的button样式*******/
+$--button-default-color: $--color-text-regular !default;
+$--button-default-fill: $--fill-color-bright !default;
+$--button-default-border: $--border-color-base !default;
+
+/*未确认*/
+$--button-disabled-color: $--color-text-placeholder !default;
+$--button-disabled-fill: $--color-white !default;
+$--button-disabled-border: $--border-color-lighter !default;
+
+$--button-primary-border: $--color-primary !default;
+$--button-primary-color: $--color-text-primary !default;
+$--button-primary-fill: $--color-primary !default;
+
+$--button-success-border: $--color-success !default;
+$--button-success-color: $--color-white !default;
+$--button-success-fill: $--color-success !default;
+
+$--button-warning-border: $--color-warning !default;
+$--button-warning-color: $--color-white !default;
+$--button-warning-fill: $--color-warning !default;
+
+$--button-danger-border: $--color-danger !default;
+$--button-danger-color: $--color-white !default;
+$--button-danger-fill: $--color-danger !default;
+
+$--button-info-border: $--color-info !default;
+$--button-info-color: $--color-white !default;
+$--button-info-fill: $--color-info !default;
+
+$--button-hover-tint-percent: 20% !default;
+$--button-active-shade-percent: 10% !default;
+
+
+/* cascader
+-------------------------- */
+$--cascader-height: 200px !default;
+
+/* Switch
+-------------------------- */
+$--switch-on-color: $--color-primary !default;
+$--switch-off-color: $--border-color-base !default;
+$--switch-disabled-color: $--border-color-lighter !default;
+$--switch-disabled-text-color: $--color-text-placeholder !default;
+
+$--switch-font-size: $--font-size-base !default;
+$--switch-core-border-radius: 10px !default;
+$--switch-width: 40px !default;
+$--switch-height: 20px !default;
+$--switch-button-size: 16px !default;
+
+/* Dialog
+-------------------------- */
+$--dialog-background-color: #1f2e2e !default;
+$--dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !default;
+$--dialog-close-hover-color: $--color-primary !default;
+$--dialog-title-font-size: $--font-size-large !default;
+$--dialog-font-size: 14px !default;
+$--dialog-line-height: $--font-line-height-primary !default;
+$--dialog-padding-primary: 20px !default;
+
+/* Table
+-------------------------- */
+$--table-border-color: $--border-color-lighter !default;
+$--table-border: 1px solid #42daff !default;
+$--table-text-color: #42daff !default;
+$--table-header-color: #0a4958 !default;
+$--table-row-hover-background: #42daff !default;
+$--table-current-row-background: #42daff !default;
+$--table-header-background: #0a4958 !default;
+$--table-footer-background: $--color-text-placeholder !default;
+$--table-fixed-box-shadow: 0 0 10px rgba(0, 0, 0, .12) !default;
+
+/* Pagination
+-------------------------- */
+$--pagination-font-size: 13px !default;
+$--pagination-fill: #1a3339 !default;
+$--pagination-color: $--color-text-primary !default;
+$--pagination-border-radius: 3px !default;
+$--pagination-button-color: $--color-text-primary !default;
+$--pagination-button-width: 35.5px !default;
+$--pagination-button-height: 28px !default;
+$--pagination-button-disabled-color: $--color-text-placeholder !default;
+$--pagination-button-disabled-fill: #1a3339 !default;
+$--pagination-hover-fill: $--color-primary !default;
+$--pagination-hover-color: $--color-white !default;
+
+/* Popover  弹出框样式
+-------------------------- */
+$--popover-fill: $--color-popover-fill !default;  // 这个是Popper的小三角
+$--popover-font-size: $--font-size-base !default;
+$--popover-border-color: $--color-popover-border !default;
+$--popover-arrow-size: 6px !default;
+$--popover-padding: 12px !default;
+$--popover-padding-large: 18px 20px !default;
+$--popover-title-font-size: 16px !default;
+$--popover-title-color: $--color-text-primary !default;
+
+/* Tooltip
+-------------------------- */
+$--tooltip-fill: $--color-text-primary !default;
+$--tooltip-color: black !default;
+$--tooltip-font-size: 12px !default;
+$--tooltip-border-color: $--color-text-primary !default;
+$--tooltip-arrow-size: 6px !default;
+$--tooltip-padding: 10px !default;
+
+/* Tag
+-------------------------- */
+$--tag-padding: 0 10px !default;
+$--tag-fill: rgba($--color-primary, 0.10) !default;
+$--tag-color: $--color-primary !default;
+$--tag-border: rgba($--color-primary, 0.20) !default;
+$--tag-font-size: 12px !default;
+$--tag-border-radius: 4px !default;
+
+$--tag-info-fill: rgba($--color-info, 0.10) !default;
+$--tag-info-border: rgba($--color-info, 0.20) !default;
+$--tag-info-color: $--color-info !default;
+
+$--tag-primary-fill: rgba($--color-primary, 0.10) !default;
+$--tag-primary-border: rgba($--color-primary, 0.20) !default;
+$--tag-primary-color: $--color-primary !default;
+
+$--tag-success-fill: rgba($--color-success, 0.10) !default;
+$--tag-success-border: rgba($--color-success, 0.20) !default;
+$--tag-success-color: $--color-success !default;
+
+$--tag-warning-fill: rgba($--color-warning, 0.10) !default;
+$--tag-warning-border: rgba($--color-warning, 0.20) !default;
+$--tag-warning-color: $--color-warning !default;
+
+$--tag-danger-fill: rgba($--color-danger, 0.10) !default;
+$--tag-danger-border: rgba($--color-danger, 0.20) !default;
+$--tag-danger-color: $--color-danger !default;
+
+/* Tree
+-------------------------- */
+$--tree-node-hover-color: $--background-color-base !default;
+$--tree-text-color: $--color-text-regular !default;
+$--tree-expand-icon-color: $--color-text-placeholder !default;
+
+/* Dropdown
+-------------------------- */
+$--dropdown-menu-box-shadow: $--box-shadow-light !default;
+$--dropdown-menuItem-hover-fill: $--background-color-bright !default;
+$--dropdown-menuItem-hover-color: #b6f0ff !default;
+
+/* Badge
+-------------------------- */
+$--badge-fill: $--color-danger !default;
+$--badge-radius: 10px !default;
+$--badge-font-size: 12px !default;
+$--badge-padding: 6px !default;
+$--badge-size: 18px !default;
+
+/* Card
+--------------------------*/
+$--card-border-color: $--border-color-lighter !default;
+$--card-border-radius: 4px !default;
+$--card-padding: 8px !default;
+
+/* Slider
+--------------------------*/
+$--slider-main-background-color: $--color-primary !default;
+$--slider-runway-background-color: $--border-color-light !default;
+$--slider-button-hover-color: mix($--color-primary, black, 97%) !default;
+$--slider-stop-background-color: $--color-white !default;
+$--slider-disable-color: $--color-text-placeholder !default;
+
+$--slider-margin: 16px 0 !default;
+$--slider-border-radius: 3px !default;
+$--slider-height: 6px !default;
+$--slider-button-size: 16px !default;
+$--slider-button-wrapper-size: 36px !default;
+$--slider-button-wrapper-offset: -15px !default;
+
+/* Steps
+--------------------------*/
+$--steps-border-color: $--disabled-border-base !default;
+$--steps-border-radius: 4px !default;
+$--steps-padding: 20px !default;
+
+/* Menu
+--------------------------*/
+$--menu-item-font-size: $--font-size-base !default;
+$--menu-item-color: $--color-text-primary !default;
+$--menu-item-fill: $--color-white !default;
+$--menu-item-hover-fill: #42daff !default;
+
+/* Rate
+--------------------------*/
+$--rate-height: 20px !default;
+$--rate-font-size: $--font-size-base !default;
+$--rate-icon-size: 18px !default;
+$--rate-icon-margin: 6px !default;
+$--rate-icon-color: $--color-text-placeholder !default;
+
+/* DatePicker
+--------------------------*/
+$--datepicker-color: $--color-text-regular !default;
+$--datepicker-off-color: $--color-text-placeholder !default;
+$--datepicker-header-color: $--color-text-regular !default;
+$--datepicker-icon-color: $--color-text-primary !default;
+$--datepicker-border-color: $--disabled-border-base !default;//#42daff !default;             //
+$--datepicker-inner-border-color: #42daff !default;       // 内部的border
+$--datepicker-inrange-color: #06404e !default;            // 选择的连接的背景色
+$--datepicker-inrange-hover-color: #42daff !default;      //
+$--datepicker-active-color: $--color-primary !default;
+$--datepicker-text-hover-color: $--color-primary !default;
+$--datepicker-cell-hover-color: #06404e !default;
+
+/* Loading
+--------------------------*/
+$--loading-spinner-size: 42px !default;
+$--loading-fullscreen-spinner-size: 50px !default;
+
+/* Scrollbar
+--------------------------*/
+$--scrollbar-background-color: rgba($--color-text-secondary, .3) !default;
+$--scrollbar-hover-background-color: rgba($--color-text-secondary, .5) !default;
+
+/* Carousel
+--------------------------*/
+$--carousel-arrow-font-size: 12px !default;
+$--carousel-arrow-size: 36px !default;
+$--carousel-arrow-background: rgba(31, 45, 61, 0.11) !default;
+$--carousel-arrow-hover-background: rgba(31, 45, 61, 0.23) !default;
+$--carousel-indicator-width: 30px !default;
+$--carousel-indicator-height: 2px !default;
+$--carousel-indicator-padding-horizontal: 4px !default;
+$--carousel-indicator-padding-vertical: 12px !default;
+$--carousel-indicator-out-color: $--border-color-hover !default;
+
+/* Collapse
+--------------------------*/
+$--collapse-border-color: $--border-color-lighter !default;
+$--collapse-header-height: 48px !default;
+$--collapse-header-padding: 20px !default;
+$--collapse-header-fill: $--color-white !default;
+$--collapse-header-color: $--color-text-primary !default;
+$--collapse-header-size: 13px !default;
+$--collapse-content-fill: $--color-white !default;
+$--collapse-content-size: 13px !default;
+$--collapse-content-color: $--color-text-primary !default;
+
+/* Transfer
+--------------------------*/
+$--transfer-border-color: $--border-color-lighter !default;
+$--transfer-border-radius: $--border-radius-base !default;
+$--transfer-panel-width: 200px !default;
+$--transfer-panel-header-height: 40px !default;
+$--transfer-panel-header-background: rgba(31, 46, 46, 0.9) !default;
+$--transfer-panel-footer-height: 40px !default;
+$--transfer-panel-body-height: 246px !default;
+$--transfer-item-height: 30px !default;
+$--transfer-item-hover-background: #42daff !default;
+$--transfer-filter-height: 32px !default;
+
+/* Header
+  --------------------------*/
+$--header-padding: 0 20px !default;
+
+/* Footer
+--------------------------*/
+$--footer-padding: 0 20px !default;
+
+/* Main
+--------------------------*/
+$--main-padding: 20px !default;
+
+/* Break-point
+--------------------------*/
+$--sm: 768px !default;
+$--md: 992px !default;
+$--lg: 1200px !default;
+$--xl: 1920px !default;
+
+$--breakpoints: (
+  'xs' : (max-width: $--sm),
+  'sm' : (min-width: $--sm),
+  'md' : (min-width: $--md),
+  'lg' : (min-width: $--lg),
+  'xl' : (min-width: $--xl)
+);
+
+$--breakpoints-spec: (
+  'xs-only' : (max-width: $--sm - 1),
+  'sm-and-up' : (min-width: $--sm),
+  'sm-only': "(min-width: #{$--sm}) and (max-width: #{$--md} - 1)",
+  'sm-and-down': (max-width: $--md - 1),
+  'md-and-up' : (min-width: $--md),
+  'md-only': "(min-width: #{$--md}) and (max-width: #{$--lg } - 1)",
+  'md-and-down': (max-width: $--lg - 1),
+  'lg-and-up' : (min-width: $--lg),
+  'lg-only': "(min-width: #{$--lg}) and (max-width: #{$--xl } - 1)",
+  'lg-and-down': (max-width: $--xl - 1),
+  'xl-only' : (min-width: $--xl),
+);
+
+// /* kanban
+// --------------------------*/
+.board {
+  width: 100%;
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.kanban {
+  &.todo {
+    .board-column-header {
+      background: #12424d;
+    }
+  }
+}
+.board-column {
+    min-width: 180px;
+    min-height: 100px;
+    height: auto;
+    overflow: hidden;
+    background: rgba(31,46,46,0.9);
+    border-radius: 3px;
+    border: 1px solid #095569;
+  
+    .board-column-header {
+      height: 40px;
+      line-height: 40px;
+      overflow: hidden;
+      padding: 0 10px;
+      text-align: center;
+      background: #12424d;
+      color: #42daff;
+      border-radius: 3px 3px 0 0;
+    }
+  
+    .board-column-content {
+      height: auto;
+      overflow: hidden;
+      border: 10px solid transparent;
+      min-height: 60px;
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column;
+      align-items: center;
+  
+      .board-item {
+        cursor: pointer;
+        width: 100%;
+        height: 48px;
+        margin: 5px 0;
+        // background-color: rgba(31,46,46,0.9);
+        text-align: right;
+        line-height: 40px;
+        padding: 1px 1px;
+        box-sizing: border-box;
+      }
+    }
+  }
+
+
+// kiss风格登陆页面样式
+.login-container {
+  .el-input {
+    display: inline-block;
+    height: 47px;
+    width: 85%;
+    input {
+      background: transparent;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 0px;
+      padding: 12px 5px 12px 15px;
+      color: #0096ba;
+      height: 47px;
+      &:-webkit-autofill {
+        // -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
+        -webkit-text-fill-color: rgb(0, 0, 0) !important;
+      }
+    }
+  }
+  .el-form-item {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    color: #454545;
+  }
+}
+
+.login-container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: #232525;
+  .login-form {
+    position: absolute;
+    left: 0;
+    right: 0;
+    //width: 33%;
+    width: 20%;
+    min-width: 400px;
+    padding: 35px 35px 15px 35px;
+    margin: 120px auto;
+  }
+  .tips {
+    font-size: 14px;
+    color: #0096ba;
+    margin-bottom: 10px;
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: #42daff;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+    &_login {
+      font-size: 20px;
+    }
+  }
+  .title {
+    font-size: 26px;
+    font-weight: 400;
+    color: #42daff;
+    margin: 0px auto 40px auto;
+    text-align: center;
+    font-weight: bold;
+  }
+  .show-pwd {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    font-size: 16px;
+    color: #42daff;
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
+// time选择器的样式。
+.el-time-panel__btn.confirm {
+  font-weight: 800;
+  color: #42daff;
+}
+
+/*  容器div start  */
+
+#query {
+  color: #42daff;
+  background: rgba(31, 46, 46, 0.8);
+}
+
+/*  容器div end  */
+
+/**************** 下拉框 start  ********************/
+/*下拉框中的el-tag的样式 默认是info 现在修改*/
+
+.el-select {
+  .el-tag {
+    background-color: #0096ba;
+  }
+  .el-tag--info {
+    color: #b6f0ff;
+  }
+}
+
+/*************** 下拉框 end  ********************/
+
+/*************** table start *******************/
+
+.el-table, .el-table__expanded-cell {
+  background-color: transparent;
+  // opacity: 0.8;
+}
+
+.el-table {
+  th {
+    background-color: #0a4958;
+  }
+  tr {
+    background-color: #192626;
+    color: #42daff;
+  }
+}
+
+.el-table__body .el-table__row {
+  background-color: #1f2e2e !important;
+  color: #42daff;
+  &.current-row > td {
+    background: #009cc4 !important;
+    color: #b6f0ff;
+  }
+  &:hover > td {
+    background-color: #00718e !important;
+    color: #ffffff;
+  }
+}
+
+/* .el-table__body tr:hover>td {
+    background-color: #00718e !important;
+    color: #ffffff;
+} */
+
+.el-table--border {
+  td, th {
+    border-right: 1px solid #ebeef5;
+    border-color: #0a4958;
+  }
+}
+
+.el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+  border-right: 1px solid #ebeef5;
+  border-color: #0a4958;
+}
+
+.el-table {
+  td, th.is-leaf {
+    border-bottom: 1px solid #0a4958;
+  }
+}
+
+.el-table--border, .el-table--group {
+  border: 1px solid #0a4958;
+}
+
+.el-table--border::after, .el-table--group::after {
+  background-color: #0a4958;
+}
+
+.el-table {
+  &::before {
+    background-color: #0a4958;
+  }
+  &.el-table--fit.el-table--border.el-table--enable-row-hover.el-table--enable-row-transition {
+    width: 100%;
+    border: 1px solid #0a4958;
+  }
+}
+
+tr {
+  height: 40px;
+}
+
+.el-table {
+  td, th {
+    padding: 0px 0;
+    min-width: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    position: relative;
+  }
+  .cell {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 18px;
+  }
+}
+
+/********************* table end  **********************/
+
+/******** 时间选择器 start **********/
+
+.el-picker-panel, .el-picker-panel__footer {
+  background: #0a4958;
+}
+
+.el-date-editor input {
+  background: #1f2e2e !important;
+}
+
+.el-button {
+  &.is-plain {
+    &:active, &:hover {
+      background: #42daff;
+    }
+  }
+  &.is-disabled.is-plain {
+    background-color: #0a6b83;
+    &:hover, &:focus {
+      background-color: #0a6b83;
+    }
+  }
+}
+
+.el-time-panel {
+  margin: 5px 0;
+  border: solid 1px #0096ba;
+  background-color: rgb(14, 73, 87);
+  -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  position: absolute;
+  width: 180px;
+  left: 0;
+  z-index: 1000;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/******** 时间选择器 end **********/
+
+/**************drop 的背景 satrt******************/
+
+.el-dropdown-menu, .el-card, .el-tree {
+  background-color: rgba(31, 46, 46, 0.8);
+}
+
+/**************drop 的背景 end******************/
+
+/**************card start******************/
+
+/**************card end******************/
+
+/**************tree start******************/
+
+/**************tree end******************/
+
+/******************steps start*****************/
+
+.el-step__icon {
+  background: rgb(31, 46, 46);
+}
+
+/*选中前的线*/
+
+.el-step__line {
+  background: #0a4958;
+}
+
+/*选中前的图表圈圈*/
+
+.el-step__head {
+  &.is-wait, &.is-process {
+    color: #0a4958;
+    border-color: #0a4958;
+  }
+}
+
+.el-step__title {
+  &.is-process, &.is-wait {
+    color: #0a4958;
+  }
+}
+
+/*选中成功*/
+
+.el-step__head.is-success {
+  color: #42daff;
+  border-color: #42daff;
+}
+
+.el-step__title.is-success {
+  color: #42daff;
+}
+
+.el-step__icon :hover {
+  cursor: pointer;
+}
+
+/*******************start end******************/
+
+/******************tabs start********************/
+
+.el-tabs--border-card {
+  > {
+    .el-tabs__header {
+      .el-tabs__item.is-active {
+        background-color: #0096ba;
+      }
+      background-color: transparent;
+      border-bottom: none;
+    }
+    .el-tabs__content {
+      padding: 0;
+    }
+    .el-tabs__header .el-tabs__item {
+      &:not(.is-disabled):hover, &.is-active {
+        color: #b6f0ff;
+      }
+    }
+  }
+  background: transparent;
+  border: none;
+}
+
+.el-tabs__new-tab {
+  border: 1px solid #42daff;
+}
+
+.el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
+  border-bottom-color: #42daff;
+}
+
+.el-tabs__item.is-active {
+  background: #0d404c;
+  color: #b6f0ff;
+}
+
+/******************tabs end********************/
+
+/******************* button start ******************/
+
+.el-button--text {
+  color: #42daff;
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+.el-button--default:hover {
+  color: #222e2e;
+  background: #42daff;
+  border: solid 1px #42daff;
+}
+
+.el-button--primary {
+  &:hover {
+    color: #222e2e;
+    background: #42daff;
+    border: solid 1px #42daff;
+  }
+  &.is-disabled {
+    color: #0a6b83;
+    background-color: #1f2e2e;
+    border-color: #1f2e2e;
+    &:hover, &:focus, &:active {
+      color: #0a6b83;
+      background-color: #1f2e2e;
+      border-color: #1f2e2e;
+    }
+  }
+  color: #b6f0ff;
+  background-color: #0096ba;
+  border-color: #0096ba;
+}
+
+.el-button--default {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #0096ba;
+  border: 1px solid #0096ba;
+  border-color: #0096ba;
+  color: #b6f0ff;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  -webkit-transition: .1s;
+  transition: .1s;
+  font-weight: 500;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.el-button--text {
+  &:hover, &:focus {
+    color: #42daff;
+    border-color: transparent;
+    background-color: transparent;
+  }
+}
+
+.el-button--primary:focus, .el-button--default:focus {
+  color: #b6f0ff;
+  border-color: #0096ba;
+  background-color: #0096ba;
+}
+
+.el-button--small:hover {
+  color: #222e2e;
+  border-color: #42daff;
+  background-color: #42daff;
+}
+
+/********************button end*********************/
+
+/*******************form satrt**********************/
+
+.el-form-item__label {
+  color: #42daff;
+}
+
+/********************form end***********************/
+
+/*********************message box***********************/
+
+.el-message-box {
+  background-color: rgba(31, 46, 46, 0.8);
+}
+
+/*********************message box***********************/
+
+/********************** 滚动条的样式 start ********************/
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background-color: black;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: #00738f;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #40d8ff;
+  border-radius: 5px;
+}
+
+/*拉条的样式*/
+
+::-webkit-scrollbar-corner {
+  background-color: #535353;
+}
+
+/* 即两个滚动条的交汇处 */
+
+::-webkit-scrollbar-resizer {
+  background-color: #FF6E00;
+}
+
+/*两个滚动条的交汇处上用于通过拖动调整元素大小的小控件 */
+/********************** 滚动条的样式 end ********************/
+
+/********************** Transfer  start ********************/
+
+.el-transfer-panel__list {
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  height: 246px;
+  overflow: auto;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background: rgba(31, 46, 46, 0.9);
+}
+
+.el-transfer-panel__item.el-checkbox {
+  &:hover {
+    color: #b6f0ff;
+  }
+  color: #0096ba;
+}
+
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: #b6f0ff;
+}
+
+.el-transfer-panel .el-transfer-panel__header {
+  height: 40px;
+  line-height: 40px;
+  background: rgba(31, 46, 46, 1);
+  margin: 0;
+  padding-left: 15px;
+  border-bottom: 1px solid #0096b0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #000;
+}
+
+/********************** dialog  start ********************/
+
+.el-dialog {
+  background: rgba(31, 46, 46, 0.9);
+  /* border: solid 1px rgba(66, 218, 255, 0.8); */
+  border: solid 1px #0096ba;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+  color: #42daff;
+  &:hover {
+    color: #0096ba;
+  }
+}
+
+/********************** dialog  end ********************/
+
+.el-transfer-panel__body {
+  background: rgba(31, 46, 46, 1);
+}
+
+.el-pagination {
+  background: #1a3339;
+}
+
+#app .sidebar-container {
+  background: #191d1e;
+}
+
+.el-menu-item {
+  min-width: 220px;
+  background-color: #1b2f33;
+}
+
+.el-menu {
+  border: none;
+  width: 100%;
+  background-color: #232525;
+}
+
+#app {
+  background: #1c1e1e;
+}
+
+/********************** 分割线 ********************/
+
+.el-menu.el-menu--horizontal {
+  border-bottom: solid 1px #0a4958;
+}
+
+.hamburgercolor {
+  fill: #42daff;
+  stroke: red;
+  stroke-width: 2;
+}
+
+/********************** 密码校验规则部分样式 ********************/
+
+#pass-label .el-form-item__label {
+  color: #0096ba;
+}
+
+#pass-state-succ {
+  color: #01b468;
+  float: left;
+}
+
+#pass-state-err {
+  color: #0096ba;
+  float: left;
+}
+
+/********************** input输入框变绿的异常情况 ********************/
+
+.el-form-item.is-success {
+  .el-input__inner, .el-textarea__inner {
+    border-color: #42daff;
+    &:focus {
+      border-color: #42daff;
+    }
+  }
+}
+
+/********************** 重新设置左侧菜单的高度，使之与右侧Navar高度相同 ********************/
+
+.el-submenu__title {
+  height: 50px;
+  line-height: 56px;
+  font-size: 14px;
+  color: #42daff;
+  padding: 0 20px;
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  -webkit-transition: border-color .3s, background-color .3s, color .3s;
+  transition: border-color .3s, background-color .3s, color .3s;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+/********************** 设置权限树的滚动条和边框 ********************/
+
+.borde-style {
+  overflow: auto;
+  height: 310px;
+  border: 1px solid;
+  border-width: 1px;
+  border-color: #0a4958;
+}
+
+/********************** 全局背景色 ********************/
+
+html {
+  background-color: #232525;
+}
+
+/********************** 更改checkbox的背景色 ********************/
+
+.el-checkbox__inner {
+  display: inline-block;
+  position: relative;
+  border: 1px solid #0096ba;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  background-color: rgba(31, 46, 46, 0.9);
+  z-index: 1;
+  -webkit-transition: border-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46), background-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46);
+  transition: border-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46), background-color 0.25s cubic-bezier(0.71, -0.46, 0.29, 1.46);
+}
+
+/********************** 更改删除弹框的取消符号的样式 ********************/
+
+.el-message-box__headerbtn .el-message-box__close {
+  color: #42daff;
+  &:hover {
+    color: #0096ba;
+  }
+}
+
+.el-message-box__content {
+  position: relative;
+  padding: 10px 15px;
+  color: #42daff;
+  font-size: 14px;
+}
+
+/********************** 设置主页字体样式 ********************/
+
+.dashboard-container {
+  font-style: italic;
+  font-size: 30px;
+  color: #42daff;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/********************** 设置dashboard后面文字的样式 ********************/
+
+.no-redirect {
+  color: #b6f0ff;
+  cursor: text;
+}
+
+/********************** 设置左侧菜单title的样式 ********************/
+
+.menutitle, .el-icon-plus, .el-icon-minus {
+  color: #42daff;
+}
+
+/********************** 设置权限加号和减号的颜色 ********************/
+
+/********************** 设置main的分割线的颜色 ********************/
+
+.el-dropdown-menu__item--divided:before {
+  content: '';
+  height: 4px;
+  display: block;
+  margin: 0 -20px;
+  background-color: #0a4958;
+}
+
+/********************** 设置左侧菜单的样式 ********************/
+
+#app .sidebar-container {
+  .nest-menu .el-submenu > .el-submenu__title, .el-submenu .el-menu-item {
+    min-width: 180px !important;
+    background-color: #162528 !important;
+  }
+  .nest-menu .el-submenu > .el-submenu__title, .el-submenu .el-menu-item:hover, .nest-menu .el-submenu > .el-submenu__title, .el-submenu .el-menu-item.is-active {
+    min-width: 180px !important;
+    background-color: #121f21 !important;
+  }
+}
+
+.el-input-group__prepend {
+  color: #42daff !important;
+}
+
+#app .sidebar-container .el-menu {
+  border: none;
+  height: 100%;
+  width: 100% !important;
+  background: #1b2f33 !important;
+}
+
+.submenu-title-noDropdown:hover, .el-submenu__title:hover {
+  background: #1c3c43 !important;
+}
+
+.el-menu-item {
+  &.is-active {
+    background: #1c3c43 !important;
+    color: #42daff !important;
+  }
+  color: #0096ba !important;
+  &:hover, &:focus {
+    outline: none;
+    background-color: #0d404c;
+  }
+}
+
+/********************** 设置选择框右边的文字样式 ********************/
+
+.el-checkbox {
+  color: #0096ba;
+  font-weight: 500;
+  font-size: 14px;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/********************** 设置table下拉框箭头的样式 ********************/
+
+.el-table__expand-icon {
+  position: relative;
+  cursor: pointer;
+  color: #42daff;
+  font-size: 12px;
+  -webkit-transition: -webkit-transform 0.2s ease-in-out;
+  transition: -webkit-transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+  height: 20px;
+}
+
+/********************** 设置选择框多选状态，去除选中的样式 ********************/
+
+.el-select .el-tag__close.el-icon-close {
+  background-color: #0096ba;
+  right: -7px;
+  top: 0;
+  color: #fff;
+}
+
+/********************** 设置date下拉框的样式 ********************/
+
+.el-popper[x-placement^="bottom"] {
+  margin-top: 10px;
+}
+
+/********************** 设置日历的样式 ********************/
+
+.el-date-table {
+  td {
+    &.next-month, &.prev-month {
+      color: #0096ba;
+    }
+    &.current:not(.disabled) span {
+      color: #fff;
+      background-color: #0096ba;
+    }
+  }
+  span:hover {
+    background: #0096ba;
+  }
+  td.today span {
+    color: #42daff;
+    font-weight: bold;
+  }
+}
+
+.el-picker-panel__icon-btn:hover {
+  font-size: 12px;
+  color: #42daff;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  margin-top: 8px;
+}
+
+.el-month-table td.current:not(.disabled) .cell {
+  color: #42daff;
+}
+
+.el-year-table td .cell {
+  width: 48px;
+  height: 32px;
+  display: block;
+  line-height: 32px;
+  color: #b6f0ff;
+  margin: 0 auto;
+}
+
+.el-month-table td .cell:hover, .el-year-table td .cell:hover {
+  width: 48px;
+  height: 32px;
+  display: block;
+  line-height: 32px;
+  color: #0096ba;
+  margin: 0 auto;
+}
+
+.el-date-picker__header-label:hover {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0 5px;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+  color: #b6f0ff;
+}
+
+.el-date-table td.available:hover {
+  color: #42daff;
+}
+
+/********************** 设置日期选择的样式 ********************/
+
+.el-time-spinner__item:hover:not(.disabled):not(.active) {
+  background: #0096ba;
+  cursor: pointer;
+}
+
+.el-scrollbar__thumb {
+  background: #40d8ff;
+  &:hover {
+    background: #40d8ff;
+  }
+}
+
+/********************** 设置计数框的样式 ********************/
+
+.el-input-number__increase:hover, .el-input-number__decrease:hover {
+  color: #b6f0ff;
+  background: #0096ba;
+}
+
+/********************** 设置多选下拉框的样式 ********************/
+
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
+  &.hover {
+    background-color: #0096ba;
+    color: #fff;
+  }
+  color: #0096ba;
+  font-weight: bold;
+}
+
+/********************** 设置单选下拉框的样式 ********************/
+
+.el-select-dropdown__item.selected {
+  color: #0096ba;
+  font-weight: bold;
+  &:hover {
+    background-color: #0096ba;
+    color: #fff;
+  }
+}
+
+/********************** 设置看板的样式 ********************/
+
+.kanban-button {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #0096ba;
+  border: 1px solid #0096ba;
+  border-color: #0096ba;
+  color: #fff;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  -webkit-transition: .1s;
+  transition: .1s;
+  font-weight: 500;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+  &:hover {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #0096ba;
+    border: 1px solid #0096ba;
+    border-color: #0096ba;
+    color: #fff;
+    -webkit-appearance: none;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    -webkit-transition: .1s;
+    transition: .1s;
+    font-weight: 500;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+}
+.noSelected{
+  // width: 23%;
+  /* padding-bottom: 23%; */
+  border: 1% solid #fff;        
+  background-color: #184752;
+  border-radius: 3%;
+  float: left;
+  margin: 1%;
+  cursor: pointer;
+}
+.Selected{
+  // width: 23%; 
+  /* padding-bottom: 23%; */
+  border: 1% solid #fff;        
+  background-color: #0684a4;
+  border-radius: 3%;
+  float: left;
+  margin: 1%;
+  cursor: pointer;
+}
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:40px;
+  text-align:center;
+  font-weight:500;
+  color: #fff;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+  

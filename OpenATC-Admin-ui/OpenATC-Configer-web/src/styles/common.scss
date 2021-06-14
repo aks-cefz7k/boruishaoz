@@ -1,0 +1,326 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+@import "./mixin.scss";
+
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
+
+.cssstyle-auth {
+  #pass-label .el-form-item__label {
+    color: #999;
+  }
+
+  #pass-state-succ {
+    color: #01b468;
+    float: left;
+  }
+
+  #pass-state-err {
+    color: #999;
+    float: left;
+  }
+
+  .borde-style {
+    overflow: auto;
+    height: 310px;
+    border: 1px solid;
+    border-width: 1px;
+    border-color: #eeeeee
+  }
+
+  /********************** 设置主页字体样式 ********************/
+  .dashboard-container {
+    font-style: italic;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  /********************** 设置dashboard后面文字的样式 ********************/
+  .no-redirect {
+    color: #97a8be;
+    cursor: text;
+  }
+
+  .cssstylelogin-auth {
+    background-color: $bg;
+    @include relative;
+    height: 100vh;
+    //background-color: #fff;
+    background-color: $bg;
+
+    input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px #293444 inset !important;
+      -webkit-text-fill-color: #fff !important;
+    }
+
+    input {
+      background: transparent;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 0px;
+      padding: 12px 5px 12px 15px;
+      color: $light_gray;
+      height: 47px;
+    }
+
+    .el-input {
+      display: inline-block;
+      height: 47px;
+      width: 85%;
+    }
+
+    .tips {
+      font-size: 14px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .svg-container {
+      padding: 6px 5px 6px 15px;
+      color: $dark_gray;
+      vertical-align: middle;
+      width: 30px;
+      display: inline-block;
+
+      &_login {
+        font-size: 20px;
+      }
+    }
+
+    .title {
+      font-size: 26px;
+      color: $light_gray;
+      margin: 0px auto 40px auto;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .login-form {
+      position: absolute;
+      left: 0;
+      right: 0;
+      width: 400px;
+      padding: 35px 35px 15px 35px;
+      margin: 120px auto;
+      vertical-align: middle;
+    }
+
+    .el-form-item {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      color: #454545;
+    }
+
+    .show-pwd {
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      font-size: 16px;
+      color: $dark_gray;
+      cursor: pointer;
+    }
+
+    .thirdparty-button {
+      position: absolute;
+      right: 35px;
+      bottom: 28px;
+    }
+  }
+
+  .kanban-button {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    background: #4A9FF9;
+    border: 1px solid #4A9FF9;
+    border-color: #4A9FF9;
+    color: #fff;
+    -webkit-appearance: none;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    -webkit-transition: .1s;
+    transition: .1s;
+    font-weight: 500;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    &:hover {
+      display: inline-block;
+      line-height: 1;
+      white-space: nowrap;
+      cursor: pointer;
+      background: #4A9FF9;
+      border: 1px solid #4A9FF9;
+      border-color: #4A9FF9;
+      color: #fff;
+      -webkit-appearance: none;
+      text-align: center;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      outline: none;
+      margin: 0;
+      -webkit-transition: .1s;
+      transition: .1s;
+      font-weight: 500;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      padding: 12px 20px;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+  }
+}
+
+// .cssstylelogin,
+
+#pass-label .el-form-item__label {
+  color: #999;
+}
+
+#pass-state-succ {
+  color: #01b468;
+  float: left;
+}
+
+#pass-state-err {
+  color: #999;
+  float: left;
+}
+
+.borde-style {
+  overflow: auto;
+  height: 310px;
+  border: 1px solid;
+  border-width: 1px;
+  border-color: #eeeeee
+}
+
+/********************** 设置主页字体样式 ********************/
+.dashboard-container {
+  font-style: italic;
+  font-size: 30px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/********************** 设置dashboard后面文字的样式 ********************/
+.no-redirect {
+  color: #97a8be;
+  cursor: text;
+}
+/********************** 设置edge的相位弹框样式 ********************/
+.phaseNoSelected{
+  // width: 23%;
+  /* padding-bottom: 23%; */
+  border: 1% solid #fff;        
+  background-color: #ecf5ff;
+  border-radius: 3%;
+  float: left;
+  margin: 1%;
+  cursor: pointer;
+}
+.phaseSelected{
+  // width: 23%; 
+  /* padding-bottom: 23%; */
+  border: 1% solid #fff;        
+  background-color: #409EFF;
+  border-radius: 3%;
+  float: left;
+  margin: 1%;
+  cursor: pointer;
+}
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:40px;
+  text-align:center;
+  font-weight:500;
+  color: #000000;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/********************** 设置kanban样式 ********************/
+.phase-description {
+  background: rgb(217, 236, 255);
+  width: 40px;
+  height: 40px;
+}
+.board-column {
+min-width: 180px;
+min-height: 100px;
+height: auto;
+overflow: hidden;
+background: #f0f0f0;
+border-radius: 3px;
+border: 1px solid #f0f0f0;
+
+.board-column-header {
+  height: 50px;
+  line-height: 50px;
+  overflow: hidden;
+  padding: 0 10px;
+  text-align: center;
+  background: #12424d;
+  color: #fff;
+  border-radius: 3px 3px 0 0;
+}
+
+.board-column-content {
+  height: auto;
+  overflow: hidden;
+  border: 10px solid transparent;
+  min-height: 60px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+
+  .board-item {
+    cursor: pointer;
+    width: 100%;
+    height: 48px;
+    margin: 5px 0;
+    // background-color: rgba(31,46,46,0.9);
+    text-align: left;
+    line-height: 40px;
+    padding: 1px 1px;
+    box-sizing: border-box;
+  }
+}
+}
+.agent-id {
+  color: #606266;
+  font-size: 14px;
+}
+.sysytem-strategy {
+  color: #606266;
+  margin-right: 10px;
+}
+.system-saturation {
+  color: #606266;
+}
+.control-container {
+  font-weight: bold;
+  color: #606266;
+  margin-top: 20px;
+}

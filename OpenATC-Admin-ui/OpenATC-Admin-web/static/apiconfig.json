@@ -1,0 +1,182 @@
+[
+    {
+    "key": "login",
+    "url": "/auth/login",
+    "method": "post"
+  },
+  {
+    "key": "getCurInfo",
+    "url": "/auth/info",
+    "method": "get"
+  },
+  {
+    "key": "getUsr",
+    "url": "/auth/user",
+    "method": "get"
+  },
+  {
+    "key": "logout",
+    "url": "/auth/logout",
+    "method": "get"
+  },
+  {
+    "key": "getCaptcha",
+    "url": "/auth/captcha",
+    "method": "get"
+  },
+  {
+    "key": "addUsrs",
+    "url": "/auth/user",
+    "method": "post"
+  },
+  {
+    "key": "putUsr",
+    "url": "/auth/user",
+    "method": "put"
+  },
+  {
+    "key": "delUsr",
+    "url": "/auth/user",
+    "method": "delete"
+  },
+  {
+    "key": "getAllRoles",
+    "url": "/auth/role",
+    "method": "get"
+  },
+  {
+    "key": "postPassword",
+    "url": "/auth/password",
+    "method": "post"
+  },
+  {
+    "key": "getHisParamsList",
+    "url": "/devs/hisparams",
+    "method": "get"
+  },
+  {
+    "key": "exportHisParams",
+    "url": "/devs/hisparams",
+    "method": "get"
+  },
+  {
+    "key": "getAllDevice",
+    "url": "/devs/all",
+    "method": "get"
+  },
+  {
+    "key": "getDeviceByIds",
+    "url": "/devs/list",
+    "method": "post"
+  },
+  {
+    "key": "updateDevice",
+    "url": "/devs",
+    "method": "put"
+  },
+  {
+    "key": "addDevice",
+    "url": "/devs",
+    "method": "post"
+  },
+  {
+    "key": "deleteDevice",
+    "url": "/devs",
+    "method": "delete"
+  },
+  {
+    "key": "getSimpleRoute",
+    "url": "/route/simple",
+    "method": "get"
+  },
+  {
+    "key": "getAllPatternOfRoute",
+    "url": "/route/pattern/upload",
+    "method": "get"
+  },
+  {
+    "key": "putAllPatternOfRoute",
+    "url": "/route/pattern/download",
+    "method": "post"
+  },
+  {
+    "key": "getAllPhaseOfRoute",
+    "url": "/route/phase/upload",
+    "method": "get"
+  },
+  {
+    "key": "getRouteInfo",
+    "url": "/route",
+    "method": "get"
+  },
+  {
+    "key": "addRoute",
+    "url": "/route",
+    "method": "post"
+  },
+  {
+    "key": "deleteRoute",
+    "url": "/route",
+    "method": "delete"
+  },
+  {
+    "key": "updateRoute",
+    "url": "/route",
+    "method": "put"
+  },
+  {
+    "key": "generateRoute",
+    "url": "/route/generate",
+    "method": "post"
+  },
+  {
+    "key": "updateRouteName",
+    "url": "/route/name",
+    "method": "put"
+  },
+  {
+    "key": "getTscControl",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
+    "key": "getOrganization",
+    "url": "/organization",
+    "method": "get"
+  },
+  {
+    "key": "getOrganizationById",
+    "url": "/organization",
+    "method": "get"
+  },
+  {
+    "key": "addOrganization",
+    "url": "/organization",
+    "method": "post"
+  },
+  {
+    "key": "updateOrganization",
+    "url": "/organization",
+    "method": "post"
+  },
+  {
+    "key": "delOrganization",
+    "url": "/organization",
+    "method": "delete"
+  },
+  {
+    "key": "getNoneRelatedDevices",
+    "url": "/devs/orgnization/none",
+    "method": "get"
+  },
+  {
+    "key": "getDevicesByOrgCode",
+    "url": "/devs/orgnization",
+    "method": "get"
+  },
+  {
+    "key": "batchUpdateDevice",
+    "url": "/organization",
+    "method": "post"
+  }
+]

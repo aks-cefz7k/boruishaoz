@@ -1,0 +1,7 @@
+*.classpath
+*.settings
+*.springBeans
+*.logs
+OpenATC-Admin-server/agent/src/main/resources/static
+*.project
+/.idea

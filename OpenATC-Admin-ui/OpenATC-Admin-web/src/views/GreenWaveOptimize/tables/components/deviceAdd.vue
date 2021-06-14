@@ -1,0 +1,194 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+<template>
+  <div class="addDeviceDrawer">
+    <div class="devs-container">
+      <div class="filter-container">
+        <el-form>
+          <el-form-item>
+            <el-input
+              v-model="devsfilter"
+              placeholder="输入关键字搜索"
+              prefix-icon="el-icon-search"
+              style="width: 100%;"/>
+          </el-form-item>
+        </el-form>
+      </div>
+    <div class="devs-table">
+      <el-table
+          ref="addDeviceTable"
+          stripe
+          size="mini"
+          style="width: 100%"
+          v-loading.body="listLoading"
+          :data="tableData"
+          @selection-change="handleSelectionChange">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            type="index"
+            label="#"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="agentid"
+            label="设备ID"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="jsonparam.ip"
+            label="IP"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="jsonparam.port"
+            label="端口"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="设备名称"
+            align="center">
+          </el-table-column>
+      </el-table>
+    </div>
+    <div class="btnGroup">
+      <el-button class="btn" @click="handleClose">取消</el-button>
+      <el-button class="btn" type="primary" @click="onOk">确定</el-button>
+    </div>
+  </div>
+  <router-view></router-view>
+</div>
+</template>
+<script>
+import { GetAllDevice } from '@/api/device'
+export default {
+  name: 'deviceAdd',
+  props: {
+    choosedDevice: {
+      type: Array
+    }
+  },
+  watch: {
+    devsfilter: {
+      handler: function (val) {
+        this.handleFilter(val)
+      },
+      deep: true
+    }
+  },
+  data () {
+    return {
+      devsfilter: '',
+      devsData: [], // 所有设备
+      tableData: [], // 过滤后表格显示的设备
+      multipleSelection: [], // 选中项
+      listLoading: false // 数据加载等待动画
+    }
+  },
+  created () {
+    this.getList()
+  },
+  methods: {
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    getList () {
+      this.listLoading = true
+      GetAllDevice().then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return
+        }
+        this.listLoading = false
+        this.filterDeviceData(res.data.data)
+        // this.getChoosed()
+      })
+    },
+    filterDeviceData (allDevs) {
+      // 数据源过滤掉已选择设备
+      const agentids = this.choosedDevice.map(ele => ele.agentid)
+      this.devsData = allDevs.filter(data => !agentids.includes(data.agentid))
+      this.tableData = this.devsData
+    },
+    // getChoosed () {
+    //   // 已有设备勾选
+    //   const agentids = this.choosedDevice.map(ele => ele.agentid)
+    //   const choosed = this.tableData.filter(data => agentids.includes(data.agentid))
+    //   choosed.forEach(row => {
+    //     this.$nextTick(() => {
+    //       this.$refs.addDeviceTable.toggleRowSelection(row, true)
+    //     })
+    //   })
+    // },
+    handleFilter (val) {
+      this.tableData = this.devsData.filter(data => !this.devsfilter ||
+        (data.agentid !== undefined && data.agentid.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
+        (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
+        (data.name !== undefined && data.name.toLowerCase().includes(this.devsfilter.toLowerCase())))
+      this.multipleSelection.forEach(row => {
+        this.$nextTick(() => {
+          this.$refs.addDeviceTable.toggleRowSelection(row, true)
+        })
+      })
+    },
+    onOk () {
+      this.$emit('addMultiDevice', this.multipleSelection)
+      this.$emit('closeAddDrawer')
+    },
+    handleClose (done) {
+      this.$emit('closeAddDrawer')
+    }
+  }
+}
+</script>
+
+<style>
+.addDeviceDrawer .devs-table .el-table th>.cell {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+</style>
+
+<style scoped>
+.addDeviceDrawer {
+  height: 100%;
+  position: relative;
+}
+.addDeviceDrawer .btnGroup {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 100%;
+  padding: 0 16px;
+  display: flex;
+  align-items:center;
+}
+.addDeviceDrawer .btnGroup .btn {
+  width: 50%;
+}
+.addDeviceDrawer .devs-container {
+  padding: 0 20px;
+  overflow: hidden;
+}
+.addDeviceDrawer .filter-container {
+  float: right;
+  width: 100%;
+}
+.addDeviceDrawer .devs-table {
+  border: solid 1px #e6e6e6;
+  overflow: auto;
+  max-height: 590px;
+}
+</style>

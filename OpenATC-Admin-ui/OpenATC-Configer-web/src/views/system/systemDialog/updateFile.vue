@@ -1,0 +1,96 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+<template>
+  <div>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogFormVisible"
+      width="400px"
+      @close='closeFormDialog'>
+      <div>
+          <form>
+              <input type="file" @change="getFile($event)">
+          </form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+          <el-button @click="resetForm()">取消</el-button>
+          <el-button type="primary" @click="submitForm($event)">更新</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+/**
+  Auth: yangdongyang
+  Created: 2019/12/11
+*/
+import { updateFile } from '@/api/param'
+export default {
+  data () {
+    return {
+      dialogFormVisible: false,
+      file: ''
+    }
+  },
+  name: 'updatefile',
+  props: {},
+  created () {
+  },
+  methods: {
+    onUpdateFile () {
+      this.dialogFormVisible = !this.dialogFormVisible
+    },
+    closeFormDialog () {
+      this.resetForm()
+    },
+    resetForm (formData) {
+      // 取消重置表单
+      this.dialogFormVisible = false
+    },
+    ok () {
+    },
+    getFile (event) {
+      this.file = event.target.files[0]
+    },
+    submitForm (event) {
+      event.preventDefault()
+      let formData = new FormData()
+      formData.append('file', this.file)
+      updateFile(formData).then((data) => {
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error('设备不在线！')
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        let msg = '更新成功！'
+        this.closeFormDialog()
+        this.$message({
+          message: msg,
+          type: 'success',
+          duration: 1 * 1000
+        })
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
+    }
+  }
+}
+</script>
+
+<style lang="scss" rel="stylesheet/scss">
+</style>

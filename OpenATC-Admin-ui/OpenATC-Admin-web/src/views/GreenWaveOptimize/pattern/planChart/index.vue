@@ -1,0 +1,304 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+<template>
+<div style="overflow: auto;">
+  <div class="planchart-top">
+    <div class="coordination-name">协调策略</div>
+    <div class="coordination-select">
+      <el-select v-model="optstrategy" placeholder="请选择" size="small">
+        <el-option
+          v-for="item in optstrategyOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
+    <div class="coordination-name" style="margin-left: 40px;">协调方向</div>
+    <div class="coordination-select">
+      <el-select v-model="direction" placeholder="请选择" size="small" @change="handleDirection">
+        <el-option
+          v-for="item in directionOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
+    <div class="coordination-name" style="margin-left: 40px;">关键路口</div>
+    <div class="coordination-select">
+      <el-select v-model="keyintsid" placeholder="请选择" size="small">
+        <el-option
+          v-for="item in keyintsidOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
+    <div class="coordination-name" style="margin-left: 40px;">上行速度(km/h)</div>
+    <div class="coordination-select">
+      <el-input v-model="upspeed" size="small" @change="handleUpSpeed"></el-input>
+    </div>
+    <div class="coordination-name" style="margin-left: 40px;">下行速度(km/h)</div>
+    <div class="coordination-select">
+      <el-input v-model="downspeed" size="small" @change="handleDownSpeed"></el-input>
+    </div>
+  </div>
+  <div class="planchart-bottom">
+    <div class="up-card" v-if="isShowUpCard" style="float: left;">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span class="header-text">上行</span>
+        </div>
+        <div class="text item">
+          {{'持续时间: ' + green[0].width + 's' }}
+        </div>
+        <div class="text item">
+          {{'速度: ' + green[0].speed + 'km/h' }}
+        </div>
+        <div class="text item">
+          {{'车辆: ' + green[0].vehicle }}
+        </div>
+      </el-card>
+    </div>
+    <div class="up-card" v-if="isShowDownCard" style="float: right;">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span class="header-text">下行</span>
+        </div>
+        <div class="text item">
+          {{'持续时间: ' + green[0].width + 's' }}
+        </div>
+        <div class="text item">
+          {{'速度: ' + green[0].speed + 'km/h' }}
+        </div>
+        <div class="text item">
+          {{'车辆: ' + green[0].vehicle }}
+        </div>
+      </el-card>
+    </div>
+    <div id="echarts" class="echartsStyle"></div>
+  </div>
+</div>
+</template>
+
+<script>
+import CDTModel from './model/coordinationModel.js'
+export default {
+  name: 'echartsStyle',
+  components: {},
+  data () {
+    return {
+      optstrategy: 'green',
+      direction: '',
+      keyintsid: '',
+      upspeed: 0,
+      downspeed: 0,
+      keyintsidOptions: [],
+      directionOptions: [{
+        value: 'up',
+        label: '上行'
+      }, {
+        value: 'down',
+        label: '下行'
+      }, {
+        value: 'all',
+        label: '双向'
+      }],
+      optstrategyOptions: [{
+        value: 'green',
+        label: '绿波优化'
+      }],
+      routerData: {},
+      isShowUpCard: false,
+      isShowDownCard: false,
+      green: [],
+      cardStyle: {
+        'float': 'left'
+      },
+      directionName: ''
+    }
+  },
+  mounted () {
+    var dom = document.getElementById('echarts')
+    this.myChart = this.$echarts.init(dom)
+    this.CDTModel = new CDTModel()
+    window.onresize = function () {
+      this.myChart.resize()
+    }
+    // window.addEventListener('resize', function () {
+    //   this.myChart.resize()
+    // })
+  },
+  created () {
+  },
+  methods: {
+    onPlanChart (routeData, patternList, greenwave) {
+      this.keyintsidOptions = []
+      if (greenwave.length === 0) {
+        this.isShowUpCard = false
+        this.isShowDownCard = false
+      } else {
+        this.green = greenwave
+        if (this.direction === 'up') {
+          this.isShowUpCard = true
+          this.directionName = '上行'
+          // this.cardStyle.float = 'left'
+        } else if (this.direction === 'down') {
+          this.isShowDownCard = true
+          this.directionName = '下行'
+          // this.cardStyle.float = 'right'
+        } else if (this.direction === 'all') {
+          this.isShowUpCard = true
+          this.isShowDownCard = true
+          this.directionName = '双向'
+          // this.cardStyle.float = 'right'
+        }
+        this.CDTModel.greenwave = greenwave
+      }
+      if (patternList.length === 0) {
+        // this.$message.error('方案为空！')
+        return
+      }
+      this.optstrategy = routeData.optstrategy
+      this.direction = routeData.direction
+      this.keyintsid = routeData.keyintsid
+      this.upspeed = routeData.upspeed
+      this.downspeed = routeData.downspeed
+      let intersections = routeData.intersections
+      for (let inter of intersections) {
+        let obj = {}
+        obj.label = inter.intersectionid
+        obj.value = inter.intersectionid
+        this.keyintsidOptions.push(obj)
+        inter.patternList = []
+        let id = inter.intersectionid
+        let patternId = inter.patternid
+        let pattern = patternList.filter(pat => pat.intersectionid === id)[0]
+        if (pattern.feature !== undefined && pattern.feature.patternList.length !== 0) {
+          let allPatternList = pattern.feature.patternList
+          if (Array.isArray(allPatternList)) {
+            let currPatternList = allPatternList.filter(apl => apl.id === patternId)
+            inter.patternList = currPatternList
+          } else {
+            let tempList = []
+            tempList.push(allPatternList)
+            inter.patternList = tempList
+          }
+        }
+      }
+      this.CDTModel.rourte = routeData
+      this.routerData = routeData
+      this.clearMyChart()
+      this.myChart.setOption(this.CDTModel.RenderOption())
+    },
+    clearMyChart () {
+      if (this.myChart.getOption() !== undefined) {
+        this.myChart.clear()
+      }
+    },
+    handleUpSpeed (val) {
+      this.routerData.upspeed = Number(val)
+      this.CDTModel.rourte = this.routerData
+      this.myChart.clear()
+      this.myChart.setOption(this.CDTModel.RenderOption())
+    },
+    handleDownSpeed (val) {
+      this.routerData.downspeed = Number(val)
+      this.CDTModel.rourte = this.routerData
+      this.myChart.clear()
+      this.myChart.setOption(this.CDTModel.RenderOption())
+    },
+    handleDirection (val) {
+      this.routerData.direction = val
+      this.CDTModel.rourte = this.routerData
+      this.CDTModel.greenwave = []
+      this.isShowUpCard = false
+      this.isShowDownCard = false
+      this.myChart.clear()
+      this.myChart.setOption(this.CDTModel.RenderOption())
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.planchart-top {
+  width: 100%;
+  min-width: 1600px;
+}
+.planchart-bottom {
+  width: 100%;
+  min-width: 1600px;
+}
+.echartsStyle {
+  float: left;
+  width: 1300px;
+  height: 700px;
+}
+.up-card {
+  // float: left;
+  margin-top: 400px;
+}
+.coordination-name {
+  float: left;
+  margin-top: 8px;
+  margin-left: 10px;
+  height: 14px;
+  font-family: SourceHanSansCN-Regular;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 14px;
+  letter-spacing: 0px;
+  color: #999999;
+}
+.coordination-select {
+  float: left;
+  margin-left: 10px;
+}
+.text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 5px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+  .box-card {
+    width: 130px;
+    height: 141px;
+    background-color: #fbfbfb;
+    border-radius: 4px;
+    border: solid 1px #e6e6e6;
+  }
+</style>
+<style rel="stylesheet/scss" lang="scss">
+  .up-card .el-card__header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #EBEEF5;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .up-card .el-card__body {
+    padding: 10px;
+  }
+</style>
