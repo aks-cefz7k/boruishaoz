@@ -3,7 +3,7 @@
 <a href="" rel="nofollow"><img alt="author" src="https://img.shields.io/badge/author-kedacom-green" style="max-width:100%;"></a>
 <a href="https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/html/" rel="nofollow"><img alt="Spring Boot" src="https://img.shields.io/badge/Spring%20Boot-2.1.5.RELEASE-orange" style="max-width:100%;"></a>
 <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" rel="nofollow"><img alt="JDK" src="https://img.shields.io/badge/JDK-1.8.0_162-brightgreen.svg" style="max-width:100%;"></a>
-<a href="" rel="nofollow"><img alt="author" src="https://img.shields.io/badge/license-MIT-green" style="max-width:100%;"></a>
+<a href="" rel="nofollow"><img alt="author" src="https://img.shields.io/badge/license-Mulan PSL v2-green" style="max-width:100%;"></a>
 
 ### 简介
 
