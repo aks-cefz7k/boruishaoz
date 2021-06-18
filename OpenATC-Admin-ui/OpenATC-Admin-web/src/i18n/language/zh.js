@@ -12,12 +12,14 @@
 const zh = {
   openatc: {
     'common': {
-      'add': '添加',
+      'add': '新增',
       'delete': '删除',
       'edit': '编辑'
     },
     'main': {
-      'homepage': '主页'
+      'homepage': '主页',
+      'gis': '地图',
+      'usermanager': '用户管理'
     },
     'usermanager': {
       'username': '用户名称',

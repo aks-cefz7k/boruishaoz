@@ -17,7 +17,9 @@ const en = {
       'edit': 'edit'
     },
     'main': {
-      'homepage': 'homepage'
+      'homepage': 'homePage',
+      'gis': 'GIS',
+      'usermanager': 'userManager'
     },
     'usermanager': {
       'username': 'userName',

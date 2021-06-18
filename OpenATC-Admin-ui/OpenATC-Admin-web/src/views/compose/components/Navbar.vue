@@ -16,7 +16,7 @@
     <div class="openatc-line"></div>
     <div class="openatc-menu">
       <el-menu-item index="home" style="display:inline">{{$t('openatc.main.homepage')}}</el-menu-item>
-      <el-menu-item index="gis" style="display:inline">GIS</el-menu-item>
+      <el-menu-item index="gis" style="display:inline">{{$t('openatc.main.gis')}}</el-menu-item>
       <el-menu-item index="device" style="display:inline">设备管理</el-menu-item>
       <el-menu-item index="user" style="display:inline">用户管理</el-menu-item>
       <el-menu-item index="greenwave" style="display:inline">绿波协调</el-menu-item>

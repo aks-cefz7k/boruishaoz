@@ -17,7 +17,7 @@
         <el-button
         type="primary"
         icon="el-icon-plus"
-        @click="add">新增</el-button>
+        @click="add">{{$t('openatc.common.add')}}</el-button>
         <el-input
             @keyup.enter.native="handleFilter"
             v-model="schfilter"
@@ -42,22 +42,22 @@
         </el-table-column>
         <el-table-column
         prop="user_name"
-        label="用户名称"
+        :label="$t('openatc.usermanager.username')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="organization"
-        label="组织机构"
+        :label="$t('openatc.usermanager.organization')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="nick_name"
-        label="真实姓名"
+        :label="$t('openatc.usermanager.realname')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="roleNames"
-        label="角色"
+        :label="$t('openatc.usermanager.role')"
         align="center">
           <template slot-scope="scope">
             <span v-for="(data, index) in scope.row.roleNames" :key="index">
@@ -67,18 +67,18 @@
         </el-table-column>
         <el-table-column
         prop="mobile_phone"
-        label="电话"
+        :label="$t('openatc.usermanager.telno')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="email"
-        label="邮箱"
+        :label="$t('openatc.usermanager.email')"
         align="center">
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column :label="$t('openatc.usermanager.operation')" align="center">
         <template slot-scope="scope">
-            <el-button type="text" @click="edit(scope.$index)">编辑</el-button>
-            <el-button type="text" @click="handleDelete(scope.$index)">删除</el-button>
+            <el-button type="text" @click="edit(scope.$index)">{{$t('openatc.common.edit')}}</el-button>
+            <el-button type="text" @click="handleDelete(scope.$index)">{{$t('openatc.common.delete')}}</el-button>
         </template>
         </el-table-column>
     </el-table>
