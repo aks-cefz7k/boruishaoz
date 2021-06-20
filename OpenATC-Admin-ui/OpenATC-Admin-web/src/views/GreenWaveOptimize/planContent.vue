@@ -13,7 +13,7 @@
 <div class="planContent" v-if="!!chooseId">
   <div class="mask" v-if="maskVisible" @click ="clickMask"></div>
   <div class="btnGroup">
-    <el-button class="btn" type="primary" @click="Download">下载</el-button>
+    <!-- <el-button class="btn" type="primary" @click="Download">下载</el-button> -->
     <el-button class="btn" type="primary" @click="handleCreate">生成</el-button>
     <div class="editbtn" :style="{zIndex: zIndexObj.editZIndex}">
       <el-popover placement="top-start" trigger="manual" v-model="maskVisible" width="290">
@@ -307,7 +307,8 @@ export default {
 .btnGroup {
   overflow: hidden;
   float: right;
-  width: 230px;
+  width: 150px;
+  /* width: 230px; */
 }
 /* 蒙层样式 */
 .mask {
