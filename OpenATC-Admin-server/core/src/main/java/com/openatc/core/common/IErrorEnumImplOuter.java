@@ -46,6 +46,8 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_3013("3013","Account has been deactivated!"),
     E_3014("3014","Token is expired!"),
     E_3015("3015","Invaid token!"),
+    E_3016("3016","user organization is null"),
+    E_3017("3017","organization does not exist"),
 
     // 消息通讯错误
     E_4001("4001", "error request!"),

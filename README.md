@@ -28,24 +28,15 @@
 PROJECT_FOLDER
 ├─logs   //存放服务运行的日志，每次运行会删除旧日志，保存新日志
 ├─OpenATC-Admin-server  //服务端项目
-│  │  build.sh
-│  ├─codestyle
-│  │      checkstyle.xml
-│  ├─docker
-│  │  └─stack
-│  │          openatc-stack.yml     //使用docker部署服务的脚本文件
-│  ├─KDAgent
-│  │  │  Dockerfile
-│  │  │  kdagent.iml
+│  ├─agent
 │  │  │  pom.xml
 │  │  ├─src
 │  │  │  └─main
 │  │  │      ├─java
 │  │  │      │  └─com
-│  │  │      │      └─kedacom
-│  │  │      │          └─openatc
-│  │  │      │              └─kdagent
-│  │  │      │                  │  KDAgentApplication.java         //KDAgent服务启动入口
+│  │  │      │      └─openatc
+│  │  │      │             └─agent
+│  │  │      │                  │  agentApplication.java         //agent服务启动入口
 │  │  │      │                  ├─config
 │  │  │      │                  │      CorsConfig.java
 │  │  │      │                  │      LazyInitBeanFactoryPostProcessor.java   //懒加载，减少服务启动时间
@@ -89,8 +80,8 @@ PROJECT_FOLDER
 │  │  └─target
 │  │
 │  ├─algorithm   //算法包
-│  ├─KDComm        //通讯包，用于服务和设备的通讯
-│  └─KDCore        //异常包，存放服务的错误代码和信息
+│  ├─comm        //通讯包，用于服务和设备的通讯
+│  └─core        //异常包，存放服务的错误代码和信息
 ├─OpenATC-Admin-ui //前端项目
 └─uploads
 ```
@@ -113,7 +104,7 @@ PROJECT_FOLDER
 
     ``` bash
     # 克隆项目
-    git clone https://github.com/apache/****-admin.git
+    git clone https://gitee.com/openatc/open-atc-admin.git
 
     # 安装依赖
     npm install
@@ -152,13 +143,96 @@ PROJECT_FOLDER
 
 #### 配置说明
 
-- [application.properties](http://192.168.13.118/OpenATC/OpenATC-Admin/wiki/application.properties) 
+```
+	# 项目名称
+	spring.application.name=agent  
+
+	# https的端口号
+	server.port = 10004
+	# http的端口号
+	server.http.port = 10003
+
+	# 监听服务发送的端口
+	agent.send.port=0
+	# 监听设备主动上报消息的端口
+	agent.subscribe.port=21003
+
+	# agent配置工具服务模式，设为true时，为中心模式，需配置数据库；设为false时，需打开spring.autoconfigure.exclude配置
+	agent.server.mode.center=true
+
+	# token的密码及过期时间
+	jwt.token.secret = kedacom
+	jwt.token.expiration = 86400000
+
+	# 重置用户后的密码 123456
+	default.user.password=123456
+
+	# Preferred JSON mapper to use for HTTP message conversion.
+	spring.http.converters.preferred-json-mapper=gson
+
+	# 试图给一个new的RouteIntersection对象的某一个属性赋一个已经Persistent对象,导致最后save或者mergeRouterIntersection对象报这个错误,因此需要增加这个配置
+	spring.jpa.properties.hibernate.event.merge.entity_copy_observer=allow
+
+	# 配置工具版本使用此配置
+	#spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+	# 平台版本使用数据库配置
+	spring.datasource.url=jdbc:postgresql://192.168.13.112:5432/openatc?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai
+	spring.datasource.username=postgres
+	spring.datasource.password=password
+	spring.datasource.driverClassName=org.postgresql.Driver
+	spring.jpa.database-platform = com.example.jpajsonb.support.JsonbPostgresDialect
+	spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+	spring.jpa.properties.hibernate.hbm2ddl.auto=update
+	spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults = false
+	spring.flyway.baseline-on-migrate=true
+
+	##  Hikari 连接池配置
+	## 最小空闲连接数量
+	spring.datasource.hikari.minimum-idle=1
+	## 空闲连接存活最大时间，默认600000（10分钟）
+	spring.datasource.hikari.idle-timeout=180000
+	## 连接池最大连接数，默认是10
+	spring.datasource.hikari.maximum-pool-size=5
+	## 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+	spring.datasource.hikari.auto-commit=true
+	## 连接池名称
+	spring.datasource.hikari.pool-name=HikariOpenATC
+	## 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+	spring.datasource.hikari.max-lifetime=1800000
+	## 数据库连接超时时间,默认30秒，即30000
+	spring.datasource.hikari.connection-timeout=30000
+
+	## 文件上传配置
+	# 开启 multipart 上传功能
+	spring.servlet.multipart.enabled=true
+	# 文件写入磁盘的阈值
+	spring.servlet.multipart.file-size-threshold=2KB
+	# 最大文件大小
+	spring.servlet.multipart.max-file-size=200MB
+	# 最大请求大小
+	spring.servlet.multipart.max-request-size=215MB
+	# 文件存储目录
+	file.upload-dir=./uploads
+
+	# 秘钥证书库文件所在位置
+	#server.ssl.key-store = classpath:kd014693.com.jks   #ssl证书
+	server.ssl.key-store = classpath:kdstore.p12         #jdk证书
+	# 密码
+	server.ssl.key-store-password = kedacom123
+	# 秘钥证书库类型
+	#server.ssl.keyStoreType = JKS   #ssl证书类型
+	server.ssl.keyStoreType = PKCS12 #jdk证书类型
+	# 别名条目
+	server.ssl.keyAlias= kd
+
+```
 
 #### 开发环境部署
 
     ``` bash
     # Clone project
-    git clone https://github.com/apache/****-admin.git
+    git clone https://gitee.com/openatc/open-atc-admin.git
 
     # Maven管理KDagent
     使用IDEA打开第一步下载的项目文件，右键 OpenATC-Admin/OpenATC-Admin-server/KDagent/pom.xml文件，
