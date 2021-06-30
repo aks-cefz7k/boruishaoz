@@ -13,12 +13,11 @@ package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.AscsBaseModel;
-import com.openatc.agent.model.DevCover;
-import com.openatc.agent.model.Route;
-import com.openatc.agent.model.RouteIntersection;
+import com.openatc.agent.model.*;
 import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.service.OrgService;
 import com.openatc.agent.service.RouteDao;
+import com.openatc.agent.service.UserDao;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -43,10 +42,30 @@ public class DevController {
     AscsBaseModel ascsModel;
     @Autowired(required = false)
     private RouteDao routeDao;
+    @Autowired(required = false)
+    private UserDao userDao;
+    @Autowired(required = false)
+    private OrgService orgService;
 
     @Value("${agent.server.mode.config}")
     private boolean isConfigMode;
     private Logger log = LoggerFactory.getLogger(DevController.class);
+
+
+    @GetMapping(value="/devs//user/{username}")
+    public RESTRetBase GetAllAscsByUsername(@PathVariable String username){
+        User user = userDao.getUserByUserName(username);
+        String organizationName = user.getOrganization();
+        if(organizationName == null) return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_3016);
+        List<SysOrg> sysOrgs = orgService.findByOrgnizationCodeLike(organizationName);
+        if(sysOrgs == null) return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_3017);
+        List<AscsBaseModel> devices = new ArrayList<>();
+        for(SysOrg sysOrg : sysOrgs){
+            List<AscsBaseModel> ascsByCode = mDao.getAscsByCode(sysOrg.getOrgnization_code());
+            devices.addAll(ascsByCode);
+        }
+        return RESTRetUtils.successObj(devices);
+    }
 
     @GetMapping(value = "/devs/all/{val}")
     public RESTRetBase GetAllAscsInfo(@PathVariable int val) {
