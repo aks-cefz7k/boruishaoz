@@ -60,6 +60,10 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     //协调路线错误
     E_5001("5001","Duplicate Route name!"),
 
+    //勤务路线错误
+    E_6001("6001","Duplicate vipRoute name!"),
+    E_6002("6002","Device is in execution!"),
+
     //全局异常错误
     E_0001("0001","NullPointerException"),
     E_0002("0002","HttpRequestMethodNotSupportedException"),
