@@ -129,36 +129,30 @@ public class ManualpanelController {
         if (result) {
             // 这里要多一层校验
             // 第一个按钮，东西执行（1、5）
-            chenck(channelList, lsCheck, i, phaseArray, gson, arr);
+            check(channelList, lsCheck, i, phaseArray, gson, arr);
         } else {
-            channelList.get(i).add(new Channel(lsCheck.getId(), 1));
+            channelList.get(i).add(new Channel(lsCheck.getId(), 1)); //1红灯，3绿灯
         }
-
-
     }
 
-    private void chenck(List<List<Channel>> channelList, LSCheck lsCheck, int i, JsonArray phaseArray, Gson gson, int[] arr) {
-        //判断有没有被设置为红灯
+    public void check(List<List<Channel>> channelList, LSCheck lsCheck, int i, JsonArray phaseArray, Gson gson, int[] arr) {
         int x = 0;
         for (int k = 0; k < phaseArray.size(); k++) {
-            if(x != 0) break;
-            //获取各个相位的directions
-            int[] directions0 = gson.fromJson(phaseArray.get(k).getAsJsonObject().get("direction"), int[].class);  //directions0 [1, 3, 5, 7]
+            if (x != 0) break;
+            int[] directions0 = gson.fromJson(phaseArray.get(k).getAsJsonObject().get("direction"), int[].class);
             int[] concurrent0 = gson.fromJson(phaseArray.get(k).getAsJsonObject().get("concurrent"), int[].class);
-            // arr [1, 4]
-            for (int s : arr) {  //s 1
-                if(x != 0) break;
+            int id = phaseArray.get(k).getAsJsonObject().get("id").getAsInt();
+            for (int s : arr) {
+                if (x != 0) break;
                 if (ArrayUtils.contains(directions0, s)) {
                     for (int u = 0; u < phaseArray.size(); u++) {
                         if (u == k) continue;
-                        // 获取其他相位的directions   directions1是其他相位
                         int[] directions1 = gson.fromJson(phaseArray.get(u).getAsJsonObject().get("direction"), int[].class);
-                        // 其他相位的并发相位
                         int[] concurrent2 = gson.fromJson(phaseArray.get(u).getAsJsonObject().get("concurrent"), int[].class);
+                        int id2 = phaseArray.get(u).getAsJsonObject().get("id").getAsInt();
                         for (int m : arr) {
-                            //如果其他相位包含他的其他相位，那么要检查并发相位是否
                             if (ArrayUtils.contains(directions1, m)) {
-                                if (!(ArrayUtils.contains(concurrent2, s) && ArrayUtils.contains(concurrent0, m))) {
+                                if (!(ArrayUtils.contains(concurrent2, id) && ArrayUtils.contains(concurrent0, id2))) {
                                     channelList.get(i).add(new Channel(lsCheck.getId(), 1));
                                     x++;
                                     break;
@@ -173,5 +167,5 @@ public class ManualpanelController {
             channelList.get(i).add(new Channel(lsCheck.getId(), 3));
         }
     }
-
+    
 }

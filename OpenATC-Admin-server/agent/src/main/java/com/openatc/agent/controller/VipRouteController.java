@@ -111,7 +111,7 @@ public class VipRouteController {
         // 3 将设备信息更新到redis中
         for (VipRouteDevice vipRouteDevice : devs) {
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(vipRouteDevice.getAgentid(), 0, "00:00");
-            stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + vipRouteDevice.getId() + ":" + vipRouteDevice.getAgentid(), gson.toJson(vipRouteDeviceStatus));
+            stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + vipRouteDevice.getViprouteid() + ":" + vipRouteDevice.getAgentid(), gson.toJson(vipRouteDeviceStatus));
         }
         // 4 保存到数据库中
         VipRoute dbRoute = vipRouteDao.save(routeEntity);

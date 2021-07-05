@@ -276,20 +276,20 @@ public class RouteController {
         List<RouteIntersectionBase> devs = new ArrayList<>();
         //拿到各个列表的id，再根据id进行请求获得数据后，存放到list当中
         Route rr = routeDao.findById(id);
-        Set<RouteIntersection> routeIntersections = rr.getIntersections();
+        Set<RouteIntersection> routeIntersections = rr.getDevs();
 
         //为每一个设备设置id和feature
         for (RouteIntersection r : routeIntersections) {
             //创建返回的设备
             RouteIntersectionBase eachDev = new RouteIntersectionBase();
             //为设备设置id
-            eachDev.setIntersectionid(r.getIntersectionid());
+            eachDev.setAgentid(r.getAgentid());
             //为设备设置feature
-            MessageData messageData = new MessageData(r.getIntersectionid(), CosntDataDefine.getrequest, "feature/" + feature, new JsonObject());
+            MessageData messageData = new MessageData(r.getAgentid(), CosntDataDefine.getrequest, "feature/" + feature, new JsonObject());
             RESTRet<MessageData> retBase = null;
             retBase = messageController.postDevsMessage(null, messageData);
             if (retBase.getMessage().equals("Device not online!")) {
-                DevCommError devCommError = RESTRetUtils.errorObj(r.getIntersectionid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
+                DevCommError devCommError = RESTRetUtils.errorObj(r.getAgentid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
                 return RESTRetUtils.errorDetialObj(E_4003, devCommError);
             }
 
@@ -303,7 +303,7 @@ public class RouteController {
             eachDev.setFeature(intersectionFeature);
             devs.add(eachDev);
         }
-        devList.setIntersections(devs);
+        devList.setDevs(devs);
         return RESTRetUtils.successObj(devList);
     }
 
@@ -316,11 +316,11 @@ public class RouteController {
     public RESTRetBase downloadConfigure(@PathVariable String feature, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
 
         //先拿到pattern的jsonObject对象feature
-        JsonArray devlistJsonArray = jsonObject.get("intersections").getAsJsonArray();
+        JsonArray devlistJsonArray = jsonObject.get("devss").getAsJsonArray();
         String intersectionid;
         JsonObject featureList;
         for (JsonElement device : devlistJsonArray) {
-            intersectionid = device.getAsJsonObject().get("intersectionid").getAsString();
+            intersectionid = device.getAsJsonObject().get("agentid").getAsString();
             //featureList就是要发送的patternList
             featureList = device.getAsJsonObject().get("feature").getAsJsonObject();
             MessageData messageData = new MessageData(intersectionid, CosntDataDefine.setrequest, "feature/" + feature, featureList);
