@@ -1,14 +1,3 @@
-/**
- * Copyright (c) 2020 kedacom
- * OpenATC is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- * http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- * See the Mulan PSL v2 for more details.
- **/
 package com.openatc.comm.packupack;
 /**
  * @ClassName: DataSchedulePackUpPack
@@ -174,6 +163,14 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         {
             return 24;
         }
+        if(operatorObj.equals(channelcheck))
+        {
+            return 25;
+        }
+        if(operatorObj.equals(volumelog))
+        {
+            return 26;
+        }
         return 0;
     }
     public String StringOperatorObj(byte operatorObj){
@@ -229,6 +226,12 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         }
         if(operatorObj==-89) {
             return systemlog;
+        }
+        if(operatorObj==-88) {
+            return channelcheck;
+        }
+        if(operatorObj==-87) {
+            return volumelog;
         }
         return null;
     }
@@ -1065,6 +1068,56 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             System.arraycopy(dataSend,0,dataSchdule,14,dataSendSize);
                         }
                         break;
+                    case 25://通道检测
+                        Arrays.fill(dataSchdule,(byte)0);
+                        dataSchdule[0]=CB_VERSION_FLAG;
+                        dataSchdule[1]=CB_RECEIVE_FLAG;
+                        dataSchdule[2]=CB_SEND_FLAG;
+                        dataSchdule[3]=DATA_LINK_CONTROL;
+                        dataSchdule[7]=OPERATE_TYPE_SET_REQUEST;
+                        dataSchdule[8]=INFO_TYPE_SYSTEM_CHANNEL_CHECK;
+                        dataSchdule[9]=RESERVE_FLAG;
+                        dataSchdule[10]=0x00;
+                        dataSchdule[11]=0x00;
+                        dataSchdule[12]=0x00;
+                        dataSchdule[13]=0x00;
+                        //数据内容
+                        String strChannelCheck = null;
+                        JsonElement strChannelCheckObject=sendData.getData();
+                        if(strChannelCheckObject!=null)
+                        {
+                            strChannelCheck=strChannelCheckObject.toString();
+                            byte[] dataSend=strChannelCheck.getBytes("UTF-8");
+                            int dataSendSize=dataSend.length;
+                            dataSchdule=Arrays.copyOf(dataSchdule,dataSendSize+14);
+                            System.arraycopy(dataSend,0,dataSchdule,14,dataSendSize);
+                        }
+                        break;
+                    case 26://流量日志获取
+                        Arrays.fill(dataSchdule,(byte)0);
+                        dataSchdule[0]=CB_VERSION_FLAG;
+                        dataSchdule[1]=CB_RECEIVE_FLAG;
+                        dataSchdule[2]=CB_SEND_FLAG;
+                        dataSchdule[3]=DATA_LINK_CONTROL;
+                        dataSchdule[7]=OPERATE_TYPE_SET_REQUEST;
+                        dataSchdule[8]=INFO_TYPE_VOLUMELOG;
+                        dataSchdule[9]=RESERVE_FLAG;
+                        dataSchdule[10]=0x00;
+                        dataSchdule[11]=0x00;
+                        dataSchdule[12]=0x00;
+                        dataSchdule[13]=0x00;
+                        //数据内容
+                        String strVolumeLog = null;
+                        JsonElement strVolumeLogObject=sendData.getData();
+                        if(strVolumeLogObject!=null)
+                        {
+                            strVolumeLog=strVolumeLogObject.toString();
+                            byte[] dataSend=strVolumeLog.getBytes("UTF-8");
+                            int dataSendSize=dataSend.length;
+                            dataSchdule=Arrays.copyOf(dataSchdule,dataSendSize+14);
+                            System.arraycopy(dataSend,0,dataSchdule,14,dataSendSize);
+                        }
+                        break;
                     default :
                         Arrays.fill(dataSchdule,(byte)0);
                 }
@@ -1183,7 +1236,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             for (int i = 14; i < dataScheduleSize; i++) {
                 pDest[i-14] = dataSchedule[i];  //取出有效数据data
             }
-            tempData = new String(pDest,"UTF-8");
+            tempData = new String(pDest);
         }
         pRoadID[0]=dataSchedule[5];
         pRoadID[1]=dataSchedule[6];
@@ -1231,6 +1284,32 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     tempData="{\n" +
                             "\t\"sucess\": 1\n" +
                             "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+            //信号机应答通道可检测
+            if((chOperateType == OPERATE_TYPE_SET_ANSWER)&&(chInfoType == INFO_TYPE_SYSTEM_CHANNEL_CHECK)) {
+                recvData.setOperation(StringOperatorType(chOperateType));
+                recvData.setAgentid(roadID);
+                recvData.setInfotype( StringOperatorObj(chInfoType));
+                Gson recvDataJson=new Gson();
+                if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答流量日志获取环境状态
+            if((chOperateType == OPERATE_TYPE_SET_ANSWER)&&(chInfoType == INFO_TYPE_VOLUMELOG)) {
+                recvData.setOperation(StringOperatorType(chOperateType));
+                recvData.setAgentid(roadID);
+                recvData.setInfotype( StringOperatorObj(chInfoType));
+                Gson recvDataJson=new Gson();
+                if(tempData!=null) {
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }

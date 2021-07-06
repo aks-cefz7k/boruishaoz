@@ -1,14 +1,3 @@
-/**
- * Copyright (c) 2020 kedacom
- * OpenATC is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- * http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
- * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
- * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- * See the Mulan PSL v2 for more details.
- **/
 package com.openatc.comm.packupack;
 
 public final class CosntDataDefine {
@@ -17,7 +6,8 @@ public final class CosntDataDefine {
     public static final byte CB_ESCAPE1  = -37;      //0xDB
     public static final byte CB_ESCAPE2  = -36;      //0xDC
     public static final byte CB_ESCAPE3  = -35;      //0xDD
-    
+
+    //GB25286  相关数据定义
     public static final byte CB_VERSION_FLAG         = 0x10;        //版本号
     public static final byte CB_SEND_FLAG            = 0x10;        //发送方标识
     public static final byte CB_RECEIVE_FLAG         = 0x20;        //接收方标识
@@ -67,7 +57,8 @@ public final class CosntDataDefine {
     public static final byte  INFO_TYPE_UPDATEUDISK = -91;             //u盘更新0xA5
     public static final byte  INFO_TYPE_SYSTEM_REMOTE = -90;           //远程调试0xA6
     public static final byte INFO_TYPE_SYSTEM_LOG = -89;               //操作日志0xA7
-
+    public static final byte INFO_TYPE_SYSTEM_CHANNEL_CHECK = -88;     //通道可检测 0xA8
+    public static final byte INFO_TYPE_VOLUMELOG = -87;                 //流量日志 0xA9
 
     public static final byte  CFG_ACK_ASKSEND            = 0x18;   //主机回应配置软件请求发送数据
     public static final byte  CFG_ASK_ASKREAD            = 0x19;    //配置软件请求读数据
@@ -113,4 +104,7 @@ public final class CosntDataDefine {
     public static final String updatedisk="system/udiskupdate";  //u盘更新
     public static final String systemremote="system/remote";   //远程调试
     public static final String systemlog="system/log";   //操作日志
+    public static final String channelcheck="system/channelcheck"; //通道可检测
+    public static final String volumelog="system/volumelog"; //通道可检测
+
 }

@@ -167,5 +167,5 @@ public class ManualpanelController {
             channelList.get(i).add(new Channel(lsCheck.getId(), 3));
         }
     }
-    
+
 }
