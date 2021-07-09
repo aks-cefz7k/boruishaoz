@@ -9,6 +9,7 @@ import com.openatc.comm.data.MessageData;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -16,16 +17,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.SocketException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_6001;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_6002;
 
+@Slf4j
 @RestController
 public class VipRouteController {
     @Autowired
@@ -44,6 +44,7 @@ public class VipRouteController {
     private Sort.Order order = Sort.Order.asc("id");
     private Sort sort = Sort.by(order);
     private Gson gson = new Gson();
+    private CopyOnWriteArrayList cowlist = new CopyOnWriteArrayList();
 
     // 获取所有的勤务路线的全部信息
     @GetMapping(value = "/viproute")
@@ -88,7 +89,6 @@ public class VipRouteController {
             if (vipRouteDeviceStatus.getState() == 1) return RESTRetUtils.errorObj(E_6002);
         }
         // 1 首先删除这条路线之前的设备
-
         vipRouteDeviceDao.deleteByViprouteid(id);
         double[] location = null;
         // 2 保存路线之前，要先计算墨卡托坐标
@@ -99,12 +99,14 @@ public class VipRouteController {
             location = dev.getLocation();
         }
         //   第一次，需要进行坐标转换
-        if (location == null) {
+        if (location == null ) {
             for (VipRouteDevice device : devs) {
                 Map<String, Object> geometry = device.getGeometry();
-                List<Double> coordinates = (ArrayList) geometry.get("coordinates");
-                double[] devlocation = new double[]{getMercatorLon(coordinates.get(0)), getMercatorLat(coordinates.get(1))};
-                device.setLocation(devlocation);
+                if(geometry != null){
+                    List<Double> coordinates = (ArrayList) geometry.get("coordinates");
+                    double[] devlocation = new double[]{getMercatorLon(coordinates.get(0)), getMercatorLat(coordinates.get(1))};
+                    device.setLocation(devlocation);
+                }
             }
             routeEntity.setDevs(devs);
         }
@@ -154,37 +156,49 @@ public class VipRouteController {
         data.addProperty("value", vrDevice.getValue());
         // 执行勤务路线
         if (operation == 1) {
+            if (cowlist.contains(agentid + ":" + viprouteid)) return RESTRetUtils.errorObj(E_6002);
+            cowlist.add(agentid + ":" + viprouteid);
             AtomicInteger totaltime = new AtomicInteger(vrDevice.getTotaltime());
             MessageData messageData = new MessageData(agentid, "set-request", "control/pattern", data);
             messageController.postDevsMessage(null, messageData);
             // 2 开启一个线程后台计算剩余时间
-            new Thread(() -> {
-                while (totaltime.get() > 0) {
+            Thread thread1 = new Thread(() -> {
+                while (totaltime.get() > 0 && cowlist.contains(agentid + ":" + viprouteid)) {
                     try {
-                        Thread.sleep(2000);
-                        totaltime.addAndGet(-2);
+                        totaltime.addAndGet(-1);
                         // 将时间更新到redis中
                         if (totaltime.get() > 0) {
-                            String resttime = totaltime.get() / 60 + ":" + totaltime.get() % 60;
+                            //相位用两位字符串表示，不足位数补0
+                            String min = String.format("%2d", totaltime.get() / 60).replace(" ", "0");
+                            String sec = String.format("%2d", totaltime.get() % 60).replace(" ", "0");
+                            String resttime =  min + ":" + sec;
                             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 1, resttime);
                             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
                         } else {
                             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, "00:00");
                             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
                         }
+                        if(totaltime.get() <= 0){
+                            cowlist.remove(agentid + ":" + viprouteid);
+                        }
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-
-            }).start();
+            });
+            thread1.start();
         }
         // 取消勤务路线
         if (operation == 0) {
             MessageData messageData = new MessageData(agentid, "get-request", "control/pattern", data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
+            log.info("-------"+cowlist.toString());
+            cowlist.remove(agentid + ":" + viprouteid);
+            log.info(cowlist.toString());
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, "00:00");
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
+            log.info("取消执行，存入redis");
         }
 
 
