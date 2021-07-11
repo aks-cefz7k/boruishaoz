@@ -18,7 +18,7 @@ public class VipRoute {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "viprouteid")
-//    @OrderBy("sortid ASC")
+    @OrderBy("id ASC")
     private Set<VipRouteDevice> devs;
 
     public VipRoute() {

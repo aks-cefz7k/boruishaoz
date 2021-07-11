@@ -171,6 +171,10 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         {
             return 26;
         }
+        if(operatorObj.equals(interrupt))
+        {
+            return 27;
+        }
         return 0;
     }
     public String StringOperatorObj(byte operatorObj){
@@ -232,6 +236,9 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         }
         if(operatorObj==-87) {
             return volumelog;
+        }
+        if(operatorObj==-86) {
+            return interrupt;
         }
         return null;
     }
@@ -1118,6 +1125,31 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             System.arraycopy(dataSend,0,dataSchdule,14,dataSendSize);
                         }
                         break;
+                    case 27://方案干预
+                        Arrays.fill(dataSchdule,(byte)0);
+                        dataSchdule[0]=CB_VERSION_FLAG;
+                        dataSchdule[1]=CB_RECEIVE_FLAG;
+                        dataSchdule[2]=CB_SEND_FLAG;
+                        dataSchdule[3]=DATA_LINK_CONTROL;
+                        dataSchdule[7]=OPERATE_TYPE_SET_REQUEST;
+                        dataSchdule[8]=INFO_TYPE_PATTERN_INTERRUPT;
+                        dataSchdule[9]=RESERVE_FLAG;
+                        dataSchdule[10]=0x00;
+                        dataSchdule[11]=0x00;
+                        dataSchdule[12]=0x00;
+                        dataSchdule[13]=0x00;
+                        //数据内容
+                        String strInterrupt = null;
+                        JsonElement strInterruptObject=sendData.getData();
+                        if(strInterruptObject!=null)
+                        {
+                            strInterrupt=strInterruptObject.toString();
+                            byte[] dataSend=strInterrupt.getBytes("UTF-8");
+                            int dataSendSize=dataSend.length;
+                            dataSchdule=Arrays.copyOf(dataSchdule,dataSendSize+14);
+                            System.arraycopy(dataSend,0,dataSchdule,14,dataSendSize);
+                        }
+                        break;
                     default :
                         Arrays.fill(dataSchdule,(byte)0);
                 }
@@ -1291,6 +1323,20 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             }
             //信号机应答通道可检测
             if((chOperateType == OPERATE_TYPE_SET_ANSWER)&&(chInfoType == INFO_TYPE_SYSTEM_CHANNEL_CHECK)) {
+                recvData.setOperation(StringOperatorType(chOperateType));
+                recvData.setAgentid(roadID);
+                recvData.setInfotype( StringOperatorObj(chInfoType));
+                Gson recvDataJson=new Gson();
+                if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答方案干预
+            if((chOperateType == OPERATE_TYPE_SET_ANSWER)&&(chInfoType == INFO_TYPE_PATTERN_INTERRUPT)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setAgentid(roadID);
                 recvData.setInfotype( StringOperatorObj(chInfoType));

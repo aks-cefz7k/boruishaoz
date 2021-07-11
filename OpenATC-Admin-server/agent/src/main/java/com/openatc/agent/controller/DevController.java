@@ -12,6 +12,8 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
@@ -53,6 +55,8 @@ public class DevController {
     @Value("${agent.server.mode.config}")
     private boolean isConfigMode;
     private Logger log = LoggerFactory.getLogger(DevController.class);
+
+    private Gson gson = new Gson();
 
 
     @GetMapping(value = "/devs//user/{username}")
@@ -256,20 +260,18 @@ public class DevController {
 
     //修改设备状态优化参数
     @PostMapping(value = "/devs/{agentid}/optstatparam")
-    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody TStat tstat) throws SocketException, ParseException {
+    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
         // 0 下发到信号机
-        JsonObject tstatjson = new JsonObject();
-        tstatjson.addProperty("phaseid", tstat.getPhaseid());
-        tstatjson.addProperty("maxflow", tstat.getMaxflow());
-        tstatjson.addProperty("maxqueue", tstat.getMaxqueue());
-        tstatjson.addProperty("maxoccupancy", tstat.getMaxoccupancy());
-        tstatjson.addProperty("maxspeed", tstat.getMaxspeed());
-        MessageData messageData = new MessageData(agentid, "set-request", "status/optstatparam", tstatjson);
+        MessageData messageData = new MessageData(agentid, "set-request", "status/optstatparam", jsonObject);
         messageController.postDevsMessage(null, messageData);
 
         // 1 保存到数据库
-        tstat.setAgentid(agentid);
-        tStatDao.save(tstat);
+        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
+        for(JsonElement tstatJson : tstats){
+            TStat tStat = gson.fromJson(tstatJson, TStat.class);
+            tStat.setAgentid(agentid);
+            tStatDao.save(tStat);
+        }
         return RESTRetUtils.successObj();
     }
 

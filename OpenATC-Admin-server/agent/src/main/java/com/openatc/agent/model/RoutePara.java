@@ -19,11 +19,11 @@ import java.util.List;
 public class RoutePara {
     private int id;
     private String name;
-    private String type;
+    private int type;
     private  String optstrategy;
     private  String direction;
     private  String keyintsid;
     private int upspeed;
     private int downspeed;
-    private List<Device> intersections;
+    private List<Device> devs;
 }
