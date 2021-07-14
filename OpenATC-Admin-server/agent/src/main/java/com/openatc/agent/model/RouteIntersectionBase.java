@@ -18,26 +18,26 @@ import javax.persistence.Transient;
 @MappedSuperclass
 public class RouteIntersectionBase {
 
-    @Column(name = "intersection_id")
-    private String intersectionid;
+    @Column(name = "agentid")
+    private String agentid;
 
     @Transient
     private Interfeature feature;
 
-    public RouteIntersectionBase(String intersectionid, Interfeature feature) {
-        this.intersectionid = intersectionid;
+    public RouteIntersectionBase(String agentid, Interfeature feature) {
+        this.agentid = agentid;
         this.feature = feature;
     }
 
     public RouteIntersectionBase() {
     }
 
-    public String getIntersectionid() {
-        return intersectionid;
+    public String getAgentid() {
+        return agentid;
     }
 
-    public void setIntersectionid(String intersectionid) {
-        this.intersectionid = intersectionid;
+    public void setAgentid(String intersectionid) {
+        this.agentid = intersectionid;
     }
 
     public Interfeature getFeature() {

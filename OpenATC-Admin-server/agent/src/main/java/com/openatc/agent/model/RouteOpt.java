@@ -19,5 +19,5 @@ import java.util.List;
 @Data
 public class RouteOpt {
     private List<Greenwave> greenwave;
-    private List<Device> intersections;
+    private List<Device> devs;
 }

@@ -26,6 +26,6 @@ public interface RouteDao extends JpaRepository<Route, Integer> {
     @Transactional
     void deleteById(Long id);
 
-    @Query(value = "SELECT new Route(r.id, r.name, r.keyintsid, r.direction, r.optstrategy, r.upspeed, r.downspeed, r.type) From Route r order by id")
+    @Query(value = "SELECT new Route(r.id, r.name, r.keyintsid, r.direction, r.optstrategy, r.upspeed, r.downspeed, r.type, r.enable) From Route r order by id")
     List<Route> getSimpleInfoForRoute();
 }

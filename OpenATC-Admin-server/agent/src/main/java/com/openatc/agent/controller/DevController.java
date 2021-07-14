@@ -12,12 +12,12 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
-import com.openatc.agent.service.AscsDao;
-import com.openatc.agent.service.OrgService;
-import com.openatc.agent.service.RouteDao;
-import com.openatc.agent.service.UserDao;
+import com.openatc.agent.service.*;
+import com.openatc.comm.data.MessageData;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,21 +47,27 @@ public class DevController {
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
+    @Autowired
+    private TStatDao tStatDao;
+    @Autowired
+    private MessageController messageController;
 
     @Value("${agent.server.mode.config}")
     private boolean isConfigMode;
     private Logger log = LoggerFactory.getLogger(DevController.class);
 
+    private Gson gson = new Gson();
 
-    @GetMapping(value="/devs//user/{username}")
-    public RESTRetBase GetAllAscsByUsername(@PathVariable String username){
+
+    @GetMapping(value = "/devs//user/{username}")
+    public RESTRetBase GetAllAscsByUsername(@PathVariable String username) {
         User user = userDao.getUserByUserName(username);
         String organizationName = user.getOrganization();
-        if(organizationName == null) return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_3016);
+        if (organizationName == null) return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_3016);
         List<SysOrg> sysOrgs = orgService.findByOrgnizationCodeLike(organizationName);
-        if(sysOrgs == null) return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_3017);
+        if (sysOrgs == null) return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_3017);
         List<AscsBaseModel> devices = new ArrayList<>();
-        for(SysOrg sysOrg : sysOrgs){
+        for (SysOrg sysOrg : sysOrgs) {
             List<AscsBaseModel> ascsByCode = mDao.getAscsByCode(sysOrg.getOrgnization_code());
             devices.addAll(ascsByCode);
         }
@@ -204,9 +211,9 @@ public class DevController {
         //删除协调路线的id设备
         List<Route> routes = routeDao.findAll();
         for (Route route : routes) {
-            Set<RouteIntersection> intersections = route.getIntersections();
+            Set<RouteIntersection> intersections = route.getDevs();
             for (RouteIntersection intersection : intersections) {
-                if (intersection.getIntersectionid().equals(id)) {
+                if (intersection.getAgentid().equals(id)) {
                     //在set中剔除设备
                     intersections.remove(intersection);
                 }
@@ -242,6 +249,30 @@ public class DevController {
         } else {
             return RESTRetUtils.successObj(ascs);
         }
+    }
+
+    //获取设备优化状态参数
+    @GetMapping(value = "/devs/{agentid}/optstatparam")
+    public RESTRetBase getDevOptstatparam(@PathVariable String agentid) {
+        List<TStat> tStats = tStatDao.findByAgentid(agentid);
+        return RESTRetUtils.successObj(tStats);
+    }
+
+    //修改设备状态优化参数
+    @PostMapping(value = "/devs/{agentid}/optstatparam")
+    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
+        // 0 下发到信号机
+        MessageData messageData = new MessageData(agentid, "set-request", "status/optstatparam", jsonObject);
+        messageController.postDevsMessage(null, messageData);
+
+        // 1 保存到数据库
+        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
+        for(JsonElement tstatJson : tstats){
+            TStat tStat = gson.fromJson(tstatJson, TStat.class);
+            tStat.setAgentid(agentid);
+            tStatDao.save(tStat);
+        }
+        return RESTRetUtils.successObj();
     }
 
 }
