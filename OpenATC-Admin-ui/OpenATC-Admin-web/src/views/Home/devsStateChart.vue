@@ -10,41 +10,41 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
+<div class="devsStatePart">
  <el-row :gutter="50">
   <el-col :span="12">
-    <div class="leftPart" ref="leftPart" :style="{ paddingLeft: leftPartPaddingLeft, paddingTop: leftPartPaddingTop}">
+    <div class="leftPart" id="leftPart" ref="leftPart">
       <div class="chartPart">
         <el-progress type="circle" :percentage="percentage" :height="chartHeight" :width="chartWidth" :stroke-width="chartRadius" color="#53c776"></el-progress>
       </div>
-      <div class="lengendPart" :style="{ paddingTop: lengendPartPaddingTop, width: chartWidth + 'px'  }">
-        <div>
-          <span class="upLengend"></span>
-          <span>在线</span>
+      <div class="lengendPart" :style="{ paddingTop: lengendPartPaddingTop}">
+        <span class="upLengend"></span>
+          <span>{{$t('openatc.home.online')}}</span>
           <span class="downLengend"></span>
-          <span>离线</span>
-        </div>
+          <span>{{$t('openatc.home.offline')}}</span>
       </div>
     </div>
   </el-col>
   <el-col :span="12">
-      <div class="rightPart" :style="{paddingTop: rightPartPaddingTop}">
+      <div class="rightPart">
           <div class="devsUp" :style="{ height: rightPartHeight }">
               <div class="Img upImg"></div>
               <div class="desc">
                   <div class="num">{{chartData[0].value}}</div>
-                  <div class="state">在线</div>
+                  <div class="state">{{$t('openatc.home.online')}}</div>
               </div>
           </div>
           <div class="devsDown" :style="{ height: rightPartHeight }">
               <div class="Img downImg"></div>
               <div class="desc">
                   <div class="num">{{chartData[1].value}}</div>
-                  <div class="state">离线</div>
+                  <div class="state">{{$t('openatc.home.offline')}}</div>
               </div>
           </div>
       </div>
   </el-col>
 </el-row>
+</div>
 </template>
 
 <script>
@@ -70,12 +70,10 @@ export default {
       sum: 0,
       height: undefined,
       width: undefined,
-      chartHeight: '394',
-      chartWidth: '394',
-      chartRadius: '44',
+      chartHeight: 394,
+      chartWidth: 394,
+      chartRadius: 44,
       lengendPartPaddingTop: '25px',
-      leftPartPaddingLeft: '150px',
-      leftPartPaddingTop: '53px',
       rightPartHeight: '154px',
       rightPartPaddingTop: '88px'
     }
@@ -85,31 +83,41 @@ export default {
       this.getPercentage()
       this.$refs.leftPart.getElementsByClassName('el-progress__text')[0].innerHTML = `<div class="content">
             <div class="sum">${this.sum}</div>
-            <div class="text">总计</div>
+            <div class="text">${this.$t('openatc.home.total')}</div>
         </div>`
     },
     getPercentage () {
       this.sum = this.chartData[0].value + this.chartData[1].value
       if (!this.sum) return
       this.percentage = (this.chartData[0].value / this.sum).toFixed(1) * 100
+    },
+    calculateChartSize () {
+      if (document.getElementById('leftPart').clientHeight - 130 < document.getElementById('leftPart').clientWidth - 30) {
+        this.chartHeight = document.getElementById('leftPart').clientHeight - 130
+        this.chartWidth = this.chartHeight
+      } else {
+        this.chartWidth = document.getElementById('leftPart').clientWidth - 30
+        this.chartHeight = this.chartWidth
+      }
     }
   },
   created () {
     let viewH = document.documentElement.clientHeight - 40
-    let viewW = document.documentElement.clientWidth - 40
-    // 利用斜边长计算圆环半径
-    let viewSide = Math.sqrt(Math.pow(viewH, 2) + Math.pow(viewW, 2))
-    this.chartHeight = Number((394 / 1080 * viewH).toFixed(0))
-    this.chartWidth = this.chartHeight
-    this.chartRadius = Number((44 / 2203 * viewSide).toFixed(0))
-    this.leftPartPaddingLeft = (150 / 1920 * viewW).toFixed(0) + 'px'
-    this.leftPartPaddingTop = (53 / 1920 * viewH).toFixed(0) + 'px'
     this.lengendPartPaddingTop = (25 / 1080 * viewH).toFixed(0) + 'px'
     this.rightPartHeight = (154 / 1080 * viewH).toFixed(0) + 'px'
     this.rightPartPaddingTop = (88 / 1080 * viewH).toFixed(0) + 'px'
   },
   mounted () {
     this.initData()
+    let viewH = document.documentElement.clientHeight - 40
+    let viewW = document.documentElement.clientWidth - 40
+    this.calculateChartSize()
+    // 利用斜边长计算圆环半径
+    let viewSide = Math.sqrt(Math.pow(viewH, 2) + Math.pow(viewW, 2))
+    this.chartRadius = Number((44 / 2203 * viewSide).toFixed(0))
+    window.addEventListener('resize', () => {
+      this.calculateChartSize()
+    }, false)
   }
 }
 </script>
@@ -129,36 +137,55 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.devsStatePart {
+  height: 100%;
+}
+.el-row {
+    height: 100%;
+}
+.el-col {
+  height: 100%;
+}
 .leftPart {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  // flex-wrap: wrap;
+  justify-content: center;
+  .chartPart {
+    text-align: center;
+  }
   .lengendPart {
-      box-sizing: border-box;
-      overflow: hidden;
-      text-align: center;
-      > span {
-          float: left;
-      }
-      .upLengend {
-          display: inline-block;
-          width: 10px;
-          height: 10px;
-          background: #53c776;
-          border-radius: 50%;
-          margin-right: 5px;
-      }
-      .downLengend {
-          display: inline-block;
-          width: 10px;
-          height: 10px;
-          background: rgb(229, 233, 242);
-          border-radius: 50%;
-          margin-left: 32px;
-          margin-right: 5px;
-      }
-    }
+    width: 100%;
+    height: 50px;
+    text-align: center;
+  }
+  .upLengend {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #53c776;
+      border-radius: 50%;
+      margin-right: 5px;
+  }
+  .downLengend {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: rgb(229, 233, 242);
+      border-radius: 50%;
+      margin-left: 32px;
+      margin-right: 5px;
+  }
 }
 .rightPart {
     // padding-top: 88px;
-    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    // flex-wrap: wrap;
+    justify-content: center;
     > div {
         width: calc(100% - 50px);
         background-color: #f8f8f8;

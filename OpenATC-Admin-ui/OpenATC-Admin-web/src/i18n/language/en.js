@@ -21,6 +21,19 @@ const en = {
       'gis': 'GIS',
       'usermanager': 'userManager'
     },
+    'home': {
+      'devicestatus': 'DeviceStatus',
+      'faultlist': 'FaultList',
+      'online': 'on-line',
+      'offline': 'off-line',
+      'total': 'total',
+      'faultsum': 'faultSum',
+      'faulttype': 'faultType',
+      'quantity': 'quantity',
+      'devicemaneger': 'device maneger',
+      'usermanager': 'user manager',
+      'operationrecord': 'operation record'
+    },
     'usermanager': {
       'username': 'userName',
       'organization': 'organization',

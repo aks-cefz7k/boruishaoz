@@ -10,38 +10,43 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="homeLayout" :style="{height: layoutHeight}">
+  <div class="homeLayout">
+    <div class="top">
       <el-row :gutter="20">
         <el-col :span="16">
-          <OpenATCCard width="100%" :height="topRowHeight" title="设备状态">
-            <div slot="cardContent">
+          <OpenATCCard width="100%" height="100%" :title="$t('openatc.home.devicestatus')">
+            <div slot="cardContent" class="chart">
               <DevsStateChart :chartData="chartData"/>
             </div>
           </OpenATCCard>
         </el-col>
         <el-col :span="8">
-          <OpenATCCard width="100%" :height="topRowHeight" title="故障列表">
-            <div slot="cardContent">
+          <OpenATCCard width="100%" height="100%" :title="$t('openatc.home.faultlist')">
+            <div slot="cardContent" class="list">
               <FaultList :faultList="faultList"/>
             </div>
           </OpenATCCard>
         </el-col>
       </el-row>
+    </div>
+    <div class="bottom">
       <el-row :gutter="20">
         <el-col :span="8" v-for="(card, index) in toPagePart" :key="index">
-          <OpenATCCard width="100%" :height="bottomRowHeight" :ishasTitle="false">
-            <div slot="cardContent">
-              <div class="imagebox">
-                <div :class="card.className" :style="{height: imgHeight, backgroundSize: imgWidth + ' ' + imgHeight}"></div>
+          <OpenATCCard width="100%" height="100%" :ishasTitle="false">
+            <div slot="cardContent" class="animationPart">
+              <div class="imagebox" id="imagebox">
+                <LottieAnim v-if="Visible" :Width="Width" :Height="Height" :Options="card.options" />
+                <!-- <div :class="card.className" :style="{height: imgHeight, backgroundSize: imgWidth + ' ' + imgHeight}"></div> -->
               </div>
               <div class="toPage">
-                <div :style="{ marginTop: toPageMarginTop, marginBottom: toPageMarginBottom }">{{card.name}}</div>
+                <div :style="{ marginTop: toPageMarginTop, marginBottom: toPageMarginBottom }">{{$t(`openatc.home.${[card.name]}`)}}</div>
                 <i class="iconfont icon-qianwang" @click="handleClickToPage(card.name)"></i>
               </div>
             </div>
           </OpenATCCard>
         </el-col>
       </el-row>
+    </div>
   </div>
 </template>
 <script>
@@ -50,27 +55,37 @@ import DevsStateChart from './devsStateChart'
 import FaultList from './faultList'
 import router from '@/router'
 import { GetAllDevice } from '@/api/device'
+import LottieAnim from './lottieDemo/index'
+import Anim from '../../../static/lottiejson/deviceMannege.json'
 export default {
   data () {
     return {
+      Width: 340,
+      Height: 236,
+      Visible: false,
       getDevsDataTimer: Object,
-      layoutHeight: '1030px',
-      topRowHeight: '573px',
-      bottomRowHeight: '402px',
-      imgHeight: '236px',
-      imgWidth: '340px',
       toPageMarginTop: '17px',
       toPageMarginBottom: '20px',
       toPagePart: [{
         className: 'device-manage',
-        name: '设备管理'
+        name: 'devicemaneger',
+        options: {
+          animationData: Anim, loop: false, autoplay: false
+        }
       }, {
         className: 'user-manage',
-        name: '用户管理'
+        name: 'usermanager',
+        options: {
+          animationData: Anim, loop: false, autoplay: false
+        }
       }, {
         className: 'operation-record',
-        name: '操作记录'
-      }],
+        name: 'operationrecord',
+        options: {
+          animationData: Anim, loop: false, autoplay: false
+        }
+      }
+      ],
       // faultTypeMap 故障种类，前端写死的假数据
       // faultTypeMap: new Map([[1, '检测器报警'], [2, '灯故障'], [3, '断电故障'], [4, '通讯故障']]),
       faultTypeMap: new Map([[201, '灯控板在线个数异常'], [202, '灯组红绿同亮'], [203, '所有灯组红灯全灭'], [204, '绿冲突'], [1, '检测器报警'], [2, '灯故障'], [3, '断电故障'], [4, '通讯故障']]),
@@ -91,28 +106,26 @@ export default {
   components: {
     OpenATCCard,
     DevsStateChart,
-    FaultList
+    FaultList,
+    LottieAnim
   },
   methods: {
     calculateHeight () {
       // 浏览器可视区域的高
       let viewH = document.documentElement.clientHeight - 10
-      let viewW = document.documentElement.clientWidth
-      this.layoutHeight = (1030 / 1080 * viewH).toFixed(0) + 'px'
-      this.topRowHeight = (573 / 1080 * viewH).toFixed(0) + 'px'
-      this.bottomRowHeight = (402 / 1080 * viewH).toFixed(0) + 'px'
-      this.imgHeight = (236 / 1080 * viewH).toFixed(0) + 'px'
-      this.imgWidth = (340 / 1920 * viewW).toFixed(0) + 'px'
       this.toPageMarginTop = (17 / 1080 * viewH).toFixed(0) + 'px'
       this.toPageMarginBottom = (17 / 1080 * viewH).toFixed(0) + 'px'
+      this.Width = document.getElementById('imagebox').clientWidth
+      this.Height = document.getElementById('imagebox').clientHeight
+      this.Visible = true
     },
     handleClickToPage (name) {
       switch (name) {
-        case '设备管理': router.push({ path: '/device' })
+        case 'devicemaneger': router.push({ path: '/device' })
           break
-        case '用户管理': router.push({ path: '/user' })
+        case 'usermanager': router.push({ path: '/user' })
           break
-        case '操作记录': router.push({ path: '/operaterecord' })
+        case 'operationrecord': router.push({ path: '/operaterecord' })
           break
         default: router.push({ path: '/' })
       }
@@ -163,6 +176,16 @@ export default {
     this.getDevsDataTimer = setInterval(() => {
       this.getdata()
     }, 60000)
+    const _this = this
+    window.onresize = function () {
+      // 动画大小自适应
+      _this.Width = document.getElementById('imagebox').clientWidth
+      _this.Height = document.getElementById('imagebox').clientHeight
+      _this.Visible = false
+      _this.$nextTick(() => {
+        _this.Visible = true
+      })
+    }
   },
   destroyed () {
     clearInterval(this.getDevsDataTimer)
@@ -174,17 +197,33 @@ export default {
 .homeLayout {
   padding: 19px;
   background-color: #eff1f4;
-  // height: calc(100vh - 50px);
+  height: 100%;
+}
+.top {
+  height: 53%;
+  margin-bottom: 20px;
+  .chart {
+    height: calc(100% - 52px);
+  }
+  .list {
+    height: calc(100% - 52px);
+  }
+}
+.bottom {
+  height: calc(47% - 20px);
 }
 .el-row {
-    margin-bottom: 20px;
+    height: 100%;
     &:last-child {
       margin-bottom: 0;
     }
 }
+.el-col {
+  height: 100%;
+}
 .imagebox {
   margin: 0 auto;
-  padding-top: 50px;
+  height: 100%;
 }
 .toPage {
   width: 72px;
@@ -200,13 +239,17 @@ export default {
   color: #409eff;
   font-size: 20px;
 }
-.device-manage {
-  // height: 236px;
-  background: url("../../assets/home/deviceManage.png");
-  // background-size: 340px 236px;
-  background-repeat: no-repeat;
-  background-position:center center;
-}
+// .device-manage {
+//   // height: 236px;
+//   background: url("../../assets/home/deviceManage.png");
+//   // background-size: 340px 236px;
+//   background-repeat: no-repeat;
+//   background-position:center center;
+// }
+// .device {
+//     width: 100%;
+//     height: 100%;
+// }
 .user-manage {
   background: url("../../assets/home/usersManage.png");
   background-repeat: no-repeat;
@@ -216,5 +259,9 @@ export default {
   background: url("../../assets/home/operateRecord.png");
   background-repeat: no-repeat;
   background-position:center center;
+}
+.animationPart {
+  position: relative;
+  height: 70%;
 }
 </style>

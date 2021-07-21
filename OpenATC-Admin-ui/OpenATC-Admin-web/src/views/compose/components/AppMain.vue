@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="appMain">
       <!-- <router-view :key="key"></router-view> -->
       <router-view></router-view>
   </div>
@@ -26,3 +26,9 @@ export default {
   }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  @import "src/styles/mixin.scss";
+  .appMain {
+    height: calc(100% - 50px);
+  }
+</style>

@@ -21,6 +21,19 @@ const zh = {
       'gis': '地图',
       'usermanager': '用户管理'
     },
+    'home': {
+      'devicestatus': '设备状态',
+      'faultlist': '故障列表',
+      'online': '在线',
+      'offline': '离线',
+      'total': '总计',
+      'faultsum': '故障总数',
+      'faulttype': '故障类型',
+      'quantity': '数量',
+      'devicemaneger': '设备管理',
+      'usermanager': '用户管理',
+      'operationrecord': '操作记录'
+    },
     'usermanager': {
       'username': '用户名称',
       'organization': '组织机构',
