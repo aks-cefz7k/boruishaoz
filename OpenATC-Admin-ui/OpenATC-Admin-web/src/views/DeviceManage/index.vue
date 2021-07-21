@@ -11,7 +11,7 @@
  **/
 <template>
   <div>
-    <Messagebox :visible="messageboxVisible" text="是否删除此设备?" @cancle="cancle" @ok="ok"/>
+    <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
     <div class="devs-container">
       <div class="tag-container">
         <DeviceTags />
@@ -22,11 +22,11 @@
             <el-button
             type="primary"
             icon="el-icon-plus"
-            @click="handleAdd">新增</el-button>
+            @click="handleAdd">{{$t('openatc.common.add')}}</el-button>
             <el-input
               @keyup.enter.native="handleFilter"
               v-model="devsfilter"
-              placeholder="输入关键字搜索"
+              :placeholder="$t('openatc.common.searchplaceholder')"
               prefix-icon="el-icon-search"
               style="width: 200px;"/>
           </el-form-item>
@@ -47,46 +47,46 @@
           </el-table-column>
           <el-table-column
           prop="agentid"
-          label="设备ID"
+          :label="$t('openatc.devicemanager.deviceid')"
           :sort-method="sortAgentId"
           sortable
           align="center">
           </el-table-column>
            <el-table-column
           prop="name"
-          label="设备名称"
+          :label="$t('openatc.devicemanager.devicename')"
           align="center">
           </el-table-column>
           <el-table-column
           prop="type"
-          label="类型"
+          :label="$t('openatc.devicemanager.type')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
           prop="jsonparam.ip"
-          label="IP"
+          :label="$t('openatc.devicemanager.IP')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
           prop="jsonparam.port"
-          label="端口"
+          :label="$t('openatc.devicemanager.port')"
           align="center">
           </el-table-column>
           <el-table-column
           prop="descs"
-          label="设备描述"
+          :label="$t('openatc.devicemanager.describe')"
           align="center">
           </el-table-column>
           <el-table-column
           prop="protocol"
-          label="协议"
+          :label="$t('openatc.devicemanager.protocol')"
           align="center">
           </el-table-column>
           <el-table-column
           prop="roles"
-          label="状态"
+          :label="$t('openatc.devicemanager.state')"
           align="center">
             <template slot-scope="scope">
               <div>
@@ -96,15 +96,15 @@
           </el-table-column>
           <el-table-column
           prop="lastTime"
-          label="最后更新时间"
+          :label="$t('openatc.devicemanager.lastupdatetime')"
           sortable
           align="center">
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column :label="$t('openatc.devicemanager.operation')" align="center">
           <template slot-scope="scope">
-              <el-button type="text" @click="handleEdit(scope.$index)">编辑</el-button>
-              <el-button type="text" @click="handleToDetail(scope.$index)">详情</el-button>
-              <el-button type="text" @click="handleDelete(scope.$index)">删除</el-button>
+              <el-button type="text" @click="handleEdit(scope.$index)">{{$t('openatc.common.edit')}}</el-button>
+              <el-button type="text" @click="handleToDetail(scope.$index)">{{$t('openatc.common.detail')}}</el-button>
+              <el-button type="text" @click="handleDelete(scope.$index)">{{$t('openatc.common.delete')}}</el-button>
           </template>
           </el-table-column>
       </el-table>
@@ -128,7 +128,7 @@ export default {
     return {
       tableHeight: 700,
       devsfilter: '',
-      childTitle: '新增设备',
+      childTitle: 'adddevice',
       messageboxVisible: false,
       tableData: [],
       listLoading: false // 数据加载等待动画
@@ -171,19 +171,19 @@ export default {
     getTag (row) {
       if (row.state === 'DOWN') {
         return {
-          label: '离线',
+          label: this.$t('openatc.devicemanager.offline'),
           type: 'info'
         }
       } else {
         if (row.status === 0) {
           // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
           return {
-            label: '在线',
+            label: this.$t('openatc.devicemanager.online'),
             type: 'success'
           }
         } else {
           return {
-            label: '故障',
+            label: this.$t('openatc.devicemanager.fault'),
             type: 'danger'
           }
         }
@@ -223,12 +223,12 @@ export default {
     handleFilter () {
     },
     handleAdd () {
-      this.childTitle = '新增设备'
+      this.childTitle = 'adddevice'
       let updateChild = this.$refs.updateChild
       updateChild.onUpdateClick()
     },
     handleEdit ($index) {
-      this.childTitle = '编辑设备'
+      this.childTitle = 'editdevice'
       let dev = this.tableData[$index]
       let updateChild = this.$refs.updateChild
       updateChild.onUpdateClick(dev)

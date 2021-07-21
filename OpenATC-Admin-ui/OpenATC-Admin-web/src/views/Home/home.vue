@@ -57,6 +57,8 @@ import router from '@/router'
 import { GetAllDevice } from '@/api/device'
 import LottieAnim from './lottieDemo/index'
 import Anim from '../../../static/lottiejson/deviceMannege.json'
+import operatAnim from '../../../static/lottiejson/operationRecord.json'
+
 export default {
   data () {
     return {
@@ -82,7 +84,7 @@ export default {
         className: 'operation-record',
         name: 'operationrecord',
         options: {
-          animationData: Anim, loop: false, autoplay: false
+          animationData: operatAnim, loop: false, autoplay: false
         }
       }
       ],

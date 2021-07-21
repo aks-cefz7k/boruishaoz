@@ -14,7 +14,22 @@ const en = {
     'common': {
       'add': 'add',
       'delete': 'delete',
-      'edit': 'edit'
+      'edit': 'edit',
+      'detail': 'detail',
+      'searchplaceholder': 'Enter keyword search',
+      'addfailed': 'Add Success!',
+      'addsuccess': 'Add Failed!',
+      'addcancel': 'Add Canceled!',
+      'deletefailed': 'Delete Failed!',
+      'deletesuccess': 'Delete Success!',
+      'deletecancel': 'Delete Canceled!',
+      'updatefailed': 'Update Failed!',
+      'updatesuccess': 'Update Success!',
+      'updatecancel': 'Update Canceled!'
+    },
+    'button': {
+      'OK': 'OK',
+      'Cancel': 'Cancel'
     },
     'main': {
       'homepage': 'homePage',
@@ -24,8 +39,8 @@ const en = {
     'home': {
       'devicestatus': 'DeviceStatus',
       'faultlist': 'FaultList',
-      'online': 'on-line',
-      'offline': 'off-line',
+      'online': 'online',
+      'offline': 'offline',
       'total': 'total',
       'faultsum': 'faultSum',
       'faulttype': 'faultType',
@@ -33,6 +48,36 @@ const en = {
       'devicemaneger': 'device maneger',
       'usermanager': 'user manager',
       'operationrecord': 'operation record'
+    },
+    'devicemanager': {
+      'devicelist': 'deviceList',
+      'deviceid': 'device Id',
+      'devicename': 'device Name',
+      'type': 'type',
+      'IP': 'IP',
+      'port': 'port',
+      'describe': 'describe',
+      'protocol': 'protocol',
+      'state': 'state',
+      'fault': 'fault',
+      'online': 'online',
+      'offline': 'offline',
+      'lastupdatetime': 'last Update Time',
+      'operation': 'operation',
+      'longitude': 'longitude',
+      'latitude': 'latitude',
+      'adddevice': 'Add device',
+      'editdevice': 'Edit device',
+      'enterIp': 'Please enter IP',
+      'correctIp': 'Please fill in the legal IP!',
+      'enterport': 'Please enter port!',
+      'correctport': 'Please fill in the legal port!',
+      'choosetype': 'Please select type',
+      'chooseprotocol': 'Please select protocol',
+      'enterId': 'Please enter device ID',
+      'entername': 'Please enter device name',
+      'enterrequired': 'Please fill in the required items!',
+      'deletedevice': 'Do you want to delete this device?'
     },
     'usermanager': {
       'username': 'userName',
