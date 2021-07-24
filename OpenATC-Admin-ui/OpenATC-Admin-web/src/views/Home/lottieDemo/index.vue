@@ -57,6 +57,7 @@ export default {
         this.restart = true
       })
       this.play()
+      // this.restart = true
     },
     stop () {
       this.anim.stop()

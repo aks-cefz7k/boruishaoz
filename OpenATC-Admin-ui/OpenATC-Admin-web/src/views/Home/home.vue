@@ -56,7 +56,8 @@ import FaultList from './faultList'
 import router from '@/router'
 import { GetAllDevice } from '@/api/device'
 import LottieAnim from './lottieDemo/index'
-import Anim from '../../../static/lottiejson/deviceMannege.json'
+import deviceAnim from '../../../static/lottiejson/deviceManager.json'
+import userAnim from '../../../static/lottiejson/userManager.json'
 import operatAnim from '../../../static/lottiejson/operationRecord.json'
 
 export default {
@@ -72,13 +73,13 @@ export default {
         className: 'device-manage',
         name: 'devicemaneger',
         options: {
-          animationData: Anim, loop: false, autoplay: false
+          animationData: deviceAnim, loop: false, autoplay: false
         }
       }, {
         className: 'user-manage',
         name: 'usermanager',
         options: {
-          animationData: Anim, loop: false, autoplay: false
+          animationData: userAnim, loop: false, autoplay: false
         }
       }, {
         className: 'operation-record',
