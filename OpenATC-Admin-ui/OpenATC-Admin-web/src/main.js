@@ -31,6 +31,7 @@ import 'leaflet/dist/leaflet.css'
 import Edgebase from 'edgebase-front'
 
 import i18n from './i18n'
+import VueKonva from 'vue-konva'
 
 window.dev = process.env.NODE_ENV
 
@@ -43,7 +44,7 @@ Vue.use(ElementUI, {
 Vue.use(Edgebase)
 Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)
-
+Vue.use(VueKonva)
 Vue.config.productionTip = false
 
 // mian test hg
