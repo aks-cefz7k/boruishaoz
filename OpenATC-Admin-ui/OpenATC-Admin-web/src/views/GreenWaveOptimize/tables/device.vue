@@ -13,7 +13,7 @@
   <div>
      <el-drawer
       ref="addDrawer"
-      title="新增设备"
+      :title="$t('openatc.greenwaveoptimize.adddevice')"
       destroy-on-close
       :wrapperClosable="false"
       :append-to-body="true"
@@ -24,10 +24,10 @@
        @closeAddDrawer="closeAddDrawer"
        @addMultiDevice="addMultiDevice"/>
     </el-drawer>
-    <Messagebox v-if="messageboxVisible" :visible="messageboxVisible" :text="'是否删除设备'+deleteId" @cancle="cancleDel" @ok="confirmDel"/>
+    <Messagebox v-if="messageboxVisible" :visible="messageboxVisible" :text="$t('openatc.greenwaveoptimize.deletedevice')+deleteId" @cancle="cancleDel" @ok="confirmDel"/>
     <div>
     <div style="overflow: hidden;">
-      <el-button class="addbtn" type="primary" @click="handleAdd">添加设备</el-button>
+      <el-button class="addbtn" type="primary" @click="handleAdd">{{$t('openatc.greenwaveoptimize.adddevice')}}</el-button>
     </div>
     <div class="devicePanel">
       <el-table
@@ -44,38 +44,38 @@
           </el-table-column>
           <el-table-column
             prop="agentid"
-            label="设备ID"
+            :label="$t('openatc.greenwaveoptimize.deviceid')"
             align="center">
           </el-table-column>
            <el-table-column
             prop="name"
-            label="设备名称"
+            :label="$t('openatc.greenwaveoptimize.devicename')"
             align="center">
           </el-table-column>
           <el-table-column
             prop="type"
-            label="类型"
+            :label="$t('openatc.greenwaveoptimize.type')"
             align="center">
           </el-table-column>
           <el-table-column
             width="120"
             prop="jsonparam.ip"
-            label="IP"
+            :label="$t('openatc.greenwaveoptimize.IP')"
             align="center">
           </el-table-column>
           <el-table-column
             prop="jsonparam.port"
-            label="端口"
+            :label="$t('openatc.greenwaveoptimize.port')"
             align="center">
           </el-table-column>
           <el-table-column
             prop="descs"
-            label="设备描述"
+            :label="$t('openatc.greenwaveoptimize.describe')"
             align="center">
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column :label="$t('openatc.greenwaveoptimize.operation')" align="center">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleDelete(scope.$index)">删除</el-button>
+              <el-button type="text" @click="handleDelete(scope.$index)">{{$t('openatc.common.delete')}}</el-button>
             </template>
           </el-table-column>
       </el-table>
@@ -134,7 +134,7 @@ export default {
     },
     confirmDel () {
       this.$emit('deleteDevice', this.deleteId)
-      this.$message.success('删除设备成功！')
+      this.$message.success(this.$t('openatc.greenwaveoptimize.deletedevsuccess'))
       this.messageboxVisible = false
     },
     getOptions () {

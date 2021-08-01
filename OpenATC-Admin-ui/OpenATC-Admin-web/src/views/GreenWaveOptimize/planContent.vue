@@ -21,7 +21,7 @@
           <div>
             <i class="iconfont icon-yindaoicon1"></i>
           </div>
-          <div class="text">点击编辑按钮开始计划生成配置</div>
+          <div class="text">{{$t('openatc.greenwaveoptimize.createconfig')}}</div>
         </div>
         <button slot="reference" class="btn" @click="handleEdit" ref="editbtn">编辑</button>
       </el-popover>

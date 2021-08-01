@@ -25,7 +25,8 @@ const zh = {
       'deletecancel': '删除取消!',
       'updatefailed': '更新失败!',
       'updatesuccess': '更新成功!',
-      'updatecancel': '更新取消!'
+      'updatecancel': '更新取消!',
+      'devicenotonline': '设备不在线！'
     },
     'button': {
       'OK': '确定',
@@ -87,6 +88,41 @@ const zh = {
       'telno': '电话',
       'email': '邮箱',
       'operation': '操作'
+    },
+    'greenwaveoptimize': {
+      'addplan': '点击添加按钮添加绿波协调计划',
+      'createconfig': '点击编辑按钮开始计划生成配置',
+      'operation': '操作',
+      'isdelete': '是否删除',
+      'nochooseplan': '未选中任何方案！',
+      'namerepeat': '协调方案名称重复！',
+      'addfail': '新增失败，协调方案名称重复！',
+      'addroute': '新增协调方案',
+      'editroute': '编辑协调方案',
+      'name': '名称',
+      'routename': '方案名称',
+      'isClose': '配置未保存，是否确认关闭?',
+      'coordinateparamconfig': '协调参数配置',
+      'device': '设备',
+      'phase': '相位',
+      'distance': '距离',
+      'pattern': '方案',
+      'choosephase': '请选择相位！',
+      'choosepattern': '请选择方案！',
+      'configsuccess': '协调参数配置成功！',
+      'adddevice': '新增设备',
+      'deletedevice': '是否删除设备',
+      'deviceid': '设备ID',
+      'devicename': '设备名称',
+      'type': '类型',
+      'IP': 'IP',
+      'port': '端口',
+      'describe': '设备描述',
+      'deletedevsuccess': '删除设备成功！',
+      'distancemeter': '距离（m）',
+      'widthmeter': '宽度（m）',
+      'forward': '上行',
+      'back': '下行'
     }
   }
 }

@@ -11,9 +11,9 @@
  **/
 <template>
 <div v-if="configurationVisible" class="configDrawer">
-  <Messagebox :visible="messageboxVisible" text="配置未保存，是否确认关闭?" @cancle="cancle" @ok="ok"/>
+  <Messagebox :visible="messageboxVisible" :text="$t('openatc.greenwaveoptimize.isClose')" @cancle="cancle" @ok="ok"/>
   <el-drawer
-    title="协调参数配置"
+    :title="$t('openatc.greenwaveoptimize.coordinateparamconfig')"
     size="41%"
     :visible.sync="configurationVisible"
     direction="rtl"
@@ -21,25 +21,25 @@
     :destroy-on-close="true"
     :before-close="handleClose">
     <el-tabs v-model="activeTab" type="card" @tab-click="handleClickTab">
-      <el-tab-pane label="设备" name="device">
+      <el-tab-pane :label="$t('openatc.greenwaveoptimize.device')" name="device">
         <DevicePanel :devicesData="devicesData"
           @addDevice="addDevice"
           @deleteDevice="deleteDevice"
           @handleSortRow="handleSortRow" />
       </el-tab-pane>
-      <el-tab-pane label="相位" name="phase">
+      <el-tab-pane :label="$t('openatc.greenwaveoptimize.phase')" name="phase">
         <PhasePanel :phaseData="phaseData" @changeData="changePhase"/>
       </el-tab-pane>
-      <el-tab-pane label="距离" name="distance">
+      <el-tab-pane :label="$t('openatc.greenwaveoptimize.distance')" name="distance">
         <DistancePanel :distanceData="distanceData" @changeData="changeData"/>
       </el-tab-pane>
-      <el-tab-pane label="方案" name="pattern">
+      <el-tab-pane :label="$t('openatc.greenwaveoptimize.pattern')" name="pattern">
         <PatternPanel :patternData="patternData" @changeData="changePattern"/>
       </el-tab-pane>
     </el-tabs>
     <div class="btnGroup">
-      <el-button class="btn" @click="handleClose">取消</el-button>
-      <el-button class="btn" type="primary" @click="onOk">确定</el-button>
+      <el-button class="btn" @click="handleClose">{{$t('openatc.button.Cancel')}}</el-button>
+      <el-button class="btn" type="primary" @click="onOk">{{$t('openatc.button.OK')}}</el-button>
     </div>
   </el-drawer>
 </div>
@@ -134,11 +134,11 @@ export default {
     checkRules (intersections) {
       for (let inter of intersections) {
         if (inter.forwardphaseid === 0 || inter.backphaseid === 0) {
-          this.$message.error('请选择相位！')
+          this.$message.error(this.$t('openatc.greenwaveoptimize.choosephase'))
           return true
         }
         if (inter.patternid === 0) {
-          this.$message.error('请选择方案！')
+          this.$message.error(this.$t('openatc.greenwaveoptimize.choosepattern'))
           return true
         }
       }
@@ -181,7 +181,7 @@ export default {
           return
         }
         this.$message({
-          message: '协调参数配置成功！',
+          message: this.$t('openatc.greenwaveoptimize.configsuccess'),
           type: 'success',
           duration: 1500
         })

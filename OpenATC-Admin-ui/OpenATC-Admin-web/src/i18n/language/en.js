@@ -25,7 +25,8 @@ const en = {
       'deletecancel': 'Delete Canceled!',
       'updatefailed': 'Update Failed!',
       'updatesuccess': 'Update Success!',
-      'updatecancel': 'Update Canceled!'
+      'updatecancel': 'Update Canceled!',
+      'devicenotonline': 'Device not online！'
     },
     'button': {
       'OK': 'OK',
@@ -51,8 +52,8 @@ const en = {
     },
     'devicemanager': {
       'devicelist': 'deviceList',
-      'deviceid': 'device Id',
-      'devicename': 'device Name',
+      'deviceid': 'device id',
+      'devicename': 'device name',
       'type': 'type',
       'IP': 'IP',
       'port': 'port',
@@ -87,6 +88,41 @@ const en = {
       'telno': 'telno',
       'email': 'email',
       'operation': 'oper'
+    },
+    'greenwaveoptimize': {
+      'addplan': 'Click the Add button to add the greenwave coordination plan',
+      'createconfig': 'Click the Edit button to start the plan generation configuration',
+      'operation': 'operation',
+      'isdelete': 'Is delete',
+      'nochooseplan': 'No scheme selected!',
+      'namerepeat': 'Duplicate coordination scheme name!',
+      'addfail': 'Failed to add, the name of coordination scheme is duplicate!',
+      'addroute': 'New coordination scheme',
+      'editroute': 'Edit coordination scheme',
+      'name': 'name',
+      'routename': 'route name',
+      'isClose': 'Configuration not saved, are you sure to close?',
+      'coordinateparamconfig': 'Coordinate parameter configuration',
+      'device': 'device',
+      'phase': 'phase',
+      'distance': 'distance',
+      'pattern': 'pattern',
+      'choosephase': 'Please select phase!',
+      'choosepattern': 'Please select pattern!',
+      'configsuccess': 'Coordination parameter configuration succeeded!',
+      'adddevice': 'add device',
+      'deletedevice': 'Is delete device',
+      'deviceid': 'device id',
+      'devicename': 'device name',
+      'type': 'type',
+      'IP': 'IP',
+      'port': 'port',
+      'describe': 'describe',
+      'deletedevsuccess': 'Delete device successfully!',
+      'distancemeter': 'distance（m）',
+      'widthmeter': 'width（m）',
+      'forward': 'forward',
+      'back': 'back'
     }
   }
 }

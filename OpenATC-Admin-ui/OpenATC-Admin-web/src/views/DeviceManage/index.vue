@@ -102,9 +102,9 @@
           </el-table-column>
           <el-table-column :label="$t('openatc.devicemanager.operation')" align="center">
           <template slot-scope="scope">
-              <el-button type="text" @click="handleEdit(scope.$index)">{{$t('openatc.common.edit')}}</el-button>
-              <el-button type="text" @click="handleToDetail(scope.$index)">{{$t('openatc.common.detail')}}</el-button>
-              <el-button type="text" @click="handleDelete(scope.$index)">{{$t('openatc.common.delete')}}</el-button>
+              <el-button type="text" @click="handleEdit(scope.row)">{{$t('openatc.common.edit')}}</el-button>
+              <el-button type="text" @click="handleToDetail(scope.row)">{{$t('openatc.common.detail')}}</el-button>
+              <el-button type="text" @click="handleDelete(scope.row)">{{$t('openatc.common.delete')}}</el-button>
           </template>
           </el-table-column>
       </el-table>
@@ -200,8 +200,8 @@ export default {
         this.tableData = res.data.data
       })
     },
-    handleToDetail ($index) {
-      const dev = this.tableData[$index]
+    handleToDetail (row) {
+      const dev = row
       const devId = dev.id
       this.$store.dispatch('SetOperatedDeviceId', devId)
       this.$store.dispatch('SaveDevsTags', dev)
@@ -227,14 +227,14 @@ export default {
       let updateChild = this.$refs.updateChild
       updateChild.onUpdateClick()
     },
-    handleEdit ($index) {
+    handleEdit (row) {
       this.childTitle = 'editdevice'
-      let dev = this.tableData[$index]
+      let dev = row
       let updateChild = this.$refs.updateChild
       updateChild.onUpdateClick(dev)
     },
-    handleDelete ($index) {
-      let dev = this.tableData[$index]
+    handleDelete (row) {
+      let dev = row
       this.deleteId = dev.agentid
       this.messageboxVisible = true
     },
