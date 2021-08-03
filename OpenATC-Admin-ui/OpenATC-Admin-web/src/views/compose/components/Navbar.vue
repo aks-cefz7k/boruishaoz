@@ -59,23 +59,41 @@
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided command="a">修改密码</el-dropdown-item>
-            <el-dropdown-item command="b">退出</el-dropdown-item>
+            <el-dropdown-item command="b">关于</el-dropdown-item>
+            <el-dropdown-item command="c">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
+    <div class="switch-language">
+        <el-dropdown trigger="click" @command="switchLanguage">
+          <span class="el-dropdown-link">
+            {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="Ch">中文</el-dropdown-item>
+            <el-dropdown-item command="En">English</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
   </el-menu>
   <modifypasswd ref="modifypasswdChild"></modifypasswd>
+  <versioninfo ref="versioninfoChild"></versioninfo>
+  <!-- <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+    <div>123456</div>
+</el-dialog> -->
   </div>
 </template>
 <script>
 import router from '@/router'
 import modifypasswd from './modifyPasswd'
+import versioninfo from './versionInfo'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
+import { setLanguage } from '@/utils/auth'
 export default {
   name: 'navbar',
-  components: { modifypasswd },
+  components: { modifypasswd, versioninfo },
   data () {
     return {
       activeIndex: '',
@@ -90,7 +108,8 @@ export default {
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,
-      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew']
+      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew'],
+      language: 'Language'
     }
   },
   watch: {
@@ -139,10 +158,16 @@ export default {
       switch (command) {
         case 'a': this.modifyPasswd()
           break
-        case 'b': this.logout()
+        case 'b': this.showVersion()
+          break
+        case 'c': this.logout()
           break
         default: router.push({ path: '/' })
       }
+    },
+    showVersion () {
+      let versionInfoChild = this.$refs.versioninfoChild
+      versionInfoChild.showMessage()
     },
     logout () {
       this.$store.dispatch('LogOut').then(() => {
@@ -178,6 +203,27 @@ export default {
         }
         this.userInfo = data.data.data
       })
+    },
+    switchLanguage (command) {
+      switch (command) {
+        case 'Ch':
+          this.switchToChinese()
+          break
+        case 'En':
+          this.switchToEngLish()
+          break
+        default:
+          console.log(command)
+          break
+      }
+    },
+    switchToChinese () {
+      this.$i18n.locale = 'zh'
+      setLanguage(this.$i18n.locale)
+    },
+    switchToEngLish () {
+      this.$i18n.locale = 'en'
+      setLanguage(this.$i18n.locale)
     }
   }
 }
@@ -302,4 +348,10 @@ export default {
   letter-spacing: 0px;
   color: #333333;
 }
+.switch-language {
+    cursor: pointer;
+    margin-top: 17px;
+    margin-right: 30px;
+    float: right;
+  }
 </style>
