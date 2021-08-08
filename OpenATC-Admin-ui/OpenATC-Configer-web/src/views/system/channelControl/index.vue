@@ -131,7 +131,9 @@ export default {
       channelcheck(params).then(data => {
         if (!data.data.success) {
           this.$message.error(data.data.message)
+          return
         }
+        this.$alert(this.$t('edge.channelControl.recoverysuccess'), { type: 'success' })
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
