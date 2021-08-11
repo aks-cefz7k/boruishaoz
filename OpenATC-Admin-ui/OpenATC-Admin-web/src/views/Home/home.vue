@@ -229,7 +229,7 @@ export default {
   height: 100%;
 }
 .toPage {
-  width: 72px;
+  // width: 72px;
   text-align: center;
   margin: 0 auto;
   color: #666;

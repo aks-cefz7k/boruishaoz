@@ -26,7 +26,8 @@ const zh = {
       'updatefailed': '更新失败!',
       'updatesuccess': '更新成功!',
       'updatecancel': '更新取消!',
-      'devicenotonline': '设备不在线！'
+      'devicenotonline': '设备不在线！',
+      'tipsmodaltitle': '提示'
     },
     'button': {
       'OK': '确定',
@@ -35,7 +36,11 @@ const zh = {
     'main': {
       'homepage': '主页',
       'gis': '地图',
-      'usermanager': '用户管理'
+      'devicemanager': '设备管理',
+      'usermanager': '用户管理',
+      'greenwaveoptimize': '绿波协调',
+      'operationrecord': '操作记录',
+      'organization': '组织机构'
     },
     'home': {
       'devicestatus': '设备状态',

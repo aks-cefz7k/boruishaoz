@@ -17,11 +17,11 @@
     <div class="openatc-menu">
       <el-menu-item index="home" style="display:inline">{{$t('openatc.main.homepage')}}</el-menu-item>
       <el-menu-item index="gis" style="display:inline">{{$t('openatc.main.gis')}}</el-menu-item>
-      <el-menu-item index="device" style="display:inline">设备管理</el-menu-item>
-      <el-menu-item index="user" style="display:inline">用户管理</el-menu-item>
-      <el-menu-item index="greenwave" style="display:inline">绿波协调</el-menu-item>
-      <el-menu-item index="operate" style="display:inline">操作记录</el-menu-item>
-      <el-menu-item index="organization" style="display:inline">组织机构</el-menu-item>
+      <el-menu-item index="device" style="display:inline">{{$t('openatc.main.devicemanager')}}</el-menu-item>
+      <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item>
+      <el-menu-item index="greenwave" style="display:inline">{{$t('openatc.main.greenwaveoptimize')}}</el-menu-item>
+      <el-menu-item index="operate" style="display:inline">{{$t('openatc.main.operationrecord')}}</el-menu-item>
+      <el-menu-item index="organization" style="display:inline">{{$t('openatc.main.organization')}}</el-menu-item>
     </div>
     <div class="openatc-operate">
       <div class="admin">

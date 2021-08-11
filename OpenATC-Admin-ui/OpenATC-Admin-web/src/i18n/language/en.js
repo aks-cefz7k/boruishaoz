@@ -26,7 +26,8 @@ const en = {
       'updatefailed': 'Update Failed!',
       'updatesuccess': 'Update Success!',
       'updatecancel': 'Update Canceled!',
-      'devicenotonline': 'Device not online！'
+      'devicenotonline': 'Device not online！',
+      'tipsmodaltitle': 'Tips'
     },
     'button': {
       'OK': 'OK',
@@ -35,7 +36,11 @@ const en = {
     'main': {
       'homepage': 'homePage',
       'gis': 'GIS',
-      'usermanager': 'userManager'
+      'devicemanager': 'deviceManager',
+      'usermanager': 'userManager',
+      'greenwaveoptimize': 'greenwaveOptimize',
+      'operationrecord': 'operationRecord',
+      'organization': 'organization'
     },
     'home': {
       'devicestatus': 'DeviceStatus',
