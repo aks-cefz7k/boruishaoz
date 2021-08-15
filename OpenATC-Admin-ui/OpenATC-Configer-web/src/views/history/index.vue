@@ -11,21 +11,26 @@
  **/
 <template>
   <div class="app-container">
+    <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">刷新</el-button>
     <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">导出</el-button>
+    <el-button class="detail-fault" type="primary" size="small" @click="showDetailFault" style="" v-show="activeName === '2'">当前详细灯组故障</el-button>
+    <el-button class="detail-fault" type="primary" size="small" @click="showDetailFault" style="" v-show="activeName === '3'">当前详细车检版故障</el-button>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.value">
       <boardTable ref="boardtable" :activeName="activeName" :tableData="tableData" @getAllFault="getAllFault"></boardTable>
     </el-tab-pane>
   </el-tabs>
+  <detailFault ref="detailfault"></detailFault>
   </div>
 </template>
 
 <script>
 import boardTable from './table/index'
 import { getFault } from '@/api/fault'
+import detailFault from './dialog/index'
 export default {
   name: 'history',
-  components: { boardTable },
+  components: { boardTable, detailFault },
   data () {
     return {
       activeName: '0',
@@ -114,10 +119,21 @@ export default {
       el.click()
       // 移除链接释放资源
       urlObject.revokeObjectURL(url)
+    },
+    showDetailFault () {
+      debugger
+      let detailFault = this.$refs.detailfault
+      detailFault.onShowDetailFault()
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.detail-fault {
+  position: relative;
+  float: right;
+  margin-top: 40px;
+  z-index: 99;
+}
 </style>

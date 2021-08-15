@@ -55,8 +55,8 @@
             :label="$t('openatc.devicemanager.protocol')"
             prop="protocol">
             <el-select v-model="deviceInfo.protocol" placeholder="" style="width:100%">
-                <el-option label="kedacom" value="kedacom"></el-option>
-                <el-option label="GB" value="GB"></el-option>
+                <el-option label="scp" value="scp"></el-option>
+                <el-option label="ocp" value="ocp"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item

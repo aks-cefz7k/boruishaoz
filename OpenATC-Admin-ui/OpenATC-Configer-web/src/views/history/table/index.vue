@@ -11,7 +11,7 @@
  **/
 <template>
   <div>
-    <el-button type="primary" @click="refreshData" size="small" style="margin-bottom: 10px;">刷新</el-button>
+    <!-- <el-button type="primary" @click="refreshData" size="small" style="margin-bottom: 10px;">刷新</el-button> -->
     <div class="atc-table">
     <el-table
         :data="tableData"

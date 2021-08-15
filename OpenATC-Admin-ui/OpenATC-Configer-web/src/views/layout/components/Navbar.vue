@@ -601,6 +601,7 @@ export default {
     },
     baseCheck () {
       this.phaseNotZero = false
+      this.phaseRing = false
       this.concurrentRules = false
       this.planNotZero = false
       this.patternNotZero = false
@@ -618,6 +619,11 @@ export default {
         this.$message.error(
           this.$t('edge.errorTip.phaseNotZero')
         )
+        return false
+      }
+      this.checkPhaseRing()
+      if (!this.phaseRing) {
+        this.$message.error('环配置应从环1起配，不允出现跳环配置!')
         return false
       }
       this.checkConcurrentRules()
@@ -731,6 +737,20 @@ export default {
         }
         this.phaseNotZero = true
       }
+    },
+    checkPhaseRing () {
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      if (phaseList.length > 0 && phaseList[0].ring !== 1) {
+        this.phaseRing = false
+        return
+      }
+      for (let i = 0; i < phaseList.length - 1; i++) {
+        if (phaseList[i].ring > phaseList[i + 1].ring) {
+          this.phaseRing = false
+          return
+        }
+      }
+      this.phaseRing = true
     },
     checkConcurrentRules () {
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
