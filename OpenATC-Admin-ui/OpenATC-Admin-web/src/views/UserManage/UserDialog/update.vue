@@ -12,7 +12,7 @@
 <template>
   <div class="user-update">
     <el-dialog
-        title="编辑用户"
+        :title="$t('openatc.usermanager.edituser')"
         :visible.sync="dialogFormVisible"
         width="700px"
         @close='closeFormDialog'>
@@ -21,9 +21,9 @@
         ref="tempUser"
         :model="tempUser"
         :rules="rules"
-        label-width="15%">
+        :label-width="$t('openatc.usermanager.labelwidth')">
         <el-form-item
-            label="新密码"
+            :label="$t('openatc.usermanager.newpassword')"
             prop="newpass">
             <el-input
             type="password"
@@ -33,7 +33,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="确认密码"
+            :label="$t('openatc.usermanager.confirmpassword')"
             v-if="tempUser.newpass!==''"
             prop="checkpass">
             <el-input
@@ -54,7 +54,7 @@
             </el-input>
         </el-form-item> -->
         <el-form-item
-            label="角色">
+            :label="$t('openatc.usermanager.role')">
             <el-select v-model="roleNames" multiple placeholder="" style="width:100%">
               <el-option
                 v-for="item in roles"
@@ -65,7 +65,7 @@
           </el-select>
         </el-form-item>
         <el-form-item
-            label="真实姓名"
+            :label="$t('openatc.usermanager.realname')"
             prop="nick_name">
             <el-input
             type="text"
@@ -74,7 +74,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="组织机构"
+            :label="$t('openatc.usermanager.organization')"
             prop="organization">
             <el-input
             type="text"
@@ -84,7 +84,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="电话"
+            :label="$t('openatc.usermanager.telno')"
             prop="mobile_phone">
             <el-input
             type="text"
@@ -93,7 +93,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="邮箱"
+            :label="$t('openatc.usermanager.email')"
             prop="email">
             <el-input
             type="text"
@@ -105,8 +105,8 @@
         <div
         slot="footer"
         class="dialog-footer">
-            <el-button @click="resetForm('tempUser')">取消</el-button>
-            <el-button type="primary" @click="updateUser">确定</el-button>
+            <el-button @click="resetForm('tempUser')">{{$t('openatc.button.Cancel')}}</el-button>
+            <el-button type="primary" @click="updateUser">{{$t('openatc.button.OK')}}</el-button>
         </div>
     </el-dialog>
     <choose-organization-dialog

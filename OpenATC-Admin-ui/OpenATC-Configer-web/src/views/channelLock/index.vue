@@ -106,10 +106,12 @@
           align="center">
           </el-table-column>
           <el-table-column prop="desc" label="通道信息" align="center">
+          </el-table-column>
+          <!-- <el-table-column prop="desc" label="通道信息" align="center">
             <template slot-scope="scope">
               <el-input size="small" v-model="scope.row.desc"></el-input>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           label="状态"
           align="center">

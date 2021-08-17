@@ -21,7 +21,7 @@
         <el-input
             @keyup.enter.native="handleFilter"
             v-model="schfilter"
-            placeholder="输入关键字搜索"
+            :placeholder="$t('openatc.common.searchplaceholder')"
             prefix-icon="el-icon-search"
             style="width: 200px;"/>
       </el-form-item>
@@ -85,7 +85,7 @@
   </div>
   <add ref="addChild"></add>
   <update ref="updateChild"></update>
-  <Messagebox :visible="messageboxVisible" text="是否删除此用户?" @cancle="cancle" @ok="ok"/>
+  <Messagebox :visible="messageboxVisible" :text="$t('openatc.usermanager.deleteuser')" @cancle="cancle" @ok="ok"/>
 </div>
 </template>
 

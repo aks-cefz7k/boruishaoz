@@ -92,7 +92,14 @@ const en = {
       'role': 'role',
       'telno': 'telno',
       'email': 'email',
-      'operation': 'oper'
+      'operation': 'oper',
+      'password': 'Password',
+      'confirmpassword': 'Confirm Password',
+      'newpassword': 'New Password',
+      'edituser': 'Edit User',
+      'adduser': 'Add User',
+      'deleteuser': 'Delete This User?',
+      'labelwidth': '25%'
     },
     'greenwaveoptimize': {
       'addplan': 'Click the Add button to add the greenwave coordination plan',
@@ -128,6 +135,16 @@ const en = {
       'widthmeter': 'width（m）',
       'forward': 'forward',
       'back': 'back'
+    },
+    'record': {
+      'user': 'Operator',
+      'updatetime': 'Updatetime',
+      'originadress': 'Source',
+      'deviceid': 'Deviceid',
+      'messagetype': 'Infotype',
+      'reponsestatus': 'Responsestatus',
+      'opera': 'Opera',
+      'export': 'Export'
     }
   }
 }

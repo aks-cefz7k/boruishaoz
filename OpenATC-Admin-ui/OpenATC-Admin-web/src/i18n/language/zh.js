@@ -92,7 +92,14 @@ const zh = {
       'role': '角色',
       'telno': '电话',
       'email': '邮箱',
-      'operation': '操作'
+      'operation': '操作',
+      'password': '密码',
+      'confirmpassword': '确认密码',
+      'newpassword': '新密码',
+      'edituser': '编辑用户',
+      'adduser': '添加用户',
+      'deleteuser': '是否删除此用户?',
+      'labelwidth': '15%'
     },
     'greenwaveoptimize': {
       'addplan': '点击添加按钮添加绿波协调计划',
@@ -128,6 +135,16 @@ const zh = {
       'widthmeter': '宽度（m）',
       'forward': '上行',
       'back': '下行'
+    },
+    'record': {
+      'user': '用户',
+      'updatetime': '更新时间',
+      'originadress': '源地址',
+      'deviceid': '设备ID',
+      'messagetype': '消息类型',
+      'reponsestatus': '返回状态',
+      'opera': '操作',
+      'export': '导出'
     }
   }
 }
