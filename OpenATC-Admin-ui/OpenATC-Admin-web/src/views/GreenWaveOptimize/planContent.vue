@@ -14,7 +14,7 @@
   <div class="mask" v-if="maskVisible" @click ="clickMask"></div>
   <div class="btnGroup">
     <!-- <el-button class="btn" type="primary" @click="Download">下载</el-button> -->
-    <el-button class="btn" type="primary" @click="handleCreate">生成</el-button>
+    <el-button class="btn" type="primary" @click="handleCreate">{{$t('openatc.greenwaveoptimize.generate')}}</el-button>
     <div class="editbtn" :style="{zIndex: zIndexObj.editZIndex}">
       <el-popover placement="top-start" trigger="manual" v-model="maskVisible" width="290">
         <div class="tipContent">
@@ -23,7 +23,7 @@
           </div>
           <div class="text">{{$t('openatc.greenwaveoptimize.createconfig')}}</div>
         </div>
-        <button slot="reference" class="btn" @click="handleEdit" ref="editbtn">编辑</button>
+        <button slot="reference" class="btn" @click="handleEdit" ref="editbtn">{{$t('openatc.greenwaveoptimize.edit')}}</button>
       </el-popover>
     </div>
   </div>
@@ -35,11 +35,11 @@
     <el-tab-pane label="时距图" name="first">
       <PlanChart ref="planchart"/>
     </el-tab-pane>
-    <el-tab-pane label="方案" name="second">
+    <el-tab-pane :label="$t('openatc.greenwaveoptimize.pattern')" name="second">
       <PatternTable ref="patterntable"/>
     </el-tab-pane>
   </el-tabs>
-  <Messagebox :visible="messageboxVisible" text="确认下载方案？" @cancle="cancle" @ok="ok"/>
+  <Messagebox :visible="messageboxVisible" :text="$t('openatc.greenwaveoptimize.confirmdownloadpattern')" @cancle="cancle" @ok="ok"/>
 </div>
 </template>
 

@@ -24,22 +24,22 @@
           <span>{{scope.$index+1}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="设备ID" minWidth="40">
+      <el-table-column align="center" :label="$t('openatc.greenwaveoptimize.deviceid')" minWidth="40">
         <template slot-scope="scope">
           <span>{{scope.row.intersectionid}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="方案" prop="desc">
+      <el-table-column align="center" :label="$t('openatc.greenwaveoptimize.pattern')" prop="desc">
         <!-- <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"></el-input>
         </template> -->
       </el-table-column>
-      <el-table-column  align="center" label="相位差" prop="offset">
+      <el-table-column  align="center" :label="$t('openatc.greenwaveoptimize.offset')" prop="offset">
         <template slot-scope="scope">
           <el-input size="small" v-model.number="scope.row.offset"></el-input>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="周期" prop="cycle">
+      <el-table-column align="center" :label="$t('openatc.greenwaveoptimize.cycle')" prop="cycle">
       </el-table-column>
     </el-table>
   </div>

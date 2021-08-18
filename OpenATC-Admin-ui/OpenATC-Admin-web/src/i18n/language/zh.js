@@ -40,7 +40,14 @@ const zh = {
       'usermanager': '用户管理',
       'greenwaveoptimize': '绿波协调',
       'operationrecord': '操作记录',
-      'organization': '组织机构'
+      'organization': '组织机构',
+      'realname': '真实姓名',
+      'telno': '联系电话',
+      'email': '电子邮箱',
+      'changepass': '修改密码',
+      'about': '关于',
+      'signout': '退出',
+      'language': '语言'
     },
     'home': {
       'devicestatus': '设备状态',
@@ -134,7 +141,12 @@ const zh = {
       'distancemeter': '距离（m）',
       'widthmeter': '宽度（m）',
       'forward': '上行',
-      'back': '下行'
+      'back': '下行',
+      'generate': '生成',
+      'edit': '编辑',
+      'confirmdownloadpattern': '确认下载此方案?',
+      'offset': '相位差',
+      'cycle': '周期'
     },
     'record': {
       'user': '用户',

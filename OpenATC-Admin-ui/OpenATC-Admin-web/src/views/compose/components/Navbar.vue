@@ -40,27 +40,27 @@
             </el-dropdown-item>
             <el-dropdown-item divided disabled>
               <div class="organization">
-                <div class="laber-name">组织机构</div>
+                <div class="laber-name">{{$t('openatc.main.organization')}}</div>
                 <div class="laber-value">{{userInfo.organization}}</div>
               </div>
               <div class="real-name">
-                <div class="laber-name">真实姓名</div>
+                <div class="laber-name">{{$t('openatc.main.realname')}}</div>
                 <div class="laber-value">{{userInfo.nick_name}}</div>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided disabled>
               <div class="organization">
-                <div class="laber-name">联系电话</div>
+                <div class="laber-name">{{$t('openatc.main.telno')}}</div>
                 <div class="laber-value">{{userInfo.mobile_phone}}</div>
               </div>
               <div class="real-name">
-                <div class="laber-name">电子邮箱</div>
+                <div class="laber-name">{{$t('openatc.main.email')}}</div>
                 <div class="laber-value">{{userInfo.email}}</div>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item divided command="a">修改密码</el-dropdown-item>
-            <el-dropdown-item command="b">关于</el-dropdown-item>
-            <el-dropdown-item command="c">退出</el-dropdown-item>
+            <el-dropdown-item divided command="a">{{$t('openatc.main.changepass')}}</el-dropdown-item>
+            <el-dropdown-item command="b">{{$t('openatc.main.about')}}</el-dropdown-item>
+            <el-dropdown-item command="c">{{$t('openatc.main.signout')}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -68,7 +68,7 @@
     <div class="switch-language">
         <el-dropdown trigger="click" @command="switchLanguage">
           <span class="el-dropdown-link">
-            {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Ch">中文</el-dropdown-item>
