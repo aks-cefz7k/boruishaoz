@@ -107,6 +107,9 @@ export default {
     this.rightPartHeight = (154 / 1080 * viewH).toFixed(0) + 'px'
     this.rightPartPaddingTop = (88 / 1080 * viewH).toFixed(0) + 'px'
   },
+  beforeUpdate () {
+    this.initData()
+  },
   mounted () {
     this.initData()
     let viewH = document.documentElement.clientHeight - 40

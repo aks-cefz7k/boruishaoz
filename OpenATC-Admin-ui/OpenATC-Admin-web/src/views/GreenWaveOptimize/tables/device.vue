@@ -44,11 +44,13 @@
           </el-table-column>
           <el-table-column
             prop="agentid"
+            width="120"
             :label="$t('openatc.greenwaveoptimize.deviceid')"
             align="center">
           </el-table-column>
            <el-table-column
             prop="name"
+            width="120"
             :label="$t('openatc.greenwaveoptimize.devicename')"
             align="center">
           </el-table-column>
@@ -73,7 +75,7 @@
             :label="$t('openatc.greenwaveoptimize.describe')"
             align="center">
           </el-table-column>
-          <el-table-column :label="$t('openatc.greenwaveoptimize.operation')" align="center">
+          <el-table-column :label="$t('openatc.greenwaveoptimize.operation')" align="center" width="120">
             <template slot-scope="scope">
               <el-button type="text" @click="handleDelete(scope.$index)">{{$t('openatc.common.delete')}}</el-button>
             </template>

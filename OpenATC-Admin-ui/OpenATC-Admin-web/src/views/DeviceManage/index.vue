@@ -96,11 +96,12 @@
           </el-table-column>
           <el-table-column
           prop="lastTime"
+          width="150"
           :label="$t('openatc.devicemanager.lastupdatetime')"
           sortable
           align="center">
           </el-table-column>
-          <el-table-column :label="$t('openatc.devicemanager.operation')" align="center">
+          <el-table-column :label="$t('openatc.devicemanager.operation')" align="center" width="180">
           <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">{{$t('openatc.common.edit')}}</el-button>
               <el-button type="text" @click="handleToDetail(scope.row)">{{$t('openatc.common.detail')}}</el-button>
