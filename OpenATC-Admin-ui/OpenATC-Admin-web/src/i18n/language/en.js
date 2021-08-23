@@ -119,7 +119,7 @@ const en = {
       'addroute': 'New Optimize Scheme',
       'editroute': 'Edit Optimize Scheme',
       'name': 'Name',
-      'routename': 'Route Name',
+      'routename': 'Scheme Name',
       'isClose': 'Configuration not saved, are you sure to close?',
       'coordinateparamconfig': 'Coordinate Parameter Configuration',
       'device': 'Device',

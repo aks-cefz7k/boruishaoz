@@ -67,6 +67,9 @@ export default {
       this.$emit('cancle')
     }
   },
+  beforeUpdate () {
+    this.modalTitle = this.$t('openatc.common.tipsmodaltitle')
+  },
   mounted () {
   }
 }
