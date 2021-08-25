@@ -18,7 +18,6 @@
             height="350"
             stripe
             size="small"
-            :max-height="tableHeight"
             style="width: 100%"
             v-loading.body="listLoading"
             id="footerBtn">
@@ -82,6 +81,7 @@ export default {
   },
   data () {
     return {
+      listLoading: false,
       dialogTableVisible: false,
       tableData: [{
         'm_wFaultID': 1000,
@@ -576,7 +576,6 @@ export default {
   },
   methods: {
     onShowDetailFault () {
-      debugger
       this.dialogTableVisible = !this.dialogTableVisible
     }
   }

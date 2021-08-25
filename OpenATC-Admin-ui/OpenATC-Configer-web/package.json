@@ -22,6 +22,7 @@
   "dependencies": {
     "ajv": "^6.0.0",
     "axios": "0.17.1",
+    "echarts": "^4.9.0",
     "element-theme": "^2.0.1",
     "element-ui": "^2.13.0",
     "generate-asset-webpack-plugin": "^0.3.0",

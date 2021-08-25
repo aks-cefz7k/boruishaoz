@@ -45,7 +45,8 @@ const zh = {
       'deviceInfo': '设备信息',
       'user': '用户',
       'dailyRecord': '日志',
-      'controlPanel': '手动面板'
+      'controlPanel': '手动面板',
+      'statistics': '统计'
     },
     'main': {
       'main': '目录',

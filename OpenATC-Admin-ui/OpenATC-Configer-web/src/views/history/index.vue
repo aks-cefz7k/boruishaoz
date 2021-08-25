@@ -121,7 +121,6 @@ export default {
       urlObject.revokeObjectURL(url)
     },
     showDetailFault () {
-      debugger
       let detailFault = this.$refs.detailfault
       detailFault.onShowDetailFault()
     }

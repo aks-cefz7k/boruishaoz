@@ -45,7 +45,8 @@ const en = {
       'deviceInfo': 'deviceInfo',
       'user': 'User',
       'dailyRecord': 'DailyRecord',
-      'controlPanel': 'ControlPanel'
+      'controlPanel': 'ControlPanel',
+      'statistics': 'Statistics'
     },
     'main': {
       'main': 'Main',

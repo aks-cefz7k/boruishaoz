@@ -20,6 +20,7 @@ import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import App from './App'
 import router from './router'
 import store from './store'
+import Echarts from 'echarts'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -35,6 +36,8 @@ Vue.use(ElementUI, {
 })
 
 Vue.config.productionTip = false
+Vue.prototype.$echarts = Echarts
+Vue.use(Echarts)
 
 // mian test hg
 /* eslint-disable no-new */
