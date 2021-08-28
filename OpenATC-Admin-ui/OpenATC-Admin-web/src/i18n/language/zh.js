@@ -27,7 +27,8 @@ const zh = {
       'updatesuccess': '更新成功!',
       'updatecancel': '更新取消!',
       'devicenotonline': '设备不在线！',
-      'tipsmodaltitle': '提示'
+      'tipsmodaltitle': '提示',
+      'placeholder': '请选择'
     },
     'button': {
       'OK': '确定',
@@ -146,7 +147,15 @@ const zh = {
       'edit': '编辑',
       'confirmdownloadpattern': '确认下载此方案?',
       'offset': '相位差',
-      'cycle': '周期'
+      'cycle': '周期',
+      'timespace': '时距图',
+      'coordinationstrategy': '协调策略',
+      'coordinationdirection': '协调方向',
+      'keyintersection': '关键路口',
+      'upspeed': '上行速度(km/h)',
+      'downspeed': '下行速度(km/h)',
+      'up': '上行',
+      'down': '下行'
     },
     'record': {
       'user': '用户',

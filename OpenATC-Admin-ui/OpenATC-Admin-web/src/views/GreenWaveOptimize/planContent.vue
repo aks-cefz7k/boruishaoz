@@ -32,7 +32,7 @@
     :routeData="routeData"
     @closeDrawer="closeDrawer" />
   <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane label="时距图" name="first">
+    <el-tab-pane :label="$t('openatc.greenwaveoptimize.timespace')" name="first">
       <PlanChart ref="planchart"/>
     </el-tab-pane>
     <el-tab-pane :label="$t('openatc.greenwaveoptimize.pattern')" name="second">

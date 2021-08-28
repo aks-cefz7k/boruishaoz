@@ -27,14 +27,15 @@ const en = {
       'updatesuccess': 'Update Success!',
       'updatecancel': 'Update Canceled!',
       'devicenotonline': 'Device not online！',
-      'tipsmodaltitle': 'Tips'
+      'tipsmodaltitle': 'Tips',
+      'placeholder': 'Select'
     },
     'button': {
       'OK': 'OK',
       'Cancel': 'Cancel'
     },
     'main': {
-      'homepage': 'Homepage',
+      'homepage': 'Home',
       'gis': 'GIS',
       'devicemanager': 'Device Manager',
       'usermanager': 'User Manager',
@@ -146,7 +147,15 @@ const en = {
       'edit': 'Edit',
       'confirmdownloadpattern': 'Confirm to download this pattern?',
       'offset': 'Offset',
-      'cycle': 'Cycle'
+      'cycle': 'Cycle',
+      'timespace': 'Time Space',
+      'coordinationstrategy': 'Coordination Strategy',
+      'coordinationdirection': 'Coordination Direction',
+      'keyintersection': 'Key Intersection',
+      'upspeed': 'Up Speed(km/h)',
+      'downspeed': 'Down Speed(km/h)',
+      'up': 'Up',
+      'down': 'Down'
     },
     'record': {
       'user': 'Operator',

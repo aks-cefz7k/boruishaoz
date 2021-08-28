@@ -12,9 +12,9 @@
 <template>
 <div style="overflow: auto;">
   <div class="planchart-top">
-    <div class="coordination-name">协调策略</div>
+    <div class="coordination-name">{{$t('openatc.greenwaveoptimize.coordinationstrategy')}}</div>
     <div class="coordination-select">
-      <el-select v-model="optstrategy" placeholder="请选择" size="small">
+      <el-select v-model="optstrategy" :placeholder="$t('openatc.common.placeholder')" size="small">
         <el-option
           v-for="item in optstrategyOptions"
           :key="item.value"
@@ -23,9 +23,9 @@
         </el-option>
       </el-select>
     </div>
-    <div class="coordination-name" style="margin-left: 40px;">协调方向</div>
+    <div class="coordination-name" style="margin-left: 40px;">{{$t('openatc.greenwaveoptimize.coordinationdirection')}}</div>
     <div class="coordination-select">
-      <el-select v-model="direction" placeholder="请选择" size="small" @change="handleDirection">
+      <el-select v-model="direction" :placeholder="$t('openatc.common.placeholder')" size="small" @change="handleDirection">
         <el-option
           v-for="item in directionOptions"
           :key="item.value"
@@ -34,9 +34,9 @@
         </el-option>
       </el-select>
     </div>
-    <div class="coordination-name" style="margin-left: 40px;">关键路口</div>
+    <div class="coordination-name" style="margin-left: 40px;">{{$t('openatc.greenwaveoptimize.keyintersection')}}</div>
     <div class="coordination-select">
-      <el-select v-model="keyintsid" placeholder="请选择" size="small">
+      <el-select v-model="keyintsid" :placeholder="$t('openatc.common.placeholder')" size="small">
         <el-option
           v-for="item in keyintsidOptions"
           :key="item.value"
@@ -45,11 +45,11 @@
         </el-option>
       </el-select>
     </div>
-    <div class="coordination-name" style="margin-left: 40px;">上行速度(km/h)</div>
+    <div class="coordination-name" style="margin-left: 40px;">{{$t('openatc.greenwaveoptimize.upspeed')}}</div>
     <div class="coordination-select">
       <el-input v-model="upspeed" size="small" @change="handleUpSpeed"></el-input>
     </div>
-    <div class="coordination-name" style="margin-left: 40px;">下行速度(km/h)</div>
+    <div class="coordination-name" style="margin-left: 40px;">{{$t('openatc.greenwaveoptimize.downspeed')}}</div>
     <div class="coordination-select">
       <el-input v-model="downspeed" size="small" @change="handleDownSpeed"></el-input>
     </div>
@@ -58,7 +58,7 @@
     <div class="up-card" v-if="isShowUpCard" style="float: left;">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span class="header-text">上行</span>
+          <span class="header-text">{{$t('openatc.greenwaveoptimize.up')}}</span>
         </div>
         <div class="text item">
           {{'持续时间: ' + green[0].width + 's' }}
@@ -74,7 +74,7 @@
     <div class="up-card" v-if="isShowDownCard" style="float: right;">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span class="header-text">下行</span>
+          <span class="header-text">{{$t('openatc.greenwaveoptimize.down')}}</span>
         </div>
         <div class="text item">
           {{'持续时间: ' + green[0].width + 's' }}
