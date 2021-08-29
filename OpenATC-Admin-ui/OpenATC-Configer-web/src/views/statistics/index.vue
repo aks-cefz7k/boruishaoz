@@ -12,8 +12,9 @@
 <template>
 <div class="statistics">
     <div class="one">
-        <el-button type="primary" size="small" style="margin-left: 10px;">获取设备流量数据</el-button>
-        <el-button type="primary" size="small">导入本地流量文件</el-button>
+        <el-button type="primary" @click="getStatisticsData" size="small" style="margin-left: 10px;">获取设备流量数据</el-button>
+        <el-button type="primary" @click="testSftp" size="small">导入本地流量文件</el-button>
+        <a href="ftp://admin:kedacomIPC@192.168.15.11:21/mnt/TrafficFlowLog/2020-09-22%2000-00.json" download="">FTP下载 </a>
         <div class="statistics-button">
             <el-radio-group v-model="radio">
                 <el-radio-button label="检测器1"></el-radio-button>
@@ -80,7 +81,9 @@
 </template>
 
 <script>
+import { setVolumelog } from '@/api/statistics'
 import echart from 'echarts'
+// import Ftp from 'vinyl-ftp'
 export default {
   name: 'statistics',
   components: {},
@@ -127,6 +130,30 @@ export default {
   created () {
   },
   methods: {
+    getStatisticsData () {
+      let param = {
+        'udiskset': 1,
+        'gainstatus': 1
+      }
+      debugger
+      setVolumelog(param).then((data) => {
+        debugger
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error('设备不在线！')
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        this.software = res.data.data.software
+        this.hardware = res.data.data.hardware
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
     initEcharts () {
       this.historyFlowEcharts = echart.init(document.getElementById('historyFlowEcharts'))
       let _this = this
@@ -170,6 +197,8 @@ export default {
         }]
       }
       this.historyFlowEcharts.setOption(option)
+    },
+    testSftp () {
     }
   }
 }
