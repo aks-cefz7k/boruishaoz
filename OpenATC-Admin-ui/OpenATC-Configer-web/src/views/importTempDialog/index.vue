@@ -12,7 +12,7 @@
 <template>
   <div class="temp-import">
     <el-dialog
-        title="模板数据编辑"
+        :title="$t('edge.importTemp.editTemplateData')"
         :visible.sync="visible"
         width="1070px"
         :modal-append-to-body="false"
@@ -21,32 +21,32 @@
          <el-row>
           <el-col :span="13">
                <el-row>
-                   <el-col :span="4">
-                      <div class="sort-name">模板</div>
+                   <el-col :span="5">
+                      <div class="sort-name">{{$t('edge.importTemp.template')}}</div>
                    </el-col>
-                   <el-col :span="20">
+                   <el-col :span="19">
                       <el-form
                         ref="template"
                         :model="templateInfo"
-                        label-width="80px">
+                        label-width="95px">
                             <el-form-item
-                                label="路口形状"
+                                :label="$t('edge.importTemp.crossShape')"
                                 prop="shape">
-                                <el-select size="small" v-model="shape" placeholder="" style="width: 367px">
+                                <el-select size="small" v-model="shape" placeholder="" style="width: 350px">
                                     <el-option v-for="shape in shapeList" :key="shape" :label="CrossShape.get(shape)" :value="shape"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item
-                                label="名称"
+                                :label="$t('edge.importTemp.name')"
                                 prop="intersection">
-                                <el-select size="small" v-model="intersection" placeholder="" style="width: 367px">
+                                <el-select size="small" v-model="intersection" placeholder="" style="width: 350px">
                                     <el-option v-for="temp in tempList" :key="temp" :label="TempMap.get(temp)" :value="temp"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item
-                                label="相位数量"
+                                :label="$t('edge.importTemp.phaseCount')"
                                 prop="count">
-                                <el-select size="small" v-model="phaseCount" placeholder="" style="width: 367px" :disabled="shape !== '999'">
+                                <el-select size="small" v-model="phaseCount" placeholder="" style="width: 350px" :disabled="shape !== '999'">
                                   <el-option v-for="option in phaseOptions" :key="option" :label="option" :value="option"></el-option>
                                 </el-select>
                             </el-form-item>
@@ -54,31 +54,31 @@
                    </el-col>
                </el-row>
                <el-row>
-                   <el-col :span="4">
-                      <div class="sort-name">相位</div>
+                   <el-col :span="5">
+                      <div class="sort-name">{{$t('edge.importTemp.phase')}}</div>
                    </el-col>
-                   <el-col :span="20">
+                   <el-col :span="19">
                       <el-form
                         ref="phase"
                         :inline="true"
-                        label-width="80px"
+                        label-width="95px"
                         :model="templateInfo">
                             <el-form-item
-                            label="绿闪"
+                            :label="$t('edge.importTemp.greenClear')"
                             prop="flashgreen">
                             <el-select size="small" v-model="templateInfo.phase.flashgreen" placeholder="">
                               <el-option v-for="option in greenOptions" :key="option" :label="option + 's'" :value="option"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                            label="黄灯"
+                            :label="$t('edge.importTemp.yellow')"
                             prop="yellow" class="ipLabel">
                             <el-select size="small" v-model="templateInfo.phase.yellow" placeholder="">
                               <el-option v-for="option in yellowOptions" :key="option" :label="option + 's'" :value="option"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                            label="红灯清空"
+                            :label="$t('edge.importTemp.redClear')"
                             prop="redclear" class="portLabel">
                             <el-select size="small" v-model="templateInfo.phase.redclear" placeholder="">
                              <el-option v-for="option in redOptions" :key="option" :label="option + 's'" :value="option"></el-option>
@@ -88,24 +88,24 @@
                    </el-col>
                </el-row>
                <el-row>
-                   <el-col :span="4">
-                      <div class="sort-name">方案</div>
+                   <el-col :span="5">
+                      <div class="sort-name">{{$t('edge.importTemp.pattern')}}</div>
                    </el-col>
-                   <el-col :span="20">
+                   <el-col :span="19">
                       <el-form
                         ref="pattern"
                         :inline="true"
-                        label-width="80px"
+                        label-width="95px"
                         :model="templateInfo">
                           <el-form-item
-                            label="数量"
+                            :label="$t('edge.importTemp.count')"
                             prop="count">
                             <el-select size="small" v-model="templateInfo.pattern.count" placeholder="">
                               <el-option v-for="option in defaultOptions" :key="option" :label="option" :value="option"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                            label="绿信比"
+                            :label="$t('edge.importTemp.split')"
                             prop="split">
                             <el-input-number size="small" v-model="templateInfo.pattern.split" :min="0" :max="255"></el-input-number>
                         </el-form-item>
@@ -113,17 +113,17 @@
                    </el-col>
                </el-row>
                <el-row>
-                   <el-col :span="4">
-                      <div class="sort-name">计划</div>
+                   <el-col :span="5">
+                      <div class="sort-name">{{$t('edge.importTemp.plan')}}</div>
                    </el-col>
-                   <el-col :span="20">
+                   <el-col :span="19">
                       <el-form
                         ref="plan"
                         :inline="true"
-                        label-width="80px"
+                        label-width="95px"
                         :model="templateInfo">
                           <el-form-item
-                            label="数量"
+                            :label="$t('edge.importTemp.count')"
                             prop="count">
                             <el-select size="small" v-model="templateInfo.plan.count" placeholder="">
                               <el-option v-for="option in defaultOptions" :key="option" :label="option" :value="option"></el-option>
@@ -133,24 +133,24 @@
                    </el-col>
                </el-row>
                <el-row>
-                   <el-col :span="4">
-                      <div class="sort-name">日期</div>
+                   <el-col :span="5">
+                      <div class="sort-name">{{$t('edge.importTemp.date')}}</div>
                    </el-col>
-                   <el-col :span="20">
+                   <el-col :span="19">
                       <el-form
                         ref="date"
                         :inline="true"
-                        label-width="80px"
+                        label-width="95px"
                         :model="templateInfo">
                          <el-form-item
-                            label="数量"
+                            :label="$t('edge.importTemp.count')"
                             prop="count">
                             <el-select size="small" v-model="templateInfo.date.count" placeholder="">
                               <el-option v-for="option in defaultOptions" :key="option" :label="option" :value="option"></el-option>
                             </el-select>
                           </el-form-item>
                           <el-form-item
-                              label="全年"
+                              :label="$t('edge.importTemp.annual')"
                               prop="allyear">
                               <el-switch size="small" v-model="templateInfo.date.allyear"></el-switch>
                           </el-form-item>
@@ -166,8 +166,8 @@
         <div
         slot="footer"
         class="footer">
-            <el-button @click="handleClose()">取消</el-button>
-            <el-button type="primary" @click="submitDeviceInfo()">确定</el-button>
+            <el-button @click="handleClose()">{{$t('edge.button.Cancel')}}</el-button>
+            <el-button type="primary" @click="submitDeviceInfo()">{{$t('edge.button.OK')}}</el-button>
         </div>
     </el-dialog>
   </div>
@@ -228,12 +228,12 @@ export default {
       visible: this.imortVisible,
       list: [], // 模板列表
       cate: {}, // 经过分类的模板列表
-      CrossShape: new Map([['100', '丁字路口'], ['101', '十字路口'], ['102', '环形路口'], ['110', '其他形状路口'], ['999', '自定义路口']]),
-      CrossIntersection: new Map([['000', ''], ['001', '东向'], ['002', '南向'], ['003', '西向'], ['004', '北向']]),
-      CrossPhase: new Map([['00', ''], ['01', '一相位'], ['02', '二相位'], ['03', '三相位'],
-        ['04', '四相位'], ['05', '五相位'], ['06', '六相位'], ['07', '七相位'], ['08', '八相位'], ['09', '九相位'],
-        ['10', '十相位'], ['11', '十一相位'], ['12', '十二相位'], ['13', '十三相位'], ['14', '十四相位'],
-        ['15', '十五相位'], ['16', '十六相位']]),
+      CrossShape: new Map([['100', this.$t('edge.importTemp.crossShapes.tjunction')], ['101', this.$t('edge.importTemp.crossShapes.crossroads')], ['102', this.$t('edge.importTemp.crossShapes.Roundabout')], ['110', this.$t('edge.importTemp.crossShapes.otherIntersections')], ['999', this.$t('edge.importTemp.crossShapes.customIntersection')]]),
+      CrossIntersection: new Map([['000', ''], ['001', this.$t('edge.importTemp.crossIntersection.eastward')], ['002', this.$t('edge.importTemp.crossIntersection.southward')], ['003', this.$t('edge.importTemp.crossIntersection.westward')], ['004', this.$t('edge.importTemp.crossIntersection.northward')]]),
+      CrossPhase: new Map([['00', ''], ['01', this.$t('edge.importTemp.crossPhase.onePhase')], ['02', this.$t('edge.importTemp.crossPhase.twoPhase')], ['03', this.$t('edge.importTemp.crossPhase.threePhase')],
+        ['04', this.$t('edge.importTemp.crossPhase.fourPhase')], ['05', this.$t('edge.importTemp.crossPhase.fivePhase')], ['06', this.$t('edge.importTemp.crossPhase.sixPhase')], ['07', this.$t('edge.importTemp.crossPhase.sevenPhase')], ['08', this.$t('edge.importTemp.crossPhase.eightPhase')], ['09', this.$t('edge.importTemp.crossPhase.ninePhase')],
+        ['10', this.$t('edge.importTemp.crossPhase.tenPhase')], ['11', this.$t('edge.importTemp.crossPhase.elevenPhase')], ['12', this.$t('edge.importTemp.crossPhase.twelvePhase')], ['13', this.$t('edge.importTemp.crossPhase.thirteenPhase')], ['14', this.$t('edge.importTemp.crossPhase.fourteenPhase')],
+        ['15', this.$t('edge.importTemp.crossPhase.fifteenPhase')], ['16', this.$t('edge.importTemp.crossPhase.sixteenPhase')]]),
       shapeList: [], // 路口形状可选项
       tempList: [], // 模板名称可选项
       TempMap: new Map(), // 模板字符串与模板名称映射
@@ -339,7 +339,7 @@ export default {
         let phasecount = Number(this.deleteZero(arr[2]))
         let crossShapeName = this.CrossShape.get(arr[0])
         let phasecountstr = this.CrossPhase.get(arr[2])
-        let crosstempstr = this.CrossShape.get(arr[0]) + this.CrossIntersection.get(arr[1]) + this.CrossPhase.get(arr[2])
+        let crosstempstr = this.CrossShape.get(arr[0]) + ' ' + this.CrossIntersection.get(arr[1]) + ' ' + this.CrossPhase.get(arr[2])
         if (!this.cate[arr[0]]) {
           this.cate[arr[0]] = []
         }

@@ -11,7 +11,7 @@
  **/
 <template>
   <div>
-    <Messagebox :visible="readDiologVisible" :text="`是否载入设备${copiedAgentid}的方案信息，到当前设备配置中 ?`" @cancle="cancleRead" @ok="handleRead"/>
+    <Messagebox :visible="readDiologVisible" :text="`${$t('edge.main.readDevice')}${copiedAgentid} ${$t('edge.main.readPattern')}`" @cancle="cancleRead" @ok="handleRead"/>
     <ImportTempDialog ref="importTemp" v-if="importVisible" :imortVisible="importVisible" @closeImportTemp="closeImportTemp"/>
     <el-menu
       class="navbar"
@@ -290,7 +290,7 @@ export default {
     },
     createNotify () {
       this.curCopyAgentid = JSON.parse(window.sessionStorage.getItem('curTagDevInfo')) === null ? '' : JSON.parse(window.sessionStorage.getItem('curTagDevInfo')).agentid
-      let tip = `设备${this.curCopyAgentid}的方案已被复制`
+      let tip = `${this.$t('edge.main.copyDevice')} ${this.curCopyAgentid} ${this.$t('edge.main.copyPattern')}`
       window.sessionStorage.setItem('copiedAgentid', this.curCopyAgentid)
       if (this.notify !== undefined) {
         // 短时间内点击两次复制，前一个复制框还未关闭的情况下，则关闭前一个复制框
@@ -298,7 +298,7 @@ export default {
       }
       const h = this.$createElement
       this.notify = this.$notify({
-        title: '提示',
+        title: this.$t('edge.main.tip'),
         duration: 5000,
         offset: 40,
         onClose: () => {

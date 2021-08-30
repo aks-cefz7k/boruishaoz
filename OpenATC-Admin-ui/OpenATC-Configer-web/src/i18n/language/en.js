@@ -58,7 +58,12 @@ const en = {
       'export': 'Export',
       'importtemplate': 'Import Template',
       'copy': 'Copy',
+      'copyDevice': 'Device',
+      'copyPattern': 'pattern already copied',
+      'tip': 'Tips',
       'read': 'Read',
+      'readDevice': 'Whether to load device',
+      'readPattern': 'pattern into the current device configuration ?',
       'title': 'Welcome to KISS Edge Manage Center',
       'changelanguage': 'Switch Language',
       'agentid': 'AGENTID'
@@ -234,6 +239,10 @@ const en = {
       'currentvolume': 'CurrentVolume',
       'time': 'Time'
     },
+    'button': {
+      'OK': 'OK',
+      'Cancel': 'Cancel'
+    },
     'common': {
       'confirm': 'Confirm',
       'query': 'Query',
@@ -274,7 +283,8 @@ const en = {
       'downloadandrun': 'Submit and run successfully!',
       'editagentid': 'Edit AgentID',
       'querysucess': 'Query Success!',
-      'setup': 'setup'
+      'setup': 'setup',
+      'tipsmodaltitle': 'Tips'
     },
     'login': {
       'title': 'KISS Edge Manage Center',
@@ -296,6 +306,54 @@ const en = {
       'overlapRules': 'The parent phase in the overlap cannot be empty！',
       'manualpanel': 'The manualpanel cannot be empty！',
       'momthIsNull': 'Month cannot be empty in date！'
+    },
+    'importTemp': {
+      'editTemplateData': 'Edit Template Data',
+      'template': 'Template',
+      'crossShape': 'Cross Shape',
+      'name': 'Name',
+      'phaseCount': 'Phase Count',
+      'phase': 'Phase',
+      'greenClear': 'GreenClear',
+      'yellow': 'Yellow',
+      'redClear': 'RedClear',
+      'pattern': 'Pattern',
+      'count': 'Count',
+      'split': 'Split',
+      'plan': 'Plan',
+      'date': 'Date',
+      'annual': 'Annual',
+      'crossShapes': {
+        'crossroads': 'Crossroads',
+        'tjunction': 'T-junction',
+        'roundabout': 'Roundabout',
+        'otherIntersections': 'OtherIntersections',
+        'customIntersection': 'CustomIntersection'
+      },
+      'crossIntersection': {
+        'eastward': 'Eastward',
+        'westward': 'Westward',
+        'southward': 'Southward',
+        'northward': 'Northward'
+      },
+      'crossPhase': {
+        'onePhase': 'OnePhase',
+        'twoPhase': 'TwoPhase',
+        'threePhase': 'ThreePhase',
+        'fourPhase': 'FourPhase',
+        'fivePhase': 'FivePhase',
+        'sixPhase': 'SixPhase',
+        'sevenPhase': 'SevenPhase',
+        'eightPhase': 'EightPhase',
+        'ninePhase': 'NinePhase',
+        'tenPhase': 'TenPhase',
+        'elevenPhase': 'ElevenPhase',
+        'twelvePhase': 'TwelvePhase',
+        'thirteenPhase': 'ThirteenPhase',
+        'fourteenPhase': 'FourteenPhase',
+        'fifteenPhase': 'FifteenPhase',
+        'sixteenPhase': 'SixteenPhase'
+      }
     }
   }
 }

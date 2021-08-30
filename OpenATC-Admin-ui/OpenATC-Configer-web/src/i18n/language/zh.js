@@ -58,7 +58,12 @@ const zh = {
       'export': '导出文件',
       'importtemplate': '从模板导入',
       'copy': '复制参数',
+      'copyDevice': '设备',
+      'copyPattern': '的方案已被复制',
+      'tip': '提示',
       'read': '读取',
+      'readDevice': '是否载入设备',
+      'readPattern': '的方案信息，到当前设备配置中 ?',
       'title': '欢迎进入配置管理中心',
       'changelanguage': '切换语言',
       'agentid': '设备ID'
@@ -243,6 +248,10 @@ const zh = {
       'currentvolume': '实时流量',
       'time': '时间'
     },
+    'button': {
+      'OK': '确定',
+      'Cancel': '取消'
+    },
     'common': {
       'confirm': '确认',
       'query': '查询',
@@ -283,7 +292,8 @@ const zh = {
       'downloadandrun': '提交并运行成功！',
       'editagentid': '编辑设备ID',
       'querysucess': '查询成功！',
-      'setup': '设置'
+      'setup': '设置',
+      'tipsmodaltitle': '提示'
     },
     'login': {
       'title': '配置管理中心',
@@ -306,6 +316,54 @@ const zh = {
       'manualpanel': '手动面板数据不能为空',
       'momthIsNull': '日期里月份不能为空！',
       'concurrentRules': '相位参数中配置了多环时，并发相位不能为空！'
+    },
+    'importTemp': {
+      'editTemplateData': '模板数据编辑',
+      'template': '模板',
+      'crossShape': '路口形状',
+      'name': '名称',
+      'phaseCount': '相位数量',
+      'phase': '相位',
+      'greenClear': '绿闪',
+      'yellow': '黄灯',
+      'redClear': '红灯清空',
+      'pattern': '方案',
+      'count': '数量',
+      'split': '绿信比',
+      'plan': '计划',
+      'date': '日期',
+      'annual': '全年',
+      'crossShapes': {
+        'crossroads': '十字路口',
+        'tjunction': '丁字路口',
+        'roundabout': '环形路口',
+        'otherIntersections': '其他形状路口',
+        'customIntersection': '自定义路口'
+      },
+      'crossIntersection': {
+        'eastward': '东向',
+        'westward': '西向',
+        'southward': '南向',
+        'northward': '北向'
+      },
+      'crossPhase': {
+        'onePhase': '一相位',
+        'twoPhase': '二相位',
+        'threePhase': '三相位',
+        'fourPhase': '四相位',
+        'fivePhase': '五相位',
+        'sixPhase': '六相位',
+        'sevenPhase': '七相位',
+        'eightPhase': '八相位',
+        'ninePhase': '九相位',
+        'tenPhase': '十相位',
+        'elevenPhase': '十一相位',
+        'twelvePhase': '十二相位',
+        'thirteenPhase': '十三相位',
+        'fourteenPhase': '十四相位',
+        'fifteenPhase': '十五相位',
+        'sixteenPhase': '十六相位'
+      }
     }
   }
 }
