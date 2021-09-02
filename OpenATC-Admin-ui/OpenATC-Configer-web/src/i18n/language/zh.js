@@ -98,7 +98,8 @@ const zh = {
       'ss': '南直行',
       'sl': '南左转',
       'sr': '南右转',
-      'sb': '南掉头'
+      'sb': '南掉头',
+      'redyellow': '红黄'
     },
     'overlap': {
       'desc': '描述',
@@ -115,7 +116,18 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此方案？',
       'firstphase': '请先创建相位!',
-      'mostdata': '最多只能创建108条数据!'
+      'mostdata': '最多只能创建108条数据!',
+      'ring': '环',
+      'modeOption1': '其他',
+      'modeOption2': '无',
+      'modeOption3': '最小绿请求',
+      'modeOption4': '最大绿请求',
+      'modeOption5': '行人请求',
+      'modeOption6': '最大绿和行人请求',
+      'modeOption7': '忽略相位',
+      'coordphaseOption1': '协调相位',
+      'coordphaseOption2': '关键相位',
+      'coordphaseOption4': '固定相位'
     },
     'plan': {
       'tipcontext': '请输入计划名！',
@@ -128,7 +140,16 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此计划？',
       'tabtip': '确认删除此标签？',
-      'mostdata': '最多只能创建48条数据!'
+      'mostdata': '最多只能创建48条数据!',
+      'controltype': '控制方式',
+      'ControlOption1': '黄闪',
+      'ControlOption2': '全红',
+      'ControlOption3': '关灯',
+      'ControlOption4': '步进',
+      'ControlOption5': '定周期控制',
+      'ControlOption6': '单点感应控制',
+      'ControlOption10': '无电缆控制',
+      'ControlOption12': '行人过街控制'
     },
     'date': {
       'desc': '描述',
@@ -180,7 +201,15 @@ const zh = {
       'mostdata': '最多只能创建72条数据！'
     },
     'channellock': {
-      'deleteAlltip': '确认删除所有通道锁定？'
+      'deleteAlltip': '确认删除所有通道锁定？',
+      'starttime': '开始时间',
+      'endtime': '结束时间',
+      'transitiongreenflashtime': '过渡绿闪时间',
+      'transitionyellowtime': '过渡黄灯时间',
+      'channelstats': '通道状态',
+      'channel': '通道',
+      'channelinfo': '通道信息',
+      'status': '状态'
     },
     'channelControl': {
       'recoverysuccess': '恢复成功！',
