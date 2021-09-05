@@ -105,7 +105,7 @@
             </el-dropdown>
       </div>
       <!-- <div class="dividing-line"></div> -->
-      <!-- <div class="switch-language">
+      <div class="switch-language">
         <el-dropdown trigger="click" @command="switchLanguage">
           <span class="el-dropdown-link">
             {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -115,7 +115,7 @@
             <el-dropdown-item command="En">English</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </div> -->
+      </div>
     </el-menu>
     <el-dialog
       :title="$t('edge.plan.tip')"

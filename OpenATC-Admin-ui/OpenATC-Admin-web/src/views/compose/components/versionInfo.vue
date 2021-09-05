@@ -18,7 +18,7 @@
       height="300px"
       @close='closeFormDialog'>
       <div class="banben">
-          <span>版本：</span><span>openatc-admin1.9</span>
+          <span>版本：</span><span>{{version}}</span>
       </div>
       <div class="banben" style="margin-top: 10px;">
           <span>版权所有©1995-2020苏州科达科技股份有限公司</span>
@@ -41,7 +41,8 @@ import licenseinfo from './licenseInfo'
 export default {
   data () {
     return {
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      version: ''
     }
   },
   name: 'versioninfo',
@@ -49,6 +50,10 @@ export default {
   props: {},
   watch: {
     deep: true
+  },
+  created () {
+    let json = require('../../../../static/version.json')
+    this.version = json.version
   },
   methods: {
     showMessage () {

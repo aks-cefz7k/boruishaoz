@@ -13,14 +13,14 @@
   <div class="app-container">
     <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">刷新</el-button>
     <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">导出</el-button>
-    <el-button class="detail-fault" type="primary" size="small" @click="showDetailFault" style="" v-show="activeName === '2'">当前详细灯组故障</el-button>
-    <el-button class="detail-fault" type="primary" size="small" @click="showDetailFault" style="" v-show="activeName === '3'">当前详细车检版故障</el-button>
+    <el-button class="detail-fault" type="primary" size="small" @click="showLedDetailFault" style="" v-show="activeName === '2'">当前详细灯组故障</el-button>
+    <el-button class="detail-fault" type="primary" size="small" @click="showVehDetDetailFault" style="" v-show="activeName === '3'">当前详细车检版故障</el-button>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.value">
       <boardTable ref="boardtable" :activeName="activeName" :tableData="tableData" @getAllFault="getAllFault"></boardTable>
     </el-tab-pane>
   </el-tabs>
-  <detailFault ref="detailfault"></detailFault>
+  <detailFault ref="detailfault" :dialogDetailFault="dialogDetailFault"></detailFault>
   </div>
 </template>
 
@@ -52,7 +52,8 @@ export default {
       }],
       listLoading: false,
       allFault: [],
-      tableData: []
+      tableData: [],
+      dialogDetailFault: []
     }
   },
   created () {
@@ -120,9 +121,30 @@ export default {
       // 移除链接释放资源
       urlObject.revokeObjectURL(url)
     },
-    showDetailFault () {
-      let detailFault = this.$refs.detailfault
-      detailFault.onShowDetailFault()
+    showLedDetailFault () {
+      this.showDetailFault(5)
+    },
+    showVehDetDetailFault () {
+      this.showDetailFault(6)
+    },
+    showDetailFault (val) {
+      getFault(val).then(data => {
+        debugger
+        if (data.data.success !== true) {
+          this.listLoading = false
+          this.$message.error(data.data.message)
+          console.log(data.data.message)
+          return
+        }
+        this.listLoading = false
+        if (data.data.data.data === undefined || data.data.data.data.m_FaultDetailedInfo === undefined) {
+          this.dialogDetailFault = []
+        } else {
+          this.dialogDetailFault = this.formateDateForAllFault(data.data.data.data.m_FaultDetailedInfo)
+        }
+        let detailFault = this.$refs.detailfault
+        detailFault.onShowDetailFault()
+      })
     }
   }
 }

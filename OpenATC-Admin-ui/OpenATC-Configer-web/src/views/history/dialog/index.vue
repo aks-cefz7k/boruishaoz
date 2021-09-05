@@ -14,7 +14,7 @@
       <el-dialog title="故障信息" :visible.sync="dialogTableVisible">
         <div class="detailfault-table">
             <el-table
-            :data="tableData"
+            :data="dialogDetailFault"
             height="350"
             stripe
             size="small"
@@ -72,12 +72,12 @@
 export default {
   name: 'detailfault',
   props: {
-    activeName: {
-      type: String
+    // activeName: {
+    //   type: String
+    // },
+    dialogDetailFault: {
+      type: Array
     }
-    // tableData: {
-    //   type: Array
-    // }
   },
   data () {
     return {

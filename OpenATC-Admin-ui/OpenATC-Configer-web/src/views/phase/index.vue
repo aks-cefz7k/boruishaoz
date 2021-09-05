@@ -71,7 +71,7 @@
           <span>{{scope.row.redclear}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" class-name="status-col" label="红黄" min-width="100">
+      <el-table-column align="center" class-name="status-col" :label="$t('edge.phase.redyellow')" min-width="100">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.redyellow" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
           <span>{{scope.row.redyellow}}</span>

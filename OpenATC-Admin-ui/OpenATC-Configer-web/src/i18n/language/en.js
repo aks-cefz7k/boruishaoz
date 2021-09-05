@@ -104,7 +104,8 @@ const en = {
       'ss': 'South-Straight',
       'sl': 'South-Left',
       'sr': 'South-Right',
-      'sb': 'South-Back'
+      'sb': 'South-Back',
+      'redyellow': 'redyellow'
     },
     'overlap': {
       'desc': 'Description',
@@ -122,7 +123,18 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Pattern?',
       'firstphase': 'Please create phase first !',
-      'mostdata': 'There are at most 108 data !'
+      'mostdata': 'There are at most 108 data !',
+      'ring': 'Ring',
+      'modeOption1': 'Other',
+      'modeOption2': 'None',
+      'modeOption3': 'Min Call',
+      'modeOption4': 'Max Call',
+      'modeOption5': 'Pedestrian Call',
+      'modeOption6': 'Max Call And Pedestrian Call',
+      'modeOption7': 'Omit Call',
+      'coordphaseOption1': 'Coordination Phase',
+      'coordphaseOption2': 'Key Phase',
+      'coordphaseOption4': 'Fixed Phase'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
@@ -135,7 +147,16 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Plan?',
       'tabtip': 'Delete This Tab?',
-      'mostdata': 'There are at most 48 data !'
+      'mostdata': 'There are at most 48 data !',
+      'controltype': 'Control Type',
+      'ControlOption1': 'Yellow Clear',
+      'ControlOption2': 'Red Control',
+      'ControlOption3': 'Dark Control',
+      'ControlOption4': 'Step Control',
+      'ControlOption5': 'Fixed_Cycle Control',
+      'ControlOption6': 'Free Control',
+      'ControlOption10': 'Nocable Control',
+      'ControlOption12': 'Pedestrian Crossing Control'
     },
     'date': {
       'desc': 'Description',
@@ -187,11 +208,29 @@ const en = {
       'mostdata': 'There are at most 72 data !'
     },
     'channellock': {
-      'deleteAlltip': 'Delete All channellock'
+      'deleteAlltip': 'Delete All channellock',
+      'starttime': 'Start Time',
+      'endtime': 'End Time',
+      'transitiongreenflashtime': 'Green Flashing Time',
+      'transitionyellowtime': 'Yellow Time',
+      'channelstats': 'Channel Status',
+      'channel': 'Channel',
+      'channelinfo': 'Channel Info',
+      'status': 'Status'
     },
     'channelControl': {
       'recoverysuccess': 'Recovery Success!',
       'recoveryfailed': 'Recovery Failed!'
+    },
+    'pedestrianDetector': {
+      'desc': 'Description ',
+      'callPhase': 'Call Phase',
+      'noactivity': 'Noactivity(min)',
+      'maxpresence': 'Maxpresence(min)',
+      'erraticCounts': 'Erratic Counts(one/min）',
+      'operation': 'Operation',
+      'deletetip': 'Delete This Detector',
+      'mostdata': 'There are at most 8 data !'
     },
     'optimize': {
       'strategy': 'Optimization strategy',
