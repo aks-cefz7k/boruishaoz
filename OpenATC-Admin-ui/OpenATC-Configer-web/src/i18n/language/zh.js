@@ -68,6 +68,10 @@ const zh = {
       'changelanguage': '切换语言',
       'agentid': '设备ID'
     },
+    'overview': {
+      'phase': '相位',
+      'recapture': '重新获取路口图'
+    },
     'phase': {
       'desc': '描述',
       'mingreen': '最小绿',
@@ -322,7 +326,8 @@ const zh = {
       'editagentid': '编辑设备ID',
       'querysucess': '查询成功！',
       'setup': '设置',
-      'tipsmodaltitle': '提示'
+      'tipsmodaltitle': '提示',
+      'deviceoffline': '设备不在线！'
     },
     'login': {
       'title': '配置管理中心',
@@ -393,6 +398,10 @@ const zh = {
         'fifteenPhase': '十五相位',
         'sixteenPhase': '十六相位'
       }
+    },
+    'system': {
+      'lightcontrolpanel': '灯控板',
+      'recovery': '恢复'
     }
   }
 }

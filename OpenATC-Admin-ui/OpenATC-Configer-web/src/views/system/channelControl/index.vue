@@ -29,7 +29,7 @@
       </div>
     </div>
   </div>
-  <el-button class="controlbtn" type="primary" @click="toAutoControl">恢复</el-button>
+  <el-button class="controlbtn" type="primary" @click="toAutoControl">{{$t('edge.system.recovery')}}</el-button>
 </div>
 </template>
 
@@ -62,12 +62,16 @@ export default {
   mounted () {
     this.handleCreateLampCtrboard()
   },
+  beforeUpdate () {
+    this.handleCreateLampCtrboard()
+  },
   methods: {
     handleCreateLampCtrboard () {
+      this.data = []
       for (let i = 1; i <= 10; i++) {
         let lamp = {}
         lamp.lampctrboardnum = i
-        lamp.name = `灯控板${i}`
+        lamp.name = `${this.$t('edge.system.lightcontrolpanel')}${i}`
 
         lamp.channels = []
         for (let j = 1; j <= 4; j++) {

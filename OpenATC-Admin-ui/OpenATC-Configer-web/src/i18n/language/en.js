@@ -68,6 +68,10 @@ const en = {
       'changelanguage': 'Switch Language',
       'agentid': 'AGENTID'
     },
+    'overview': {
+      'phase': 'phase',
+      'recapture': 'Get intersection drawing again'
+    },
     'phase': {
       'desc': 'Description',
       'mingreen': 'MinGreen',
@@ -323,7 +327,8 @@ const en = {
       'editagentid': 'Edit AgentID',
       'querysucess': 'Query Success!',
       'setup': 'setup',
-      'tipsmodaltitle': 'Tips'
+      'tipsmodaltitle': 'Tips',
+      'deviceoffline': 'Device not online!'
     },
     'login': {
       'title': 'KISS Edge Manage Center',
@@ -393,6 +398,10 @@ const en = {
         'fifteenPhase': 'FifteenPhase',
         'sixteenPhase': 'SixteenPhase'
       }
+    },
+    'system': {
+      'lightcontrolpanel': 'Light Control Panel',
+      'recovery': 'Recovery'
     }
   }
 }
