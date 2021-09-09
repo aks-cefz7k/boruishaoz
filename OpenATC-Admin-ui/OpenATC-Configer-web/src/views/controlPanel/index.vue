@@ -13,21 +13,21 @@
 <div class="manual-record">
   <div class="manual-top">
     <div class="control-model">
-      <div class="control-model-name">控制模式：</div><div class="control-model-value">{{controlMode}}</div>
-      <div class="control-model-name">持续时间：</div><div class="control-model-input"><el-input v-model.number="manualpanel.duration" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">过渡绿闪时间：</div><div class="control-model-input"><el-input v-model.number="manualpanel.greenflash" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">过渡黄灯时间：</div><div class="control-model-input"><el-input v-model.number="manualpanel.yellow" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">过渡全红时间：</div><div class="control-model-input"><el-input v-model.number="manualpanel.redclear" placeholder="" size="small"></el-input></div>
-      <div class="control-model-name">最小绿时间：</div><div class="control-model-input"><el-input v-model.number="manualpanel.mingreen" placeholder="" size="small"></el-input></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.controlmode')}}：</div><div class="control-model-value">{{controlMode}}</div>
+      <div class="control-model-name">{{$t('edge.controlpanel.duration')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.duration" placeholder="" size="small"></el-input></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitiongreenflashtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.greenflash" placeholder="" size="small"></el-input></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitionyellowtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.yellow" placeholder="" size="small"></el-input></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.transitionredtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.redclear" placeholder="" size="small"></el-input></div>
+      <div class="control-model-name">{{$t('edge.controlpanel.mingreen')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.mingreen" placeholder="" size="small"></el-input></div>
     </div>
   </div>
   <div class="manual-bottom" style="display: inline-block">
     <div class="manual-control" style="display: inline-block">
       <div class="manualControl-kanban">
         <svg-icon icon-class="manualcontrolbackground" class="manualControl-background"></svg-icon>
-        <div class="manual-button" style="left: 201px; top: 150px;"><span class="button-name">步进</span></div>
-        <div class="manual-button" style="left: 393px; top: 150px;"><span class="button-name">全红</span></div>
-        <div class="manual-button" style="left: 585px; top: 150px;"><span class="button-name">黄闪</span></div>
+        <div class="manual-button" style="left: 201px; top: 150px;"><span class="button-name">{{$t('edge.controlpanel.step')}}</span></div>
+        <div class="manual-button" style="left: 393px; top: 150px;"><span class="button-name">{{$t('edge.controlpanel.allred')}}</span></div>
+        <div class="manual-button" style="left: 585px; top: 150px;"><span class="button-name">{{$t('edge.controlpanel.yellowflash')}}</span></div>
         <div  v-for="(item, index)  in manualBtnList" :key="index">
           <div :class="item.id > 8 ? (item.id === currChannelId ? 'select-rectangle-button' : 'rectangle-button') : (item.id === currChannelId ? 'select-circle-button' : 'circle-button')" :style="item.style" @click ="manualBtnClicked(item)">
             <!-- <span :class="item.id > 8 ? (item.id === currChannelId ? 'select-rectangle-name' : 'rectangle-name') : (item.id === currChannelId ? 'select-cycle-name' : 'cycle-name')" :style="item.btnNameList > 4 ? 'width: 52px; left: 15px; font-size: 10px; line-height: 15px;' : ''">{{getBtnName(item.name)}}</span> -->
@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="manual-control-button">
-        <el-button type="primary" @click="resetDefaultManualpanel">生成默认设置</el-button>
+        <el-button type="primary" @click="resetDefaultManualpanel">{{$t('edge.controlpanel.defaultsettings')}}</el-button>
       </div>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -46,7 +46,7 @@
         <div v-show="currChannelId !== -1">
           <div  v-show="!editStatus"><div class="manual-tables-name">{{currChannelName}}</div><div class="manual-tables-edit" @click="edit"><i class="el-icon-edit"></i></div></div>
           <div class="manual-tables-name" v-show="editStatus"><el-input v-model="currChannelName" placeholder="请输入内容" size="mini" @blur="editPanelName"></el-input></div>
-          <div class="manual-tables-clear"><i class="el-icon-delete"></i><span class="manual-tables-qingkong" @click="clearChannel">清空</span><svg-icon icon-class="huangshan" style="margin-left: 20px;"></svg-icon><span class="manual-tables-qingkong" @click="reset">状态重置</span></div>
+          <div class="manual-tables-clear"><i class="el-icon-delete"></i><span class="manual-tables-qingkong" @click="clearChannel">{{$t('edge.controlpanel.clear')}}</span><svg-icon icon-class="huangshan" style="margin-left: 20px;"></svg-icon><span class="manual-tables-qingkong" @click="reset">{{$t('edge.controlpanel.resetstatus')}}</span></div>
         </div>
       </div>
       <div class="manual-tables-bottom">
@@ -64,16 +64,16 @@
           </el-table-column>
           <el-table-column
           prop="channelid"
-          label="通道"
+          :label="$t('edge.controlpanel.channel')"
           align="center">
           </el-table-column>
           <el-table-column
           prop="desc"
-          label="通道描述"
+          :label="$t('edge.controlpanel.channeldesc')"
           align="center">
           </el-table-column>
           <el-table-column
-          label="状态"
+          :label="$t('edge.controlpanel.status')"
           align="center">
           <template slot-scope="scope">
             <el-select v-model="scope.row.channelstatus" placeholder="请选择" size="small">
