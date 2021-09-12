@@ -12,7 +12,7 @@
 <template>
   <div>
     <el-dialog
-      title="修改系统时间"
+      :title="$t('edge.system.modifysystemtime')"
       :visible.sync="dialogFormVisible"
       width="600px"
       @close='closeFormDialog'>
@@ -20,16 +20,16 @@
            <el-date-picker
             v-model="dateValue"
             type="date"
-            placeholder="选择日期">
+            :placeholder="$t('edge.system.selectdate')">
             </el-date-picker>
           <el-time-picker
                 v-model="timeValue"
-                placeholder="任意时间点">
+                :placeholder="$t('edge.system.anytimepoint')">
             </el-time-picker>
       </div>
       <div slot="footer" class="dialog-footer">
-          <el-button @click="resetForm()">取消</el-button>
-          <el-button type="primary" @click="ok">确定</el-button>
+          <el-button @click="resetForm()">{{$t('edge.common.cancel')}}</el-button>
+          <el-button type="primary" @click="ok">{{$t('edge.common.confirm')}}</el-button>
       </div>
     </el-dialog>
   </div>

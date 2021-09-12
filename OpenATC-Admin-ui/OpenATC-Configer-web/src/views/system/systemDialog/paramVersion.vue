@@ -12,14 +12,14 @@
 <template>
   <div>
     <el-dialog
-      title="特征参数版本设置"
+      :title="$t('edge.system.featureparameterversionsetting')"
       :visible.sync="dialogFormVisible"
       width="600px"
       @close='closeFormDialog'>
       <div style="text-align: center;">
-        <div class="paramversion-name">特征参数版本</div>
+        <div class="paramversion-name">{{$t('edge.system.featureparameterversion')}}</div>
         <div style="margin-right: 30px;">
-            <el-select v-model="value" placeholder="请选择" style="width:75%" size="small">
+            <el-select v-model="value" :placeholder="$t('edge.common.select')" style="width:75%" size="small">
                 <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -30,8 +30,8 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-          <el-button @click="resetForm()">取消</el-button>
-          <el-button type="primary" @click="ok">确定</el-button>
+          <el-button @click="resetForm()">{{$t('edge.common.cancel')}}</el-button>
+          <el-button type="primary" @click="ok">{{$t('edge.common.confirm')}}</el-button>
       </div>
     </el-dialog>
   </div>

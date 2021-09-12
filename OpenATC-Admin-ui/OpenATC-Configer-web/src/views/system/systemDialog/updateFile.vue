@@ -12,7 +12,7 @@
 <template>
   <div>
     <el-dialog
-      title="提示"
+      :title="$t('edge.system.tips')"
       :visible.sync="dialogFormVisible"
       width="400px"
       @close='closeFormDialog'>
@@ -22,8 +22,8 @@
           </form>
       </div>
       <div slot="footer" class="dialog-footer">
-          <el-button @click="resetForm()">取消</el-button>
-          <el-button type="primary" @click="submitForm($event)">更新</el-button>
+          <el-button @click="resetForm()">{{$t('edge.common.cancel')}}</el-button>
+          <el-button type="primary" @click="submitForm($event)">{{$t('edge.system.update')}}</el-button>
       </div>
     </el-dialog>
   </div>

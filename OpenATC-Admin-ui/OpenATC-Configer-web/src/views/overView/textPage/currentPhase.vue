@@ -37,27 +37,27 @@
                 <el-table-column
                   align="center"
                   prop="ring"
-                  label="环">
+                  :label="$t('edge.overview.ring')">
                 </el-table-column>
                 <el-table-column
                   align="center"
                   prop="id"
-                  label="相位id">
+                  :label="$t('edge.overview.phaseid')">
                 </el-table-column>
                 <el-table-column
                   align="center"
                   prop="countdown"
-                  label="相位倒计时">
+                  :label="$t('edge.control.phase_countdown')">
                 </el-table-column>
                 <el-table-column
                   align="center"
                   prop="split"
-                  label="绿信比">
+                  :label="$t('edge.control.split')">
                 </el-table-column>
                 <el-table-column
                   align="center"
                   prop="type"
-                  label="相位类型">
+                  :label="$t('edge.control.type')">
                 </el-table-column>
               </el-table>
             </div>
