@@ -23,7 +23,17 @@ const zh = {
       'none': '无',
       'weak': '弱',
       'normal': '普通',
-      'strong': '强'
+      'strong': '强',
+      'setnewpassword': '设置新密码',
+      'oldpass': '旧密码',
+      'inputpassagain': '请再次输入密码',
+      'twopassinconsistent': '两次输入密码不一致 !',
+      'enterpass': '请输入密码',
+      'enternewpass': '请输入新密码',
+      'inputoldpass': '请输入旧密码！',
+      'twopassnotdiff': '新密码不能与旧密码一致！',
+      'originalpasserror': '原密码错误!',
+      'modifisucceeded': '修改成功'
     },
     'route': {
       'dashboard': '首页',
@@ -66,7 +76,14 @@ const zh = {
       'readPattern': '的方案信息，到当前设备配置中 ?',
       'title': '欢迎进入配置管理中心',
       'changelanguage': '切换语言',
-      'agentid': '设备ID'
+      'agentid': '设备ID',
+      'passwordexpiration': '密码到期',
+      'organization': '组织机构',
+      'realname': '真实姓名',
+      'phone': '联系电话',
+      'email': '电子邮箱',
+      'changepass': '修改密码',
+      'exit': '退出'
     },
     'overview': {
       'crossinfo': '路口信息',
