@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('openatc.greenwaveoptimize.deviceid')" minWidth="40">
         <template slot-scope="scope">
-          <span>{{scope.row.intersectionid}}</span>
+          <span>{{scope.row.agentid}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('openatc.greenwaveoptimize.pattern')" prop="desc">
@@ -100,15 +100,15 @@ export default {
     },
     handlePatternList (routeData, patternList, phaseList) {
       this.newPatternList = []
-      let intersections = routeData.intersections
+      let devs = routeData.devs
       for (let pattern of patternList) {
         let obj = {}
-        let id = pattern.intersectionid
-        obj.intersectionid = id
+        let id = pattern.agentid
+        obj.agentid = id
         let count = [] // 计算相位有几个环
         if (pattern.feature !== undefined && pattern.feature.patternList.length !== 0) {
           let currPatternList = pattern.feature.patternList
-          let patternId = intersections.filter(ist => ist.intersectionid === id)[0].patternid
+          let patternId = devs.filter(ist => ist.agentid === id)[0].patternid
           let currPattern
           if (Array.isArray(currPatternList)) {
             currPattern = currPatternList.filter(cpl => cpl.id === patternId)[0]
@@ -126,7 +126,7 @@ export default {
           obj.cycle = currPattern.cycle
           obj.patternId = currPattern.id
           let rings = currPattern.rings
-          let currPhase = phaseList.filter(phl => phl.intersectionid === id)[0].feature.phaseList
+          let currPhase = phaseList.filter(phl => phl.agentid === id)[0].feature.phaseList
           // 计算有几个环
           for (let ring of rings) {
             if (ring.length === 0) continue

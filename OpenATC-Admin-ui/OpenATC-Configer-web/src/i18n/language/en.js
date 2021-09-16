@@ -394,8 +394,8 @@ const en = {
       'deletetip': 'Delete This History?'
     },
     'fault': {
-      'refresh': '刷新',
-      'export': '导出',
+      'refresh': 'Refresh',
+      'export': 'Export',
       'faultofcurrentdetailedlightgroup': '当前详细灯组故障',
       'faultofcurrentdetailedvehicleinspectionversion': '当前详细车检版故障',
       'tab': 'tab',
@@ -404,12 +404,19 @@ const en = {
       'tab2': '灯控板',
       'tab3': '车检板',
       'tab4': 'I/O板',
-      'maintype': '主类型',
-      'subtype': '子类型',
-      'occurtime': '发生时间',
-      'recoverytime': '恢复时间',
-      'grade': '等级',
-      'value': '值'
+      'maintype': 'Maintype',
+      'subtype': 'Subtype',
+      'occurtime': 'Occurtime',
+      'recoverytime': 'Recoverytime',
+      'grade': 'Grade',
+      'value': 'value'
+    },
+    'dailyrecord': {
+      'data': 'Data',
+      'infotype': 'Infotype',
+      'subject': 'Subject',
+      'object': 'Object',
+      'operationresults': 'Operation Result'
     },
     'control': {
       'mode': 'Mode:',

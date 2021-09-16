@@ -131,8 +131,8 @@ export default {
           break
       }
     },
-    checkRules (intersections) {
-      for (let inter of intersections) {
+    checkRules (devs) {
+      for (let inter of devs) {
         if (inter.forwardphaseid === 0 || inter.backphaseid === 0) {
           this.$message.error(this.$t('openatc.greenwaveoptimize.choosephase'))
           return true
@@ -145,13 +145,13 @@ export default {
       return false
     },
     onOk () {
-      if (this.checkRules(this.configData.intersections)) { // 检验方案和相位是否为空
+      if (this.checkRules(this.configData.devs)) { // 检验方案和相位是否为空
         return
       }
-      this.configData.intersections.forEach(ele => {
-        if (ele.agentid) {
-          delete ele.agentid
-        }
+      this.configData.devs.forEach(ele => {
+        // if (ele.agentid) {
+        //   delete ele.agentid
+        // }
         if (ele.allPatterns) {
           delete ele.allPatterns
         }
@@ -169,7 +169,7 @@ export default {
         }
       })
       // 传sordid排序
-      this.configData.intersections = this.configData.intersections.map((ele, index) => {
+      this.configData.devs = this.configData.devs.map((ele, index) => {
         return {
           ...ele,
           sortid: index + 1
@@ -201,7 +201,7 @@ export default {
     },
     getDeviceByIds () {
       // 获取设备表格信息
-      this.deviceIds = this.configData.intersections.map(ele => ele.intersectionid)
+      this.deviceIds = this.configData.devs.map(ele => ele.agentid)
       GetDeviceByIds(this.deviceIds).then(res => {
         if (!res.data.success) {
           this.$message.error(res.data.message)
@@ -212,16 +212,16 @@ export default {
     },
     getDistance () {
       // 获取距离表格信息
-      this.distanceData = this.configData.intersections.map(ele => ({
-        agentid: ele.intersectionid,
+      this.distanceData = this.configData.devs.map(ele => ({
+        agentid: ele.agentid,
         distance: ele.distance,
         width: ele.width
       }))
     },
     getPattern () {
       // 获取方案表格信息
-      this.patternData = this.configData.intersections.map(ele => ({
-        agentid: ele.intersectionid,
+      this.patternData = this.configData.devs.map(ele => ({
+        agentid: ele.agentid,
         patterndes: ele.patterndes,
         patternid: ele.patternid,
         allPatterns: ele.allPatterns || []
@@ -229,20 +229,20 @@ export default {
     },
     getPhase () {
       // 获取相位表格信息
-      this.phaseData = this.configData.intersections.map(ele => ({
-        agentid: ele.intersectionid,
+      this.phaseData = this.configData.devs.map(ele => ({
+        agentid: ele.agentid,
         forwardphaseid: ele.forwardphaseid,
         forwardphasedirection: ele.forwardphasedirection,
-        // forwardphasedirection: this.getPhasedirection(ele.intersectionid, ele.forwardphaseid),
+        // forwardphasedirection: this.getPhasedirection(ele.agentid, ele.forwardphaseid),
         allForwardPhase: ele.allForwardPhase || [],
         backphaseid: ele.backphaseid,
         backphasedirection: ele.backphasedirection,
-        // backphasedirection: this.getPhasedirection(ele.intersectionid, ele.backphaseid),
+        // backphasedirection: this.getPhasedirection(ele.agentid, ele.backphaseid),
         allBackPhase: ele.allBackPhase || []
       }))
     },
     // getPhasedirection (agentid, phaseid) {
-    //   let allPhase = this.phaseList.filter(ele => ele.intersectionid === agentid)
+    //   let allPhase = this.phaseList.filter(ele => ele.agentid === agentid)
     //   let phaseList = allPhase[0].feature.phaseList
     //   let currPhase = phaseList.filter(ele => ele.id === phaseid)
     //   return currPhase[0].direction
@@ -251,17 +251,17 @@ export default {
       // 添加多个设备
       for (let dev of devices) {
         if (this.deviceIds.includes(dev.agentid)) continue
-        this.configData.intersections.push(JSON.parse(JSON.stringify({
+        this.configData.devs.push(JSON.parse(JSON.stringify({
           ...this.defaultScheme,
           routeid: this.routeData.id,
-          intersectionid: dev.agentid
+          agentid: dev.agentid
         })))
       }
       this.getDeviceByIds()
     },
     deleteDevice (agentid) {
       // 删除设备
-      this.configData.intersections = this.configData.intersections.filter(ele => ele.intersectionid !== agentid)
+      this.configData.devs = this.configData.devs.filter(ele => ele.agentid !== agentid)
       this.getDeviceByIds()
     },
     changePhase (changedField) {
@@ -276,9 +276,9 @@ export default {
     },
     changeData (changedField) {
       // 对应字段修改内部维护的配置数据
-      this.configData.intersections.forEach((ele, index) => {
-        if (ele.intersectionid === changedField.agentid) {
-          this.configData.intersections[index] = JSON.parse(JSON.stringify({
+      this.configData.devs.forEach((ele, index) => {
+        if (ele.agentid === changedField.agentid) {
+          this.configData.devs[index] = JSON.parse(JSON.stringify({
             ...ele,
             ...changedField
           }))
@@ -287,8 +287,8 @@ export default {
     },
     handleSortRow (sortAgentid) {
       // sortId是排序规则
-      this.configData.intersections.sort(function (a, b) {
-        return sortAgentid.indexOf(a.intersectionid) - sortAgentid.indexOf(b.intersectionid)
+      this.configData.devs.sort(function (a, b) {
+        return sortAgentid.indexOf(a.agentid) - sortAgentid.indexOf(b.agentid)
       })
     }
   }

@@ -409,6 +409,13 @@ const zh = {
       'grade': '等级',
       'value': '值'
     },
+    'dailyrecord': {
+      'data': '日期',
+      'infotype': '事件类型',
+      'subject': '主体标时',
+      'object': '客体标时',
+      'operationresults': '操作结果'
+    },
     'control': {
       'mode': '模式:',
       'control': '控制:',
