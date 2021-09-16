@@ -175,16 +175,16 @@ export default {
       this.keyintsid = routeData.keyintsid
       this.upspeed = routeData.upspeed
       this.downspeed = routeData.downspeed
-      let intersections = routeData.intersections
-      for (let inter of intersections) {
+      let devs = routeData.devs
+      for (let inter of devs) {
         let obj = {}
-        obj.label = inter.intersectionid
-        obj.value = inter.intersectionid
+        obj.label = inter.agentid
+        obj.value = inter.agentid
         this.keyintsidOptions.push(obj)
         inter.patternList = []
-        let id = inter.intersectionid
+        let id = inter.agentid
         let patternId = inter.patternid
-        let pattern = patternList.filter(pat => pat.intersectionid === id)[0]
+        let pattern = patternList.filter(pat => pat.agentid === id)[0]
         if (pattern.feature !== undefined && pattern.feature.patternList.length !== 0) {
           let allPatternList = pattern.feature.patternList
           if (Array.isArray(allPatternList)) {

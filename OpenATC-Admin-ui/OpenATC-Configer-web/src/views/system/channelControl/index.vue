@@ -71,7 +71,8 @@ export default {
       for (let i = 1; i <= 10; i++) {
         let lamp = {}
         lamp.lampctrboardnum = i
-        lamp.name = `${this.$t('edge.system.lightcontrolpanel')}${i}`
+        // lamp.name = `灯控板${i}`
+        lamp.name = this.$t('edge.system.lampcontrolpanel') + i
 
         lamp.channels = []
         for (let j = 1; j <= 4; j++) {

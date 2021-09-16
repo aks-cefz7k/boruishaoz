@@ -113,8 +113,8 @@ export default {
         let patterntable = this.$refs.patterntable
         let newPatternList = patterntable.newPatternList
         for (let pattern of this.patternList) {
-          let intersectionid = pattern.intersectionid
-          let newPattern = newPatternList.filter(npl => npl.intersectionid === intersectionid)[0]
+          let agentid = pattern.agentid
+          let newPattern = newPatternList.filter(npl => npl.agentid === agentid)[0]
           let patternId = newPattern.patternId
           let currPatternList = pattern.feature.patternList
           let currPattern
@@ -165,8 +165,8 @@ export default {
       let patterntable = this.$refs.patterntable
       let newPatternList = patterntable.newPatternList
       for (let pattern of this.patternList) {
-        let intersectionid = pattern.intersectionid
-        let newPattern = newPatternList.filter(npl => npl.intersectionid === intersectionid)[0]
+        let agentid = pattern.agentid
+        let newPattern = newPatternList.filter(npl => npl.agentid === agentid)[0]
         let patternId = newPattern.id
         let currPatternList = pattern.feature.patternList
         let currPattern
@@ -179,7 +179,7 @@ export default {
         currPattern.offset = newPattern.offset
       }
       let param = {}
-      param.intersections = this.patternList
+      param.devs = this.patternList
       putAllPatternOfRoute(param).then(res => {
         if (!res.data.success) {
           this.$message.error(res.data.message)
@@ -197,19 +197,19 @@ export default {
       param.upspeed = Number(planchart.upspeed)
       param.downspeed = Number(planchart.downspeed)
       param.direction = planchart.direction
-      let intersections = param.intersections
-      for (let inter of intersections) {
+      let devs = param.devs
+      for (let inter of devs) {
         let feature = {}
-        let intersectionid = inter.intersectionid
+        let agentid = inter.agentid
         // 获取patternList
         for (let newPattern of newPatternList) {
-          if (newPattern.intersectionid === intersectionid) {
+          if (newPattern.agentid === agentid) {
             feature.patternList = newPattern
           }
         }
         // 获取phaseList
         for (let phase of this.phaseList) {
-          if (phase.intersectionid === intersectionid) {
+          if (phase.agentid === agentid) {
             let tempPhaseList = []
             let list = phase.feature.phaseList
             for (let ls of list) {
@@ -229,7 +229,7 @@ export default {
           return
         }
         this.greenwave = res.data.data.greenwave
-        this.patternList = res.data.data.intersections
+        this.patternList = res.data.data.devs
         this.handlePlanChart()
         this.handlePatternTable()
       })
@@ -255,7 +255,7 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        this.patternList = res.data.data.intersections
+        this.patternList = res.data.data.devs
         this.handlePlanChart()
         this.getAllPhaseOfRouter() // 获取改路线的所有相位
       })
@@ -272,7 +272,7 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        this.phaseList = res.data.data.intersections
+        this.phaseList = res.data.data.devs
         this.handlePatternTable()
         this.handleMaskVisible()
       })

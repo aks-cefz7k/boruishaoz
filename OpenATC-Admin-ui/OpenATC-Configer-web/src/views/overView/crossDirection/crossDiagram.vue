@@ -15,14 +15,14 @@
       <!-- 相位倒计时 -->
       <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
         <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
-          <span style="float: left;font-size: 20px;color: #fff;width: 80px;">{{$t('edge.overview.phase') + curPhase.id}} :</span>
+          <span style="float: left;font-size: 20px;color: #fff;width: 80px;">{{$t('edge.overview.phase')}}{{curPhase.id}} :</span>
           <span style="float: left;">{{curPhase.phaseCountdown}}</span>
         </div>
       </div>
       <!-- 手动刷新 -->
       <div v-if="!isLoaded">
         <RefreshSvg @click.native="refresh"/>
-        <span class="text">{{$t('edge.overview.recapture')}}</span>
+        <span class="text">{{$t('edge.overview.getintersectionmapagain')}}</span>
       </div>
     </div>
     <!-- 路口底图 -->

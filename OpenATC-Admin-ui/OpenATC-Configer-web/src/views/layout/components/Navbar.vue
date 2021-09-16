@@ -72,7 +72,7 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item disabled>
                   <div class="user-name">{{userInfo.user_name}}</div>
-                  <div class="pass-expire" v-show="passIsExpire">密码到期 {{userInfo.expiration_time}}</div>
+                  <div class="pass-expire" v-show="passIsExpire">{{$t('edge.main.passwordexpiration')}} {{userInfo.expiration_time}}</div>
                   <div style="margin-top: 10px;">
                     <span v-for="(data, index) in userInfo.roleNames" :key="index">
                       <el-tag size="medium" :type="roleType[index]">{{ data }}</el-tag>
@@ -81,26 +81,26 @@
                 </el-dropdown-item>
                 <el-dropdown-item divided disabled>
                   <div class="organization">
-                    <div class="laber-name">组织机构</div>
+                    <div class="laber-name">{{$t('edge.main.organization')}}</div>
                     <div class="laber-value">{{userInfo.organization}}</div>
                   </div>
                   <div class="real-name">
-                    <div class="laber-name">真实姓名</div>
+                    <div class="laber-name">{{$t('edge.main.realname')}}</div>
                     <div class="laber-value">{{userInfo.nick_name}}</div>
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided disabled>
                   <div class="organization">
-                    <div class="laber-name">联系电话</div>
+                    <div class="laber-name">{{$t('edge.main.phone')}}</div>
                     <div class="laber-value">{{userInfo.mobile_phone}}</div>
                   </div>
                   <div class="real-name">
-                    <div class="laber-name">电子邮箱</div>
+                    <div class="laber-name">{{$t('edge.main.email')}}</div>
                     <div class="laber-value">{{userInfo.email}}</div>
                   </div>
                 </el-dropdown-item>
-                <el-dropdown-item divided command="a">修改密码</el-dropdown-item>
-                <el-dropdown-item command="b">登出</el-dropdown-item>
+                <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
       </div>

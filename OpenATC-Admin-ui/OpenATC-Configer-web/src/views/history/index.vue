@@ -11,12 +11,12 @@
  **/
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">刷新</el-button>
-    <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">导出</el-button>
-    <el-button class="detail-fault" type="primary" size="small" @click="showLedDetailFault" style="" v-show="activeName === '2'">当前详细灯组故障</el-button>
-    <el-button class="detail-fault" type="primary" size="small" @click="showVehDetDetailFault" style="" v-show="activeName === '3'">当前详细车检版故障</el-button>
+    <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">{{$t('edge.fault.refresh')}}</el-button>
+    <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">{{$t('edge.fault.export')}}</el-button>
+    <el-button class="detail-fault" type="primary" size="small" @click="showLedDetailFault" style="" v-show="activeName === '2'">{{$t('edge.fault.faultofcurrentdetailedlightgroup')}}</el-button>
+    <el-button class="detail-fault" type="primary" size="small" @click="showVehDetDetailFault" style="" v-show="activeName === '3'">{{$t('edge.fault.faultofcurrentdetailedvehicleinspectionversion')}}</el-button>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.value">
+    <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="$t('edge.fault.tab' + item.value)" :name="item.value">
       <boardTable ref="boardtable" :activeName="activeName" :tableData="tableData" @getAllFault="getAllFault"></boardTable>
     </el-tab-pane>
   </el-tabs>
