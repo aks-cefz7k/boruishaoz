@@ -32,6 +32,7 @@ import Edgebase from 'edgebase-front'
 
 import i18n from './i18n'
 import VueKonva from 'vue-konva'
+import './mock'
 
 window.dev = process.env.NODE_ENV
 

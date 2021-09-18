@@ -153,6 +153,14 @@ export const constantRouterMapOfLogin = [{
   }]
 },
 {
+  path: '/service',
+  component: compose,
+  children: [{
+    path: '',
+    component: () => import('@/views/Service/service')
+  }]
+},
+{
   path: '/404',
   component: () => import('@/views/404'),
   hidden: true

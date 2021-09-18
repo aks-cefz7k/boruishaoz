@@ -22,6 +22,7 @@
       <el-menu-item index="greenwave" style="display:inline">绿波协调</el-menu-item>
       <el-menu-item index="operate" style="display:inline">操作记录</el-menu-item>
       <el-menu-item index="organization" style="display:inline">组织机构</el-menu-item>
+      <el-menu-item index="service" style="display:inline">勤务预案</el-menu-item>
     </div>
     <div class="openatc-operate">
       <div class="admin">
@@ -86,7 +87,8 @@ export default {
         user: '/user',
         greenwave: '/greenWaveOptimize',
         operate: '/operaterecord',
-        organization: '/organization'
+        organization: '/organization',
+        service: '/service'
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,

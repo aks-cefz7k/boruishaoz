@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /**
  * Copyright (c) 2020 kedacom
  * OpenATC is licensed under Mulan PSL v2.
@@ -11,49 +12,94 @@
  **/
 <template>
   <div class="app-container">
-    <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
-    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row @current-change="handleCurrentChange" @expand-change="expandChange" ref="singleTable" id="footerBtn">
+    <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{
+      $t("edge.common.add")
+    }}</el-button>
+    <el-table
+      :data="patternList"
+      :max-height="tableHeight"
+      highlight-current-row
+      @current-change="handleCurrentChange"
+      @expand-change="expandChange"
+      ref="singleTable"
+      id="footerBtn"
+    >
       <el-table-column type="expand">
         <template slot-scope="scope">
           <div class="components-container board">
-          <!-- <div class="components-container board" style="overflow-x:auto;"> -->
-            <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="'环 '+n" :index="scope.$index" @handleSplit="handleSplit"/>
+            <!-- <div class="components-container board" style="overflow-x:auto;"> -->
+            <Kanban
+              v-for="n in ringCount"
+              :key="n"
+              class="kanban todo"
+              :list="scope.row.rings[n - 1]"
+              :options="scope.row.options"
+              :header-text="'环 ' + n"
+              :index="scope.$index"
+              @handleSplit="handleSplit"
+            />
           </div>
         </template>
       </el-table-column>
       <el-table-column align="center" label="No" minWidth="40">
         <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
+          <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="ID" minWidth="40">
         <template slot-scope="scope">
-          <span>{{scope.row.id}}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc">
+      <el-table-column
+        align="center"
+        :label="$t('edge.pattern.desc')"
+        prop="desc"
+      >
         <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"></el-input>
         </template>
       </el-table-column>
-      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset">
+      <el-table-column
+        align="center"
+        :label="$t('edge.pattern.offset')"
+        prop="offset"
+      >
         <template slot-scope="scope">
-          <el-input size="small" v-model.number="scope.row.offset" @blur="checkOffset(scope.row.offset, scope.row)"></el-input>
+          <el-input
+            size="small"
+            v-model.number="scope.row.offset"
+            @blur="checkOffset(scope.row.offset, scope.row)"
+          ></el-input>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
+      <el-table-column
+        align="center"
+        :label="$t('edge.pattern.cycle')"
+        prop="cycle"
+      >
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">
+      <el-table-column
+        align="center"
+        :label="$t('edge.pattern.operation')"
+        width="120"
+      >
         <template slot-scope="scope">
-          <el-button type="text"  @click="handleDelete(scope.$index)">{{$t('edge.common.delete')}}</el-button>
+          <el-button type="text" @click="handleDelete(scope.$index)">{{
+            $t("edge.common.delete")
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div class="pattern-figure" v-show="isShowPatternStatus">
-      <div class="pattern-status">{{currPatternName}}</div>
+      <div class="pattern-status">{{ currPatternName }}</div>
       <span class="pattern-explain">：绿信比</span>
       <span class="pattern-explain" style="margin-right: 15px;">P相位</span>
-      <PatternStatus style="margin-top: 20px;" :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus>
+      <PatternStatus
+        style="margin-top: 20px;"
+        :patternStatusList="patternStatusList"
+        :barrierList="barrierList"
+      ></PatternStatus>
     </div>
   </div>
 </template>
@@ -91,6 +137,8 @@ export default {
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
+    console.log(this.globalParamModel)
+    debugger
     this.initData()
   },
   mounted: function () {
@@ -100,9 +148,9 @@ export default {
       // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
       // 后面的50：根据需求空出的高度，自行调整
       _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                250
+        window.innerHeight -
+        document.querySelector('#footerBtn').offsetTop -
+        250
       window.onresize = function () {
         // 定义窗口大小变更通知事件
         _this.screenHeight = window.innerHeight // 窗口高度
@@ -113,9 +161,9 @@ export default {
     screenHeight: function () {
       // 监听屏幕高度变化
       this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                250
+        window.innerHeight -
+        document.querySelector('#footerBtn').offsetTop -
+        250
     },
     patternList: function (val) {
       if (!val.length) return
@@ -388,6 +436,7 @@ export default {
       }
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
       this.patternStatusList = []
+      debugger
       let cycle = val.cycle
       for (let rings of val.rings) {
         if (rings.length === 0) continue
@@ -430,6 +479,7 @@ export default {
           this.barrierList = []
           return
         }
+        debugger
         if (!this.isEqualsForArray(tempList, concurrent)) {
           tempList = concurrent
           this.barrierList.push(barrierWidth)
@@ -461,37 +511,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .board {
-    width: 100%;
-    margin-left: 10px;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    align-items: flex-start;
-  }
-  .kanban {
-    &.todo {
-      .board-column-header {
-        background: #4A9FF9;
-      }
+.board {
+  width: 100%;
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.kanban {
+  &.todo {
+    .board-column-header {
+      background: #4a9ff9;
     }
   }
-  .pattern-figure {
-    position: fixed;
-    width: 88%;
-    bottom: 30px;
-  }
-  .pattern-status {
-    display: inline;
-    font-family: SourceHanSansCN-Regular;
-    font-size: 20px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
-    color: #303133;
-  }
-  .pattern-explain {
-    float: right;
-  }
+}
+.pattern-figure {
+  position: fixed;
+  width: 88%;
+  bottom: 30px;
+}
+.pattern-status {
+  display: inline;
+  font-family: SourceHanSansCN-Regular;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 22px;
+  letter-spacing: 0px;
+  color: #303133;
+}
+.pattern-explain {
+  float: right;
+}
 </style>

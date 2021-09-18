@@ -22,7 +22,7 @@
           :style="{
             width: item.greenWidth,
             height: '34px',
-            background: '#7ccc66'
+            background: '#7ccc66',
           }"
         >
           <div class="ring-phase">
@@ -34,7 +34,7 @@
           </div>
           <el-tooltip placement="top-start" effect="light">
             <div slot="content">P{{ item.id }}:{{ item.split }}</div>
-            <div style="cursor:pointer;">
+            <div style="cursor: pointer">
               <div class="ring-num">P{{ item.id }}:</div>
               <div class="ring-num">{{ item.split }}</div>
             </div>
@@ -47,7 +47,7 @@
           :style="{
             width: item.yellowWidth,
             height: '34px',
-            background: '#f9dc6a'
+            background: '#f9dc6a',
           }"
         ></div>
         <div
@@ -55,7 +55,7 @@
           :style="{
             width: item.redWidth,
             height: '34px',
-            background: '#f27979'
+            background: '#f27979',
           }"
         ></div>
       </div>
@@ -90,10 +90,6 @@ export default {
     patternStatusList: {
       handler: function (val, oldVal) {
         this.handleBarrierHeight() // 计算屏障高度
-
-        console.log('props: ')
-        console.log(this.patternStatusList)
-        console.log(this.barrierList)
       },
       // 深度观察监听
       deep: true
@@ -119,7 +115,7 @@ export default {
 }
 .ring-first {
   margin-top: 1px;
-  width: 100%;
+  width: 44.5%;
   height: 34px;
 }
 .first-1 {
