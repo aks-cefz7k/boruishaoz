@@ -1,0 +1,366 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "勤务路线A",
+      "devs": [
+        {
+          "id": 1,
+          "viprouteid": 1,
+          "agentid": "10081",
+          "name": "10081设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              122.523995,
+              31.233105
+            ]
+          },
+          "location": [
+            1.363930873145899E7,
+            3663059.411032503
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 2,
+          "viprouteid": 1,
+          "agentid": "10082",
+          "name": "10082设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 3,
+          "viprouteid": 1,
+          "agentid": "10082",
+          "name": "10083设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 4,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10084设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 5,
+          "viprouteid": 1,
+          "agentid": "10085",
+          "name": "10085设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        },
+        {
+          "id": 6,
+          "viprouteid": 1,
+          "agentid": "10084",
+          "name": "10086设备",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              132.523995,
+              81.233105
+            ]
+          },
+          "location": [
+            1.475250363923677E7,
+            1.6381847815458855E7
+          ],
+          "control": 0,
+          "terminal": 0,
+          "terminalname": "早高峰",
+          "value": 3,
+          "totaltime": 300
+        }
+      ]
+    }
+  ],
+  "success": true,
+  "code": "0",
+  "message": "Success",
+  "timestamp": 1600067954854
+}

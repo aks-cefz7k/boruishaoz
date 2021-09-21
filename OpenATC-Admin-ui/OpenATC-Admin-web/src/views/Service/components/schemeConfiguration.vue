@@ -1,0 +1,297 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+<template>
+  <div v-show="configurationVisible" class="configDrawer">
+    <el-drawer
+      title="勤务路线配置"
+      size="41%"
+      :visible.sync="configurationVisible"
+      direction="rtl"
+      :wrapperClosable="false"
+      :destroy-on-close="true"
+      :before-close="handleClose"
+    >
+      <el-tabs v-model="activeTab" type="card" @tab-click="handleClickTab">
+        <el-tab-pane label="节点" name="device">
+          <DevicePanel
+            :devicesData="devicesData"
+            ref="devicedPanel"
+            @addDevice="addDevice"
+            @deleteDevice="deleteDevice"
+          />
+        </el-tab-pane>
+        <el-tab-pane label="预案" name="pattern">
+          <PatternPanel :patternData="patternData" ref="patternPanel" />
+        </el-tab-pane>
+      </el-tabs>
+      <div class="btnGroup">
+        <el-button class="btn" @click="handleClose">取消</el-button>
+        <el-button class="btn" type="primary" @click="onOk">确定</el-button>
+      </div>
+    </el-drawer>
+    <Messagebox
+      :visible="messageboxVisible"
+      text="配置未保存，是否确认关闭?"
+      @cancle="cancle"
+      @ok="ok"
+    />
+  </div>
+</template>
+
+<script>
+import Messagebox from '../../../components/MessageBox/index'
+import DevicePanel from '../tables/device'
+import PatternPanel from '../tables/pattern'
+import {
+  UpdateViproute
+} from '@/api/service'
+export default {
+  name: 'schemeConfiguration',
+  components: {
+    Messagebox,
+    DevicePanel,
+    PatternPanel
+  },
+  props: {
+    visible: {
+      type: Boolean
+    },
+    routeData: {
+      type: Object
+    }
+  },
+  data () {
+    return {
+      configurationVisible: false, // 配置界面是否显示
+      activeTab: 'device',
+      messageboxVisible: false, // 关闭界面二期确认弹窗是否显示
+      configData: undefined, // 内部可修改的配置数据
+      deviceIds: [], // 初始协调线路包含的设备id
+      devicesData: [], // 设备面板数据
+      patternData: [], // 方案面板数据
+      defaultScheme: { // 默认协调方案配置参数
+        sortid: 0,
+        patternid: 0,
+        patterndes: ''
+      }
+    }
+  },
+  watch: {
+    visible: {
+      handler: function (val) {
+        this.configurationVisible = val
+      },
+      deep: true
+    },
+    routeData: {
+      handler: function (val) {
+        this.configData = JSON.parse(JSON.stringify(val))
+      },
+      deep: true
+    }
+  },
+  methods: {
+    handleClose () {
+      this.messageboxVisible = true
+      this.devicesData = []
+      this.patternData = []
+    },
+    reset () {
+      this.activeTab = 'device'
+    },
+    handleClickTab (tab, event) {
+      switch (tab.name) {
+        case 'device':
+          this.setDeviceData()
+          break
+        case 'pattern':
+          this.getPattern()
+          break
+      }
+    },
+    checkRules (reqData) {
+      let devs = reqData.devs
+      for (let inter of devs) {
+        if (!inter.patternid || inter.patternid === 0) {
+          this.$message.error('请选择方案！')
+          return true
+        }
+      }
+      return false
+    },
+    onOk () {
+      let reqData = this.getReqData()
+      if (this.checkRules(reqData)) { // 检验方案和相位是否为空
+        return
+      }
+      UpdateViproute(reqData).then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return
+        }
+        this.$message({
+          message: '协调参数配置成功！',
+          type: 'success',
+          duration: 1500
+        })
+        this.reset()
+        // 关闭抽屉，重新刷新右侧数据（即重刷planContent组件）
+        this.$emit('closeDrawer', 'refresh')
+      })
+    },
+    getReqData () {
+      let res = {
+        'id': this.configData.id,
+        'name': this.configData.name,
+        'devs': []
+      }
+      // 合并数据
+      let patternPanel = this.$refs.patternPanel
+      let patternTableData = patternPanel.patternTableData
+      for (let item of this.devicesData) {
+        let agentid = item.agentid
+        for (let pattern of patternTableData) {
+          let pAgentid = pattern.agentid
+          if (agentid === pAgentid) {
+            item.patternid = pattern.patternid
+            item.patterndes = pattern.patterndes
+            item.patterndesc = pattern.patterndesc
+            item.control = pattern.control
+            item.state = pattern.state
+            item.totaltime = pattern.totaltime
+            break
+          }
+        }
+      }
+      let devs = []
+      for (let dev of this.devicesData) {
+        let item = {
+          'id': dev.id,
+          'viprouteid': this.configData.id,
+          'agentid': dev.agentid,
+          'name': dev.name,
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [
+              0,
+              0
+            ]
+          },
+          'location': [
+            0,
+            0
+          ],
+          'control': dev.control,
+          'terminal': dev.patternid,
+          'terminalname': dev.patterndes,
+          'value': dev.state,
+          'totaltime': dev.totaltime
+        }
+        let geometry = dev.geometry
+        let location = dev.location
+        if (geometry && geometry.length > 0) {
+          item.geometry = geometry
+        }
+        if (location && location.length > 0) {
+          item.location = location
+        }
+        devs.push(item)
+      }
+      res.devs = devs
+      return res
+    },
+    cancle () {
+      this.messageboxVisible = false
+    },
+    ok () {
+      this.messageboxVisible = false
+      this.reset()
+      // 只关闭抽屉，不重刷组件
+      this.$emit('closeDrawer')
+    },
+    setDeviceData () {
+      // 获取设备表格信息
+      if (this.devicesData.length === 0 && this.configData.devs.length > 0) {
+        this.devicesData = [...this.configData.devs]
+      }
+    },
+    getPattern () {
+      // 获取方案表格信息
+      this.patternData = this.devicesData.map(ele => ({
+        agentid: ele.agentid,
+        patterndes: ele.terminalname,
+        patternid: ele.terminal,
+        state: ele.value,
+        control: ele.control,
+        totaltime: ele.totaltime
+      }))
+    },
+    addDevice (devices) {
+      // 添加多个设备
+      for (let dev of devices) {
+        let isIn = false
+        for (let item of this.devicesData) {
+          if (item.agentid === dev.agentid) {
+            isIn = true
+            break
+          }
+        }
+        if (!isIn) {
+          this.devicesData.push(dev)
+        }
+      }
+    },
+    deleteDevice (agentid) {
+      // 删除设备
+      let index = -1
+      for (let i = 0; i < this.devicesData.length; i++) {
+        let item = this.devicesData[i]
+        if (item.agentid === agentid) {
+          index = i
+          break
+        }
+      }
+      if (index !== -1) {
+        this.devicesData.splice(index, 1)
+        this.patternData = [] // 强制清空数据销毁table dom
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss" rel="stylesheet/scss">
+.configDrawer .el-drawer__header {
+  text-align: left;
+  color: #666666;
+}
+.configDrawer .el-drawer__body {
+  padding: 0 16px 30px 16px;
+}
+</style>
+<style lang="scss" rel="stylesheet/scss" scoped>
+.configDrawer {
+  position: relative;
+  .btnGroup {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    .btn {
+      width: 50%;
+    }
+  }
+}
+</style>

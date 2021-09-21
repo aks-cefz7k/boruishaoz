@@ -1,0 +1,339 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+<template>
+  <div class="planContent" v-if="!!chooseId">
+    <div class="mask" v-if="maskVisible" @click="clickMask"></div>
+    <div class="btnGroup">
+      <div class="editbtn" :style="{ zIndex: zIndexObj.editZIndex }">
+        <el-popover
+          placement="top-start"
+          trigger="manual"
+          v-model="maskVisible"
+          width="290"
+        >
+          <div class="tipContent">
+            <div>
+              <i class="iconfont icon-yindaoicon1"></i>
+            </div>
+            <div class="text">点击编辑按钮开始计划生成配置</div>
+          </div>
+          <button
+            slot="reference"
+            class="btn"
+            @click="handleEdit"
+            ref="editbtn"
+          >
+            编辑
+          </button>
+        </el-popover>
+      </div>
+    </div>
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+      <el-tab-pane label="线路预览" name="first"> </el-tab-pane>
+      <el-tab-pane label="线路状态" name="second"> </el-tab-pane>
+      <PlanChart
+        ref="planchart"
+        :route="route"
+        :tabName="activeName"
+        @onNodeClick="onNodeClick"
+        @research="research"
+      />
+    </el-tabs>
+    <SchemeConfiguration
+      :visible="configurationVisible"
+      :routeData="routeData"
+      ref="config"
+      @closeDrawer="closeDrawer"
+    />
+    <select-control v-show="false" ref="selectControl"></select-control>
+  </div>
+</template>
+
+<script>
+import SchemeConfiguration from './components/schemeConfiguration'
+import PatternTable from './pattern/patternTable'
+import PlanChart from './pattern/planChart/routePreview'
+import {
+  GetSingleViproute,
+  GetViprouteStatus
+} from '@/api/service'
+import { GetDeviceByIds } from '@/api/device'
+import NodeCard from '@/views/Service/components/nodeCard'
+import SelectControl from '@/views/Service/components/SelectControl'
+export default {
+  name: 'PlanContent',
+  components: {
+    SchemeConfiguration,
+    PatternTable,
+    PlanChart,
+    NodeCard,
+    SelectControl
+  },
+  props: {
+    schemeData: {
+      type: Array
+    },
+    step: {
+      type: Boolean
+    },
+    zIndexObj: {
+      type: Object
+    },
+    chooseId: {
+      type: Number
+    }
+  },
+  data () {
+    return {
+      activeName: 'first',
+      maskVisible: false, // 引导遮罩层是否显示
+      configurationVisible: false, // 配置界面是否显示
+      messageboxVisible: false, // 关闭界面二期确认弹窗是否显示
+      addNum: 0,
+      routeData: {}, // 单个协调路线的全部信息
+      patternList: [],
+      phaseList: [],
+      greenwave: [],
+      node: {},
+      route: {},
+      stateList: [],
+      devicesData: [],
+      deviceIds: []
+    }
+  },
+  watch: {
+    schemeData: {
+      handler: function (val) {
+        if (val && !val.length && this.step) {
+          this.maskVisible = true
+          // 模拟一次手动点击，触发tip显示
+          this.$refs.editbtn.click()
+        }
+      },
+      deep: true
+    },
+    chooseId (val) {
+      this.setRoute()
+    }
+  },
+  methods: {
+    getControlName (control) {
+      let res
+      res = this.$refs.selectControl.getNameById(control)
+      return res
+    },
+    getSingleViproute () {
+      return new Promise((resolve, reject) => {
+        if (this.chooseId === 0) return
+        GetSingleViproute(this.chooseId).then(res => {
+          if (!res.data.success) {
+            this.$message.error(res.data.message)
+            return
+          }
+          this.routeData = res.data.data
+          resolve(this.routeData)
+        })
+      })
+    },
+    getViprouteStatus () {
+      return new Promise((resolve, reject) => {
+        if (this.chooseId === 0) return
+        GetViprouteStatus(this.chooseId).then(res => {
+          if (!res.data.success) {
+            this.$message.error(res.data.message)
+            return
+          }
+          let stateList = res.data.data
+          this.stateList = stateList
+          if (this.stateList && this.stateList.length === 0) {
+            this.maskVisible = true
+            // 模拟一次手动点击，触发tip显示
+            this.$refs.editbtn.click()
+          }
+          resolve(stateList)
+        })
+      })
+    },
+    getDeviceByIds () {
+      // 获取设备表格信息
+      this.devicesData = []
+      return new Promise((resolve, reject) => {
+        if (this.chooseId === 0) return
+        this.deviceIds = this.routeData.devs.map(ele => ele.agentid)
+        GetDeviceByIds(this.deviceIds).then(res => {
+          if (!res.data.success) {
+            this.$message.error(res.data.message)
+            return
+          }
+          this.devicesData = res.data.data
+          resolve(this.devicesData)
+        })
+      })
+    },
+    async setRoute () {
+      await this.getSingleViproute()
+      await this.getViprouteStatus()
+      await this.getDeviceByIds()
+      for (let item of this.routeData.devs) {
+        for (let state of this.stateList) {
+          if (item.agentid === state.agentid) {
+            item.state = state.state
+            item.resttime = state.resttime
+            let controlName = this.getControlName(item.control)
+            item.controlName = controlName
+            for (let dev of this.devicesData) {
+              if (item.agentid === dev.agentid) {
+                item = Object.assign(item, dev)
+              }
+            }
+          }
+        }
+      }
+      this.route = this.routeData
+    },
+    handleClick (tab, event) {
+      this.activeName = tab.name
+    },
+    handleEdit () {
+      if (this.maskVisible && this.addNum <= 1) {
+        if (this.addNum === 1) {
+          this.maskVisible = false
+        }
+        this.addNum++
+      }
+      if (!this.maskVisible) {
+        // 获取单个协调路线的全部信息
+        // (弹窗取消后，应重新获取静态数据，此处采取中间变量法重新赋值，以触发watch能监听到routeData变化，给弹窗内共有变量configData重新赋值)
+        const lastRouteData = JSON.parse(JSON.stringify(this.routeData))
+        this.routeData = []
+        this.routeData = lastRouteData
+        this.configurationVisible = true
+        let _this = this
+        this.$nextTick(() => {
+          _this.$refs.config.setDeviceData()
+        })
+      }
+    },
+    closeDrawer (isRefresh) {
+      this.configurationVisible = false
+      if (isRefresh === 'refresh') {
+        this.$emit('resetContentComponent')
+      }
+    },
+    clickMask () {
+      this.maskVisible = false
+    },
+    handleMaskVisible () {
+      // 数据为空，显示蒙层
+      if (this.patternList && !this.patternList.length && this.step) {
+        this.maskVisible = true
+        // 模拟一次手动点击，触发tip显示
+        this.$refs.editbtn.click()
+      }
+    },
+    onNodeClick (id) {
+      console.log(id)
+      let intersections = this.route.intersections
+      let nodes = intersections.filter(e => e.id === id)
+      if (nodes && nodes.length === 1) {
+        this.node = nodes[0]
+        this.$refs.nodeCard.show()
+      }
+    },
+    research () {
+      this.setRoute()
+    }
+  }
+}
+</script>
+
+<style scoped>
+.planContent {
+  position: relative;
+}
+.btnGroup {
+  overflow: hidden;
+  float: right;
+  width: 150px;
+  /* width: 230px; */
+}
+/* 蒙层样式 */
+.mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.5;
+  z-index: 98;
+}
+/* 原生按钮样式修改 */
+.btnGroup button {
+  width: 70px;
+  height: 40px;
+  padding: 0;
+  line-height: 40px;
+  border: 1px solid #dcdfe6;
+  white-space: nowrap;
+  outline: 0;
+  transition: 0.1s;
+  font-size: 14px;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #409eff;
+  border-color: #409eff;
+  cursor: pointer;
+}
+.btnGroup button:hover {
+  color: #fff;
+  background-color: #66b1ff;
+  border-color: #66b1ff;
+}
+.btnGroup > button {
+  float: left;
+  position: relative;
+  z-index: 10;
+}
+.btnGroup button {
+  height: 32px;
+  line-height: 32px;
+}
+.btnGroup .editbtn {
+  float: left;
+  position: relative;
+  /* z-index: 98; */
+  margin-left: 10px;
+}
+.btnGroup .editbtn button {
+  font-weight: 500;
+}
+/* 提示框相关 */
+.tipContent > div {
+  float: left;
+}
+.tipContent div i {
+  color: #409eff;
+  font-size: 30px;
+}
+.tipContent .text {
+  font-family: SourceHanSansCN-Regular;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 14px;
+  letter-spacing: 1px;
+  color: #409eff;
+  margin-left: 7px;
+  line-height: 42px;
+}
+</style>
