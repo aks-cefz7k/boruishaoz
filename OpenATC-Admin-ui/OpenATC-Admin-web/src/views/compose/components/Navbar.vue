@@ -105,8 +105,7 @@ export default {
         user: '/user',
         greenwave: '/greenWaveOptimize',
         operate: '/operaterecord',
-        organization: '/organization'
-        organization: '/organization'        organization: '/organization',
+        organization: '/organization',
         service: '/service'
       },
       roleType: ['', 'success', 'warning'],
