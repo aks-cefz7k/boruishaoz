@@ -47,17 +47,17 @@
                 <el-table-column
                   align="center"
                   prop="countdown"
-                  :label="$t('edge.control.phase_countdown')">
+                  :label="$t('edge.overview.phase_countdown')">
                 </el-table-column>
                 <el-table-column
                   align="center"
                   prop="split"
-                  :label="$t('edge.control.split')">
+                  :label="$t('edge.overview.split')">
                 </el-table-column>
                 <el-table-column
                   align="center"
                   prop="type"
-                  :label="$t('edge.control.type')">
+                  :label="$t('edge.overview.type')">
                 </el-table-column>
               </el-table>
             </div>

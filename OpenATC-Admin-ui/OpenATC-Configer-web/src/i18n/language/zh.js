@@ -83,7 +83,18 @@ const zh = {
       'phone': '联系电话',
       'email': '电子邮箱',
       'changepass': '修改密码',
-      'exit': '退出'
+      'exit': '退出',
+      'options': 'options',
+      'options1': '全部',
+      'options2': '相位',
+      'options3': '跟随相位',
+      'options4': '方案',
+      'options5': '计划',
+      'options6': '日期',
+      'options7': '通道',
+      'options8': '检测器',
+      'options9': '行人检测器',
+      'options10': '设备信息'
     },
     'overview': {
       'crossinfo': '路口信息',
@@ -132,7 +143,10 @@ const zh = {
       'mediumvehicles': '中型车数量',
       'bigcars': '大型车数量',
       'possessionoftime': '占有时间',
-      'occupancy': '占有率'
+      'occupancy': '占有率',
+      'phase_countdown': '相位倒计时',
+      'split': '绿信比',
+      'type': '类型'
     },
     'phase': {
       'desc': '描述',

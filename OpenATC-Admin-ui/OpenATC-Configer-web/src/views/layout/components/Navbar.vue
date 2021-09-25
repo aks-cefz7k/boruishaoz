@@ -28,11 +28,11 @@
        </div> -->
       <div class="operation-button">
         <div v-show="isShowMenu" style="display: inline;">
-          <el-select v-model="value" placeholder="请选择" size="mini">
+          <el-select v-model="value" :placeholder="$t('edge.common.select')" size="mini">
             <el-option
               v-for="item in options"
               :key="item.value"
-              :label="item.label"
+              :label="$t('edge.main.options' + item.label)"
               :value="item.value">
             </el-option>
           </el-select>
@@ -182,34 +182,44 @@ export default {
       loading: {},
       options: [{
         value: 'all',
-        label: '全部'
+        // label: '全部'
+        label: '1'
       }, {
         value: 'phase',
-        label: '相位'
+        // label: '相位'
+        label: '2'
       }, {
         value: 'overlap',
-        label: '跟随相位'
+        // label: '跟随相位'
+        label: '3'
       }, {
         value: 'pattern',
-        label: '方案'
+        // label: '方案'
+        label: '4'
       }, {
         value: 'plan',
-        label: '计划'
+        // label: '计划'
+        label: '5'
       }, {
         value: 'date',
-        label: '日期'
+        // label: '日期'
+        label: '6'
       }, {
         value: 'channel',
-        label: '通道'
+        // label: '通道'
+        label: '7'
       }, {
         value: 'detecter',
-        label: '检测器'
+        // label: '检测器'
+        label: '8'
       }, {
         value: 'peddetecter',
-        label: '行人检测器'
+        // label: '行人检测器'
+        label: '9'
       }, {
         value: 'devinfo',
-        label: '设备信息'
+        // label: '设备信息'
+        label: '10'
       }],
       value: 'all',
       notify: undefined, // 用于判断关闭多个显示的提示框
