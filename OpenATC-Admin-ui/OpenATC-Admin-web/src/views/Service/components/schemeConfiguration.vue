@@ -94,6 +94,8 @@ export default {
     },
     routeData: {
       handler: function (val) {
+        this.devicesData = []
+        this.patternData = []
         this.configData = JSON.parse(JSON.stringify(val))
       },
       deep: true
@@ -102,8 +104,6 @@ export default {
   methods: {
     handleClose () {
       this.messageboxVisible = true
-      this.devicesData = []
-      this.patternData = []
     },
     reset () {
       this.activeTab = 'device'
@@ -121,7 +121,7 @@ export default {
     checkRules (reqData) {
       let devs = reqData.devs
       for (let inter of devs) {
-        if (!inter.patternid || inter.patternid === 0) {
+        if (!inter.terminal || inter.terminal === 0) {
           this.$message.error('请选择方案！')
           return true
         }
@@ -146,6 +146,7 @@ export default {
         this.reset()
         // 关闭抽屉，重新刷新右侧数据（即重刷planContent组件）
         this.$emit('closeDrawer', 'refresh')
+        this.$emit('research')
       })
     },
     getReqData () {
@@ -262,7 +263,7 @@ export default {
       }
       if (index !== -1) {
         this.devicesData.splice(index, 1)
-        this.patternData = [] // 强制清空数据销毁table dom
+        // this.patternData = [] // 强制清空数据销毁table dom
       }
     }
   }

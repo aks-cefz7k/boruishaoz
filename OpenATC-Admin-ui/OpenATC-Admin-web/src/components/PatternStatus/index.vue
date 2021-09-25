@@ -115,7 +115,7 @@ export default {
 }
 .ring-first {
   margin-top: 1px;
-  width: 44.5%;
+  width: 100%;
   height: 34px;
 }
 .first-1 {
@@ -141,7 +141,7 @@ export default {
 }
 .divider {
   position: absolute;
-  top: -10px;
+  top: -25px;
   // left: 370px;
   width: 2px;
   // height: 99px;

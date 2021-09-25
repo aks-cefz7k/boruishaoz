@@ -70,7 +70,7 @@
       <span class="pattern-explain">：绿信比</span>
       <span class="pattern-explain" style="margin-right: 15px">P相位</span>
       <PatternStatus
-        style="margin-bottom: 50px"
+        style="margin-bottom: 70px"
         :patternStatusList="patternStatusList"
         :barrierList="barrierList"
       ></PatternStatus>
@@ -266,8 +266,8 @@ export default {
 }
 .pattern-figure {
   position: fixed;
-  width: 88%;
-  bottom: 30px;
+  width: 39%;
+  bottom: 40px;
 }
 .pattern-status {
   display: inline;

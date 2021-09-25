@@ -44,7 +44,6 @@
         ref="planchart"
         :route="route"
         :tabName="activeName"
-        @onNodeClick="onNodeClick"
         @research="research"
       />
     </el-tabs>
@@ -53,6 +52,7 @@
       :routeData="routeData"
       ref="config"
       @closeDrawer="closeDrawer"
+      @research="research"
     />
     <select-control v-show="false" ref="selectControl"></select-control>
   </div>
@@ -67,7 +67,6 @@ import {
   GetViprouteStatus
 } from '@/api/service'
 import { GetDeviceByIds } from '@/api/device'
-import NodeCard from '@/views/Service/components/nodeCard'
 import SelectControl from '@/views/Service/components/SelectControl'
 export default {
   name: 'PlanContent',
@@ -75,7 +74,6 @@ export default {
     SchemeConfiguration,
     PatternTable,
     PlanChart,
-    NodeCard,
     SelectControl
   },
   props: {
@@ -111,16 +109,6 @@ export default {
     }
   },
   watch: {
-    schemeData: {
-      handler: function (val) {
-        if (val && !val.length && this.step) {
-          this.maskVisible = true
-          // 模拟一次手动点击，触发tip显示
-          this.$refs.editbtn.click()
-        }
-      },
-      deep: true
-    },
     chooseId (val) {
       this.setRoute()
     }
@@ -132,33 +120,33 @@ export default {
       return res
     },
     getSingleViproute () {
+      let _this = this
       return new Promise((resolve, reject) => {
-        if (this.chooseId === 0) return
-        GetSingleViproute(this.chooseId).then(res => {
+        GetSingleViproute(_this.chooseId).then(res => {
           if (!res.data.success) {
-            this.$message.error(res.data.message)
+            _this.$message.error(res.data.message)
             return
           }
-          this.routeData = res.data.data
-          resolve(this.routeData)
+          _this.routeData = res.data.data
+          if (!_this.routeData || _this.routeData.length === 0) {
+            _this.maskVisible = true
+            // 模拟一次手动点击，触发tip显示
+            _this.$refs.editbtn.click()
+          }
+          resolve(_this.routeData)
         })
       })
     },
     getViprouteStatus () {
+      let _this = this
       return new Promise((resolve, reject) => {
-        if (this.chooseId === 0) return
-        GetViprouteStatus(this.chooseId).then(res => {
+        GetViprouteStatus(_this.chooseId).then(res => {
           if (!res.data.success) {
-            this.$message.error(res.data.message)
-            return
+            _this.$message.error(res.data.message)
+            resolve()
           }
           let stateList = res.data.data
-          this.stateList = stateList
-          if (this.stateList && this.stateList.length === 0) {
-            this.maskVisible = true
-            // 模拟一次手动点击，触发tip显示
-            this.$refs.editbtn.click()
-          }
+          _this.stateList = stateList
           resolve(stateList)
         })
       })
@@ -166,20 +154,23 @@ export default {
     getDeviceByIds () {
       // 获取设备表格信息
       this.devicesData = []
+      let _this = this
       return new Promise((resolve, reject) => {
-        if (this.chooseId === 0) return
-        this.deviceIds = this.routeData.devs.map(ele => ele.agentid)
-        GetDeviceByIds(this.deviceIds).then(res => {
+        _this.deviceIds = _this.routeData.devs.map(ele => ele.agentid)
+        GetDeviceByIds(_this.deviceIds).then(res => {
           if (!res.data.success) {
-            this.$message.error(res.data.message)
-            return
+            _this.$message.error(res.data.message)
+            resolve()
           }
-          this.devicesData = res.data.data
-          resolve(this.devicesData)
+          _this.devicesData = res.data.data
+          resolve(_this.devicesData)
         })
       })
     },
     async setRoute () {
+      if (!this.chooseId || this.chooseId === 0) {
+        return false
+      }
       await this.getSingleViproute()
       await this.getViprouteStatus()
       await this.getDeviceByIds()
@@ -197,6 +188,11 @@ export default {
             }
           }
         }
+      }
+      if (!this.routeData || this.routeData.devs.length === 0) {
+        this.maskVisible = true
+        // 模拟一次手动点击，触发tip显示
+        this.$refs.editbtn.click()
       }
       this.route = this.routeData
     },
@@ -238,15 +234,6 @@ export default {
         this.maskVisible = true
         // 模拟一次手动点击，触发tip显示
         this.$refs.editbtn.click()
-      }
-    },
-    onNodeClick (id) {
-      console.log(id)
-      let intersections = this.route.intersections
-      let nodes = intersections.filter(e => e.id === id)
-      if (nodes && nodes.length === 1) {
-        this.node = nodes[0]
-        this.$refs.nodeCard.show()
       }
     },
     research () {
