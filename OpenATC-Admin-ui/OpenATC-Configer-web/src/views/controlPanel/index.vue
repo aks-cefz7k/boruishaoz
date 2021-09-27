@@ -45,7 +45,7 @@
         <div class="manual-tables-cycle"></div>
         <div v-show="currChannelId !== -1">
           <div  v-show="!editStatus"><div class="manual-tables-name">{{currChannelName}}</div><div class="manual-tables-edit" @click="edit"><i class="el-icon-edit"></i></div></div>
-          <div class="manual-tables-name" v-show="editStatus"><el-input v-model="currChannelName" placeholder="请输入内容" size="mini" @blur="editPanelName"></el-input></div>
+          <div class="manual-tables-name" v-show="editStatus"><el-input v-model="currChannelName" :placeholder="$t('edge.common.entercontent')" size="mini" @blur="editPanelName"></el-input></div>
           <div class="manual-tables-clear"><i class="el-icon-delete"></i><span class="manual-tables-qingkong" @click="clearChannel">{{$t('edge.controlpanel.clear')}}</span><svg-icon icon-class="huangshan" style="margin-left: 20px;"></svg-icon><span class="manual-tables-qingkong" @click="reset">{{$t('edge.controlpanel.resetstatus')}}</span></div>
         </div>
       </div>
@@ -76,11 +76,11 @@
           :label="$t('edge.controlpanel.status')"
           align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.channelstatus" placeholder="请选择" size="small">
+            <el-select v-model="scope.row.channelstatus" :placeholder="$t('edge.common.select')" size="small">
               <el-option
                 v-for="item in channelstatusList"
                 :key="item.value"
-                :label="item.label"
+                :label="$t('edge.controlpanel.channelstatus' + item.value)"
                 :value="item.value">
               </el-option>
             </el-select>
@@ -116,42 +116,42 @@ export default {
       }],
       manualBtnList: [{
         id: 1,
-        name: '东西直行',
+        name: this.$t('edge.controlpanel.manualbtn1'),
         btnNameList: 4,
         style: 'left: 173px; top: 243px;'
       }, {
         id: 2,
-        name: '北向通行',
+        name: this.$t('edge.controlpanel.manualbtn2'),
         btnNameList: 4,
         style: 'left: 403px; top: 243px;'
       }, {
         id: 3,
-        name: '东西左转',
+        name: this.$t('edge.controlpanel.manualbtn3'),
         btnNameList: 4,
         style: 'left: 632px; top: 243px;'
       }, {
         id: 4,
-        name: '西向通行',
+        name: this.$t('edge.controlpanel.manualbtn4'),
         btnNameList: 4,
         style: 'left: 300px; top: 346px;'
       }, {
         id: 5,
-        name: '东向通行',
+        name: this.$t('edge.controlpanel.manualbtn5'),
         btnNameList: 4,
         style: 'left: 506px; top: 346px;'
       }, {
         id: 6,
-        name: '南北直行',
+        name: this.$t('edge.controlpanel.manualbtn6'),
         btnNameList: 4,
         style: 'left: 173px; top: 449px;'
       }, {
         id: 7,
-        name: '南向通行',
+        name: this.$t('edge.controlpanel.manualbtn7'),
         btnNameList: 4,
         style: 'left: 403px; top: 449px;'
       }, {
         id: 8,
-        name: '南北左转',
+        name: this.$t('edge.controlpanel.manualbtn8'),
         btnNameList: 4,
         style: 'left: 632px; top: 449px;'
       }, {
@@ -324,7 +324,7 @@ export default {
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
       let channel = this.globalParamModel.getParamsByType('channelList')
       if (phaseList.length === 0 || channel.length === 0) {
-        this.$message.error('相位和通道不能为空！')
+        this.$message.error(this.$t('edge.controlpanel.phaseanddetectornotnull'))
         return
       }
       param.phaseList = phaseList
@@ -339,7 +339,7 @@ export default {
           this.$message.error(data.data.message)
           return
         }
-        this.$alert('生成默认参数成功，请查看！', { type: 'success' })
+        this.$alert(this.$t('edge.controlpanel.getdefaultmanualpaneltips'), { type: 'success' })
         this.$store.getters.tscParam.manualpanel = res.data
       }).catch(error => {
         this.$message.error(error)

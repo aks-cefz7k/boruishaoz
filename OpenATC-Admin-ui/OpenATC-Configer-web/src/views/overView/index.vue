@@ -57,7 +57,7 @@
           </div>
           <div class="other-div" v-for="(item, index) in showList" :key="index">
             <div style="height: 70px;">
-              <div class="model-tupian"><svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon></div><div class="model-name">{{item.name}}</div>
+              <div class="model-tupian"><svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon></div><div class="model-name">{{$t('edge.overview.showlist' + item.label)}}</div>
               <div class="to-detail" v-if="item.name === '当前/剩余时间' || item.name === '实时流量'" @click="handleChangeTable(item.name)">{{$t('edge.overview.details')}}</div>
             </div>
             <div>
@@ -294,28 +294,34 @@ export default {
       showList: [{
         iconClass: 'model',
         name: '控制模式',
-        value: '--'
+        value: '--',
+        label: '1'
       }, {
         iconClass: 'cycle',
         name: '周期',
-        value: '--'
+        value: '--',
+        label: '2'
       }, {
         iconClass: 'time',
         name: '当前/剩余时间',
-        insertHtml: true
+        insertHtml: true,
+        label: '3'
       },
       {
         iconClass: 'maincontrol',
         name: '控制方式',
-        value: '--'
+        value: '--',
+        label: '4'
       }, {
         iconClass: 'phasediff',
         name: '相位差',
-        value: '--'
+        value: '--',
+        label: '5'
       }, {
         iconClass: 'currentvolume',
         name: '实时流量',
-        value: '--'
+        value: '--',
+        label: '6'
       }],
       curTime: '--',
       syncTime: '--',
