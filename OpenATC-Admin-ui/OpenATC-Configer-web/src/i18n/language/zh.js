@@ -146,7 +146,17 @@ const zh = {
       'occupancy': '占有率',
       'phase_countdown': '相位倒计时',
       'split': '绿信比',
-      'type': '类型'
+      'type': '类型',
+      'showlist': 'showlist',
+      'showlist1': '控制模式',
+      'showlist2': '周期',
+      'showlist3': '当前/剩余时间',
+      'showlist4': '控制方式',
+      'showlist5': '相位差',
+      'showlist6': '实时流量',
+      'platformcontrol': '平台控制',
+      'configurationtoolcontrol': '配置工具控制',
+      'manualcontrol': '手动面板控制'
     },
     'phase': {
       'desc': '描述',
@@ -330,7 +340,9 @@ const zh = {
       'lampcontrolpanel': '主机灯控板数量: ',
       'boardsformainengine': '主机车检板数量: ',
       'ioboards': '主机IO板数量: ',
-      'slavecascadeoffset': '从机级联偏移量: '
+      'slavecascadeoffset': '从机级联偏移量: ',
+      'deviceinfostyle': 'margin-left: 50px; top: 10px;',
+      'deviceparamstyle': 'margin-left: 50px; top: 10px;'
     },
     'controlpanel': {
       'controlmode': '控制模式',
@@ -347,7 +359,22 @@ const zh = {
       'yellowflash': '黄闪',
       'defaultsettings': '生成默认设置',
       'clear': '清空',
-      'resetstatus': '状态重置'
+      'resetstatus': '状态重置',
+      'manualbtn': 'manualbtn',
+      'manualbtn1': '东西直行',
+      'manualbtn2': '北向通行',
+      'manualbtn3': '东西左转',
+      'manualbtn4': '西向通行',
+      'manualbtn5': '东向通行',
+      'manualbtn6': '南北直行',
+      'manualbtn7': '南向通行',
+      'manualbtn8': '南北左转',
+      'channelstatus': 'channelstatus',
+      'channelstatus1': '红灯',
+      'channelstatus3': '绿灯',
+      'channelstatus4': '灭灯',
+      'getdefaultmanualpaneltips': '生成默认参数成功，请查看！',
+      'phaseanddetectornotnull': '相位和通道不能为空！'
     },
     'system': {
       'information': '信息',
@@ -496,6 +523,7 @@ const zh = {
       'relatecancel': '关联取消！',
       'upload': '上传',
       'select': '请选择',
+      'entercontent': '请输入内容',
       'commit': '提交',
       'commitandexecute': '提交并执行',
       'uploadsuccess': '参数上传成功!',
