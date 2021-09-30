@@ -28,11 +28,15 @@ const en = {
       'updatecancel': 'Update Canceled!',
       'devicenotonline': 'Device not online！',
       'tipsmodaltitle': 'Tips',
-      'placeholder': 'Select'
+      'placeholder': 'Select',
+      'operationsuccess': 'Operation Success !'
     },
     'button': {
       'OK': 'OK',
-      'Cancel': 'Cancel'
+      'Cancel': 'Cancel',
+      'expandall': 'Expand All',
+      'collapseall': 'Collapse All',
+      'search': 'Search'
     },
     'main': {
       'homepage': 'Home',
@@ -42,6 +46,7 @@ const en = {
       'greenwaveoptimize': 'Greenwave Optimize',
       'operationrecord': 'Operation Record',
       'organization': 'Organization',
+      'dutyroute': 'Duty Route',
       'realname': 'RealName',
       'telno': 'Telno',
       'email': 'Email',
@@ -166,6 +171,15 @@ const en = {
       'reponsestatus': 'Response Status',
       'opera': 'Operation',
       'export': 'Export'
+    },
+    'organization': {
+      'viewdevice': 'ViewDevice',
+      'belongorganization': 'Belong Organization',
+      'relatedevice': 'RelateDevice',
+      'unrelateddevice': 'Unrelated Device',
+      'relateddevice': 'Related Device',
+      'modifyorganization': 'Modify Organization',
+      'addorganization': 'Add Organization'
     }
   }
 }

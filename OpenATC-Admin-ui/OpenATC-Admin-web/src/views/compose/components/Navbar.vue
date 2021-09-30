@@ -22,7 +22,7 @@
       <el-menu-item index="greenwave" style="display:inline">{{$t('openatc.main.greenwaveoptimize')}}</el-menu-item>
       <el-menu-item index="operate" style="display:inline">{{$t('openatc.main.operationrecord')}}</el-menu-item>
       <el-menu-item index="organization" style="display:inline">{{$t('openatc.main.organization')}}</el-menu-item>
-      <el-menu-item index="service" style="display:inline">勤务预案</el-menu-item>
+      <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item>
     </div>
     <div class="openatc-operate">
       <div class="admin">
@@ -106,7 +106,7 @@ export default {
         greenwave: '/greenWaveOptimize',
         operate: '/operaterecord',
         organization: '/organization',
-        service: '/service'
+        dutyroute: '/dutyroute'
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,

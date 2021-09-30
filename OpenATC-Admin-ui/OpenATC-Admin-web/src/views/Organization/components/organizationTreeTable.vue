@@ -19,7 +19,7 @@
       border
       fit
       highlight-current-row
-      style="width: 100%;"
+      style="width: 100%"
       :max-height="tableHeight"
       id="footerBtn"
     >
@@ -68,13 +68,13 @@
             type="text"
             :disabled="scope.row.description === '*'"
             @click="onRelateDeviceClick(scope.row)"
-            >关联设备</el-button
+            >{{ $t("openatc.organization.relatedevice") }}</el-button
           >
           <el-button
             type="text"
             :disabled="scope.row.description === '*'"
             @click="onViewDeviceClick(scope.row)"
-            >查看设备</el-button
+            >{{ $t("openatc.organization.viewdevice") }}</el-button
           >
         </template>
       </el-table-column>
@@ -125,8 +125,8 @@ export default {
     return {
       dialogStatus: 'create',
       textMap: {
-        update: '修改组织',
-        create: '添加组织'
+        update: this.$t('openatc.organization.modifyorganization'),
+        create: this.$t('openatc.organization.addorganization')
       },
       tempOrganization: {
         label: '',
@@ -273,7 +273,7 @@ export default {
     async removeOrganization (row) {
       let id = row.id
       let _this = this
-      _this.$confirm('是否删除组织？', _this.$t('edge.common.alarm'), {
+      _this.$confirm(_this.$t('openatc.greenwaveoptimize.isdelete') + ' ?', _this.$t('edge.common.alarm'), {
         confirmButtonText: _this.$t('edge.common.confirm'),
         showCancelButton: false,
         type: 'warning'

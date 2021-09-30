@@ -28,11 +28,15 @@ const zh = {
       'updatecancel': '更新取消!',
       'devicenotonline': '设备不在线！',
       'tipsmodaltitle': '提示',
-      'placeholder': '请选择'
+      'placeholder': '请选择',
+      'operationsuccess': '操作成功'
     },
     'button': {
       'OK': '确定',
-      'Cancel': '取消'
+      'Cancel': '取消',
+      'expandall': '全部展开',
+      'collapseall': '全部折叠',
+      'search': '搜索'
     },
     'main': {
       'homepage': '主页',
@@ -42,6 +46,7 @@ const zh = {
       'greenwaveoptimize': '绿波协调',
       'operationrecord': '操作记录',
       'organization': '组织机构',
+      'dutyroute': '勤务路线',
       'realname': '真实姓名',
       'telno': '联系电话',
       'email': '电子邮箱',
@@ -166,6 +171,15 @@ const zh = {
       'reponsestatus': '返回状态',
       'opera': '操作',
       'export': '导出'
+    },
+    'organization': {
+      'viewdevice': '查看设备',
+      'belongorganization': '所属组织',
+      'relatedevice': '关联设备',
+      'unrelateddevice': '未关联设备',
+      'relateddevice': '已关联设备',
+      'modifyorganization': '修改组织',
+      'addorganization': '添加组织'
     }
   }
 }
