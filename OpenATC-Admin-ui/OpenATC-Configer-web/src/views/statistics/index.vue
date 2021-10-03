@@ -135,9 +135,7 @@ export default {
         'udiskset': 1,
         'gainstatus': 1
       }
-      debugger
       setVolumelog(param).then((data) => {
-        debugger
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {

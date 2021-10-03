@@ -129,7 +129,6 @@ export default {
     },
     showDetailFault (val) {
       getFault(val).then(data => {
-        debugger
         if (data.data.success !== true) {
           this.listLoading = false
           this.$message.error(data.data.message)
