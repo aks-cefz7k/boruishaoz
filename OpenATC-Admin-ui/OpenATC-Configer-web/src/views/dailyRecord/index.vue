@@ -121,7 +121,7 @@ export default {
         if (!res.success) {
           this.listLoading = false
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)

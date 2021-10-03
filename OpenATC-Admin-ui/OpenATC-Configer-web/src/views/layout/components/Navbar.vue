@@ -105,7 +105,7 @@
             </el-dropdown>
       </div>
       <!-- <div class="dividing-line"></div> -->
-      <div class="switch-language">
+      <div class="switch-language" v-show="isShowLogout">
         <el-dropdown trigger="click" @command="switchLanguage">
           <span class="el-dropdown-link">
             {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -377,7 +377,7 @@ export default {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -404,7 +404,7 @@ export default {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -523,7 +523,7 @@ export default {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)

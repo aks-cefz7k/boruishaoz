@@ -41,15 +41,26 @@ export const downloadOptParam = (optimize, override) => {
   return api.Send({}, data, paramList)
 }
 
-export function uploadOptParam () {
+export function initOptParam () {
   var iframdevid = getIframdevid()
-  let api = new Authapi('uploadOptParam')
+  let api = new Authapi('initOptParam')
   let data = {}
   data.agentid = iframdevid
   data.operation = 'get-request'
-  data.infotype = 'status/opts'
-  // let paramList = [iframdevid, 'opt', 'upload']
+  data.infotype = 'status/optstatparam'
+  // let paramList = [iframdevid, 'optstatparam']
   return api.Send({}, data)
+}
+
+export function uploadOptParam () {
+  var iframdevid = getIframdevid()
+  let api = new Authapi('uploadOptParam')
+  // let data = {}
+  // data.agentid = iframdevid
+  // data.operation = 'get-request'
+  // data.infotype = 'status/opts'
+  let paramList = [iframdevid, 'optstatparam']
+  return api.Send({}, {}, paramList)
 }
 
 export const runStrategyType = () => {

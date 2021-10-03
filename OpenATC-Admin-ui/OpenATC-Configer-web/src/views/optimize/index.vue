@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { uploadOptParam, downloadOptParam, runStrategyType } from '@/api/optimize'
+import { initOptParam, uploadOptParam, downloadOptParam, runStrategyType } from '@/api/optimize'
 const clickoutside = {
   // 初始化指令
   bind (el, binding, vnode) {
@@ -123,6 +123,7 @@ export default {
   directives: { clickoutside },
   created () {
     this.getParams()
+    // this.initOptParam()
   },
   mounted: function () {
     var _this = this
@@ -190,12 +191,30 @@ export default {
         console.log(error)
       })
     },
+    initOptParam () {
+      initOptParam().then((data) => {
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        this.getParams()
+        // this.listLoading = true
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
     getParams () {
       uploadOptParam().then((data) => {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
