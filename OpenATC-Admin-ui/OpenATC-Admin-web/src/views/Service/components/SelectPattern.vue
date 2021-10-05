@@ -19,7 +19,7 @@
     collapse-tags
     clearable
     filterable
-    placeholder="请选择"
+    :placeholder="$t('openatc.common.placeholder')"
     @change="onChange"
   >
     <el-option
@@ -77,7 +77,7 @@ export default {
         this.loading = false
         if (!res.data.success) {
           if (res.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('openatc.common.devicenotonline'))
             return
           }
           this.$message.error(res.data.message)
@@ -91,7 +91,7 @@ export default {
             patternList: list,
             patternid: item.id,
             patterndes: item.desc,
-            patterndesc: item.desc === '' ? `方案${item.id}` : item.desc
+            patterndesc: item.desc === '' ? `${this.$t('openatc.greenwaveoptimize.pattern')}${item.id}` : item.desc
           }
           this.options.push(res)
         }

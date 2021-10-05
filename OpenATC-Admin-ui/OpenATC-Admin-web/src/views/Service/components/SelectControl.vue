@@ -18,7 +18,7 @@
     collapse-tags
     clearable
     filterable
-    placeholder="请选择"
+    :placeholder="$t('openatc.common.placeholder')"
     @change="onChange"
   >
     <el-option
@@ -61,71 +61,71 @@ export default {
       options: [
         {
           value: 0,
-          label: '恢复自主控制'
+          label: this.$t('openatc.dutyroute.autonomouscontrol')
         },
         {
           value: 1,
-          label: '黄闪'
+          label: this.$t('openatc.dutyroute.yellowflash')
         },
         {
           value: 2,
-          label: '全红'
+          label: this.$t('openatc.dutyroute.allred')
         },
         {
           value: 3,
-          label: '关灯'
+          label: this.$t('openatc.dutyroute.turnofflights')
         },
         {
           value: 4,
-          label: '步进'
+          label: this.$t('openatc.dutyroute.stepping')
         },
         {
           value: 5,
-          label: '定周期控制'
+          label: this.$t('openatc.dutyroute.fixedcyclecontrol')
         },
         {
           value: 6,
-          label: '单点感应控制'
+          label: this.$t('openatc.dutyroute.singlePointInductionControl')
         },
         {
           value: 7,
-          label: '协调感应控制(未支持)'
+          label: this.$t('openatc.dutyroute.coordinatedInductionControl')
         },
         {
           value: 8,
-          label: '方案选择控制(未支持)'
+          label: this.$t('openatc.dutyroute.schemeSelectionControl')
         },
         {
           value: 9,
-          label: '自适应控制(未支持)'
+          label: this.$t('openatc.dutyroute.adaptivecontrol')
         },
         {
           value: 10,
-          label: '无缆线控制'
+          label: this.$t('openatc.dutyroute.nocablecontrol')
         },
         {
           value: 11,
-          label: '有缆线控制'
+          label: this.$t('openatc.dutyroute.cablecontrol')
         },
         {
           value: 12,
-          label: '行人过街控制'
+          label: this.$t('openatc.dutyroute.pedestrianCrossingControl')
         },
         {
           value: 13,
-          label: '通道锁定'
+          label: this.$t('openatc.dutyroute.channellock')
         },
         {
           value: 14,
-          label: '相位锁定'
+          label: this.$t('openatc.dutyroute.phaselock')
         },
         {
           value: 100,
-          label: '方案干预'
+          label: this.$t('openatc.dutyroute.programIntervention')
         },
         {
           value: 101,
-          label: '通道检测'
+          label: this.$t('openatc.dutyroute.channelDetection')
         }
       ]
     }

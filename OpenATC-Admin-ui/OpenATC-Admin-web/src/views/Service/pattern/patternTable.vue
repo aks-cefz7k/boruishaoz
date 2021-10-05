@@ -15,31 +15,55 @@
       <el-table-column type="expand">
         <template slot-scope="scope">
           <div class="components-container board">
-            <Kanban v-for="n in scope.row.ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :header-text="'环 '+n" :index="scope.$index" @fatherMethod="fatherMethod"/>
+            <Kanban
+              v-for="n in scope.row.ringCount"
+              :key="n"
+              class="kanban todo"
+              :list="scope.row.rings[n - 1]"
+              :header-text="$t('openatc.dutyroute.ring') + n"
+              :index="scope.$index"
+              @fatherMethod="fatherMethod"
+            />
           </div>
         </template>
       </el-table-column>
       <el-table-column align="center" label="No" minWidth="40">
         <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
+          <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="设备ID" minWidth="40">
+      <el-table-column
+        align="center"
+        :label="$t('openatc.greenwaveoptimize.deviceid')"
+        minWidth="40"
+      >
         <template slot-scope="scope">
-          <span>{{scope.row.intersectionid}}</span>
+          <span>{{ scope.row.intersectionid }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="方案" prop="desc">
+      <el-table-column
+        align="center"
+        :label="$t('openatc.greenwaveoptimize.pattern')"
+        prop="desc"
+      >
         <!-- <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"></el-input>
         </template> -->
       </el-table-column>
-      <el-table-column  align="center" label="相位差" prop="offset">
+      <el-table-column
+        align="center"
+        :label="$t('openatc.greenwaveoptimize.offset')"
+        prop="offset"
+      >
         <template slot-scope="scope">
           <el-input size="small" v-model.number="scope.row.offset"></el-input>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="周期" prop="cycle">
+      <el-table-column
+        align="center"
+        :label="$t('openatc.greenwaveoptimize.cycle')"
+        prop="cycle"
+      >
       </el-table-column>
     </el-table>
   </div>
@@ -68,9 +92,9 @@ export default {
       // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
       // 后面的50：根据需求空出的高度，自行调整
       _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
+        window.innerHeight -
+        document.querySelector('#footerBtn').offsetTop -
+        50
       window.onresize = function () {
         // 定义窗口大小变更通知事件
         _this.screenHeight = window.innerHeight // 窗口高度
@@ -81,9 +105,9 @@ export default {
     screenHeight: function () {
       // 监听屏幕高度变化
       this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
+        window.innerHeight -
+        document.querySelector('#footerBtn').offsetTop -
+        50
     }
   },
   methods: {
@@ -117,7 +141,7 @@ export default {
           }
           // let currPattern = currPatternList.filter(cpl => cpl.id === patternId)[0]
           if (currPattern.desc === '') {
-            obj.desc = '方案' + currPattern.id
+            obj.desc = this.$t('openatc.greenwaveoptimize.pattern') + currPattern.id
           } else {
             obj.desc = currPattern.desc
           }
@@ -163,19 +187,19 @@ export default {
 </script>
 
 <style lang="scss">
-  .board {
-    width: 100%;
-    margin-left: 10px;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    align-items: flex-start;
-  }
-  .kanban {
-    &.todo {
-      .board-column-header {
-        background: #4A9FF9;
-      }
+.board {
+  width: 100%;
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.kanban {
+  &.todo {
+    .board-column-header {
+      background: #4a9ff9;
     }
   }
+}
 </style>

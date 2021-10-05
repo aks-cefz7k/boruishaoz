@@ -24,7 +24,9 @@
             <div>
               <i class="iconfont icon-yindaoicon1"></i>
             </div>
-            <div class="text">点击编辑按钮开始计划生成配置</div>
+            <div class="text">
+              {{ $t("openatc.greenwaveoptimize.createconfig") }}
+            </div>
           </div>
           <button
             slot="reference"
@@ -32,14 +34,16 @@
             @click="handleEdit"
             ref="editbtn"
           >
-            编辑
+            {{ $t("openatc.common.edit") }}
           </button>
         </el-popover>
       </div>
     </div>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="线路预览" name="first"> </el-tab-pane>
-      <el-tab-pane label="线路状态" name="second"> </el-tab-pane>
+      <el-tab-pane :label="$t('openatc.dutyroute.routePreview')" name="first">
+      </el-tab-pane>
+      <el-tab-pane :label="$t('openatc.dutyroute.routeState')" name="second">
+      </el-tab-pane>
       <PlanChart
         ref="planchart"
         :route="route"

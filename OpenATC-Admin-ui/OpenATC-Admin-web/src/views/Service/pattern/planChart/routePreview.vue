@@ -16,12 +16,12 @@
           @click.native="onStepClick(index)"
         >
           <div v-show="tabName === 'second'">
-            <el-tag type="info" class="tag" v-show="step.state === 0"
-              >待执勤</el-tag
-            >
-            <el-tag type="success" class="tag" v-show="step.state === 1"
-              >执勤中</el-tag
-            >
+            <el-tag type="info" class="tag" v-show="step.state === 0">{{
+              $t("openatc.dutyroute.notonduty")
+            }}</el-tag>
+            <el-tag type="success" class="tag" v-show="step.state === 1">{{
+              $t("openatc.dutyroute.onduty")
+            }}</el-tag>
           </div>
           <div
             class="resttime"
@@ -99,7 +99,7 @@ export default {
 .card-div {
   /* position: absolute; */
   padding-left: 80px;
-  width: 650px;
+  width: 850px;
 }
 .block >>> .el-scrollbar__wrap {
   overflow-x: hidden;

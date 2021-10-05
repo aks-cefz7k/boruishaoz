@@ -17,7 +17,7 @@
           <el-form-item>
             <el-input
               v-model="devsfilter"
-              placeholder="输入关键字搜索"
+              :placeholder="$t('openatc.common.searchplaceholder')"
               prefix-icon="el-icon-search"
               style="width: 100%"
             />
@@ -37,19 +37,39 @@
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column type="index" label="#" align="center">
           </el-table-column>
-          <el-table-column prop="agentid" label="设备ID" align="center">
+          <el-table-column
+            prop="agentid"
+            :label="$t('openatc.greenwaveoptimize.deviceid')"
+            align="center"
+          >
           </el-table-column>
-          <el-table-column prop="jsonparam.ip" label="IP" align="center">
+          <el-table-column
+            prop="jsonparam.ip"
+            :label="$t('openatc.greenwaveoptimize.IP')"
+            align="center"
+          >
           </el-table-column>
-          <el-table-column prop="jsonparam.port" label="端口" align="center">
+          <el-table-column
+            prop="jsonparam.port"
+            label="$t('openatc.greenwaveoptimize.port')"
+            align="center"
+          >
           </el-table-column>
-          <el-table-column prop="name" label="设备名称" align="center">
+          <el-table-column
+            prop="name"
+            label="$t('openatc.greenwaveoptimize.devicename')"
+            align="center"
+          >
           </el-table-column>
         </el-table>
       </div>
       <div class="btnGroup">
-        <el-button class="btn" @click="handleClose">取消</el-button>
-        <el-button class="btn" type="primary" @click="onOk">确定</el-button>
+        <el-button class="btn" @click="handleClose">{{
+          $t("openatc.button.Cancel")
+        }}</el-button>
+        <el-button class="btn" type="primary" @click="onOk">{{
+          $t("openatc.button.OK")
+        }}</el-button>
       </div>
     </div>
     <router-view></router-view>

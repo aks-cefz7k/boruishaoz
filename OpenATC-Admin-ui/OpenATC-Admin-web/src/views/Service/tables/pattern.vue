@@ -21,9 +21,16 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column type="index" label="#" align="center"> </el-table-column>
-      <el-table-column prop="agentid" label="设备ID" align="center">
+      <el-table-column
+        prop="agentid"
+        :label="$t('openatc.greenwaveoptimize.deviceid')"
+        align="center"
+      >
       </el-table-column>
-      <el-table-column label="控制方式" align="center">
+      <el-table-column
+        :label="$t('openatc.dutyroute.controlpattern')"
+        align="center"
+      >
         <template slot-scope="scope">
           <select-control
             :defaultValue="scope.row.control"
@@ -33,7 +40,10 @@
           ></select-control>
         </template>
       </el-table-column>
-      <el-table-column label="方案" align="center">
+      <el-table-column
+        :label="$t('openatc.greenwaveoptimize.pattern')"
+        align="center"
+      >
         <template slot-scope="scope">
           <select-pattern
             :agentid="scope.row.agentid"
@@ -43,7 +53,11 @@
           ></select-pattern>
         </template>
       </el-table-column>
-      <el-table-column prop="state" label="阶段" align="center">
+      <el-table-column
+        prop="state"
+        :label="$t('openatc.dutyroute.stage')"
+        align="center"
+      >
         <template slot-scope="scope">
           <el-input-number
             size="small"
@@ -54,7 +68,11 @@
           ></el-input-number>
         </template>
       </el-table-column>
-      <el-table-column prop="totaltime" label="持续时间(秒)" align="center">
+      <el-table-column
+        prop="totaltime"
+        :label="$t('openatc.dutyroute.lasttime')"
+        align="center"
+      >
         <template slot-scope="scope">
           <el-input-number
             size="small"
@@ -67,8 +85,12 @@
     </el-table>
     <div class="pattern-figure" v-show="isShowPatternStatus">
       <div class="pattern-status">{{ currPatternName }}</div>
-      <span class="pattern-explain">：绿信比</span>
-      <span class="pattern-explain" style="margin-right: 15px">P相位</span>
+      <span class="pattern-explain"
+        >：{{ $t("openatc.dutyroute.greenpercent") }}</span
+      >
+      <span class="pattern-explain" style="margin-right: 15px"
+        >P{{ $t("openatc.greenwaveoptimize.phase") }}</span
+      >
       <PatternStatus
         style="margin-bottom: 70px"
         :patternStatusList="patternStatusList"
@@ -111,12 +133,15 @@ export default {
         let pattern = JSON.parse(JSON.stringify(val))
         for (let i = 0; i < pattern.length; i++) {
           if (pattern[i].patternid !== 0) {
-            pattern[i].patterndesc = pattern[i].patterndes === '' ? `方案${pattern[i].patternid}` : pattern[i].patterndes
+            pattern[i].patterndesc = pattern[i].patterndes === '' ? `${this.$t('openatc.greenwaveoptimize.pattern')}${pattern[i].patternid}` : pattern[i].patterndes
           } else {
             pattern[i].patterndesc = ''
           }
         }
         this.patternTableData = pattern
+        this.isShowPatternStatus = false
+        this.barrierList = []
+        this.patternStatusList = []
       },
       deep: true
     }
@@ -161,7 +186,7 @@ export default {
           this.loading = false
           if (!res.data.success) {
             if (res.data.code === '4003') {
-              this.$message.error('设备不在线！')
+              this.$message.error(this.$t('openatc.common.devicenotonline'))
               return
             }
             this.$message.error(res.data.message)
@@ -176,7 +201,7 @@ export default {
       await this.getCurPhase(row.agentid)
       this.patternList = row.patternList
       if (!this.patternList) {
-        this.$message.warning('获取方案失败!')
+        this.$message.error(this.$t('openatc.dutyroute.getpatternfailed'))
         return false
       }
       this.isShowPatternStatus = true

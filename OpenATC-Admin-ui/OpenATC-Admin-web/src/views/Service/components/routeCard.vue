@@ -12,7 +12,9 @@
 <template>
   <el-card class="box-card" v-show="isShow">
     <div slot="header" class="clearfix">
-      <span><strong>属性</strong></span>
+      <span
+        ><strong>{{ $t("openatc.dutyroute.attributes") }}</strong></span
+      >
       <el-button
         style="float: right; padding: 3px 0"
         type="text"
@@ -26,7 +28,9 @@
         <el-col :span="8">
           <el-row :gutter="10">
             <el-col :span="12">
-              <div class="grid-content bg-purple">设备ID:</div>
+              <div class="grid-content bg-purple">
+                {{ $t("openatc.greenwaveoptimize.deviceid") }}:
+              </div>
             </el-col>
             <el-col :span="12">
               <div class="grid-content bg-purple">{{ node.agentid }}</div>
@@ -36,7 +40,9 @@
         <el-col :span="8">
           <el-row :gutter="10">
             <el-col :span="12">
-              <div class="grid-content bg-purple">执行方式:</div>
+              <div class="grid-content bg-purple">
+                {{ $t("openatc.dutyroute.executionway") }}:
+              </div>
             </el-col>
             <el-col :span="12">
               <div class="grid-content bg-purple">
@@ -48,7 +54,9 @@
         <el-col :span="8">
           <el-row :gutter="10">
             <el-col :span="12">
-              <div class="grid-content bg-purple">驻留阶段:</div>
+              <div class="grid-content bg-purple">
+                {{ $t("openatc.dutyroute.residentphase") }}:
+              </div>
             </el-col>
             <el-col :span="12">
               <div class="grid-content bg-purple">{{ node.value }}</div>
@@ -60,7 +68,9 @@
         <el-col :span="8">
           <el-row :gutter="10">
             <el-col :span="12">
-              <div class="grid-content bg-purple">方案:</div>
+              <div class="grid-content bg-purple">
+                {{ $t("openatc.greenwaveoptimize.pattern") }}:
+              </div>
             </el-col>
             <el-col :span="12">
               <div class="grid-content bg-purple">{{ node.terminalname }}</div>
@@ -70,7 +80,9 @@
         <el-col :span="8">
           <el-row :gutter="10">
             <el-col :span="12">
-              <div class="grid-content bg-purple">剩余时间:</div>
+              <div class="grid-content bg-purple">
+                {{ $t("openatc.dutyroute.timeleft") }}:
+              </div>
             </el-col>
             <el-col :span="12">
               <div class="grid-content bg-purple">{{ node.resttime }}</div>
@@ -86,7 +98,7 @@
         v-show="node.state === 0"
         @click="executeViproute"
         :disabled="isBtnDisabled"
-        >立即执行</el-button
+        >{{ $t("openatc.dutyroute.executenow") }}</el-button
       >
       <el-button
         style="float: right; padding: 3px 0"
@@ -94,7 +106,7 @@
         v-show="node.state === 1"
         @click="executeViproute"
         :disabled="isBtnDisabled"
-        >取消执行</el-button
+        >{{ $t("openatc.dutyroute.cancelexecute") }}</el-button
       >
     </div>
   </el-card>
@@ -169,6 +181,9 @@ export default {
 </script>
 
 <style>
+.box-card {
+  width: 100%;
+}
 .btn-bottom {
   float: right;
   margin: 15px;

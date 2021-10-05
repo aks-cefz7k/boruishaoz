@@ -12,7 +12,7 @@
 <template>
   <div class="addOptimize">
     <el-dialog
-      :title="isedit ? '编辑协调方案' : '新增协调方案'"
+      :title="isedit ? $t('openatc.common.edit') : $t('openatc.common.edit')"
       :visible.sync="addDialogVisible"
       :close-on-click-modal="false"
       width="780px"
@@ -25,18 +25,25 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="名称" prop="oldPass">
+        <el-form-item
+          :label="$t('openatc.greenwaveoptimize.name')"
+          prop="oldPass"
+        >
           <el-input
             type="text"
             auto-complete="off"
-            placeholder="方案名称"
+            :placeholder="$t('openatc.greenwaveoptimize.routename')"
             v-model="Form.name"
           ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('addForm')">取消</el-button>
-        <el-button type="primary" @click="commit()">确定</el-button>
+        <el-button @click="resetForm('addForm')">{{
+          $t("openatc.button.Cancel")
+        }}</el-button>
+        <el-button type="primary" @click="commit()">{{
+          $t("openatc.button.OK")
+        }}</el-button>
       </div>
     </el-dialog>
   </div>

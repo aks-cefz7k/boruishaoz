@@ -12,7 +12,7 @@
 <template>
   <div v-show="configurationVisible" class="configDrawer">
     <el-drawer
-      title="勤务路线配置"
+      :title="$t('openatc.dutyroute.dutyrouteconfig')"
       size="41%"
       :visible.sync="configurationVisible"
       direction="rtl"
@@ -21,7 +21,7 @@
       :before-close="handleClose"
     >
       <el-tabs v-model="activeTab" type="card" @tab-click="handleClickTab">
-        <el-tab-pane label="节点" name="device">
+        <el-tab-pane :label="$t('openatc.dutyroute.node')" name="device">
           <DevicePanel
             :devicesData="devicesData"
             ref="devicedPanel"
@@ -29,18 +29,22 @@
             @deleteDevice="deleteDevice"
           />
         </el-tab-pane>
-        <el-tab-pane label="预案" name="pattern">
+        <el-tab-pane :label="$t('openatc.dutyroute.plan')" name="pattern">
           <PatternPanel :patternData="patternData" ref="patternPanel" />
         </el-tab-pane>
       </el-tabs>
       <div class="btnGroup">
-        <el-button class="btn" @click="handleClose">取消</el-button>
-        <el-button class="btn" type="primary" @click="onOk">确定</el-button>
+        <el-button class="btn" @click="handleClose">{{
+          $t("openatc.button.Cancel")
+        }}</el-button>
+        <el-button class="btn" type="primary" @click="onOk">{{
+          $t("openatc.button.OK")
+        }}</el-button>
       </div>
     </el-drawer>
     <Messagebox
       :visible="messageboxVisible"
-      text="配置未保存，是否确认关闭?"
+      :text="$t('openatc.greenwaveoptimize.isClose')"
       @cancle="cancle"
       @ok="ok"
     />
@@ -122,7 +126,7 @@ export default {
       let devs = reqData.devs
       for (let inter of devs) {
         if (!inter.terminal || inter.terminal === 0) {
-          this.$message.error('请选择方案！')
+          this.$message.error(this.$t('openatc.greenwaveoptimize.choosepattern'))
           return true
         }
       }
@@ -139,7 +143,7 @@ export default {
           return
         }
         this.$message({
-          message: '协调参数配置成功！',
+          message: this.$t('openatc.common.operationsuccess'),
           type: 'success',
           duration: 1500
         })
