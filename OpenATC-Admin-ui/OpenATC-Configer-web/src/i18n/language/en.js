@@ -105,7 +105,7 @@ const en = {
       'signalIP': 'Signal IP',
       'online': 'Online',
       'offline': 'Offline',
-      'onlineing': '联机中...',
+      'onlineing': 'Offline...',
       'controlmode': 'Control Mode',
       'manual': 'Manual',
       'exitmanual': 'Exit Manual',
@@ -156,7 +156,17 @@ const en = {
       'showlist6': 'Real-time Volume',
       'platformcontrol': 'Platform Control',
       'configurationtoolcontrol': 'Configuration Tool Control',
-      'manualcontrol': 'Manual Control'
+      'manualcontrol': 'Manual Control',
+      'modelList': 'modelList',
+      'modelList0': 'Auto Control',
+      'modelList1': 'Yellow Flash',
+      'modelList2': 'Red Control',
+      'modelList3': 'Dark Control',
+      'modelList4': 'Step Control',
+      'modelList5': 'Fixed_Cycle Control',
+      'modelList6': 'Free Control',
+      'modelList10': 'Nocable Control',
+      'modelList12': 'phasewalk'
     },
     'phase': {
       'desc': 'Description',
@@ -556,7 +566,8 @@ const en = {
       'planPattern': 'The pattern in the plan can not be empty !',
       'overlapRules': 'The parent phase in the overlap cannot be empty！',
       'manualpanel': 'The manualpanel cannot be empty！',
-      'momthIsNull': 'Month cannot be empty in date！'
+      'momthIsNull': 'Month cannot be empty in date！',
+      'devicenotonline': 'Device not online!'
     },
     'importTemp': {
       'editTemplateData': 'Edit Template Data',

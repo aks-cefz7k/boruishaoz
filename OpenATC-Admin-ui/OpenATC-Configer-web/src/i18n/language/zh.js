@@ -156,7 +156,17 @@ const zh = {
       'showlist6': '实时流量',
       'platformcontrol': '平台控制',
       'configurationtoolcontrol': '配置工具控制',
-      'manualcontrol': '手动面板控制'
+      'manualcontrol': '手动面板控制',
+      'modelList': 'modelList',
+      'modelList0': '自主控制',
+      'modelList1': '黄闪',
+      'modelList2': '全红',
+      'modelList3': '关灯',
+      'modelList4': '步进',
+      'modelList5': '定周期',
+      'modelList6': '感应控制',
+      'modelList10': '无电缆协调',
+      'modelList12': '行人过街'
     },
     'phase': {
       'desc': '描述',
@@ -555,7 +565,8 @@ const zh = {
       'overlapRules': '跟随相位里的母相位不能为空！',
       'manualpanel': '手动面板数据不能为空',
       'momthIsNull': '日期里月份不能为空！',
-      'concurrentRules': '相位参数中配置了多环时，并发相位不能为空！'
+      'concurrentRules': '相位参数中配置了多环时，并发相位不能为空！',
+      'devicenotonline': '设备不在线！'
     },
     'importTemp': {
       'editTemplateData': '模板数据编辑',

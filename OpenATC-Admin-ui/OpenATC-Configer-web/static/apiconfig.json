@@ -65,9 +65,14 @@
   "method": "put"
 },
 {
-  "key": "uploadOptParam",
+  "key": "initOptParam",
   "url": "/devs/message",
   "method": "post"
+},
+{
+  "key": "uploadOptParam",
+  "url": "/devs",
+  "method": "get"
 },
 {
   "key": "putTscControl",

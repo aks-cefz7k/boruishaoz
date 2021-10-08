@@ -254,7 +254,7 @@ export default {
         if (!data.data.success) {
           this.devStatus = 2
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error('通讯异常！')
@@ -279,7 +279,7 @@ export default {
           if (data.data.code === '4003') {
             this.devStatus = 2
             this.clearPatternInterval() // 清除其他定时器
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)

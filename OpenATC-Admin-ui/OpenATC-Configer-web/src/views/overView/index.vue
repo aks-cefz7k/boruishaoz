@@ -153,7 +153,7 @@
               <div :class="currModel===item.id ? 'single-model-select' : 'single-model'" @click="selectModel(item.id)" :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''">
               <!-- <div :class="currModel===item.id ? 'single-model-select' : (preselectModel == item.id ? 'single-model-preselect' : 'single-model')" @click="selectModel(item.id)"> -->
                 <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
-                <div class="single-model-name">{{item.iconName}}</div>
+                <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
               </div>
             </div>
           </div>
@@ -383,7 +383,7 @@ export default {
         // 与每秒获取信号机状态共用一套断线重连机制，此处不做清空定时器的处理
         if (!data.data.success) {
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error('通讯异常！')
@@ -419,7 +419,7 @@ export default {
         if (!data.data.success) {
           this.devStatus = 2
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             this.reSend()
             return
           }
@@ -477,7 +477,7 @@ export default {
             this.devStatus = 2
             this.clearPatternInterval() // 清除其他定时器
             this.clearVolumeInterval()
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             this.reSend()
             return
           }
@@ -799,7 +799,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(res.message)
