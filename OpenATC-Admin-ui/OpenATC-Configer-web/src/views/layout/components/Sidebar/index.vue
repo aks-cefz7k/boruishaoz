@@ -62,7 +62,7 @@ export default {
     ]),
     routes () {
       this.getBaseEdgeRoute(this.$router.options.routes)
-      const curRoutes = this.parentRoutes
+      const curRoutes = this.parentRoutes.filter(ele => ele.path !== '/overviewNew')
       return curRoutes
     },
     isCollapse () {
