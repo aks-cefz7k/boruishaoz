@@ -26,11 +26,11 @@
       </el-table-column>
       <el-table-column
         prop="agentid"
-        label="设备ID"
+        :label="$t('openatc.greenwaveoptimize.deviceid')"
         align="center">
       </el-table-column>
       <el-table-column
-        label="距离（m）"
+        :label="$t('openatc.greenwaveoptimize.distancemeter')"
         align="center">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" v-model.number="scope.row.distance" @change="handleEdit('distance', scope.$index, scope.row)" style="width: 142px;margin: 0 auto;"></el-input-number>
@@ -38,7 +38,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="宽度（m）"
+        :label="$t('openatc.greenwaveoptimize.widthmeter')"
         align="center">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" v-model.number="scope.row.width" @change="handleEdit('width', scope.$index, scope.row)" style="width: 142px;margin: 0 auto;"></el-input-number>

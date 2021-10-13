@@ -12,7 +12,7 @@
 <template>
 <div>
   <div class="mask" v-if="maskVisible" @click ="clickMask"></div>
-  <Messagebox :visible="deleteDiologVisible" :text="`是否删除${chooseName} ?`" @cancle="closeDeleteDialog" @ok="handleDelete"/>
+  <Messagebox :visible="deleteDiologVisible" :text="`${$t('openatc.greenwaveoptimize.isdelete')}${chooseName} ?`" @cancle="closeDeleteDialog" @ok="handleDelete"/>
   <AddOptimizeDialog
     :visible="addDialogVisible"
     :isedit="isEdit"
@@ -31,19 +31,19 @@
           <div>
             <i class="iconfont icon-yindaoicon"></i>
           </div>
-          <div class="text">点击添加按钮添加绿波协调计划</div>
+          <div class="text">{{$t('openatc.greenwaveoptimize.addplan')}}</div>
         </div>
-        <button slot="reference" class="btn" @click="onAdd" ref="addbtn">添加</button>
+        <button slot="reference" class="btn" @click="onAdd" ref="addbtn">{{$t('openatc.common.add')}}</button>
       </el-popover>
     </div>
     <div class="operate">
       <el-dropdown trigger="click" @command="switchOperate">
         <span class="el-dropdown-link">
-          操作<i class="el-icon-arrow-down el-icon--right"></i>
+          {{$t('openatc.greenwaveoptimize.operation')}}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-edit" command="Edit">编辑</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-delete" command="Delete">删除</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-edit" command="Edit">{{$t('openatc.common.edit')}}</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-delete" command="Delete">{{$t('openatc.common.delete')}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -135,7 +135,7 @@ export default {
     onEdit () {
       if (!this.chooseId) {
         this.$message({
-          message: '未选中任何方案！',
+          message: this.$t('openatc.greenwaveoptimize.nochooseplan'),
           type: 'warning'
         })
         return
@@ -146,7 +146,7 @@ export default {
     onDelete () {
       if (!this.chooseId) {
         this.$message({
-          message: '未选中任何方案！',
+          message: this.$t('openatc.greenwaveoptimize.nochooseplan'),
           type: 'warning'
         })
         return
@@ -162,7 +162,7 @@ export default {
         this.deleteDiologVisible = false
         this.resetChooseId()
         this.$message({
-          message: '删除成功',
+          message: this.$t('openatc.common.deletesuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
@@ -183,7 +183,7 @@ export default {
       UpdateRouteName(data).then(res => {
         if (!res.data.success) {
           if (res.data.code === '5001') {
-            this.$message.error('协调方案名称重复！')
+            this.$message.error(this.$t('openatc.greenwaveoptimize.namerepeat'))
           } else {
             this.$message.error(res.data.message)
           }
@@ -191,7 +191,7 @@ export default {
         }
         this.closeAddDialog()
         this.$message({
-          message: '编辑成功',
+          message: this.$t('openatc.common.updatesuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
@@ -204,7 +204,7 @@ export default {
       AddRoute(data).then(res => {
         if (!res.data.success) {
           if (res.data.code === '5001') {
-            this.$message.error('新增失败，协调方案名称重复！')
+            this.$message.error(this.$t('openatc.greenwaveoptimize.addfail'))
           } else {
             this.$message.error(res.data.message)
           }
@@ -212,7 +212,7 @@ export default {
         }
         this.closeAddDialog()
         this.$message({
-          message: '新增成功',
+          message: this.$t('openatc.common.addsuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {

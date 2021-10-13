@@ -11,7 +11,7 @@
  **/
 <template>
   <el-dialog
-    title="关联设备"
+    :title="$t('openatc.organization.relatedevice')"
     :visible.sync="dialogRolesVisible"
     width="700px"
     @close="closeDialog"
@@ -21,7 +21,10 @@
         v-model="value"
         :data="allDevice"
         :props="{ key: 'agentid', label: 'name' }"
-        :titles="['未关联设备', '已关联设备']"
+        :titles="[
+          $t('openatc.organization.unrelateddevice'),
+          $t('openatc.organization.relateddevice'),
+        ]"
         style="text-align: left; display: inline-block"
       ></el-transfer>
     </div>
@@ -67,7 +70,7 @@ export default {
           this.$message.error(data.data.message)
           return
         }
-        let msg = '操作成功!'
+        let msg = this.$t('openatc.common.operationsuccess')
         this.listLoading = false
         this.dialogRolesVisible = false
         this.$message({

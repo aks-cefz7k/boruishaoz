@@ -32,21 +32,21 @@
         <el-input-number controls-position="right" size="small" :min="0" :max="255" :step="1" v-model.number="element.value" ref="type" :disabled="element.mode === 7"></el-input-number>
         </el-col>
         <el-col :span="7">
-          <el-select v-model="element.mode" size="small" @change="doChange(element)">
+          <el-select v-model="element.mode" size="small" @change="doChange(element)" :placeholder="$t('edge.common.select')">
             <el-option
               v-for="item in modeOption"
               :key="item.value"
-              :label="item.label"
+              :label="$t('edge.pattern.modeOption' + item.value)"
               :value="item.value">
             </el-option>
           </el-select>
         </el-col>
         <el-col :span="7">
-          <el-select v-model="element.options" size="small" multiple collapse-tags>
+          <el-select v-model="element.options" size="small" multiple collapse-tags :placeholder="$t('edge.common.select')">
             <el-option
               v-for="item in coordphaseOption"
               :key="item.value"
-              :label="item.label"
+              :label="$t('edge.pattern.coordphaseOption' + item.value)"
               :value="item.value">
             </el-option>
           </el-select>
@@ -69,36 +69,26 @@ export default {
   data () {
     return {
       modeOption: [{
-        value: 1,
-        label: '其他'
+        value: 1
       }, {
-        value: 2,
-        label: '无'
+        value: 2
       }, {
-        value: 3,
-        label: '最小绿请求'
+        value: 3
       }, {
-        value: 4,
-        label: '最大绿请求'
+        value: 4
       }, {
-        value: 5,
-        label: '行人请求'
+        value: 5
       }, {
-        value: 6,
-        label: '最大绿和行人请求'
+        value: 6
       }, {
-        value: 7,
-        label: '忽略相位'
+        value: 7
       }],
       coordphaseOption: [{
-        value: 1,
-        label: '协调相位'
+        value: 1
       }, {
-        value: 2,
-        label: '关键相位'
+        value: 2
       }, {
-        value: 4,
-        label: '固定相位'
+        value: 4
       }]
     }
   },

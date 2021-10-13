@@ -17,7 +17,7 @@
         <template slot-scope="scope">
           <div class="components-container board">
           <!-- <div class="components-container board" style="overflow-x:auto;"> -->
-            <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="'环 '+n" :index="scope.$index" @handleSplit="handleSplit"/>
+            <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="$t('edge.pattern.ring')+n" :index="scope.$index" @handleSplit="handleSplit"/>
           </div>
         </template>
       </el-table-column>

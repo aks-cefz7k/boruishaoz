@@ -12,7 +12,7 @@
 <template>
   <div class="dev-update">
     <el-dialog
-        :title="childTitle"
+        :title="$t(`openatc.devicemanager.${[childTitle]}`)"
         :visible.sync="dialogFormVisible"
         width="913px"
         :close-on-click-modal="false"
@@ -24,7 +24,7 @@
         :rules="rules"
         label-width="15%">
         <el-form-item
-            label="设备ID"
+            :label="$t('openatc.devicemanager.deviceid')"
             prop="agentid">
             <el-input
             type="text"
@@ -34,7 +34,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="设备名称"
+            :label="$t('openatc.devicemanager.devicename')"
             prop="name">
             <el-input
             type="text"
@@ -43,7 +43,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="类型"
+            :label="$t('openatc.devicemanager.type')"
             prop="type">
             <el-select v-model="deviceInfo.type" placeholder="" style="width:100%">
                 <el-option label="asc" value="asc"></el-option>
@@ -52,15 +52,15 @@
             </el-select>
         </el-form-item>
         <el-form-item
-            label="协议"
+            :label="$t('openatc.devicemanager.protocol')"
             prop="protocol">
             <el-select v-model="deviceInfo.protocol" placeholder="" style="width:100%">
-                <el-option label="kedacom" value="kedacom"></el-option>
-                <el-option label="GB" value="GB"></el-option>
+                <el-option label="scp" value="scp"></el-option>
+                <el-option label="ocp" value="ocp"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item
-            label="IP"
+            :label="$t('openatc.devicemanager.IP')"
             prop="ip" class="ipLabel">
             <el-input
             type="text"
@@ -69,7 +69,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="端口"
+            :label="$t('openatc.devicemanager.port')"
             prop="port" class="portLabel">
             <el-input
             type="text"
@@ -78,7 +78,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="描述"
+            :label="$t('openatc.devicemanager.describe')"
             prop="descs">
             <el-input
             type="text"
@@ -87,7 +87,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="经度"
+            :label="$t('openatc.devicemanager.longitude')"
             prop="lng">
             <el-input
             type="text"
@@ -96,7 +96,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="纬度"
+            :label="$t('openatc.devicemanager.latitude')"
             prop="lat">
             <el-input
             type="text"
@@ -108,8 +108,8 @@
         <div
         slot="footer"
         class="dialog-footer">
-            <el-button @click="resetForm('device')">取消</el-button>
-            <el-button type="primary" @click="submitDeviceInfo('device')">确定</el-button>
+            <el-button @click="resetForm('device')">{{$t('openatc.button.Cancel')}}</el-button>
+            <el-button type="primary" @click="submitDeviceInfo('device')">{{$t('openatc.button.OK')}}</el-button>
         </div>
     </el-dialog>
   </div>
@@ -137,7 +137,7 @@ export default {
     var checkIp = (rule, value, callback) => {
       if (value === '') {
         return callback(
-          new Error('请输入IP')
+          new Error(this.$t('openatc.devicemanager.enterIp'))
         )
       }
       const ipReg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
@@ -147,14 +147,14 @@ export default {
       } else {
         this.ip_status = false
         return callback(
-          new Error('请输入合法的IP！')
+          new Error(this.$t('openatc.devicemanager.correctIp'))
         )
       }
     }
     var checkPort = (rule, value, callback) => {
       if (value === '') {
         return callback(
-          new Error('请输入端口')
+          new Error(this.$t('openatc.devicemanager.enterport'))
         )
       }
       const portReg = /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
@@ -165,7 +165,7 @@ export default {
         } else {
           this.port_status = false
           callback(
-            new Error('请输入正确的端口！')
+            new Error(this.$t('openatc.devicemanager.correctport'))
           )
         }
       }, 100)
@@ -188,10 +188,10 @@ export default {
       },
       rules: {
         type: [
-          { required: true, message: '请选择类型', trigger: 'blur' }
+          { required: true, message: this.$t('openatc.devicemanager.choosetype'), trigger: 'blur' }
         ],
         protocol: [
-          { required: true, message: '请选择协议', trigger: 'blur' }
+          { required: true, message: this.$t('openatc.devicemanager.chooseprotocol'), trigger: 'blur' }
         ],
         ip: [
           { validator: checkIp, trigger: 'blur' }
@@ -200,10 +200,10 @@ export default {
           { validator: checkPort, trigger: 'blur' }
         ],
         agentid: [
-          { required: true, message: '请输入设备ID', trigger: 'blur' }
+          { required: true, message: this.$t('openatc.devicemanager.enterId'), trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '请输入设备名称', trigger: 'blur' }
+          { required: true, message: this.$t('openatc.devicemanager.entername'), trigger: 'blur' }
         ]
       }
     }
@@ -212,15 +212,15 @@ export default {
     submitDeviceInfo (formName) {
       // 提交表单
       if (this.deviceInfo.ip === '' || this.deviceInfo.port === '') {
-        this.$message.error('请填写必填项！')
+        this.$message.error(this.$t('openatc.devicemanager.enterrequired'))
         return
       }
       if (!this.ip_status) {
-        this.$message.error('请填写合法的IP！')
+        this.$message.error(this.$t('openatc.devicemanager.correctIp'))
         return
       }
       if (!this.port_status) {
-        this.$message.error('请填写合法的端口！')
+        this.$message.error(this.$t('openatc.devicemanager.correctport'))
         return
       }
       this.$refs[formName].validate((valid) => {
@@ -231,7 +231,7 @@ export default {
             this.addDevice()
           }
         } else {
-          this.$message.error('请填写必填项！')
+          this.$message.error(this.$t('openatc.devicemanager.enterrequired'))
           return false
         }
       })
@@ -258,7 +258,7 @@ export default {
         }
         this.dialogFormVisible = false
         this.$message({
-          message: '新增成功',
+          message: this.$t('edge.common.addsuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
@@ -281,7 +281,7 @@ export default {
         if (!res.data.success) {
           this.$message.error(res.data.message)
           this.$message({
-            message: '编辑失败',
+            message: this.$t('edge.common.updatefailed'),
             type: 'error',
             duration: 1 * 1000
           })
@@ -289,7 +289,7 @@ export default {
         }
         this.dialogFormVisible = false
         this.$message({
-          message: '编辑成功',
+          message: this.$t('edge.common.updatesuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {

@@ -194,7 +194,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -211,7 +211,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)

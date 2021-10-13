@@ -15,15 +15,15 @@
       center
       width="424px"
       :visible.sync="boxVisible"
-      :title="title"
+      :title="modalTitle"
       :close-on-click-modal="false"
       custom-class="MessageBox"
       @close="oncancle"
       append-to-body>
       <div class="text">{{text}}</div>
       <div slot="footer" class="boxFooter">
-        <el-button class="btn canclebtn" @click="oncancle">取 消</el-button>
-        <el-button class="btn okbtn" type="primary" @click="onok">确 认</el-button>
+        <el-button class="btn canclebtn" @click="oncancle">{{$t('openatc.button.Cancel')}}</el-button>
+        <el-button class="btn okbtn" type="primary" @click="onok">{{$t('openatc.button.OK')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -33,12 +33,16 @@ export default {
   name: 'message-box',
   data () {
     return {
-      boxVisible: this.visible
+      boxVisible: this.visible,
+      modalTitle: this.$t('openatc.common.tipsmodaltitle')
     }
   },
   watch: {
     visible: function (val) {
       this.boxVisible = val
+    },
+    title: function (val) {
+      this.modalTitle = val
     }
   },
   props: {
@@ -48,7 +52,7 @@ export default {
     },
     title: {
       type: String,
-      default: '提示'
+      default: ''
     },
     text: {
       type: String,
@@ -62,6 +66,9 @@ export default {
     oncancle () {
       this.$emit('cancle')
     }
+  },
+  beforeUpdate () {
+    this.modalTitle = this.$t('openatc.common.tipsmodaltitle')
   },
   mounted () {
   }

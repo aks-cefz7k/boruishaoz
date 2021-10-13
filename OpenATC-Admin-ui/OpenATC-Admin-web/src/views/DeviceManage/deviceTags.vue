@@ -16,7 +16,7 @@
     :class="operateId ? 'normalTag' : 'highlightTag'"
     type="primary"
     @click="backToDeviceList"
-    >设备列表</el-button>
+    >{{$t('openatc.devicemanager.devicelist')}}</el-button>
   <el-tag size="mini"
     closable
     v-for="(tag, index) in tags"

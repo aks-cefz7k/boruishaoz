@@ -14,16 +14,16 @@
   <div class="mask" v-if="maskVisible" @click ="clickMask"></div>
   <div class="btnGroup">
     <!-- <el-button class="btn" type="primary" @click="Download">下载</el-button> -->
-    <el-button class="btn" type="primary" @click="handleCreate">生成</el-button>
+    <el-button class="btn" type="primary" @click="handleCreate">{{$t('openatc.greenwaveoptimize.generate')}}</el-button>
     <div class="editbtn" :style="{zIndex: zIndexObj.editZIndex}">
       <el-popover placement="top-start" trigger="manual" v-model="maskVisible" width="290">
         <div class="tipContent">
           <div>
             <i class="iconfont icon-yindaoicon1"></i>
           </div>
-          <div class="text">点击编辑按钮开始计划生成配置</div>
+          <div class="text">{{$t('openatc.greenwaveoptimize.createconfig')}}</div>
         </div>
-        <button slot="reference" class="btn" @click="handleEdit" ref="editbtn">编辑</button>
+        <button slot="reference" class="btn" @click="handleEdit" ref="editbtn">{{$t('openatc.greenwaveoptimize.edit')}}</button>
       </el-popover>
     </div>
   </div>
@@ -32,14 +32,14 @@
     :routeData="routeData"
     @closeDrawer="closeDrawer" />
   <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane label="时距图" name="first">
+    <el-tab-pane :label="$t('openatc.greenwaveoptimize.timespace')" name="first">
       <PlanChart ref="planchart"/>
     </el-tab-pane>
-    <el-tab-pane label="方案" name="second">
+    <el-tab-pane :label="$t('openatc.greenwaveoptimize.pattern')" name="second">
       <PatternTable ref="patterntable"/>
     </el-tab-pane>
   </el-tabs>
-  <Messagebox :visible="messageboxVisible" text="确认下载方案？" @cancle="cancle" @ok="ok"/>
+  <Messagebox :visible="messageboxVisible" :text="$t('openatc.greenwaveoptimize.confirmdownloadpattern')" @cancle="cancle" @ok="ok"/>
 </div>
 </template>
 
@@ -113,8 +113,8 @@ export default {
         let patterntable = this.$refs.patterntable
         let newPatternList = patterntable.newPatternList
         for (let pattern of this.patternList) {
-          let intersectionid = pattern.intersectionid
-          let newPattern = newPatternList.filter(npl => npl.intersectionid === intersectionid)[0]
+          let agentid = pattern.agentid
+          let newPattern = newPatternList.filter(npl => npl.agentid === agentid)[0]
           let patternId = newPattern.patternId
           let currPatternList = pattern.feature.patternList
           let currPattern
@@ -165,8 +165,8 @@ export default {
       let patterntable = this.$refs.patterntable
       let newPatternList = patterntable.newPatternList
       for (let pattern of this.patternList) {
-        let intersectionid = pattern.intersectionid
-        let newPattern = newPatternList.filter(npl => npl.intersectionid === intersectionid)[0]
+        let agentid = pattern.agentid
+        let newPattern = newPatternList.filter(npl => npl.agentid === agentid)[0]
         let patternId = newPattern.id
         let currPatternList = pattern.feature.patternList
         let currPattern
@@ -179,7 +179,7 @@ export default {
         currPattern.offset = newPattern.offset
       }
       let param = {}
-      param.intersections = this.patternList
+      param.devs = this.patternList
       putAllPatternOfRoute(param).then(res => {
         if (!res.data.success) {
           this.$message.error(res.data.message)
@@ -197,19 +197,19 @@ export default {
       param.upspeed = Number(planchart.upspeed)
       param.downspeed = Number(planchart.downspeed)
       param.direction = planchart.direction
-      let intersections = param.intersections
-      for (let inter of intersections) {
+      let devs = param.devs
+      for (let inter of devs) {
         let feature = {}
-        let intersectionid = inter.intersectionid
+        let agentid = inter.agentid
         // 获取patternList
         for (let newPattern of newPatternList) {
-          if (newPattern.intersectionid === intersectionid) {
+          if (newPattern.agentid === agentid) {
             feature.patternList = newPattern
           }
         }
         // 获取phaseList
         for (let phase of this.phaseList) {
-          if (phase.intersectionid === intersectionid) {
+          if (phase.agentid === agentid) {
             let tempPhaseList = []
             let list = phase.feature.phaseList
             for (let ls of list) {
@@ -229,7 +229,7 @@ export default {
           return
         }
         this.greenwave = res.data.data.greenwave
-        this.patternList = res.data.data.intersections
+        this.patternList = res.data.data.devs
         this.handlePlanChart()
         this.handlePatternTable()
       })
@@ -255,7 +255,7 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        this.patternList = res.data.data.intersections
+        this.patternList = res.data.data.devs
         this.handlePlanChart()
         this.getAllPhaseOfRouter() // 获取改路线的所有相位
       })
@@ -272,7 +272,7 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        this.phaseList = res.data.data.intersections
+        this.phaseList = res.data.data.devs
         this.handlePatternTable()
         this.handleMaskVisible()
       })

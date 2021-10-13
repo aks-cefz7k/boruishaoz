@@ -23,42 +23,42 @@
           <div class="agent-div">
             <div style="height: 210px;">
               <div class="agent-icon">
-                <div v-show="devStatus===3"><div class="yuanxing" style="background: rgba(64, 158, 255, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #409eff;"></div><div class="dev-status" style="color: #409eff; left: 40px;">在线</div></div>
-                <div v-show="devStatus===2"><div class="yuanxing" style="background: rgba(179, 179, 179, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #b3b3b3;"></div><div class="dev-status" style="color: #b3b3b3; left: 40px;">离线</div></div>
-                <div v-show="devStatus===1"><div class="yuanxing" style="background: rgba(230, 162, 60, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #e6a23c;"></div><div class="dev-status" style="color: #e6a23c; left: 30px;">联机中</div></div>
+                <div v-show="devStatus===3"><div class="yuanxing" style="background: rgba(64, 158, 255, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #409eff;"></div><div class="dev-status" style="color: #409eff; left: 40px;">{{$t('edge.overview.online')}}</div></div>
+                <div v-show="devStatus===2"><div class="yuanxing" style="background: rgba(179, 179, 179, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #b3b3b3;"></div><div class="dev-status" style="color: #b3b3b3; left: 40px;">{{$t('edge.overview.offline')}}</div></div>
+                <div v-show="devStatus===1"><div class="yuanxing" style="background: rgba(230, 162, 60, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #e6a23c;"></div><div class="dev-status" style="color: #e6a23c; left: 30px;">{{$t('edge.overview.onlineing')}}</div></div>
               </div>
               <div class="agent-num">
-                <div class="agent-id">IP地址</div>
+                <div class="agent-id">{{$t('edge.overview.ipaddress')}}</div>
                 <div class="agent-number">{{ip}}</div>
-                <div class="agent-port">设备端口</div>
+                <div class="agent-port">{{$t('edge.overview.deviceport')}}</div>
                 <div class="port-number">{{port}}</div>
-                <div class="agent-port">协议</div>
+                <div class="agent-port">{{$t('edge.overview.agreement')}}</div>
                 <div class="port-number">{{protocol}}</div>
               </div>
             </div>
             <div style="height: 210px;">
               <div style="float: left; height: 50%; width: 50%; text-align: center;">
                 <div class="curr-grade">{{controlData.current_stage}}</div>
-                <div class="curr-num">当前阶段</div>
+                <div class="curr-num">{{$t('edge.overview.currentstage')}}</div>
               </div>
               <div style="float: right; height: 50%; width: 50%; text-align: center;">
                 <div class="curr-grade">{{controlData.total_stages}}</div>
-                <div class="curr-num">总阶段数</div>
+                <div class="curr-num">{{$t('edge.overview.allstagesnum')}}</div>
               </div>
               <div style="float: left; height: 50%; width: 50%; text-align: center;">
                 <div class="curr-grade">{{controlData.patternid}}</div>
-                <div class="curr-num">方案编号</div>
+                <div class="curr-num">{{$t('edge.overview.patternnum')}}</div>
               </div>
               <div style="float: right; height: 50%; width: 50%; text-align: center;">
                 <div class="curr-grade">{{controlData.name}}</div>
-                <div class="curr-num">方案名称</div>
+                <div class="curr-num">{{$t('edge.overview.patternname')}}</div>
               </div>
             </div>
           </div>
           <div class="other-div" v-for="(item, index) in showList" :key="index">
             <div style="height: 70px;">
-              <div class="model-tupian"><svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon></div><div class="model-name">{{item.name}}</div>
-              <div class="to-detail" v-if="item.name === '当前/剩余时间' || item.name === '实时流量'" @click="handleChangeTable(item.name)">详情</div>
+              <div class="model-tupian"><svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon></div><div class="model-name">{{$t('edge.overview.showlist' + item.label)}}</div>
+              <div class="to-detail" v-if="item.name === '当前/剩余时间' || item.name === '实时流量'" @click="handleChangeTable(item.name)">{{$t('edge.overview.details')}}</div>
             </div>
             <div>
               <div class="control-center" v-if="!item.insertHtml">{{item.value}}</div>
@@ -85,18 +85,14 @@
               </el-form-item>
               <el-form-item :label="$t('edge.control.control_style')">
                   <el-select v-model="form.control" :placeholder="$t('edge.common.select')">
-                      <el-option label="自主控制" value="0"></el-option>
-                      <el-option label="黄闪" value="1"></el-option>
-                      <el-option label="全红" value="2"></el-option>
-                      <el-option label="步进" value="4"></el-option>
-                      <el-option label="定周期" value="5"></el-option>
-                      <el-option label="感应控制" value="6"></el-option>
-                      <!-- <el-option label="协调感应控制" value="7"></el-option>
-                      <el-option label="方案选择控制" value="8"></el-option>
-                      <el-option label="自适应控制" value="9"></el-option> -->
-                      <el-option label="无电缆协调" value="10"></el-option>
-                      <!-- <el-option label="有电缆控制" value="11"></el-option> -->
-                      <el-option label="行人过街" value="12"></el-option>
+                      <el-option :label="$t('edge.overview.autocontrol')" value="0"></el-option>
+                      <el-option :label="$t('edge.overview.yellowflash')" value="1"></el-option>
+                      <el-option :label="$t('edge.overview.allred')" value="2"></el-option>
+                      <el-option :label="$t('edge.overview.step')" value="4"></el-option>
+                      <el-option :label="$t('edge.overview.fixedperiod')" value="5"></el-option>
+                      <el-option :label="$t('edge.overview.inductioncontrol')" value="6"></el-option>
+                      <el-option :label="$t('edge.overview.nocablecoordination')" value="10"></el-option>
+                      <el-option :label="$t('edge.overview.phasewalk')" value="12"></el-option>
                   </el-select>
               </el-form-item>
               <el-form-item :label="$t('edge.control.pattern')">
@@ -119,49 +115,49 @@
           <CrossDiagram v-if="reset" :crossStatusData="crossStatusData" :agentId="agentId" :devStatus="devStatus"/>
         </div>
         <div class="pattern-status">
-          <div class="pattern-name">方案状态</div>
-          <div class="pattern-message">(周期: {{controlData.cycle}}  相位差: {{controlData.offset}})</div>
-          <span class="pattern-explain">：绿信比</span>
-          <span class="pattern-explain" style="margin-right: 15px;">P相位</span>
+          <div class="pattern-name">{{$t('edge.overview.patternstate')}}</div>
+          <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
+          <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
+          <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
           <PatternStatus style="margin-top: 30px;" :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus>
         </div>
       </div>
       <div class="tuxing-right">
-        <div class="cross-mess">路口信息</div>
+        <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
         <div class="cross-module" style="height: 160px;">
-          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">路口名称:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">设备状态:</div>
-            <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">在线</div>
-            <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">离线</div>
-            <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">联机中...</div>
+          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div>
+          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+            <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
+            <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
+            <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
           </div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">协议类型:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div>
+          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div>
           <!-- <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">信号机ID:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">信号机IP:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
+          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
+          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
         </div>
-        <div style="margin-top: 220px;"><div class="cross-mess" style="float: left;">控制方式</div>
-          <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">手动</el-button>
-          <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">退出手动</el-button>
+        <div style="margin-top: 220px;"><div class="cross-mess" style="float: left;">{{$t('edge.overview.controlmode')}}</div>
+          <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
+          <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
         </div>
         <div class="cross-module" :style="{'height':controlHeight+'px'}">
-          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">控制模式:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">方案名称:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">控制编号:</div>
+          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
+          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
+          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
             <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
-            <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" placeholder="请输入"></el-input></div>
+            <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
           </div>
-          <div style="margin-top: 5px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">方式:</div></div>
+          <div style="margin-top: 5px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
           <div style="margin-left: 15px; width: 100%; height: auto;">
             <div class="control-model" v-for="(item, index) in modelList" :key="index">
               <div :class="currModel===item.id ? 'single-model-select' : 'single-model'" @click="selectModel(item.id)" :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''">
               <!-- <div :class="currModel===item.id ? 'single-model-select' : (preselectModel == item.id ? 'single-model-preselect' : 'single-model')" @click="selectModel(item.id)"> -->
                 <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
-                <div class="single-model-name">{{item.iconName}}</div>
+                <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
               </div>
             </div>
           </div>
-          <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div>
+          <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
           <!-- <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div> -->
           <div style="margin-left: 15px; width: 100%; height: auto;">
             <div class="control-model" v-for="(item, index) in stagesList" :key="index">
@@ -173,7 +169,7 @@
           </div>
           <div style="margin-top: 100px; margin-left: 5px; width: 100%; height: 22px;">
             <div style="float: left;">
-              <el-button style="margin-left: 12px;" type="primary" size="mini" @click="patternCommit" v-show="isOperation">执行</el-button>
+              <el-button style="margin-left: 12px;" type="primary" size="mini" @click="patternCommit" v-show="isOperation">{{$t('edge.overview.implement')}}</el-button>
             </div>
           </div>
         </div>
@@ -298,28 +294,34 @@ export default {
       showList: [{
         iconClass: 'model',
         name: '控制模式',
-        value: '--'
+        value: '--',
+        label: '1'
       }, {
         iconClass: 'cycle',
         name: '周期',
-        value: '--'
+        value: '--',
+        label: '2'
       }, {
         iconClass: 'time',
         name: '当前/剩余时间',
-        insertHtml: true
+        insertHtml: true,
+        label: '3'
       },
       {
         iconClass: 'maincontrol',
         name: '控制方式',
-        value: '--'
+        value: '--',
+        label: '4'
       }, {
         iconClass: 'phasediff',
         name: '相位差',
-        value: '--'
+        value: '--',
+        label: '5'
       }, {
         iconClass: 'currentvolume',
         name: '实时流量',
-        value: '--'
+        value: '--',
+        label: '6'
       }],
       curTime: '--',
       syncTime: '--',
@@ -381,7 +383,7 @@ export default {
         // 与每秒获取信号机状态共用一套断线重连机制，此处不做清空定时器的处理
         if (!data.data.success) {
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error('通讯异常！')
@@ -417,7 +419,7 @@ export default {
         if (!data.data.success) {
           this.devStatus = 2
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             this.reSend()
             return
           }
@@ -475,7 +477,7 @@ export default {
             this.devStatus = 2
             this.clearPatternInterval() // 清除其他定时器
             this.clearVolumeInterval()
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             this.reSend()
             return
           }
@@ -797,7 +799,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(res.message)

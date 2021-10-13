@@ -1,5 +1,5 @@
 [
-    {
+  {
     "key": "login",
     "url": "/auth/login",
     "method": "post"
@@ -178,5 +178,50 @@
     "key": "batchUpdateDevice",
     "url": "/organization",
     "method": "post"
+  },
+  {
+    "key": "getAllViproutes",
+    "url": "/viproute",
+    "method": "get"
+  },
+  {
+    "key": "getSingleViproute",
+    "url": "/viproute",
+    "method": "get"
+  },
+  {
+    "key": "getAllBriefViproutes",
+    "url": "/viproute/simple",
+    "method": "get"
+  },
+  {
+    "key": "addViproute",
+    "url": "/viproute",
+    "method": "post"
+  },
+  {
+    "key": "updateViproute",
+    "url": "/viproute",
+    "method": "put"
+  },
+  {
+    "key": "renameViproute",
+    "url": "/viproute/name",
+    "method": "put"
+  },
+  {
+    "key": "deleteViproute",
+    "url": "/viproute",
+    "method": "delete"
+  },
+  {
+    "key": "executeViproute",
+    "url": "/viproute/execute",
+    "method": "post"
+  },
+  {
+    "key": "getViprouteStatus",
+    "url": "/viproute",
+    "method": "get"
   }
 ]

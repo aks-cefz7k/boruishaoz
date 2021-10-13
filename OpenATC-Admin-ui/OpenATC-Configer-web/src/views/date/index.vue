@@ -130,9 +130,13 @@ export default {
     let lan = this.$i18n.locale
     if (lan === 'en') {
       this.days = daysModelEn
+      // this.dates = datesModelEn
+      // this.months = monthsModelEn
     }
     if (lan === 'zh') {
       this.days = daysModelCh
+      // this.dates = datesModel
+      // this.months = monthsModel
     }
     this.globalParamModel = this.$store.getters.globalParamModel
     this.init()

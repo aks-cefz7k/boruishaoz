@@ -11,7 +11,7 @@
  **/
 <template>
   <el-dialog
-    title="组织机构"
+    :title="$t('openatc.main.organization')"
     :visible.sync="dialogPermissionVisible"
     width="600px"
   >

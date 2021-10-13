@@ -15,14 +15,14 @@
       <!-- 相位倒计时 -->
       <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
         <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
-          <span style="float: left;font-size: 20px;color: #fff;width: 80px;">相位{{curPhase.id}} :</span>
+          <span style="float: left;font-size: 20px;color: #fff;width: 80px;">{{$t('edge.overview.phase')}}{{curPhase.id}} :</span>
           <span style="float: left;">{{curPhase.phaseCountdown}}</span>
         </div>
       </div>
       <!-- 手动刷新 -->
       <div v-if="!isLoaded">
         <RefreshSvg @click.native="refresh"/>
-        <span class="text">重新获取路口图</span>
+        <span class="text">{{$t('edge.overview.getintersectionmapagain')}}</span>
       </div>
     </div>
     <!-- 路口底图 -->
@@ -118,7 +118,7 @@ export default {
     devStatus: {
       handler: function (val) {
         if (val === 3) return
-        console.log('离线/联机中')
+        // console.log('离线/联机中')
         this.handleDefaultStatus()
       }
     }
@@ -233,7 +233,7 @@ export default {
         if (!res.data.success) {
           this.isLoaded = false
           if (res.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.common.deviceoffline'))
             return
           }
           this.$message.error(res.data.message)
@@ -361,7 +361,7 @@ export default {
 }
 .centerText {
   position: absolute;
-  width: 150px;
+  width: 250px;
   height: 150px;
   left: 50%;
   top: 50%;

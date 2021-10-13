@@ -11,7 +11,7 @@
  **/
 <template>
   <div>
-    <el-button type="primary" @click="refreshData" size="small" style="margin-bottom: 10px;">刷新</el-button>
+    <!-- <el-button type="primary" @click="refreshData" size="small" style="margin-bottom: 10px;">刷新</el-button> -->
     <div class="atc-table">
     <el-table
         :data="tableData"
@@ -27,34 +27,34 @@
         </el-table-column>
         <el-table-column
         prop="m_wFaultType"
-        label="主类型"
+        :label="$t('edge.fault.maintype')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="m_wSubFaultType"
-        label="子类型"
+        :label="$t('edge.fault.subtype')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="m_unFaultOccurTime"
-        label="发生时间"
+        :label="$t('edge.fault.occurtime')"
         sortable
         align="center">
         </el-table-column>
         <el-table-column
         prop="m_unFaultRenewTime"
-        label="恢复时间"
+        :label="$t('edge.fault.recoverytime')"
         sortable
         align="center">
         </el-table-column>
         <el-table-column
         prop="m_byFaultLevel"
-        label="等级"
+        :label="$t('edge.fault.grade')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="m_byFaultDescValue"
-        label="值"
+        :label="$t('edge.fault.value')"
         align="center">
         </el-table-column>
     </el-table>

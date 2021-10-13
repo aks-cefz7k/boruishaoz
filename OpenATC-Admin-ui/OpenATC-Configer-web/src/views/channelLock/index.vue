@@ -23,7 +23,7 @@
             {{scope.$index + 1}}
           </template>
         </el-table-column>
-        <el-table-column label="开始时间" min-width="190" align="center">
+        <el-table-column :label="$t('edge.channellock.starttime')" min-width="190" align="center">
         <template slot-scope="scope">
           <el-col :span="10">
             <el-select style="float:right;width:80px" v-model="scope.row.starthour" size="small">
@@ -50,7 +50,7 @@
           </el-col>
         </template>
       </el-table-column>
-      <el-table-column label="结束时间" min-width="190" align="center">
+      <el-table-column :label="$t('edge.channellock.endtime')" min-width="190" align="center">
         <template slot-scope="scope">
           <el-col :span="10">
             <el-select style="float:right;width:80px" v-model="scope.row.endhour" size="small">
@@ -77,12 +77,12 @@
           </el-col>
         </template>
       </el-table-column>
-      <el-table-column prop="greenflash" align="center" label="过渡绿闪时间" width="180">
+      <el-table-column prop="greenflash" align="center" :label="$t('edge.channellock.transitiongreenflashtime')" width="180">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" :max="1000" :step="1" v-model.number="scope.row.greenflash" style="width: 100px;"></el-input-number>
         </template>
       </el-table-column>
-      <el-table-column prop="yellowlamp" align="center" label="过渡黄灯时间" width="180">
+      <el-table-column prop="yellowlamp" align="center" :label="$t('edge.channellock.transitionyellowtime')" width="180">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" :max="1000" :step="1" v-model.number="scope.row.yellowlamp" style="width: 100px;"></el-input-number>
         </template>
@@ -91,7 +91,7 @@
     </div>
     <div class="manual-tables" style="display: inline-block">
       <div class="manual-tables-top">
-        <div class="channel-status">通道状态</div>
+        <div class="channel-status">{{$t('edge.channellock.channelstats')}}</div>
       </div>
       <div class="manual-tables-bottom">
         <el-table :data="channelList" :max-height="tableHeight" v-loading.body="listLoading" style="width: 90%" border id="footerBtn">
@@ -102,19 +102,21 @@
           </el-table-column> -->
           <el-table-column
           prop="channelid"
-          label="通道"
+          :label="$t('edge.channellock.channel')"
           align="center">
           </el-table-column>
-          <el-table-column prop="desc" label="通道信息" align="center">
+          <el-table-column prop="desc" :label="$t('edge.channellock.channelinfo')" align="center">
+          </el-table-column>
+          <!-- <el-table-column prop="desc" label="通道信息" align="center">
             <template slot-scope="scope">
               <el-input size="small" v-model="scope.row.desc"></el-input>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
-          label="状态"
+          :label="$t('edge.channellock.status')"
           align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.lockstatus" placeholder="请选择" size="small">
+            <el-select v-model="scope.row.lockstatus" :placeholder="$t('edge.common.select')" size="small">
               <el-option
                 v-for="item in channelstatusList"
                 :key="item.value"

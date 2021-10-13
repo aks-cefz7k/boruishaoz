@@ -70,6 +70,18 @@ const subRouter = [{
   }]
 },
 {
+  path: '/overviewNew',
+  component: Layout,
+  children: [{
+    path: 'index',
+    component: () => import('@/views/overView/index'),
+    meta: {
+      title: 'edge.route.overview',
+      icon: 'overview'
+    }
+  }]
+},
+{
   path: '/example',
   component: Layout,
   redirect: '/example/phase',
@@ -241,6 +253,19 @@ const subRouter = [{
     meta: {
       title: 'edge.route.dailyRecord',
       icon: 'dailyrecord'
+    }
+  }]
+},
+{
+  path: '/statistics',
+  component: Layout,
+  children: [{
+    path: 'index',
+    name: 'Statistics',
+    component: () => import('@/views/statistics/index'),
+    meta: {
+      title: 'edge.route.statistics',
+      icon: 'statistics'
     }
   }]
 }

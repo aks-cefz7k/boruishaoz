@@ -12,44 +12,44 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane label="信息" name="information">
+    <el-tab-pane :label="$t('edge.system.information')" name="information">
       <div class="system-information">
         <div class="signal-version">
-            <div class="signal-version-name">信号机版本：</div>
+            <div class="signal-version-name">{{$t('edge.system.signalversion')}}：</div>
             <div class="signal-version-value" style="height: 70px;">
                 <div>
-                    <div class="software" style="top: 10px;"><div style="float: left;">软件版本：</div><div>{{software}}</div></div>
-                    <div class="software" style="top: 30px;"><div style="float: left;">硬件版本：</div><div>{{hardware}}</div></div>
+                    <div class="software" style="top: 10px;"><div style="float: left;">{{$t('edge.system.softwareversion')}}：</div><div>{{software}}</div></div>
+                    <div class="software" style="top: 30px;"><div style="float: left;">{{$t('edge.system.hardwareversion')}}：</div><div>{{hardware}}</div></div>
                 </div>
             </div>
         </div>
         <div class="currsystemtime" style="margin-top: 50px;">
-            <div class="signal-version-name">当前系统时间：</div>
+            <div class="signal-version-name">{{$t('edge.system.currentsystemtime')}}：</div>
             <div class="signal-version-value" style="height: 40px;">
               <div>
-                <div class="software" style="top: 15px;"><div style="float: left;">时间：</div><div>{{systemTime}}</div></div>
+                <div class="software" style="top: 15px;"><div style="float: left;">{{$t('edge.system.time')}}：</div><div>{{systemTime}}</div></div>
               </div>
             </div>
             <div class="signal-version-bottom">
-              <el-button type="primary" @click="editCurrSystemTime" size="mini">设置</el-button>
+              <el-button type="primary" @click="editCurrSystemTime" size="mini">{{$t('edge.system.reset')}}</el-button>
             </div>
         </div>
         <div class="feature-parameter-version" style="margin-top: 50px;">
-            <div class="signal-version-name">特征参数版本：</div>
+            <div class="signal-version-name">{{$t('edge.system.featureparameterversion')}}：</div>
             <div class="signal-version-value" style="height: 40px;">
               <div>
-                <div class="software" style="top: 15px;"><div style="float: left;">版本号：</div><div>{{paramVersion}}</div></div>
+                <div class="software" style="top: 15px;"><div style="float: left;">{{$t('edge.system.version')}}：</div><div>{{paramVersion}}</div></div>
               </div>
             </div>
             <div class="signal-version-bottom">
-              <el-button type="primary" @click="editParamVersion" size="mini">设置</el-button>
+              <el-button type="primary" @click="editParamVersion" size="mini">{{$t('edge.system.reset')}}</el-button>
             </div>
         </div>
         <div class="identification-code" style="margin-top: 50px;">
-            <div class="signal-version-name">识别码：</div>
+            <div class="signal-version-name">{{$t('edge.system.identificationcode')}}：</div>
             <div class="signal-version-value" style="height: 40px;">
               <div>
-                <div class="software" style="top: 15px;"><div style="float: left;">设备识别码：</div><div>{{code}}</div></div>
+                <div class="software" style="top: 15px;"><div style="float: left;">{{$t('edge.system.equipmentidentificationcode')}}：</div><div>{{code}}</div></div>
               </div>
             </div>
             <!-- <div class="signal-version-bottom">
@@ -57,14 +57,14 @@
             </div> -->
         </div>
         <div class="identification-code" style="margin-top: 50px;">
-            <div class="signal-version-name">远程调试：</div>
+            <div class="signal-version-name">{{$t('edge.system.remotedebugging')}}：</div>
             <div class="signal-version-value" style="height: 95px;">
               <el-form
                 ref="template"
                 :model="remoteDebugInfo"
                 label-width="80px">
                     <el-form-item
-                        label="是否开启"
+                        :label="$t('edge.system.openornot')"
                         prop="status"
                         style="margin-bottom: 5px;">
                       <el-switch
@@ -75,7 +75,7 @@
                       </el-switch>
                     </el-form-item>
                     <el-form-item
-                        label="自动关闭"
+                        :label="$t('edge.system.automaticshutdown')"
                         prop=".duration">
                         <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
                             <el-option v-for="item in durationList" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -84,7 +84,7 @@
                 </el-form>
             </div>
             <div class="signal-version-bottom">
-              <el-button type="primary" @click="editRemoteDebug" size="mini">确定</el-button>
+              <el-button type="primary" @click="editRemoteDebug" size="mini">{{$t('edge.system.sure')}}</el-button>
             </div>
         </div>
       </div>
@@ -124,13 +124,13 @@
             </div>
       </div>
     </el-tab-pane> -->
-    <el-tab-pane label="远程控制" name="remote">
+    <el-tab-pane :label="$t('edge.system.remotecontrol')" name="remote">
         <div class="system-information">
             <div class="currsystemtime">
-                <div class="signal-version-name">远程控制：</div>
+                <div class="signal-version-name">{{$t('edge.system.remotecontrol')}}：</div>
                 <div class="signal-version-value" style="height: 70px;">
                     <div>
-                        <div class="software"><div style="float: left; margin-top: 30px;">操作</div>
+                        <div class="software"><div style="float: left; margin-top: 30px;">{{$t('edge.system.oper')}}</div>
                           <div class="remote-select">
                             <el-select v-model="remoteControl" placeholder="请选择" size="small">
                               <el-option
@@ -145,24 +145,24 @@
                     </div>
                 </div>
                 <div class="signal-version-bottom">
-                    <el-button type="primary" @click="editRemoteControl" size="mini">确定</el-button>
+                    <el-button type="primary" @click="editRemoteControl" size="mini">{{$t('edge.system.sure')}}</el-button>
                 </div>
             </div>
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
-                <div class="signal-version-name">系统更新：</div>
+                <div class="signal-version-name">{{$t('edge.system.systemupdate')}}：</div>
                 <div class="signal-version-bottom">
-                    <el-button type="primary" @click="chooseFile" size="mini">选择文件</el-button>
+                    <el-button type="primary" @click="chooseFile" size="mini">{{$t('edge.system.selectfile')}}</el-button>
                 </div>
             </div>
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
-                <div class="signal-version-name">数据更新：</div>
+                <div class="signal-version-name">{{$t('edge.system.dataupdate')}}：</div>
                 <div class="signal-version-bottom">
-                    <el-button type="primary" @click="updateUSB" size="mini">更新U盘数据</el-button>
+                    <el-button type="primary" @click="updateUSB" size="mini">{{$t('edge.system.updateUSB')}}</el-button>
                 </div>
             </div>
       </div>
     </el-tab-pane>
-    <el-tab-pane label="通道检测" name="channel">
+    <el-tab-pane :label="$t('edge.system.channeldetection')" name="channel">
       <channelControl />
     </el-tab-pane>
     <!-- <el-tab-pane label="手动控制" name="manual">
@@ -270,7 +270,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -288,7 +288,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -305,7 +305,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -322,7 +322,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -339,7 +339,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -358,7 +358,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -378,7 +378,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -398,7 +398,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -444,7 +444,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -463,7 +463,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
