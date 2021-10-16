@@ -25,8 +25,8 @@ export default class CoordinationModel {
     let rourte = this.rourte
     let maxY = 0
     if (Object.keys(rourte).length === 0) return maxY
-    for (let intersections of rourte.intersections) {
-      for (let pattern of intersections.patternList) {
+    for (let devs of rourte.devs) {
+      for (let pattern of devs.patternList) {
         if (pattern.cycle > maxY) {
           maxY = pattern.cycle
         }
@@ -38,8 +38,8 @@ export default class CoordinationModel {
     let rourte = this.rourte
     let maxX = 0
     if (Object.keys(rourte).length === 0) return maxX
-    for (let intersections of rourte.intersections) {
-      maxX = maxX + intersections.distance
+    for (let devs of rourte.devs) {
+      maxX = maxX + devs.distance
     }
     return maxX
   }
@@ -47,8 +47,8 @@ export default class CoordinationModel {
     let rourte = this.rourte
     let data = []
     let xDistance = 0 // 表示该路口到起点的距离
-    for (let intersections of rourte.intersections) {
-      xDistance = xDistance + intersections.distance
+    for (let devs of rourte.devs) {
+      xDistance = xDistance + devs.distance
       let list = [xDistance, 0]
       data.push(list)
     }
@@ -58,10 +58,10 @@ export default class CoordinationModel {
     let rourte = this.rourte
     let xDistance = 0 // 表示该路口到起点的距离
     let xName = ''
-    for (let intersections of rourte.intersections) {
-      xDistance = xDistance + intersections.distance
+    for (let devs of rourte.devs) {
+      xDistance = xDistance + devs.distance
       if (xDistance === val) {
-        xName = intersections.intersectionid + '(' + val + ')'
+        xName = devs.agentid + '(' + val + ')'
       }
     }
     return xName
@@ -69,8 +69,8 @@ export default class CoordinationModel {
   getCycleNum () {
     let rourte = this.rourte
     let minCycle = 99999
-    for (let intersections of rourte.intersections) {
-      let cycle = intersections.patternList[0].cycle
+    for (let devs of rourte.devs) {
+      let cycle = devs.patternList[0].cycle
       if (cycle < minCycle) {
         minCycle = cycle
       }
@@ -229,7 +229,7 @@ export default class CoordinationModel {
     let rourte = this.rourte
     // let greenwave = this.greenwave
     if (greenwave.length === 0) return data
-    let routeList = rourte.intersections
+    let routeList = rourte.devs
     let firstXLine = routeList[0].distance // 虚线起点的x坐标
     let lastXLine = this.getMaxX() // 虚线终点的x坐标
     let firstYLine = greenwave[0].start // 虚线起点的y坐标
@@ -243,7 +243,7 @@ export default class CoordinationModel {
     }
     let lastYLine2 = lastYLine + greenwave[0].width // 第二条虚线终点的y坐标
     let maxY = this.getMaxY() * 3
-    let firstDevCycle = rourte.intersections[0].patternList[0].cycle
+    let firstDevCycle = rourte.devs[0].patternList[0].cycle
     let lineNum = Math.ceil(maxY / firstDevCycle)
     for (let i = 0; i < lineNum; i++) { // 根据周期画出多段虚线
       let dataList = []
@@ -273,7 +273,7 @@ export default class CoordinationModel {
   getCustomData (direction) {
     let rourte = this.rourte
     let customList = []
-    let routeList = rourte.intersections
+    let routeList = rourte.devs
     if (routeList.length === 1) return customList // 如果只有一个路口则不画阴影部分
     let speed = 0
     if (direction === 'forward') {
@@ -427,16 +427,16 @@ export default class CoordinationModel {
     let rourte = this.rourte
     let list = []
     let distance = 0
-    for (let intersections of rourte.intersections) {
+    for (let devs of rourte.devs) {
       let ob = {}
-      ob.name = intersections.intersectionid
-      distance = distance + intersections.distance
+      ob.name = devs.agentid
+      distance = distance + devs.distance
       ob.distance = distance
-      let cycle = intersections.patternList[0].cycle
+      let cycle = devs.patternList[0].cycle
       ob.cycle = cycle
-      let forwardphaseid = intersections.forwardphaseid
-      let rings = this.getByRingById(forwardphaseid, intersections.patternList[0].rings)
-      let offset = intersections.patternList[0].offset
+      let forwardphaseid = devs.forwardphaseid
+      let rings = this.getByRingById(forwardphaseid, devs.patternList[0].rings)
+      let offset = devs.patternList[0].offset
       ob.value = this.getCycleData(forwardphaseid, rings, cycle, offset)
       list.push(ob)
     }
@@ -446,17 +446,17 @@ export default class CoordinationModel {
     let rourte = this.rourte
     let list = []
     let distance = 0
-    for (let intersections of rourte.intersections) {
+    for (let devs of rourte.devs) {
       let ob = {}
-      ob.name = intersections.intersectionid
-      distance = distance + intersections.distance
+      ob.name = devs.agentid
+      distance = distance + devs.distance
       ob.distance = distance
-      let cycle = intersections.patternList[0].cycle
+      let cycle = devs.patternList[0].cycle
       ob.cycle = cycle
-      let backphaseid = intersections.backphaseid
-      let rings = this.getByRingById(backphaseid, intersections.patternList[0].rings)
-      let offset = intersections.patternList[0].offset
-      // ob.value = this.getCycleData(backphaseid, intersections.patternList[0].rings, cycle, offset)
+      let backphaseid = devs.backphaseid
+      let rings = this.getByRingById(backphaseid, devs.patternList[0].rings)
+      let offset = devs.patternList[0].offset
+      // ob.value = this.getCycleData(backphaseid, devs.patternList[0].rings, cycle, offset)
       ob.value = this.getCycleData(backphaseid, rings, cycle, offset)
       list.push(ob)
     }

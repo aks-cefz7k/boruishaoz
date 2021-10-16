@@ -29,12 +29,12 @@
       </div>
     </div>
   </div>
-  <el-button class="controlbtn" type="primary" @click="toAutoControl">恢复</el-button>
+  <el-button class="controlbtn" type="primary" @click="toAutoControl">{{$t('edge.system.recovery')}}</el-button>
 </div>
 </template>
 
 <script>
-import { putTscControl } from '@/api/control'
+// import { putTscControl } from '@/api/control'
 import { channelcheck } from '@/api/system'
 export default {
   name: 'channelcontrol',
@@ -62,12 +62,17 @@ export default {
   mounted () {
     this.handleCreateLampCtrboard()
   },
+  beforeUpdate () {
+    this.handleCreateLampCtrboard()
+  },
   methods: {
     handleCreateLampCtrboard () {
+      this.data = []
       for (let i = 1; i <= 10; i++) {
         let lamp = {}
         lamp.lampctrboardnum = i
-        lamp.name = `灯控板${i}`
+        // lamp.name = `灯控板${i}`
+        lamp.name = this.$t('edge.system.lampcontrolpanel') + i
 
         lamp.channels = []
         for (let j = 1; j <= 4; j++) {
@@ -96,7 +101,8 @@ export default {
       const params = {
         lampctrboard,
         channel,
-        lampcolor
+        lampcolor,
+        control: 15
       }
       channelcheck(params).then(data => {
         if (!data.data.success) {
@@ -109,9 +115,25 @@ export default {
     },
     toAutoControl () {
       this.handleExclusive()
-      let control = {}
-      control.control = 0
-      putTscControl(control).then(data => {
+      // let control = {}
+      // control.control = 0
+      // putTscControl(control).then(data => {
+      //   if (!data.data.success) {
+      //     this.$message.error(data.data.message)
+      //     return
+      //   }
+      //   this.$alert(this.$t('edge.channelControl.recoverysuccess'), { type: 'success' })
+      // }).catch(error => {
+      //   this.$message.error(error)
+      //   console.log(error)
+      // })
+      const params = {
+        lampctrboard: 0,
+        channel: 0,
+        lampcolor: 0,
+        control: 0
+      }
+      channelcheck(params).then(data => {
         if (!data.data.success) {
           this.$message.error(data.data.message)
           return

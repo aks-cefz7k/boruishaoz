@@ -59,8 +59,8 @@
         <el-form-item prop="protocol">
           <span class="text-container">协议</span>
           <el-select v-model="loginForm.protocol" placeholder="" style="width:85%">
-            <el-option label="kedacom" value="kedacom"></el-option>
-            <el-option label="GB" value="GB"></el-option>
+            <el-option label="scp" value="scp"></el-option>
+            <el-option label="ocp" value="ocp"></el-option>
           </el-select>
           <!-- <el-input class="login-input" name="protocol" type="text" v-model="loginForm.protocol" auto-complete="on" placeholder="" /> -->
         </el-form-item>
@@ -144,7 +144,7 @@ export default {
         password: '',
         ip: 'localhost',
         port: '8880',
-        protocol: 'GB',
+        protocol: 'ocp',
         agentid: '0'
       },
       loginRules: {
@@ -258,7 +258,7 @@ export default {
     resetParams () {
       this.loginForm.ip = 'localhost'
       this.loginForm.port = '8880'
-      this.loginForm.protocol = 'GB'
+      this.loginForm.protocol = 'ocp'
       this.loginForm.agentid = '0'
     },
     addDevice () {

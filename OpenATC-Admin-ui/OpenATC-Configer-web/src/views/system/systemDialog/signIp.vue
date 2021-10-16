@@ -12,7 +12,7 @@
 <template>
   <div class="system-signip">
     <el-dialog
-      title="设备识别码设置"
+      :title="$t('edge.system.deviceidentificationcodesetting')"
       :visible.sync="dialogFormVisible"
       width="600px"
       @close='closeFormDialog'>
@@ -34,7 +34,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="子网掩码"
+            :label="$t('edge.deviceinfo.subnetmask')"
             prop="subnetmask" class="ipLabel">
             <el-input
             type="text"
@@ -45,7 +45,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            label="网关"
+            :label="$t('edge.deviceinfo.gateway')"
             prop="gateway" class="ipLabel">
             <el-input
             type="text"
@@ -57,8 +57,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-          <el-button @click="resetForm()">取消</el-button>
-          <el-button type="primary" @click="ok">确定</el-button>
+          <el-button @click="resetForm()">{{$t('edge.common.cancel')}}</el-button>
+          <el-button type="primary" @click="ok">{{$t('edge.common.confirm')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -187,7 +187,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)

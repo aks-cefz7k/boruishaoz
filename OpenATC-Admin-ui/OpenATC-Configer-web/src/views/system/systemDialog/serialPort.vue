@@ -12,7 +12,7 @@
 <template>
   <div class="system-signip">
     <el-dialog
-      title="设备识别码设置"
+      :title="$t('edge.system.deviceidentificationcodesetting')"
       :visible.sync="dialogFormVisible"
       width="600px"
       @close='closeFormDialog'>
@@ -22,9 +22,9 @@
         :model="serialPortInfo"
         label-width="15%">
         <el-form-item
-            label="波特率"
+            :label="$t('edge.system.baudrate')"
             prop="Baudrate">
-            <el-select v-model="serialPortInfo.Baudrate" placeholder="请选择" style="width:90%" size="small">
+            <el-select v-model="serialPortInfo.Baudrate" :placeholder="$t('edge.common.select')" style="width:90%" size="small">
                 <el-option
                 v-for="item in baudrateOptions"
                 :key="item.value"
@@ -34,9 +34,9 @@
             </el-select>
         </el-form-item>
         <el-form-item
-            label="数据位"
+            :label="$t('edge.system.databit')"
             prop="databit">
-            <el-select v-model="serialPortInfo.databit" placeholder="请选择" style="width:90%" size="small">
+            <el-select v-model="serialPortInfo.databit" :placeholder="$t('edge.common.select')" style="width:90%" size="small">
                 <el-option
                 v-for="item in databitOptions"
                 :key="item.value"
@@ -46,9 +46,9 @@
             </el-select>
         </el-form-item>
         <el-form-item
-            label="停止位"
+            :label="$t('edge.system.stopbit')"
             prop="stopbit">
-            <el-select v-model="serialPortInfo.stopbit" placeholder="请选择" style="width:90%" size="small">
+            <el-select v-model="serialPortInfo.stopbit" :placeholder="$t('edge.common.select')" style="width:90%" size="small">
                 <el-option
                 v-for="item in stopbitOptions"
                 :key="item.value"
@@ -58,9 +58,9 @@
             </el-select>
         </el-form-item>
         <el-form-item
-            label="奇偶校验位"
+            :label="$t('edge.system.paritybit')"
             prop="paritybit">
-            <el-select v-model="serialPortInfo.paritybit" placeholder="请选择" style="width:90%" size="small">
+            <el-select v-model="serialPortInfo.paritybit" :placeholder="$t('edge.common.select')" style="width:90%" size="small">
                 <el-option
                 v-for="item in paritybitOptions"
                 :key="item.value"
@@ -71,8 +71,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-          <el-button @click="resetForm()">取消</el-button>
-          <el-button type="primary" @click="ok">确定</el-button>
+          <el-button @click="resetForm()">{{$t('edge.common.cancel')}}</el-button>
+          <el-button type="primary" @click="ok">{{$t('edge.common.confirm')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -188,7 +188,7 @@ export default {
         let res = data.data
         if (!res.success) {
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)

@@ -11,21 +11,26 @@
  **/
 <template>
   <div class="app-container">
-    <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">导出</el-button>
+    <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">{{$t('edge.fault.refresh')}}</el-button>
+    <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">{{$t('edge.fault.export')}}</el-button>
+    <el-button class="detail-fault" type="primary" size="small" @click="showLedDetailFault" style="" v-show="activeName === '2'">{{$t('edge.fault.faultofcurrentdetailedlightgroup')}}</el-button>
+    <el-button class="detail-fault" type="primary" size="small" @click="showVehDetDetailFault" style="" v-show="activeName === '3'">{{$t('edge.fault.faultofcurrentdetailedvehicleinspectionversion')}}</el-button>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.value">
+    <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="$t('edge.fault.tab' + item.value)" :name="item.value">
       <boardTable ref="boardtable" :activeName="activeName" :tableData="tableData" @getAllFault="getAllFault"></boardTable>
     </el-tab-pane>
   </el-tabs>
+  <detailFault ref="detailfault" :dialogDetailFault="dialogDetailFault"></detailFault>
   </div>
 </template>
 
 <script>
 import boardTable from './table/index'
 import { getFault } from '@/api/fault'
+import detailFault from './dialog/index'
 export default {
   name: 'history',
-  components: { boardTable },
+  components: { boardTable, detailFault },
   data () {
     return {
       activeName: '0',
@@ -47,7 +52,8 @@ export default {
       }],
       listLoading: false,
       allFault: [],
-      tableData: []
+      tableData: [],
+      dialogDetailFault: []
     }
   },
   created () {
@@ -114,10 +120,40 @@ export default {
       el.click()
       // 移除链接释放资源
       urlObject.revokeObjectURL(url)
+    },
+    showLedDetailFault () {
+      this.showDetailFault(5)
+    },
+    showVehDetDetailFault () {
+      this.showDetailFault(6)
+    },
+    showDetailFault (val) {
+      getFault(val).then(data => {
+        if (data.data.success !== true) {
+          this.listLoading = false
+          this.$message.error(data.data.message)
+          console.log(data.data.message)
+          return
+        }
+        this.listLoading = false
+        if (data.data.data.data === undefined || data.data.data.data.m_FaultDetailedInfo === undefined) {
+          this.dialogDetailFault = []
+        } else {
+          this.dialogDetailFault = this.formateDateForAllFault(data.data.data.data.m_FaultDetailedInfo)
+        }
+        let detailFault = this.$refs.detailfault
+        detailFault.onShowDetailFault()
+      })
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.detail-fault {
+  position: relative;
+  float: right;
+  margin-top: 40px;
+  z-index: 99;
+}
 </style>

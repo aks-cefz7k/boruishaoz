@@ -143,6 +143,19 @@ const subrouter = [
     }]
   },
   {
+    path: '/overviewNew',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'OverviewNew',
+      component: overview,
+      meta: {
+        title: 'edge.route.overview',
+        icon: 'overview'
+      }
+    }]
+  },
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/phase',

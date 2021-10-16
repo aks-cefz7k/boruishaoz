@@ -11,7 +11,7 @@
  **/
 <template>
   <div>
-    <Messagebox :visible="readDiologVisible" :text="`是否载入设备${copiedAgentid}的方案信息，到当前设备配置中 ?`" @cancle="cancleRead" @ok="handleRead"/>
+    <Messagebox :visible="readDiologVisible" :text="`${$t('edge.main.readDevice')}${copiedAgentid} ${$t('edge.main.readPattern')}`" @cancle="cancleRead" @ok="handleRead"/>
     <ImportTempDialog ref="importTemp" v-if="importVisible" :imortVisible="importVisible" @closeImportTemp="closeImportTemp"/>
     <el-menu
       class="navbar"
@@ -28,11 +28,11 @@
        </div> -->
       <div class="operation-button">
         <div v-show="isShowMenu" style="display: inline;">
-          <el-select v-model="value" placeholder="请选择" size="mini">
+          <el-select v-model="value" :placeholder="$t('edge.common.select')" size="mini">
             <el-option
               v-for="item in options"
               :key="item.value"
-              :label="item.label"
+              :label="$t('edge.main.options' + item.label)"
               :value="item.value">
             </el-option>
           </el-select>
@@ -72,7 +72,7 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item disabled>
                   <div class="user-name">{{userInfo.user_name}}</div>
-                  <div class="pass-expire" v-show="passIsExpire">密码到期 {{userInfo.expiration_time}}</div>
+                  <div class="pass-expire" v-show="passIsExpire">{{$t('edge.main.passwordexpiration')}} {{userInfo.expiration_time}}</div>
                   <div style="margin-top: 10px;">
                     <span v-for="(data, index) in userInfo.roleNames" :key="index">
                       <el-tag size="medium" :type="roleType[index]">{{ data }}</el-tag>
@@ -81,31 +81,31 @@
                 </el-dropdown-item>
                 <el-dropdown-item divided disabled>
                   <div class="organization">
-                    <div class="laber-name">组织机构</div>
+                    <div class="laber-name">{{$t('edge.main.organization')}}</div>
                     <div class="laber-value">{{userInfo.organization}}</div>
                   </div>
                   <div class="real-name">
-                    <div class="laber-name">真实姓名</div>
+                    <div class="laber-name">{{$t('edge.main.realname')}}</div>
                     <div class="laber-value">{{userInfo.nick_name}}</div>
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided disabled>
                   <div class="organization">
-                    <div class="laber-name">联系电话</div>
+                    <div class="laber-name">{{$t('edge.main.phone')}}</div>
                     <div class="laber-value">{{userInfo.mobile_phone}}</div>
                   </div>
                   <div class="real-name">
-                    <div class="laber-name">电子邮箱</div>
+                    <div class="laber-name">{{$t('edge.main.email')}}</div>
                     <div class="laber-value">{{userInfo.email}}</div>
                   </div>
                 </el-dropdown-item>
-                <el-dropdown-item divided command="a">修改密码</el-dropdown-item>
-                <el-dropdown-item command="b">登出</el-dropdown-item>
+                <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
       </div>
       <!-- <div class="dividing-line"></div> -->
-      <!-- <div class="switch-language">
+      <div class="switch-language" v-show="isShowLogout">
         <el-dropdown trigger="click" @command="switchLanguage">
           <span class="el-dropdown-link">
             {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -115,7 +115,7 @@
             <el-dropdown-item command="En">English</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </div> -->
+      </div>
     </el-menu>
     <el-dialog
       :title="$t('edge.plan.tip')"
@@ -182,34 +182,44 @@ export default {
       loading: {},
       options: [{
         value: 'all',
-        label: '全部'
+        // label: '全部'
+        label: '1'
       }, {
         value: 'phase',
-        label: '相位'
+        // label: '相位'
+        label: '2'
       }, {
         value: 'overlap',
-        label: '跟随相位'
+        // label: '跟随相位'
+        label: '3'
       }, {
         value: 'pattern',
-        label: '方案'
+        // label: '方案'
+        label: '4'
       }, {
         value: 'plan',
-        label: '计划'
+        // label: '计划'
+        label: '5'
       }, {
         value: 'date',
-        label: '日期'
+        // label: '日期'
+        label: '6'
       }, {
         value: 'channel',
-        label: '通道'
+        // label: '通道'
+        label: '7'
       }, {
         value: 'detecter',
-        label: '检测器'
+        // label: '检测器'
+        label: '8'
       }, {
         value: 'peddetecter',
-        label: '行人检测器'
+        // label: '行人检测器'
+        label: '9'
       }, {
         value: 'devinfo',
-        label: '设备信息'
+        // label: '设备信息'
+        label: '10'
       }],
       value: 'all',
       notify: undefined, // 用于判断关闭多个显示的提示框
@@ -290,7 +300,7 @@ export default {
     },
     createNotify () {
       this.curCopyAgentid = JSON.parse(window.sessionStorage.getItem('curTagDevInfo')) === null ? '' : JSON.parse(window.sessionStorage.getItem('curTagDevInfo')).agentid
-      let tip = `设备${this.curCopyAgentid}的方案已被复制`
+      let tip = `${this.$t('edge.main.copyDevice')} ${this.curCopyAgentid} ${this.$t('edge.main.copyPattern')}`
       window.sessionStorage.setItem('copiedAgentid', this.curCopyAgentid)
       if (this.notify !== undefined) {
         // 短时间内点击两次复制，前一个复制框还未关闭的情况下，则关闭前一个复制框
@@ -298,7 +308,7 @@ export default {
       }
       const h = this.$createElement
       this.notify = this.$notify({
-        title: '提示',
+        title: this.$t('edge.main.tip'),
         duration: 5000,
         offset: 40,
         onClose: () => {
@@ -367,7 +377,7 @@ export default {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -394,7 +404,7 @@ export default {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -513,7 +523,7 @@ export default {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)
@@ -601,6 +611,7 @@ export default {
     },
     baseCheck () {
       this.phaseNotZero = false
+      this.phaseRing = false
       this.concurrentRules = false
       this.planNotZero = false
       this.patternNotZero = false
@@ -618,6 +629,11 @@ export default {
         this.$message.error(
           this.$t('edge.errorTip.phaseNotZero')
         )
+        return false
+      }
+      this.checkPhaseRing()
+      if (!this.phaseRing) {
+        this.$message.error('环配置应从环1起配，不允出现跳环配置!')
         return false
       }
       this.checkConcurrentRules()
@@ -731,6 +747,20 @@ export default {
         }
         this.phaseNotZero = true
       }
+    },
+    checkPhaseRing () {
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      if (phaseList.length > 0 && phaseList[0].ring !== 1) {
+        this.phaseRing = false
+        return
+      }
+      for (let i = 0; i < phaseList.length - 1; i++) {
+        if (phaseList[i].ring > phaseList[i + 1].ring) {
+          this.phaseRing = false
+          return
+        }
+      }
+      this.phaseRing = true
     },
     checkConcurrentRules () {
       let phaseList = this.globalParamModel.getParamsByType('phaseList')

@@ -26,27 +26,27 @@
         </el-table-column>
         <el-table-column
         prop="starttime"
-        label="日期"
+        :label="$t('edge.dailyrecord.data')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="infotype"
-        label="事件类型"
+        :label="$t('edge.dailyrecord.infotype')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="subject"
-        label="主体标时"
+        :label="$t('edge.dailyrecord.subject')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="object"
-        label="客体标时"
+        :label="$t('edge.dailyrecord.object')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="status"
-        label="操作结果"
+        :label="$t('edge.dailyrecord.operationresults')"
         align="center">
         </el-table-column>
     </el-table>
@@ -121,7 +121,7 @@ export default {
         if (!res.success) {
           this.listLoading = false
           if (res.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
           this.$message.error(data.data.message)

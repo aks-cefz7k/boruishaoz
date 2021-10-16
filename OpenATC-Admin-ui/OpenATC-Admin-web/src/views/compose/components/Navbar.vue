@@ -17,11 +17,12 @@
     <div class="openatc-menu">
       <el-menu-item index="home" style="display:inline">{{$t('openatc.main.homepage')}}</el-menu-item>
       <el-menu-item index="gis" style="display:inline">{{$t('openatc.main.gis')}}</el-menu-item>
-      <el-menu-item index="device" style="display:inline">设备管理</el-menu-item>
-      <el-menu-item index="user" style="display:inline">用户管理</el-menu-item>
-      <el-menu-item index="greenwave" style="display:inline">绿波协调</el-menu-item>
-      <el-menu-item index="operate" style="display:inline">操作记录</el-menu-item>
-      <el-menu-item index="organization" style="display:inline">组织机构</el-menu-item>
+      <el-menu-item index="device" style="display:inline">{{$t('openatc.main.devicemanager')}}</el-menu-item>
+      <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item>
+      <el-menu-item index="greenwave" style="display:inline">{{$t('openatc.main.greenwaveoptimize')}}</el-menu-item>
+      <el-menu-item index="operate" style="display:inline">{{$t('openatc.main.operationrecord')}}</el-menu-item>
+      <el-menu-item index="organization" style="display:inline">{{$t('openatc.main.organization')}}</el-menu-item>
+      <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item>
     </div>
     <div class="openatc-operate">
       <div class="admin">
@@ -40,42 +41,60 @@
             </el-dropdown-item>
             <el-dropdown-item divided disabled>
               <div class="organization">
-                <div class="laber-name">组织机构</div>
+                <div class="laber-name">{{$t('openatc.main.organization')}}</div>
                 <div class="laber-value">{{userInfo.organization}}</div>
               </div>
               <div class="real-name">
-                <div class="laber-name">真实姓名</div>
+                <div class="laber-name">{{$t('openatc.main.realname')}}</div>
                 <div class="laber-value">{{userInfo.nick_name}}</div>
               </div>
             </el-dropdown-item>
             <el-dropdown-item divided disabled>
               <div class="organization">
-                <div class="laber-name">联系电话</div>
+                <div class="laber-name">{{$t('openatc.main.telno')}}</div>
                 <div class="laber-value">{{userInfo.mobile_phone}}</div>
               </div>
               <div class="real-name">
-                <div class="laber-name">电子邮箱</div>
+                <div class="laber-name">{{$t('openatc.main.email')}}</div>
                 <div class="laber-value">{{userInfo.email}}</div>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item divided command="a">修改密码</el-dropdown-item>
-            <el-dropdown-item command="b">退出</el-dropdown-item>
+            <el-dropdown-item divided command="a">{{$t('openatc.main.changepass')}}</el-dropdown-item>
+            <el-dropdown-item command="b">{{$t('openatc.main.about')}}</el-dropdown-item>
+            <el-dropdown-item command="c">{{$t('openatc.main.signout')}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
+    <div class="switch-language">
+        <el-dropdown trigger="click" @command="switchLanguage">
+          <span class="el-dropdown-link">
+            {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="Ch">中文</el-dropdown-item>
+            <el-dropdown-item command="En">English</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
   </el-menu>
   <modifypasswd ref="modifypasswdChild"></modifypasswd>
+  <versioninfo ref="versioninfoChild"></versioninfo>
+  <!-- <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+    <div>123456</div>
+</el-dialog> -->
   </div>
 </template>
 <script>
 import router from '@/router'
 import modifypasswd from './modifyPasswd'
+import versioninfo from './versionInfo'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
+import { setLanguage } from '@/utils/auth'
 export default {
   name: 'navbar',
-  components: { modifypasswd },
+  components: { modifypasswd, versioninfo },
   data () {
     return {
       activeIndex: '',
@@ -86,11 +105,13 @@ export default {
         user: '/user',
         greenwave: '/greenWaveOptimize',
         operate: '/operaterecord',
-        organization: '/organization'
+        organization: '/organization',
+        dutyroute: '/dutyroute'
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,
-      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew']
+      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew'],
+      language: 'Language'
     }
   },
   watch: {
@@ -139,10 +160,16 @@ export default {
       switch (command) {
         case 'a': this.modifyPasswd()
           break
-        case 'b': this.logout()
+        case 'b': this.showVersion()
+          break
+        case 'c': this.logout()
           break
         default: router.push({ path: '/' })
       }
+    },
+    showVersion () {
+      let versionInfoChild = this.$refs.versioninfoChild
+      versionInfoChild.showMessage()
     },
     logout () {
       this.$store.dispatch('LogOut').then(() => {
@@ -178,6 +205,27 @@ export default {
         }
         this.userInfo = data.data.data
       })
+    },
+    switchLanguage (command) {
+      switch (command) {
+        case 'Ch':
+          this.switchToChinese()
+          break
+        case 'En':
+          this.switchToEngLish()
+          break
+        default:
+          console.log(command)
+          break
+      }
+    },
+    switchToChinese () {
+      this.$i18n.locale = 'zh'
+      setLanguage(this.$i18n.locale)
+    },
+    switchToEngLish () {
+      this.$i18n.locale = 'en'
+      setLanguage(this.$i18n.locale)
     }
   }
 }
@@ -302,4 +350,10 @@ export default {
   letter-spacing: 0px;
   color: #333333;
 }
+.switch-language {
+    cursor: pointer;
+    margin-top: 17px;
+    margin-right: 30px;
+    float: right;
+  }
 </style>

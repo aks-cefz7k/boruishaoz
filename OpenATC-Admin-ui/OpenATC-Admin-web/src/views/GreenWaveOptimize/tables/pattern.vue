@@ -25,11 +25,11 @@
       </el-table-column>
       <el-table-column
         prop="agentid"
-        label="设备ID"
+        :label="$t('openatc.greenwaveoptimize.deviceid')"
         align="center">
       </el-table-column>
       <el-table-column
-        label="方案"
+        :label="$t('openatc.greenwaveoptimize.pattern')"
         align="center">
         <template slot-scope="scope">
           <el-select
@@ -63,7 +63,7 @@ export default {
         let pattern = JSON.parse(JSON.stringify(val))
         for (let i = 0; i < pattern.length; i++) {
           if (pattern[i].patternid !== 0) {
-            pattern[i].patterndesc = pattern[i].patterndes === '' ? `方案${pattern[i].patternid}` : pattern[i].patterndes
+            pattern[i].patterndesc = pattern[i].patterndes === '' ? `${this.$t('openatc.greenwaveoptimize.pattern')}${pattern[i].patternid}` : pattern[i].patterndes
           } else {
             pattern[i].patterndesc = ''
           }
@@ -97,7 +97,7 @@ export default {
         this.loading = false
         if (!res.data.success) {
           if (res.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('openatc.common.devicenotonline'))
             return
           }
           this.$message.error(res.data.message)
@@ -109,7 +109,7 @@ export default {
               return {
                 patternid: ele.id,
                 patterndes: ele.desc,
-                patterndesc: ele.desc === '' ? `方案${ele.id}` : ele.desc
+                patterndesc: ele.desc === '' ? `${this.$t('openatc.greenwaveoptimize.pattern')}${ele.id}` : ele.desc
               }
             })
           }

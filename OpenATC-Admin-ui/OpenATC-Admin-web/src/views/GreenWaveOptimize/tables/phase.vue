@@ -25,11 +25,11 @@
       </el-table-column>
       <el-table-column
         prop="agentid"
-        label="设备ID"
+        :label="$t('openatc.greenwaveoptimize.deviceid')"
         align="center">
       </el-table-column>
       <el-table-column
-        label="上行"
+        :label="$t('openatc.greenwaveoptimize.forward')"
         align="center">
         <template slot-scope="scope">
           <div class="XRDDir">
@@ -49,7 +49,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="下行"
+        :label="$t('openatc.greenwaveoptimize.back')"
         align="center">
         <template slot-scope="scope">
           <div class="XRDDir">
@@ -97,12 +97,12 @@ export default {
         for (let i = 0; i < phases.length; i++) {
           if (phases[i].forwardphaseid !== 0) {
             const forwardobj = this.getPhaseName(phases[i].forwardphasedirection)
-            phases[i].forwarddesc = `相位${phases[i].forwardphaseid} ${forwardobj.name}`
+            phases[i].forwarddesc = `${this.$t('openatc.greenwaveoptimize.phase')}${phases[i].forwardphaseid} ${forwardobj.name}`
             phases[i].forwardshowlist = this.getPhaseDescription(phases[i].forwardphasedirection)
           }
           if (phases[i].backphaseid !== 0) {
             const backobj = this.getPhaseName(phases[i].backphasedirection)
-            phases[i].backdesc = `相位${phases[i].backphaseid} ${backobj.name}`
+            phases[i].backdesc = `${this.$t('openatc.greenwaveoptimize.phase')}${phases[i].backphaseid} ${backobj.name}`
             phases[i].backshowlist = this.getPhaseDescription(phases[i].backphasedirection)
           }
         }
@@ -144,7 +144,7 @@ export default {
         this.loading = false
         if (!res.data.success) {
           if (res.data.code === '4003') {
-            this.$message.error('设备不在线！')
+            this.$message.error(this.$t('openatc.common.devicenotonline'))
             return
           }
           this.$message.error(res.data.message)
@@ -157,14 +157,14 @@ export default {
               if (key === 'allForwardPhase') {
                 return {
                   forwardphasedirection: ele.direction,
-                  forwarddesc: `相位${ele.id} ${this.getPhaseName(ele.direction).name}`,
+                  forwarddesc: `${this.$t('openatc.greenwaveoptimize.phase')}${ele.id} ${this.getPhaseName(ele.direction).name}`,
                   forwardphaseid: ele.id
                 }
               }
               if (key === 'allBackPhase') {
                 return {
                   backphasedirection: ele.direction,
-                  backdesc: `相位${ele.id} ${this.getPhaseName(ele.direction).name}`,
+                  backdesc: `${this.$t('openatc.greenwaveoptimize.phase')}${ele.id} ${this.getPhaseName(ele.direction).name}`,
                   backphaseid: ele.id
                 }
               }

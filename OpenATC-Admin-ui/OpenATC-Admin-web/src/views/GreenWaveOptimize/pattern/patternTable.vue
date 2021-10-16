@@ -24,22 +24,22 @@
           <span>{{scope.$index+1}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="设备ID" minWidth="40">
+      <el-table-column align="center" :label="$t('openatc.greenwaveoptimize.deviceid')" minWidth="40">
         <template slot-scope="scope">
-          <span>{{scope.row.intersectionid}}</span>
+          <span>{{scope.row.agentid}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="方案" prop="desc">
+      <el-table-column align="center" :label="$t('openatc.greenwaveoptimize.pattern')" prop="desc">
         <!-- <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"></el-input>
         </template> -->
       </el-table-column>
-      <el-table-column  align="center" label="相位差" prop="offset">
+      <el-table-column  align="center" :label="$t('openatc.greenwaveoptimize.offset')" prop="offset">
         <template slot-scope="scope">
           <el-input size="small" v-model.number="scope.row.offset"></el-input>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="周期" prop="cycle">
+      <el-table-column align="center" :label="$t('openatc.greenwaveoptimize.cycle')" prop="cycle">
       </el-table-column>
     </el-table>
   </div>
@@ -100,15 +100,15 @@ export default {
     },
     handlePatternList (routeData, patternList, phaseList) {
       this.newPatternList = []
-      let intersections = routeData.intersections
+      let devs = routeData.devs
       for (let pattern of patternList) {
         let obj = {}
-        let id = pattern.intersectionid
-        obj.intersectionid = id
+        let id = pattern.agentid
+        obj.agentid = id
         let count = [] // 计算相位有几个环
         if (pattern.feature !== undefined && pattern.feature.patternList.length !== 0) {
           let currPatternList = pattern.feature.patternList
-          let patternId = intersections.filter(ist => ist.intersectionid === id)[0].patternid
+          let patternId = devs.filter(ist => ist.agentid === id)[0].patternid
           let currPattern
           if (Array.isArray(currPatternList)) {
             currPattern = currPatternList.filter(cpl => cpl.id === patternId)[0]
@@ -126,7 +126,7 @@ export default {
           obj.cycle = currPattern.cycle
           obj.patternId = currPattern.id
           let rings = currPattern.rings
-          let currPhase = phaseList.filter(phl => phl.intersectionid === id)[0].feature.phaseList
+          let currPhase = phaseList.filter(phl => phl.agentid === id)[0].feature.phaseList
           // 计算有几个环
           for (let ring of rings) {
             if (ring.length === 0) continue

@@ -62,13 +62,13 @@
           </el-select>
         </template>
       </el-table-column> -->
-      <el-table-column label="控制方式" min-width="100" align="center">
+      <el-table-column :label="$t('edge.plan.controltype')" min-width="100" align="center">
         <template slot-scope="scope">
           <el-select v-model="scope.row.control" size="small" @change="doChange(scope.row)">
             <el-option
               v-for="item in ControlOption"
               :key="item.value"
-              :label="item.label"
+              :label="$t('edge.plan.ControlOption' + item.value)"
               :value="item.value">
             </el-option>
           </el-select>
@@ -371,29 +371,21 @@ export default {
       //   '51', '52', '53', '54', '55', '56', '57', '58', '59'],
       PatternOption: [],
       ControlOption: [{
-        value: 1,
-        label: '黄闪'
+        value: 1
       }, {
-        value: 2,
-        label: '全红'
+        value: 2
       }, {
-        value: 3,
-        label: '关灯'
+        value: 3
       }, {
-        value: 4,
-        label: '步进'
+        value: 4
       }, {
-        value: 5,
-        label: '定周期控制'
+        value: 5
       }, {
-        value: 6,
-        label: '单点感应控制'
+        value: 6
       }, {
-        value: 10,
-        label: '无电缆控制'
+        value: 10
       }, {
-        value: 12,
-        label: '行人过街控制'
+        value: 12
       }],
       controlStatus: true
     }

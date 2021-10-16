@@ -15,7 +15,7 @@
       <el-form>
         <el-form-item>
           <el-input
-            placeholder="组织机构"
+            :placeholder="$t('openatc.main.organization')"
             @keyup.enter.native="handleFilter"
             v-model="schfilter"
             style="width: 200px;"
@@ -24,21 +24,21 @@
             type="primary"
             icon="el-icon-search"
             @click="handleFilter"
-            >{{ $t("edge.common.search") }}</el-button
+            >{{ $t("openatc.button.search") }}</el-button
           >
           <el-button
             type="primary"
             v-if="isOpen == true"
             icon="el-icon-circle-plus-outline"
             @click="openAllRows"
-            >全部展开</el-button
+            >{{ $t("openatc.button.expandall") }}</el-button
           >
           <el-button
             type="primary"
             v-else
             icon="el-icon-remove-outline"
             @click="openAllRows"
-            >全部折叠</el-button
+            >{{ $t("openatc.button.collapseall") }}</el-button
           >
         </el-form-item>
       </el-form>

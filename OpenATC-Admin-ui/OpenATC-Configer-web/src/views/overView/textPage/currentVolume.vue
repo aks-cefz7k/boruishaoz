@@ -29,32 +29,32 @@
               <el-table-column
                 align="center"
                 prop="id"
-                label="检测器ID">
+                :label="$t('edge.overview.detectorid')">
               </el-table-column>
               <el-table-column
                 align="center"
                 prop="smallvehnum"
-                label="小型车数量">
+                :label="$t('edge.overview.smallcars')">
               </el-table-column>
               <el-table-column
                 align="center"
                 prop="middlevehnum"
-                label="中型车数量">
+                :label="$t('edge.overview.mediumvehicles')">
               </el-table-column>
               <el-table-column
                 align="center"
                 prop="largevehnum"
-                label="大型车数量">
+                :label="$t('edge.overview.bigcars')">
               </el-table-column>
               <el-table-column
                 align="center"
                 prop="totalvehtime"
-                label="占有时间">
+                :label="$t('edge.overview.possessionoftime')">
               </el-table-column>
               <el-table-column
                 align="center"
                 prop="occupyrate"
-                label="占有率">
+                :label="$t('edge.overview.occupancy')">
               </el-table-column>
             </el-table>
           </div>

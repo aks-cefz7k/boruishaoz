@@ -16,7 +16,7 @@
         <el-form-item>
           <el-input
             v-model="schfilter"
-            placeholder="输入关键字搜索"
+            :placeholder="$t('openatc.common.searchplaceholder')"
             prefix-icon="el-icon-search"
             style="width: 200px;"/>
         </el-form-item>
@@ -42,38 +42,38 @@
         </el-table-column> -->
         <el-table-column
         prop="operator"
-        label="用户"
+        :label="$t('openatc.record.user')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="opertime"
-        label="更新时间"
+        :label="$t('openatc.record.updatetime')"
         sortable
         align="center">
         </el-table-column>
         <el-table-column
         prop="source"
-        label="源地址"
+        :label="$t('openatc.record.originadress')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="agentid"
-        label="设备ID"
+        :label="$t('openatc.record.deviceid')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="infotype"
-        label="消息类型"
+        :label="$t('openatc.record.messagetype')"
         align="center">
         </el-table-column>
         <el-table-column
         prop="status"
-        label="返回状态"
+        :label="$t('openatc.record.reponsestatus')"
         align="center">
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column :label="$t('openatc.record.opera')" align="center">
         <template slot-scope="scope">
-            <el-button type="text" @click="derive(scope.$index)">导出</el-button>
+            <el-button type="text" @click="derive(scope.$index)">{{$t('openatc.record.export')}}</el-button>
         </template>
         </el-table-column>
     </el-table>

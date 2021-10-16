@@ -14,14 +14,14 @@
     <div class="total" :style="{ width: '100%', marginBottom: totalMarginBottom }">
         <div class="Img"></div>
         <div class="text">
-            故障总数
+            {{$t('openatc.home.faultsum')}}
         </div>
         <div class="num">{{maxValue}}</div>
     </div>
     <div class="title" :style="{marginBottom: titleMarginBottom}">
-        <div class="faultName" :style="{width: typeNameWidth}">故障类型</div>
+        <div class="faultName" :style="{width: typeNameWidth}">{{$t('openatc.home.faulttype')}}</div>
         <div class="faultNum" :style="{width: faultNumWidth}">
-           数量
+           {{$t('openatc.home.quantity')}}
         </div>
     </div>
     <div class="content" :style="{maxHeight: maxListHeight}">
@@ -106,6 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 .faultList {
+    height: 100%;
     padding: 12px 6px;
     .total {
         // width: 554px;

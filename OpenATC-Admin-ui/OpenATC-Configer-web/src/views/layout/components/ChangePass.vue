@@ -12,7 +12,7 @@
 <template>
   <div class="app-container">
     <el-dialog
-      title="设置新密码"
+      :title="$t('edge.auth.setnewpassword')"
       :visible.sync="dialogFormVisible"
       width="600px"
       @close='closeFormDialog'
@@ -27,7 +27,7 @@
         style='width: 70%; margin-left:50px;'
       >
         <el-form-item
-          label="旧密码"
+          :label="$t('edge.auth.oldpass')"
           prop="pass"
         >
           <el-input
@@ -45,7 +45,7 @@
         ></passCheck>
 
         <el-form-item
-          label="确认新密码"
+          :label="$t('edge.auth.confirm')"
           prop="checknewpass"
         >
           <el-input
@@ -63,11 +63,11 @@
         class="dialog-footer"
       >
         <!-- <center> -->
-          <el-button @click="resetForm">取消</el-button>
+          <el-button @click="resetForm">{{$t('edge.common.cancel')}}</el-button>
           <el-button
             type="primary"
             @click="updateUser"
-          >确定</el-button>
+          >{{$t('edge.common.confirm')}}</el-button>
         <!-- </center> -->
       </div>
     </el-dialog>
@@ -88,9 +88,9 @@ export default {
   data () {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'))
+        callback(new Error(this.$t('edge.auth.inputpassagain')))
       } else if (value !== this.PasswordData.newpass) {
-        callback(new Error('两次输入密码不一致 !'))
+        callback(new Error(this.$t('edge.auth.twopassinconsistent')))
       } else {
         callback()
       }
@@ -114,8 +114,8 @@ export default {
         checknewpass: ''
       },
       rules: {
-        pass: [{ required: true, message: '请输入密码' }],
-        newpass: [{ required: true, message: '请输入新密码' }],
+        pass: [{ required: true, message: this.$t('edge.auth.enterpass') }],
+        newpass: [{ required: true, message: this.$t('edge.auth.enternewpass') }],
         checknewpass: [
           {
             required: true,
@@ -142,19 +142,19 @@ export default {
     },
     updateUser () {
       if (this.PasswordData.pass === '') {
-        this.$message.error('请输入旧密码！')
+        this.$message.error(this.$t('edge.auth.inputoldpass'))
         return
       }
       if (this.PasswordData.newpass === '') {
-        this.$message.error('请输入新密码！')
+        this.$message.error(this.$t('edge.auth.enternewpass'))
         return
       }
       if (this.PasswordData.newpass !== this.PasswordData.checknewpass) {
-        this.$message.error('两次输入密码不一致！')
+        this.$message.error(this.$t('edge.auth.twopassinconsistent'))
         return
       }
       if (this.PasswordData.newpass === this.PasswordData.pass) {
-        this.$message.error('新密码不能与旧密码一致！')
+        this.$message.error(this.$t('edge.auth.twopassnotdiff'))
         return
       }
       // if (!this.check_length || !this.check_char) {
@@ -174,13 +174,13 @@ export default {
       ).then(data => {
         if (data.data.success !== true) {
           if (data.data.code === '3006') {
-            this.$message.error('原密码错误!')
+            this.$message.error(this.$t('edge.auth.originalpasserror'))
             return
           }
           this.$message.error(data.data.message)
           return
         }
-        let msg = '修改成功'
+        let msg = this.$t('edge.auth.modifisucceeded')
         this.dialogFormVisible = false
         // this.strong = 'common.none'
         this.$message({
