@@ -93,8 +93,8 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
         //读取本地文件， 若token和本地文件的token也相同，则放行
         String checktoken = ((JwtToken) token).getToken();
 
-        if(AgentApplication.tokenlist != null){
-            for (String s : AgentApplication.tokenlist){
+        if (AgentApplication.tokenlist != null) {
+            for (String s : AgentApplication.tokenlist) {
                 if (s.equals(checktoken)) return true;
             }
         }
@@ -111,13 +111,15 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
             jsonObject.addProperty(Constants.CODE, "3013");
             jsonObject.addProperty(Constants.MESSAGE, "Account has been deactivated!");
             jsonObject.addProperty("success", false);
-        }
-        else if (ae.getMessage().equals("Token is expired!")) {
+        } else if (ae.getMessage().equals("Token is expired!")) {
             jsonObject.addProperty(Constants.CODE, "3014");
             jsonObject.addProperty(Constants.MESSAGE, "Token is expired!");
             jsonObject.addProperty("success", false);
-        }
-        else {
+        } else if (ae.getMessage().equals("access ip is inconsistent with user ip")) {
+            jsonObject.addProperty(Constants.CODE, "3018");
+            jsonObject.addProperty(Constants.MESSAGE, "access ip is inconsistent with user ip!");
+            jsonObject.addProperty("success", false);
+        } else {
             jsonObject.addProperty(Constants.CODE, "3015");
             jsonObject.addProperty(Constants.MESSAGE, "Invalid token!");
             jsonObject.addProperty("success", false);

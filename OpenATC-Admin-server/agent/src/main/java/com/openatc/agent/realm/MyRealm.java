@@ -66,23 +66,27 @@ public class MyRealm extends AuthorizingRealm {
      * 认证
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException{
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         JwtToken jwtToken = (JwtToken) authenticationToken;
         String token = jwtToken.getToken();
-
-        if (token == null){
+        String ip = jwtToken.getIp();
+        System.out.println("ip: " + ip);
+        if (token == null) {
             throw new AuthenticationException("Token is null!");
         }
         String username = tokenUtil.getUsernameFromToken(token);
         User user = userDao.getUserByUserName(username);
         //判断用户是否停用
-        if(user.getStatus() == 0){
+        if (user.getStatus() == 0) {
             throw new AuthenticationException("Account has been deactivated!");
         }
         //判断token是否过期 true表示过期了
         boolean isExpired = tokenUtil.isTokenExpiredEx(token);
         if (isExpired) {
             throw new AuthenticationException("Token is expired!");
+        }
+        if (!tokenUtil.checkip(ip, token)) {
+            throw new AuthenticationException("access ip is inconsistent with user ip");
         }
         if (username == null) {
             throw new AuthenticationException("Get null username from token!");

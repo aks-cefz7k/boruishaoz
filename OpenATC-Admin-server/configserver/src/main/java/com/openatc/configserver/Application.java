@@ -11,14 +11,17 @@
  **/
 package com.openatc.configserver;
 
+import com.openatc.configserver.utils.NoLogging;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.log.Log;
 
 public class Application {
     public static void main(String[] args) throws Exception {
+        Log.setLog(new NoLogging());
         Server jettyServer = new Server();
         HttpConfiguration http_config = new HttpConfiguration();
         /**
@@ -40,6 +43,7 @@ public class Application {
         httpServer.setPort(8012);
         httpServer.setIdleTimeout(120000);
         jettyServer.addConnector(httpServer);
+
 
         /**
          * 设置整个web服务的根url，/ 表示 localhost:8012/  之后地址的是可访问的
@@ -93,7 +97,6 @@ public class Application {
 //        ServletHandler handler = new ServletHandler();
 //        FilterHolder fh = handler.addFilterWithMapping((Class<? extends Filter>) OpenatcFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
 //        context.addFilter(fh, "/*", EnumSet.of(DispatcherType.REQUEST));
-
         try {
             jettyServer.start();
             jettyServer.join();

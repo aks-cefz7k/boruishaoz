@@ -75,9 +75,6 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	public static int getTimediffBetweenDates(Date date1, Date date2){
 		int interval = (int) (date2.getTime() - date1.getTime())/(1000*60);
 		return interval;
-		
-		
-		
 	}
 	
 	

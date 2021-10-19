@@ -152,7 +152,7 @@ public class MessageController {
         }
 
         // 把设置请求的操作保存到历史记录中
-        if (requestData.getOperation().equals("set-request") && isConfigMode == false && shiroOpen) {
+        if (requestData.getOperation().equals("set-request") && isConfigMode == false) {
             logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
             hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp));
         }

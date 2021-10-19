@@ -166,19 +166,19 @@ public class VipRouteController {
         // 执行勤务路线
         if (operation == 1) {
             log.info("cowlist: " + cowlist);
-            if (cowlist.contains(agentid + ":" + viprouteid)) return RESTRetUtils.errorObj(E_6002);
-            cowlist.add(agentid + ":" + viprouteid);
+            if (cowlist.contains(agentid)) return RESTRetUtils.errorObj(E_6002);
+            cowlist.add(agentid);
             AtomicInteger totaltime = new AtomicInteger(vrDevice.getTotaltime());
             MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
             log.info("******restRet:  " + restRet);
             if (restRet.getData() instanceof DevCommError) {
-                cowlist.remove(agentid + ":" + viprouteid);
+                cowlist.remove(agentid);
                 return restRet;
             }
             // 2 开启一个线程后台计算剩余时间
             Thread thread1 = new Thread(() -> {
-                while (totaltime.get() > 0 && cowlist.contains(agentid + ":" + viprouteid)) {
+                while (totaltime.get() > 0 && cowlist.contains(agentid)) {
                     try {
                         totaltime.addAndGet(-1);
                         // 将时间更新到redis中
@@ -194,7 +194,7 @@ public class VipRouteController {
                             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
                         }
                         if (totaltime.get() <= 0) {
-                            cowlist.remove(agentid + ":" + viprouteid);
+                            cowlist.remove(agentid);
                         }
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -206,11 +206,11 @@ public class VipRouteController {
         }
         // 取消勤务路线
         if (operation == 0) {
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.workmode, data);
+            data.addProperty("control", 0);
+            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
-            log.info("-------" + cowlist.toString());
-            cowlist.remove(agentid + ":" + viprouteid);
-            log.info(cowlist.toString());
+            if (restRet.getData() instanceof DevCommError) return restRet;
+            cowlist.remove(agentid);
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
             log.info("取消执行，存入redis");

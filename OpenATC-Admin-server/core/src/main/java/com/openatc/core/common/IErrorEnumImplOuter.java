@@ -48,6 +48,7 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_3015("3015","Invaid token!"),
     E_3016("3016","user organization is null"),
     E_3017("3017","organization does not exist"),
+    E_3018("3018","access ip is inconsistent with user ip!"),
 
     // 消息通讯错误
     E_4001("4001", "error request!"),

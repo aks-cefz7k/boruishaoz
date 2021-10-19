@@ -22,7 +22,6 @@ import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 import static com.openatc.core.common.IErrorEnumImplInner.*;
 import static com.openatc.core.common.IErrorEnumImplOuter.*;

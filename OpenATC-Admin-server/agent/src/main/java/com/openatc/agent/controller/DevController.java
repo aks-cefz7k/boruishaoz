@@ -118,7 +118,7 @@ public class DevController {
      */
     @PutMapping(value = "/devs/discovery")
     public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel) throws ParseException {
-        mDao.updateAscs(ascsModel);
+        mDao.updateAscsByReport(ascsModel);
         return RESTRetUtils.successObj(ascsModel);
     }
 
