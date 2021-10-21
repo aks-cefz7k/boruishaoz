@@ -65,6 +65,9 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_6001("6001","Duplicate vipRoute name!"),
     E_6002("6002","Device is in execution!"),
 
+    //历史流量错误
+    E_7001("7001","ftpClient connect failed!"),
+
     //全局异常错误
     E_0001("0001","NullPointerException"),
     E_0002("0002","HttpRequestMethodNotSupportedException"),

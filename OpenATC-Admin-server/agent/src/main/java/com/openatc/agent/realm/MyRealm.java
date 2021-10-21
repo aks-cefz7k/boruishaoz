@@ -86,7 +86,7 @@ public class MyRealm extends AuthorizingRealm {
             throw new AuthenticationException("Token is expired!");
         }
         if (!tokenUtil.checkip(ip, token)) {
-            throw new AuthenticationException("access ip is inconsistent with user ip");
+            throw new AuthenticationException("access ip is inconsistent with user ip!");
         }
         if (username == null) {
             throw new AuthenticationException("Get null username from token!");

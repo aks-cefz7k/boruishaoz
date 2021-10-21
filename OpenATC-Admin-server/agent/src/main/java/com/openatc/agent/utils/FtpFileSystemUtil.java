@@ -1,6 +1,7 @@
 package com.openatc.agent.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class FtpFileSystemUtil {
         FTPClient ftpClient = null;
         try {
             ftpClient = new FTPClient();
-            ftpClient.setConnectTimeout(1000 * 30);//设置连接超时时间
+            ftpClient.setConnectTimeout(1000 * 15);//设置连接超时时间
             ftpClient.connect(host, port);// 连接FTP服务器
             ftpClient.login(userName, password);// 登陆FTP服务器
             ftpClient.setControlEncoding("UTF-8");// 中文支持
@@ -60,7 +61,7 @@ public class FtpFileSystemUtil {
         return arFiles;
     }
 
-    public static JsonObject getJsonFile(FTPClient ftpClient, String fileName) {
+    public static JsonArray getJsonFile(FTPClient ftpClient, String fileName) {
         InputStream is = null;
         String result = null;
         try {
@@ -75,7 +76,6 @@ public class FtpFileSystemUtil {
             }
             result = new String(baos.toByteArray());
             ftpClient.completePendingCommand();
-            log.info("fileName: "+fileName);
             log.info("FTP文件下载成功！");
         } catch (Exception e) {
             log.error("FTP文件下载失败！" + e);
@@ -88,11 +88,14 @@ public class FtpFileSystemUtil {
             }
         }
         JsonObject jsonFile = null;
+        JsonArray flowInfo = null;
         try {
             jsonFile = gson.fromJson(result, JsonObject.class);
-        } catch (JsonSyntaxException e) {
+            flowInfo = jsonFile.get("flowInfo").getAsJsonArray();
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return jsonFile;
+        return flowInfo;
     }
 }

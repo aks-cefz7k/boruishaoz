@@ -13,13 +13,15 @@ package com.openatc.agent.realm;
 
 import com.google.gson.JsonObject;
 import com.openatc.agent.AgentApplication;
-import com.openatc.agent.utils.TokenUtil;
 import com.openatc.core.common.Constants;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
+
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -33,7 +35,6 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
     private static final String TOKEN = "token";
     private static final String AUTH = "Authorization";
     private Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.toString());
-    TokenUtil tokenUtil = new TokenUtil();
 
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
@@ -101,28 +102,19 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
 
         //调试模式直接返回true
         if (!AgentApplication.shiroOpen) return true;
-//        HttpServletRequest servletRequest = (HttpServletRequest) request;
 
         HttpServletResponse servletResponse = (HttpServletResponse) response;
 
-        JsonObject jsonObject = new JsonObject();
+        JsonObject jsonObject = null;
 
         if (ae.getMessage().equals("Account has been deactivated!")) {
-            jsonObject.addProperty(Constants.CODE, "3013");
-            jsonObject.addProperty(Constants.MESSAGE, "Account has been deactivated!");
-            jsonObject.addProperty("success", false);
+            jsonObject = errorToJson(E_3013);
         } else if (ae.getMessage().equals("Token is expired!")) {
-            jsonObject.addProperty(Constants.CODE, "3014");
-            jsonObject.addProperty(Constants.MESSAGE, "Token is expired!");
-            jsonObject.addProperty("success", false);
-        } else if (ae.getMessage().equals("access ip is inconsistent with user ip")) {
-            jsonObject.addProperty(Constants.CODE, "3018");
-            jsonObject.addProperty(Constants.MESSAGE, "access ip is inconsistent with user ip!");
-            jsonObject.addProperty("success", false);
+            jsonObject = errorToJson(E_3014);
+        } else if (ae.getMessage().equals("access ip is inconsistent with user ip!")) {
+            jsonObject = errorToJson(E_3018);
         } else {
-            jsonObject.addProperty(Constants.CODE, "3015");
-            jsonObject.addProperty(Constants.MESSAGE, "Invalid token!");
-            jsonObject.addProperty("success", false);
+            jsonObject = errorToJson(E_3015);
         }
 
         try {
@@ -133,5 +125,13 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
         } catch (IOException e) {
         }
         return false;
+    }
+
+    private JsonObject errorToJson(IErrorEnumImplOuter iErrorEnumImplOuter) {
+        JsonObject errorJson = new JsonObject();
+        errorJson.addProperty(Constants.CODE, iErrorEnumImplOuter.getErrorCode());
+        errorJson.addProperty(Constants.MESSAGE, iErrorEnumImplOuter.getErrorMsg());
+        errorJson.addProperty("success", false);
+        return errorJson;
     }
 }
