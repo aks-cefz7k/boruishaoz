@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 
-@Slf4j
+
 public class ocpMessage implements Message {
     private static final String allFeature = "feature/all";
     public static final String setrequest = "set-request";

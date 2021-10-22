@@ -21,7 +21,7 @@ import org.eclipse.jetty.util.log.Log;
 
 public class Application {
     public static void main(String[] args) throws Exception {
-        Log.setLog(new NoLogging());
+//        Log.setLog(new NoLogging());
         Server jettyServer = new Server();
         HttpConfiguration http_config = new HttpConfiguration();
         /**

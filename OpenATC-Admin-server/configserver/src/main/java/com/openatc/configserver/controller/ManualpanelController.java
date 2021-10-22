@@ -33,7 +33,6 @@ import java.util.*;
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Slf4j
 public class ManualpanelController {
 
     private int[] ewSPhase = new int[]{1, 5}; //东西直行
