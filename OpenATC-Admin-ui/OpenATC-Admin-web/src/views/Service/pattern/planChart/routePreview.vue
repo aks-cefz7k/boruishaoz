@@ -15,6 +15,9 @@
           size="large"
           @click.native="onStepClick(index)"
         >
+          <div class="resttime">
+            {{ $t("openatc.greenwaveoptimize.device") }}{{ step.agentid }}
+          </div>
           <div v-show="tabName === 'second'">
             <el-tag type="info" class="tag" v-show="step.state === 0">{{
               $t("openatc.dutyroute.notonduty")
@@ -63,8 +66,36 @@ export default {
     return {
       activeIndex: 0,
       isPopoverShow: true,
-      showIndex: -1
+      showIndex: -1,
+      intervalId: 0
     }
+  },
+  watch: {
+    route (val) {
+      if (!val) { return false }
+      let devs = val.devs
+      if (!devs || devs.length === 0) {
+        return false
+      }
+      let isOn = false
+      for (let dev of devs) {
+        if (dev.state === 1) {
+          let _this = this
+          if (_this.intervalId !== 0) { // 已有定时器
+            return false
+          }
+          isOn = true
+          _this.intervalId = setInterval(function () {
+            _this.$emit('research')
+          }, 2000)
+        }
+      }
+      if (!isOn) {
+        clearInterval(this.intervalId)
+        this.intervalId = 0
+      }
+    },
+    deep: true
   },
   methods: {
     getType (state, index) {
