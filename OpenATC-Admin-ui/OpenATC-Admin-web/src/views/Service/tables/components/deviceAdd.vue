@@ -51,13 +51,13 @@
           </el-table-column>
           <el-table-column
             prop="jsonparam.port"
-            label="$t('openatc.greenwaveoptimize.port')"
+            :label="$t('openatc.greenwaveoptimize.port')"
             align="center"
           >
           </el-table-column>
           <el-table-column
             prop="name"
-            label="$t('openatc.greenwaveoptimize.devicename')"
+            :label="$t('openatc.greenwaveoptimize.devicename')"
             align="center"
           >
           </el-table-column>
