@@ -278,7 +278,10 @@ export default {
     } else {
       this.isShowMenu = false
     }
-    if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === true) {
+    // if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === 'true') {
+    //   this.isShowLogout = false
+    // }
+    if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true') {
       this.isShowLogout = false
     }
     this.extendErrorCodeMap() // 扩展错误码的map集合

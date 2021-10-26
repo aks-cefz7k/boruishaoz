@@ -43,17 +43,17 @@ export default {
   components: { SidebarItem },
   data () {
     return {
-      isfromatc: false,
+      // isfromatc: false,
       openeds: ['TSC']
     }
   },
-  watch: {
-    $route (val) {
-      if (val.query !== undefined && val.query.isfromatc !== undefined && val.query.isfromatc === true) {
-        this.isfromatc = true
-      }
-    }
-  },
+  // watch: {
+  //   $route (val) {
+  //     if (val.query !== undefined && val.query.isfromatc !== undefined && val.query.isfromatc === true) {
+  //       this.isfromatc = true
+  //     }
+  //   }
+  // },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -83,8 +83,8 @@ export default {
       }
     },
     handleUserMgrRoutes (curRoutes) {
-      // 平台打开的配置工具，用户管理不可见
-      if (this.isfromatc) {
+      // 平台打开的配置工具，用户管理不可见（层级高）
+      if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true') {
         const noPermission = ['User']
         this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission})
         return
@@ -104,16 +104,19 @@ export default {
           const noPermission = ['User']
           this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission})
         }
+        return
       }
+      // 其余情况对侧边栏显示无限制
+      this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission: []})
     },
     getUserInfo () {
       this.$store.dispatch('GetInfo')
     }
   },
   mounted () {
-    if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === true) {
-      this.isfromatc = true
-    }
+    // if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === true) {
+    //   this.isfromatc = true
+    // }
     if (!this.roles.length) {
       this.getUserInfo()
     }
