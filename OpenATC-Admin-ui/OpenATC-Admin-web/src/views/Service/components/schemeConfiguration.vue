@@ -232,6 +232,7 @@ export default {
     getPattern () {
       // 获取方案表格信息
       this.patternData = this.devicesData.map(ele => ({
+        isNew: ele.isNew, // 区分新增
         agentid: ele.agentid,
         patterndes: ele.terminalname,
         patternid: ele.terminal,
@@ -251,6 +252,7 @@ export default {
           }
         }
         if (!isIn) {
+          dev.isNew = true
           this.devicesData.push(dev)
         }
       }

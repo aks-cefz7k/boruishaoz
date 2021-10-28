@@ -198,6 +198,9 @@ export default {
       })
     },
     async handleCurrentChange (row) {
+      if (row.isNew) { // 避免新增数据触发
+        return false
+      }
       await this.getCurPhase(row.agentid)
       this.patternList = row.patternList
       if (!this.patternList) {
