@@ -10,13 +10,12 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-    <div>
-        <div id="map">
-        </div>
-        <div class="map-position">
-          经度{{lngLat.lng}} 纬度{{lngLat.lat}} 层级 {{zoom}}
-      </div>
+  <div>
+    <div id="map"></div>
+    <div class="map-position">
+      经度{{ lngLat.lng }} 纬度{{ lngLat.lat }} 层级 {{ zoom }}
     </div>
+  </div>
 </template>
 <script>
 
@@ -126,7 +125,7 @@ export default {
         // L.popup().setLatLng(e.latlng).setContent(e.latlng.toString()).openOn(map)
       })
       var boxMap = document.getElementById('map')
-      L.DomEvent.on(boxMap, 'mousewheel', function (e) {
+      L.DomEvent.on(boxMap, 'wheel', function (e) {
         _this.zoom = _this.map.getZoom()
       })
     },
@@ -214,9 +213,9 @@ export default {
 </script>
 <style scoped>
 #map {
-    position: relative;
-    width: 100%;
-    height: 94.5vh;
+  position: relative;
+  width: 100%;
+  height: 94.5vh;
 }
 .map-position {
   width: 18rem;
@@ -231,18 +230,18 @@ export default {
   right: 3.3rem;
   z-index: 903;
   font-size: 0.6rem;
-  color: rgba(254, 254, 254, .7);
+  color: rgba(254, 254, 254, 0.7);
 }
 </style>
 <style>
 .leaflet-popup-content-wrapper {
-    padding: 1px;
-    text-align: left;
-    border-radius: 6px;
+  padding: 1px;
+  text-align: left;
+  border-radius: 6px;
 }
 .leaflet-popup {
-    position: absolute;
-    text-align: center;
-    margin-bottom: 40px;
+  position: absolute;
+  text-align: center;
+  margin-bottom: 40px;
 }
 </style>
