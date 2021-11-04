@@ -78,7 +78,7 @@
                         :label="$t('edge.system.automaticshutdown')"
                         prop=".duration">
                         <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
-                            <el-option v-for="item in durationList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            <el-option v-for="item in durationList" :key="item.value" :label="$t('edge.system.duration' + item.id)" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -136,7 +136,7 @@
                               <el-option
                                 v-for="item in remoteOptions"
                                 :key="item.value"
-                                :label="item.label"
+                                :label="$t('edge.system.remote' + item.id)"
                                 :value="item.value">
                               </el-option>
                             </el-select>
@@ -208,13 +208,16 @@ export default {
       paritybit: '--',
       remoteOptions: [{
         value: 'reboot',
-        label: '重启'
+        // label: '重启',
+        id: '1'
       }, {
         value: 'auth',
-        label: '授权'
+        // label: '授权',
+        id: '2'
       }, {
         value: 'custom',
-        label: '自定义'
+        // label: '自定义',
+        id: '3'
       }],
       remoteControl: 'reboot',
       remoteDebugInfo: {
@@ -222,14 +225,17 @@ export default {
         duration: 0
       },
       durationList: [{
-        label: '5min',
-        value: 300
+        // label: '5min',
+        value: 300,
+        id: '1'
       }, {
-        label: '60min',
-        value: 3600
+        // label: '60min',
+        value: 3600,
+        id: '2'
       }, {
-        label: '无限制',
-        value: 0
+        // label: '无限制',
+        value: 0,
+        id: '3'
       }]
     }
   },

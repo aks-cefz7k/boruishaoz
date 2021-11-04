@@ -273,9 +273,9 @@ export default {
       this.manualpanel.controlmode = 1
     },
     reset () {
-      this.$confirm('是否将状态全部初始化为红灯?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('edge.controlpanel.changered'), this.$t('edge.controlpanel.tips'), {
+        confirmButtonText: this.$t('edge.button.OK'),
+        cancelButtonText: this.$t('edge.button.Cancel'),
         type: 'warning',
         center: true
       }).then(() => {
@@ -294,14 +294,14 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消初始化'
+          message: this.$t('edge.controlpanel.cancelinit')
         })
       })
     },
     clearChannel () {
-      this.$confirm('是否清空数据?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('edge.controlpanel.iscleardata'), this.$t('edge.controlpanel.tips'), {
+        confirmButtonText: this.$t('edge.button.OK'),
+        cancelButtonText: this.$t('edge.button.Cancel'),
         type: 'warning',
         center: true
       }).then(() => {
@@ -315,7 +315,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消清空'
+          message: this.$t('edge.controlpanel.cancelclear')
         })
       })
     },

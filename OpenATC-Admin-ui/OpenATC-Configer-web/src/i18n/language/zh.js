@@ -166,7 +166,12 @@ const zh = {
       'modelList5': '定周期',
       'modelList6': '感应控制',
       'modelList10': '无电缆协调',
-      'modelList12': '行人过街'
+      'modelList12': '行人过街',
+      'tips': '提示',
+      'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
+      'canceled': '已取消',
+      'nextcycleeffic': '执行成功，下周期生效！',
+      'transitioneffic': '执行成功，过渡切换后生效！'
     },
     'phase': {
       'desc': '描述',
@@ -384,7 +389,12 @@ const zh = {
       'channelstatus3': '绿灯',
       'channelstatus4': '灭灯',
       'getdefaultmanualpaneltips': '生成默认参数成功，请查看！',
-      'phaseanddetectornotnull': '相位和通道不能为空！'
+      'phaseanddetectornotnull': '相位和通道不能为空！',
+      'iscleardata': '是否清空数据?',
+      'tips': '提示',
+      'cancelclear': '已取消清空',
+      'changered': '是否将状态全部初始化为红灯?',
+      'cancelinit': '已取消初始化'
     },
     'system': {
       'information': '信息',
@@ -422,7 +432,13 @@ const zh = {
       'selectdate': '选择日期',
       'anytimepoint': '任意时间点',
       'tips': '提示',
-      'update': '更新'
+      'update': '更新',
+      'duration1': '5分钟',
+      'duration2': '60分钟',
+      'duration3': '无限制',
+      'remote1': '重启',
+      'remote2': '授权',
+      'remote3': '自定义'
     },
     'optimize': {
       'strategy': '优化策略',
@@ -566,7 +582,8 @@ const zh = {
       'manualpanel': '手动面板数据不能为空',
       'momthIsNull': '日期里月份不能为空！',
       'concurrentRules': '相位参数中配置了多环时，并发相位不能为空！',
-      'devicenotonline': '设备不在线！'
+      'devicenotonline': '设备不在线！',
+      'abnormalcommunication': '通讯异常！'
     },
     'importTemp': {
       'editTemplateData': '模板数据编辑',

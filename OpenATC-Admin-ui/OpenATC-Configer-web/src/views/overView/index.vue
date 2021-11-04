@@ -238,7 +238,7 @@ export default {
       registerMessageTimer: null, // 延时器
       volumeControlTimer: null, // 流量定时器
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
-      ParamsMode: new Map([[0, '自主控制'], [1, '平台控制'], [2, '配置工具控制'], [3, '手动面板控制']]),
+      ParamsMode: new Map([[0, '系统控制'], [1, '平台控制'], [2, '配置工具控制'], [3, '手动面板控制']]),
       ParamsControl: new Map([[0, '自主控制'], [1, '黄闪'], [2, '全红'], [3, '关灯'], [4, '步进'], [5, '定周期控制'], [6, '单点感应控制'], [7, '协调感应控制'], [8, '方案选择控制'], [9, '自适应控制'], [10, '无电缆控制'], [11, '有电缆控制'], [12, '行人过街控制']]),
       phaseType: new Map([[1, '红'], [2, '黄'], [3, '绿']]), // phaseType表示红，黄，绿
       ip: '--',
@@ -386,7 +386,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error('通讯异常！')
+          this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
           return
         }
         if (data.data.data.data) {
@@ -423,7 +423,7 @@ export default {
             this.reSend()
             return
           }
-          this.$message.error('通讯异常！')
+          this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
           this.reSend()
           return
         }
@@ -718,9 +718,9 @@ export default {
         }
         this.modelList.push(autonomyControl)
       } else {
-        this.$confirm('退出前需要先恢复自主控制, 是否退出?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$t('edge.overview.exitmanul'), this.$t('edge.overview.tips'), {
+          confirmButtonText: this.$t('edge.button.OK'),
+          cancelButtonText: this.$t('edge.button.Cancel'),
           type: 'warning'
         }).then(() => {
           this.$route.params.flag = false
@@ -735,7 +735,7 @@ export default {
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消'
+            message: this.$t('edge.overview.canceled')
           })
         })
       }
@@ -759,11 +759,11 @@ export default {
           return
         }
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
-          that.$alert('执行成功，下周期生效！', { type: 'success' })
+          that.$alert(this.$t('edge.overview.nextcycleeffic'), { type: 'success' })
           return
         }
         if (that.preselectModel === 4) {
-          that.$alert('执行成功，过渡切换后生效！', { type: 'success' })
+          that.$alert(this.$t('edge.overview.transitioneffic'), { type: 'success' })
           return
         }
         that.$alert(that.$t('edge.common.download'), { type: 'success' })
