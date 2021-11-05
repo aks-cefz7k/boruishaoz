@@ -394,7 +394,11 @@ const zh = {
       'tips': '提示',
       'cancelclear': '已取消清空',
       'changered': '是否将状态全部初始化为红灯?',
-      'cancelinit': '已取消初始化'
+      'cancelinit': '已取消初始化',
+      'manualpanelundefined': '',
+      'manualpanel0': '默认',
+      'manualpanel1': '自定义',
+      'manualcontrolbackground': 'manualcontrolbackground'
     },
     'system': {
       'information': '信息',

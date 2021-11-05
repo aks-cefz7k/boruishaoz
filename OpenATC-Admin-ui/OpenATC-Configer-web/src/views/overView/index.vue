@@ -239,8 +239,11 @@ export default {
       volumeControlTimer: null, // 流量定时器
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
       ParamsMode: new Map([[0, '系统控制'], [1, '平台控制'], [2, '配置工具控制'], [3, '手动面板控制']]),
+      ParamsModeEn: new Map([[0, 'System Control'], [1, 'Platform Control'], [2, 'Configuration Control'], [3, 'Manual Panel Control']]),
       ParamsControl: new Map([[0, '自主控制'], [1, '黄闪'], [2, '全红'], [3, '关灯'], [4, '步进'], [5, '定周期控制'], [6, '单点感应控制'], [7, '协调感应控制'], [8, '方案选择控制'], [9, '自适应控制'], [10, '无电缆控制'], [11, '有电缆控制'], [12, '行人过街控制']]),
+      ParamsControlEn: new Map([[0, 'Auto Control'], [1, 'Yellow Flash Control'], [2, 'Red Control'], [3, 'Dark Control'], [4, 'Step'], [5, 'Fixed_Cycle Control'], [6, 'Free Control'], [7, 'Coordinated Induction Control'], [8, 'Pattern Selection Control'], [9, 'Adaptive Control'], [10, '无电缆控制'], [11, 'Cable Control'], [12, 'Pedestrian Crossing Control']]),
       phaseType: new Map([[1, '红'], [2, '黄'], [3, '绿']]), // phaseType表示红，黄，绿
+      phaseTypeEn: new Map([[1, 'Red'], [2, 'Yellow'], [3, 'Green']]), // phaseType表示红，黄，绿
       ip: '--',
       port: '--',
       protocol: '--',
@@ -560,7 +563,13 @@ export default {
         let patternData = data.data.data.data
         this.form.control = String(patternData.control)
         this.form.terminal = String(patternData.terminal)
-        this.form.mode = this.ParamsMode.get(patternData.mode)
+        if (this.$i18n.locale === 'en') {
+          this.form.mode = this.ParamsModeEn.get(patternData.mode)
+        } else if (this.$i18n.locale === 'zh') {
+          this.form.mode = this.ParamsMode.get(patternData.mode)
+        }
+        // this.form.mode = this.ParamsMode.get(patternData.mode)
+        // this.form.mode = this.ParamsModeEn.get(patternData.mode)
         this.form.value = patternData.value
       }).catch(error => {
         this.unlockScreen()
@@ -571,22 +580,44 @@ export default {
     handleGetData (data) {
       let that = this
       if (data.name === '') {
-        data.name = '方案' + data.patternid
+        if (that.$i18n.locale === 'en') {
+          data.name = 'Pattern' + data.patternid
+        } else if (that.$i18n.locale === 'zh') {
+          data.name = '方案' + data.patternid
+        }
       }
       Object.keys(data).forEach(function (key) {
-        if (key === 'mode') {
-          if (data[key] > 0 && data[key] < 6) {
-            data[key] = that.ParamsMode.get(data[key])
-          } else {
-            data[key] = that.ParamsMode.get(0)
+        if (that.$i18n.locale === 'en') {
+          if (key === 'mode') {
+            if (data[key] > 0 && data[key] < 6) {
+              data[key] = that.ParamsModeEn.get(data[key])
+            } else {
+              data[key] = that.ParamsModeEn.get(0)
+            }
           }
-        }
-        if (key === 'control') {
-          data[key] = that.ParamsControl.get(data[key])
-        }
-        if (key === 'phase') {
-          for (let val of data[key]) {
-            val.type = that.phaseType.get(val.type)
+          if (key === 'control') {
+            data[key] = that.ParamsControlEn.get(data[key])
+          }
+          if (key === 'phase') {
+            for (let val of data[key]) {
+              val.type = that.phaseTypeEn.get(val.type)
+            }
+          }
+        } else if (that.$i18n.locale === 'zh') {
+          if (key === 'mode') {
+            if (data[key] > 0 && data[key] < 6) {
+              data[key] = that.ParamsMode.get(data[key])
+            } else {
+              data[key] = that.ParamsMode.get(0)
+            }
+          }
+          if (key === 'control') {
+            data[key] = that.ParamsControl.get(data[key])
+          }
+          if (key === 'phase') {
+            for (let val of data[key]) {
+              val.type = that.phaseType.get(val.type)
+            }
           }
         }
       })
