@@ -158,7 +158,7 @@ export default {
     speak: none;
     font-style: normal;
     font-weight: 400;
-    font-size: 30px;
+    font-size: 28px;
     font-variant: normal;
     text-transform: none;
     line-height: 1;
@@ -168,7 +168,7 @@ export default {
 }
 .tabs-style .el-tabs__new-tab {
     float: right;
-    border: 1px solid #d3dce6;
+    border: 1px solid #409eff;
     height: 30px;
     width: 30px;
     line-height: 18px;
@@ -176,7 +176,7 @@ export default {
     border-radius: 3px;
     text-align: center;
     font-size: 12px;
-    color: #d3dce6;
+    color: #409eff;
     cursor: pointer;
     -webkit-transition: all .15s;
     transition: all .15s;
