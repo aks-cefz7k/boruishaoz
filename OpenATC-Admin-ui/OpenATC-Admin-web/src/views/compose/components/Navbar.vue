@@ -110,7 +110,7 @@ export default {
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,
-      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew'],
+      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew', '/overviewNew/index'],
       language: 'Language'
     }
   },

@@ -11,7 +11,7 @@
  **/
 <template>
   <div>
-    <DeviceTags />
+    <DeviceTags v-if="show" />
     <div class="adminEdge">
       <router-view></router-view>
     </div>
@@ -25,9 +25,16 @@ export default {
   },
   data () {
     return {
+      show: true
     }
   },
   mounted () {
+    // 如果直接跳转到单设备详情，需要隐藏tags管理
+    if (sessionStorage.getItem('toSingleEdge') === '1') {
+      this.show = false
+    } else {
+      this.show = true
+    }
   },
   methods: {
   }

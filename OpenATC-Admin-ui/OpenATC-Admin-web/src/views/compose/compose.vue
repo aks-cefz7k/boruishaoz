@@ -48,6 +48,18 @@ export default {
   },
   created () {
   },
+  mounted () {
+    // 打开单一设备详情时加载composeNew父组件（设置token免登录）。但是点击侧边栏后，路由会切换至多设备管理detail下的子路由，
+    // 而此处对应的父组件是compose，此时为了避免显示多设备管理的tags，需要在此处判断是否是从单一设备入口进入的，并且当前的路由
+    // 包含在配置工具的路由中，以此作为依据改变标识，然后在deviceDetai页根据这个标识控制顶部tags的隐藏。
+    const currParentRouter = `/${this.$route.path.split('/')[1]}`
+    const allEdgeParentPath = this.$router.options.routes.filter(ele => ele.name === 'Detail')[0].children[0].children.map(ele => ele.path)
+    if (sessionStorage.getItem('toSingleEdge') === '1' && allEdgeParentPath.indexOf(currParentRouter) !== -1) {
+      sessionStorage.setItem('toSingleEdge', '1')
+    } else {
+      sessionStorage.setItem('toSingleEdge', '0')
+    }
+  },
   methods: {
     saveCurDevInfo (operateId) {
       let allDevsInfo = this.$store.getters.deviceInfos
