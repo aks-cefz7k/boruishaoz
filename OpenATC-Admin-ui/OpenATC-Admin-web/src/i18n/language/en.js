@@ -113,7 +113,14 @@ const en = {
       'edituser': 'Edit User',
       'adduser': 'Add User',
       'deleteuser': 'Delete This User?',
-      'labelwidth': '25%'
+      'labelwidth': '25%',
+      'authorize': 'Authorize',
+      'authorizetitle': 'Authorize Token',
+      'authorizetime': 'Authorize Time：',
+      'generate': 'Generate',
+      'to': 'To',
+      'starttime': 'Start date',
+      'endtime': 'End date'
     },
     'greenwaveoptimize': {
       'addplan': 'Click the Add button to add the greenwave Optimize plan',

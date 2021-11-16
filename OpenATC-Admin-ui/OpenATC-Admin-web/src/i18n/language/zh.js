@@ -113,7 +113,14 @@ const zh = {
       'edituser': '编辑用户',
       'adduser': '添加用户',
       'deleteuser': '是否删除此用户?',
-      'labelwidth': '15%'
+      'labelwidth': '15%',
+      'authorize': '授权',
+      'authorizetitle': '授权token',
+      'authorizetime': '授权时间：',
+      'generate': '生成',
+      'to': '至',
+      'starttime': '开始时间',
+      'endtime': '结束时间'
     },
     'greenwaveoptimize': {
       'addplan': '点击添加按钮添加绿波协调计划',
