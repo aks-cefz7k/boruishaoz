@@ -79,7 +79,7 @@
       </div>
       <div class="container-right">
         <div class="control-right">
-          <el-form ref="form" :model="form" label-width="80px">
+          <el-form ref="form" :model="form" label-width="110px">
             <el-form-item :label="$t('edge.control.mode_style')" v-if="form.mode != ''">
                 <div>{{form.mode}}</div>
               </el-form-item>
@@ -93,7 +93,12 @@
                       <el-option :label="$t('edge.overview.inductioncontrol')" value="6"></el-option>
                       <el-option :label="$t('edge.overview.nocablecoordination')" value="10"></el-option>
                       <el-option :label="$t('edge.overview.phasewalk')" value="12"></el-option>
+                      <el-option :label="$t('edge.overview.websteroptimization')" value="14"></el-option>
+                      <el-option :label="$t('edge.overview.custom')" value="999"></el-option>
                   </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('edge.overview.controlmodevalue')">
+                  <el-input v-model="controlNum" style="width: 70%" :disabled="form.control!=='999'"></el-input>
               </el-form-item>
               <el-form-item :label="$t('edge.control.pattern')">
                   <el-input v-model="form.terminal" style="width: 70%"></el-input>
@@ -207,6 +212,7 @@ export default {
         mode: '',
         value: ''
       },
+      controlNum: '',
       spanArr: [],
       list: [{
         iconClass: 'model',
@@ -530,10 +536,14 @@ export default {
       }
     },
     onSubmit () {
+      if (this.form.control === '999' && this.controlNum === '') {
+        this.$message.error(this.$t('edge.overview.controlnumerrormess'))
+        return
+      }
       this.lockScreen()
       // let control = { ...this.controlData }
       let control = {}
-      control.control = Number(this.form.control)
+      control.control = Number(this.form.control === '999' ? this.controlNum : this.form.control)
       // control.pattern = Number(this.form.pattern)
       control.terminal = Number(this.form.terminal)
       control.value = Number(this.form.value)
@@ -561,7 +571,14 @@ export default {
         }
         this.$message.success(this.$t('edge.common.querysucess'))
         let patternData = data.data.data.data
-        this.form.control = String(patternData.control)
+        let patternList = [0, 1, 2, 4, 5, 6, 10, 12, 14]
+        if (patternList.includes(patternData.control)) {
+          this.form.control = String(patternData.control)
+        } else {
+          this.form.control = '999'
+          this.controlNum = String(patternData.control)
+        }
+        // this.form.control = String(patternData.control)
         this.form.terminal = String(patternData.terminal)
         if (this.$i18n.locale === 'en') {
           this.form.mode = this.ParamsModeEn.get(patternData.mode)

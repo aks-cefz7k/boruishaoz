@@ -130,6 +130,9 @@ const en = {
       'inductioncontrol': 'Free Control',
       'nocablecoordination': 'Nocable Control',
       'phasewalk': 'Pedestrian Crossing Control',
+      'websteroptimization': 'Webster Single Point Optimization',
+      'custom': 'Custom',
+      'controlmodevalue': 'Control Value',
       'patternstate': 'Pattern State',
       'cycle': 'Cycle',
       'phasesplit': 'Phase Split',
@@ -171,7 +174,8 @@ const en = {
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
       'canceled': 'Cancelled',
       'nextcycleeffic': 'Successful execution, the next cycle will take effect!',
-      'transitioneffic': 'The execution is successful. It will take effect after the transition switch!'
+      'transitioneffic': 'The execution is successful. It will take effect after the transition switch!',
+      'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!'
     },
     'phase': {
       'desc': 'Description',

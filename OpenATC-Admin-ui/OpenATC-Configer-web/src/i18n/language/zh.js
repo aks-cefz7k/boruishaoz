@@ -130,6 +130,9 @@ const zh = {
       'inductioncontrol': '感应控制',
       'nocablecoordination': '无电缆协调',
       'phasewalk': '行人过街',
+      'websteroptimization': 'Webster单点优化',
+      'custom': '自定义',
+      'controlmodevalue': '控制方式数值',
       'patternstate': '方案状态',
       'cycle': '周期',
       'phasesplit': '绿信比',
@@ -171,7 +174,8 @@ const zh = {
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
       'canceled': '已取消',
       'nextcycleeffic': '执行成功，下周期生效！',
-      'transitioneffic': '执行成功，过渡切换后生效！'
+      'transitioneffic': '执行成功，过渡切换后生效！',
+      'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！'
     },
     'phase': {
       'desc': '描述',
