@@ -281,7 +281,8 @@ export default {
     // if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === 'true') {
     //   this.isShowLogout = false
     // }
-    if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true') {
+    if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
+      // 增加判断toSingleEdge，解决isfromatc参数丢失问题
       this.isShowLogout = false
     }
     this.extendErrorCodeMap() // 扩展错误码的map集合

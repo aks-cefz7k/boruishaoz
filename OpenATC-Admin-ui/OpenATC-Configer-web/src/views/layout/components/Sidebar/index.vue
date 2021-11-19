@@ -84,7 +84,8 @@ export default {
     },
     handleUserMgrRoutes (curRoutes) {
       // 平台打开的配置工具，用户管理不可见（层级高）
-      if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true') {
+      if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
+        // 增加判断toSingleEdge，解决isfromatc参数丢失问题
         const noPermission = ['User']
         this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission})
         return
