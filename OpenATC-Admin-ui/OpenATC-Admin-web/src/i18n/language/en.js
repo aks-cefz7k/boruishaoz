@@ -37,7 +37,8 @@ const en = {
       'Cancel': 'Cancel',
       'expandall': 'Expand All',
       'collapseall': 'Collapse All',
-      'search': 'Search'
+      'search': 'Search',
+      'location': 'Location'
     },
     'main': {
       'homepage': 'Home',
@@ -221,6 +222,9 @@ const en = {
       'phaselock': 'Phase Lock',
       'programIntervention': 'Program Intervention',
       'channelDetection': 'Channel Detection'
+    },
+    'gis': {
+      'chooseLocationInfo': 'Click the map to choose a location !'
     }
   }
 }
