@@ -106,7 +106,7 @@
 import { mapState } from 'vuex'
 import dateObj from './utils.js'
 import Sortable from 'sortablejs'
-const { monthsModel, daysModelCh, daysModelEn, datesModel } = dateObj
+const { monthsModel, daysModelCh, daysModelEn, datesModel, monthsModelEn, datesModelEn } = dateObj
 export default {
   name: 'date',
   data () {
@@ -130,13 +130,13 @@ export default {
     let lan = this.$i18n.locale
     if (lan === 'en') {
       this.days = daysModelEn
-      // this.dates = datesModelEn
-      // this.months = monthsModelEn
+      this.dates = datesModelEn
+      this.months = monthsModelEn
     }
     if (lan === 'zh') {
       this.days = daysModelCh
-      // this.dates = datesModel
-      // this.months = monthsModel
+      this.dates = datesModel
+      this.months = monthsModel
     }
     this.globalParamModel = this.$store.getters.globalParamModel
     this.init()
@@ -190,7 +190,13 @@ export default {
       }
       for (let i = 0; i < dateList.length; i++) {
         if (dateList[i].month.length === 12) dateList[i].month.push(0)
-        if (dateList[i].date.length === 31) dateList[i].date.push('全选')
+        if (dateList[i].date.length === 31) {
+          if (this.$i18n.locale === 'en') {
+            dateList[i].date.push('All')
+          } else if (this.$i18n.locale === 'zh') {
+            dateList[i].date.push('全选')
+          }
+        }
         if (dateList[i].day.length === 7) dateList[i].day.push(8)
         let plan = dateList[i].plan
         let idList = []
@@ -315,20 +321,39 @@ export default {
       for (let item of this.dates) {
         allValues.push(item)
       }
-      // 若是全部选择
-      if (val.includes('全选')) this.dateList[index].date = allValues
-      // 取消全部选中，上次有，当前没有，表示取消全选
-      if (this.oldOptions.includes('全选') && !val.includes('全选')) this.dateList[index].date = []
-      // 点击非全部选中，需要排除全部选中，以及，当前点击的选项
-      // 新老数据都有全部选中
-      if (this.oldOptions.includes('全选') && val.includes('全选')) {
-        let tempIndex = val.indexOf('全选')
-        val.splice(tempIndex, 1) // 排除全选选项
-        this.dateList[index].date = val
-      }
-      // 全选未选，但是其他选项全部选上，则全选选上，上次和当前，都没有全选
-      if (!this.oldOptions.includes('全选') && !val.includes('全选')) {
-        if (val.length === allValues.length - 1) this.dateList[index].date = ['全选'].concat(val)
+      // 判断中英文
+      if (this.$i18n.locale === 'en') {
+        // 若是全部选择
+        if (val.includes('All')) this.dateList[index].date = allValues
+        // 取消全部选中，上次有，当前没有，表示取消全选
+        if (this.oldOptions.includes('All') && !val.includes('All')) this.dateList[index].date = []
+        // 点击非全部选中，需要排除全部选中，以及，当前点击的选项
+        // 新老数据都有全部选中
+        if (this.oldOptions.includes('All') && val.includes('All')) {
+          let tempIndex = val.indexOf('All')
+          val.splice(tempIndex, 1) // 排除全选选项
+          this.dateList[index].date = val
+        }
+        // 全选未选，但是其他选项全部选上，则全选选上，上次和当前，都没有全选
+        if (!this.oldOptions.includes('All') && !val.includes('All')) {
+          if (val.length === allValues.length - 1) this.dateList[index].date = ['All'].concat(val)
+        }
+      } else if (this.$i18n.locale === 'zh') {
+        // 若是全部选择
+        if (val.includes('全选')) this.dateList[index].date = allValues
+        // 取消全部选中，上次有，当前没有，表示取消全选
+        if (this.oldOptions.includes('全选') && !val.includes('全选')) this.dateList[index].date = []
+        // 点击非全部选中，需要排除全部选中，以及，当前点击的选项
+        // 新老数据都有全部选中
+        if (this.oldOptions.includes('全选') && val.includes('全选')) {
+          let tempIndex = val.indexOf('全选')
+          val.splice(tempIndex, 1) // 排除全选选项
+          this.dateList[index].date = val
+        }
+        // 全选未选，但是其他选项全部选上，则全选选上，上次和当前，都没有全选
+        if (!this.oldOptions.includes('全选') && !val.includes('全选')) {
+          if (val.length === allValues.length - 1) this.dateList[index].date = ['全选'].concat(val)
+        }
       }
       this.oldOptions = this.dateList[index].date
     },

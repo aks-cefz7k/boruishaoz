@@ -84,11 +84,19 @@ export const constantRouterMapOfLogin = [{
 {
   path: '/',
   component: compose,
+  name: 'Detail',
   children: [{
     path: 'detail',
     component: () => import('@/views/DeviceManage/deviceDetail'),
-    children: Edgebase.subrouter
+    children: Edgebase.subrouter.filter(subr => subr.path !== '/overviewNew')
   }]
+},
+{
+  path: '/',
+  component: composeNew,
+  name: 'OverviewNew',
+  hidden: true,
+  children: Edgebase.subrouter.filter(subr => subr.path === '/overviewNew')
 },
 {
   path: '/',

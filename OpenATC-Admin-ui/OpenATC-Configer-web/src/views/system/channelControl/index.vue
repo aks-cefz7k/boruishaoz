@@ -63,7 +63,7 @@ export default {
     this.handleCreateLampCtrboard()
   },
   beforeUpdate () {
-    this.handleCreateLampCtrboard()
+    this.handleUpdateLampCtrboard()
   },
   methods: {
     handleCreateLampCtrboard () {
@@ -84,6 +84,11 @@ export default {
         this.data.push(lamp)
       }
       console.log(this.data)
+    },
+    handleUpdateLampCtrboard () {
+      this.data.forEach((ele, index) => {
+        ele.name = this.$t('edge.system.lampcontrolpanel') + index
+      })
     },
     handleExclusive () {
       // 排他，保证单选

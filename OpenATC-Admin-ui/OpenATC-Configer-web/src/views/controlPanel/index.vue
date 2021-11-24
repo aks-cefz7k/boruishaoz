@@ -13,7 +13,7 @@
 <div class="manual-record">
   <div class="manual-top">
     <div class="control-model">
-      <div class="control-model-name">{{$t('edge.controlpanel.controlmode')}}：</div><div class="control-model-value">{{controlMode}}</div>
+      <div class="control-model-name">{{$t('edge.controlpanel.controlmode')}}：</div><div class="control-model-value">{{$t('edge.controlpanel.manualpanel' + manualpanel.controlmode)}}</div>
       <div class="control-model-name">{{$t('edge.controlpanel.duration')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.duration" placeholder="" size="small"></el-input></div>
       <div class="control-model-name">{{$t('edge.controlpanel.transitiongreenflashtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.greenflash" placeholder="" size="small"></el-input></div>
       <div class="control-model-name">{{$t('edge.controlpanel.transitionyellowtime')}}：</div><div class="control-model-input"><el-input v-model.number="manualpanel.yellow" placeholder="" size="small"></el-input></div>
@@ -24,7 +24,7 @@
   <div class="manual-bottom" style="display: inline-block">
     <div class="manual-control" style="display: inline-block">
       <div class="manualControl-kanban">
-        <svg-icon icon-class="manualcontrolbackground" class="manualControl-background"></svg-icon>
+        <svg-icon :icon-class="$t('edge.controlpanel.manualcontrolbackground')" class="manualControl-background"></svg-icon>
         <div class="manual-button" style="left: 201px; top: 150px;"><span class="button-name">{{$t('edge.controlpanel.step')}}</span></div>
         <div class="manual-button" style="left: 393px; top: 150px;"><span class="button-name">{{$t('edge.controlpanel.allred')}}</span></div>
         <div class="manual-button" style="left: 585px; top: 150px;"><span class="button-name">{{$t('edge.controlpanel.yellowflash')}}</span></div>
@@ -178,7 +178,7 @@ export default {
       currChannelName: '',
       currChannelId: -1,
       editStatus: false, // 通道名称的编辑状态
-      controlMode: '',
+      // controlMode: '',
       channelList: []
     }
   },
@@ -202,11 +202,11 @@ export default {
     initManualPanel () {
       this.manualList = []
       this.currChannelId = -1
-      if (this.manualpanel.controlmode === 0) {
-        this.controlMode = '默认'
-      } else if (this.manualpanel.controlmode === 1) {
-        this.controlMode = '自定义'
-      }
+      // if (this.manualpanel.controlmode === 0) {
+      //   this.controlMode = '默认'
+      // } else if (this.manualpanel.controlmode === 1) {
+      //   this.controlMode = '自定义'
+      // }
     },
     getChannelList () {
       getChannel().then((data) => {
@@ -269,13 +269,13 @@ export default {
     },
     edit () {
       this.editStatus = true
-      this.controlMode = '自定义'
+      // this.controlMode = '自定义'
       this.manualpanel.controlmode = 1
     },
     reset () {
-      this.$confirm('是否将状态全部初始化为红灯?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('edge.controlpanel.changered'), this.$t('edge.controlpanel.tips'), {
+        confirmButtonText: this.$t('edge.button.OK'),
+        cancelButtonText: this.$t('edge.button.Cancel'),
         type: 'warning',
         center: true
       }).then(() => {
@@ -294,14 +294,14 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消初始化'
+          message: this.$t('edge.controlpanel.cancelinit')
         })
       })
     },
     clearChannel () {
-      this.$confirm('是否清空数据?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('edge.controlpanel.iscleardata'), this.$t('edge.controlpanel.tips'), {
+        confirmButtonText: this.$t('edge.button.OK'),
+        cancelButtonText: this.$t('edge.button.Cancel'),
         type: 'warning',
         center: true
       }).then(() => {
@@ -315,7 +315,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消清空'
+          message: this.$t('edge.controlpanel.cancelclear')
         })
       })
     },

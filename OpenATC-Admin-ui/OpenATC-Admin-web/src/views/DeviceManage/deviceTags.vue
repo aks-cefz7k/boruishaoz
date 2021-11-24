@@ -44,6 +44,9 @@ export default {
   },
   created () {
     const currRouter = this.$route.path
+    // 如果是打开的单一设备详情，此处阻止根据数据长度判断tags为0后，重定向回设备列表（此处理逻辑是多设备管理的逻辑）
+    const stopJumpFlag = sessionStorage.getItem('toSingleEdge')
+    if (stopJumpFlag === '1') return
     if (this.tags.length === 0 && currRouter !== '/device' && currRouter !== '/deviceNew') {
       router.push({ path: this.devicePath })
     }

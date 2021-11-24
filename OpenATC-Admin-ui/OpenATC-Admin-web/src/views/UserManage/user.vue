@@ -77,6 +77,7 @@
         </el-table-column>
         <el-table-column :label="$t('openatc.usermanager.operation')" align="center">
         <template slot-scope="scope">
+            <el-button type="text" @click="authorize(scope.$index)">{{$t('openatc.usermanager.authorize')}}</el-button>
             <el-button type="text" @click="edit(scope.$index)">{{$t('openatc.common.edit')}}</el-button>
             <el-button type="text" @click="handleDelete(scope.$index)">{{$t('openatc.common.delete')}}</el-button>
         </template>
@@ -85,6 +86,7 @@
   </div>
   <add ref="addChild"></add>
   <update ref="updateChild"></update>
+  <authorize ref="authorizeChild"></authorize>
   <Messagebox :visible="messageboxVisible" :text="$t('openatc.usermanager.deleteuser')" @cancle="cancle" @ok="ok"/>
 </div>
 </template>
@@ -92,11 +94,12 @@
 <script>
 import add from './UserDialog/add'
 import update from './UserDialog/update'
+import authorize from './UserDialog/authorize'
 import Messagebox from '../../components/MessageBox'
 import { GetUsrInfoList, DeleteUsr } from '../../api/user'
 export default {
   name: 'user',
-  components: { add, update, Messagebox },
+  components: { add, update, Messagebox, authorize },
   data () {
     return {
       tableHeight: 700,
@@ -195,6 +198,11 @@ export default {
           }
         })
       })
+    },
+    authorize ($index) {
+      let user = this.tableData[$index]
+      let authorizeChild = this.$refs.authorizeChild
+      authorizeChild.onAuthorizeClick(user)
     }
   }
 }
