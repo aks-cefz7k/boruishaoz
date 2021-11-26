@@ -37,7 +37,8 @@ const zh = {
       'Cancel': '取消',
       'expandall': '全部展开',
       'collapseall': '全部折叠',
-      'search': '搜索'
+      'search': '搜索',
+      'location': '位置'
     },
     'main': {
       'homepage': '主页',
@@ -228,6 +229,9 @@ const zh = {
       'phaselock': '相位锁定',
       'programIntervention': '方案干预',
       'channelDetection': '通道检测'
+    },
+    'gis': {
+      'chooseLocationInfo': '请点击地图选择位置 !'
     }
   }
 }
