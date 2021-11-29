@@ -79,15 +79,17 @@
       </div>
     </div>
     <Update ref="updateChild"></Update>
+    <EdgeModal ref="edgeModalChild"></EdgeModal>
     <router-view></router-view>
   </div>
 </template>
 <script>
-import router from '@/router'
+// import router from '@/router'
 import Update from './update'
+import EdgeModal from './edgeModal'
 export default {
   name: 'device',
-  components: { Update },
+  components: { Update, EdgeModal },
   props: {
     devicesData: {
       type: Array
@@ -147,23 +149,8 @@ export default {
     },
     onDetailClick (row) {
       const dev = row
-      const devId = dev.id
-      this.$store.dispatch('SetOperatedDeviceId', devId)
-      this.$store.dispatch('SaveDevsTags', dev)
-      this.$store.dispatch('GetMultDeviceData', devId)
-      const curTscParam = this.$store.getters.openedDevice
-      const curPath = this.$store.getters.openedPath
-      if (!curTscParam) {
-        this.$store.dispatch('ResetTscParam')
-        this.$store.dispatch('SaveCurPath', '/overview/index')
-      } else {
-        this.$store.dispatch('SaveTscParam', curTscParam)
-        this.$store.dispatch('SaveCurPath', curPath)
-      }
-      router.push({
-        path: !curPath || curPath === '/overview/index' ? '/overview/index' : curPath,
-        query: { IP: dev.jsonparam.ip, port: dev.jsonparam.port, agentid: dev.agentid, protocol: dev.protocol, isfromatc: true }
-      })
+      let edgeModalChild = this.$refs.edgeModalChild
+      edgeModalChild.openSingleEdge(dev)
     },
     getList () {
       this.$parent.getAllAdevice()
