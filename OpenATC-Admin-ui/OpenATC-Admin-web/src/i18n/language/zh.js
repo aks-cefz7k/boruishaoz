@@ -169,7 +169,14 @@ const zh = {
       'upspeed': '上行速度(km/h)',
       'downspeed': '下行速度(km/h)',
       'up': '上行',
-      'down': '下行'
+      'down': '下行',
+      'optstrategyoption1': '绿波优化',
+      'directionOption1': '上行',
+      'directionOption2': '下行',
+      'directionOption3': '双向',
+      'duration': '持续时间：',
+      'speed': '速度：',
+      'vehicle': '车辆：'
     },
     'record': {
       'user': '用户',

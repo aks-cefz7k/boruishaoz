@@ -169,7 +169,14 @@ const en = {
       'upspeed': 'Up Speed(km/h)',
       'downspeed': 'Down Speed(km/h)',
       'up': 'Up',
-      'down': 'Down'
+      'down': 'Down',
+      'optstrategyoption1': 'Green wave optimization',
+      'directionOption1': 'Up',
+      'directionOption2': 'Down',
+      'directionOption3': 'All',
+      'duration': 'Duration：',
+      'speed': 'Speed：',
+      'vehicle': 'vehicle：'
     },
     'record': {
       'user': 'Operator',
