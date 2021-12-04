@@ -178,7 +178,8 @@ export default {
       let name = ''
       for (let i = 0; i < status.length; i++) {
         if (!status[i]) continue
-        name = name + ',' + images[i].name
+        // name = name + ',' + images[i].name
+        name = name + ',' + this.$t(images[i].name)
       }
       if (name !== '') {
         const obj = {

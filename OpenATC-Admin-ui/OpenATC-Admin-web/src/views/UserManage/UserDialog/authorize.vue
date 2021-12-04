@@ -54,7 +54,7 @@ export default {
   data () {
     return {
       dialogFormVisible: false,
-      value: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+      value: '',
       token: 'eyJraWQiOiIxNjAyODExODM5NDkwIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYwMjgxMTg0MH0.8n-g_nctB-IIupsw7EibJ-Lb0kmkeCTgMS08GLo0Z9o'
     }
   },

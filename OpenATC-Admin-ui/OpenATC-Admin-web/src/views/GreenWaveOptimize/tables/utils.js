@@ -12,112 +12,112 @@
 export const images = [{
   id: 1,
   // name: 'East-Straight',
-  name: '东直行',
+  name: 'openatc.greenwaveoptimize.es',
   // img: require('./images/East-Straight.svg'),
   class: 'iconfont icon-icon-test2'
 },
 {
   id: 2,
   // name: 'East-Left',
-  name: '东左转',
+  name: 'openatc.greenwaveoptimize.el',
   // img: require('./images/East-Left.svg'),
   class: 'iconfont icon-icon-test4'
 },
 {
   id: 3,
   // name: 'East-Right',
-  name: '东右转',
+  name: 'openatc.greenwaveoptimize.er',
   // img: require('./images/East-Right.svg'),
   class: 'iconfont icon-icon-test3'
 },
 {
   id: 4,
   // name: 'East-Back',
-  name: '东掉头',
+  name: 'openatc.greenwaveoptimize.eb',
   // img: require('./images/East-Back.svg'),
   class: 'iconfont icon-icon-test6'
 },
 {
   id: 5,
   // name: 'West-Straight',
-  name: '西直行',
+  name: 'openatc.greenwaveoptimize.ws',
   // img: require('./images/West-Straight.svg'),
   class: 'iconfont icon-icon-test5'
 },
 {
   id: 6,
   // name: 'West-Left',
-  name: '西左转',
+  name: 'openatc.greenwaveoptimize.wl',
   // img: require('./images/West-Left.svg'),
   class: 'iconfont icon-icon-test7'
 },
 {
   id: 7,
   // name: 'West-Right',
-  name: '西右转',
+  name: 'openatc.greenwaveoptimize.wr',
   // img: require('./images/West-Right.svg'),
   class: 'iconfont icon-icon-test9'
 },
 {
   id: 8,
   // name: 'West-Back',
-  name: '西掉头',
+  name: 'openatc.greenwaveoptimize.wb',
   // img: require('./images/West-Back.svg'),
   class: 'iconfont icon-icon-test8'
 },
 {
   id: 9,
   // name: 'North-Straight',
-  name: '北直行',
+  name: 'openatc.greenwaveoptimize.ns',
   // img: require('./images/North-Straight.svg'),
   class: 'iconfont icon-icon-test10'
 },
 {
   id: 10,
   // name: 'North-Left',
-  name: '北左转',
+  name: 'openatc.greenwaveoptimize.nl',
   // img: require('./images/North-Left.svg'),
   class: 'iconfont icon-icon-test12'
 },
 {
   id: 11,
   // name: 'North-Right',
-  name: '北右转',
+  name: 'openatc.greenwaveoptimize.nr',
   // img: require('./images/North-Right.svg'),
   class: 'iconfont icon-icon-test13'
 },
 {
   id: 12,
   // name: 'North-Back',
-  name: '北掉头',
+  name: 'openatc.greenwaveoptimize.nb',
   // img: require('./images/North-Back.svg'),
   class: 'iconfont icon-icon-test11'
 },
 {
   id: 13,
   // name: 'South-Straight',
-  name: '南直行',
+  name: 'openatc.greenwaveoptimize.ss',
   // img: require('./images/South-Straight.svg'),
   class: 'iconfont icon-icon-test15'
 },
 {
   id: 14,
   // name: 'South-Left',
-  name: '南左转',
+  name: 'openatc.greenwaveoptimize.sl',
   // img: require('./images/South-Left.svg'),
   class: 'iconfont icon-icon-test14'
 },
 {
   id: 15,
   // name: 'South-Right',
-  name: '南右转',
+  name: 'openatc.greenwaveoptimize.sr',
   // img: require('./images/South-Right.svg'),
   class: 'iconfont icon-icon-test'
 },
 {
   id: 16,
   // name: 'South-Back',
-  name: '南掉头',
+  name: 'openatc.greenwaveoptimize.sb',
   // img: require('./images/South-Back.svg'),
   class: 'iconfont icon-icon-test1'
 }]
