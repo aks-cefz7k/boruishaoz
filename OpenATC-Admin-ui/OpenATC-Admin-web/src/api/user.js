@@ -75,11 +75,23 @@ export const getRoles = () => {
 
   return api.Send({}, {})
 }
+export const AuthorizeToken = (usrName, startTime, endTime) => {
+  let api = new Authapi('authorizeToken')
+
+  let param = {
+    'user_name': usrName,
+    'start_time': startTime,
+    'end_time': endTime
+  }
+
+  return api.Send({}, param)
+}
 export default {
   GetUsrInfoList,
   AddUsr,
   GetUsrInfo,
   UpdateUsr,
   DeleteUsr,
-  getRoles
+  getRoles,
+  AuthorizeToken
 }

@@ -30,7 +30,8 @@ const zh = {
       'tipsmodaltitle': '提示',
       'placeholder': '请选择',
       'operation': '操作',
-      'operationsuccess': '操作成功'
+      'operationsuccess': '操作成功',
+      'authtip': '没有权限访问 !'
     },
     'button': {
       'OK': '确定',
@@ -121,7 +122,8 @@ const zh = {
       'generate': '生成',
       'to': '至',
       'starttime': '开始时间',
-      'endtime': '结束时间'
+      'endtime': '结束时间',
+      'Authorization': '授权时间不能为空！'
     },
     'greenwaveoptimize': {
       'addplan': '点击添加按钮添加绿波协调计划',

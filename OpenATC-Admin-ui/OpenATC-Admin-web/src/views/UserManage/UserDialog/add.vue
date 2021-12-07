@@ -226,7 +226,7 @@ export default {
       getRoles().then(res => {
         if (!res.data.success) {
           if (res.data.code === '3008') {
-            this.$message.error('没有权限访问!')
+            this.$message.error(this.$t('openatc.common.authtip'))
             return
           }
           this.$message.error(res.data.message)

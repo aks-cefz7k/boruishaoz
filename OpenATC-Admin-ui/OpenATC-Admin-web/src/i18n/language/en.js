@@ -30,7 +30,8 @@ const en = {
       'tipsmodaltitle': 'Tips',
       'placeholder': 'Select',
       'operation': 'Operation',
-      'operationsuccess': 'Operation Success !'
+      'operationsuccess': 'Operation Success !',
+      'authtip': 'No access !'
     },
     'button': {
       'OK': 'OK',
@@ -121,7 +122,8 @@ const en = {
       'generate': 'Generate',
       'to': 'To',
       'starttime': 'Start date',
-      'endtime': 'End date'
+      'endtime': 'End date',
+      'Authorization': 'Authorization time cannot be empty!'
     },
     'greenwaveoptimize': {
       'addplan': 'Click the Add button to add the greenwave Optimize plan',

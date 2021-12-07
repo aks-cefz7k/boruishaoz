@@ -15,6 +15,11 @@
     "method": "get"
   },
   {
+    "key": "authorizeToken",
+    "url": "/auth/user/token",
+    "method": "post"
+  },
+  {
     "key": "logout",
     "url": "/auth/logout",
     "method": "get"
