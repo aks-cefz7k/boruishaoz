@@ -129,9 +129,9 @@ export default {
   data () {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入确认密码！'))
+        callback(new Error(this.$t('openatc.usermanager.enterpass')))
       } else if (value !== this.tempUser.newpass) {
-        callback(new Error('确认密码与密码不同！'))
+        callback(new Error(this.$t('openatc.usermanager.enterpassdiffpass')))
       } else {
         callback()
       }
@@ -147,7 +147,7 @@ export default {
         } else {
           this.phone_status = false
           return callback(
-            new Error('请输入正确的电话号码！')
+            new Error(this.$t('openatc.usermanager.correctphone'))
           )
         }
       }
@@ -165,15 +165,15 @@ export default {
           callback()
         } else {
           this.email_status = false
-          callback(new Error('请输入正确的电子邮箱！'))
+          callback(new Error(this.$t('openatc.usermanager.correctemail')))
         }
       }, 100)
     }
     var checkName = (rule, value, callback) => {
       if (!value.match(/^[a-zA-Z0-9_]{1,}$/)) {
-        callback(new Error('用户名只能输入字母、数字或下划线！'))
+        callback(new Error(this.$t('openatc.usermanager.lettersnumbersunderscores')))
       } else if (value === '') {
-        callback(new Error('请输入用户名！'))
+        callback(new Error(this.$t('openatc.usermanager.enterusername')))
       }
     }
     return {
@@ -181,7 +181,7 @@ export default {
       email_status: true,
       phone_status: true,
       roles: [],
-      roleNames: ['普通用户'],
+      roleNames: ['ordinary user'],
       tempUser: {
         user_name: '',
         newpass: '',
@@ -199,7 +199,7 @@ export default {
         //   { required: true, message: '请至少选择一个角色', trigger: 'blur' }
         // ],
         newpass: [
-          { required: true, message: '请输入密码！', trigger: 'blur' }
+          { required: true, message: this.$t('openatc.usermanager.enterpassword'), trigger: 'blur' }
         ],
         email: [{ validator: checkEmail, trigger: 'blur' }],
         mobile_phone: [{ validator: checkPhone, trigger: 'blur' }],
@@ -245,23 +245,23 @@ export default {
         this.tempUser.user_name === '' ||
         this.tempUser.newpass === ''
       ) {
-        this.$message.error('用户名密码不能为空！')
+        this.$message.error(this.$t('openatc.usermanager.nameandpasswordnotempty'))
         return
       }
       if (!this.phone_status || !this.email_status) {
-        this.$message.error('错误的电话号码或者电子邮箱！')
+        this.$message.error(this.$t('openatc.usermanager.wrongphoneemail'))
         return
       }
       if (this.tempUser.newpass !== this.tempUser.checkpass) {
-        this.$message.error('确认密码与密码不同！')
+        this.$message.error(this.$t('openatc.usermanager.enterpassdiffpass'))
         return
       }
       if (this.roleNames.length === 0) {
-        this.$message.error('请至少选择一个角色！')
+        this.$message.error(this.$t('openatc.usermanager.selectonerole'))
         return
       }
       if (!this.tempUser.user_name.match(/^[a-zA-Z0-9_]{1,}$/)) {
-        this.$message.error('用户名只能输入字母、数字或下划线！')
+        this.$message.error(this.$t('openatc.usermanager.lettersnumbersunderscores'))
         return
       }
       AddUsr(
@@ -278,7 +278,7 @@ export default {
           console.log(data.data.message)
           return
         }
-        let msg = '新增成功！'
+        let msg = this.$t('openatc.common.addsuccess')
         this.closeFormDialog()
         this.$message({
           message: msg,

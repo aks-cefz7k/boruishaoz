@@ -190,7 +190,7 @@ export default {
         }
         this.messageboxVisible = false
         this.$message({
-          message: '删除成功！',
+          message: this.$t('openatc.common.deletesuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
