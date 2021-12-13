@@ -11,9 +11,12 @@
  **/
 <template>
     <div class="main-statgestatus">
-        <div class="stage-line"></div>
+        <div class="stage-line" v-show="stageLineStatus"></div>
         <div v-for="(item, index) in stageList" :key="index + '1'">
-            <div class="stage-verticalline" :style="{'margin-left':item}"></div>
+          <div class="stage-verticalline" :style="{'margin-left':item}"></div>
+        </div>
+        <div v-for="(item, index) in stageStatusList" :key="index + '2'">
+          <div class="stage-text" :style="{'left':item}"><span class="stage-span">S{{index + 1}}</span></div>
         </div>
     </div>
 </template>
@@ -24,7 +27,9 @@ export default {
   components: {},
   data () {
     return {
-      stageList: []
+      stageList: [],
+      stageStatusList: [],
+      stageLineStatus: false
     }
   },
   props: {
@@ -48,16 +53,22 @@ export default {
   methods: {
     handleStages () {
       this.stageList = []
-      if (this.patternStatusList.length === 0) return
-      //   let stageLength = 0
+      this.stageStatusList = []
+      if (this.patternStatusList.length === 0) {
+        this.stageLineStatus = false
+        return
+      }
+      this.stageLineStatus = true
       let firstPatternStatusList = this.patternStatusList[0]
       this.stageList.push(0)
       let stageLength = 0
+      let stageStatusLength = 0
       for (let i = 0; i < firstPatternStatusList.length; i++) {
-      // for (let stage of this.patternStatusList[0]) {
         let tempLength = Number.parseFloat(firstPatternStatusList[i].greenWidth) + Number.parseFloat(firstPatternStatusList[i].redWidth) + Number.parseFloat(firstPatternStatusList[i].yellowWidth)
+        stageStatusLength = stageLength + tempLength / 2
         stageLength = stageLength + tempLength
         this.stageList.push(stageLength + '%')
+        this.stageStatusList.push(stageStatusLength + '%')
       }
     }
   },
@@ -84,5 +95,26 @@ export default {
   height: 14px;
   background-color: #999999;
   z-index:2;
+}
+.stage-text {
+  position: absolute;
+  float: left;
+  width: 25px;
+  background-color: #ffffff;
+  z-index:3;
+}
+.stage-span {
+  position: relative;
+  bottom: 3px;
+  left: 5px;
+  width: 15px;
+  height: 14px;
+  font-family: SourceHanSansCN-Regular;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 20px;
+  letter-spacing: 0px;
+  color: #333333;
 }
 </style>
