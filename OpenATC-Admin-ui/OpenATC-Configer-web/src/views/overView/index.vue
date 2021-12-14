@@ -124,6 +124,7 @@
           <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
           <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
           <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
+          <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
           <PatternStatus style="margin-top: 30px;" :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus>
         </div>
       </div>
@@ -190,6 +191,7 @@ import { setIframdevid } from '@/utils/auth'
 import FloatImgBtn from '@/components/FloatImgBtn'
 import CrossDiagram from './crossDirection/crossDiagram'
 import PatternStatus from '@/components/PatternStatus'
+import StageStatus from '@/components/StageStatus'
 import xdrdirselector from '@/components/XRDDirSelector'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
@@ -199,6 +201,7 @@ export default {
     FloatImgBtn,
     CrossDiagram,
     PatternStatus,
+    StageStatus,
     xdrdirselector,
     CurVolume,
     CurPhase

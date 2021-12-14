@@ -18,7 +18,7 @@
         <el-option
           v-for="item in optstrategyOptions"
           :key="item.value"
-          :label="item.label"
+          :label="$t('openatc.greenwaveoptimize.optstrategyoption' + item.id)"
           :value="item.value">
         </el-option>
       </el-select>
@@ -29,7 +29,7 @@
         <el-option
           v-for="item in directionOptions"
           :key="item.value"
-          :label="item.label"
+          :label="$t('openatc.greenwaveoptimize.directionOption' + item.id)"
           :value="item.value">
         </el-option>
       </el-select>
@@ -61,13 +61,13 @@
           <span class="header-text">{{$t('openatc.greenwaveoptimize.up')}}</span>
         </div>
         <div class="text item">
-          {{'持续时间: ' + green[0].width + 's' }}
+          {{$t('openatc.greenwaveoptimize.duration') + green[0].width + 's' }}
         </div>
         <div class="text item">
-          {{'速度: ' + green[0].speed + 'km/h' }}
+          {{$t('openatc.greenwaveoptimize.speed') + green[0].speed + 'km/h' }}
         </div>
         <div class="text item">
-          {{'车辆: ' + green[0].vehicle }}
+          {{$t('openatc.greenwaveoptimize.vehicle') + green[0].vehicle }}
         </div>
       </el-card>
     </div>
@@ -77,13 +77,13 @@
           <span class="header-text">{{$t('openatc.greenwaveoptimize.down')}}</span>
         </div>
         <div class="text item">
-          {{'持续时间: ' + green[0].width + 's' }}
+          {{$t('openatc.greenwaveoptimize.duration') + green[0].width + 's' }}
         </div>
         <div class="text item">
-          {{'速度: ' + green[0].speed + 'km/h' }}
+          {{$t('openatc.greenwaveoptimize.speed') + green[0].speed + 'km/h' }}
         </div>
         <div class="text item">
-          {{'车辆: ' + green[0].vehicle }}
+          {{$t('openatc.greenwaveoptimize.vehicle') + green[0].vehicle }}
         </div>
       </el-card>
     </div>
@@ -107,17 +107,21 @@ export default {
       keyintsidOptions: [],
       directionOptions: [{
         value: 'up',
-        label: '上行'
+        label: '上行',
+        id: '1'
       }, {
         value: 'down',
-        label: '下行'
+        label: '下行',
+        id: '2'
       }, {
         value: 'all',
-        label: '双向'
+        label: '双向',
+        id: '3'
       }],
       optstrategyOptions: [{
         value: 'green',
-        label: '绿波优化'
+        label: '绿波优化',
+        id: '1'
       }],
       routerData: {},
       isShowUpCard: false,

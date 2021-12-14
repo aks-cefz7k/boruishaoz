@@ -146,7 +146,7 @@ export default {
         if (data.data.success !== true) {
           this.listLoading = false
           if (data.data.code === '3008') {
-            this.$message.error('没有权限访问！')
+            this.$message.error(this.$t('openatc.common.authtip'))
             console.log(data.data.message)
             return
           }
@@ -182,7 +182,7 @@ export default {
       DeleteUsr(name).then(data => {
         if (data.data.success !== true) {
           if (data.data.code === '3008') {
-            _vue.$message.error('没有权限访问!')
+            _vue.$message.error(this.$t('openatc.common.authtip'))
             return
           }
           _vue.$message.error(data.data.message)
@@ -190,7 +190,7 @@ export default {
         }
         this.messageboxVisible = false
         this.$message({
-          message: '删除成功！',
+          message: this.$t('openatc.common.deletesuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {

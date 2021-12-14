@@ -14,8 +14,7 @@
     <el-dialog
         :title="$t('openatc.usermanager.authorizetitle')"
         :visible.sync="dialogFormVisible"
-        width="560px"
-        :before-close="handleClose">
+        width="560px">
         <div>
             <span>{{$t('openatc.usermanager.authorizetime')}}</span>
             <el-date-picker
@@ -49,19 +48,23 @@
   Auth: yangdongyang
   Created: 2020/10/16
 */
+import { AuthorizeToken } from '../../../api/user'
 export default {
   components: {},
   data () {
     return {
       dialogFormVisible: false,
-      value: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      token: 'eyJraWQiOiIxNjAyODExODM5NDkwIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYwMjgxMTg0MH0.8n-g_nctB-IIupsw7EibJ-Lb0kmkeCTgMS08GLo0Z9o'
+      value: '',
+      token: '',
+      user_name: ''
     }
   },
   name: 'authorize',
   props: {},
   methods: {
     onAuthorizeClick (user) {
+      this.token = ''
+      this.user_name = user.user_name
       this.dialogFormVisible = !this.dialogFormVisible
     },
     resetForm (formData) {
@@ -69,6 +72,39 @@ export default {
       this.dialogFormVisible = false
     //   this.$refs[formData].resetFields() // 表单重置
     //   this.hidePassContain = true
+    },
+    generate () {
+      if (this.value === '' || this.value === null) {
+        this.$message.error(this.$t('openatc.usermanager.Authorization'))
+        return
+      }
+      let startDate = this.formateDate(this.value[0])
+      let endDate = this.formateDate(this.value[1])
+      AuthorizeToken(this.user_name, startDate, endDate).then(res => {
+        if (!res.data.success) {
+          if (res.data.code === '3008') {
+            this.$message.error(this.$t('openatc.common.authtip'))
+            return
+          }
+          this.$message.error(res.data.message)
+          return
+        }
+        this.token = res.data.data.token
+      })
+    },
+    formateDate (newDate) {
+      var y = newDate.getFullYear()
+      var m = newDate.getMonth() + 1
+      m = m < 10 ? ('0' + m) : m
+      var d = newDate.getDate()
+      d = d < 10 ? ('0' + d) : d
+      var h = newDate.getHours()
+      h = h < 10 ? ('0' + h) : h
+      var minute = newDate.getMinutes()
+      minute = minute < 10 ? ('0' + minute) : minute
+      var second = newDate.getSeconds()
+      second = second < 10 ? ('0' + second) : second
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
     }
   }
 }

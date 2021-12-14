@@ -96,6 +96,7 @@ export default {
       listLoading: false,
       tableData: [],
       statusMode: new Map([['set-request', '请求错误'], ['set-response', '应答成功'], ['error-response', '应答错误']]),
+      statusModeEn: new Map([['set-request', 'Request error'], ['set-response', 'Successful response'], ['error-response', 'Response error']]),
       listQuery: {
         pageNum: 1, // 页码
         pageRow: 50 // 每页条数
@@ -185,7 +186,12 @@ export default {
       for (let obj of data) {
         Object.keys(obj).forEach(function (key) {
           if (key === 'status') {
-            obj[key] = that.statusMode.get(obj[key])
+            if (that.$i18n.locale === 'en') {
+              obj[key] = that.statusModeEn.get(obj[key])
+            } else {
+              obj[key] = that.statusMode.get(obj[key])
+            }
+            // obj[key] = that.statusMode.get(obj[key])
           }
         })
       }
