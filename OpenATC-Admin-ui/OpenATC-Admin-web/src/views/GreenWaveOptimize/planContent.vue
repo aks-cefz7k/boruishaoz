@@ -151,7 +151,7 @@ export default {
         if (!res.data.success) {
           if (res.data.code === '4003') {
             let agentid = res.data.data.agentid
-            this.$message.error('设备' + agentid + '不在线！')
+            this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
           this.$message.error(res.data.message)
@@ -185,7 +185,7 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        this.$alert('方案下发成功!', { type: 'success' })
+        this.$alert(this.$t('openatc.greenwaveoptimize.planissuedsucc'), { type: 'success' })
       })
     },
     handleCreate () {
@@ -249,7 +249,7 @@ export default {
         if (!res.data.success) {
           if (res.data.code === '4003') {
             let agentid = res.data.data.agentid
-            this.$message.error('设备' + agentid + '不在线！')
+            this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
           this.$message.error(res.data.message)
@@ -266,7 +266,7 @@ export default {
         if (!res.data.success) {
           if (res.data.code === '4003') {
             let agentid = res.data.data.agentid
-            this.$message.error('设备' + agentid + '不在线！')
+            this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
           this.$message.error(res.data.message)

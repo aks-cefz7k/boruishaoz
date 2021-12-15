@@ -46,6 +46,11 @@
         align="center">
         </el-table-column>
         <el-table-column
+        prop="login_ip_limit"
+        :label="$t('openatc.usermanager.ip')"
+        align="center">
+        </el-table-column>
+        <el-table-column
         prop="organization"
         :label="$t('openatc.usermanager.organization')"
         align="center">

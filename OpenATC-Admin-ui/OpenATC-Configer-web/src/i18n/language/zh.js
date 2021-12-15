@@ -484,6 +484,20 @@ const zh = {
       'grade': '等级',
       'value': '值'
     },
+    'statistics': {
+      'username': '用户名：',
+      'pass': '密码：',
+      'usernameplaceholder': '请输入用户名',
+      'passplaceholder': '请输入密码',
+      'getdevicedata': '获取设备流量数据',
+      'detector': '检测器',
+      'time': '时间',
+      'flow': '流量',
+      'occupyrate': '占有率',
+      'occupytime': '占有时间',
+      'userpassnotnull': '用户名或密码不能为空!',
+      'historicalisempty': '获取历史流量数据为空！'
+    },
     'dailyrecord': {
       'data': '日期',
       'infotype': '事件类型',

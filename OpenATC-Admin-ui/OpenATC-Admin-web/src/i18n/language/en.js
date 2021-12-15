@@ -146,7 +146,8 @@ const en = {
       'enteroldpass': 'Please input the old password!',
       'enternewepass': 'Please input the new password!',
       'originalpassworderror': 'Original password error！',
-      'modificationsucc': 'Modification succeeded'
+      'modificationsucc': 'Modification succeeded',
+      'ip': 'IP'
     },
     'greenwaveoptimize': {
       'addplan': 'Click the Add button to add the greenwave Optimize plan',
@@ -217,7 +218,9 @@ const en = {
       'ss': 'South-Straight',
       'sl': 'South-Left',
       'sr': 'South-Right',
-      'sb': 'South-Back'
+      'sb': 'South-Back',
+      'notonline': ' do not online!',
+      'planissuedsucc': 'Plan issued successfully'
     },
     'record': {
       'user': 'Operator',

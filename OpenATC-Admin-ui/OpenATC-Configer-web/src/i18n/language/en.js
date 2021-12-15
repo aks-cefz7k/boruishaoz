@@ -486,6 +486,20 @@ const en = {
       'grade': 'Grade',
       'value': 'value'
     },
+    'statistics': {
+      'username': 'User_name：',
+      'pass': 'Password：',
+      'usernameplaceholder': 'Enter one user name',
+      'passplaceholder': 'Please input a password',
+      'getdevicedata': 'Get device traffic data',
+      'detector': 'Detector',
+      'time': 'Time',
+      'flow': 'Flow',
+      'occupyrate': 'Occupancy',
+      'occupytime': 'Possession of time',
+      'userpassnotnull': 'User name or password cannot be empty!',
+      'historicalisempty': 'Get historical traffic data is empty!'
+    },
     'dailyrecord': {
       'data': 'Data',
       'infotype': 'Infotype',

@@ -146,7 +146,8 @@ const zh = {
       'enteroldpass': '请输入旧密码！',
       'enternewepass': '请输入新密码',
       'originalpassworderror': '原密码错误！',
-      'modificationsucc': '修改成功'
+      'modificationsucc': '修改成功',
+      'ip': 'IP'
     },
     'greenwaveoptimize': {
       'addplan': '点击添加按钮添加绿波协调计划',
@@ -217,7 +218,9 @@ const zh = {
       'ss': '南直行',
       'sl': '南左转',
       'sr': '南右转',
-      'sb': '南掉头'
+      'sb': '南掉头',
+      'notonline': '不在线！',
+      'planissuedsucc': '方案下发成功!'
     },
     'record': {
       'user': '用户',

@@ -272,5 +272,10 @@
   "key": "resetUsr",
   "url": "/auth/user/reset",
   "method": "put"
+},
+{
+  "key": "getHistoryFlow",
+  "url": "/flow/history",
+  "method": "post"
 }
 ]

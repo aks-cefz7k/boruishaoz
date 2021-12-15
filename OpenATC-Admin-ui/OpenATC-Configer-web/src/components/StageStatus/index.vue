@@ -65,7 +65,7 @@ export default {
       let stageStatusLength = 0
       for (let i = 0; i < firstPatternStatusList.length; i++) {
         let tempLength = Number.parseFloat(firstPatternStatusList[i].greenWidth) + Number.parseFloat(firstPatternStatusList[i].redWidth) + Number.parseFloat(firstPatternStatusList[i].yellowWidth)
-        stageStatusLength = stageLength + tempLength / 2
+        stageStatusLength = stageLength + tempLength / 2 - 1
         stageLength = stageLength + tempLength
         this.stageList.push(stageLength + '%')
         this.stageStatusList.push(stageStatusLength + '%')
@@ -115,6 +115,7 @@ export default {
   font-stretch: normal;
   line-height: 20px;
   letter-spacing: 0px;
+  background-color: #ffffff;
   color: #333333;
 }
 </style>
