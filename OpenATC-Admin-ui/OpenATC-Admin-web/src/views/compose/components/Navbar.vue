@@ -11,7 +11,7 @@
  **/
 <template>
   <div v-if="isShow">
-  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" active-text-color='#20A0FF' @select="handleSelect">
+  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" active-text-color='$--color-primary' @select="handleSelect">
     <div class="openatc-main">OpenATC-Admin</div>
     <div class="openatc-line"></div>
     <div class="openatc-menu">
@@ -261,7 +261,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #409eff;
+  color: $--color-primary;
 }
 .openatc-operate {
   cursor: pointer;
@@ -292,7 +292,7 @@ export default {
     padding: 0 24px;
     .name {
       font-size: 20px;
-      color: #409eff;
+      color: $--color-primary;
       margin-bottom: 14px;
       margin-top: 13px;
     }
@@ -320,7 +320,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #409eff;
+  color: $--color-primary;
 }
 .organization {
   margin-top: 8px;

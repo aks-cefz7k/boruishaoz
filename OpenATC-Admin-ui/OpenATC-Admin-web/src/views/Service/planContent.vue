@@ -247,7 +247,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .planContent {
   position: relative;
 }
@@ -281,8 +281,8 @@ export default {
   font-size: 14px;
   border-radius: 4px;
   color: #fff;
-  background-color: #409eff;
-  border-color: #409eff;
+  background-color: $--color-primary;
+  border-color: $--color-primary;
   cursor: pointer;
 }
 .btnGroup button:hover {
@@ -313,7 +313,7 @@ export default {
   float: left;
 }
 .tipContent div i {
-  color: #409eff;
+  color: $--color-primary;
   font-size: 30px;
 }
 .tipContent .text {
@@ -323,7 +323,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 1px;
-  color: #409eff;
+  color: $--color-primary;
   margin-left: 7px;
   line-height: 42px;
 }

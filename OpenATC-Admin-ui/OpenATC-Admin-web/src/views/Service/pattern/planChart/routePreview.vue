@@ -141,10 +141,6 @@ export default {
   width: 28px;
   height: 28px;
 }
-/* .block >>> .el-timeline-item__icon {
-  color: #409eff;
-  font-size: 40px;
-} */
 .block >>> .el-timeline-item__tail {
   position: absolute;
   left: 4px;

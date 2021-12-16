@@ -257,14 +257,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .btnGroup .operate .el-dropdown-link {
-  color: #409eff;
+  color: $--color-primary;
   cursor: pointer;
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-menu {
   height: calc(100vh - 120px);
   max-height: calc(100vh - 120px);
@@ -298,14 +298,14 @@ export default {
     font-size: 14px;
     border-radius: 4px;
     color: #fff;
-    background-color: #409EFF;
-    border-color: #409EFF;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
     cursor: pointer;
 }
 .btnGroup button:hover {
     color: #fff;
-    background-color: #66b1ff;
-    border-color: #66b1ff;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
 }
 .deletebtn {
     position: fixed;
@@ -333,7 +333,7 @@ export default {
     float: left;
 }
 .tipContent div i {
-  color: #409eff;
+  color: $--color-primary;
   font-size: 30px;
 }
 .tipContent .text {
@@ -343,7 +343,7 @@ export default {
     font-stretch: normal;
     line-height: 14px;
     letter-spacing: 1px;
-    color: #409eff;
+    color: $--color-primary;
     margin-left: 7px;
     line-height: 42px;
 }

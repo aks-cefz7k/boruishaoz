@@ -239,7 +239,7 @@ export default {
   }
 }
 .icon-qianwang {
-  color: #409eff;
+  color: $--color-primary;
   font-size: 20px;
 }
 // .device-manage {

@@ -77,7 +77,7 @@ export default {
 .versioninfo .el-dialog__header {
     padding: 50px 30px 10px;
     height: 109px;
-    background-color: #409eff;
+    background-color: $--color-primary;
     border-radius: 4px 4px 0px 0p
 }
 .versioninfo .el-dialog__title {
@@ -115,7 +115,7 @@ export default {
     font-stretch: normal;
     line-height: 14px;
     letter-spacing: 0px;
-    color: #409eff;
+    color: $--color-primary;
 }
 .agreement {
     cursor: pointer;

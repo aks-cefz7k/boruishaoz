@@ -137,19 +137,19 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
  .tagsList .highlightTag .el-icon-close{
     color: #fff;
   }
   .tagsList .highlightTag .el-icon-close:hover {
     background-color: #ecf5ff;
-    color: #409eff;
+    color: $--color-primary;
   }
  .tagsList .normalTag .el-icon-close{
-    color: #409EFF;
+    color: $--color-primary;
   }
   .tagsList .normalTag .el-icon-close:hover {
-    background-color: #409eff;
+    background-color: $--color-primary;
     color: #fff;
   }
 </style>
@@ -182,14 +182,14 @@ export default {
     margin-bottom: 4px;
   }
   .highlightTag {
-    background-color: #409eff;
-    border-color: #409eff;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
     color: #fff;
   }
   .normalTag {
     background-color: #ecf5ff;
     border-color: #d9ecff;
-    color: #409EFF;
+    color: $--color-primary;
   }
 }
 </style>

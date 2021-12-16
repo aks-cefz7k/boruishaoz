@@ -179,7 +179,7 @@ export default {
 .licenseInfo .el-dialog__header {
     padding: 30px 10px 10px;
     height: 69px;
-    background-color: #409eff;
+    background-color: $--color-primary;
     border-radius: 4px 4px 0px 0p
 }
 .licenseInfo .el-dialog__title {
