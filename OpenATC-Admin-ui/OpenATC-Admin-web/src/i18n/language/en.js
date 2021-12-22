@@ -41,6 +41,15 @@ const en = {
       'search': 'Search',
       'location': 'Location'
     },
+    'login': {
+      'username': 'user_name',
+      'password': 'Password',
+      'login': 'Login',
+      'usernamenotnull': 'The user name cannot be empty!',
+      'passnotnull': 'Password cannot be empty!',
+      'passerror': 'Password error!',
+      'usernamenotexist': 'User name does not exist!'
+    },
     'main': {
       'homepage': 'Home',
       'gis': 'GIS',

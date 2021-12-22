@@ -154,7 +154,7 @@ export default {
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .addDeviceDrawer {
   height: 100%;
   position: relative;
@@ -180,7 +180,7 @@ export default {
   width: 100%;
 }
 .addDeviceDrawer .devs-table {
-  border: solid 1px #e6e6e6;
+  border: solid 1px $--border-color-lighter;
   overflow: auto;
   max-height: 590px;
 }

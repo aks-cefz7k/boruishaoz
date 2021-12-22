@@ -125,15 +125,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .leftPart .chartPart .el-progress--circle .el-progress__text .content .sum {
   font-size: 66px;
-  color: #333;
+  color: $--color-text-primary;
   text-align: center;
 }
 .leftPart .chartPart .el-progress--circle .el-progress__text .content .text {
   font-size: 14px;
-  color: #666;
+  color: $--color-text-regular;
   text-align: center;
   margin-top: 15px;
 }
@@ -163,6 +163,7 @@ export default {
     width: 100%;
     height: 50px;
     text-align: center;
+    color: $--color-text-regular
   }
   .upLengend {
       display: inline-block;
@@ -197,7 +198,7 @@ export default {
     }
     .state {
         font-size: 14px;
-        color: #666;
+        color: $--color-text-regular;
     }
     .desc {
         text-align: center;

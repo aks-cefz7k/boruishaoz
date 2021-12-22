@@ -13,7 +13,6 @@
 <div class="tagsList">
   <el-button
     class="toListBtn"
-    :class="operateId ? 'normalTag' : 'highlightTag'"
     type="primary"
     @click="backToDeviceList"
     >{{$t('openatc.devicemanager.devicelist')}}</el-button>
@@ -139,10 +138,10 @@ export default {
 
 <style lang="scss">
  .tagsList .highlightTag .el-icon-close{
-    color: #fff;
+    color: $--color-white;
   }
   .tagsList .highlightTag .el-icon-close:hover {
-    background-color: #ecf5ff;
+    background-color: $--border-color-extra-light;
     color: $--color-primary;
   }
  .tagsList .normalTag .el-icon-close{
@@ -150,7 +149,7 @@ export default {
   }
   .tagsList .normalTag .el-icon-close:hover {
     background-color: $--color-primary;
-    color: #fff;
+    color: $--color-white;
   }
 </style>
 <style lang="scss" scoped>
@@ -184,12 +183,13 @@ export default {
   .highlightTag {
     background-color: $--color-primary;
     border-color: $--color-primary;
-    color: #fff;
+    color: $--color-white;
   }
-  .normalTag {
-    background-color: #ecf5ff;
-    border-color: #d9ecff;
-    color: $--color-primary;
-  }
+  // .normalTag {
+  //   background-color: $--border-color-extra-light;
+  //   // border-color: #d9ecff;
+  //   // border-color: $--color-primary;
+  //   color: $--color-primary;
+  // }
 }
 </style>

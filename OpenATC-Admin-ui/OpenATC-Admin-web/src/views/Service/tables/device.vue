@@ -204,7 +204,7 @@ export default {
 
 <style lang="scss" scoped>
 .devicePanel {
-  border: solid 1px #e6e6e6;
+  border: solid 1px $--border-color-lighter;
 }
 .addbtn {
   padding: 0;

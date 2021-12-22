@@ -41,6 +41,15 @@ const zh = {
       'search': '搜索',
       'location': '位置'
     },
+    'login': {
+      'username': '用户名',
+      'password': '密码',
+      'login': '登录',
+      'usernamenotnull': '用户名不能为空!',
+      'passnotnull': '密码不能为空！',
+      'passerror': '密码错误！',
+      'usernamenotexist': '用户名不存在！'
+    },
     'main': {
       'homepage': '主页',
       'gis': '地图',

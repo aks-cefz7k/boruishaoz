@@ -38,9 +38,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .cardBox {
-  background-color: #fff;
+  background-color: $--color-white;
   padding: 0 22px;
 }
 .cardTitle {
@@ -48,7 +48,7 @@ export default {
   line-height: 52px;
   border-bottom: 1px solid #eee;
   font-size: 18px;
-  color: #666;
+  color: $--color-text-regular;
   font-family: MicrosoftYaHei;
 }
 </style>

@@ -124,9 +124,9 @@ export default {
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .distancePanel {
-  border: solid 1px #e6e6e6;
+  border: solid 1px $--border-color-lighter;
 }
 .distanceTable .el-input-number {
    display: none

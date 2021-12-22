@@ -132,7 +132,7 @@ export default {
             font-family: MicrosoftYaHei;
             font-size: 14px;
             letter-spacing: 0px;
-            color: #666666;
+            color: $--color-text-regular;
         }
         .num {
             // float: right;
@@ -141,7 +141,7 @@ export default {
             font-family: SourceHanSansCN-Regular;
             font-size: 32px;
             letter-spacing: 0px;
-            color: #333333;
+            color: $--color-text-primary;
         }
     }
     .title {
@@ -154,7 +154,7 @@ export default {
         font-family: MicrosoftYaHei;
         font-size: 14px;
         letter-spacing: 0px;
-        color: #999999;
+        color: $--color-text-secondary;
       }
       .faultNum {
         float: left;
@@ -171,7 +171,7 @@ export default {
         font-family: MicrosoftYaHei;
         font-size: 14px;
         letter-spacing: 0px;
-        color: #666666;
+        color: $--color-text-regular;
       }
       .list {
         float: left;

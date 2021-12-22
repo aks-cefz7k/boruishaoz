@@ -243,7 +243,7 @@ export default {
   font-weight: bold;
   font-stretch: normal;
   letter-spacing: 0px;
-  color: #333333;
+  color: $--color-text-primary;
 }
 .openatc-line {
   float:left;
@@ -251,7 +251,7 @@ export default {
   margin-top: 19px;
   width: 1px;
   height: 14px;
-  background-color: #b9b9b9;
+  background-color: $--color-text-placeholder;
 }
 .openatc-menu {
   float:left;
@@ -276,16 +276,16 @@ export default {
 .el-dropdown-menu {
   width: 228px;
   .el-dropdown-menu__item {
-    color: #666;
+    color: $--color-text-regular;
   }
   .label {
     font-size: 12px;
-    color: #999;
+    color: $--color-text-secondary;
     margin-bottom: 12px;
   }
   .content {
     font-size: 12px;
-    color: #333;
+    color: $--color-text-primary;
   }
   .user {
     font-family: MicrosoftYaHei;
@@ -338,7 +338,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #999999;
+  color: $--color-text-secondary;
 }
 .laber-value {
   margin-top: 5px;
@@ -348,7 +348,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #333333;
+  color: $--color-text-primary;
 }
 .switch-language {
     cursor: pointer;

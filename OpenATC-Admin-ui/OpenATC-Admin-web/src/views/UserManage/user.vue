@@ -224,7 +224,7 @@ export default {
   top: 150px;
   left: 20px;
   right: 20px;
-  border: solid 1px #e6e6e6;
+  border: solid 1px $--border-color-lighter;
   overflow: auto;
 }
 </style>

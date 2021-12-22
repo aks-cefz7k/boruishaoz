@@ -297,13 +297,13 @@ export default {
     transition: .1s;
     font-size: 14px;
     border-radius: 4px;
-    color: #fff;
+    color: $--color-white;
     background-color: $--color-primary;
     border-color: $--color-primary;
     cursor: pointer;
 }
 .btnGroup button:hover {
-    color: #fff;
+    color: $--color-white;
     background-color: $--color-primary;
     border-color: $--color-primary;
 }

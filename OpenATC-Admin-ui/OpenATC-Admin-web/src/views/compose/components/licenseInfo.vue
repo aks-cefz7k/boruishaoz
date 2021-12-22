@@ -160,7 +160,7 @@ export default {
         overflow: hidden;
         .el-dialog__body {
             padding: 30px 20px;
-            color: #606266;
+            color: $--color-text-regular;
             font-size: 14px;
             word-break: break-all;
             position: absolute;
@@ -174,7 +174,7 @@ export default {
     }
 }
 .licenseInfo .el-dialog__headerbtn .el-dialog__close {
-    color: #ffffff;
+    color: $--color-white;
 }
 .licenseInfo .el-dialog__header {
     padding: 30px 10px 10px;
@@ -189,6 +189,6 @@ export default {
     font-stretch: normal;
     line-height: 14px;
     letter-spacing: 0px;
-    color: #ffffff;
+    color: $--color-white;
 }
 </style>

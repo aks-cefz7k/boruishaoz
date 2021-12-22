@@ -72,7 +72,7 @@ export default {
 
 <style lang="scss" rel="stylesheet/scss">
 .versioninfo .el-dialog__headerbtn .el-dialog__close {
-    color: #ffffff;
+    color: $--color-white;
 }
 .versioninfo .el-dialog__header {
     padding: 50px 30px 10px;
@@ -90,7 +90,7 @@ export default {
     font-stretch: normal;
     line-height: 14px;
     letter-spacing: 0px;
-    color: #ffffff;
+    color: $--color-white;
 }
 .banben {
     font-family: MicrosoftYaHei;
@@ -99,7 +99,7 @@ export default {
     font-stretch: normal;
     line-height: 14px;
     letter-spacing: 0px;
-    color: #666666;
+    color: $--color-text-regular;
 }
 .divider {
     // width: 483px;

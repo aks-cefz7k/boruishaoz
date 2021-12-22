@@ -484,7 +484,7 @@ export default {
 </style>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-$color-blue: #2196f3;
+// $color-blue: #2196f3;
 $space-width: 18px;
 .ms-tree-space {
   position: relative;
@@ -510,7 +510,7 @@ table td {
 .tree-ctrl {
   position: relative;
   cursor: pointer;
-  color: $color-blue;
+  color: $--color-primary;
   margin-left: -$space-width;
 }
 </style>

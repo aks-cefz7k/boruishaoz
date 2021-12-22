@@ -265,7 +265,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #999999;
+  color: $--color-text-secondary;
 }
 .coordination-select {
   float: left;
@@ -292,7 +292,7 @@ export default {
     height: 141px;
     background-color: #fbfbfb;
     border-radius: 4px;
-    border: solid 1px #e6e6e6;
+    border: solid 1px $--border-color-lighter;
   }
 </style>
 <style rel="stylesheet/scss" lang="scss">

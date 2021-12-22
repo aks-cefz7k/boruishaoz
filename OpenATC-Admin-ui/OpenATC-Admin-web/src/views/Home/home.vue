@@ -232,7 +232,7 @@ export default {
   // width: 72px;
   text-align: center;
   margin: 0 auto;
-  color: #666;
+  color: $--color-text-regular;
   font-family: MicrosoftYaHei;
   .iconfont {
     cursor: pointer;

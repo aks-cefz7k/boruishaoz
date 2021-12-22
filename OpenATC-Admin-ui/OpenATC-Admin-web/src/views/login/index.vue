@@ -29,19 +29,19 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input class="login-input" name="user_name" type="text" v-model="loginForm.user_name" auto-complete="on" placeholder="用户名" />
+        <el-input class="login-input" name="user_name" type="text" v-model="loginForm.user_name" auto-complete="on" :placeholder="$t('openatc.login.username')" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
         <el-input class="login-input" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" auto-complete="on"
-          placeholder="密码"></el-input>
+          :placeholder="$t('openatc.login.password')"></el-input>
           <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          登录
+          {{$t('openatc.login.login')}}
         </el-button>
       </el-form-item>
     </el-form>
@@ -71,10 +71,10 @@ export default {
       },
       loginRules: {
         user_name: [
-          { required: true, trigger: 'blur', message: '用户名不能为空！' }
+          { required: true, trigger: 'blur', message: this.$t('openatc.login.usernamenotnull') }
         ],
         password: [
-          { required: true, trigger: 'blur', message: '密码不能为空！' }
+          { required: true, trigger: 'blur', message: this.$t('openatc.login.passnotnull') }
         ],
         vcode: [{ required: true, trigger: 'blur', message: 'Invalid VCode' }]
       },
@@ -116,12 +116,12 @@ export default {
             .then(data => {
               if (data.data.success !== true) {
                 if (data.data.code === '3009') {
-                  this.$message.error('密码错误！')
+                  this.$message.error(this.$t('openatc.login.passerror'))
                   this.loading = false
                   return
                 }
                 if (data.data.code === '3001') {
-                  this.$message.error('用户名不存在！')
+                  this.$message.error(this.$t('openatc.login.usernamenotexist'))
                   this.loading = false
                   return
                 }
@@ -183,25 +183,25 @@ export default {
       height: 47px;
       width: 85%;
       input {
-        background: #ffffff;
+        background: $--color-white;
         border: 0px;
         -webkit-appearance: none;
         border-radius: 0px;
         padding: 12px 5px 12px 15px;
-        color: #333333;
+        color: $--color-text-primary;
         height: 47px;
         &:-webkit-autofill {
           -webkit-text-fill-color: rgb(0, 0, 0) !important;
         }
         .el-input__inner {
           -webkit-appearance: none;
-          background-color: #fff;
+          background-color: $--color-white;
           background-image: none;
           border-radius: 4px;
           border: 0px solid #dcdfe6;
           -webkit-box-sizing: border-box;
           box-sizing: border-box;
-          color: #606266;
+          color: $--color-text-regular;
           display: inline-block;
           font-size: inherit;
           height: 40px;
@@ -216,9 +216,9 @@ export default {
     }
     .el-form-item {
       border: 1px solid rgba(255, 255, 255, 0.1);
-      background: #ffffff;
+      background: $--color-white;
       border-radius: 5px;
-      color: #1890ff;
+      color: $--color-primary;
     }
   }
 
@@ -239,7 +239,7 @@ export default {
     }
     .tips {
       font-size: 14px;
-      color: #999999;
+      color: $--color-text-secondary;
       margin-bottom: 10px;
       span {
         &:first-of-type {
@@ -249,7 +249,7 @@ export default {
     }
     .svg-container {
       padding: 6px 5px 6px 15px;
-      color: #1890ff;
+      color: $--color-primary;
       vertical-align: middle;
       width: 30px;
       display: inline-block;
@@ -260,7 +260,7 @@ export default {
     .title {
       font-size: 26px;
       font-weight: 400;
-      color: #1890ff;
+      color: $--color-primary;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;

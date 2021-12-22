@@ -198,7 +198,7 @@ export default {
 .kanban {
   &.todo {
     .board-column-header {
-      background: #4a9ff9;
+      background: $--color-primary;
     }
   }
 }
