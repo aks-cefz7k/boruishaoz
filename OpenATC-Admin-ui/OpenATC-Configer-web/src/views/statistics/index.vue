@@ -143,7 +143,6 @@ export default {
       }
       this.lockScreen()
       getHistoryFlow(username, password).then((data) => {
-        debugger
         let res = data.data
         if (!res.success) {
           this.unlockScreen()

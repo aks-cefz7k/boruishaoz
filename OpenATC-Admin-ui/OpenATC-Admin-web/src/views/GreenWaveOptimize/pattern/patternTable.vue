@@ -171,11 +171,11 @@ export default {
     flex-direction: row;
     align-items: flex-start;
   }
-  .kanban {
-    &.todo {
-      .board-column-header {
-        background: $--color-primary;
-      }
-    }
-  }
+  // .kanban {
+  //   &.todo {
+  //     .board-column-header {
+  //       background: $--color-primary;
+  //     }
+  //   }
+  // }
 </style>

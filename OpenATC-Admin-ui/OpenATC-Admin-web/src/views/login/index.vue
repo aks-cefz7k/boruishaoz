@@ -171,110 +171,110 @@ export default {
 </script>
 
 <style lang="scss">
-.switch-language {
-  cursor:pointer;
-  margin-top: 20px;
-  margin-right: 20px;
-  float: right;
-}
-.login-container {
-    .el-input {
-      display: inline-block;
-      height: 47px;
-      width: 85%;
-      input {
-        background: $--color-white;
-        border: 0px;
-        -webkit-appearance: none;
-        border-radius: 0px;
-        padding: 12px 5px 12px 15px;
-        color: $--color-text-primary;
-        height: 47px;
-        &:-webkit-autofill {
-          -webkit-text-fill-color: rgb(0, 0, 0) !important;
-        }
-        .el-input__inner {
-          -webkit-appearance: none;
-          background-color: $--color-white;
-          background-image: none;
-          border-radius: 4px;
-          border: 0px solid #dcdfe6;
-          -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-          color: $--color-text-regular;
-          display: inline-block;
-          font-size: inherit;
-          height: 40px;
-          line-height: 40px;
-          outline: 0;
-          padding: 0 15px;
-          -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-          transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-          width: 100%;
-        }
-      }
-    }
-    .el-form-item {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: $--color-white;
-      border-radius: 5px;
-      color: $--color-primary;
-    }
-  }
+// .switch-language {
+//   cursor:pointer;
+//   margin-top: 20px;
+//   margin-right: 20px;
+//   float: right;
+// }
+// .login-container {
+//     .el-input {
+//       display: inline-block;
+//       height: 47px;
+//       width: 85%;
+//       input {
+//         background: $--color-white;
+//         border: 0px;
+//         -webkit-appearance: none;
+//         border-radius: 0px;
+//         padding: 12px 5px 12px 15px;
+//         color: $--color-text-primary;
+//         height: 47px;
+//         &:-webkit-autofill {
+//           -webkit-text-fill-color: rgb(0, 0, 0) !important;
+//         }
+//         .el-input__inner {
+//           -webkit-appearance: none;
+//           background-color: $--color-white;
+//           background-image: none;
+//           border-radius: 4px;
+//           border: 0px solid #dcdfe6;
+//           -webkit-box-sizing: border-box;
+//           box-sizing: border-box;
+//           color: $--color-text-regular;
+//           display: inline-block;
+//           font-size: inherit;
+//           height: 40px;
+//           line-height: 40px;
+//           outline: 0;
+//           padding: 0 15px;
+//           -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//           transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//           width: 100%;
+//         }
+//       }
+//     }
+//     .el-form-item {
+//       border: 1px solid rgba(255, 255, 255, 0.1);
+//       background: $--color-white;
+//       border-radius: 5px;
+//       color: $--color-primary;
+//     }
+//   }
 
-  .login-container {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    background-color: #f2f9ff;
-    .login-form {
-      position: absolute;
-      left: 0;
-      right: 0;
-      //width: 33%;
-      width: 20%;
-      min-width: 400px;
-      padding: 35px 35px 15px 35px;
-      margin: 120px auto;
-    }
-    .tips {
-      font-size: 14px;
-      color: $--color-text-secondary;
-      margin-bottom: 10px;
-      span {
-        &:first-of-type {
-          margin-right: 16px;
-        }
-      }
-    }
-    .svg-container {
-      padding: 6px 5px 6px 15px;
-      color: $--color-primary;
-      vertical-align: middle;
-      width: 30px;
-      display: inline-block;
-      &_login {
-        font-size: 20px;
-      }
-    }
-    .title {
-      font-size: 26px;
-      font-weight: 400;
-      color: $--color-primary;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-      font-family: SourceHanSansCN-Bold;
-      font-stretch: normal;
-    }
-    .show-pwd {
-      position: absolute;
-      right: 10px;
-      top: 7px;
-      font-size: 16px;
-      color: #889aa4;
-      cursor: pointer;
-      user-select: none;
-    }
-  }
+//   .login-container {
+//     position: fixed;
+//     height: 100%;
+//     width: 100%;
+//     background-color: #f2f9ff;
+//     .login-form {
+//       position: absolute;
+//       left: 0;
+//       right: 0;
+//       //width: 33%;
+//       width: 20%;
+//       min-width: 400px;
+//       padding: 35px 35px 15px 35px;
+//       margin: 120px auto;
+//     }
+//     .tips {
+//       font-size: 14px;
+//       color: $--color-text-secondary;
+//       margin-bottom: 10px;
+//       span {
+//         &:first-of-type {
+//           margin-right: 16px;
+//         }
+//       }
+//     }
+//     .svg-container {
+//       padding: 6px 5px 6px 15px;
+//       color: $--color-primary;
+//       vertical-align: middle;
+//       width: 30px;
+//       display: inline-block;
+//       &_login {
+//         font-size: 20px;
+//       }
+//     }
+//     .title {
+//       font-size: 26px;
+//       font-weight: 400;
+//       color: $--color-primary;
+//       margin: 0px auto 40px auto;
+//       text-align: center;
+//       font-weight: bold;
+//       font-family: SourceHanSansCN-Bold;
+//       font-stretch: normal;
+//     }
+//     .show-pwd {
+//       position: absolute;
+//       right: 10px;
+//       top: 7px;
+//       font-size: 16px;
+//       color: #889aa4;
+//       cursor: pointer;
+//       user-select: none;
+//     }
+//   }
 </style>

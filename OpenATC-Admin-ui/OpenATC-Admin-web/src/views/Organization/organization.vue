@@ -212,6 +212,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+ @import "../../styles/theme/element-variables.scss";
 .atc-table {
   position: absolute;
   top: 150px;

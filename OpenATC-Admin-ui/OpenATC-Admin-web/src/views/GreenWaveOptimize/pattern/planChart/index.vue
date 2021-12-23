@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<div style="overflow: auto;">
+<div style="overflow: auto;" class="openatc-planchart">
   <div class="planchart-top">
     <div class="coordination-name">{{$t('openatc.greenwaveoptimize.coordinationstrategy')}}</div>
     <div class="coordination-select">
@@ -237,63 +237,63 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.planchart-top {
-  width: 100%;
-  min-width: 1600px;
-}
-.planchart-bottom {
-  width: 100%;
-  min-width: 1600px;
-}
-.echartsStyle {
-  float: left;
-  width: 1300px;
-  height: 700px;
-}
-.up-card {
-  // float: left;
-  margin-top: 400px;
-}
-.coordination-name {
-  float: left;
-  margin-top: 8px;
-  margin-left: 10px;
-  height: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-text-secondary;
-}
-.coordination-select {
-  float: left;
-  margin-left: 10px;
-}
-.text {
-    font-size: 14px;
-  }
+// .planchart-top {
+//   width: 100%;
+//   min-width: 1600px;
+// }
+// .planchart-bottom {
+//   width: 100%;
+//   min-width: 1600px;
+// }
+// .echartsStyle {
+//   float: left;
+//   width: 1300px;
+//   height: 700px;
+// }
+// .up-card {
+//   // float: left;
+//   margin-top: 400px;
+// }
+// .coordination-name {
+//   float: left;
+//   margin-top: 8px;
+//   margin-left: 10px;
+//   height: 14px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-text-secondary;
+// }
+// .coordination-select {
+//   float: left;
+//   margin-left: 10px;
+// }
+// .text {
+//     font-size: 14px;
+//   }
 
-  .item {
-    margin-bottom: 5px;
-  }
+//   .item {
+//     margin-bottom: 5px;
+//   }
 
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  }
-  .box-card {
-    width: 130px;
-    height: 141px;
-    background-color: #fbfbfb;
-    border-radius: 4px;
-    border: solid 1px $--border-color-lighter;
-  }
+//   .clearfix:before,
+//   .clearfix:after {
+//     display: table;
+//     content: "";
+//   }
+//   .clearfix:after {
+//     clear: both
+//   }
+//   .box-card {
+//     width: 130px;
+//     height: 141px;
+//     background-color: #fbfbfb;
+//     border-radius: 4px;
+//     border: solid 1px $--border-color-lighter;
+//   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
   .up-card .el-card__header {

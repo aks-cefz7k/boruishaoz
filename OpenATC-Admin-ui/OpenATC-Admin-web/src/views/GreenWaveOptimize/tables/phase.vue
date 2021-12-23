@@ -233,13 +233,13 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.phasePanel {
-  border: solid 1px $--border-color-lighter;
-}
-.XRDDir {
-  float: left;
-  width: 32px;
-  height: 32px;
-  margin-right: 8px;
-}
+// .phasePanel {
+//   border: solid 1px $--border-color-lighter;
+// }
+// .XRDDir {
+//   float: left;
+//   width: 32px;
+//   height: 32px;
+//   margin-right: 8px;
+// }
 </style>

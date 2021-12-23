@@ -72,13 +72,13 @@ exports.cssLoaders = function (options) {
     postcss: generateLoaders(),
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
-    // scss: generateLoaders('sass'),
-    scss: generateLoaders('sass').concat({
-      loader: 'sass-resources-loader', // 为了scss全局变量能在vue文件中使用
-      options: {
-        resources: path.resolve(__dirname, './../src/styles/theme/element-variables.scss')
-      }
-    }),
+    scss: generateLoaders('sass'),
+    // scss: generateLoaders('sass').concat({
+    //   loader: 'sass-resources-loader', // 为了scss全局变量能在vue文件中使用
+    //   options: {
+    //     resources: path.resolve(__dirname, './../src/styles/theme/element-variables.scss')
+    //   }
+    // }),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   }

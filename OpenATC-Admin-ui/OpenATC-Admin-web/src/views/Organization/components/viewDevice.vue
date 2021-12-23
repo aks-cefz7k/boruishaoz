@@ -284,6 +284,7 @@ export default {
 </script>
 
 <style lang="scss">
+ @import "../../../styles/theme/element-variables.scss";
 .tag-container {
   float: left;
   max-width: 70%;

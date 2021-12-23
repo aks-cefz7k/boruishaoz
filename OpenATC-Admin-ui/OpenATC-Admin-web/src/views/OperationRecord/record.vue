@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="openatc-operationrecord">
     <div class="filter-container">
       <el-form>
         <el-form-item>
@@ -217,17 +217,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.atc-table {
-  position: absolute;
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px $--border-color-lighter;
-  overflow: auto;
-}
-.filter-container {
-  float: right;
-  margin-top: 20px;
-  margin-right: 20px;
-}
+// .atc-table {
+//   position: absolute;
+//   top: 150px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+// }
+// .filter-container {
+//   float: right;
+//   margin-top: 20px;
+//   margin-right: 20px;
+// }
 </style>

@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="openatc-gis">
     <div id="map"></div>
     <div class="showLayout">
       <transition name="slide">

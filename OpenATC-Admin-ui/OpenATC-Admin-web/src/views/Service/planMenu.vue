@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="serviceroute-planmenu">
     <el-menu @select="selectPlan" v-loading="loading">
       <el-menu-item
         :index="String(plan.id)"
@@ -279,6 +279,7 @@ export default {
 </script>
 
 <style lang="scss">
+ @import "../../styles/theme/element-variables.scss";
 .btnGroup .operate .el-dropdown-link {
   color: $--color-primary;
   cursor: pointer;
@@ -286,86 +287,86 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.el-menu {
-  height: calc(100vh - 120px);
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  border-right: none;
-}
-.el-menu-item.is-active {
-  background: #eaeaea;
-}
-/* 蒙层样式 */
-.mask {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: 0.5;
-  z-index: 97;
-}
-/* 原生按钮样式修改 */
-.btnGroup button {
-  width: 70px;
-  height: 40px;
-  padding: 0;
-  line-height: 40px;
-  border: 1px solid #dcdfe6;
-  white-space: nowrap;
-  outline: 0;
-  transition: 0.1s;
-  font-size: 14px;
-  border-radius: 4px;
-  color: $--color-white;
-  background-color: $--color-primary;
-  border-color: $--color-primary;
-  cursor: pointer;
-}
-// .btnGroup button:hover {
-//   color: #fff;
-//   background-color: #66b1ff;
-//   border-color: #66b1ff;
+// .el-menu {
+//   height: calc(100vh - 120px);
+//   max-height: calc(100vh - 120px);
+//   overflow-y: auto;
+//   border-right: none;
 // }
-.deletebtn {
-  position: fixed;
-  bottom: 30px;
-  left: 93px;
-}
-.btnGroup .addbtn {
-  position: fixed;
-  bottom: 30px;
-  left: 17px;
-  z-index: 98;
-}
-.btnGroup .addbtn button {
-  font-weight: 500;
-}
-.btnGroup .operate {
-  position: fixed;
-  bottom: 30px;
-  left: 108px;
-  height: 40px;
-  line-height: 40px;
-}
-/* 提示框相关 */
-.tipContent > div {
-  float: left;
-}
-.tipContent div i {
-  color: $--color-primary;
-  font-size: 30px;
-}
-.tipContent .text {
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 1px;
-  color: $--color-primary;
-  margin-left: 7px;
-  line-height: 42px;
-}
+// .el-menu-item.is-active {
+//   background: #eaeaea;
+// }
+// /* 蒙层样式 */
+// .mask {
+//   position: fixed;
+//   left: 0;
+//   top: 0;
+//   width: 100%;
+//   height: 100%;
+//   background: #000;
+//   opacity: 0.5;
+//   z-index: 97;
+// }
+// /* 原生按钮样式修改 */
+// .btnGroup button {
+//   width: 70px;
+//   height: 40px;
+//   padding: 0;
+//   line-height: 40px;
+//   border: 1px solid #dcdfe6;
+//   white-space: nowrap;
+//   outline: 0;
+//   transition: 0.1s;
+//   font-size: 14px;
+//   border-radius: 4px;
+//   color: $--color-white;
+//   background-color: $--color-primary;
+//   border-color: $--color-primary;
+//   cursor: pointer;
+// }
+// // .btnGroup button:hover {
+// //   color: #fff;
+// //   background-color: #66b1ff;
+// //   border-color: #66b1ff;
+// // }
+// .deletebtn {
+//   position: fixed;
+//   bottom: 30px;
+//   left: 93px;
+// }
+// .btnGroup .addbtn {
+//   position: fixed;
+//   bottom: 30px;
+//   left: 17px;
+//   z-index: 98;
+// }
+// .btnGroup .addbtn button {
+//   font-weight: 500;
+// }
+// .btnGroup .operate {
+//   position: fixed;
+//   bottom: 30px;
+//   left: 108px;
+//   height: 40px;
+//   line-height: 40px;
+// }
+// /* 提示框相关 */
+// .tipContent > div {
+//   float: left;
+// }
+// .tipContent div i {
+//   color: $--color-primary;
+//   font-size: 30px;
+// }
+// .tipContent .text {
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 1px;
+//   color: $--color-primary;
+//   margin-left: 7px;
+//   line-height: 42px;
+// }
 </style>

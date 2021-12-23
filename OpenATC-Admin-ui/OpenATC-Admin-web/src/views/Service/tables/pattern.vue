@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="patternPanel">
+  <div class="serviceroute-pattern">
     <el-table
       stripe
       highlight-current-row
@@ -279,35 +279,35 @@ export default {
 </script>
 
 <style>
-.patternPanel .el-table td,
+.serviceroute-pattern .el-table td,
 .el-table th {
   padding: 7px 0;
 }
-.patternPanel .el-table .cell {
+.serviceroute-pattern .el-table .cell {
   line-height: 32px;
 }
 </style>
 
 <style lang="scss" scoped>
-.patternPanel {
-  border: solid 1px $--border-color-lighter;
-}
-.pattern-figure {
-  position: fixed;
-  width: 39%;
-  bottom: 40px;
-}
-.pattern-status {
-  display: inline;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 20px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #303133;
-}
-.pattern-explain {
-  float: right;
-}
+// .serviceroute-pattern {
+//   border: solid 1px $--border-color-lighter;
+// }
+// .pattern-figure {
+//   position: fixed;
+//   width: 39%;
+//   bottom: 40px;
+// }
+// .pattern-status {
+//   display: inline;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 20px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 22px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
+// .pattern-explain {
+//   float: right;
+// }
 </style>

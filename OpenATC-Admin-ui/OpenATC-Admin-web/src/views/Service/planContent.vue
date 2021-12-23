@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="planContent" v-if="!!chooseId">
+  <div class="serviceroute-plancontent" v-if="!!chooseId">
     <div class="mask" v-if="maskVisible" @click="clickMask"></div>
     <div class="btnGroup">
       <div class="editbtn" :style="{ zIndex: zIndexObj.editZIndex }">
@@ -248,83 +248,83 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.planContent {
-  position: relative;
-}
-.btnGroup {
-  overflow: hidden;
-  float: right;
-  width: 150px;
-  /* width: 230px; */
-}
-/* 蒙层样式 */
-.mask {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: 0.5;
-  z-index: 98;
-}
-/* 原生按钮样式修改 */
-.btnGroup button {
-  width: 70px;
-  height: 40px;
-  padding: 0;
-  line-height: 40px;
-  border: 1px solid #dcdfe6;
-  white-space: nowrap;
-  outline: 0;
-  transition: 0.1s;
-  font-size: 14px;
-  border-radius: 4px;
-  color: $--color-white;
-  background-color: $--color-primary;
-  border-color: $--color-primary;
-  cursor: pointer;
-}
-.btnGroup button:hover {
-  color: $--color-white;
-  background-color: #66b1ff;
-  border-color: #66b1ff;
-}
-.btnGroup > button {
-  float: left;
-  position: relative;
-  z-index: 10;
-}
-.btnGroup button {
-  height: 32px;
-  line-height: 32px;
-}
-.btnGroup .editbtn {
-  float: left;
-  position: relative;
-  /* z-index: 98; */
-  margin-left: 10px;
-}
-.btnGroup .editbtn button {
-  font-weight: 500;
-}
-/* 提示框相关 */
-.tipContent > div {
-  float: left;
-}
-.tipContent div i {
-  color: $--color-primary;
-  font-size: 30px;
-}
-.tipContent .text {
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 1px;
-  color: $--color-primary;
-  margin-left: 7px;
-  line-height: 42px;
-}
+// .serviceroute-plancontent {
+//   position: relative;
+// }
+// .btnGroup {
+//   overflow: hidden;
+//   float: right;
+//   width: 150px;
+//   /* width: 230px; */
+// }
+// /* 蒙层样式 */
+// .mask {
+//   position: fixed;
+//   left: 0;
+//   top: 0;
+//   width: 100%;
+//   height: 100%;
+//   background: #000;
+//   opacity: 0.5;
+//   z-index: 98;
+// }
+// /* 原生按钮样式修改 */
+// .btnGroup button {
+//   width: 70px;
+//   height: 40px;
+//   padding: 0;
+//   line-height: 40px;
+//   border: 1px solid #dcdfe6;
+//   white-space: nowrap;
+//   outline: 0;
+//   transition: 0.1s;
+//   font-size: 14px;
+//   border-radius: 4px;
+//   color: $--color-white;
+//   background-color: $--color-primary;
+//   border-color: $--color-primary;
+//   cursor: pointer;
+// }
+// .btnGroup button:hover {
+//   color: $--color-white;
+//   background-color: #66b1ff;
+//   border-color: #66b1ff;
+// }
+// .btnGroup > button {
+//   float: left;
+//   position: relative;
+//   z-index: 10;
+// }
+// .btnGroup button {
+//   height: 32px;
+//   line-height: 32px;
+// }
+// .btnGroup .editbtn {
+//   float: left;
+//   position: relative;
+//   /* z-index: 98; */
+//   margin-left: 10px;
+// }
+// .btnGroup .editbtn button {
+//   font-weight: 500;
+// }
+// /* 提示框相关 */
+// .tipContent > div {
+//   float: left;
+// }
+// .tipContent div i {
+//   color: $--color-primary;
+//   font-size: 30px;
+// }
+// .tipContent .text {
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 1px;
+//   color: $--color-primary;
+//   margin-left: 7px;
+//   line-height: 42px;
+// }
 </style>

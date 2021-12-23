@@ -125,16 +125,16 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.distancePanel {
-  border: solid 1px $--border-color-lighter;
-}
-.distanceTable .el-input-number {
-   display: none
-}
-.distanceTable .current-row .el-input-number {
-  display: block
-}
-.distanceTable .current-row .el-input-number+span {
-  display: none
-}
+// .distancePanel {
+//   border: solid 1px $--border-color-lighter;
+// }
+// .distanceTable .el-input-number {
+//    display: none
+// }
+// .distanceTable .current-row .el-input-number {
+//   display: block
+// }
+// .distanceTable .current-row .el-input-number+span {
+//   display: none
+// }
 </style>

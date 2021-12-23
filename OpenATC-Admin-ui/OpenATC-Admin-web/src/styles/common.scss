@@ -1,0 +1,1038 @@
+ /**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+ @charset "UTF-8";
+ @import './theme/element-variables.scss';
+ // 主页样式
+ .homeLayout {
+    padding: 19px;
+    background-color: #eff1f4;
+    height: 100%;
+    .top {
+        height: 53%;
+        margin-bottom: 20px;
+        .chart {
+          height: calc(100% - 52px);
+        }
+        .list {
+          height: calc(100% - 52px);
+        }
+      }
+      .bottom {
+        height: calc(47% - 20px);
+      }
+      .el-row {
+          height: 100%;
+          &:last-child {
+            margin-bottom: 0;
+          }
+      }
+      .el-col {
+        height: 100%;
+      }
+      .imagebox {
+        margin: 0 auto;
+        height: 100%;
+      }
+      .toPage {
+        // width: 72px;
+        text-align: center;
+        margin: 0 auto;
+        color: $--color-text-regular;
+        font-family: MicrosoftYaHei;
+        .iconfont {
+          cursor: pointer;
+        }
+      }
+      .icon-qianwang {
+        color: $--color-primary;
+        font-size: 20px;
+      }
+      .user-manage {
+        background: url('./assets/home/usersManage.png');
+        background-repeat: no-repeat;
+        background-position:center center;
+      }
+      .operation-record {
+        background: url('./assets/home/operateRecord.png');
+        background-repeat: no-repeat;
+        background-position:center center;
+      }
+      .animationPart {
+        position: relative;
+        height: 70%;
+      }
+ }
+ .faultList {
+    height: 100%;
+    padding: 12px 6px;
+    .total {
+        // width: 554px;
+        height: 54px;
+        background: #f8f8f8;
+        // margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        .Img {
+          float: left;
+          margin-left: 13px;
+          margin-right: 6px;
+          height: 30px;
+          width: 30px;
+          background-size: 30px 30px;
+          background-repeat: no-repeat;
+          background-position:center center;
+          background-image: url('./assets/home/trouble.png');
+        }
+        .text {
+            float: left;
+            font-family: MicrosoftYaHei;
+            font-size: 14px;
+            letter-spacing: 0px;
+            color: $--color-text-regular;
+        }
+        .num {
+            // float: right;
+            position: absolute;
+            right: 36px;
+            font-family: SourceHanSansCN-Regular;
+            font-size: 32px;
+            letter-spacing: 0px;
+            color: $--color-text-primary;
+        }
+    }
+    .title {
+      overflow: hidden;
+      width: 100%;
+      // margin-bottom: 30px;
+      > div {
+        float: left;
+        text-align: center;
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        letter-spacing: 0px;
+        color: $--color-text-secondary;
+      }
+      .faultNum {
+        float: left;
+        // width: 295px;
+        text-align: center;
+      }
+    }
+    .content {
+      overflow-y: auto;
+      .typeName {
+        float: left;
+        // width: 116px;
+        text-align: center;
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        letter-spacing: 0px;
+        color: $--color-text-regular;
+      }
+      .list {
+        float: left;
+      }
+    }
+}
+.leftPart .chartPart .el-progress--circle .el-progress__text .content .sum {
+    font-size: 66px;
+    color: $--color-text-primary;
+    text-align: center;
+  }
+.leftPart .chartPart .el-progress--circle .el-progress__text .content .text {
+    font-size: 14px;
+    color: $--color-text-regular;
+    text-align: center;
+    margin-top: 15px;
+}
+.devsStatePart {
+    height: 100%;
+    .el-row {
+        height: 100%;
+    }
+    .el-col {
+      height: 100%;
+    }
+    .leftPart {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      // flex-wrap: wrap;
+      justify-content: center;
+      .chartPart {
+        text-align: center;
+      }
+      .lengendPart {
+        width: 100%;
+        height: 50px;
+        text-align: center;
+        color: $--color-text-regular
+      }
+      .upLengend {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          background: #53c776;
+          border-radius: 50%;
+          margin-right: 5px;
+      }
+      .downLengend {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          background: rgb(229, 233, 242);
+          border-radius: 50%;
+          margin-left: 32px;
+          margin-right: 5px;
+      }
+    }
+    .rightPart {
+        // padding-top: 88px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        // flex-wrap: wrap;
+        justify-content: center;
+        > div {
+            width: calc(100% - 50px);
+            background-color: #f8f8f8;
+            display: flex;
+            align-items: center;
+        }
+        .state {
+            font-size: 14px;
+            color: $--color-text-regular;
+        }
+        .desc {
+            text-align: center;
+        }
+        .Img {
+            height: 66px;
+            width: 66px;
+            background-size: 66px 66px;
+            background-repeat: no-repeat;
+            background-position:center center;
+            margin: 0 13.5% 0 20%;
+        }
+        .devsUp {
+            > div {
+                float: left;
+            }
+            .upImg {
+                background-image: url('./assets/home/online.png');
+            }
+            .num {
+                font-size: 54px;
+                color: #53c776;
+            }
+        }
+        .devsDown {
+            margin-top: 46px;
+            > div {
+                float: left;
+            }
+            .downImg {
+                background-image: url('./assets/home/offline.png');
+            }
+            .num {
+                font-size: 54px;
+                color: #b9b9b9;
+            }
+        }
+    }
+}
+.cardBox {
+    background-color: $--color-white;
+    padding: 0 22px;
+    .cardTitle {
+        height: 52px;
+        line-height: 52px;
+        border-bottom: 1px solid #eee;
+        font-size: 18px;
+        color: $--color-text-regular;
+        font-family: MicrosoftYaHei;
+      }
+  }
+// GIS页面样式
+.gis-devicePanel {
+    .devicePanel {
+        border: solid 1px $--border-color-lighter;
+      }
+      .addbtn {
+        padding: 0;
+        width: 12.5%;
+        height: 40px;
+        text-align: center;
+        float: right;
+        line-height: 40px;
+        min-width: 66px;
+        margin-bottom: 7px;
+      }
+}
+// 设备管理页面样式
+.openatc-device {
+    .tag-container {
+        float: left;
+        max-width: 70%;
+        overflow: hidden;
+      }
+      .filter-container {
+        float: right;
+        margin-top: 20px;
+        margin-right: 20px;
+      }
+      .devs-table {
+        position: absolute;
+        top: 134px;
+        left: 20px;
+        right: 20px;
+        border: solid 1px $--border-color-lighter;
+        overflow: auto;
+      }
+}
+  // 用户管理页面样式
+  .openatc-user {
+    .filter-container {
+        float: right;
+        margin-top: 20px;
+        margin-right: 20px;
+    }
+    .atc-table {
+        position: absolute;
+        top: 150px;
+        left: 20px;
+        right: 20px;
+        border: solid 1px $--border-color-lighter;
+        overflow: auto;
+    }
+  }
+  // 绿波协调页面样式
+  .greenWaveOptimize {
+    height: calc(100vh - 50px);
+    .el-aside {
+        height: calc(100vh - 50px);
+        color: $--color-text-primary;
+        border-right: solid 1px $--border-color-lighter;
+    }
+    .el-main {
+      height: calc(100vh - 50px);
+    }
+  }
+  .planContent {
+    position: relative;
+    .btnGroup {
+        overflow: hidden;
+        float: right;
+        width: 150px;
+        /* width: 230px; */
+      }
+      /* 蒙层样式 */
+      .mask {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.5;
+        z-index: 98;
+      }
+      /* 原生按钮样式修改 */
+      .btnGroup button {
+          width: 70px;
+          height: 40px;
+          padding: 0;
+          line-height: 40px;
+          border: 1px solid #dcdfe6;
+          white-space: nowrap;
+          outline: 0;
+          transition: .1s;
+          font-size: 14px;
+          border-radius: 4px;
+          color: $--color-white;
+          background-color: $--color-primary;
+          border-color: $--color-primary;
+          cursor: pointer;
+      }
+      .btnGroup button:hover {
+          color: $--color-white;
+          background-color: #66b1ff;
+          border-color: #66b1ff;
+      }
+      .btnGroup > button {
+        float: left;
+        position: relative;
+        z-index: 10;
+      }
+      .btnGroup button {
+        height: 32px;
+        line-height: 32px;
+      }
+      .btnGroup .editbtn{
+          float: left;
+          position: relative;
+          /* z-index: 98; */
+          margin-left: 10px;
+      }
+      .btnGroup .editbtn button {
+        font-weight: 500;
+      }
+      /* 提示框相关 */
+      .tipContent > div{
+          float: left;
+      }
+      .tipContent div i {
+        color: $--color-primary;
+        font-size: 30px;
+      }
+      .tipContent .text {
+          font-family: SourceHanSansCN-Regular;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 14px;
+          letter-spacing: 1px;
+          color: $--color-primary;
+          margin-left: 7px;
+          line-height: 42px;
+      }
+  }
+  // .btnGroup .operate .el-dropdown-link {
+  //   color: $--color-primary;
+  //   cursor: pointer;
+  // }
+  .openatc-planmanu {
+    .el-menu {
+        height: calc(100vh - 120px);
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        border-right: none;
+      }
+      .el-menu-item.is-active {
+        background: #eaeaea;
+      }
+      /* 蒙层样式 */
+      .mask {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.5;
+        z-index: 97;
+      }
+      /* 原生按钮样式修改 */
+      .btnGroup button {
+          width: 70px;
+          height: 40px;
+          padding: 0;
+          line-height: 40px;
+          border: 1px solid #dcdfe6;
+          white-space: nowrap;
+          outline: 0;
+          transition: .1s;
+          font-size: 14px;
+          border-radius: 4px;
+          color: $--color-white;
+          background-color: $--color-primary;
+          border-color: $--color-primary;
+          cursor: pointer;
+      }
+      .btnGroup button:hover {
+          color: $--color-white;
+          background-color: $--color-primary;
+          border-color: $--color-primary;
+      }
+      .deletebtn {
+          position: fixed;
+          bottom: 30px;
+          left: 93px;
+      }
+      .btnGroup .addbtn {
+          position: fixed;
+          bottom: 30px;
+          left: 17px;
+          z-index: 98;
+      }
+      .btnGroup .addbtn button {
+        font-weight: 500;
+      }
+      .btnGroup .operate{
+        position: fixed;
+        bottom: 30px;
+        left: 108px;
+        height: 40px;
+        line-height: 40px;
+      }
+      /* 提示框相关 */
+      .tipContent > div{
+          float: left;
+      }
+      .tipContent div i {
+        color: $--color-primary;
+        font-size: 30px;
+      }
+      .tipContent .text {
+          font-family: SourceHanSansCN-Regular;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 14px;
+          letter-spacing: 1px;
+          color: $--color-primary;
+          margin-left: 7px;
+          line-height: 42px;
+      }
+  }
+  .openatc-planchart {
+    .planchart-top {
+        width: 100%;
+        min-width: 1600px;
+      }
+      .planchart-bottom {
+        width: 100%;
+        min-width: 1600px;
+      }
+      .echartsStyle {
+        float: left;
+        width: 1300px;
+        height: 700px;
+      }
+      .up-card {
+        // float: left;
+        margin-top: 400px;
+      }
+      .coordination-name {
+        float: left;
+        margin-top: 8px;
+        margin-left: 10px;
+        height: 14px;
+        font-family: SourceHanSansCN-Regular;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 14px;
+        letter-spacing: 0px;
+        color: $--color-text-secondary;
+      }
+      .coordination-select {
+        float: left;
+        margin-left: 10px;
+      }
+      .text {
+          font-size: 14px;
+        }
+      
+        .item {
+          margin-bottom: 5px;
+        }
+      
+        .clearfix:before,
+        .clearfix:after {
+          display: table;
+          content: "";
+        }
+        .clearfix:after {
+          clear: both
+        }
+        .box-card {
+          width: 130px;
+          height: 141px;
+          background-color: #fbfbfb;
+          border-radius: 4px;
+          border: solid 1px $--border-color-lighter;
+        }
+  }
+  .addDeviceDrawer {
+    height: 100%;
+    position: relative;
+    .btnGroup {
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        width: 100%;
+        padding: 0 16px;
+        display: flex;
+        align-items:center;
+        .btn {
+            width: 50%;
+          }
+      }
+      .devs-container {
+        padding: 0 20px;
+        overflow: hidden;
+      }
+      .filter-container {
+        float: right;
+        width: 100%;
+      }
+      .devs-table {
+        border: solid 1px $--border-color-lighter;
+        overflow: auto;
+        max-height: 590px;
+      }
+  }
+  .openatc-greenwareoptimize-device {
+    .devicePanel {
+        border: solid 1px $--border-color-lighter;
+      }
+      .addbtn {
+        padding: 0;
+        width: 12.5%;
+        height: 40px;
+        text-align: center;
+        float: right;
+        line-height: 40px;
+        min-width: 66px;
+        margin-bottom: 7px;
+      }
+  }
+  .distancePanel {
+    border: solid 1px $--border-color-lighter;
+    .distanceTable .el-input-number {
+        display: none
+     }
+     .distanceTable .current-row .el-input-number {
+       display: block
+     }
+     .distanceTable .current-row .el-input-number+span {
+       display: none
+     }
+  }
+  .patternPanel {
+    border: solid 1px $--border-color-lighter;
+  }
+  .phasePanel {
+    border: solid 1px $--border-color-lighter;
+    .XRDDir {
+        float: left;
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+      }
+  }
+  // 操作记录页面样式
+  .openatc-operationrecord {
+    .atc-table {
+        position: absolute;
+        top: 150px;
+        left: 20px;
+        right: 20px;
+        border: solid 1px $--border-color-lighter;
+        overflow: auto;
+      }
+      .filter-container {
+        float: right;
+        margin-top: 20px;
+        margin-right: 20px;
+      }
+  }
+  // 组织机构页面样式
+  // 勤务路线页面样式
+  .openatc-serviceroute {
+    height: calc(100vh - 50px);
+    .el-aside {
+        height: calc(100vh - 50px);
+        color: $--color-text-primary;
+        border-right: solid 1px $--border-color-lighter;
+      }
+      .el-main {
+        height: calc(100vh - 50px);
+      }
+  }
+  .serviceroute-planmenu {
+    .el-menu {
+        height: calc(100vh - 120px);
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        border-right: none;
+      }
+      .el-menu-item.is-active {
+        background: #eaeaea;
+      }
+      /* 蒙层样式 */
+      .mask {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.5;
+        z-index: 97;
+      }
+      /* 原生按钮样式修改 */
+      .btnGroup button {
+        width: 70px;
+        height: 40px;
+        padding: 0;
+        line-height: 40px;
+        border: 1px solid #dcdfe6;
+        white-space: nowrap;
+        outline: 0;
+        transition: 0.1s;
+        font-size: 14px;
+        border-radius: 4px;
+        color: $--color-white;
+        background-color: $--color-primary;
+        border-color: $--color-primary;
+        cursor: pointer;
+      }
+      // .btnGroup button:hover {
+      //   color: #fff;
+      //   background-color: #66b1ff;
+      //   border-color: #66b1ff;
+      // }
+      .deletebtn {
+        position: fixed;
+        bottom: 30px;
+        left: 93px;
+      }
+      .btnGroup .addbtn {
+        position: fixed;
+        bottom: 30px;
+        left: 17px;
+        z-index: 98;
+      }
+      .btnGroup .addbtn button {
+        font-weight: 500;
+      }
+      .btnGroup .operate {
+        position: fixed;
+        bottom: 30px;
+        left: 108px;
+        height: 40px;
+        line-height: 40px;
+      }
+      /* 提示框相关 */
+      .tipContent > div {
+        float: left;
+      }
+      .tipContent div i {
+        color: $--color-primary;
+        font-size: 30px;
+      }
+      .tipContent .text {
+        font-family: SourceHanSansCN-Regular;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 14px;
+        letter-spacing: 1px;
+        color: $--color-primary;
+        margin-left: 7px;
+        line-height: 42px;
+      }
+  }
+  .serviceroute-plancontent {
+    position: relative;
+    .btnGroup {
+        overflow: hidden;
+        float: right;
+        width: 150px;
+        /* width: 230px; */
+      }
+      /* 蒙层样式 */
+      .mask {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.5;
+        z-index: 98;
+      }
+      /* 原生按钮样式修改 */
+      .btnGroup button {
+        width: 70px;
+        height: 40px;
+        padding: 0;
+        line-height: 40px;
+        border: 1px solid #dcdfe6;
+        white-space: nowrap;
+        outline: 0;
+        transition: 0.1s;
+        font-size: 14px;
+        border-radius: 4px;
+        color: $--color-white;
+        background-color: $--color-primary;
+        border-color: $--color-primary;
+        cursor: pointer;
+      }
+      .btnGroup button:hover {
+        color: $--color-white;
+        background-color: #66b1ff;
+        border-color: #66b1ff;
+      }
+      .btnGroup > button {
+        float: left;
+        position: relative;
+        z-index: 10;
+      }
+      .btnGroup button {
+        height: 32px;
+        line-height: 32px;
+      }
+      .btnGroup .editbtn {
+        float: left;
+        position: relative;
+        /* z-index: 98; */
+        margin-left: 10px;
+      }
+      .btnGroup .editbtn button {
+        font-weight: 500;
+      }
+      /* 提示框相关 */
+      .tipContent > div {
+        float: left;
+      }
+      .tipContent div i {
+        color: $--color-primary;
+        font-size: 30px;
+      }
+      .tipContent .text {
+        font-family: SourceHanSansCN-Regular;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 14px;
+        letter-spacing: 1px;
+        color: $--color-primary;
+        margin-left: 7px;
+        line-height: 42px;
+      }
+  }
+  .serviceroute-pattern {
+    border: solid 1px $--border-color-lighter;
+    .pattern-figure {
+        position: fixed;
+        width: 39%;
+        bottom: 40px;
+      }
+      .pattern-status {
+        display: inline;
+        font-family: SourceHanSansCN-Regular;
+        font-size: 20px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 22px;
+        letter-spacing: 0px;
+        color: #303133;
+      }
+      .pattern-explain {
+        float: right;
+      }
+  }
+  .serviceroute-device {
+    .devicePanel {
+        border: solid 1px $--border-color-lighter;
+      }
+      .addbtn {
+        padding: 0;
+        width: 12.5%;
+        height: 40px;
+        text-align: center;
+        float: right;
+        line-height: 40px;
+        min-width: 66px;
+        margin-bottom: 7px;
+      }
+  }
+  .serviceroute-addDeviceDrawer {
+    height: 100%;
+    position: relative;
+    .btnGroup {
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        width: 100%;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        .btn {
+            width: 50%;
+        }
+      }
+      .devs-container {
+        padding: 0 20px;
+        overflow: hidden;
+      }
+      .filter-container {
+        float: right;
+        width: 100%;
+      }
+      .devs-table {
+        border: solid 1px $--border-color-lighter;
+        overflow: auto;
+        max-height: 590px;
+      }
+  }
+  // 头部样式
+.versioninfo {
+    .el-dialog__headerbtn .el-dialog__close {
+        color: $--color-white;
+    }
+    .el-dialog__header {
+        padding: 50px 30px 10px;
+        height: 109px;
+        background-color: $--color-primary;
+        border-radius: 4px 4px 0px 0p
+    }
+    .el-dialog__title {
+        width: 291px;
+        height: 38px;
+        margin-top: 40px;
+        font-family: MicrosoftYaHei;
+        font-size: 36px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 14px;
+        letter-spacing: 0px;
+        color: $--color-white;
+    }
+    .banben {
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 14px;
+        letter-spacing: 0px;
+        color: $--color-text-regular;
+    }
+    .divider {
+        // width: 483px;
+        height: 1px;
+        margin-top: 15px;
+        background-color: #eeeeee;
+    }
+    .open-source {
+        margin-top: 25px;
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 14px;
+        letter-spacing: 0px;
+        color: $--color-primary;
+    }
+    .agreement {
+        cursor: pointer;
+    }
+}
+// 登录页面样式
+.login-container {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: #f2f9ff;
+    .switch-language {
+        cursor:pointer;
+        margin-top: 20px;
+        margin-right: 20px;
+        float: right;
+      }
+      .el-input {
+        display: inline-block;
+        height: 47px;
+        width: 85%;
+        input {
+          background: $--color-white;
+          border: 0px;
+          -webkit-appearance: none;
+          border-radius: 0px;
+          padding: 12px 5px 12px 15px;
+          color: $--color-text-primary;
+          height: 47px;
+          &:-webkit-autofill {
+            -webkit-text-fill-color: rgb(0, 0, 0) !important;
+          }
+          .el-input__inner {
+            -webkit-appearance: none;
+            background-color: $--color-white;
+            background-image: none;
+            border-radius: 4px;
+            border: 0px solid #dcdfe6;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            color: $--color-text-regular;
+            display: inline-block;
+            font-size: inherit;
+            height: 40px;
+            line-height: 40px;
+            outline: 0;
+            padding: 0 15px;
+            -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+            transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+            width: 100%;
+          }
+        }
+      }
+      .el-form-item {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: $--color-white;
+        border-radius: 5px;
+        color: $--color-primary;
+      }
+      .login-form {
+        position: absolute;
+        left: 0;
+        right: 0;
+        //width: 33%;
+        width: 20%;
+        min-width: 400px;
+        padding: 35px 35px 15px 35px;
+        margin: 120px auto;
+      }
+      .tips {
+        font-size: 14px;
+        color: $--color-text-secondary;
+        margin-bottom: 10px;
+        span {
+          &:first-of-type {
+            margin-right: 16px;
+          }
+        }
+      }
+      .svg-container {
+        padding: 6px 5px 6px 15px;
+        color: $--color-primary;
+        vertical-align: middle;
+        width: 30px;
+        display: inline-block;
+        &_login {
+          font-size: 20px;
+        }
+      }
+      .title {
+        font-size: 26px;
+        font-weight: 400;
+        color: $--color-primary;
+        margin: 0px auto 40px auto;
+        text-align: center;
+        font-weight: bold;
+        font-family: SourceHanSansCN-Bold;
+        font-stretch: normal;
+      }
+      .show-pwd {
+        position: absolute;
+        right: 10px;
+        top: 7px;
+        font-size: 16px;
+        color: #889aa4;
+        cursor: pointer;
+        user-select: none;
+      }
+}

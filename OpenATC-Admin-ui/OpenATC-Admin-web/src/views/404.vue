@@ -214,7 +214,7 @@ export default {
       background: #1482f0;
       border-radius: 100px;
       text-align: center;
-      color: $--color-white;
+      color: #fff;
       opacity: 0;
       font-size: 14px;
       line-height: 36px;

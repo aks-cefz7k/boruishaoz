@@ -11,7 +11,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="greenWaveOptimize">
+  <div class="openatc-serviceroute">
     <el-container>
       <el-aside width="200px">
         <PlanMenu
@@ -117,16 +117,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.greenWaveOptimize {
-  height: calc(100vh - 50px);
-}
-.el-aside {
-  height: calc(100vh - 50px);
-  color: $--color-text-primary;
-  border-right: solid 1px $--border-color-lighter;
-}
+// .openatc-serviceroute {
+//   height: calc(100vh - 50px);
+// }
+// .el-aside {
+//   height: calc(100vh - 50px);
+//   color: $--color-text-primary;
+//   border-right: solid 1px $--border-color-lighter;
+// }
 
-.el-main {
-  height: calc(100vh - 50px);
-}
+// .el-main {
+//   height: calc(100vh - 50px);
+// }
 </style>

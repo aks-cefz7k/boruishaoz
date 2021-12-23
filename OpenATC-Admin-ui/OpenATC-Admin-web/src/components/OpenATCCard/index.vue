@@ -39,16 +39,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cardBox {
-  background-color: $--color-white;
-  padding: 0 22px;
-}
-.cardTitle {
-  height: 52px;
-  line-height: 52px;
-  border-bottom: 1px solid #eee;
-  font-size: 18px;
-  color: $--color-text-regular;
-  font-family: MicrosoftYaHei;
-}
+// .cardBox {
+//   background-color: $--color-white;
+//   padding: 0 22px;
+// }
+// .cardTitle {
+//   height: 52px;
+//   line-height: 52px;
+//   border-bottom: 1px solid #eee;
+//   font-size: 18px;
+//   color: $--color-text-regular;
+//   font-family: MicrosoftYaHei;
+// }
 </style>

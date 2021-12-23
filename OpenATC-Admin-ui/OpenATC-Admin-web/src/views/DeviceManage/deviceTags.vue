@@ -137,6 +137,7 @@ export default {
 </script>
 
 <style lang="scss">
+ @import "../../styles/theme/element-variables.scss";
  .tagsList .highlightTag .el-icon-close{
     color: $--color-white;
   }
@@ -153,6 +154,7 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
+ @import "../../styles/theme/element-variables.scss";
 .tagsList {
   height: 84px;
   padding: 24px 29px;

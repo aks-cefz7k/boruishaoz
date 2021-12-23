@@ -130,7 +130,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.patternPanel {
-  border: solid 1px $--border-color-lighter;
-}
+// .patternPanel {
+//   border: solid 1px $--border-color-lighter;
+// }
 </style>

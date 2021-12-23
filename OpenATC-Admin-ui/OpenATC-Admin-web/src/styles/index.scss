@@ -9,6 +9,7 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
+@import './common.scss';
 @import './variables.scss';
 @import './mixin.scss';
 @import './transition.scss';
@@ -86,6 +87,13 @@ a:hover {
 
 .app-container {
   padding: 10px;
+  .kanban {
+    &.todo {
+      .board-column-header {
+        background: $--color-primary;
+      }
+    }
+  }
 }
 
 .components-container {

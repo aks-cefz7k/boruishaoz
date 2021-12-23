@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div v-if="isShow">
+  <div v-if="isShow" class="openatc-navbar">
   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" active-text-color='$--color-primary' @select="handleSelect">
     <div class="openatc-main">OpenATC-Admin</div>
     <div class="openatc-line"></div>
@@ -231,6 +231,7 @@ export default {
 }
 </script>
 <style lang="scss">
+ @import "../../../styles/theme/element-variables.scss";
 .el-menu-demo {
   padding: 0 18px;
 }

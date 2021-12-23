@@ -150,6 +150,7 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
+ @import "../../../styles/theme/element-variables.scss";
 .licenseInfo {
     display: flex;
     justify-content: center;

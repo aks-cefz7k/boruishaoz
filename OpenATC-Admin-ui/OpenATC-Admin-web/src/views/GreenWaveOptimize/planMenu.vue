@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<div>
+<div class="openatc-planmanu">
   <div class="mask" v-if="maskVisible" @click ="clickMask"></div>
   <Messagebox :visible="deleteDiologVisible" :text="`${$t('openatc.greenwaveoptimize.isdelete')}${chooseName} ?`" @cancle="closeDeleteDialog" @ok="handleDelete"/>
   <AddOptimizeDialog
@@ -258,6 +258,7 @@ export default {
 </script>
 
 <style lang="scss">
+ @import "../../styles/theme/element-variables.scss";
 .btnGroup .operate .el-dropdown-link {
   color: $--color-primary;
   cursor: pointer;
@@ -265,6 +266,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+ @import "../../styles/theme/element-variables.scss";
 .el-menu {
   height: calc(100vh - 120px);
   max-height: calc(100vh - 120px);

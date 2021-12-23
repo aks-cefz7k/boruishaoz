@@ -484,6 +484,7 @@ export default {
 </style>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
+ @import "../../../styles/theme/element-variables.scss";
 // $color-blue: #2196f3;
 $space-width: 18px;
 .ms-tree-space {
