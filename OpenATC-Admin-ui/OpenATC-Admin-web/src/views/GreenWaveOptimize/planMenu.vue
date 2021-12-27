@@ -308,6 +308,7 @@ export default {
     color: $--color-white;
     background-color: $--color-primary;
     border-color: $--color-primary;
+    opacity: 0.8;
 }
 .deletebtn {
     position: fixed;

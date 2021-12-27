@@ -341,8 +341,9 @@ export default {
 }
 .btnGroup button:hover {
     color: $--color-white;
-    background-color: #66b1ff;
-    border-color: #66b1ff;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
+    opacity: 0.8;
 }
 .btnGroup > button {
   float: left;
@@ -417,11 +418,11 @@ export default {
     border-color: $--color-primary;
     cursor: pointer;
 }
-.btnGroup button:hover {
-    color: $--color-white;
-    background-color: #66b1ff;
-    border-color: #66b1ff;
-}
+// .btnGroup button:hover {
+//     color: $--color-white;
+//     background-color: #66b1ff;
+//     border-color: #66b1ff;
+// }
 .btnGroup > button {
   float: left;
   position: relative;

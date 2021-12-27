@@ -365,11 +365,11 @@
           border-color: $--color-primary;
           cursor: pointer;
       }
-      .btnGroup button:hover {
-          color: $--color-white;
-          background-color: #66b1ff;
-          border-color: #66b1ff;
-      }
+      // .btnGroup button:hover {
+      //     color: $--color-white;
+      //     background-color: #66b1ff;
+      //     border-color: #66b1ff;
+      // }
       .btnGroup > button {
         float: left;
         position: relative;
@@ -450,11 +450,11 @@
           border-color: $--color-primary;
           cursor: pointer;
       }
-      .btnGroup button:hover {
-          color: $--color-white;
-          background-color: $--color-primary;
-          border-color: $--color-primary;
-      }
+      // .btnGroup button:hover {
+      //     color: $--color-white;
+      //     background-color: $--color-primary;
+      //     border-color: $--color-primary;
+      // }
       .deletebtn {
           position: fixed;
           bottom: 30px;
@@ -690,11 +690,12 @@
         border-color: $--color-primary;
         cursor: pointer;
       }
-      // .btnGroup button:hover {
-      //   color: #fff;
-      //   background-color: #66b1ff;
-      //   border-color: #66b1ff;
-      // }
+      .btnGroup button:hover {
+        color: #fff;
+        background-color: $--color-primary;
+        border-color: $--color-primary;
+        opacity: 0.8;
+      }
       .deletebtn {
         position: fixed;
         bottom: 30px;
@@ -774,8 +775,9 @@
       }
       .btnGroup button:hover {
         color: $--color-white;
-        background-color: #66b1ff;
-        border-color: #66b1ff;
+        background-color: $--color-primary;
+        border-color: $--color-primary;
+        opacity: 0.8;
       }
       .btnGroup > button {
         float: left;
