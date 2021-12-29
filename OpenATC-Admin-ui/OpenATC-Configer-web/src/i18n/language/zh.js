@@ -584,11 +584,26 @@ const zh = {
       'deviceoffline': '设备不在线！'
     },
     'login': {
-      'title': '配置管理中心',
+      'title': '信号机设备配置',
       'login': '登录',
       'authorize': '授权',
       'close': '关闭',
-      'dialogtitle': '应用授权'
+      'dialogtitle': '应用授权',
+      'username': '用户名',
+      'password': '密码',
+      'locallogin': '本地登陆',
+      'port': '端口',
+      'protocol': '协议',
+      'restoredefaultparameters': '恢复默认参数',
+      'enterip': '请输入IP',
+      'enterlegalip': '请输入合法的IP！',
+      'enterpport': '请输入端口',
+      'entercorrectport': '请输入正确的端口！',
+      'usernamenotnull': '用户名不能为空！',
+      'passnotnull': '密码不能为空！',
+      'selectagreement': '请选择协议',
+      'enterdeviceid': '请输入设备ID',
+      'loginerror': '登陆错误!'
     },
     'errorTip': {
       'phaseNotZero': '必须含有至少一个相位!',

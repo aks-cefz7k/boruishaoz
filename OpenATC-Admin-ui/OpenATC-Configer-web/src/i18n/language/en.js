@@ -586,11 +586,26 @@ const en = {
       'deviceoffline': 'Device not online!'
     },
     'login': {
-      'title': 'KISS Edge Manage Center',
+      'title': 'Openatc-Configer',
       'login': 'Sign in',
       'authorize': 'Authorize',
       'close': 'Close',
-      'dialogtitle': 'Available authorizations'
+      'dialogtitle': 'Available authorizations',
+      'username': 'User Name',
+      'password': 'Password',
+      'locallogin': 'Local login',
+      'port': 'Port',
+      'protocol': 'Protocol',
+      'restoredefaultparameters': 'Restore default parameters',
+      'enterip': 'Please enter IP',
+      'enterlegalip': 'Please enter legal IP!',
+      'enterpport': 'Please enter the port',
+      'entercorrectport': 'Please enter the correct port!',
+      'usernamenotnull': 'User name cannot be empty!',
+      'passnotnull': 'Password cannot be empty!',
+      'selectagreement': 'Please select protocol',
+      'enterdeviceid': 'Please enter device ID',
+      'loginerror': 'Login error!'
     },
     'errorTip': {
       'phaseNotZero': 'Must contain at least phase !',
