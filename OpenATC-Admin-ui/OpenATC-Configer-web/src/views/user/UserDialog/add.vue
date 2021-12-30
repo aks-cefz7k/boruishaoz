@@ -152,7 +152,7 @@ export default {
       email_status: true,
       phone_status: true,
       roles: [],
-      roleNames: ['普通用户'],
+      roleNames: ['ordinary user'],
       tempUser: {
         user_name: '',
         nick_name: '',

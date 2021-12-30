@@ -83,32 +83,38 @@ export default {
       }
     },
     handleUserMgrRoutes (curRoutes) {
-      // 平台打开的配置工具，用户管理不可见（层级高）
-      if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
-        // 增加判断toSingleEdge，解决isfromatc参数丢失问题
-        const noPermission = ['User']
-        this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission})
-        return
-      }
-      // 管理员用户管理可见，其余角色不可见
-      if (this.roles && this.roles.length) {
-        let isManager = false
-        for (let role of this.roles) {
-          if (role === '超级管理员' || role === '管理员') {
-            isManager = true
-            break
-          }
-        }
-        if (isManager) {
-          this.$store.dispatch('GenerateRoutes', {curRoutes})
-        } else {
-          const noPermission = ['User']
-          this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission})
-        }
-        return
-      }
-      // 其余情况对侧边栏显示无限制
-      this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission: []})
+      // 暂时去掉用户管理界面（配置软件修改需求）
+      const noPermission = ['User']
+      this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission})
+
+      // 以下部分对权限的控制暂时不要更改！
+
+      // // 平台打开的配置工具，用户管理不可见（层级高）
+      // if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
+      //   // 增加判断toSingleEdge，解决isfromatc参数丢失问题
+      //   const noPermission = ['User']
+      //   this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission})
+      //   return
+      // }
+      // // 管理员用户管理可见，其余角色不可见
+      // if (this.roles && this.roles.length) {
+      //   let isManager = false
+      //   for (let role of this.roles) {
+      //     if (role === 'superadmin' || role === 'admin') {
+      //       isManager = true
+      //       break
+      //     }
+      //   }
+      //   if (isManager) {
+      //     this.$store.dispatch('GenerateRoutes', {curRoutes})
+      //   } else {
+      //     const noPermission = ['User']
+      //     this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission})
+      //   }
+      //   return
+      // }
+      // // 其余情况对侧边栏显示无限制
+      // this.$store.dispatch('GenerateRoutes', {curRoutes, noPermission: []})
     },
     getUserInfo () {
       this.$store.dispatch('GetInfo')
