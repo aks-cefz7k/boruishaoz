@@ -12,7 +12,8 @@
 <template>
 <div class="channel-panel">
   <div class="channels">
-    <div v-for="(item,index) in data" :key="item.name" class="single-channel" :style="index === 5 ? 'clear:both;' : ''" :class="{'twoRow': index >= 5}">
+    <!-- <div v-for="(item,index) in data" :key="item.name" class="single-channel" :style="index === 5 ? 'clear:both;' : ''" :class="{'twoRow': index >= 5}"> -->
+    <div v-for="item in data" :key="item.name" class="single-channel">
       <div class="name">{{item.name}}</div>
       <div class="content">
         <div v-for="channel in item.channels" :key="channel.channelnum" class="channel">
@@ -30,12 +31,106 @@
     </div>
   </div>
   <el-button class="controlbtn" type="primary" @click="toAutoControl">{{$t('edge.system.recovery')}}</el-button>
+  <el-button class="controlbtn" type="primary" @click="getTesting">{{$t('edge.system.test')}}</el-button>
+  <div class="list">
+    <div class="title">通道信息</div>
+    <el-table
+      :data="list"
+      stripe
+      max-height="500"
+      style="width: 100%">
+      <el-table-column
+        align="left"
+        prop="id"
+        width="80"
+        :label="$t('edge.channelControl.channel')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="inputvoltage"
+        width='120'
+        :label="$t('edge.channelControl.inputvoltage')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="redresidualvoltage"
+        width='180'
+        :label="$t('edge.channelControl.redresidualvoltage')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="redoutputvoltage"
+        width='180'
+        :label="$t('edge.channelControl.redoutputvoltage')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="redoffresidualpower"
+        width='210'
+        :label="$t('edge.channelControl.redoffresidualpower')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="redonoutputpower"
+        width='210'
+        :label="$t('edge.channelControl.redonoutputpower')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="yellowresidualvoltage"
+        width='180'
+        :label="$t('edge.channelControl.yellowresidualvoltage')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="yellowoutputvoltage"
+        width='180'
+        :label="$t('edge.channelControl.yellowoutputvoltage')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="yellowoffresidualpower"
+        width='210'
+        :label="$t('edge.channelControl.yellowoffresidualpower')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="yellowonoutputpower"
+        width='210'
+        :label="$t('edge.channelControl.yellowonoutputpower')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="greenresidualvoltage"
+        width='180'
+        :label="$t('edge.channelControl.greenresidualvoltage')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="greenoutputvoltage"
+        width='180'
+        :label="$t('edge.channelControl.greenoutputvoltage')">
+      </el-table-column>
+      <el-table-column
+        align="left"
+        prop="greenoffresidualpower"
+        width='210'
+        :label="$t('edge.channelControl.greenoffresidualpower')">
+      </el-table-column>
+      <el-table-column
+        align="greenonoutputpower"
+        prop="split"
+        width='210'
+        :label="$t('edge.channelControl.greenonoutputpower')">
+      </el-table-column>
+    </el-table>
+  </div>
 </div>
 </template>
 
 <script>
 // import { putTscControl } from '@/api/control'
-import { channelcheck } from '@/api/system'
+import { channelcheck, channeltest } from '@/api/system'
 export default {
   name: 'channelcontrol',
   components: {},
@@ -56,7 +151,9 @@ export default {
         name: '绿灯',
         selected: false
       }],
-      data: []
+      data: [],
+      list: [],
+      loading: false
     }
   },
   mounted () {
@@ -103,6 +200,15 @@ export default {
     handleClickLamp (lampctrboard, channel, lampcolor, lamp) {
       this.handleExclusive()
       lamp.selected = true
+      this.curClickedLampInfo = {
+        lampctrboard,
+        channel,
+        lampcolor,
+        lamp
+      }
+      this.handleCheckChannel(this.curClickedLampInfo.lampctrboard, this.curClickedLampInfo.channel, this.curClickedLampInfo.lampcolor, this.curClickedLampInfo.lamp)
+    },
+    handleCheckChannel (lampctrboard, channel, lampcolor, lamp) {
       const params = {
         lampctrboard,
         channel,
@@ -144,6 +250,19 @@ export default {
           return
         }
         this.$alert(this.$t('edge.channelControl.recoverysuccess'), { type: 'success' })
+        this.curClickedLampInfo = undefined
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    getTesting () {
+      channeltest().then(data => {
+        if (!data.data.success) {
+          this.$message.error(data.data.message)
+          return
+        }
+        this.$alert(this.$t('edge.channelControl.testsuccess'), { type: 'success' })
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
@@ -167,13 +286,13 @@ export default {
   margin-top: 40px;
 }
 .single-channel {
-  width: 160px;
+  width: 140px;
   height: 240px;
   background-color: #858585;
   border-radius: 4px;
   border: solid 1px #dcdcdc;
   float: left;
-  margin-right: 68px;
+  margin-right: 20px;
   .name {
     height: 40px;
     background: #f8fbff;
@@ -188,7 +307,7 @@ export default {
   }
   .content {
     height: calc(100% - 42px);
-    padding: 0 20px;
+    padding: 0 10px;
     .channel {
       display: flex;
       align-items:center;
@@ -237,6 +356,27 @@ export default {
     }
   }
 }
+.list {
+  margin-top: 30px;
+  .title {
+    margin-bottom: 10px;
+  }
+}
+ /* 显示横向滚动条 */
+ .list .el-table--scrollable-x .el-table__body-wrapper {
+   padding: 0 0 5px 0;
+   margin: 0 0 5px 0;
+   overflow-x: auto;
+ }
+ /* 滚动条的滑块样式 */
+ .list .el-table .el-table__body-wrapper::-webkit-scrollbar-thumb {
+   background-color: #ccc !important;
+   border-radius: 30px !important;
+ }
+ /* 去除右侧固定定位阴影多出来的像素 */
+ .list .el-table__fixed-right{
+   height: calc(100% - 27px) !important;
+ }
 </style>
 <style rel="stylesheet/scss" lang="scss">
 </style>

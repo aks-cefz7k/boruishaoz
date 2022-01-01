@@ -329,7 +329,23 @@ const en = {
     },
     'channelControl': {
       'recoverysuccess': 'Recovery Success!',
-      'recoveryfailed': 'Recovery Failed!'
+      'recoveryfailed': 'Recovery Failed!',
+      'testsuccess': 'Test Success!',
+      'testfailed': 'Test Failed!',
+      'channel': 'Channel',
+      'redresidualvoltage': 'Red Residual Voltage',
+      'redoutputvoltage': 'Red Output Voltage',
+      'redoffresidualpower': 'Red Off Residual Power',
+      'redonoutputpower': 'Red On Output Power',
+      'yellowresidualvoltage': 'Yellow Residual Voltage',
+      'yellowoutputvoltage': 'Yellow Output Voltage',
+      'yellowoffresidualpower': 'Yellow Off Residual Power',
+      'yellowonoutputpower': 'Yellow On Output Power',
+      'greenresidualvoltage': 'Green Residual Voltage',
+      'greenoutputvoltage': 'Green Output Voltage',
+      'greenoffresidualpower': 'Green Off Residual Power',
+      'greenonoutputpower': 'Green On Output Power',
+      'inputvoltage': 'Input Voltage'
     },
     'pedestrianDetector': {
       'desc': 'Description ',
@@ -448,7 +464,8 @@ const en = {
       'duration3': 'Unlimited',
       'remote1': 'Restart',
       'remote2': 'Authorize',
-      'remote3': 'Custom'
+      'remote3': 'Custom',
+      'test': 'Test'
     },
     'optimize': {
       'strategy': 'Optimization strategy',

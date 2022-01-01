@@ -327,7 +327,23 @@ const zh = {
     },
     'channelControl': {
       'recoverysuccess': '恢复成功！',
-      'recoveryfailed': '恢复失败！'
+      'recoveryfailed': '恢复失败！',
+      'testsuccess': '检测成功!',
+      'testfailed': '检测失败!',
+      'channel': '通道',
+      'redresidualvoltage': '红灯残留电压',
+      'redoutputvoltage': '红灯输出电压',
+      'redoffresidualpower': '红灯关闭的残留功率',
+      'redonoutputpower': '红灯亮灯的输出功率',
+      'yellowresidualvoltage': '黄灯残留电压',
+      'yellowoutputvoltage': '黄灯输出电压',
+      'yellowoffresidualpower': '黄灯关闭的残留功率',
+      'yellowonoutputpower': '黄灯亮灯的输出功率',
+      'greenresidualvoltage': '绿灯残留电压',
+      'greenoutputvoltage': '绿灯输出电压',
+      'greenoffresidualpower': '绿灯关闭的残留功率',
+      'greenonoutputpower': '绿灯亮灯的输出功率',
+      'inputvoltage': '通道输入电压'
     },
     'pedestrianDetector': {
       'desc': '描述',
@@ -446,7 +462,8 @@ const zh = {
       'duration3': '无限制',
       'remote1': '重启',
       'remote2': '授权',
-      'remote3': '自定义'
+      'remote3': '自定义',
+      'test': '检测'
     },
     'optimize': {
       'strategy': '优化策略',

@@ -244,6 +244,11 @@
   "method": "post"
 },
 {
+  "key": "channeltest",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
   "key": "getUsr",
   "url": "/auth/user",
   "method": "get"
