@@ -65,6 +65,18 @@
           >
           </el-input>
         </el-form-item>
+        <el-form-item
+          :label="$t('openatc.usermanager.organization')"
+          prop="organization"
+        >
+          <el-input
+            type="text"
+            v-model="deviceInfo.code"
+            @focus="relateOrganization(deviceInfo.code)"
+            @keyup.enter.native="submitDeviceInfo('device')"
+          >
+          </el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="resetForm('device')">{{
@@ -75,22 +87,19 @@
         }}</el-button>
       </div>
     </el-dialog>
+    <choose-organization-dialog
+      ref="chooseOrganization"
+      @getCheckedPath="getCheckedPath"
+    ></choose-organization-dialog>
   </div>
 </template>
 
 <script>
 import { UpdateDevice } from '@/api/device'
+import chooseOrganizationDialog from '@/views/Organization/components/chooseOrganizationDialog'
 export default {
   name: 'deviceUpdate',
-  // watch: {
-  //   deviceInfo: {
-  //     handler: function (val, oldVal) {
-  //       debugger
-  //     },
-  //     // 深度观察监听
-  //     deep: true
-  //   }
-  // },
+  components: { chooseOrganizationDialog },
   data () {
     return {
       dialogFormVisible: false,
@@ -106,7 +115,8 @@ export default {
         ip: '',
         port: '',
         lng: 0,
-        lat: 0
+        lat: 0,
+        code: ''
       },
       rules: {
         type: [
@@ -194,6 +204,15 @@ export default {
       // 表单重置
       this.dialogFormVisible = false
       this.$refs[formData].resetFields()
+    },
+    relateOrganization (orgPath) {
+      let chooseOrganization = this.$refs.chooseOrganization
+      chooseOrganization.onClick(orgPath)
+    },
+    getCheckedPath (path) {
+      let temp = Object.assign({}, this.deviceInfo)
+      temp.code = path
+      this.deviceInfo = temp
     }
   }
 }
