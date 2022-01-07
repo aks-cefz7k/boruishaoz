@@ -33,7 +33,8 @@ const en = {
       'inputoldpass': 'Please input the old password!',
       'twopassnotdiff': 'The new password cannot be the same as the old one!',
       'originalpasserror': 'Original password error',
-      'modifisucceeded': 'Modification succeeded'
+      'modifisucceeded': 'Modification succeeded',
+      'getmd5error': 'Failed to get MD5!'
     },
     'route': {
       'dashboard': 'Dashboard',
