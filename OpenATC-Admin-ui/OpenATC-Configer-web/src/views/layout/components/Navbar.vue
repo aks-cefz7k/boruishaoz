@@ -582,12 +582,13 @@ export default {
             resolve(data.data.data)
           } else {
             console.log(data.data.message)
-            this.$message.error('获取MD5失败！')
+            this.$message.error(this.$t('edge.common.getmd5error'))
             reject(new Error(data.data.message))
           }
         }, () => {
           this.unlockScreen()
           console.log('checkCode Error')
+          this.$message.error(this.$t('edge.common.getmd5error'))
           reject(new Error('checkCode Error'))
         })
       })

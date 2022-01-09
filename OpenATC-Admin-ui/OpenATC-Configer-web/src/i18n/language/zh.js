@@ -33,7 +33,8 @@ const zh = {
       'inputoldpass': '请输入旧密码！',
       'twopassnotdiff': '新密码不能与旧密码一致！',
       'originalpasserror': '原密码错误!',
-      'modifisucceeded': '修改成功'
+      'modifisucceeded': '修改成功',
+      'getmd5error': '获取MD5失败！'
     },
     'route': {
       'dashboard': '首页',
