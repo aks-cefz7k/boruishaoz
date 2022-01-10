@@ -622,7 +622,10 @@ const en = {
       'manualpanel': 'The manualpanel cannot be empty！',
       'momthIsNull': 'Month cannot be empty in date！',
       'devicenotonline': 'Device not online!',
-      'abnormalcommunication': 'Abnormal Communication!'
+      'abnormalcommunication': 'Abnormal Communication!',
+      'saveParamFailed': 'Signal save parameter failed!',
+      'ringErrorTip': 'Ring configuration should be started from ring 1, and skip ring configuration is not allowed!',
+      'deviceinformationnotnull': 'Address code in device information cannot be empty!'
     },
     'importTemp': {
       'editTemplateData': 'Edit Template Data',

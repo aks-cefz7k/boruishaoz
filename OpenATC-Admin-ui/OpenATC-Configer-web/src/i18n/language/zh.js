@@ -621,7 +621,10 @@ const zh = {
       'momthIsNull': '日期里月份不能为空！',
       'concurrentRules': '相位参数中配置了多环时，并发相位不能为空！',
       'devicenotonline': '设备不在线！',
-      'abnormalcommunication': '通讯异常！'
+      'abnormalcommunication': '通讯异常！',
+      'saveParamFailed': '信号机保存参数失败!',
+      'ringErrorTip': '环配置应从环1起配，不允出现跳环配置!',
+      'deviceinformationnotnull': '设备信息中的地址码不能为空！'
     },
     'importTemp': {
       'editTemplateData': '模板数据编辑',

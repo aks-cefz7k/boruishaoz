@@ -87,7 +87,8 @@ export default {
     },
     formateDateForAllFault (datas) {
       for (let data of datas) {
-        let newDate = new Date(data.m_unFaultOccurTime * 1000 + 8 * 60 * 60 * 1000)
+        // let newDate = new Date(data.m_unFaultOccurTime * 1000 + 8 * 60 * 60 * 1000)
+        let newDate = new Date(data.m_unFaultOccurTime * 1000)
         var y = newDate.getFullYear()
         var m = newDate.getMonth() + 1
         m = m < 10 ? ('0' + m) : m
