@@ -222,10 +222,12 @@ export default {
     switchToChinese () {
       this.$i18n.locale = 'zh'
       setLanguage(this.$i18n.locale)
+      location.reload()
     },
     switchToEngLish () {
       this.$i18n.locale = 'en'
       setLanguage(this.$i18n.locale)
+      location.reload()
     }
   }
 }

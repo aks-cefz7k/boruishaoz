@@ -286,7 +286,7 @@ export default {
       // 增加判断toSingleEdge，解决isfromatc参数丢失问题
       this.isShowLogout = false
     }
-    this.extendErrorCodeMap() // 扩展错误码的map集合
+    // this.extendErrorCodeMap() // 扩展错误码的map集合
   },
   methods: {
     handleCommand (command) {
@@ -460,9 +460,25 @@ export default {
             let errorMes = ''
             for (let code of codeList) {
               if (this.$i18n.locale === 'en') {
-                errorMes = errorMes + '</br>' + this.errorCodeMapEn.get(code)
+                if (code[0] === 305) {
+                  errorMes = errorMes + '</br>' + 'There is an intra-ring phase concurrency conflict in scheme' + code[1]
+                } else if (code[0] === 1005) {
+                  errorMes = errorMes + '</br>' + 'Time period' + code[1] + 'channel lock state conflict'
+                } else if (code[0] === 1006) {
+                  errorMes = errorMes + '</br>' + 'The control source of the locked channel in period' + code[1] + ' is not ignored'
+                } else {
+                  errorMes = errorMes + '</br>' + this.errorCodeMapEn.get(code[0])
+                }
               } else {
-                errorMes = errorMes + '</br>' + this.errorCodeMap.get(code)
+                if (code[0] === 305) {
+                  errorMes = errorMes + '</br>' + '方案' + code[1] + '中存在环内相位并发冲突'
+                } else if (code[0] === 1005) {
+                  errorMes = errorMes + '</br>' + '时段' + code[1] + '通道状态锁定冲突'
+                } else if (code[0] === 1006) {
+                  errorMes = errorMes + '</br>' + '时段' + code[1] + '锁定通道的控制源未被忽略'
+                } else {
+                  errorMes = errorMes + '</br>' + this.errorCodeMap.get(code[0])
+                }
               }
             }
             // this.$message.error(errorMes.substr(1))
@@ -965,10 +981,12 @@ export default {
     switchToChinese () {
       this.$i18n.locale = 'zh'
       setLanguage(this.$i18n.locale)
+      location.reload()
     },
     switchToEngLish () {
       this.$i18n.locale = 'en'
       setLanguage(this.$i18n.locale)
+      location.reload()
     },
     lockScreen () {
       this.loading = this.$loading({
