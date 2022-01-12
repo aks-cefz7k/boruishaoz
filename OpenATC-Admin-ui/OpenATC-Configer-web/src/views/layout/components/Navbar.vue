@@ -390,7 +390,7 @@ export default {
         }
         this.$store.state.user.route = this.$route.path
         if (Object.keys(data.data.data.data).length === 0) {
-          this.$message.error('暂没有可上载方案！')
+          this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
         let allTscParam = data.data.data.data
@@ -417,7 +417,7 @@ export default {
         }
         this.$store.state.user.route = this.$route.path
         if (Object.keys(data.data.data.data).length === 0) {
-          this.$message.error('暂没有可上载方案！')
+          this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
         this.globalParamModel.setGlobalParams(data.data.data.data)

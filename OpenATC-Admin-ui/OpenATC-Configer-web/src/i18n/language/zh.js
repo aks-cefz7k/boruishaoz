@@ -624,7 +624,8 @@ const zh = {
       'abnormalcommunication': '通讯异常！',
       'saveParamFailed': '信号机保存参数失败!',
       'ringErrorTip': '环配置应从环1起配，不允出现跳环配置!',
-      'deviceinformationnotnull': '设备信息中的地址码不能为空！'
+      'deviceinformationnotnull': '设备信息中的地址码不能为空！',
+      'noSchemeUpload': '暂没有可上载方案！'
     },
     'importTemp': {
       'editTemplateData': '模板数据编辑',

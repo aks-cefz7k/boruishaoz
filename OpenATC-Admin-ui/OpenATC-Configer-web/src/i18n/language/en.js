@@ -625,7 +625,8 @@ const en = {
       'abnormalcommunication': 'Abnormal Communication!',
       'saveParamFailed': 'Signal save parameter failed!',
       'ringErrorTip': 'Ring configuration should be started from ring 1, and skip ring configuration is not allowed!',
-      'deviceinformationnotnull': 'Address code in device information cannot be empty!'
+      'deviceinformationnotnull': 'Address code in device information cannot be empty!',
+      'noSchemeUpload': 'There is no scheme to upload!'
     },
     'importTemp': {
       'editTemplateData': 'Edit Template Data',
