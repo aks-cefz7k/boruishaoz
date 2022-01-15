@@ -331,7 +331,7 @@ export default {
       setTimeout(() => {
         let result = JSON.parse(JSON.stringify(this.copiedTscParam))
         this.globalParamModel.setGlobalParams(result)
-        this.$message.success('读取方案成功！')
+        this.$message.success(this.$t('edge.errorTip.readSchemeSucc'))
       }, 50)
     },
     cancleRead () {

@@ -626,7 +626,8 @@ const en = {
       'saveParamFailed': 'Signal save parameter failed!',
       'ringErrorTip': 'Ring configuration should be started from ring 1, and skip ring configuration is not allowed!',
       'deviceinformationnotnull': 'Address code in device information cannot be empty!',
-      'noSchemeUpload': 'There is no scheme to upload!'
+      'noSchemeUpload': 'There is no scheme to upload!',
+      'readSchemeSucc': 'Reading scheme succeeded!'
     },
     'importTemp': {
       'editTemplateData': 'Edit Template Data',
