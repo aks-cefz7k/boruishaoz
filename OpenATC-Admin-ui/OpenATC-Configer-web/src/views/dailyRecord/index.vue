@@ -142,7 +142,7 @@ export default {
       return datas
     },
     formateDate (gmtdate) {
-      let newDate = new Date(gmtdate * 1000 + 8 * 60 * 60 * 1000)
+      let newDate = new Date(gmtdate * 1000)
       var y = newDate.getFullYear()
       var m = newDate.getMonth() + 1
       m = m < 10 ? ('0' + m) : m
