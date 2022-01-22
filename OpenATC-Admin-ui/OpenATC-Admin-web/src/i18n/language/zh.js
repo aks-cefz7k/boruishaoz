@@ -229,7 +229,8 @@ const zh = {
       'sr': '南右转',
       'sb': '南掉头',
       'notonline': '不在线！',
-      'planissuedsucc': '方案下发成功!'
+      'planissuedsucc': '方案下发成功!',
+      'time': '时间（s）'
     },
     'record': {
       'user': '用户',

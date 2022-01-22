@@ -229,7 +229,8 @@ const en = {
       'sr': 'South-Right',
       'sb': 'South-Back',
       'notonline': ' do not online!',
-      'planissuedsucc': 'Plan issued successfully'
+      'planissuedsucc': 'Plan issued successfully',
+      'time': 'Time（s）'
     },
     'record': {
       'user': 'Operator',
