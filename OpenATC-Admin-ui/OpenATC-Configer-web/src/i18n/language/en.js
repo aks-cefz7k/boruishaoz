@@ -33,7 +33,8 @@ const en = {
       'inputoldpass': 'Please input the old password!',
       'twopassnotdiff': 'The new password cannot be the same as the old one!',
       'originalpasserror': 'Original password error',
-      'modifisucceeded': 'Modification succeeded'
+      'modifisucceeded': 'Modification succeeded',
+      'getmd5error': 'Failed to get MD5!'
     },
     'route': {
       'dashboard': 'Dashboard',
@@ -638,7 +639,12 @@ const en = {
       'manualpanel': 'The manualpanel cannot be empty！',
       'momthIsNull': 'Month cannot be empty in date！',
       'devicenotonline': 'Device not online!',
-      'abnormalcommunication': 'Abnormal Communication!'
+      'abnormalcommunication': 'Abnormal Communication!',
+      'saveParamFailed': 'Signal save parameter failed!',
+      'ringErrorTip': 'Ring configuration should be started from ring 1, and skip ring configuration is not allowed!',
+      'deviceinformationnotnull': 'Address code in device information cannot be empty!',
+      'noSchemeUpload': 'There is no scheme to upload!',
+      'readSchemeSucc': 'Reading scheme succeeded!'
     },
     'importTemp': {
       'editTemplateData': 'Edit Template Data',

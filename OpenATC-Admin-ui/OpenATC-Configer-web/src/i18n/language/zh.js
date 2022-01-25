@@ -33,7 +33,8 @@ const zh = {
       'inputoldpass': '请输入旧密码！',
       'twopassnotdiff': '新密码不能与旧密码一致！',
       'originalpasserror': '原密码错误!',
-      'modifisucceeded': '修改成功'
+      'modifisucceeded': '修改成功',
+      'getmd5error': '获取MD5失败！'
     },
     'route': {
       'dashboard': '首页',
@@ -637,7 +638,12 @@ const zh = {
       'momthIsNull': '日期里月份不能为空！',
       'concurrentRules': '相位参数中配置了多环时，并发相位不能为空！',
       'devicenotonline': '设备不在线！',
-      'abnormalcommunication': '通讯异常！'
+      'abnormalcommunication': '通讯异常！',
+      'saveParamFailed': '信号机保存参数失败!',
+      'ringErrorTip': '环配置应从环1起配，不允出现跳环配置!',
+      'deviceinformationnotnull': '设备信息中的地址码不能为空！',
+      'noSchemeUpload': '暂没有可上载方案！',
+      'readSchemeSucc': '读取方案成功！'
     },
     'importTemp': {
       'editTemplateData': '模板数据编辑',

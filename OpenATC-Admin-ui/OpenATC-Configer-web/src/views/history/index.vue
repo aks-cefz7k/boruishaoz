@@ -53,7 +53,17 @@ export default {
       listLoading: false,
       allFault: [],
       tableData: [],
-      dialogDetailFault: []
+      dialogDetailFault: [],
+      faultCodeMap: new Map([[101, 'can总线通信故障'], [102, '黄闪器故障'], [103, '特征参数故障'], [104, '故障检测板不在线'], [201, '灯控板ID故障'], [202, '灯控板脱机'], [203, '无红灯亮起'], [204, '红绿同亮'], [205, '绿冲突'], [206, '红灯灯电压故障'], [207, '黄灯灯电压故障'], [208, '绿灯灯电压故障'], [209, '红灯灯功率故障'], [210, '黄灯灯功率故障'], [211, '绿灯灯功率故障'], [212, '灯组故障'], [213, '车检器故障'], [301, '车检板未初始化'], [302, '车检板脱机'], [303, '车辆检测器短路'], [304, '车辆检测器断路'], [401, 'I/O板未初始化'], [402, 'I/O板脱机']]),
+      faultCodeMapEn: new Map([[101, 'CanBus Fault'], [102, 'Yellow Flasher Fault'], [103, 'TZParam Fault'], [104, 'FaultDet Offline'], [201, 'LampBoard ID Fault'], [202, 'LampBoard Offline'], [203, 'No Red Lamp Is On'], [204, 'Red And Green Conflict'], [205, 'Green Conflict'], [206, 'Red Lamp Voltage Fault'], [207, 'Yellow Lamp Voltage Fault'], [208, 'Green Lamp Voltage Fault'], [209, 'Red Lamp Lamp Power Fault'], [210, 'Yellow Lamp Lamp Power Fault'], [211, 'Green Lamp Lamp Power Fault'], [301, 'VehDetBoard Is Not Init'], [302, 'VehDetBoard Is Offline'], [303, 'VehDetector Short Circiut'], [304, 'VehDetector Open  Circiut'], [401, 'I/O Board Is Not Init'], [402, 'I/O Board Offline']]),
+      faultLevelMap: new Map([[1, '一般故障'], [2, '降级故障'], [3, '严重故障']]),
+      faultLevelMapEn: new Map([[1, 'General failure'], [2, 'Degradation failure'], [3, 'Serious failure']]),
+      TZParamSubtypeMap: new Map([[0, ''], [1, '特征参数不存在'], [2, '特征参数文件不可读'], [3, '特征参数人为修改'], [4, '特征参数文件打开失败'], [5, '特征参数文件更新失败'], [6, '信号机地址码校验失败'], [7, '特征参数内容格式错误']]),
+      TZParamSubtypeMapEn: new Map([[0, ''], [1, 'Non-existent'], [2, 'File Is Unreadable'], [3, 'File Artificial Changes'], [4, 'File Open Fail'], [5, 'File Update Fail'], [6, 'File Check SiteID Fail'], [7, 'Format Error']]),
+      greenLampSubtypeMap: new Map([[0, ''], [1, '未输出有效电压'], [2, '输出电压低于输入电压过多'], [3, '输出电压高于输入电压'], [4, '关闭输出但实际电压仍然输出'], [5, '关闭输出但实际电压部分输出'], [6, '线路残留电压过高']]),
+      greenLampSubtypeMapEn: new Map([[0, ''], [1, 'Output Volatage Is Fail'], [2, 'Output Volatage Is Low'], [3, 'Output Volatage Is High'], [4, 'Off Output Volatage Is high'], [5, 'Off Output Volatage Is low'], [6, 'Residual Voltage Is Over-High']]),
+      lampPowerSubtypeMap: new Map([[0, ''], [1, '功率异常增加'], [2, '功率异常减少'], [3, '功率无输出'], [4, '关闭状态有功率输出']]),
+      lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']])
     }
   },
   created () {
@@ -87,21 +97,67 @@ export default {
     },
     formateDateForAllFault (datas) {
       for (let data of datas) {
-        let newDate = new Date(data.m_unFaultOccurTime * 1000 + 8 * 60 * 60 * 1000)
-        var y = newDate.getFullYear()
-        var m = newDate.getMonth() + 1
-        m = m < 10 ? ('0' + m) : m
-        var d = newDate.getDate()
-        d = d < 10 ? ('0' + d) : d
-        var h = newDate.getHours()
-        h = h < 10 ? ('0' + h) : h
-        var minute = newDate.getMinutes()
-        minute = minute < 10 ? ('0' + minute) : minute
-        var second = newDate.getSeconds()
-        second = second < 10 ? ('0' + second) : second
-        data.m_unFaultOccurTime = y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+        if (this.$i18n.locale === 'en') {
+          data.m_wFaultType = this.faultCodeMapEn.get(data.m_wFaultType)
+          data.m_byFaultLevel = this.faultLevelMapEn.get(data.m_byFaultLevel)
+          if (data.m_wFaultType === 103) {
+            data.m_wSubFaultType = this.TZParamSubtypeMapEn.get(data.m_wSubFaultType)
+          } else if (data.m_wFaultType === 208) {
+            data.m_wSubFaultType = this.greenLampSubtypeMapEn.get(data.m_wSubFaultType)
+          } else if (data.m_wFaultType === 211) {
+            data.m_wSubFaultType = this.lampPowerSubtypeMapEn.get(data.m_wSubFaultType)
+          } else {
+            data.m_wSubFaultType = ''
+          }
+        } else {
+          data.m_wFaultType = this.faultCodeMap.get(data.m_wFaultType)
+          data.m_byFaultLevel = this.faultLevelMap.get(data.m_byFaultLevel)
+          if (data.m_wFaultType === 103) {
+            data.m_wSubFaultType = this.TZParamSubtypeMap.get(data.m_wSubFaultType)
+          } else if (data.m_wFaultType === 208) {
+            data.m_wSubFaultType = this.greenLampSubtypeMap.get(data.m_wSubFaultType)
+          } else if (data.m_wFaultType === 211) {
+            data.m_wSubFaultType = this.lampPowerSubtypeMap.get(data.m_wSubFaultType)
+          } else {
+            data.m_wSubFaultType = ''
+          }
+        }
+        data.m_unFaultOccurTime = this.formateDate(data.m_unFaultOccurTime)
+        data.m_unFaultRenewTime = this.formateDate(data.m_unFaultRenewTime)
+        // let newDate = new Date(data.m_unFaultOccurTime * 1000 + 8 * 60 * 60 * 1000)
+        // let newDate = new Date(data.m_unFaultOccurTime * 1000)
+        // var y = newDate.getFullYear()
+        // var m = newDate.getMonth() + 1
+        // m = m < 10 ? ('0' + m) : m
+        // var d = newDate.getDate()
+        // d = d < 10 ? ('0' + d) : d
+        // var h = newDate.getHours()
+        // h = h < 10 ? ('0' + h) : h
+        // var minute = newDate.getMinutes()
+        // minute = minute < 10 ? ('0' + minute) : minute
+        // var second = newDate.getSeconds()
+        // second = second < 10 ? ('0' + second) : second
+        // data.m_unFaultOccurTime = y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
       }
       return datas
+    },
+    formateDate (value) {
+      if (value === 0) {
+        return ''
+      }
+      let newDate = new Date(value * 1000)
+      var y = newDate.getFullYear()
+      var m = newDate.getMonth() + 1
+      m = m < 10 ? ('0' + m) : m
+      var d = newDate.getDate()
+      d = d < 10 ? ('0' + d) : d
+      var h = newDate.getHours()
+      h = h < 10 ? ('0' + h) : h
+      var minute = newDate.getMinutes()
+      minute = minute < 10 ? ('0' + minute) : minute
+      var second = newDate.getSeconds()
+      second = second < 10 ? ('0' + second) : second
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
     },
     handleClick (tab, event) {
       this.handlerFaultData()
