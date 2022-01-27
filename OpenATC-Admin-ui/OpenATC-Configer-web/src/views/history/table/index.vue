@@ -54,6 +54,7 @@
         </el-table-column>
         <el-table-column
         prop="m_byFaultDescValue"
+        :formatter="stateFormat"
         :label="$t('edge.fault.value')"
         align="center">
         </el-table-column>
@@ -116,6 +117,9 @@ export default {
   methods: {
     refreshData () {
       this.$emit('getAllFault')
+    },
+    stateFormat (row, column) {
+      return row.m_byFaultDescValue + ''
     }
     // handlerFaultData () {
     //   let filterId = Number(this.activeName)
