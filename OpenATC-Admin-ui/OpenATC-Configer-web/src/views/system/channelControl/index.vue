@@ -47,79 +47,79 @@
       </el-table-column>
       <el-table-column
         align="left"
-        prop="inputvoltage"
+        prop="inputvolt"
         width='120'
         :label="$t('edge.channelControl.inputvoltage')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="redresidualvoltage"
+        prop="redresvolt"
         width='180'
         :label="$t('edge.channelControl.redresidualvoltage')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="redoutputvoltage"
+        prop="redoutvolt"
         width='180'
         :label="$t('edge.channelControl.redoutputvoltage')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="redoffresidualpower"
+        prop="redoffrespower"
         width='210'
         :label="$t('edge.channelControl.redoffresidualpower')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="redonoutputpower"
+        prop="redonoutpower"
         width='210'
         :label="$t('edge.channelControl.redonoutputpower')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="yellowresidualvoltage"
+        prop="yelresvolt"
         width='180'
         :label="$t('edge.channelControl.yellowresidualvoltage')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="yellowoutputvoltage"
+        prop="yeloutvolt"
         width='180'
         :label="$t('edge.channelControl.yellowoutputvoltage')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="yellowoffresidualpower"
+        prop="yeloffrespower"
         width='210'
         :label="$t('edge.channelControl.yellowoffresidualpower')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="yellowonoutputpower"
+        prop="yelonoutpower"
         width='210'
         :label="$t('edge.channelControl.yellowonoutputpower')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="greenresidualvoltage"
+        prop="greenresvolt"
         width='180'
         :label="$t('edge.channelControl.greenresidualvoltage')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="greenoutputvoltage"
+        prop="greenoutvolt"
         width='180'
         :label="$t('edge.channelControl.greenoutputvoltage')">
       </el-table-column>
       <el-table-column
         align="left"
-        prop="greenoffresidualpower"
+        prop="greenoffrespower"
         width='210'
         :label="$t('edge.channelControl.greenoffresidualpower')">
       </el-table-column>
       <el-table-column
-        align="greenonoutputpower"
-        prop="split"
+        align="left"
+        prop="greenonoutpower"
         width='210'
         :label="$t('edge.channelControl.greenonoutputpower')">
       </el-table-column>
@@ -257,11 +257,12 @@ export default {
       })
     },
     getTesting () {
-      channeltest().then(data => {
-        if (!data.data.success) {
-          this.$message.error(data.data.message)
+      channeltest().then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
           return
         }
+        this.list = res.data.data.data.channeltest
         this.$alert(this.$t('edge.channelControl.testsuccess'), { type: 'success' })
       }).catch(error => {
         this.$message.error(error)
