@@ -296,6 +296,10 @@ const zh = {
     },
     'detector': {
       'desc': '描述',
+      'type': '类型',
+      'typeOption': 'typeOption',
+      'typeOption0': '线圈',
+      'typeOption1': '智慧路口终端',
       'callPhase': '请求相位',
       'noactivity': '无响应时间',
       'maxpresence': '最大持续时间',

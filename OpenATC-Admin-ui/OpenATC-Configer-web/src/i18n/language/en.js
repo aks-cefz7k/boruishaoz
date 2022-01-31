@@ -298,6 +298,10 @@ const en = {
     },
     'detector': {
       'desc': 'Description',
+      'type': 'Type',
+      'typeOption': 'typeOption',
+      'typeOption0': 'Coil',
+      'typeOption1': 'Smart junction terminal',
       'callPhase': 'CallPhase',
       'noactivity': 'NoActivity(min)',
       'maxpresence': 'MaxPresence(min)',
