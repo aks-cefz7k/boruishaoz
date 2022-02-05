@@ -199,7 +199,7 @@ export default {
       for (let dev of devs) {
         if (dev.geometry === undefined) continue
         let coordinates = dev.geometry.coordinates
-        let devPoint = [coordinates[0], coordinates[1]]
+        let devPoint = [coordinates[1], coordinates[0]]
         if (dev.state === 'UP') {
           let onlineIcon = L.icon({
             iconUrl: require('../../assets/gis/deviceonline.png'),
@@ -293,8 +293,8 @@ export default {
       this.deviceInfo = dev
       let _this = this
       _this.map.on('click', function (e) {
-        _this.lngLat.lng = _this.computedLngLat(String(e.latlng.lat))
-        _this.lngLat.lat = _this.computedLngLat(String(e.latlng.lng))
+        _this.lngLat.lng = _this.computedLngLat(String(e.latlng.lng))
+        _this.lngLat.lat = _this.computedLngLat(String(e.latlng.lat))
         _this.deviceInfo.lng = _this.lngLat.lng
         _this.deviceInfo.lat = _this.lngLat.lat
         let dev = _this.deviceInfo

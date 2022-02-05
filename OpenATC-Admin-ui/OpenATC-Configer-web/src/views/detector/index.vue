@@ -30,6 +30,19 @@
           <span>{{scope.row.desc}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.detector.type')" min-width="200">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.type" :placeholder="$t('edge.common.select')" size="small" clearable>
+            <el-option
+              v-for="item in typeOption"
+              :key="item.value"
+              :label="$t('edge.detector.typeOption' + item.value)"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span>{{$t('edge.detector.typeOption' + scope.row.type)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.detector.callPhase')" min-width="200">
         <template slot-scope="scope">
           <el-select v-model="scope.row.callphase" :placeholder="$t('edge.common.select')" size="small" clearable>
@@ -198,6 +211,13 @@ export default {
       }, {
         value: 1,
         label: 1
+      }],
+      typeOption: [{
+        value: 0,
+        label: '线圈'
+      }, {
+        value: 1,
+        label: '智慧路口终端'
       }]
     }
   },
@@ -372,6 +392,7 @@ export default {
       }
       var detectorInitData = {
         id: this.id,
+        type: 0,
         callphase: '',
         noactivity: 0,
         maxpresence: 0,

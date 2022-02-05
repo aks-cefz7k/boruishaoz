@@ -102,9 +102,9 @@ export default {
           data.m_byFaultLevel = this.faultLevelMapEn.get(data.m_byFaultLevel)
           if (data.m_wFaultType === 103) {
             data.m_wSubFaultType = this.TZParamSubtypeMapEn.get(data.m_wSubFaultType)
-          } else if (data.m_wFaultType === 208) {
+          } else if (data.m_wFaultType === 208 || data.m_wFaultType === 207 || data.m_wFaultType === 206) {
             data.m_wSubFaultType = this.greenLampSubtypeMapEn.get(data.m_wSubFaultType)
-          } else if (data.m_wFaultType === 211) {
+          } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
             data.m_wSubFaultType = this.lampPowerSubtypeMapEn.get(data.m_wSubFaultType)
           } else {
             data.m_wSubFaultType = ''
@@ -114,9 +114,9 @@ export default {
           data.m_byFaultLevel = this.faultLevelMap.get(data.m_byFaultLevel)
           if (data.m_wFaultType === 103) {
             data.m_wSubFaultType = this.TZParamSubtypeMap.get(data.m_wSubFaultType)
-          } else if (data.m_wFaultType === 208) {
+          } else if (data.m_wFaultType === 208 || data.m_wFaultType === 207 || data.m_wFaultType === 206) {
             data.m_wSubFaultType = this.greenLampSubtypeMap.get(data.m_wSubFaultType)
-          } else if (data.m_wFaultType === 211) {
+          } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
             data.m_wSubFaultType = this.lampPowerSubtypeMap.get(data.m_wSubFaultType)
           } else {
             data.m_wSubFaultType = ''
