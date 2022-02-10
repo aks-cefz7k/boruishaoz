@@ -143,42 +143,42 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.phase-part {
-  padding: 33px 30px;
-  box-sizing: border-box;
-}
-.current-phase {
-  display: flex; /*所有子元素block或inline都变成行内块元素的样式*/
-  align-items: center;
-  justify-content: flex-start;
-  width: 96%;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 16px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #333333;
-}
-.current-phasetable {
-  width: 96%;
-  height: 380px;
-  margin-top: 40px;
-}
-.color-block {
-  float: left;
-  width: 14px;
-  height: 14px;
-  background-color: #459ffc;
-}
-.curr-phase {
-  margin-left: 5px;
-}
-.curr-ring {
-  margin-left: 20px;
-}
-.phase-order {
-  margin-left: 20px;
-}
+// .phase-part {
+//   padding: 33px 30px;
+//   box-sizing: border-box;
+// }
+// .current-phase {
+//   display: flex; /*所有子元素block或inline都变成行内块元素的样式*/
+//   align-items: center;
+//   justify-content: flex-start;
+//   width: 96%;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 16px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: #333333;
+// }
+// .current-phasetable {
+//   width: 96%;
+//   height: 380px;
+//   margin-top: 40px;
+// }
+// .color-block {
+//   float: left;
+//   width: 14px;
+//   height: 14px;
+//   background-color: #459ffc;
+// }
+// .curr-phase {
+//   margin-left: 5px;
+// }
+// .curr-ring {
+//   margin-left: 20px;
+// }
+// .phase-order {
+//   margin-left: 20px;
+// }
 </style>
 <style rel="stylesheet/scss" lang="scss">
 .current-phasetable .yellow {

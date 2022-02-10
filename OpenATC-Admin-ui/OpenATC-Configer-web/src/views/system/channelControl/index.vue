@@ -294,18 +294,18 @@ export default {
   border: solid 1px #dcdcdc;
   float: left;
   margin-right: 20px;
-  .name {
-    height: 40px;
-    background: #f8fbff;
-    line-height: 40px;
-    text-align: center;
-    font-family: SourceHanSansCN-Regular;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    letter-spacing: 0px;
-    color: #333333;
-  }
+  // .name {
+  //   height: 40px;
+  //   background: #f8fbff;
+  //   line-height: 40px;
+  //   text-align: center;
+  //   font-family: SourceHanSansCN-Regular;
+  //   font-size: 14px;
+  //   font-weight: normal;
+  //   font-stretch: normal;
+  //   letter-spacing: 0px;
+  //   color: #333333;
+  // }
   .content {
     height: calc(100% - 42px);
     padding: 0 10px;
@@ -357,12 +357,12 @@ export default {
     }
   }
 }
-.list {
-  margin-top: 30px;
-  .title {
-    margin-bottom: 10px;
-  }
-}
+// .list {
+//   margin-top: 30px;
+//   .title {
+//     margin-bottom: 10px;
+//   }
+// }
  /* 显示横向滚动条 */
  .list .el-table--scrollable-x .el-table__body-wrapper {
    padding: 0 0 5px 0;

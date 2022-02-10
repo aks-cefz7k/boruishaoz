@@ -187,46 +187,46 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.device-info {
-  margin-top: 10px;
-  height: 18px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #666666;
-}
-.device-message {
-  margin-top: 15px;
-  height: 100px;
-  background-color: rgba(236, 245, 255, 0.3);
-//   background-color: #ecf5ff;
-//   opacity: 0.3;
-}
-.device-content {
-  // position: relative;
-  margin-top: 10px;
-  left: 20px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #303133;
-}
-.device-value {
-  position: relative;
-}
-.device-header {
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #303133;
-}
+// .device-info {
+//   margin-top: 10px;
+//   height: 18px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 18px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #666666;
+// }
+// .device-message {
+//   margin-top: 15px;
+//   height: 100px;
+//   background-color: rgba(236, 245, 255, 0.3);
+// //   background-color: #ecf5ff;
+// //   opacity: 0.3;
+// }
+// .device-content {
+//   // position: relative;
+//   margin-top: 10px;
+//   left: 20px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
+// .device-value {
+//   position: relative;
+// }
+// .device-header {
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
 </style>

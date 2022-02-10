@@ -491,44 +491,44 @@ export default {
 .app-container {
   min-width: 1730px;
 }
-.signal-version-name {
-  margin-top: 20px;
-  margin-left: 30px;
-  height: 18px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #666666;
-}
-.signal-version-value {
-  margin-top: 10px;
-  margin-left: 30px;
-  background-color: rgba(236, 245, 255, 0.3);
-}
-.signal-version-bottom {
-  margin-top: 10px;
-  margin-left: 30px;
-}
-.software {
-  position: relative;
-  left: 20px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #303133;
-}
-.remote-select {
-  float: left;
-  margin-left: 10px;
-  margin-top: 20px;
-}
-.currsystemtime {
-  width: 100%;
-}
+// .signal-version-name {
+//   margin-top: 20px;
+//   margin-left: 30px;
+//   height: 18px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 18px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #666666;
+// }
+// .signal-version-value {
+//   margin-top: 10px;
+//   margin-left: 30px;
+//   background-color: rgba(236, 245, 255, 0.3);
+// }
+// .signal-version-bottom {
+//   margin-top: 10px;
+//   margin-left: 30px;
+// }
+// .software {
+//   position: relative;
+//   left: 20px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
+// .remote-select {
+//   float: left;
+//   margin-left: 10px;
+//   margin-top: 20px;
+// }
+// .currsystemtime {
+//   width: 100%;
+// }
 </style>
