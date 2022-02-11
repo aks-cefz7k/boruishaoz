@@ -297,6 +297,7 @@ const zh = {
     'detector': {
       'desc': '描述',
       'type': '类型',
+      'typeOptionundefined': '',
       'typeOption': 'typeOption',
       'typeOption0': '线圈',
       'typeOption1': '智慧路口终端',

@@ -299,6 +299,7 @@ const en = {
     'detector': {
       'desc': 'Description',
       'type': 'Type',
+      'typeOptionundefined': '',
       'typeOption': 'typeOption',
       'typeOption0': 'Coil',
       'typeOption1': 'Smart junction terminal',
