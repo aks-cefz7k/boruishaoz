@@ -91,6 +91,7 @@
                       <el-option :label="$t('edge.overview.step')" value="4"></el-option>
                       <el-option :label="$t('edge.overview.fixedperiod')" value="5"></el-option>
                       <el-option :label="$t('edge.overview.inductioncontrol')" value="6"></el-option>
+                      <el-option :label="$t('edge.overview.selfadaption')" value="9"></el-option>
                       <el-option :label="$t('edge.overview.nocablecoordination')" value="10"></el-option>
                       <el-option :label="$t('edge.overview.phasewalk')" value="12"></el-option>
                       <el-option :label="$t('edge.overview.websteroptimization')" value="14"></el-option>
@@ -130,8 +131,8 @@
       </div>
       <div class="tuxing-right">
         <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
-        <div class="cross-module" style="height: 160px;">
-          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div>
+        <div class="cross-module" style="height: 130px;">
+          <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
           <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
             <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
             <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
@@ -285,6 +286,10 @@ export default {
         id: 6,
         iconClass: 'ganyingkongzhi',
         iconName: '感应控制'
+      }, {
+        id: 9,
+        iconClass: 'zishiying',
+        iconName: '自适应控制'
       }, {
         id: 10,
         iconClass: 'wuxianlan',
