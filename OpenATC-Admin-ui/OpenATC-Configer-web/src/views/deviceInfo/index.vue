@@ -12,11 +12,22 @@
 <template>
   <div class="app-container">
         <div class="device-info">{{$t('edge.deviceinfo.deviceinfo')}}</div>
-        <div class="device-message" style="height: 130px;">
+        <div class="device-message" style="height: 170px;">
             <div style="margin-left: 10px;">
               <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.addresscode')}}</div><div class="device-value" :style="$t('edge.deviceinfo.deviceinfostyle')"><el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small"></el-input></div></div>
                 <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.areaid')}}</div><div class="device-value" :style="$t('edge.deviceinfo.deviceinfostyle')"><el-input v-model.number="customInfo.areaid" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" oninput="this.value=this.value.replace(/[^\.\d]/g,'')"></el-input></div></div>
                 <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.crossid')}}</div><div class="device-value" :style="$t('edge.deviceinfo.deviceinfostyle')"><el-input v-model.number="customInfo.intersectionid" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" oninput="this.value=this.value.replace(/[^\.\d]/g,'')"></el-input></div></div>
+                <div class="device-content">
+                  <div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.selflearning')}}</div>
+                  <div class="device-value" :style="$t('edge.deviceinfo.deviceselflearningstyle')">
+                    <el-switch
+                      v-model="customInfo.selflearning"
+                      active-color="#409EFF"
+                      :active-value="1"
+                      :inactive-value="0">
+                    </el-switch>
+                  </div>
+                </div>
             </div>
         </div>
 

@@ -157,6 +157,12 @@
           <span>{{scope.row.outfilter}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.detector.saturationflow')" min-width="150">
+        <template slot-scope="scope">
+          <el-input-number size="small" controls-position="right" :min="0" :max="10" :step="1" v-model="scope.row.saturationflow"  @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.saturationflow}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.detector.operation')">
         <template slot-scope="scope">
           <el-button type="text" @click="handleClone(scope.$index,scope.row)">{{$t('edge.common.clone')}}</el-button>
@@ -406,7 +412,8 @@ export default {
         inthresh: 50,
         outthresh: 20,
         infilter: 3,
-        outfilter: 3
+        outfilter: 3,
+        saturationflow: 0
       }
       this.globalParamModel.addParamsByType('detectorList', detectorInitData)
       // this.id++

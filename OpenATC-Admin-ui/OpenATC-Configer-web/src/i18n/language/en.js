@@ -319,6 +319,7 @@ const en = {
       'outthresh': 'Outthresh',
       'infilter': 'Infilter',
       'outfilter': 'Outfilter ',
+      'saturationflow': 'SaturationFlow',
       'operation': 'Operation',
       'deletetip': 'Delete This Detector?',
       'deleteAlltip': 'Delete All Detector?',
@@ -370,6 +371,7 @@ const en = {
       'addresscode': 'Adress Code:',
       'areaid': 'Region ID:',
       'crossid': 'Cross ID:',
+      'selflearning': 'Selflearning:',
       'deviceparam': 'Device Parameters:',
       'startyellowflashtime': 'Start Yellow Flash Time:',
       'startredtime': 'Start Red Time:',
@@ -387,7 +389,8 @@ const en = {
       'ioboards': 'Number Of IO Boards:',
       'slavecascadeoffset': 'Slave Cascade Offset:',
       'deviceinfostyle': 'margin-left: 100px; top: 10px;',
-      'deviceparamstyle': 'margin-left: 170px; top: 10px;'
+      'deviceparamstyle': 'margin-left: 170px; top: 10px;',
+      'deviceselflearningstyle': 'margin-left: 100px; top: 15px;'
     },
     'controlpanel': {
       'controlmode': 'Control Mode',

@@ -317,6 +317,7 @@ const zh = {
       'outthresh': '离开阈值',
       'infilter': '进入滤波',
       'outfilter': '离开滤波 ',
+      'saturationflow': '饱和流量',
       'operation': '操作',
       'deletetip': '确认删除此检测器？',
       'deleteAlltip': '确认删除所有检测器？',
@@ -368,6 +369,7 @@ const zh = {
       'addresscode': '地址码: ',
       'areaid': '区域ID: ',
       'crossid': '路口ID: ',
+      'selflearning': '自学习:',
       'deviceparam': '设备参数: ',
       'startyellowflashtime': '启动黄闪时间(秒): ',
       'startredtime': '启动全红时间(秒): ',
@@ -385,7 +387,8 @@ const zh = {
       'ioboards': '主机IO板数量: ',
       'slavecascadeoffset': '从机级联偏移量: ',
       'deviceinfostyle': 'margin-left: 50px; top: 10px;',
-      'deviceparamstyle': 'margin-left: 50px; top: 10px;'
+      'deviceparamstyle': 'margin-left: 50px; top: 10px;',
+      'deviceselflearningstyle': 'margin-left: 50px; top: 15px;'
     },
     'controlpanel': {
       'controlmode': '控制模式',
