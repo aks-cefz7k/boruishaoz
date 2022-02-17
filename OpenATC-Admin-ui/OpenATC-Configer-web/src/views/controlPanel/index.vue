@@ -392,30 +392,30 @@ export default {
   float: left;
   max-height: 50px;
 }
-.control-model-name {
-  float: left;
-  margin-left: 30px;
-  margin-top: 30px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #606266;
-}
-.control-model-value {
-  float: left;
-  margin-left: 5px;
-  margin-top: 30px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #303133;
-}
+// .control-model-name {
+//   float: left;
+//   margin-left: 30px;
+//   margin-top: 30px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #606266;
+// }
+// .control-model-value {
+//   float: left;
+//   margin-left: 5px;
+//   margin-top: 30px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
 .control-model-input {
   float: left;
   margin-left: 5px;
@@ -562,18 +562,18 @@ export default {
   height: 8px;
   background-color: #409eff;
 }
-.manual-tables-name {
-  float: left;
-  margin-left: 10px;
-  margin-top: 22px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 20px;
-  letter-spacing: 0px;
-  color: #303133;
-}
+// .manual-tables-name {
+//   float: left;
+//   margin-left: 10px;
+//   margin-top: 22px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 18px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 20px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
 .manual-tables-edit {
   float: left;
   margin-top: 25px;
@@ -662,23 +662,23 @@ export default {
 //  }
 </style>
 <style rel="stylesheet/scss" lang="scss">
-.control-model .el-input__inner {
-  -webkit-appearance: none;
-  background-color: #fff;
-  background-image: none;
-  border-radius: 4px;
-  border: 1px solid #dcdfe6;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  color: #606266;
-  display: inline-block;
-  font-size: inherit;
-  height: 34px;
-  line-height: 40px;
-  outline: 0;
-  padding: 0 15px;
-  -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-  transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-  width: 90px;
-}
+// .control-model .el-input__inner {
+//   -webkit-appearance: none;
+//   background-color: #fff;
+//   background-image: none;
+//   border-radius: 4px;
+//   border: 1px solid #dcdfe6;
+//   -webkit-box-sizing: border-box;
+//   box-sizing: border-box;
+//   color: #606266;
+//   display: inline-block;
+//   font-size: inherit;
+//   height: 34px;
+//   line-height: 40px;
+//   outline: 0;
+//   padding: 0 15px;
+//   -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//   transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//   width: 90px;
+// }
 </style>

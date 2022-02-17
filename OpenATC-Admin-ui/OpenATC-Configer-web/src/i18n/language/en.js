@@ -132,6 +132,7 @@ const en = {
       'nocablecoordination': 'Nocable Control',
       'phasewalk': 'Pedestrian Crossing Control',
       'websteroptimization': 'Webster Single Point Optimization',
+      'selfadaption': 'Self-Adaption',
       'custom': 'Custom',
       'controlmodevalue': 'Control Value',
       'patternstate': 'Pattern State',
@@ -169,6 +170,7 @@ const en = {
       'modelList4': 'Step Control',
       'modelList5': 'Fixed_Cycle Control',
       'modelList6': 'Free Control',
+      'modelList9': 'Self-Adaption',
       'modelList10': 'Nocable Control',
       'modelList12': 'phasewalk',
       'tips': 'Tips',
@@ -299,6 +301,7 @@ const en = {
     'detector': {
       'desc': 'Description',
       'type': 'Type',
+      'typeOptionundefined': '',
       'typeOption': 'typeOption',
       'typeOption0': 'Coil',
       'typeOption1': 'Smart junction terminal',
@@ -316,6 +319,7 @@ const en = {
       'outthresh': 'Outthresh',
       'infilter': 'Infilter',
       'outfilter': 'Outfilter ',
+      'saturationflow': 'SaturationFlow',
       'operation': 'Operation',
       'deletetip': 'Delete This Detector?',
       'deleteAlltip': 'Delete All Detector?',
@@ -367,6 +371,7 @@ const en = {
       'addresscode': 'Adress Code:',
       'areaid': 'Region ID:',
       'crossid': 'Cross ID:',
+      'selflearning': 'Selflearning:',
       'deviceparam': 'Device Parameters:',
       'startyellowflashtime': 'Start Yellow Flash Time:',
       'startredtime': 'Start Red Time:',
@@ -384,7 +389,8 @@ const en = {
       'ioboards': 'Number Of IO Boards:',
       'slavecascadeoffset': 'Slave Cascade Offset:',
       'deviceinfostyle': 'margin-left: 100px; top: 10px;',
-      'deviceparamstyle': 'margin-left: 170px; top: 10px;'
+      'deviceparamstyle': 'margin-left: 170px; top: 10px;',
+      'deviceselflearningstyle': 'margin-left: 100px; top: 15px;'
     },
     'controlpanel': {
       'controlmode': 'Control Mode',

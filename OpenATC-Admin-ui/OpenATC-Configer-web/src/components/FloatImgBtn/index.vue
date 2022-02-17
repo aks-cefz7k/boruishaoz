@@ -132,27 +132,27 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .ys-float-btn {
-    background:#20a0ff;
-    box-shadow:0 2px 10px 0 rgba(0,0,0,0.1);
-    border-radius:50%;
-    color: #666666;
-    z-index: 20;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    bottom: 20vw;
-    img{
-      width: 50%;
-      height: 50%;
-      object-fit: contain;
-      margin-bottom: 3px;
-    }
-    p{
-      font-size:7px;
-    }
-  }
+  // .ys-float-btn {
+  //   background:#20a0ff;
+  //   box-shadow:0 2px 10px 0 rgba(0,0,0,0.1);
+  //   border-radius:50%;
+  //   color: #666666;
+  //   z-index: 20;
+  //   transition: all 0.3s;
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   align-items: center;
+  //   position: fixed;
+  //   bottom: 20vw;
+  //   img{
+  //     width: 50%;
+  //     height: 50%;
+  //     object-fit: contain;
+  //     margin-bottom: 3px;
+  //   }
+  //   p{
+  //     font-size:7px;
+  //   }
+  // }
 </style>

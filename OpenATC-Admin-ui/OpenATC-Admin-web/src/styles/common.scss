@@ -11,6 +11,7 @@
  **/
  @charset "UTF-8";
  @import './theme/element-variables.scss';
+ @import '../../node_modules/edgebase-front/src/styles/common.scss';
  // 主页样式
  .homeLayout {
     padding: 19px;

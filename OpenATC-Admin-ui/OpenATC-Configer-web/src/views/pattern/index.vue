@@ -483,22 +483,22 @@ export default {
       }
     }
   }
-  .pattern-figure {
-    position: fixed;
-    width: 88%;
-    bottom: 30px;
-  }
-  .pattern-status {
-    display: inline;
-    font-family: SourceHanSansCN-Regular;
-    font-size: 20px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
-    color: #303133;
-  }
-  .pattern-explain {
-    float: right;
-  }
+  // .pattern-figure {
+  //   position: fixed;
+  //   width: 88%;
+  //   bottom: 30px;
+  // }
+  // .pattern-status {
+  //   display: inline;
+  //   font-family: SourceHanSansCN-Regular;
+  //   font-size: 20px;
+  //   font-weight: normal;
+  //   font-stretch: normal;
+  //   line-height: 22px;
+  //   letter-spacing: 0px;
+  //   color: #303133;
+  // }
+  // .pattern-explain {
+  //   float: right;
+  // }
 </style>

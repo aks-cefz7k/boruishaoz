@@ -132,6 +132,7 @@ const zh = {
       'nocablecoordination': '无电缆协调',
       'phasewalk': '行人过街',
       'websteroptimization': 'Webster单点优化',
+      'selfadaption': '自适应控制',
       'custom': '自定义',
       'controlmodevalue': '控制方式数值',
       'patternstate': '方案状态',
@@ -169,6 +170,7 @@ const zh = {
       'modelList4': '步进',
       'modelList5': '定周期',
       'modelList6': '感应控制',
+      'modelList9': '自适应控制',
       'modelList10': '无电缆协调',
       'modelList12': '行人过街',
       'tips': '提示',
@@ -297,6 +299,7 @@ const zh = {
     'detector': {
       'desc': '描述',
       'type': '类型',
+      'typeOptionundefined': '',
       'typeOption': 'typeOption',
       'typeOption0': '线圈',
       'typeOption1': '智慧路口终端',
@@ -314,6 +317,7 @@ const zh = {
       'outthresh': '离开阈值',
       'infilter': '进入滤波',
       'outfilter': '离开滤波 ',
+      'saturationflow': '饱和流量',
       'operation': '操作',
       'deletetip': '确认删除此检测器？',
       'deleteAlltip': '确认删除所有检测器？',
@@ -365,6 +369,7 @@ const zh = {
       'addresscode': '地址码: ',
       'areaid': '区域ID: ',
       'crossid': '路口ID: ',
+      'selflearning': '自学习:',
       'deviceparam': '设备参数: ',
       'startyellowflashtime': '启动黄闪时间(秒): ',
       'startredtime': '启动全红时间(秒): ',
@@ -382,7 +387,8 @@ const zh = {
       'ioboards': '主机IO板数量: ',
       'slavecascadeoffset': '从机级联偏移量: ',
       'deviceinfostyle': 'margin-left: 50px; top: 10px;',
-      'deviceparamstyle': 'margin-left: 50px; top: 10px;'
+      'deviceparamstyle': 'margin-left: 50px; top: 10px;',
+      'deviceselflearningstyle': 'margin-left: 50px; top: 15px;'
     },
     'controlpanel': {
       'controlmode': '控制模式',

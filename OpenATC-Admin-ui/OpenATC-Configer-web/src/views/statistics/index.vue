@@ -243,49 +243,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.statistics {
-    height: 100%;
-}
-.one {
-    height: 6%;
-}
-.two {
-    height: 47%;
-}
-.flow-echarts {
-    height: 100%;
-}
-.three {
-    height: 47%;
-    text-align: center;
-}
-.statistics-table {
-    width: 96%;
-    margin-left: 2%;
-    border: solid 1px #e6e6e6;
-}
-.statistics-button {
-    float: right;
-    margin-right: 2%;
-}
-.statistics-input {
-  float: left;
-  // margin-left: 20px;
-}
-.statistics-bottom {
-  float: left;
-}
-.statistics-name {
-  float: left;
-  margin-top: 8px;
-  margin-left: 10px;
-  height: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #999999;
-}
+// .statistics {
+//     height: 100%;
+// }
+// .one {
+//     height: 6%;
+// }
+// .two {
+//     height: 47%;
+// }
+// .flow-echarts {
+//     height: 100%;
+// }
+// .three {
+//     height: 47%;
+//     text-align: center;
+// }
+// .statistics-table {
+//     width: 96%;
+//     margin-left: 2%;
+//     border: solid 1px #e6e6e6;
+// }
+// .statistics-button {
+//     float: right;
+//     margin-right: 2%;
+// }
+// .statistics-input {
+//   float: left;
+//   // margin-left: 20px;
+// }
+// .statistics-bottom {
+//   float: left;
+// }
+// .statistics-name {
+//   float: left;
+//   margin-top: 8px;
+//   margin-left: 10px;
+//   height: 14px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #999999;
+// }
 </style>
