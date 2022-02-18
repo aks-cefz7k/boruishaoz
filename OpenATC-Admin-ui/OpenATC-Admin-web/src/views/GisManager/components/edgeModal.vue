@@ -42,13 +42,18 @@ export default {
     }
   },
   methods: {
+    getHost () {
+      let href = window.location.href.split('//')[1].split('/')[0]
+      let host = href.split('//')[1].split('/')[0]
+      return host
+    },
     closeFormDialog () {
       // 弹窗关闭，将标识恢复默认值
       sessionStorage.setItem('toSingleEdge', '0')
       this.dialogVisible = false
     },
     openSingleEdge (dev) {
-      this.url = `http://localhost:9528/#/overviewNew/index?IP=${dev.jsonparam.ip}&port=${dev.jsonparam.port}&agentid=${dev.agentid}&protocol=${dev.protocol}&isfromatc=true`
+      this.url = `http://${this.getHost()}/#/overviewNew/index?IP=${dev.jsonparam.ip}&port=${dev.jsonparam.port}&agentid=${dev.agentid}&protocol=${dev.protocol}&isfromatc=true`
       this.dialogVisible = !this.dialogVisible
     },
     getClientHeight () {
