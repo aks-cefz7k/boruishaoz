@@ -383,6 +383,8 @@ export default {
       }, {
         value: 6
       }, {
+        value: 9
+      }, {
         value: 10
       }, {
         value: 12

@@ -267,6 +267,7 @@ const en = {
       'ControlOption4': 'Step Control',
       'ControlOption5': 'Fixed_Cycle Control',
       'ControlOption6': 'Free Control',
+      'ControlOption9': 'Self-Adaption',
       'ControlOption10': 'Nocable Control',
       'ControlOption12': 'Pedestrian Crossing Control'
     },
