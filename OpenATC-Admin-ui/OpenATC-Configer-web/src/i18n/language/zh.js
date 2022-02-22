@@ -265,6 +265,7 @@ const zh = {
       'ControlOption4': '步进',
       'ControlOption5': '定周期控制',
       'ControlOption6': '单点感应控制',
+      'ControlOption9': '自适应控制',
       'ControlOption10': '无电缆控制',
       'ControlOption12': '行人过街控制'
     },
