@@ -45,6 +45,9 @@ export default {
     getHost () {
       let href = window.location.href.split('//')[1].split('/')[0]
       let host = href.split('//')[1].split('/')[0]
+      if (host === 'dolphin-dev.kedacom.com') {
+        return 'dolphin-dev.kedacom.com/openatc'
+      }
       return host
     },
     closeFormDialog () {
