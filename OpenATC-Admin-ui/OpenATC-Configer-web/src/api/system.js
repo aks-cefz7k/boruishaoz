@@ -234,3 +234,14 @@ export const channelcheck = (param) => {
   data.data = param
   return api.Send({}, data)
 }
+
+// 获取通道电流电压状态
+export const channeltest = () => {
+  let api = new Authapi('channeltest')
+  var iframdevid = getIframdevid()
+  let data = {}
+  data.agentid = iframdevid
+  data.operation = 'get-request'
+  data.infotype = 'status/channeltest'
+  return api.Send({}, data)
+}

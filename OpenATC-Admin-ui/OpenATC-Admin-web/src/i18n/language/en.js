@@ -30,14 +30,25 @@ const en = {
       'tipsmodaltitle': 'Tips',
       'placeholder': 'Select',
       'operation': 'Operation',
-      'operationsuccess': 'Operation Success !'
+      'operationsuccess': 'Operation Success !',
+      'authtip': 'No access !'
     },
     'button': {
       'OK': 'OK',
       'Cancel': 'Cancel',
       'expandall': 'Expand All',
       'collapseall': 'Collapse All',
-      'search': 'Search'
+      'search': 'Search',
+      'location': 'Location'
+    },
+    'login': {
+      'username': 'user_name',
+      'password': 'Password',
+      'login': 'Login',
+      'usernamenotnull': 'The user name cannot be empty!',
+      'passnotnull': 'Password cannot be empty!',
+      'passerror': 'Password error!',
+      'usernamenotexist': 'User name does not exist!'
     },
     'main': {
       'homepage': 'Home',
@@ -113,7 +124,39 @@ const en = {
       'edituser': 'Edit User',
       'adduser': 'Add User',
       'deleteuser': 'Delete This User?',
-      'labelwidth': '25%'
+      'labelwidth': '25%',
+      'authorize': 'Authorize',
+      'authorizetitle': 'Authorize Token',
+      'authorizetime': 'Authorize Time：',
+      'generate': 'Generate',
+      'to': 'To',
+      'starttime': 'Start date',
+      'endtime': 'End date',
+      'Authorization': 'Authorization time cannot be empty!',
+      'enterpass': 'Please enter the confirmation password!',
+      'enterpassdiffpass': 'Confirm password is different from password!',
+      'correctphone': 'Please input the correct phone number!',
+      'correctemail': 'Please enter the correct email address！',
+      'lettersnumbersunderscores': 'The user name can only input letters, numbers or underscores!',
+      'enterusername': 'Please enter the user name!',
+      'enterpassword': 'Please input a password!',
+      'nameandpasswordnotempty': 'User name and password cannot be empty!',
+      'wrongphoneemail': 'Wrong phone number or email!',
+      'selectonerole': 'Please select at least one role!',
+      'pleaseenter': 'Please enter',
+      'newpassdiffoldpass': 'The new password cannot be the same as the old one!',
+      'nochanges': 'No changes!',
+      'superrolenotmodified': 'Super role cannot be modified！',
+      'editsucc': 'Edit successfully!',
+      'oldpass': 'Old password',
+      'confirmpass': 'Confirm new password',
+      'enputpassagain': 'Please enter the password again!',
+      'twopasswordsdiff': 'The two passwords are inconsistent!',
+      'enteroldpass': 'Please input the old password!',
+      'enternewepass': 'Please input the new password!',
+      'originalpassworderror': 'Original password error！',
+      'modificationsucc': 'Modification succeeded',
+      'ip': 'IP'
     },
     'greenwaveoptimize': {
       'addplan': 'Click the Add button to add the greenwave Optimize plan',
@@ -161,7 +204,33 @@ const en = {
       'upspeed': 'Up Speed(km/h)',
       'downspeed': 'Down Speed(km/h)',
       'up': 'Up',
-      'down': 'Down'
+      'down': 'Down',
+      'optstrategyoption1': 'Green wave optimization',
+      'directionOption1': 'Up',
+      'directionOption2': 'Down',
+      'directionOption3': 'All',
+      'duration': 'Duration：',
+      'speed': 'Speed：',
+      'vehicle': 'vehicle：',
+      'es': 'East-Straight',
+      'el': 'East-Left',
+      'er': 'East-Right',
+      'eb': 'East-Back',
+      'ws': 'West-Straight',
+      'wl': 'West-Left',
+      'wr': 'West-Right',
+      'wb': 'West-Back',
+      'ns': 'North-Straight',
+      'nl': 'North-Left',
+      'nr': 'North-Right',
+      'nb': 'North-Back',
+      'ss': 'South-Straight',
+      'sl': 'South-Left',
+      'sr': 'South-Right',
+      'sb': 'South-Back',
+      'notonline': ' do not online!',
+      'planissuedsucc': 'Plan issued successfully',
+      'time': 'Time（s）'
     },
     'record': {
       'user': 'Operator',
@@ -221,6 +290,9 @@ const en = {
       'phaselock': 'Phase Lock',
       'programIntervention': 'Program Intervention',
       'channelDetection': 'Channel Detection'
+    },
+    'gis': {
+      'chooseLocationInfo': 'Click the map to choose a location !'
     }
   }
 }

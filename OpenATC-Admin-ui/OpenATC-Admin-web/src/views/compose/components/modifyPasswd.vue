@@ -12,27 +12,27 @@
 <template>
   <div class="modify-passwd">
     <el-dialog
-      title="修改密码"
+      :title="$t('openatc.main.changepass')"
       :visible.sync="dialogFormVisible"
       width="600px"
       height="300px"
       @close='closeFormDialog'>
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="旧密码" prop="oldPass">
+        <el-form-item :label="$t('openatc.usermanager.oldpass')" prop="oldPass">
             <el-input type="password" v-model="ruleForm.oldPass" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="新密码" prop="pass">
+        <el-form-item :label="$t('openatc.usermanager.newpassword')" prop="pass">
             <el-input type="password" v-model="ruleForm.pass" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认新密码" prop="checkPass">
+        <el-form-item :label="$t('openatc.usermanager.confirmpass')" prop="checkPass">
             <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
         </el-form-item>
         </el-form>
       <div
         slot="footer"
         class="dialog-footer">
-          <el-button @click="resetForm('tempUser')">取消</el-button>
-          <el-button type="primary" @click="commit()">确定</el-button>
+          <el-button @click="resetForm('tempUser')">{{$t('openatc.button.Cancel')}}</el-button>
+          <el-button type="primary" @click="commit()">{{$t('openatc.button.OK')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -48,7 +48,7 @@ export default {
   data () {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'))
+        callback(new Error(this.$t('openatc.usermanager.enterpassword')))
       } else {
         if (this.ruleForm.checkPass !== '') {
           this.$refs.ruleForm.validateField('checkPass')
@@ -58,9 +58,9 @@ export default {
     }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'))
+        callback(new Error(this.$t('openatc.usermanager.enputpassagain')))
       } else if (value !== this.ruleForm.pass) {
-        callback(new Error('两次输入密码不一致!'))
+        callback(new Error(this.$t('openatc.usermanager.twopasswordsdiff')))
       } else {
         callback()
       }
@@ -104,19 +104,19 @@ export default {
     },
     commit () {
       if (this.ruleForm.oldPass === '') {
-        this.$message.error('请输入旧密码！')
+        this.$message.error(this.$t('openatc.usermanager.enteroldpass'))
         return
       }
       if (this.ruleForm.pass === '') {
-        this.$message.error('请输入新密码！')
+        this.$message.error(this.$t('openatc.usermanager.enternewepass'))
         return
       }
       if (this.ruleForm.pass === this.ruleForm.oldPass) {
-        this.$message.error('新密码不能与旧密码一致！')
+        this.$message.error(this.$t('openatc.usermanager.newpassdiffoldpass'))
         return
       }
       if (this.ruleForm.pass !== this.ruleForm.checkPass) {
-        this.$message.error('两次输入密码不一致！')
+        this.$message.error(this.$t('openatc.usermanager.twopasswordsdiff'))
         return
       }
       UpdateCurUsrPassWd(
@@ -126,13 +126,13 @@ export default {
       ).then(data => {
         if (data.data.success !== true) {
           if (data.data.code === '3006') {
-            this.$message.error('原密码错误!')
+            this.$message.error(this.$t('openatc.usermanager.originalpassworderror'))
             return
           }
           this.$message.error(data.data.message)
           return
         }
-        let msg = '修改成功'
+        let msg = this.$t('openatc.usermanager.modificationsucc')
         this.dialogFormVisible = false
         this.$message({
           message: msg,

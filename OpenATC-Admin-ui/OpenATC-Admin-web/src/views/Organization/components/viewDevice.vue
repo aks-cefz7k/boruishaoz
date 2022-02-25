@@ -284,6 +284,7 @@ export default {
 </script>
 
 <style lang="scss">
+ @import "../../../styles/theme/element-variables.scss";
 .tag-container {
   float: left;
   max-width: 70%;
@@ -299,7 +300,7 @@ export default {
   top: 134px;
   left: 20px;
   right: 20px;
-  border: solid 1px #e6e6e6;
+  border: solid 1px $--border-color-lighter;
   overflow: auto;
 }
 </style>

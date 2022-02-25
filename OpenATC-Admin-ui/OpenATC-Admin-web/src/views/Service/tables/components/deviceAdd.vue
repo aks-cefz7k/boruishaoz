@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="addDeviceDrawer">
+  <div class="serviceroute-addDeviceDrawer">
     <div class="devs-container">
       <div class="filter-container">
         <el-form>
@@ -51,13 +51,13 @@
           </el-table-column>
           <el-table-column
             prop="jsonparam.port"
-            label="$t('openatc.greenwaveoptimize.port')"
+            :label="$t('openatc.greenwaveoptimize.port')"
             align="center"
           >
           </el-table-column>
           <el-table-column
             prop="name"
-            label="$t('openatc.greenwaveoptimize.devicename')"
+            :label="$t('openatc.greenwaveoptimize.devicename')"
             align="center"
           >
           </el-table-column>
@@ -148,40 +148,40 @@ export default {
 </script>
 
 <style>
-.addDeviceDrawer .devs-table .el-table th > .cell {
+.serviceroute-addDeviceDrawer .devs-table .el-table th > .cell {
   padding-left: 14px;
   padding-right: 14px;
 }
 </style>
 
-<style scoped>
-.addDeviceDrawer {
-  height: 100%;
-  position: relative;
-}
-.addDeviceDrawer .btnGroup {
-  position: absolute;
-  bottom: 30px;
-  left: 0;
-  width: 100%;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-}
-.addDeviceDrawer .btnGroup .btn {
-  width: 50%;
-}
-.addDeviceDrawer .devs-container {
-  padding: 0 20px;
-  overflow: hidden;
-}
-.addDeviceDrawer .filter-container {
-  float: right;
-  width: 100%;
-}
-.addDeviceDrawer .devs-table {
-  border: solid 1px #e6e6e6;
-  overflow: auto;
-  max-height: 590px;
-}
+<style lang="scss" scoped>
+// .serviceroute-addDeviceDrawer {
+//   height: 100%;
+//   position: relative;
+// }
+// .serviceroute-addDeviceDrawer .btnGroup {
+//   position: absolute;
+//   bottom: 30px;
+//   left: 0;
+//   width: 100%;
+//   padding: 0 16px;
+//   display: flex;
+//   align-items: center;
+// }
+// .serviceroute-addDeviceDrawer .btnGroup .btn {
+//   width: 50%;
+// }
+// .serviceroute-addDeviceDrawer .devs-container {
+//   padding: 0 20px;
+//   overflow: hidden;
+// }
+// .serviceroute-addDeviceDrawer .filter-container {
+//   float: right;
+//   width: 100%;
+// }
+// .serviceroute-addDeviceDrawer .devs-table {
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+//   max-height: 590px;
+// }
 </style>

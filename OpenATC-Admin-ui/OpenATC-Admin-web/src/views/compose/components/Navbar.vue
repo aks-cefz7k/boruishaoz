@@ -10,8 +10,8 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div v-if="isShow">
-  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" active-text-color='#20A0FF' @select="handleSelect">
+  <div v-if="isShow" class="openatc-navbar">
+  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" active-text-color='$--color-primary' @select="handleSelect">
     <div class="openatc-main">OpenATC-Admin</div>
     <div class="openatc-line"></div>
     <div class="openatc-menu">
@@ -110,7 +110,7 @@ export default {
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,
-      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew'],
+      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew', '/overviewNew/index'],
       language: 'Language'
     }
   },
@@ -222,15 +222,18 @@ export default {
     switchToChinese () {
       this.$i18n.locale = 'zh'
       setLanguage(this.$i18n.locale)
+      location.reload()
     },
     switchToEngLish () {
       this.$i18n.locale = 'en'
       setLanguage(this.$i18n.locale)
+      location.reload()
     }
   }
 }
 </script>
 <style lang="scss">
+ @import "../../../styles/theme/element-variables.scss";
 .el-menu-demo {
   padding: 0 18px;
 }
@@ -243,7 +246,7 @@ export default {
   font-weight: bold;
   font-stretch: normal;
   letter-spacing: 0px;
-  color: #333333;
+  color: $--color-text-primary;
 }
 .openatc-line {
   float:left;
@@ -251,7 +254,7 @@ export default {
   margin-top: 19px;
   width: 1px;
   height: 14px;
-  background-color: #b9b9b9;
+  background-color: $--color-text-placeholder;
 }
 .openatc-menu {
   float:left;
@@ -261,7 +264,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #409eff;
+  color: $--color-primary;
 }
 .openatc-operate {
   cursor: pointer;
@@ -276,23 +279,23 @@ export default {
 .el-dropdown-menu {
   width: 228px;
   .el-dropdown-menu__item {
-    color: #666;
+    color: $--color-text-regular;
   }
   .label {
     font-size: 12px;
-    color: #999;
+    color: $--color-text-secondary;
     margin-bottom: 12px;
   }
   .content {
     font-size: 12px;
-    color: #333;
+    color: $--color-text-primary;
   }
   .user {
     font-family: MicrosoftYaHei;
     padding: 0 24px;
     .name {
       font-size: 20px;
-      color: #409eff;
+      color: $--color-primary;
       margin-bottom: 14px;
       margin-top: 13px;
     }
@@ -320,7 +323,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #409eff;
+  color: $--color-primary;
 }
 .organization {
   margin-top: 8px;
@@ -338,7 +341,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #999999;
+  color: $--color-text-secondary;
 }
 .laber-value {
   margin-top: 5px;
@@ -348,7 +351,7 @@ export default {
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #333333;
+  color: $--color-text-primary;
 }
 .switch-language {
     cursor: pointer;

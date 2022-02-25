@@ -304,7 +304,9 @@ export default {
           type: 'warning'
         }).then(() => {
         let phaseList = this.globalParamModel.getParamsByType('phaseList')
+        let patternList = this.globalParamModel.getParamsByType('patternList')
         this.globalParamModel.deleteParamsByType('phaseList', 0, phaseList.length)
+        this.globalParamModel.deleteParamsByType('patternList', 0, patternList.length)
         this.id = 1
         this.$message({
           type: 'success',

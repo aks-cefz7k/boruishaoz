@@ -151,7 +151,7 @@ export default {
         if (!res.data.success) {
           if (res.data.code === '4003') {
             let agentid = res.data.data.agentid
-            this.$message.error('设备' + agentid + '不在线！')
+            this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
           this.$message.error(res.data.message)
@@ -185,7 +185,7 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        this.$alert('方案下发成功!', { type: 'success' })
+        this.$alert(this.$t('openatc.greenwaveoptimize.planissuedsucc'), { type: 'success' })
       })
     },
     handleCreate () {
@@ -249,7 +249,7 @@ export default {
         if (!res.data.success) {
           if (res.data.code === '4003') {
             let agentid = res.data.data.agentid
-            this.$message.error('设备' + agentid + '不在线！')
+            this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
           this.$message.error(res.data.message)
@@ -266,7 +266,7 @@ export default {
         if (!res.data.success) {
           if (res.data.code === '4003') {
             let agentid = res.data.data.agentid
-            this.$message.error('设备' + agentid + '不在线！')
+            this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
           this.$message.error(res.data.message)
@@ -300,7 +300,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+ @import "../../styles/theme/element-variables.scss";
 .planContent {
   position: relative;
 }
@@ -333,15 +334,16 @@ export default {
     transition: .1s;
     font-size: 14px;
     border-radius: 4px;
-    color: #fff;
-    background-color: #409EFF;
-    border-color: #409EFF;
+    color: $--color-white;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
     cursor: pointer;
 }
 .btnGroup button:hover {
-    color: #fff;
-    background-color: #66b1ff;
-    border-color: #66b1ff;
+    color: $--color-white;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
+    opacity: 0.8;
 }
 .btnGroup > button {
   float: left;
@@ -366,7 +368,7 @@ export default {
     float: left;
 }
 .tipContent div i {
-  color: #409eff;
+  color: $--color-primary;
   font-size: 30px;
 }
 .tipContent .text {
@@ -376,7 +378,85 @@ export default {
     font-stretch: normal;
     line-height: 14px;
     letter-spacing: 1px;
-    color: #409eff;
+    color: $--color-primary;
+    margin-left: 7px;
+    line-height: 42px;
+}.planContent {
+  position: relative;
+}
+.btnGroup {
+  overflow: hidden;
+  float: right;
+  width: 150px;
+  /* width: 230px; */
+}
+/* 蒙层样式 */
+.mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.5;
+  z-index: 98;
+}
+/* 原生按钮样式修改 */
+.btnGroup button {
+    width: 70px;
+    height: 40px;
+    padding: 0;
+    line-height: 40px;
+    border: 1px solid #dcdfe6;
+    white-space: nowrap;
+    outline: 0;
+    transition: .1s;
+    font-size: 14px;
+    border-radius: 4px;
+    color: $--color-white;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
+    cursor: pointer;
+}
+// .btnGroup button:hover {
+//     color: $--color-white;
+//     background-color: #66b1ff;
+//     border-color: #66b1ff;
+// }
+.btnGroup > button {
+  float: left;
+  position: relative;
+  z-index: 10;
+}
+.btnGroup button {
+  height: 32px;
+  line-height: 32px;
+}
+.btnGroup .editbtn{
+    float: left;
+    position: relative;
+    /* z-index: 98; */
+    margin-left: 10px;
+}
+.btnGroup .editbtn button {
+  font-weight: 500;
+}
+/* 提示框相关 */
+.tipContent > div{
+    float: left;
+}
+.tipContent div i {
+  color: $--color-primary;
+  font-size: 30px;
+}
+.tipContent .text {
+    font-family: SourceHanSansCN-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 14px;
+    letter-spacing: 1px;
+    color: $--color-primary;
     margin-left: 7px;
     line-height: 42px;
 }

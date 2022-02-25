@@ -212,12 +212,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+ @import "../../styles/theme/element-variables.scss";
 .atc-table {
   position: absolute;
   top: 150px;
   left: 20px;
   right: 20px;
-  border: solid 1px #e6e6e6;
+  border: solid 1px $--border-color-lighter;
   overflow: auto;
 }
 .filter-container {

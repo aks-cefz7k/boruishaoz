@@ -79,7 +79,7 @@
       </div>
       <div class="container-right">
         <div class="control-right">
-          <el-form ref="form" :model="form" label-width="80px">
+          <el-form ref="form" :model="form" label-width="110px">
             <el-form-item :label="$t('edge.control.mode_style')" v-if="form.mode != ''">
                 <div>{{form.mode}}</div>
               </el-form-item>
@@ -91,9 +91,15 @@
                       <el-option :label="$t('edge.overview.step')" value="4"></el-option>
                       <el-option :label="$t('edge.overview.fixedperiod')" value="5"></el-option>
                       <el-option :label="$t('edge.overview.inductioncontrol')" value="6"></el-option>
+                      <el-option :label="$t('edge.overview.selfadaption')" value="9"></el-option>
                       <el-option :label="$t('edge.overview.nocablecoordination')" value="10"></el-option>
                       <el-option :label="$t('edge.overview.phasewalk')" value="12"></el-option>
+                      <el-option :label="$t('edge.overview.websteroptimization')" value="14"></el-option>
+                      <el-option :label="$t('edge.overview.custom')" value="999"></el-option>
                   </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('edge.overview.controlmodevalue')">
+                  <el-input v-model="controlNum" style="width: 70%" :disabled="form.control!=='999'"></el-input>
               </el-form-item>
               <el-form-item :label="$t('edge.control.pattern')">
                   <el-input v-model="form.terminal" style="width: 70%"></el-input>
@@ -119,13 +125,14 @@
           <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
           <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
           <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
+          <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
           <PatternStatus style="margin-top: 30px;" :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus>
         </div>
       </div>
       <div class="tuxing-right">
         <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
-        <div class="cross-module" style="height: 160px;">
-          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div>
+        <div class="cross-module" style="height: 130px;">
+          <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
           <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
             <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
             <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
@@ -185,6 +192,7 @@ import { setIframdevid } from '@/utils/auth'
 import FloatImgBtn from '@/components/FloatImgBtn'
 import CrossDiagram from './crossDirection/crossDiagram'
 import PatternStatus from '@/components/PatternStatus'
+import StageStatus from '@/components/StageStatus'
 import xdrdirselector from '@/components/XRDDirSelector'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
@@ -194,6 +202,7 @@ export default {
     FloatImgBtn,
     CrossDiagram,
     PatternStatus,
+    StageStatus,
     xdrdirselector,
     CurVolume,
     CurPhase
@@ -207,6 +216,7 @@ export default {
         mode: '',
         value: ''
       },
+      controlNum: '',
       spanArr: [],
       list: [{
         iconClass: 'model',
@@ -238,9 +248,12 @@ export default {
       registerMessageTimer: null, // 延时器
       volumeControlTimer: null, // 流量定时器
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
-      ParamsMode: new Map([[0, '自主控制'], [1, '平台控制'], [2, '配置工具控制'], [3, '手动面板控制']]),
+      ParamsMode: new Map([[0, '系统控制'], [1, '平台控制'], [2, '配置工具控制'], [3, '手动面板控制']]),
+      ParamsModeEn: new Map([[0, 'System Control'], [1, 'Platform Control'], [2, 'Configuration Control'], [3, 'Manual Panel Control']]),
       ParamsControl: new Map([[0, '自主控制'], [1, '黄闪'], [2, '全红'], [3, '关灯'], [4, '步进'], [5, '定周期控制'], [6, '单点感应控制'], [7, '协调感应控制'], [8, '方案选择控制'], [9, '自适应控制'], [10, '无电缆控制'], [11, '有电缆控制'], [12, '行人过街控制']]),
+      ParamsControlEn: new Map([[0, 'Auto Control'], [1, 'Yellow Flash Control'], [2, 'Red Control'], [3, 'Dark Control'], [4, 'Step'], [5, 'Fixed_Cycle Control'], [6, 'Free Control'], [7, 'Coordinated Induction Control'], [8, 'Pattern Selection Control'], [9, 'Adaptive Control'], [10, '无电缆控制'], [11, 'Cable Control'], [12, 'Pedestrian Crossing Control']]),
       phaseType: new Map([[1, '红'], [2, '黄'], [3, '绿']]), // phaseType表示红，黄，绿
+      phaseTypeEn: new Map([[1, 'Red'], [2, 'Yellow'], [3, 'Green']]), // phaseType表示红，黄，绿
       ip: '--',
       port: '--',
       protocol: '--',
@@ -273,6 +286,10 @@ export default {
         id: 6,
         iconClass: 'ganyingkongzhi',
         iconName: '感应控制'
+      }, {
+        id: 9,
+        iconClass: 'zishiying',
+        iconName: '自适应控制'
       }, {
         id: 10,
         iconClass: 'wuxianlan',
@@ -386,7 +403,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error('通讯异常！')
+          this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
           return
         }
         if (data.data.data.data) {
@@ -423,7 +440,7 @@ export default {
             this.reSend()
             return
           }
-          this.$message.error('通讯异常！')
+          this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
           this.reSend()
           return
         }
@@ -527,10 +544,14 @@ export default {
       }
     },
     onSubmit () {
+      if (this.form.control === '999' && this.controlNum === '') {
+        this.$message.error(this.$t('edge.overview.controlnumerrormess'))
+        return
+      }
       this.lockScreen()
       // let control = { ...this.controlData }
       let control = {}
-      control.control = Number(this.form.control)
+      control.control = Number(this.form.control === '999' ? this.controlNum : this.form.control)
       // control.pattern = Number(this.form.pattern)
       control.terminal = Number(this.form.terminal)
       control.value = Number(this.form.value)
@@ -558,9 +579,22 @@ export default {
         }
         this.$message.success(this.$t('edge.common.querysucess'))
         let patternData = data.data.data.data
-        this.form.control = String(patternData.control)
+        let patternList = [0, 1, 2, 4, 5, 6, 10, 12, 14]
+        if (patternList.includes(patternData.control)) {
+          this.form.control = String(patternData.control)
+        } else {
+          this.form.control = '999'
+          this.controlNum = String(patternData.control)
+        }
+        // this.form.control = String(patternData.control)
         this.form.terminal = String(patternData.terminal)
-        this.form.mode = this.ParamsMode.get(patternData.mode)
+        if (this.$i18n.locale === 'en') {
+          this.form.mode = this.ParamsModeEn.get(patternData.mode)
+        } else if (this.$i18n.locale === 'zh') {
+          this.form.mode = this.ParamsMode.get(patternData.mode)
+        }
+        // this.form.mode = this.ParamsMode.get(patternData.mode)
+        // this.form.mode = this.ParamsModeEn.get(patternData.mode)
         this.form.value = patternData.value
       }).catch(error => {
         this.unlockScreen()
@@ -571,22 +605,44 @@ export default {
     handleGetData (data) {
       let that = this
       if (data.name === '') {
-        data.name = '方案' + data.patternid
+        if (that.$i18n.locale === 'en') {
+          data.name = 'Pattern' + data.patternid
+        } else if (that.$i18n.locale === 'zh') {
+          data.name = '方案' + data.patternid
+        }
       }
       Object.keys(data).forEach(function (key) {
-        if (key === 'mode') {
-          if (data[key] > 0 && data[key] < 6) {
-            data[key] = that.ParamsMode.get(data[key])
-          } else {
-            data[key] = that.ParamsMode.get(0)
+        if (that.$i18n.locale === 'en') {
+          if (key === 'mode') {
+            if (data[key] > 0 && data[key] < 6) {
+              data[key] = that.ParamsModeEn.get(data[key])
+            } else {
+              data[key] = that.ParamsModeEn.get(0)
+            }
           }
-        }
-        if (key === 'control') {
-          data[key] = that.ParamsControl.get(data[key])
-        }
-        if (key === 'phase') {
-          for (let val of data[key]) {
-            val.type = that.phaseType.get(val.type)
+          if (key === 'control') {
+            data[key] = that.ParamsControlEn.get(data[key])
+          }
+          if (key === 'phase') {
+            for (let val of data[key]) {
+              val.type = that.phaseTypeEn.get(val.type)
+            }
+          }
+        } else if (that.$i18n.locale === 'zh') {
+          if (key === 'mode') {
+            if (data[key] > 0 && data[key] < 6) {
+              data[key] = that.ParamsMode.get(data[key])
+            } else {
+              data[key] = that.ParamsMode.get(0)
+            }
+          }
+          if (key === 'control') {
+            data[key] = that.ParamsControl.get(data[key])
+          }
+          if (key === 'phase') {
+            for (let val of data[key]) {
+              val.type = that.phaseType.get(val.type)
+            }
           }
         }
       })
@@ -718,9 +774,9 @@ export default {
         }
         this.modelList.push(autonomyControl)
       } else {
-        this.$confirm('退出前需要先恢复自主控制, 是否退出?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$t('edge.overview.exitmanul'), this.$t('edge.overview.tips'), {
+          confirmButtonText: this.$t('edge.button.OK'),
+          cancelButtonText: this.$t('edge.button.Cancel'),
           type: 'warning'
         }).then(() => {
           this.$route.params.flag = false
@@ -735,7 +791,7 @@ export default {
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消'
+            message: this.$t('edge.overview.canceled')
           })
         })
       }
@@ -759,11 +815,11 @@ export default {
           return
         }
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
-          that.$alert('执行成功，下周期生效！', { type: 'success' })
+          that.$alert(this.$t('edge.overview.nextcycleeffic'), { type: 'success' })
           return
         }
         if (that.preselectModel === 4) {
-          that.$alert('执行成功，过渡切换后生效！', { type: 'success' })
+          that.$alert(this.$t('edge.overview.transitioneffic'), { type: 'success' })
           return
         }
         that.$alert(that.$t('edge.common.download'), { type: 'success' })
@@ -881,462 +937,462 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.container-main {
-  width: 100%;
-  height: 880px;
-  min-width: 1250px;
-  background: #ffffff;
-}
-.container-main .iconfont {
-    font-family: "iconfont" !important;
-    font-size: 34px;
-    text-align: center;
-    font-weight: 500;
-    color: #000000;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-.container-left {
-  float: left;
-  margin-top: 20px;
-  margin-left: 20px;
-  width: 76.8%;
-  height: 840px;
-  background-color: #ffffff;
-  border: solid 1px #e6e6e6;
-}
-.container-right {
-  float: left;
-  margin-top: 20px;
-  margin-left: 20px;
-  width: 20%;
-  height: 840px;
-  background-color: #ffffff;
-  border: solid 1px #e6e6e6;
-}
-.container-left-top {
-  width: 100%;
-  height: 420px;
-}
-.container-left-bottom {
-  width: 100%;
-  height: 400px;
-  background-color: #ffffff;
-}
-.curr-order {
-  float: left;
-  margin-left: 20px;
-  margin-top: 1px;
-}
-.control-right {
-  margin-top: 40px;
-  margin-left: 20px;
-}
-.agent-div {
-  float: left;
-  width: 28%;
-  height: 420px;
-  border-bottom: solid 0.5px #e6e6e6;
-}
-.other-div {
-  float: left;
-  width: 24%;
-  height: 210px;
-  border-left: solid 1px #e6e6e6;
-  border-bottom: solid 1px #e6e6e6;
-}
-.agent-icon {
-  position:relative;
-  float: left;
-  width: 50%;
-  height: 210px;
-}
-.agent-num {
-  float: left;
-  width: 50%;
-  height: 210px;
-}
-.lianji-success {
-  position:relative;
-  float: right;
-  right: 30px;
-  top: 25px;
-  text-align: center;
-  width: 81px;
-  height: 34px;
-  background-color: #409eff;
-  border-radius: 4px;
-  font-size: 14px;
-  padding:10px 0;
-  color: #ffffff;
-}
-.lianji-fail {
-  position:relative;
-  float: right;
-  right: 30px;
-  top: 25px;
-  text-align: center;
-  width: 81px;
-  height: 34px;
-  background-color: #909399;
-  border-radius: 4px;
-  font-size: 14px;
-  padding:10px 0;
-  color: #ffffff;
-}
-.lianji-wait {
-  position:relative;
-  float: right;
-  right: 30px;
-  top: 25px;
-  text-align: center;
-  width: 110px;
-  height: 34px;
-  background-color: #e6a23c;
-  border-radius: 4px;
-  font-size: 14px;
-  padding:10px 0;
-  color: #ffffff;
-}
-.agent-id {
-  margin-top: 20px;
-  margin-right: 30px;
-  text-align: right;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #999999;
-}
-.agent-number {
-  margin-top: 10px;
-  margin-right: 30px;
-  text-align: right;
-  font-family: ArialMT;
-  font-size: 16px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #333333;
-}
-.agent-port {
-  margin-top: 20px;
-  margin-right: 30px;
-  text-align: right;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #999999;
-}
-.port-number {
-  margin-top: 10px;
-  margin-right: 30px;
-  text-align: right;
-  font-family: ArialMT;
-  font-size: 16px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #333333;
-}
-.model-name {
-  float: left;
-  margin-top: 32px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #666666;
-  margin-right: 10px;
-}
-.model-tupian {
-  float: left;
-  margin-top: 20px;
-  margin-left: 20px;
-}
-.to-detail {
-  float: left;
-  margin-top: 35px;
-  line-height: 10px;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #409eff;
-  padding-left: 10px;
-  border-left: 1px solid #409eff;
-  cursor: pointer;
-}
-.model-icon {
-  margin-top: 6px;
-  width: 26px;
-  height: 26px;
-}
-.control-center {
-  // float: left;
-  text-align: center;
-  margin-top: 40px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 30px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 20px;
-  letter-spacing: 0px;
-  color: #333333;
-}
-.curr-grade {
-  margin-top: 30px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 24px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #666666;
-}
-.curr-num {
-  margin-top: 20px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #999999;
-}
-.icon-ziyuan:before {
-  content: "\e670";
-  position:absolute;
-  z-index:2;
-  left: 45px;
-  top: 72px;
-  // color: #409eff;
-}
-.yuanxing {
-  position:absolute;
-  left: 20px;
-  top: 50px;
-  z-index:1;
-  width: 90px;
-  height: 90px;
-  // background-color: #459ffc;
-  opacity: 0.2;
-  border-radius: 50%;
-}
-.dev-status {
-  position:absolute;
-  // text-align: center;
-  // margin-top: 150px;
-  // left: 30px;
-  top: 150px;
-  height: 21px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 22px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  // color: #409eff;
-}
-.tuxing-left {
-  float: left;
-  margin-top: 20px;
-  width: 63%;
-  height: 840px;
-}
-.crossDirection-display {
-  height: 650px;
-}
-/*当屏幕小于等于1680px的屏幕样式*/
-@media only screen and (max-width: 1680px){
-  .crossDirection-display{
-        transform: scale(0.9);
-        transform-origin: center top;
-    }
-  .centerText .text {
-    font-size: 14px;
-  }
- }
-/*当屏幕小于等于1440px的屏幕样式*/
-@media only screen and (max-width: 1440px){
-  .crossDirection-display{
-        transform: scale(0.8);
-        /* transform-origin: center top; */
-    }
-  .centerText .text {
-    font-size: 18px;
-  }
- }
- /*当屏幕小于等于1280px的屏幕样式*/
-@media only screen and (max-width: 1280px){
-  .crossDirection-display{
-        transform: scale(0.7);
-        transform-origin: center top;
-    }
-  .centerText .text {
-    font-size: 20px;
-  }
- }
-.pattern-status {
-  height: 200px;
-  margin-left: 20px;
-}
-.pattern-name {
-  display: inline;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 20px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #303133;
-}
-.pattern-message {
-  display: inline;
-  margin-left: 10px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #606266;
-}
-.tuxing-right {
-  float: left;
-  margin-top: 20px;
-  width: 35%;
-  height: 840px;
-}
-.cross-mess {
-  margin-left: 5px;
-  height: 20px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 20px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #303133;
-}
-.cross-module {
-  float: left;
-  margin-top: 10px;
-  width: 95%;
-  min-width: 600px;
-  // height: 180px;
-  background-color: #f9fcff;
-}
-.cross-name {
-  // height: 13px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;font-weight: normal;
-  font-stretch: normal;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #606266;
-}
-.cross-value {
-  width: 180px;
-  height: 22px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #303133;
-}
-.control-model {
-  float: left;
-  margin-top: 10px;
-  // margin-left: 15px;
-}
-.single-model {
-  margin-right: 10px;
-  text-align: center;
-  cursor:pointer;
-  width: 70px;
-  height: 65px;
-  background-color: #edf6ff;
-  border-radius: 6px;
-}
-.single-model-select {
-  margin-right: 10px;
-  text-align: center;
-  cursor:pointer;
-  width: 70px;
-  height: 65px;
-  background-color: #c1e0ff;
-  border-radius: 6px;
-  // border: solid 1px #409eff;
-}
-.single-model-name {
-  margin-top: 3px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  // line-height: 22px;
-  letter-spacing: 0px;
-  color: #606266;
-}
-.current-stage-num {
-  margin-top: 3px;
-  font-family: MicrosoftYaHei;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: #303133;
-}
-.sloat-icon {
-  cursor:pointer;
-  margin-top: 15px;
-}
-.control-time {
-  margin-top: 40px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 30px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 20px;
-  letter-spacing: 0px;
-  color: #333333;
-}
-.control-time .time {
-  width: 50%;
-  display: inline-block;
-  text-align: center;
-}
-.control-time span:first-of-type {
-  border-right: 1px solid #e5e5e5;
-}
-.pattern-explain {
-    float: right;
-  }
+// .container-main {
+//   width: 100%;
+//   height: 880px;
+//   min-width: 1250px;
+//   background: #ffffff;
+// }
+// .container-main .iconfont {
+//     font-family: "iconfont" !important;
+//     font-size: 34px;
+//     text-align: center;
+//     font-weight: 500;
+//     color: #000000;
+//     font-style: normal;
+//     -webkit-font-smoothing: antialiased;
+//     -moz-osx-font-smoothing: grayscale;
+// }
+// .container-left {
+//   float: left;
+//   margin-top: 20px;
+//   margin-left: 20px;
+//   width: 76.8%;
+//   height: 840px;
+//   background-color: #ffffff;
+//   border: solid 1px #e6e6e6;
+// }
+// .container-right {
+//   float: left;
+//   margin-top: 20px;
+//   margin-left: 20px;
+//   width: 20%;
+//   height: 840px;
+//   background-color: #ffffff;
+//   border: solid 1px #e6e6e6;
+// }
+// .container-left-top {
+//   width: 100%;
+//   height: 420px;
+// }
+// .container-left-bottom {
+//   width: 100%;
+//   height: 400px;
+//   background-color: #ffffff;
+// }
+// .curr-order {
+//   float: left;
+//   margin-left: 20px;
+//   margin-top: 1px;
+// }
+// .control-right {
+//   margin-top: 40px;
+//   margin-left: 20px;
+// }
+// .agent-div {
+//   float: left;
+//   width: 28%;
+//   height: 420px;
+//   border-bottom: solid 0.5px #e6e6e6;
+// }
+// .other-div {
+//   float: left;
+//   width: 24%;
+//   height: 210px;
+//   border-left: solid 1px #e6e6e6;
+//   border-bottom: solid 1px #e6e6e6;
+// }
+// .agent-icon {
+//   position:relative;
+//   float: left;
+//   width: 50%;
+//   height: 210px;
+// }
+// .agent-num {
+//   float: left;
+//   width: 50%;
+//   height: 210px;
+// }
+// .lianji-success {
+//   position:relative;
+//   float: right;
+//   right: 30px;
+//   top: 25px;
+//   text-align: center;
+//   width: 81px;
+//   height: 34px;
+//   background-color: #409eff;
+//   border-radius: 4px;
+//   font-size: 14px;
+//   padding:10px 0;
+//   color: #ffffff;
+// }
+// .lianji-fail {
+//   position:relative;
+//   float: right;
+//   right: 30px;
+//   top: 25px;
+//   text-align: center;
+//   width: 81px;
+//   height: 34px;
+//   background-color: #909399;
+//   border-radius: 4px;
+//   font-size: 14px;
+//   padding:10px 0;
+//   color: #ffffff;
+// }
+// .lianji-wait {
+//   position:relative;
+//   float: right;
+//   right: 30px;
+//   top: 25px;
+//   text-align: center;
+//   width: 110px;
+//   height: 34px;
+//   background-color: #e6a23c;
+//   border-radius: 4px;
+//   font-size: 14px;
+//   padding:10px 0;
+//   color: #ffffff;
+// }
+// .agent-id {
+//   margin-top: 20px;
+//   margin-right: 30px;
+//   text-align: right;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: #999999;
+// }
+// .agent-number {
+//   margin-top: 10px;
+//   margin-right: 30px;
+//   text-align: right;
+//   font-family: ArialMT;
+//   font-size: 16px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: #333333;
+// }
+// .agent-port {
+//   margin-top: 20px;
+//   margin-right: 30px;
+//   text-align: right;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: #999999;
+// }
+// .port-number {
+//   margin-top: 10px;
+//   margin-right: 30px;
+//   text-align: right;
+//   font-family: ArialMT;
+//   font-size: 16px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: #333333;
+// }
+// .model-name {
+//   float: left;
+//   margin-top: 32px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: #666666;
+//   margin-right: 10px;
+// }
+// .model-tupian {
+//   float: left;
+//   margin-top: 20px;
+//   margin-left: 20px;
+// }
+// .to-detail {
+//   float: left;
+//   margin-top: 35px;
+//   line-height: 10px;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: #409eff;
+//   padding-left: 10px;
+//   border-left: 1px solid #409eff;
+//   cursor: pointer;
+// }
+// .model-icon {
+//   margin-top: 6px;
+//   width: 26px;
+//   height: 26px;
+// }
+// .control-center {
+//   // float: left;
+//   text-align: center;
+//   margin-top: 40px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 30px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 20px;
+//   letter-spacing: 0px;
+//   color: #333333;
+// }
+// .curr-grade {
+//   margin-top: 30px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 24px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #666666;
+// }
+// .curr-num {
+//   margin-top: 20px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #999999;
+// }
+// .icon-ziyuan:before {
+//   content: "\e670";
+//   position:absolute;
+//   z-index:2;
+//   left: 45px;
+//   top: 72px;
+//   // color: #409eff;
+// }
+// .yuanxing {
+//   position:absolute;
+//   left: 20px;
+//   top: 50px;
+//   z-index:1;
+//   width: 90px;
+//   height: 90px;
+//   // background-color: #459ffc;
+//   opacity: 0.2;
+//   border-radius: 50%;
+// }
+// .dev-status {
+//   position:absolute;
+//   // text-align: center;
+//   // margin-top: 150px;
+//   // left: 30px;
+//   top: 150px;
+//   height: 21px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 22px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   // color: #409eff;
+// }
+// .tuxing-left {
+//   float: left;
+//   margin-top: 20px;
+//   width: 63%;
+//   height: 840px;
+// }
+// .crossDirection-display {
+//   height: 650px;
+// }
+// /*当屏幕小于等于1680px的屏幕样式*/
+// @media only screen and (max-width: 1680px){
+//   .crossDirection-display{
+//         transform: scale(0.9);
+//         transform-origin: center top;
+//     }
+//   .centerText .text {
+//     font-size: 14px;
+//   }
+//  }
+// /*当屏幕小于等于1440px的屏幕样式*/
+// @media only screen and (max-width: 1440px){
+//   .crossDirection-display{
+//         transform: scale(0.8);
+//         /* transform-origin: center top; */
+//     }
+//   .centerText .text {
+//     font-size: 18px;
+//   }
+//  }
+//  /*当屏幕小于等于1280px的屏幕样式*/
+// @media only screen and (max-width: 1280px){
+//   .crossDirection-display{
+//         transform: scale(0.7);
+//         transform-origin: center top;
+//     }
+//   .centerText .text {
+//     font-size: 20px;
+//   }
+//  }
+// .pattern-status {
+//   height: 200px;
+//   margin-left: 20px;
+// }
+// .pattern-name {
+//   display: inline;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 20px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 22px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
+// .pattern-message {
+//   display: inline;
+//   margin-left: 10px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 22px;
+//   letter-spacing: 0px;
+//   color: #606266;
+// }
+// .tuxing-right {
+//   float: left;
+//   margin-top: 20px;
+//   width: 35%;
+//   height: 840px;
+// }
+// .cross-mess {
+//   margin-left: 5px;
+//   height: 20px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 20px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 22px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
+// .cross-module {
+//   float: left;
+//   margin-top: 10px;
+//   width: 95%;
+//   min-width: 600px;
+//   // height: 180px;
+//   background-color: #f9fcff;
+// }
+// .cross-name {
+//   // height: 13px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 22px;
+//   letter-spacing: 0px;
+//   color: #606266;
+// }
+// .cross-value {
+//   width: 180px;
+//   height: 22px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 22px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
+// .control-model {
+//   float: left;
+//   margin-top: 10px;
+//   // margin-left: 15px;
+// }
+// .single-model {
+//   margin-right: 10px;
+//   text-align: center;
+//   cursor:pointer;
+//   width: 70px;
+//   height: 65px;
+//   background-color: #edf6ff;
+//   border-radius: 6px;
+// }
+// .single-model-select {
+//   margin-right: 10px;
+//   text-align: center;
+//   cursor:pointer;
+//   width: 70px;
+//   height: 65px;
+//   background-color: #c1e0ff;
+//   border-radius: 6px;
+//   // border: solid 1px #409eff;
+// }
+// .single-model-name {
+//   margin-top: 3px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 12px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   // line-height: 22px;
+//   letter-spacing: 0px;
+//   color: #606266;
+// }
+// .current-stage-num {
+//   margin-top: 3px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 12px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
+// .sloat-icon {
+//   cursor:pointer;
+//   margin-top: 15px;
+// }
+// .control-time {
+//   margin-top: 40px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 30px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 20px;
+//   letter-spacing: 0px;
+//   color: #333333;
+// }
+// .control-time .time {
+//   width: 50%;
+//   display: inline-block;
+//   text-align: center;
+// }
+// .control-time span:first-of-type {
+//   border-right: 1px solid #e5e5e5;
+// }
+// .pattern-explain {
+//     float: right;
+//   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
-.container-right .el-form-item__label {
-    text-align: right;
-    float: left;
-    font-size: 14px;
-    line-height: 40px;
-    padding: 0 12px 0 0;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-family: SourceHanSansCN-Regular;
-    font-weight: normal;
-    font-stretch: normal;
-    letter-spacing: 0px;
-    color: #999999;
-}
-.container-right .el-select {
-  width: 70%;
-}
+// .container-right .el-form-item__label {
+//     text-align: right;
+//     float: left;
+//     font-size: 14px;
+//     line-height: 40px;
+//     padding: 0 12px 0 0;
+//     -webkit-box-sizing: border-box;
+//     box-sizing: border-box;
+//     font-family: SourceHanSansCN-Regular;
+//     font-weight: normal;
+//     font-stretch: normal;
+//     letter-spacing: 0px;
+//     color: #999999;
+// }
+// .container-right .el-select {
+//   width: 70%;
+// }
 </style>

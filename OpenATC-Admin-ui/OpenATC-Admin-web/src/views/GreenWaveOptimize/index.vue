@@ -106,17 +106,17 @@ export default {
 }
 </script>
 
-<style scoped>
-.greenWaveOptimize {
-  height: calc(100vh - 50px);
-}
-.el-aside {
-    height: calc(100vh - 50px);
-    color: #333;
-    border-right: solid 1px #e6e6e6;
-}
+<style lang="scss" scoped>
+// .greenWaveOptimize {
+//   height: calc(100vh - 50px);
+// }
+// .el-aside {
+//     height: calc(100vh - 50px);
+//     color: $--color-text-primary;
+//     border-right: solid 1px $--border-color-lighter;
+// }
 
-.el-main {
-  height: calc(100vh - 50px);
-}
+// .el-main {
+//   height: calc(100vh - 50px);
+// }
 </style>

@@ -30,14 +30,25 @@ const zh = {
       'tipsmodaltitle': '提示',
       'placeholder': '请选择',
       'operation': '操作',
-      'operationsuccess': '操作成功'
+      'operationsuccess': '操作成功',
+      'authtip': '没有权限访问 !'
     },
     'button': {
       'OK': '确定',
       'Cancel': '取消',
       'expandall': '全部展开',
       'collapseall': '全部折叠',
-      'search': '搜索'
+      'search': '搜索',
+      'location': '位置'
+    },
+    'login': {
+      'username': '用户名',
+      'password': '密码',
+      'login': '登录',
+      'usernamenotnull': '用户名不能为空!',
+      'passnotnull': '密码不能为空！',
+      'passerror': '密码错误！',
+      'usernamenotexist': '用户名不存在！'
     },
     'main': {
       'homepage': '主页',
@@ -113,7 +124,39 @@ const zh = {
       'edituser': '编辑用户',
       'adduser': '添加用户',
       'deleteuser': '是否删除此用户?',
-      'labelwidth': '15%'
+      'labelwidth': '15%',
+      'authorize': '授权',
+      'authorizetitle': '授权token',
+      'authorizetime': '授权时间：',
+      'generate': '生成',
+      'to': '至',
+      'starttime': '开始时间',
+      'endtime': '结束时间',
+      'Authorization': '授权时间不能为空！',
+      'enterpass': '请输入确认密码！',
+      'enterpassdiffpass': '确认密码与密码不同！',
+      'correctphone': '请输入正确的电话号码！',
+      'correctemail': '请输入正确的电子邮箱！',
+      'lettersnumbersunderscores': '用户名只能输入字母、数字或下划线！',
+      'enterusername': '请输入用户名！',
+      'enterpassword': '请输入密码!',
+      'nameandpasswordnotempty': '用户名密码不能为空！',
+      'wrongphoneemail': '错误的电话号码或者电子邮箱！',
+      'selectonerole': '请至少选择一个角色!',
+      'pleaseenter': '请输入',
+      'newpassdiffoldpass': '新密码不能与旧密码一致！',
+      'nochanges': '没有任何修改！',
+      'superrolenotmodified': '超级管理员角色不能被修改！',
+      'editsucc': '编辑成功！',
+      'oldpass': '旧密码',
+      'confirmpass': '确认新密码',
+      'enputpassagain': '请再次输入密码!',
+      'twopasswordsdiff': '两次输入密码不一致!',
+      'enteroldpass': '请输入旧密码！',
+      'enternewepass': '请输入新密码',
+      'originalpassworderror': '原密码错误！',
+      'modificationsucc': '修改成功',
+      'ip': 'IP'
     },
     'greenwaveoptimize': {
       'addplan': '点击添加按钮添加绿波协调计划',
@@ -161,7 +204,33 @@ const zh = {
       'upspeed': '上行速度(km/h)',
       'downspeed': '下行速度(km/h)',
       'up': '上行',
-      'down': '下行'
+      'down': '下行',
+      'optstrategyoption1': '绿波优化',
+      'directionOption1': '上行',
+      'directionOption2': '下行',
+      'directionOption3': '双向',
+      'duration': '持续时间：',
+      'speed': '速度：',
+      'vehicle': '车辆：',
+      'es': '东直行',
+      'el': '东左转',
+      'er': '东右转',
+      'eb': '东掉头',
+      'ws': '西直行',
+      'wl': '西左转',
+      'wr': '西右转',
+      'wb': '西掉头',
+      'ns': '北直行',
+      'nl': '北左转',
+      'nr': '北右转',
+      'nb': '北掉头',
+      'ss': '南直行',
+      'sl': '南左转',
+      'sr': '南右转',
+      'sb': '南掉头',
+      'notonline': '不在线！',
+      'planissuedsucc': '方案下发成功!',
+      'time': '时间（s）'
     },
     'record': {
       'user': '用户',
@@ -221,6 +290,9 @@ const zh = {
       'phaselock': '相位锁定',
       'programIntervention': '方案干预',
       'channelDetection': '通道检测'
+    },
+    'gis': {
+      'chooseLocationInfo': '请点击地图选择位置 !'
     }
   }
 }

@@ -150,6 +150,7 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
+ @import "../../../styles/theme/element-variables.scss";
 .licenseInfo {
     display: flex;
     justify-content: center;
@@ -160,7 +161,7 @@ export default {
         overflow: hidden;
         .el-dialog__body {
             padding: 30px 20px;
-            color: #606266;
+            color: $--color-text-regular;
             font-size: 14px;
             word-break: break-all;
             position: absolute;
@@ -174,12 +175,12 @@ export default {
     }
 }
 .licenseInfo .el-dialog__headerbtn .el-dialog__close {
-    color: #ffffff;
+    color: $--color-white;
 }
 .licenseInfo .el-dialog__header {
     padding: 30px 10px 10px;
     height: 69px;
-    background-color: #409eff;
+    background-color: $--color-primary;
     border-radius: 4px 4px 0px 0p
 }
 .licenseInfo .el-dialog__title {
@@ -189,6 +190,6 @@ export default {
     font-stretch: normal;
     line-height: 14px;
     letter-spacing: 0px;
-    color: #ffffff;
+    color: $--color-white;
 }
 </style>

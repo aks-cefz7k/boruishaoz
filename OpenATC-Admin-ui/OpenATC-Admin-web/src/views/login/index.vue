@@ -29,19 +29,19 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input class="login-input" name="user_name" type="text" v-model="loginForm.user_name" auto-complete="on" placeholder="用户名" />
+        <el-input class="login-input" name="user_name" type="text" v-model="loginForm.user_name" auto-complete="on" :placeholder="$t('openatc.login.username')" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
         <el-input class="login-input" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" auto-complete="on"
-          placeholder="密码"></el-input>
+          :placeholder="$t('openatc.login.password')"></el-input>
           <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          登录
+          {{$t('openatc.login.login')}}
         </el-button>
       </el-form-item>
     </el-form>
@@ -71,10 +71,10 @@ export default {
       },
       loginRules: {
         user_name: [
-          { required: true, trigger: 'blur', message: '用户名不能为空！' }
+          { required: true, trigger: 'blur', message: this.$t('openatc.login.usernamenotnull') }
         ],
         password: [
-          { required: true, trigger: 'blur', message: '密码不能为空！' }
+          { required: true, trigger: 'blur', message: this.$t('openatc.login.passnotnull') }
         ],
         vcode: [{ required: true, trigger: 'blur', message: 'Invalid VCode' }]
       },
@@ -116,12 +116,12 @@ export default {
             .then(data => {
               if (data.data.success !== true) {
                 if (data.data.code === '3009') {
-                  this.$message.error('密码错误！')
+                  this.$message.error(this.$t('openatc.login.passerror'))
                   this.loading = false
                   return
                 }
                 if (data.data.code === '3001') {
-                  this.$message.error('用户名不存在！')
+                  this.$message.error(this.$t('openatc.login.usernamenotexist'))
                   this.loading = false
                   return
                 }
@@ -171,110 +171,110 @@ export default {
 </script>
 
 <style lang="scss">
-.switch-language {
-  cursor:pointer;
-  margin-top: 20px;
-  margin-right: 20px;
-  float: right;
-}
-.login-container {
-    .el-input {
-      display: inline-block;
-      height: 47px;
-      width: 85%;
-      input {
-        background: #ffffff;
-        border: 0px;
-        -webkit-appearance: none;
-        border-radius: 0px;
-        padding: 12px 5px 12px 15px;
-        color: #333333;
-        height: 47px;
-        &:-webkit-autofill {
-          -webkit-text-fill-color: rgb(0, 0, 0) !important;
-        }
-        .el-input__inner {
-          -webkit-appearance: none;
-          background-color: #fff;
-          background-image: none;
-          border-radius: 4px;
-          border: 0px solid #dcdfe6;
-          -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-          color: #606266;
-          display: inline-block;
-          font-size: inherit;
-          height: 40px;
-          line-height: 40px;
-          outline: 0;
-          padding: 0 15px;
-          -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-          transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-          width: 100%;
-        }
-      }
-    }
-    .el-form-item {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: #ffffff;
-      border-radius: 5px;
-      color: #1890ff;
-    }
-  }
+// .switch-language {
+//   cursor:pointer;
+//   margin-top: 20px;
+//   margin-right: 20px;
+//   float: right;
+// }
+// .login-container {
+//     .el-input {
+//       display: inline-block;
+//       height: 47px;
+//       width: 85%;
+//       input {
+//         background: $--color-white;
+//         border: 0px;
+//         -webkit-appearance: none;
+//         border-radius: 0px;
+//         padding: 12px 5px 12px 15px;
+//         color: $--color-text-primary;
+//         height: 47px;
+//         &:-webkit-autofill {
+//           -webkit-text-fill-color: rgb(0, 0, 0) !important;
+//         }
+//         .el-input__inner {
+//           -webkit-appearance: none;
+//           background-color: $--color-white;
+//           background-image: none;
+//           border-radius: 4px;
+//           border: 0px solid #dcdfe6;
+//           -webkit-box-sizing: border-box;
+//           box-sizing: border-box;
+//           color: $--color-text-regular;
+//           display: inline-block;
+//           font-size: inherit;
+//           height: 40px;
+//           line-height: 40px;
+//           outline: 0;
+//           padding: 0 15px;
+//           -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//           transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//           width: 100%;
+//         }
+//       }
+//     }
+//     .el-form-item {
+//       border: 1px solid rgba(255, 255, 255, 0.1);
+//       background: $--color-white;
+//       border-radius: 5px;
+//       color: $--color-primary;
+//     }
+//   }
 
-  .login-container {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    background-color: #f2f9ff;
-    .login-form {
-      position: absolute;
-      left: 0;
-      right: 0;
-      //width: 33%;
-      width: 20%;
-      min-width: 400px;
-      padding: 35px 35px 15px 35px;
-      margin: 120px auto;
-    }
-    .tips {
-      font-size: 14px;
-      color: #999999;
-      margin-bottom: 10px;
-      span {
-        &:first-of-type {
-          margin-right: 16px;
-        }
-      }
-    }
-    .svg-container {
-      padding: 6px 5px 6px 15px;
-      color: #1890ff;
-      vertical-align: middle;
-      width: 30px;
-      display: inline-block;
-      &_login {
-        font-size: 20px;
-      }
-    }
-    .title {
-      font-size: 26px;
-      font-weight: 400;
-      color: #1890ff;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-      font-family: SourceHanSansCN-Bold;
-      font-stretch: normal;
-    }
-    .show-pwd {
-      position: absolute;
-      right: 10px;
-      top: 7px;
-      font-size: 16px;
-      color: #889aa4;
-      cursor: pointer;
-      user-select: none;
-    }
-  }
+//   .login-container {
+//     position: fixed;
+//     height: 100%;
+//     width: 100%;
+//     background-color: #f2f9ff;
+//     .login-form {
+//       position: absolute;
+//       left: 0;
+//       right: 0;
+//       //width: 33%;
+//       width: 20%;
+//       min-width: 400px;
+//       padding: 35px 35px 15px 35px;
+//       margin: 120px auto;
+//     }
+//     .tips {
+//       font-size: 14px;
+//       color: $--color-text-secondary;
+//       margin-bottom: 10px;
+//       span {
+//         &:first-of-type {
+//           margin-right: 16px;
+//         }
+//       }
+//     }
+//     .svg-container {
+//       padding: 6px 5px 6px 15px;
+//       color: $--color-primary;
+//       vertical-align: middle;
+//       width: 30px;
+//       display: inline-block;
+//       &_login {
+//         font-size: 20px;
+//       }
+//     }
+//     .title {
+//       font-size: 26px;
+//       font-weight: 400;
+//       color: $--color-primary;
+//       margin: 0px auto 40px auto;
+//       text-align: center;
+//       font-weight: bold;
+//       font-family: SourceHanSansCN-Bold;
+//       font-stretch: normal;
+//     }
+//     .show-pwd {
+//       position: absolute;
+//       right: 10px;
+//       top: 7px;
+//       font-size: 16px;
+//       color: #889aa4;
+//       cursor: pointer;
+//       user-select: none;
+//     }
+//   }
 </style>

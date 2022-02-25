@@ -25,3 +25,15 @@ export function setVolumelog (param) {
   data.data = param
   return api.Send({}, data)
 }
+
+// 获取统计后的历史流量
+export function getHistoryFlow (username, password) {
+  var iframdevid = getIframdevid()
+  let api = new Authapi('getHistoryFlow')
+  let param = {
+    'agentid': iframdevid,
+    'username': username,
+    'password': password
+  }
+  return api.Send({}, param)
+}

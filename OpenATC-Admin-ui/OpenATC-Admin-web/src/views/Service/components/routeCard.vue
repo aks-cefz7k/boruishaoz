@@ -128,15 +128,7 @@ export default {
   data () {
     return {
       isShow: false,
-      intervalId: 0,
-      executeAgentid: '',
       isBtnDisabled: false
-    }
-  },
-  updated () {
-    if (this.executeAgentid === this.node.agentid && this.node.state === 0) {
-      clearInterval(this.intervalId)
-      this.intervalId = 0
     }
   },
   methods: {
@@ -162,18 +154,7 @@ export default {
           this.$message.error(res.data.message)
           return false
         }
-        if (reqData.operation === 0) { // 取消执行
-          clearInterval(this.intervalId)
-          this.intervalId = 0
-          this.executeAgentid = ''
-          this.$emit('research')
-        } else {
-          let _this = this
-          _this.executeAgentid = reqData.agentid
-          _this.intervalId = setInterval(function () {
-            _this.$emit('research')
-          }, 2000)
-        }
+        this.$emit('research')
       })
     }
   }

@@ -78,7 +78,7 @@
                         :label="$t('edge.system.automaticshutdown')"
                         prop=".duration">
                         <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
-                            <el-option v-for="item in durationList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            <el-option v-for="item in durationList" :key="item.value" :label="$t('edge.system.duration' + item.id)" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -136,7 +136,7 @@
                               <el-option
                                 v-for="item in remoteOptions"
                                 :key="item.value"
-                                :label="item.label"
+                                :label="$t('edge.system.remote' + item.id)"
                                 :value="item.value">
                               </el-option>
                             </el-select>
@@ -208,13 +208,16 @@ export default {
       paritybit: '--',
       remoteOptions: [{
         value: 'reboot',
-        label: '重启'
+        // label: '重启',
+        id: '1'
       }, {
         value: 'auth',
-        label: '授权'
+        // label: '授权',
+        id: '2'
       }, {
         value: 'custom',
-        label: '自定义'
+        // label: '自定义',
+        id: '3'
       }],
       remoteControl: 'reboot',
       remoteDebugInfo: {
@@ -222,14 +225,17 @@ export default {
         duration: 0
       },
       durationList: [{
-        label: '5min',
-        value: 300
+        // label: '5min',
+        value: 300,
+        id: '1'
       }, {
-        label: '60min',
-        value: 3600
+        // label: '60min',
+        value: 3600,
+        id: '2'
       }, {
-        label: '无限制',
-        value: 0
+        // label: '无限制',
+        value: 0,
+        id: '3'
       }]
     }
   },
@@ -485,44 +491,44 @@ export default {
 .app-container {
   min-width: 1730px;
 }
-.signal-version-name {
-  margin-top: 20px;
-  margin-left: 30px;
-  height: 18px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #666666;
-}
-.signal-version-value {
-  margin-top: 10px;
-  margin-left: 30px;
-  background-color: rgba(236, 245, 255, 0.3);
-}
-.signal-version-bottom {
-  margin-top: 10px;
-  margin-left: 30px;
-}
-.software {
-  position: relative;
-  left: 20px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #303133;
-}
-.remote-select {
-  float: left;
-  margin-left: 10px;
-  margin-top: 20px;
-}
-.currsystemtime {
-  width: 100%;
-}
+// .signal-version-name {
+//   margin-top: 20px;
+//   margin-left: 30px;
+//   height: 18px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 18px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #666666;
+// }
+// .signal-version-value {
+//   margin-top: 10px;
+//   margin-left: 30px;
+//   background-color: rgba(236, 245, 255, 0.3);
+// }
+// .signal-version-bottom {
+//   margin-top: 10px;
+//   margin-left: 30px;
+// }
+// .software {
+//   position: relative;
+//   left: 20px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
+// .remote-select {
+//   float: left;
+//   margin-left: 10px;
+//   margin-top: 20px;
+// }
+// .currsystemtime {
+//   width: 100%;
+// }
 </style>

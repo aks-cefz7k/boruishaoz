@@ -132,7 +132,7 @@ export default {
   font-stretch: normal;
   line-height: 22px;
   letter-spacing: 0px;
-  color: #ffffff;
+  color: #fff;
 }
 .ring-phase {
   float: left;

@@ -161,34 +161,34 @@ export default {
 }
 </style>
 
-<style scoped>
-.addDeviceDrawer {
-  height: 100%;
-  position: relative;
-}
-.addDeviceDrawer .btnGroup {
-  position: absolute;
-  bottom: 30px;
-  left: 0;
-  width: 100%;
-  padding: 0 16px;
-  display: flex;
-  align-items:center;
-}
-.addDeviceDrawer .btnGroup .btn {
-  width: 50%;
-}
-.addDeviceDrawer .devs-container {
-  padding: 0 20px;
-  overflow: hidden;
-}
-.addDeviceDrawer .filter-container {
-  float: right;
-  width: 100%;
-}
-.addDeviceDrawer .devs-table {
-  border: solid 1px #e6e6e6;
-  overflow: auto;
-  max-height: 590px;
-}
+<style lang="scss" scoped>
+// .addDeviceDrawer {
+//   height: 100%;
+//   position: relative;
+// }
+// .addDeviceDrawer .btnGroup {
+//   position: absolute;
+//   bottom: 30px;
+//   left: 0;
+//   width: 100%;
+//   padding: 0 16px;
+//   display: flex;
+//   align-items:center;
+// }
+// .addDeviceDrawer .btnGroup .btn {
+//   width: 50%;
+// }
+// .addDeviceDrawer .devs-container {
+//   padding: 0 20px;
+//   overflow: hidden;
+// }
+// .addDeviceDrawer .filter-container {
+//   float: right;
+//   width: 100%;
+// }
+// .addDeviceDrawer .devs-table {
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+//   max-height: 590px;
+// }
 </style>

@@ -10,28 +10,66 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-    <div>
-        <div id="map">
+  <div class="openatc-gis">
+    <div id="map"></div>
+    <div class="showLayout">
+      <transition name="slide">
+        <div class="tabsconatiner" v-show="toggleShow">
+          <device
+            :devicesData="devList"
+            ref="device"
+            @setCurrent="setCurrentMarker"
+            @setDeviceLocation="setDeviceLocation"
+          ></device>
         </div>
-        <div class="map-position">
-          经度{{lngLat.lng}} 纬度{{lngLat.lat}} 层级 {{zoom}}
+      </transition>
+      <div
+        :class="[toggleshowisActive ? 'toggle_show' : 'active']"
+        @click="handletoggleshow"
+      >
+        <lottie
+          :options="defaultOptions"
+          :width="30"
+          :height="30"
+          v-on:animCreated="handleAnimation"
+        />
       </div>
     </div>
+    <div class="map-position">
+      经度{{ lngLat.lng }} 纬度{{ lngLat.lat }} 层级 {{ zoom }}
+    </div>
+  </div>
 </template>
 <script>
 
 import L from 'leaflet'
 import { GetAllDevice } from '@/api/device'
+import lottie from 'vue-lottie'
+import device from './components/device'
+import Anim from './toggleData.json'
 export default {
+  components: {
+    lottie,
+    device
+  },
   data () {
     return {
+      citiesLayer: null,
       devList: [],
       lngLat: {
         lng: '0.00000000',
         lat: '0.00000000'
       },
-      zoom: 12
+      zoom: 12,
+      toggleShow: true,
+      toggleshowisActive: true,
+      defaultOptions: { animationData: Anim, loop: false, autoplay: false },
+      deviceInfo: null
     }
+  },
+  mounted () {
+    this.initMap()
+    this.addMapEvent()
   },
   methods: {
     initMap () {
@@ -44,7 +82,8 @@ export default {
         zoomControl: false,
         attributionControl: false,
         crs: L.CRS.EPSG3857,
-        dragging: true
+        dragging: true,
+        editMode: false
       })
       window.map = map
       L.tileLayer(
@@ -116,7 +155,7 @@ export default {
       // console.log(this.citiesLayer)
       // map.addLayer(this.citiesLayer)
       // this.addMessage()
-      // map.removeLayer(citiesLayer)
+      // // map.removeLayer(citiesLayer)
     },
     addMapEvent () {
       let _this = this
@@ -126,7 +165,7 @@ export default {
         // L.popup().setLatLng(e.latlng).setContent(e.latlng.toString()).openOn(map)
       })
       var boxMap = document.getElementById('map')
-      L.DomEvent.on(boxMap, 'mousewheel', function (e) {
+      L.DomEvent.on(boxMap, 'wheel', function (e) {
         _this.zoom = _this.map.getZoom()
       })
     },
@@ -142,6 +181,7 @@ export default {
       return text
     },
     getAllAdevice () {
+      this.map.off('click')
       GetAllDevice().then(res => {
         if (!res.data.success) {
           this.$message.error(res.data.message)
@@ -152,6 +192,9 @@ export default {
       })
     },
     handleMapDevice (devs) {
+      if (this.citiesLayer) {
+        this.citiesLayer.clearLayers()
+      }
       let markers = []
       for (let dev of devs) {
         if (dev.geometry === undefined) continue
@@ -175,13 +218,35 @@ export default {
             alt: dev,
             iconAnchor: [12, 27]
           })
-          let marker = L.marker(devPoint, { icon: notOnlineIcon })
+          let marker = L.marker(devPoint, { icon: notOnlineIcon }).on('click', this.onMarkerClick)
+          // 添加marker来设置点击事件
           markers.push(marker)
         }
       }
       this.citiesLayer = L.layerGroup(markers)
       this.map.addLayer(this.citiesLayer)
       this.addMessage()
+    },
+    setCurrentMarker (dev) {
+      let marker
+      let layers = this.citiesLayer._layers
+      for (var x in layers) {
+        let layer = layers[x]
+        if (layer.options.icon.options.alt.id === dev.id) {
+          marker = layer
+          break
+        }
+      }
+      if (marker) {
+        let _latlng = marker._latlng
+        marker.openPopup(_latlng)
+      }
+    },
+    onMarkerClick (e) {
+      let dev = e.target.options.icon.options.alt
+      let devicesTableData = this.$refs.device.devicesTableData
+      let row = devicesTableData.filter(item => item.id === dev.id)[0]
+      this.$refs.device.setCurrent(row)
     },
     hideLayer () {
       this.map.removeLayer(this.citiesLayer)
@@ -202,21 +267,50 @@ export default {
           layer.bindPopup('<div style=\'font-size: 14px;\'><span style=\'color: #676767 ;\'>' + status + '</span>&nbsp&nbsp<span style=\'color: #666666;\'>' + date + '</span></div>')
         }
       })
+    },
+    handleAnimation (anim) {
+      this.anim = anim
+      this.anim.addEventListener('loopComplete', () => {
+        console.log('当前循环下播放完成！')
+      })
+    },
+    onSpeedChange (speed) {
+      this.anim.setSpeed(speed)
+    },
+    handletoggleshow () {
+      this.toggleshowisActive = !this.toggleshowisActive
+      this.toggleShow = !this.toggleShow
+      if (!this.toggleshowisActive) {
+        this.onSpeedChange(0.2)
+        this.anim.playSegments([0, 8], true)
+      } else {
+        this.onSpeedChange(0.2)
+        this.anim.playSegments([17, 25], true)
+      }
+    },
+    setDeviceLocation (dev) {
+      this.editMode = true
+      this.deviceInfo = dev
+      let _this = this
+      _this.map.on('click', function (e) {
+        _this.lngLat.lng = _this.computedLngLat(String(e.latlng.lng))
+        _this.lngLat.lat = _this.computedLngLat(String(e.latlng.lat))
+        _this.deviceInfo.lng = _this.lngLat.lng
+        _this.deviceInfo.lat = _this.lngLat.lat
+        let dev = _this.deviceInfo
+        let updateChild = _this.$refs.device.$refs.updateChild
+        updateChild.onUpdateClick(dev, true)
+        // L.popup().setLatLng(e.latlng).setContent(e.latlng.toString()).openOn(this.map)
+      })
     }
-  },
-  created () {
-  },
-  mounted () {
-    this.initMap()
-    this.addMapEvent()
   }
 }
 </script>
 <style scoped>
 #map {
-    position: relative;
-    width: 100%;
-    height: 94.5vh;
+  position: relative;
+  width: 100%;
+  height: 94.5vh;
 }
 .map-position {
   width: 18rem;
@@ -231,18 +325,81 @@ export default {
   right: 3.3rem;
   z-index: 903;
   font-size: 0.6rem;
-  color: rgba(254, 254, 254, .7);
+  color: rgba(254, 254, 254, 0.7);
+}
+
+.showLayout {
+  position: fixed;
+  top: 70px;
+  right: 38px;
+  width: 442px;
+  height: auto;
+  z-index: 904;
+  background-color: #ffffff;
+}
+.tabsconatiner {
+  margin: 10px;
+  position: relative;
+  width: 100% - 20px;
+  height: 100% - 20px;
+}
+.addbtn {
+  position: absolute;
+  right: 5px;
+  z-index: 99;
+  top: 7px;
+  width: auto;
+  height: auto;
+}
+.addicon {
+  color: #42daff;
+  font-size: 26px;
+}
+.addicon:hover {
+  color: rgb(32, 163, 195);
+}
+.toggle_show {
+  position: absolute;
+  cursor: pointer;
+  right: -25px;
+  top: 0px;
+}
+.active {
+  position: absolute;
+  cursor: pointer;
+  right: -25px;
+  top: 0px;
+}
+.init-toggle {
+  position: absolute;
+  cursor: pointer;
+  right: 440px;
+  top: 0px;
+}
+.slide-enter-active {
+  transition: all 0.5s linear;
+}
+.slide-leave-active {
+  transition: all 0.5s linear;
+}
+.slide-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
 }
 </style>
 <style>
 .leaflet-popup-content-wrapper {
-    padding: 1px;
-    text-align: left;
-    border-radius: 6px;
+  padding: 1px;
+  text-align: left;
+  border-radius: 6px;
 }
 .leaflet-popup {
-    position: absolute;
-    text-align: center;
-    margin-bottom: 40px;
+  position: absolute;
+  text-align: center;
+  margin-bottom: 40px;
 }
 </style>

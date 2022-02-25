@@ -124,17 +124,17 @@ export default {
 }
 </style>
 
-<style scoped>
-.distancePanel {
-  border: solid 1px #e6e6e6;
-}
-.distanceTable .el-input-number {
-   display: none
-}
-.distanceTable .current-row .el-input-number {
-  display: block
-}
-.distanceTable .current-row .el-input-number+span {
-  display: none
-}
+<style lang="scss" scoped>
+// .distancePanel {
+//   border: solid 1px $--border-color-lighter;
+// }
+// .distanceTable .el-input-number {
+//    display: none
+// }
+// .distanceTable .current-row .el-input-number {
+//   display: block
+// }
+// .distanceTable .current-row .el-input-number+span {
+//   display: none
+// }
 </style>

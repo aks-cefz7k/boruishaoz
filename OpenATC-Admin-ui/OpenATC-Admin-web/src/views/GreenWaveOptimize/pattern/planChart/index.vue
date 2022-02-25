@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<div style="overflow: auto;">
+<div style="overflow: auto;" class="openatc-planchart">
   <div class="planchart-top">
     <div class="coordination-name">{{$t('openatc.greenwaveoptimize.coordinationstrategy')}}</div>
     <div class="coordination-select">
@@ -18,7 +18,7 @@
         <el-option
           v-for="item in optstrategyOptions"
           :key="item.value"
-          :label="item.label"
+          :label="$t('openatc.greenwaveoptimize.optstrategyoption' + item.id)"
           :value="item.value">
         </el-option>
       </el-select>
@@ -29,7 +29,7 @@
         <el-option
           v-for="item in directionOptions"
           :key="item.value"
-          :label="item.label"
+          :label="$t('openatc.greenwaveoptimize.directionOption' + item.id)"
           :value="item.value">
         </el-option>
       </el-select>
@@ -61,13 +61,13 @@
           <span class="header-text">{{$t('openatc.greenwaveoptimize.up')}}</span>
         </div>
         <div class="text item">
-          {{'持续时间: ' + green[0].width + 's' }}
+          {{$t('openatc.greenwaveoptimize.duration') + green[0].width + 's' }}
         </div>
         <div class="text item">
-          {{'速度: ' + green[0].speed + 'km/h' }}
+          {{$t('openatc.greenwaveoptimize.speed') + green[0].speed + 'km/h' }}
         </div>
         <div class="text item">
-          {{'车辆: ' + green[0].vehicle }}
+          {{$t('openatc.greenwaveoptimize.vehicle') + green[0].vehicle }}
         </div>
       </el-card>
     </div>
@@ -77,13 +77,13 @@
           <span class="header-text">{{$t('openatc.greenwaveoptimize.down')}}</span>
         </div>
         <div class="text item">
-          {{'持续时间: ' + green[0].width + 's' }}
+          {{$t('openatc.greenwaveoptimize.duration') + green[0].width + 's' }}
         </div>
         <div class="text item">
-          {{'速度: ' + green[0].speed + 'km/h' }}
+          {{$t('openatc.greenwaveoptimize.speed') + green[0].speed + 'km/h' }}
         </div>
         <div class="text item">
-          {{'车辆: ' + green[0].vehicle }}
+          {{$t('openatc.greenwaveoptimize.vehicle') + green[0].vehicle }}
         </div>
       </el-card>
     </div>
@@ -107,17 +107,21 @@ export default {
       keyintsidOptions: [],
       directionOptions: [{
         value: 'up',
-        label: '上行'
+        label: '上行',
+        id: '1'
       }, {
         value: 'down',
-        label: '下行'
+        label: '下行',
+        id: '2'
       }, {
         value: 'all',
-        label: '双向'
+        label: '双向',
+        id: '3'
       }],
       optstrategyOptions: [{
         value: 'green',
-        label: '绿波优化'
+        label: '绿波优化',
+        id: '1'
       }],
       routerData: {},
       isShowUpCard: false,
@@ -233,63 +237,63 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.planchart-top {
-  width: 100%;
-  min-width: 1600px;
-}
-.planchart-bottom {
-  width: 100%;
-  min-width: 1600px;
-}
-.echartsStyle {
-  float: left;
-  width: 1300px;
-  height: 700px;
-}
-.up-card {
-  // float: left;
-  margin-top: 400px;
-}
-.coordination-name {
-  float: left;
-  margin-top: 8px;
-  margin-left: 10px;
-  height: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: #999999;
-}
-.coordination-select {
-  float: left;
-  margin-left: 10px;
-}
-.text {
-    font-size: 14px;
-  }
+// .planchart-top {
+//   width: 100%;
+//   min-width: 1600px;
+// }
+// .planchart-bottom {
+//   width: 100%;
+//   min-width: 1600px;
+// }
+// .echartsStyle {
+//   float: left;
+//   width: 1300px;
+//   height: 700px;
+// }
+// .up-card {
+//   // float: left;
+//   margin-top: 400px;
+// }
+// .coordination-name {
+//   float: left;
+//   margin-top: 8px;
+//   margin-left: 10px;
+//   height: 14px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-text-secondary;
+// }
+// .coordination-select {
+//   float: left;
+//   margin-left: 10px;
+// }
+// .text {
+//     font-size: 14px;
+//   }
 
-  .item {
-    margin-bottom: 5px;
-  }
+//   .item {
+//     margin-bottom: 5px;
+//   }
 
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  }
-  .box-card {
-    width: 130px;
-    height: 141px;
-    background-color: #fbfbfb;
-    border-radius: 4px;
-    border: solid 1px #e6e6e6;
-  }
+//   .clearfix:before,
+//   .clearfix:after {
+//     display: table;
+//     content: "";
+//   }
+//   .clearfix:after {
+//     clear: both
+//   }
+//   .box-card {
+//     width: 130px;
+//     height: 141px;
+//     background-color: #fbfbfb;
+//     border-radius: 4px;
+//     border: solid 1px $--border-color-lighter;
+//   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
   .up-card .el-card__header {

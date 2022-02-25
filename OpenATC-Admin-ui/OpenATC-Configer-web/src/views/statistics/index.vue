@@ -12,15 +12,23 @@
 <template>
 <div class="statistics">
     <div class="one">
-        <el-button type="primary" @click="getStatisticsData" size="small" style="margin-left: 10px;">获取设备流量数据</el-button>
-        <el-button type="primary" @click="testSftp" size="small">导入本地流量文件</el-button>
-        <a href="ftp://admin:kedacomIPC@192.168.15.11:21/mnt/TrafficFlowLog/2020-09-22%2000-00.json" download="">FTP下载 </a>
+      <div class="statistics-name">{{$t('edge.statistics.username')}}</div>
+      <div class="statistics-input">
+        <el-input v-model="userName" :placeholder="$t('edge.statistics.usernameplaceholder')" size="small"></el-input>
+      </div>
+      <div class="statistics-name">{{$t('edge.statistics.pass')}}</div>
+      <div class="statistics-input">
+        <el-input v-model="password" :placeholder="$t('edge.statistics.passplaceholder')" size="small" show-password></el-input>
+      </div>
+      <div class="statistics-bottom">
+        <el-button type="primary" @click="getStatisticsData" size="small" style="margin-left: 10px;">{{$t('edge.statistics.getdevicedata')}}</el-button>
+      </div>
+        <!-- <el-button type="primary" @click="getStatisticsData" size="small" style="margin-left: 10px;">获取设备流量数据</el-button> -->
+        <!-- <el-button type="primary" @click="testSftp" size="small">导入本地流量文件</el-button>
+        <a href="ftp://admin:kedacomIPC@192.168.15.11:21/mnt/TrafficFlowLog/2020-09-22%2000-00.json" download="">FTP下载 </a> -->
         <div class="statistics-button">
-            <el-radio-group v-model="radio">
-                <el-radio-button label="检测器1"></el-radio-button>
-                <el-radio-button label="检测器2"></el-radio-button>
-                <el-radio-button label="检测器3"></el-radio-button>
-                <el-radio-button label="检测器4"></el-radio-button>
+            <el-radio-group v-model="radio" @change="handleDetector" v-for="(item,index) in detectorList" :key="index">
+                <el-radio-button :label="index">{{$t('edge.statistics.detector') + item.id}}</el-radio-button>
             </el-radio-group>
         </div>
     </div>
@@ -40,38 +48,27 @@
             <el-table-column
             type="index"
             label="#"
+            width="110px"
             align="center">
             </el-table-column>
             <el-table-column
-            prop="m_wFaultType"
-            label="主类型"
+            prop="time"
+            :label="$t('edge.statistics.time')"
             align="center">
             </el-table-column>
             <el-table-column
-            prop="m_wSubFaultType"
-            label="子类型"
+            prop="smallvehnum"
+            :label="$t('edge.statistics.flow')"
             align="center">
             </el-table-column>
             <el-table-column
-            prop="m_unFaultOccurTime"
-            label="发生时间"
-            sortable
+            prop="occupyrate"
+            :label="$t('edge.statistics.occupyrate')"
             align="center">
             </el-table-column>
             <el-table-column
-            prop="m_unFaultRenewTime"
-            label="恢复时间"
-            sortable
-            align="center">
-            </el-table-column>
-            <el-table-column
-            prop="m_byFaultLevel"
-            label="等级"
-            align="center">
-            </el-table-column>
-            <el-table-column
-            prop="m_byFaultDescValue"
-            label="值"
+            prop="totalVehtime"
+            :label="$t('edge.statistics.occupytime')"
             align="center">
             </el-table-column>
             </el-table>
@@ -81,7 +78,7 @@
 </template>
 
 <script>
-import { setVolumelog } from '@/api/statistics'
+import { setVolumelog, getHistoryFlow } from '@/api/statistics'
 import echart from 'echarts'
 // import Ftp from 'vinyl-ftp'
 export default {
@@ -90,35 +87,16 @@ export default {
   data () {
     return {
       listLoading: false,
-      radio: '检测器1',
-      tableData: [{
-        'm_wFaultID': 1000,
-        'm_byFaultBoardType': 1,
-        'm_unFaultOccurTime': 11111,
-        'm_unFaultRenewTime': 22222,
-        'm_wFaultType': 203,
-        'm_wSubFaultType': 1,
-        'm_byFaultDescValue': [2, 3],
-        'm_byFaultLevel': 3
-      }, {
-        'm_wFaultID': 1000,
-        'm_byFaultBoardType': 1,
-        'm_unFaultOccurTime': 11111,
-        'm_unFaultRenewTime': 22222,
-        'm_wFaultType': 203,
-        'm_wSubFaultType': 1,
-        'm_byFaultDescValue': [2, 3],
-        'm_byFaultLevel': 3
-      }, {
-        'm_wFaultID': 1000,
-        'm_byFaultBoardType': 1,
-        'm_unFaultOccurTime': 11111,
-        'm_unFaultRenewTime': 22222,
-        'm_wFaultType': 203,
-        'm_wSubFaultType': 1,
-        'm_byFaultDescValue': [2, 3],
-        'm_byFaultLevel': 3
-      }]
+      radio: 0,
+      allFlowData: [],
+      tableData: [],
+      dateData: [],
+      flowData: [],
+      occupancyData: [],
+      detectorList: [],
+      loading: {},
+      userName: '',
+      password: ''
     }
   },
   watch: {
@@ -130,7 +108,7 @@ export default {
   created () {
   },
   methods: {
-    getStatisticsData () {
+    getStatisticsData1 () {
       let param = {
         'udiskset': 1,
         'gainstatus': 1
@@ -148,9 +126,61 @@ export default {
         this.software = res.data.data.software
         this.hardware = res.data.data.hardware
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.message)
         console.log(error)
       })
+    },
+    handleDetector (val) {
+      this.radio = val
+      this.handleData(this.allFlowData)
+    },
+    getStatisticsData () {
+      let username = this.userName
+      let password = this.password
+      if (username === '' || password === '') {
+        this.$message.error(this.$t('edge.statistics.userpassnotnull'))
+        return
+      }
+      this.lockScreen()
+      getHistoryFlow(username, password).then((data) => {
+        let res = data.data
+        if (!res.success) {
+          this.unlockScreen()
+          if (res.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        this.unlockScreen()
+        if (res.data.length === 0) {
+          this.$message.error(this.$t('edge.statistics.historicalisempty'))
+          return
+        }
+        this.detectorList = res.data[0].detector
+        this.allFlowData = res.data
+        this.handleData(this.allFlowData)
+      }).catch(error => {
+        this.unlockScreen()
+        this.$message.error(error.message)
+        console.log(error)
+      })
+    },
+    handleData (flows) {
+      let index = this.radio
+      for (let flow of flows) {
+        let tableObj = {}
+        tableObj.time = flow.time
+        tableObj.smallvehnum = flow.detector[index].smallvehnum
+        tableObj.totalVehtime = flow.detector[index].totalVehtime
+        tableObj.occupyrate = flow.detector[index].occupyrate
+        this.dateData.push(flow.time)
+        this.tableData.push(tableObj)
+        this.flowData.push(flow.detector[index].totalVehtime)
+        this.occupancyData.push(flow.detector[index].occupyrate)
+      }
+      this.getEchartsData()
     },
     initEcharts () {
       this.historyFlowEcharts = echart.init(document.getElementById('historyFlowEcharts'))
@@ -160,9 +190,10 @@ export default {
       }
     },
     getEchartsData () {
+      let _this = this
       let option = {
         legend: {
-          data: ['流量', '占有率'],
+          data: [_this.$t('edge.statistics.flow'), _this.$t('edge.statistics.occupyrate')],
           right: '2%'
           // align: 'right'
         },
@@ -177,55 +208,84 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: _this.dateData
         },
         yAxis: {
           type: 'value'
         },
         series: [{
-          name: '流量',
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          name: _this.$t('edge.statistics.flow'),
+          data: _this.flowData,
           type: 'line',
           smooth: true
         }, {
-          name: '占有率',
-          data: [800, 902, 981, 904, 1090, 1300, 1300],
+          name: _this.$t('edge.statistics.occupyrate'),
+          data: _this.occupancyData,
           type: 'line',
           smooth: true
         }]
       }
       this.historyFlowEcharts.setOption(option)
     },
-    testSftp () {
+    lockScreen () {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+    },
+    unlockScreen () {
+      this.loading.close()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.statistics {
-    height: 100%;
-}
-.one {
-    height: 6%;
-}
-.two {
-    height: 47%;
-}
-.flow-echarts {
-    height: 100%;
-}
-.three {
-    height: 47%;
-    text-align: center;
-}
-.statistics-table {
-    width: 96%;
-    margin-left: 2%;
-    border: solid 1px #e6e6e6;
-}
-.statistics-button {
-    float: right;
-    margin-right: 2%;
-}
+// .statistics {
+//     height: 100%;
+// }
+// .one {
+//     height: 6%;
+// }
+// .two {
+//     height: 47%;
+// }
+// .flow-echarts {
+//     height: 100%;
+// }
+// .three {
+//     height: 47%;
+//     text-align: center;
+// }
+// .statistics-table {
+//     width: 96%;
+//     margin-left: 2%;
+//     border: solid 1px #e6e6e6;
+// }
+// .statistics-button {
+//     float: right;
+//     margin-right: 2%;
+// }
+// .statistics-input {
+//   float: left;
+//   // margin-left: 20px;
+// }
+// .statistics-bottom {
+//   float: left;
+// }
+// .statistics-name {
+//   float: left;
+//   margin-top: 8px;
+//   margin-left: 10px;
+//   height: 14px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: #999999;
+// }
 </style>

@@ -30,6 +30,19 @@
           <span>{{scope.row.desc}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.detector.type')" min-width="200">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.type" :placeholder="$t('edge.common.select')" size="small" clearable>
+            <el-option
+              v-for="item in typeOption"
+              :key="item.value"
+              :label="$t('edge.detector.typeOption' + item.value)"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span>{{$t('edge.detector.typeOption' + scope.row.type)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.detector.callPhase')" min-width="200">
         <template slot-scope="scope">
           <el-select v-model="scope.row.callphase" :placeholder="$t('edge.common.select')" size="small" clearable>
@@ -144,6 +157,12 @@
           <span>{{scope.row.outfilter}}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.detector.saturationflow')" min-width="150">
+        <template slot-scope="scope">
+          <el-input-number size="small" controls-position="right" :min="0" :max="10" :step="1" v-model="scope.row.saturationflow"  @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.saturationflow}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.detector.operation')">
         <template slot-scope="scope">
           <el-button type="text" @click="handleClone(scope.$index,scope.row)">{{$t('edge.common.clone')}}</el-button>
@@ -198,6 +217,13 @@ export default {
       }, {
         value: 1,
         label: 1
+      }],
+      typeOption: [{
+        value: 0,
+        label: '线圈'
+      }, {
+        value: 1,
+        label: '智慧路口终端'
       }]
     }
   },
@@ -372,6 +398,7 @@ export default {
       }
       var detectorInitData = {
         id: this.id,
+        type: 0,
         callphase: '',
         noactivity: 0,
         maxpresence: 0,
@@ -385,7 +412,8 @@ export default {
         inthresh: 50,
         outthresh: 20,
         infilter: 3,
-        outfilter: 3
+        outfilter: 3,
+        saturationflow: 0
       }
       this.globalParamModel.addParamsByType('detectorList', detectorInitData)
       // this.id++

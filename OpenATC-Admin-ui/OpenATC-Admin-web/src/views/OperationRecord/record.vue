@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="openatc-operationrecord">
     <div class="filter-container">
       <el-form>
         <el-form-item>
@@ -96,6 +96,7 @@ export default {
       listLoading: false,
       tableData: [],
       statusMode: new Map([['set-request', '请求错误'], ['set-response', '应答成功'], ['error-response', '应答错误']]),
+      statusModeEn: new Map([['set-request', 'Request error'], ['set-response', 'Successful response'], ['error-response', 'Response error']]),
       listQuery: {
         pageNum: 1, // 页码
         pageRow: 50 // 每页条数
@@ -185,7 +186,12 @@ export default {
       for (let obj of data) {
         Object.keys(obj).forEach(function (key) {
           if (key === 'status') {
-            obj[key] = that.statusMode.get(obj[key])
+            if (that.$i18n.locale === 'en') {
+              obj[key] = that.statusModeEn.get(obj[key])
+            } else {
+              obj[key] = that.statusMode.get(obj[key])
+            }
+            // obj[key] = that.statusMode.get(obj[key])
           }
         })
       }
@@ -211,17 +217,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.atc-table {
-  position: absolute;
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px #e6e6e6;
-  overflow: auto;
-}
-.filter-container {
-  float: right;
-  margin-top: 20px;
-  margin-right: 20px;
-}
+// .atc-table {
+//   position: absolute;
+//   top: 150px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+// }
+// .filter-container {
+//   float: right;
+//   margin-top: 20px;
+//   margin-right: 20px;
+// }
 </style>

@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<div>
+<div class="openatc-user">
     <div class="filter-container">
       <el-form>
         <el-form-item>
@@ -46,6 +46,11 @@
         align="center">
         </el-table-column>
         <el-table-column
+        prop="login_ip_limit"
+        :label="$t('openatc.usermanager.ip')"
+        align="center">
+        </el-table-column>
+        <el-table-column
         prop="organization"
         :label="$t('openatc.usermanager.organization')"
         align="center">
@@ -77,6 +82,7 @@
         </el-table-column>
         <el-table-column :label="$t('openatc.usermanager.operation')" align="center">
         <template slot-scope="scope">
+            <el-button type="text" @click="authorize(scope.$index)">{{$t('openatc.usermanager.authorize')}}</el-button>
             <el-button type="text" @click="edit(scope.$index)">{{$t('openatc.common.edit')}}</el-button>
             <el-button type="text" @click="handleDelete(scope.$index)">{{$t('openatc.common.delete')}}</el-button>
         </template>
@@ -85,6 +91,7 @@
   </div>
   <add ref="addChild"></add>
   <update ref="updateChild"></update>
+  <authorize ref="authorizeChild"></authorize>
   <Messagebox :visible="messageboxVisible" :text="$t('openatc.usermanager.deleteuser')" @cancle="cancle" @ok="ok"/>
 </div>
 </template>
@@ -92,11 +99,12 @@
 <script>
 import add from './UserDialog/add'
 import update from './UserDialog/update'
+import authorize from './UserDialog/authorize'
 import Messagebox from '../../components/MessageBox'
 import { GetUsrInfoList, DeleteUsr } from '../../api/user'
 export default {
   name: 'user',
-  components: { add, update, Messagebox },
+  components: { add, update, Messagebox, authorize },
   data () {
     return {
       tableHeight: 700,
@@ -143,7 +151,7 @@ export default {
         if (data.data.success !== true) {
           this.listLoading = false
           if (data.data.code === '3008') {
-            this.$message.error('没有权限访问！')
+            this.$message.error(this.$t('openatc.common.authtip'))
             console.log(data.data.message)
             return
           }
@@ -179,7 +187,7 @@ export default {
       DeleteUsr(name).then(data => {
         if (data.data.success !== true) {
           if (data.data.code === '3008') {
-            _vue.$message.error('没有权限访问!')
+            _vue.$message.error(this.$t('openatc.common.authtip'))
             return
           }
           _vue.$message.error(data.data.message)
@@ -187,7 +195,7 @@ export default {
         }
         this.messageboxVisible = false
         this.$message({
-          message: '删除成功！',
+          message: this.$t('openatc.common.deletesuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
@@ -195,23 +203,28 @@ export default {
           }
         })
       })
+    },
+    authorize ($index) {
+      let user = this.tableData[$index]
+      let authorizeChild = this.$refs.authorizeChild
+      authorizeChild.onAuthorizeClick(user)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.filter-container {
-  float: right;
-  margin-top: 20px;
-  margin-right: 20px;
-}
-.atc-table {
-  position: absolute;
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px #e6e6e6;
-  overflow: auto;
-}
+// .filter-container {
+//   float: right;
+//   margin-top: 20px;
+//   margin-right: 20px;
+// }
+// .atc-table {
+//   position: absolute;
+//   top: 150px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+// }
 </style>

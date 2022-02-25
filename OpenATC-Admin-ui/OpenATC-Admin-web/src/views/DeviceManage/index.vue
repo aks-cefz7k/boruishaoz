@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="openatc-device">
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
     <div class="devs-container">
       <div class="tag-container">
@@ -271,22 +271,22 @@ export default {
 </script>
 
 <style lang="scss">
-.tag-container {
-  float: left;
-  max-width: 70%;
-  overflow: hidden;
-}
-.filter-container {
-  float: right;
-  margin-top: 20px;
-  margin-right: 20px;
-}
-.devs-table {
-  position: absolute;
-  top: 134px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px #e6e6e6;
-  overflow: auto;
-}
+// .tag-container {
+//   float: left;
+//   max-width: 70%;
+//   overflow: hidden;
+// }
+// .filter-container {
+//   float: right;
+//   margin-top: 20px;
+//   margin-right: 20px;
+// }
+// .devs-table {
+//   position: absolute;
+//   top: 134px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+// }
 </style>

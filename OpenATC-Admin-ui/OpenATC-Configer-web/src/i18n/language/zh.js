@@ -33,7 +33,8 @@ const zh = {
       'inputoldpass': '请输入旧密码！',
       'twopassnotdiff': '新密码不能与旧密码一致！',
       'originalpasserror': '原密码错误!',
-      'modifisucceeded': '修改成功'
+      'modifisucceeded': '修改成功',
+      'getmd5error': '获取MD5失败！'
     },
     'route': {
       'dashboard': '首页',
@@ -130,6 +131,10 @@ const zh = {
       'inductioncontrol': '感应控制',
       'nocablecoordination': '无电缆协调',
       'phasewalk': '行人过街',
+      'websteroptimization': 'Webster单点优化',
+      'selfadaption': '自适应控制',
+      'custom': '自定义',
+      'controlmodevalue': '控制方式数值',
       'patternstate': '方案状态',
       'cycle': '周期',
       'phasesplit': '绿信比',
@@ -165,8 +170,15 @@ const zh = {
       'modelList4': '步进',
       'modelList5': '定周期',
       'modelList6': '感应控制',
+      'modelList9': '自适应控制',
       'modelList10': '无电缆协调',
-      'modelList12': '行人过街'
+      'modelList12': '行人过街',
+      'tips': '提示',
+      'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
+      'canceled': '已取消',
+      'nextcycleeffic': '执行成功，下周期生效！',
+      'transitioneffic': '执行成功，过渡切换后生效！',
+      'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！'
     },
     'phase': {
       'desc': '描述',
@@ -186,7 +198,7 @@ const zh = {
       'lane': '链路',
       'operation': '操作',
       'deletetip': '确认删除此相位？',
-      'deleteAlltip': '确认删除所有相位？',
+      'deleteAlltip': '确认删除所有相位、方案？',
       'mostdata': '最多只能创建16条数据！',
       'es': '东直行',
       'el': '东左转',
@@ -253,6 +265,7 @@ const zh = {
       'ControlOption4': '步进',
       'ControlOption5': '定周期控制',
       'ControlOption6': '单点感应控制',
+      'ControlOption9': '自适应控制',
       'ControlOption10': '无电缆控制',
       'ControlOption12': '行人过街控制'
     },
@@ -286,6 +299,11 @@ const zh = {
     },
     'detector': {
       'desc': '描述',
+      'type': '类型',
+      'typeOptionundefined': '',
+      'typeOption': 'typeOption',
+      'typeOption0': '线圈',
+      'typeOption1': '智慧路口终端',
       'callPhase': '请求相位',
       'noactivity': '无响应时间',
       'maxpresence': '最大持续时间',
@@ -300,6 +318,7 @@ const zh = {
       'outthresh': '离开阈值',
       'infilter': '进入滤波',
       'outfilter': '离开滤波 ',
+      'saturationflow': '饱和流量',
       'operation': '操作',
       'deletetip': '确认删除此检测器？',
       'deleteAlltip': '确认删除所有检测器？',
@@ -318,7 +337,23 @@ const zh = {
     },
     'channelControl': {
       'recoverysuccess': '恢复成功！',
-      'recoveryfailed': '恢复失败！'
+      'recoveryfailed': '恢复失败！',
+      'testsuccess': '检测成功!',
+      'testfailed': '检测失败!',
+      'channel': '通道',
+      'redresidualvoltage': '红灯残留电压',
+      'redoutputvoltage': '红灯输出电压',
+      'redoffresidualpower': '红灯关闭的残留功率',
+      'redonoutputpower': '红灯亮灯的输出功率',
+      'yellowresidualvoltage': '黄灯残留电压',
+      'yellowoutputvoltage': '黄灯输出电压',
+      'yellowoffresidualpower': '黄灯关闭的残留功率',
+      'yellowonoutputpower': '黄灯亮灯的输出功率',
+      'greenresidualvoltage': '绿灯残留电压',
+      'greenoutputvoltage': '绿灯输出电压',
+      'greenoffresidualpower': '绿灯关闭的残留功率',
+      'greenonoutputpower': '绿灯亮灯的输出功率',
+      'inputvoltage': '通道输入电压'
     },
     'pedestrianDetector': {
       'desc': '描述',
@@ -335,6 +370,7 @@ const zh = {
       'addresscode': '地址码: ',
       'areaid': '区域ID: ',
       'crossid': '路口ID: ',
+      'selflearning': '自学习:',
       'deviceparam': '设备参数: ',
       'startyellowflashtime': '启动黄闪时间(秒): ',
       'startredtime': '启动全红时间(秒): ',
@@ -352,7 +388,8 @@ const zh = {
       'ioboards': '主机IO板数量: ',
       'slavecascadeoffset': '从机级联偏移量: ',
       'deviceinfostyle': 'margin-left: 50px; top: 10px;',
-      'deviceparamstyle': 'margin-left: 50px; top: 10px;'
+      'deviceparamstyle': 'margin-left: 50px; top: 10px;',
+      'deviceselflearningstyle': 'margin-left: 50px; top: 15px;'
     },
     'controlpanel': {
       'controlmode': '控制模式',
@@ -384,7 +421,16 @@ const zh = {
       'channelstatus3': '绿灯',
       'channelstatus4': '灭灯',
       'getdefaultmanualpaneltips': '生成默认参数成功，请查看！',
-      'phaseanddetectornotnull': '相位和通道不能为空！'
+      'phaseanddetectornotnull': '相位和通道不能为空！',
+      'iscleardata': '是否清空数据?',
+      'tips': '提示',
+      'cancelclear': '已取消清空',
+      'changered': '是否将状态全部初始化为红灯?',
+      'cancelinit': '已取消初始化',
+      'manualpanelundefined': '',
+      'manualpanel0': '默认',
+      'manualpanel1': '自定义',
+      'manualcontrolbackground': 'manualcontrolbackground'
     },
     'system': {
       'information': '信息',
@@ -422,7 +468,14 @@ const zh = {
       'selectdate': '选择日期',
       'anytimepoint': '任意时间点',
       'tips': '提示',
-      'update': '更新'
+      'update': '更新',
+      'duration1': '5分钟',
+      'duration2': '60分钟',
+      'duration3': '无限制',
+      'remote1': '重启',
+      'remote2': '授权',
+      'remote3': '自定义',
+      'test': '检测'
     },
     'optimize': {
       'strategy': '优化策略',
@@ -459,6 +512,20 @@ const zh = {
       'recoverytime': '恢复时间',
       'grade': '等级',
       'value': '值'
+    },
+    'statistics': {
+      'username': '用户名：',
+      'pass': '密码：',
+      'usernameplaceholder': '请输入用户名',
+      'passplaceholder': '请输入密码',
+      'getdevicedata': '获取设备流量数据',
+      'detector': '检测器',
+      'time': '时间',
+      'flow': '流量',
+      'occupyrate': '占有率',
+      'occupytime': '占有时间',
+      'userpassnotnull': '用户名或密码不能为空!',
+      'historicalisempty': '获取历史流量数据为空！'
     },
     'dailyrecord': {
       'data': '日期',
@@ -546,11 +613,26 @@ const zh = {
       'deviceoffline': '设备不在线！'
     },
     'login': {
-      'title': '配置管理中心',
+      'title': '信号机设备配置',
       'login': '登录',
       'authorize': '授权',
       'close': '关闭',
-      'dialogtitle': '应用授权'
+      'dialogtitle': '应用授权',
+      'username': '用户名',
+      'password': '密码',
+      'locallogin': '本地登陆',
+      'port': '端口',
+      'protocol': '协议',
+      'restoredefaultparameters': '恢复默认参数',
+      'enterip': '请输入IP',
+      'enterlegalip': '请输入合法的IP！',
+      'enterpport': '请输入端口',
+      'entercorrectport': '请输入正确的端口！',
+      'usernamenotnull': '用户名不能为空！',
+      'passnotnull': '密码不能为空！',
+      'selectagreement': '请选择协议',
+      'enterdeviceid': '请输入设备ID',
+      'loginerror': '登陆错误!'
     },
     'errorTip': {
       'phaseNotZero': '必须含有至少一个相位!',
@@ -566,7 +648,13 @@ const zh = {
       'manualpanel': '手动面板数据不能为空',
       'momthIsNull': '日期里月份不能为空！',
       'concurrentRules': '相位参数中配置了多环时，并发相位不能为空！',
-      'devicenotonline': '设备不在线！'
+      'devicenotonline': '设备不在线！',
+      'abnormalcommunication': '通讯异常！',
+      'saveParamFailed': '信号机保存参数失败!',
+      'ringErrorTip': '环配置应从环1起配，不允出现跳环配置!',
+      'deviceinformationnotnull': '设备信息中的地址码不能为空！',
+      'noSchemeUpload': '暂没有可上载方案！',
+      'readSchemeSucc': '读取方案成功！'
     },
     'importTemp': {
       'editTemplateData': '模板数据编辑',

@@ -23,6 +23,7 @@ const tscParam = {
     areaid: Number,
     intersectionid: Number,
     siteid: '',
+    selflearning: 0,
     netcard: [{
       ip: '',
       subnetmask: '',

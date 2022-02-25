@@ -117,7 +117,7 @@ export default {
           }
           // let currPattern = currPatternList.filter(cpl => cpl.id === patternId)[0]
           if (currPattern.desc === '') {
-            obj.desc = '方案' + currPattern.id
+            obj.desc = this.$t('openatc.greenwaveoptimize.pattern') + currPattern.id
           } else {
             obj.desc = currPattern.desc
           }
@@ -171,11 +171,11 @@ export default {
     flex-direction: row;
     align-items: flex-start;
   }
-  .kanban {
-    &.todo {
-      .board-column-header {
-        background: #4A9FF9;
-      }
-    }
-  }
+  // .kanban {
+  //   &.todo {
+  //     .board-column-header {
+  //       background: $--color-primary;
+  //     }
+  //   }
+  // }
 </style>

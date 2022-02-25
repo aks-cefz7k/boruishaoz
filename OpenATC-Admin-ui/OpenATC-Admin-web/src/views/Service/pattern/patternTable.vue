@@ -195,11 +195,11 @@ export default {
   flex-direction: row;
   align-items: flex-start;
 }
-.kanban {
-  &.todo {
-    .board-column-header {
-      background: #4a9ff9;
-    }
-  }
-}
+// .kanban {
+//   &.todo {
+//     .board-column-header {
+//       background: $--color-primary;
+//     }
+//   }
+// }
 </style>

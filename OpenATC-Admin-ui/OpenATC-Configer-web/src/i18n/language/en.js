@@ -33,7 +33,8 @@ const en = {
       'inputoldpass': 'Please input the old password!',
       'twopassnotdiff': 'The new password cannot be the same as the old one!',
       'originalpasserror': 'Original password error',
-      'modifisucceeded': 'Modification succeeded'
+      'modifisucceeded': 'Modification succeeded',
+      'getmd5error': 'Failed to get MD5!'
     },
     'route': {
       'dashboard': 'Dashboard',
@@ -79,7 +80,7 @@ const en = {
       'agentid': 'AGENTID',
       'Password expiration': 'Password expiration',
       'organization': 'Organization',
-      'realname': 'Real Name',
+      'realname': 'Name',
       'phone': 'Telephone',
       'email': 'Email',
       'changepass': 'Change Password',
@@ -130,6 +131,10 @@ const en = {
       'inductioncontrol': 'Free Control',
       'nocablecoordination': 'Nocable Control',
       'phasewalk': 'Pedestrian Crossing Control',
+      'websteroptimization': 'Webster Single Point Optimization',
+      'selfadaption': 'Self-Adaption',
+      'custom': 'Custom',
+      'controlmodevalue': 'Control Value',
       'patternstate': 'Pattern State',
       'cycle': 'Cycle',
       'phasesplit': 'Phase Split',
@@ -165,8 +170,15 @@ const en = {
       'modelList4': 'Step Control',
       'modelList5': 'Fixed_Cycle Control',
       'modelList6': 'Free Control',
+      'modelList9': 'Self-Adaption',
       'modelList10': 'Nocable Control',
-      'modelList12': 'phasewalk'
+      'modelList12': 'phasewalk',
+      'tips': 'Tips',
+      'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
+      'canceled': 'Cancelled',
+      'nextcycleeffic': 'Successful execution, the next cycle will take effect!',
+      'transitioneffic': 'The execution is successful. It will take effect after the transition switch!',
+      'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!'
     },
     'phase': {
       'desc': 'Description',
@@ -187,7 +199,7 @@ const en = {
       'operation': 'Operation',
       'add': 'Add Phase',
       'deletetip': 'Delete This Phase ?',
-      'deleteAlltip': 'Delete All Phase ?',
+      'deleteAlltip': 'Are you sure to delete all phases and patterns ?',
       'mostdata': 'There are at most 16 data !',
       'es': 'East-Straight',
       'el': 'East-Left',
@@ -255,6 +267,7 @@ const en = {
       'ControlOption4': 'Step Control',
       'ControlOption5': 'Fixed_Cycle Control',
       'ControlOption6': 'Free Control',
+      'ControlOption9': 'Self-Adaption',
       'ControlOption10': 'Nocable Control',
       'ControlOption12': 'Pedestrian Crossing Control'
     },
@@ -288,6 +301,11 @@ const en = {
     },
     'detector': {
       'desc': 'Description',
+      'type': 'Type',
+      'typeOptionundefined': '',
+      'typeOption': 'typeOption',
+      'typeOption0': 'Coil',
+      'typeOption1': 'Smart junction terminal',
       'callPhase': 'CallPhase',
       'noactivity': 'NoActivity(min)',
       'maxpresence': 'MaxPresence(min)',
@@ -302,6 +320,7 @@ const en = {
       'outthresh': 'Outthresh',
       'infilter': 'Infilter',
       'outfilter': 'Outfilter ',
+      'saturationflow': 'SaturationFlow',
       'operation': 'Operation',
       'deletetip': 'Delete This Detector?',
       'deleteAlltip': 'Delete All Detector?',
@@ -320,7 +339,23 @@ const en = {
     },
     'channelControl': {
       'recoverysuccess': 'Recovery Success!',
-      'recoveryfailed': 'Recovery Failed!'
+      'recoveryfailed': 'Recovery Failed!',
+      'testsuccess': 'Test Success!',
+      'testfailed': 'Test Failed!',
+      'channel': 'Channel',
+      'redresidualvoltage': 'Red Residual Voltage',
+      'redoutputvoltage': 'Red Output Voltage',
+      'redoffresidualpower': 'Red Off Residual Power',
+      'redonoutputpower': 'Red On Output Power',
+      'yellowresidualvoltage': 'Yellow Residual Voltage',
+      'yellowoutputvoltage': 'Yellow Output Voltage',
+      'yellowoffresidualpower': 'Yellow Off Residual Power',
+      'yellowonoutputpower': 'Yellow On Output Power',
+      'greenresidualvoltage': 'Green Residual Voltage',
+      'greenoutputvoltage': 'Green Output Voltage',
+      'greenoffresidualpower': 'Green Off Residual Power',
+      'greenonoutputpower': 'Green On Output Power',
+      'inputvoltage': 'Input Voltage'
     },
     'pedestrianDetector': {
       'desc': 'Description ',
@@ -337,6 +372,7 @@ const en = {
       'addresscode': 'Adress Code:',
       'areaid': 'Region ID:',
       'crossid': 'Cross ID:',
+      'selflearning': 'Selflearning:',
       'deviceparam': 'Device Parameters:',
       'startyellowflashtime': 'Start Yellow Flash Time:',
       'startredtime': 'Start Red Time:',
@@ -354,7 +390,8 @@ const en = {
       'ioboards': 'Number Of IO Boards:',
       'slavecascadeoffset': 'Slave Cascade Offset:',
       'deviceinfostyle': 'margin-left: 100px; top: 10px;',
-      'deviceparamstyle': 'margin-left: 170px; top: 10px;'
+      'deviceparamstyle': 'margin-left: 170px; top: 10px;',
+      'deviceselflearningstyle': 'margin-left: 100px; top: 15px;'
     },
     'controlpanel': {
       'controlmode': 'Control Mode',
@@ -373,20 +410,29 @@ const en = {
       'clear': 'Clear',
       'resetstatus': 'Reset State',
       'manualbtn': 'manualbtn',
-      'manualbtn1': 'EW-Straight',
-      'manualbtn2': 'N-Traffic',
-      'manualbtn3': 'EW-Left',
-      'manualbtn4': 'W-Traffic',
-      'manualbtn5': 'E-Traffic',
-      'manualbtn6': 'NS-Straight',
-      'manualbtn7': 'S-Traffic',
-      'manualbtn8': 'NS-Left',
+      'manualbtn1': '1',
+      'manualbtn2': '2',
+      'manualbtn3': '3',
+      'manualbtn4': '4',
+      'manualbtn5': '5',
+      'manualbtn6': '6',
+      'manualbtn7': '7',
+      'manualbtn8': '8',
       'channelstatus': 'channelstatus',
       'channelstatus1': 'Red',
       'channelstatus3': 'Green',
       'channelstatus4': 'Lights Out',
       'getdefaultmanualpaneltips': 'Generate default parameters successfully, please check!',
-      'phaseanddetectornotnull': 'Phase and channel cannot be empty!'
+      'phaseanddetectornotnull': 'Phase and channel cannot be empty!',
+      'iscleardata': 'Clear data?',
+      'tips': 'Tips',
+      'cancelclear': 'Emptying cancelled',
+      'changered': 'Do you want to initialize all States to red?',
+      'cancelinit': 'Uninitialized',
+      'manualpanelundefined': '',
+      'manualpanel0': 'Default',
+      'manualpanel1': 'Custom',
+      'manualcontrolbackground': 'manualcontrolbackgrounden'
     },
     'system': {
       'information': 'Information',
@@ -424,7 +470,14 @@ const en = {
       'selectdate': 'Select Date',
       'anytimepoint': 'Any Time Point',
       'tips': 'Tips',
-      'update': 'Update'
+      'update': 'Update',
+      'duration1': '5min',
+      'duration2': '60min',
+      'duration3': 'Unlimited',
+      'remote1': 'Restart',
+      'remote2': 'Authorize',
+      'remote3': 'Custom',
+      'test': 'Test'
     },
     'optimize': {
       'strategy': 'Optimization strategy',
@@ -461,6 +514,20 @@ const en = {
       'recoverytime': 'Recoverytime',
       'grade': 'Grade',
       'value': 'value'
+    },
+    'statistics': {
+      'username': 'User_name：',
+      'pass': 'Password：',
+      'usernameplaceholder': 'Enter one user name',
+      'passplaceholder': 'Please input a password',
+      'getdevicedata': 'Get device traffic data',
+      'detector': 'Detector',
+      'time': 'Time',
+      'flow': 'Flow',
+      'occupyrate': 'Occupancy',
+      'occupytime': 'Possession of time',
+      'userpassnotnull': 'User name or password cannot be empty!',
+      'historicalisempty': 'Get historical traffic data is empty!'
     },
     'dailyrecord': {
       'data': 'Data',
@@ -548,11 +615,26 @@ const en = {
       'deviceoffline': 'Device not online!'
     },
     'login': {
-      'title': 'KISS Edge Manage Center',
+      'title': 'Openatc-Configer',
       'login': 'Sign in',
       'authorize': 'Authorize',
       'close': 'Close',
-      'dialogtitle': 'Available authorizations'
+      'dialogtitle': 'Available authorizations',
+      'username': 'User Name',
+      'password': 'Password',
+      'locallogin': 'Local login',
+      'port': 'Port',
+      'protocol': 'Protocol',
+      'restoredefaultparameters': 'Restore default parameters',
+      'enterip': 'Please enter IP',
+      'enterlegalip': 'Please enter legal IP!',
+      'enterpport': 'Please enter the port',
+      'entercorrectport': 'Please enter the correct port!',
+      'usernamenotnull': 'User name cannot be empty!',
+      'passnotnull': 'Password cannot be empty!',
+      'selectagreement': 'Please select protocol',
+      'enterdeviceid': 'Please enter device ID',
+      'loginerror': 'Login error!'
     },
     'errorTip': {
       'phaseNotZero': 'Must contain at least phase !',
@@ -567,7 +649,13 @@ const en = {
       'overlapRules': 'The parent phase in the overlap cannot be empty！',
       'manualpanel': 'The manualpanel cannot be empty！',
       'momthIsNull': 'Month cannot be empty in date！',
-      'devicenotonline': 'Device not online!'
+      'devicenotonline': 'Device not online!',
+      'abnormalcommunication': 'Abnormal Communication!',
+      'saveParamFailed': 'Signal save parameter failed!',
+      'ringErrorTip': 'Ring configuration should be started from ring 1, and skip ring configuration is not allowed!',
+      'deviceinformationnotnull': 'Address code in device information cannot be empty!',
+      'noSchemeUpload': 'There is no scheme to upload!',
+      'readSchemeSucc': 'Reading scheme succeeded!'
     },
     'importTemp': {
       'editTemplateData': 'Edit Template Data',

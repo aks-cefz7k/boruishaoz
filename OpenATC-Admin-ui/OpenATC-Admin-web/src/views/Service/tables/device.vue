@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="serviceroute-device">
     <el-drawer
       ref="addDrawer"
       :title="$t('openatc.greenwaveoptimize.adddevice')"
@@ -203,17 +203,17 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.devicePanel {
-  border: solid 1px #e6e6e6;
-}
-.addbtn {
-  padding: 0;
-  width: 12.5%;
-  height: 40px;
-  text-align: center;
-  float: right;
-  line-height: 40px;
-  min-width: 66px;
-  margin-bottom: 7px;
-}
+// .devicePanel {
+//   border: solid 1px $--border-color-lighter;
+// }
+// .addbtn {
+//   padding: 0;
+//   width: 12.5%;
+//   height: 40px;
+//   text-align: center;
+//   float: right;
+//   line-height: 40px;
+//   min-width: 66px;
+//   margin-bottom: 7px;
+// }
 </style>

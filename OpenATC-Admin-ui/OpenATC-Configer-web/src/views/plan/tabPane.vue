@@ -383,6 +383,8 @@ export default {
       }, {
         value: 6
       }, {
+        value: 9
+      }, {
         value: 10
       }, {
         value: 12
@@ -413,7 +415,11 @@ export default {
       } else {
         let obj = {}
         obj.value = patternList[i].id
-        obj.label = '方案' + String(patternList[i].id)
+        if (this.$i18n.locale === 'en') {
+          obj.label = 'Pattern' + String(patternList[i].id)
+        } else if (this.$i18n.locale === 'zh') {
+          obj.label = '方案' + String(patternList[i].id)
+        }
         this.PatternOption.push(obj)
       }
     }

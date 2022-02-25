@@ -178,7 +178,8 @@ export default {
       let name = ''
       for (let i = 0; i < status.length; i++) {
         if (!status[i]) continue
-        name = name + ',' + images[i].name
+        // name = name + ',' + images[i].name
+        name = name + ',' + this.$t(images[i].name)
       }
       if (name !== '') {
         const obj = {
@@ -231,14 +232,14 @@ export default {
 }
 </style>
 
-<style scoped>
-.phasePanel {
-  border: solid 1px #e6e6e6;
-}
-.XRDDir {
-  float: left;
-  width: 32px;
-  height: 32px;
-  margin-right: 8px;
-}
+<style lang="scss" scoped>
+// .phasePanel {
+//   border: solid 1px $--border-color-lighter;
+// }
+// .XRDDir {
+//   float: left;
+//   width: 32px;
+//   height: 32px;
+//   margin-right: 8px;
+// }
 </style>

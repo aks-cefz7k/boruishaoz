@@ -13,6 +13,7 @@
   <el-dialog
     :title="$t('openatc.main.organization')"
     :visible.sync="dialogPermissionVisible"
+    :modal-append-to-body="false"
     width="600px"
   >
     <div class="borde-style">

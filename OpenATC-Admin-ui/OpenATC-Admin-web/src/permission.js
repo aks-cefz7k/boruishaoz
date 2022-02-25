@@ -17,7 +17,7 @@ import 'nprogress/nprogress.css'// Progress 进度条样式
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth' // 验权
 
-const whiteList = ['/login', '/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew'] // 不重定向白名单
+const whiteList = ['/login', '/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew', '/overviewNew/index'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   if (from.path === '/overview/index' && from.params.flag) {
     Message.error('您当前正处于手动状态，请先退出手动！')

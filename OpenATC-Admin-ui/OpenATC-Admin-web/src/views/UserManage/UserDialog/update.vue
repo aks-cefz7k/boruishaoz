@@ -142,7 +142,7 @@ export default {
         } else {
           this.phone_status = false
           return callback(
-            new Error('请输入正确的电话号码！')
+            new Error(this.$t('openatc.usermanager.correctphone'))
           )
         }
       }
@@ -161,16 +161,16 @@ export default {
         } else {
           this.email_status = false
           callback(
-            new Error('请输入正确的电子邮箱！')
+            new Error(this.$t('openatc.usermanager.correctemail'))
           )
         }
       }, 100)
     }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入确认密码！'))
+        callback(new Error(this.$t('openatc.usermanager.enterpass')))
       } else if (value !== this.tempUser.newpass) {
-        callback(new Error('确认密码与密码不同！'))
+        callback(new Error(this.$t('openatc.usermanager.enterpassdiffpass')))
       } else {
         callback()
       }
@@ -193,10 +193,10 @@ export default {
       },
       rules: {
         user_name: [
-          { message: '请输入', trigger: 'blur' }
+          { message: this.$t('openatc.usermanager.enterpassdiffpass'), trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '请输入', trigger: 'blur' }
+          { required: true, message: this.$t('openatc.usermanager.pleaseenter'), trigger: 'blur' }
         ],
         email: [{ validator: checkEmail, trigger: 'blur' }],
         mobile_phone: [{ validator: checkPhone, trigger: 'blur' }],
@@ -218,27 +218,27 @@ export default {
       // 修改用户信息
       let _vue = this
       if (!this.phone_status || !this.email_status) {
-        this.$message.error('错误的电话号码或者电子邮箱！')
+        this.$message.error(this.$t('openatc.usermanager.wrongphoneemail'))
         return
       }
       if (this.tempUser.newpass !== '') {
         if (this.tempUser.newpass !== this.tempUser.checkpass) {
-          this.$message.error('确认密码与密码不同！')
+          this.$message.error(this.$t('openatc.usermanager.enterpassdiffpass'))
           return
         }
         // 校验新密码与老密码是否一致
         let encodePass = GetPassswordEncode(this.tempUser.user_name, this.tempUser.newpass)
         if (encodePass === this.user.password) {
-          this.$message.error('新密码不能与旧密码一致！')
+          this.$message.error(this.$t('openatc.usermanager.newpassdiffoldpass'))
           return
         }
       }
       if (this.roleNames.length === 0) {
-        this.$message.error('请至少选择一个角色！')
+        this.$message.error(this.$t('openatc.usermanager.selectonerole'))
         return
       }
       if (this.tempUser.newpass === '' && this.tempUser.nick_name === this.user.nick_name && this.tempUser.email === this.user.email && this.tempUser.mobile_phone === this.user.mobile_phone && this.tempUser.organization === this.user.organization && this.roleNames === this.user.roleNames) {
-        this.$message.error('没有任何修改！')
+        this.$message.error(this.$t('openatc.usermanager.nochanges'))
         return
       }
       let params = this.getParams()
@@ -248,7 +248,7 @@ export default {
       ).then(data => {
         if (data.data.success !== true) {
           if (data.data.code === '3010') {
-            this.$message.error('超级管理员角色不能被修改！')
+            this.$message.error(this.$t('openatc.usermanager.superrolenotmodified'))
             console.log(data.data.message)
             return
           }
@@ -256,7 +256,7 @@ export default {
           console.log(data.data.message)
           return
         }
-        let msg = '编辑成功！'
+        let msg = this.$t('openatc.usermanager.editsucc')
         this.dialogFormVisible = false
         this.$message({
           message: msg,
@@ -307,7 +307,7 @@ export default {
       getRoles().then(res => {
         if (!res.data.success) {
           if (res.data.code === '3008') {
-            this.$message.error('没有权限访问!')
+            this.$message.error(this.$t('openatc.common.authtip'))
             return
           }
           this.$message.error(res.data.message)

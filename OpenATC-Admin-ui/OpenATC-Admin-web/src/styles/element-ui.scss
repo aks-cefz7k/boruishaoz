@@ -41,7 +41,7 @@
 
 /********************** 设置头部样式 ********************/
 .el-menu-item:focus, .el-menu-item:hover {
-  background-color: #fff;
+  background-color: $--color-white;
 }
 
 .el-menu-item, .el-submenu__title {
@@ -57,7 +57,7 @@
   font-stretch: normal;
   line-height: 14px;
   letter-spacing: 0px;
-  color: #666666;
+  color: $--color-text-regular;
 }
 
 .el-dialog__footer .el-button {
@@ -74,7 +74,7 @@
   font-weight: normal;
   font-stretch: normal;
   letter-spacing: 0px;
-  color: #999999;
+  color: $--color-text-secondary;
 }
 
 .el-dialog__body .el-input__inner {

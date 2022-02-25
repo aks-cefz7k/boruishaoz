@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<div>
+<div class="openatc-planmanu">
   <div class="mask" v-if="maskVisible" @click ="clickMask"></div>
   <Messagebox :visible="deleteDiologVisible" :text="`${$t('openatc.greenwaveoptimize.isdelete')}${chooseName} ?`" @cancle="closeDeleteDialog" @ok="handleDelete"/>
   <AddOptimizeDialog
@@ -257,14 +257,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+ @import "../../styles/theme/element-variables.scss";
 .btnGroup .operate .el-dropdown-link {
-  color: #409eff;
+  color: $--color-primary;
   cursor: pointer;
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
+ @import "../../styles/theme/element-variables.scss";
 .el-menu {
   height: calc(100vh - 120px);
   max-height: calc(100vh - 120px);
@@ -297,15 +299,16 @@ export default {
     transition: .1s;
     font-size: 14px;
     border-radius: 4px;
-    color: #fff;
-    background-color: #409EFF;
-    border-color: #409EFF;
+    color: $--color-white;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
     cursor: pointer;
 }
 .btnGroup button:hover {
-    color: #fff;
-    background-color: #66b1ff;
-    border-color: #66b1ff;
+    color: $--color-white;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
+    opacity: 0.8;
 }
 .deletebtn {
     position: fixed;
@@ -333,7 +336,7 @@ export default {
     float: left;
 }
 .tipContent div i {
-  color: #409eff;
+  color: $--color-primary;
   font-size: 30px;
 }
 .tipContent .text {
@@ -343,7 +346,7 @@ export default {
     font-stretch: normal;
     line-height: 14px;
     letter-spacing: 1px;
-    color: #409eff;
+    color: $--color-primary;
     margin-left: 7px;
     line-height: 42px;
 }

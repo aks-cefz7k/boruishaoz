@@ -13,7 +13,6 @@
 <div class="tagsList">
   <el-button
     class="toListBtn"
-    :class="operateId ? 'normalTag' : 'highlightTag'"
     type="primary"
     @click="backToDeviceList"
     >{{$t('openatc.devicemanager.devicelist')}}</el-button>
@@ -44,6 +43,9 @@ export default {
   },
   created () {
     const currRouter = this.$route.path
+    // 如果是打开的单一设备详情，此处阻止根据数据长度判断tags为0后，重定向回设备列表（此处理逻辑是多设备管理的逻辑）
+    const stopJumpFlag = sessionStorage.getItem('toSingleEdge')
+    if (stopJumpFlag === '1') return
     if (this.tags.length === 0 && currRouter !== '/device' && currRouter !== '/deviceNew') {
       router.push({ path: this.devicePath })
     }
@@ -134,23 +136,25 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+ @import "../../styles/theme/element-variables.scss";
  .tagsList .highlightTag .el-icon-close{
-    color: #fff;
+    color: $--color-white;
   }
   .tagsList .highlightTag .el-icon-close:hover {
-    background-color: #ecf5ff;
-    color: #409eff;
+    background-color: $--border-color-extra-light;
+    color: $--color-primary;
   }
  .tagsList .normalTag .el-icon-close{
-    color: #409EFF;
+    color: $--color-primary;
   }
   .tagsList .normalTag .el-icon-close:hover {
-    background-color: #409eff;
-    color: #fff;
+    background-color: $--color-primary;
+    color: $--color-white;
   }
 </style>
 <style lang="scss" scoped>
+ @import "../../styles/theme/element-variables.scss";
 .tagsList {
   height: 84px;
   padding: 24px 29px;
@@ -179,14 +183,15 @@ export default {
     margin-bottom: 4px;
   }
   .highlightTag {
-    background-color: #409eff;
-    border-color: #409eff;
-    color: #fff;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
+    color: $--color-white;
   }
-  .normalTag {
-    background-color: #ecf5ff;
-    border-color: #d9ecff;
-    color: #409EFF;
-  }
+  // .normalTag {
+  //   background-color: $--border-color-extra-light;
+  //   // border-color: #d9ecff;
+  //   // border-color: $--color-primary;
+  //   color: $--color-primary;
+  // }
 }
 </style>

@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">
         <template slot-scope="scope">
-          <el-button type="text"  @click="handleDelete(scope.$index)">{{$t('edge.common.delete')}}</el-button>
+          <el-button type="text"  @click="handleDelete(scope.$index, scope.row)">{{$t('edge.common.delete')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -81,7 +81,8 @@ export default {
       patternStatusList: [],
       barrierList: [],
       isShowPatternStatus: false,
-      currPatternName: '--'
+      currPatternName: '--',
+      patternStatusIndex: -1
     }
   },
   computed: {
@@ -164,13 +165,17 @@ export default {
         }
       }
     },
-    handleDelete (index) {
+    handleDelete (index, value) {
       this.$confirm(this.$t('edge.pattern.deletetip'),
         this.$t('edge.common.alarm'), {
           confirmButtonText: this.$t('edge.common.confirm'),
           cancelButtonText: this.$t('edge.common.cancel'),
           type: 'warning'
         }).then(() => {
+        if (value.id === this.patternStatusIndex) {
+          this.isShowPatternStatus = false
+          this.patternStatusIndex = -1
+        }
         this.globalParamModel.deleteParamsByType('patternList', index, 1)
         this.$message({
           type: 'success',
@@ -380,6 +385,8 @@ export default {
       }
     },
     handleCurrentChange (val) {
+      if (val === null) return
+      this.patternStatusIndex = val.id
       this.isShowPatternStatus = true
       if (val.desc === '') {
         this.currPatternName = 'pattern' + val.id
@@ -476,22 +483,22 @@ export default {
       }
     }
   }
-  .pattern-figure {
-    position: fixed;
-    width: 88%;
-    bottom: 30px;
-  }
-  .pattern-status {
-    display: inline;
-    font-family: SourceHanSansCN-Regular;
-    font-size: 20px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 22px;
-    letter-spacing: 0px;
-    color: #303133;
-  }
-  .pattern-explain {
-    float: right;
-  }
+  // .pattern-figure {
+  //   position: fixed;
+  //   width: 88%;
+  //   bottom: 30px;
+  // }
+  // .pattern-status {
+  //   display: inline;
+  //   font-family: SourceHanSansCN-Regular;
+  //   font-size: 20px;
+  //   font-weight: normal;
+  //   font-stretch: normal;
+  //   line-height: 22px;
+  //   letter-spacing: 0px;
+  //   color: #303133;
+  // }
+  // .pattern-explain {
+  //   float: right;
+  // }
 </style>

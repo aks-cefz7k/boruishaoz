@@ -27,7 +27,7 @@ export default {
   },
   data () {
     return {
-      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew']
+      fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew', '/overviewNew/index']
     }
   },
   computed: {
@@ -56,6 +56,15 @@ export default {
     if (this.fromKstpPath.indexOf(currRouter) !== -1) {
       this.setCurPath(currRouter)
       this.setToken()
+    }
+  },
+  mounted () {
+    const currRouter = this.$route.path
+    if (currRouter === '/overviewNew/index') {
+      // 直接跳转进入单设备详情，需要存储一个标识，以供后续逻辑判断使用
+      sessionStorage.setItem('toSingleEdge', '1')
+    } else {
+      sessionStorage.setItem('toSingleEdge', '0')
     }
   },
   methods: {

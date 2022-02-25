@@ -129,8 +129,8 @@ export default {
 }
 </style>
 
-<style scoped>
-.patternPanel {
-  border: solid 1px #e6e6e6;
-}
+<style lang="scss" scoped>
+// .patternPanel {
+//   border: solid 1px $--border-color-lighter;
+// }
 </style>

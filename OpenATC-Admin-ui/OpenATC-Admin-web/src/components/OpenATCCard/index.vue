@@ -38,17 +38,17 @@ export default {
 }
 </script>
 
-<style scoped>
-.cardBox {
-  background-color: #fff;
-  padding: 0 22px;
-}
-.cardTitle {
-  height: 52px;
-  line-height: 52px;
-  border-bottom: 1px solid #eee;
-  font-size: 18px;
-  color: #666;
-  font-family: MicrosoftYaHei;
-}
+<style lang="scss" scoped>
+// .cardBox {
+//   background-color: $--color-white;
+//   padding: 0 22px;
+// }
+// .cardTitle {
+//   height: 52px;
+//   line-height: 52px;
+//   border-bottom: 1px solid #eee;
+//   font-size: 18px;
+//   color: $--color-text-regular;
+//   font-family: MicrosoftYaHei;
+// }
 </style>

@@ -538,41 +538,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.manual-record {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.manual-top {
-  margin-left: 10px;
-}
-.manual-bottom {
-  width: 100%;
-}
-.manual-control {
-  float: left;
-  width: 60%;
-}
-.manual-tables {
-  float: right;
-  width: 40%;
-}
-.manual-tables-bottom {
-  // width: 800px;
-  // min-width: 700px;
-  width: 100%;
-  float: left;
-  margin-top: 10px;
-}
-.channel-status {
-  font-family: SourceHanSansCN-Regular;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 20px;
-  letter-spacing: 0px;
-  color: #303133;
-}
+// .manual-record {
+//   position: relative;
+//   width: 100%;
+//   height: 100%;
+// }
+// .manual-top {
+//   margin-left: 10px;
+// }
+// .manual-bottom {
+//   width: 100%;
+// }
+// .manual-control {
+//   float: left;
+//   width: 60%;
+// }
+// .manual-tables {
+//   float: right;
+//   width: 40%;
+// }
+// .manual-tables-bottom {
+//   // width: 800px;
+//   // min-width: 700px;
+//   width: 100%;
+//   float: left;
+//   margin-top: 10px;
+// }
+// .channel-status {
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 18px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 20px;
+//   letter-spacing: 0px;
+//   color: #303133;
+// }
 </style>
 <style rel="stylesheet/scss" lang="scss">
 .control-model .el-input__inner {

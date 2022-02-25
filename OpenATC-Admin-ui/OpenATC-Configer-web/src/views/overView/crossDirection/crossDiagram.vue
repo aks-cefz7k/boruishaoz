@@ -37,7 +37,7 @@
     </div>
     <!-- 人行道 -->
     <div class="sidewalk" v-if="resetflag && crossType !== 'Customroads' && isLoaded">
-      <SidewalkSvg v-for="side in sidewalkPhaseData" :key="side.key" :Data="side" />
+      <SidewalkSvg v-for="side in sidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
     </div>
     <!-- 车道相位 -->
     <div v-if="resetflag && crossType !== 'Customroads'">
@@ -380,7 +380,8 @@ export default {
   font-stretch: normal;
   letter-spacing: 0px;
   color: #fff;
-  /* margin: 0 auto; */
+  width: 150px;
+  margin: 0 auto;
 }
 .centerText .text {
   display: inline-block;

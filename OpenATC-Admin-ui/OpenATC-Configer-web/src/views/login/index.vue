@@ -24,23 +24,23 @@
       </el-dropdown>
     </div> -->
     <el-form class="login-form" auto-complete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
-      <h3 class="title">信号机设备配置</h3>
+      <h3 class="title">{{$t('edge.login.title')}}</h3>
       <el-form-item prop="user_name">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input class="login-input" name="user_name" type="text" v-model="loginForm.user_name" auto-complete="on" placeholder="用户名" />
+        <el-input class="login-input" name="user_name" type="text" v-model="loginForm.user_name" auto-complete="on" :placeholder="$t('edge.login.username')" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
         <el-input class="login-input" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" auto-complete="on"
-          placeholder="密码" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false"></el-input>
+          :placeholder="$t('edge.login.password')" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false"></el-input>
           <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
       </el-form-item>
       <div>
-        <el-checkbox class="expand-text" v-model="isExpand">本地登陆</el-checkbox>
+        <el-checkbox class="expand-text" v-model="isExpand">{{$t('edge.login.locallogin')}}</el-checkbox>
         <!-- <div style="display: inline;">本地登陆</div> -->
         <!-- <div style="display: inline;">
           <svg-icon icon-class="xiala" v-show="!isExpand"></svg-icon>
@@ -53,28 +53,28 @@
           <el-input class="login-input" name="IP" type="text" v-model="loginForm.ip" auto-complete="on" placeholder="" />
         </el-form-item>
         <el-form-item prop="port">
-          <span class="text-container">端口</span>
+          <span class="text-container">{{$t('edge.login.port')}}</span>
           <el-input class="login-input" name="port" type="text" v-model="loginForm.port" auto-complete="on" placeholder="" />
         </el-form-item>
         <el-form-item prop="protocol">
-          <span class="text-container">协议</span>
-          <el-select v-model="loginForm.protocol" placeholder="" style="width:85%">
+          <span class="text-container">{{$t('edge.login.protocol')}}</span>
+          <el-select v-model="loginForm.protocol" placeholder="">
             <el-option label="scp" value="scp"></el-option>
             <el-option label="ocp" value="ocp"></el-option>
           </el-select>
           <!-- <el-input class="login-input" name="protocol" type="text" v-model="loginForm.protocol" auto-complete="on" placeholder="" /> -->
         </el-form-item>
-        <el-form-item prop="agentid">
+        <!-- <el-form-item prop="agentid">
           <span class="text-container">编号</span>
           <el-input class="login-input" name="agentid" type="text" v-model="loginForm.agentid" auto-complete="on" placeholder="" />
-        </el-form-item>
-        <div class="expand-text" style="margin-left: 245px;" @click="resetParams">
-            恢复默认参数
+        </el-form-item> -->
+        <div class="expand-text" style="float: right;" @click="resetParams">
+            {{$t('edge.login.restoredefaultparameters')}}
         </div>
       </div>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          登录
+          {{$t('edge.login.login')}}
         </el-button>
       </el-form-item>
     </el-form>
@@ -105,7 +105,7 @@ export default {
     var checkIp = (rule, value, callback) => {
       if (value === '') {
         return callback(
-          new Error('请输入IP')
+          new Error(this.$t('edge.login.enterip'))
         )
       }
       const ipReg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
@@ -115,14 +115,14 @@ export default {
       } else {
         this.ip_status = false
         return callback(
-          new Error('请输入合法的IP！')
+          new Error(this.$t('edge.login.enterlegalip'))
         )
       }
     }
     var checkPort = (rule, value, callback) => {
       if (value === '') {
         return callback(
-          new Error('请输入端口')
+          new Error(this.$t('edge.login.enterpport'))
         )
       }
       const portReg = /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
@@ -133,7 +133,7 @@ export default {
         } else {
           this.port_status = false
           callback(
-            new Error('请输入正确的端口！')
+            new Error(this.$t('edge.login.entercorrectport'))
           )
         }
       }, 100)
@@ -149,13 +149,13 @@ export default {
       },
       loginRules: {
         user_name: [
-          { required: true, trigger: 'blur', message: '用户名不能为空！' }
+          { required: true, trigger: 'blur', message: this.$t('edge.login.usernamenotnull') }
         ],
         password: [
-          { required: true, trigger: 'blur', message: '密码不能为空！' }
+          { required: true, trigger: 'blur', message: this.$t('edge.login.passnotnull') }
         ],
         protocol: [
-          { required: true, message: '请选择协议', trigger: 'blur' }
+          { required: true, message: this.$t('edge.login.selectagreement'), trigger: 'blur' }
         ],
         ip: [
           { validator: checkIp, trigger: 'blur' }
@@ -164,7 +164,7 @@ export default {
           { validator: checkPort, trigger: 'blur' }
         ],
         agentid: [
-          { required: true, message: '请输入设备ID', trigger: 'blur' }
+          { required: true, message: this.$t('edge.login.enterdeviceid'), trigger: 'blur' }
         ]
       },
       loading: false,
@@ -202,7 +202,7 @@ export default {
           )
             .then(data => {
               if (data.data.success !== true) {
-                this.$message.error('登陆错误!')
+                this.$message.error(this.$t('edge.login.loginerror'))
                 this.loading = false
                 return
               }
