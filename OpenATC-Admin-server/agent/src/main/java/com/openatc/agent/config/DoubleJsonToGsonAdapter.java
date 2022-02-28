@@ -9,7 +9,7 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.core.common;
+package com.openatc.agent.config;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;

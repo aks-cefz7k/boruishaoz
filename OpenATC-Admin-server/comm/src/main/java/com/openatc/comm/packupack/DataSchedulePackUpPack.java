@@ -175,8 +175,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         {
             return 27;
         }
+        if(operatorObj.equals(channelstatus))
+        {
+            return 28;
+        }
         return 0;
     }
+
     public String StringOperatorObj(byte operatorObj){
         if(operatorObj==0x01||operatorObj==0x51){
             return login;}
@@ -239,6 +244,9 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         }
         if(operatorObj==-86) {
             return interrupt;
+        }
+        if(operatorObj==-85) {
+            return channelstatus;
         }
         return null;
     }
@@ -734,6 +742,30 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                         {
                             dataSystemLog=dataSystemLogObject.toString();
                             byte[] dataSend = dataSystemLog.getBytes("UTF-8");
+                            int dataSendCount = dataSend.length;
+                            dataSchdule=Arrays.copyOf(dataSchdule,dataSendCount+14);
+                            System.arraycopy(dataSend,0,dataSchdule,14,dataSendCount);
+                        }
+                        break;
+                    case 28:// 查询通道状态（电压电流）
+                        Arrays.fill(dataSchdule,(byte)0);
+                        dataSchdule[0]=CB_VERSION_FLAG;
+                        dataSchdule[1]=CB_RECEIVE_FLAG;
+                        dataSchdule[2]=CB_SEND_FLAG;
+                        dataSchdule[3]=DATA_LINK_CONTROL;
+                        dataSchdule[7]=OPERATE_TYPE_QUERY_REQUEST;
+                        dataSchdule[8]=INFO_TYPE_CHANNEL_STATUS;
+                        dataSchdule[9]=RESERVE_FLAG;
+                        dataSchdule[10]=0x00;
+                        dataSchdule[11]=0x00;
+                        dataSchdule[12]=0x00;
+                        dataSchdule[13]=0x00;
+                        String dataChannelStatus= null;
+                        JsonElement dataChannelStatusObject=sendData.getData();
+                        if(dataChannelStatusObject!= null)
+                        {
+                            dataChannelStatus=dataChannelStatusObject.toString();
+                            byte[] dataSend = dataChannelStatus.getBytes("UTF-8");
                             int dataSendCount = dataSend.length;
                             dataSchdule=Arrays.copyOf(dataSchdule,dataSendCount+14);
                             System.arraycopy(dataSend,0,dataSchdule,14,dataSendCount);
@@ -1268,7 +1300,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             for (int i = 14; i < dataScheduleSize; i++) {
                 pDest[i-14] = dataSchedule[i];  //取出有效数据data
             }
-            tempData = new String(pDest);
+            tempData = new String(pDest,"UTF-8");
         }
         pRoadID[0]=dataSchedule[5];
         pRoadID[1]=dataSchedule[6];
@@ -1321,6 +1353,27 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 }
                 return ReadDataScheduleSuccess;
             }
+
+            //信号机应答通道状态(电压、电流)
+            if((chOperateType == OPERATE_TYPE_QUERY_ANSWER)&&(chInfoType == INFO_TYPE_CHANNEL_STATUS)) {
+                recvData.setOperation(StringOperatorType(chOperateType));
+                recvData.setAgentid(roadID);
+                recvData.setInfotype( StringOperatorObj(chInfoType));
+                Gson recvDataJson=new Gson();
+                if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+
             //信号机应答通道可检测
             if((chOperateType == OPERATE_TYPE_SET_ANSWER)&&(chInfoType == INFO_TYPE_SYSTEM_CHANNEL_CHECK)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
@@ -1331,7 +1384,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
-
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
 
@@ -1345,7 +1404,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
-
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
 
@@ -1356,6 +1421,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setInfotype( StringOperatorObj(chInfoType));
                 Gson recvDataJson=new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1371,6 +1443,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //信号机应答手动面板参数设置
@@ -1380,6 +1459,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson=new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1454,6 +1540,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
         }
@@ -1469,7 +1562,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
-
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //信号机应答整体参数设置成功
@@ -1482,6 +1581,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //信号机应答整体参数设置
@@ -1491,6 +1597,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson=new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1508,6 +1621,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //联机查询
@@ -1517,6 +1637,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson=new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1570,6 +1697,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //灯色状态查询应答
@@ -1582,6 +1716,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //时间查询应答
@@ -1591,6 +1732,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson=new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1626,6 +1774,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //信号机故障主动上传
@@ -1647,6 +1802,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson = new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1673,6 +1835,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson = new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1707,6 +1876,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //相位设置应答
@@ -1738,6 +1914,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //信号配时方案设置应答
@@ -1766,6 +1949,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson = new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1802,6 +1992,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //工作方式设置应答
@@ -1830,6 +2027,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson = new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1864,6 +2068,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
                 return ReadDataScheduleSuccess;
             }
             //远程控制查询应答
@@ -1873,6 +2084,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson = new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }
@@ -1904,6 +2122,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setAgentid(roadID);
                 Gson recvDataJson = new Gson();
                 if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
                     JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
                     recvData.setData(obj);
                 }

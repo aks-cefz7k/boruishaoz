@@ -201,8 +201,9 @@ public class UserController {
         }
 
         //分页获取
-        Sort sort = new Sort(Sort.Direction.ASC, "user_name");
-        Pageable pageable = new PageRequest(pageNum, pageRow, sort); //分页设置
+//        Sort sort = new Sort(Sort.Direction.ASC, "user_name");
+//        Pageable pageable = new PageRequest(pageNum, pageRow, sort); //分页设置
+        Pageable pageable = new PageRequest(pageNum, pageRow); //分页设置
 
         Page<User> users = userDao.findAll(pageable);
         for (User user : users) {

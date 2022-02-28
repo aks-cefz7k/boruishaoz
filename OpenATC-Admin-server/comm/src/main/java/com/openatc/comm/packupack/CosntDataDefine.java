@@ -31,6 +31,7 @@ public final class CosntDataDefine {
     //对象标识
     public static final byte                INFO_TYPE_LOGIN             = 0x50;          //登录
     public static final byte                INFO_TYPE_LOGIN_REQUEST     = 0x51;          //信号机应答配置软件登录
+    public static final byte                INFO_TYPE_HEART_BERAT       = 0x52;           //心跳协议
 
 
     public static final byte                INFO_TYPE_ONLINE            = 0x01;           //联机
@@ -60,6 +61,7 @@ public final class CosntDataDefine {
     public static final byte                INFO_TYPE_SYSTEM_CHANNEL_CHECK = -88;         //通道可检测 0xA8
     public static final byte                INFO_TYPE_VOLUMELOG         = -87;            //流量日志 0xA9
     public static final byte                INFO_TYPE_PATTERN_INTERRUPT = -86;            //方案干预 0xAA
+    public static final byte                INFO_TYPE_CHANNEL_STATUS    = -85;            //通道状态 0xAB
 
     public static final byte                CFG_ACK_ASKSEND             = 0x18;           //主机回应配置软件请求发送数据
     public static final byte                CFG_ASK_ASKREAD             = 0x19;           //配置软件请求读数据
@@ -108,5 +110,6 @@ public final class CosntDataDefine {
     public static final         String      channelcheck    = "system/channelcheck";    //通道可检测
     public static final         String      volumelog       = "system/volumelog";       //流量日志
     public static final         String      interrupt       = "control/interrupt";      //方案干预
+    public static final         String      channelstatus   = "status/channeltest";     //通道状态
 
 }

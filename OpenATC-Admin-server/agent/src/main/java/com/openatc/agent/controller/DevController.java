@@ -59,7 +59,7 @@ public class DevController {
     private Gson gson = new Gson();
 
 
-    @GetMapping(value = "/devs//user/{username}")
+    @GetMapping(value = "/devs/user/{username}")
     public RESTRetBase GetAllAscsByUsername(@PathVariable String username) {
         User user = userDao.getUserByUserName(username);
         String organizationName = user.getOrganization();
@@ -118,7 +118,7 @@ public class DevController {
      */
     @PutMapping(value = "/devs/discovery")
     public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel) throws ParseException {
-        mDao.updateAscsByReport(ascsModel);
+        mDao.updateAscs(ascsModel);
         return RESTRetUtils.successObj(ascsModel);
     }
 
@@ -261,18 +261,50 @@ public class DevController {
     //修改设备状态优化参数
     @PostMapping(value = "/devs/{agentid}/optstatparam")
     public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
-        // 0 下发到信号机
-        MessageData messageData = new MessageData(agentid, "set-request", "status/optstatparam", jsonObject);
-        messageController.postDevsMessage(null, messageData);
 
-        // 1 保存到数据库
+        // 1 先删除之前的
+        int deleteResult = tStatDao.deleteByAgentid(agentid);
+        log.info(deleteResult + "");
+        // 2 保存到数据库
         JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
-        for(JsonElement tstatJson : tstats){
+        for (JsonElement tstatJson : tstats) {
             TStat tStat = gson.fromJson(tstatJson, TStat.class);
             tStat.setAgentid(agentid);
             tStatDao.save(tStat);
         }
         return RESTRetUtils.successObj();
     }
+
+    //查询数据库中饱和数据表
+    @GetMapping(value = "/devs/optstatparam")
+    public RESTRetBase getOptstatparam() {
+        List<TStat> tStats = tStatDao.findAll();
+        return RESTRetUtils.successObj(tStats);
+    }
+
+
+//    //获取设备优化状态参数
+//    @GetMapping(value = "/devs/{agentid}/optstatparam")
+//    public RESTRetBase getDevOptstatparam(@PathVariable String agentid) {
+//        List<TStat> tStats = tStatDao.findByAgentid(agentid);
+//        return RESTRetUtils.successObj(tStats);
+//    }
+//
+//    //修改设备状态优化参数
+//    @PostMapping(value = "/devs/{agentid}/optstatparam")
+//    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
+//        // 0 下发到信号机
+//        MessageData messageData = new MessageData(agentid, "set-request", "status/optstatparam", jsonObject);
+//        messageController.postDevsMessage(null, messageData);
+//
+//        // 1 保存到数据库
+//        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
+//        for(JsonElement tstatJson : tstats){
+//            TStat tStat = gson.fromJson(tstatJson, TStat.class);
+//            tStat.setAgentid(agentid);
+//            tStatDao.save(tStat);
+//        }
+//        return RESTRetUtils.successObj();
+//    }
 
 }

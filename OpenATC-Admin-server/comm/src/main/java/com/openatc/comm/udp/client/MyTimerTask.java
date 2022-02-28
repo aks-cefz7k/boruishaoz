@@ -34,37 +34,37 @@ public class MyTimerTask extends TimerTask {
    private static Logger logger = Logger.getLogger(MyTimerTask.class.toString());
 
 
-    public  MyTimerTask(DatagramSocket socket,String ip,int port) {
-       this.ip=ip;
-       this.socket=socket;
-       this.port=port;
+   public  MyTimerTask(DatagramSocket socket,String ip,int port) {
+      this.ip=ip;
+      this.socket=socket;
+      this.port=port;
    }
 
    @Override
-    public void run(){
-       byte[] myDataSchdule=new byte[17];
-       Arrays.fill(myDataSchdule,(byte)0);
-       myDataSchdule[0]= CosntDataDefine.CB_HEADTAIL;
-       myDataSchdule[1]= CosntDataDefine.CB_VERSION_FLAG;
-       myDataSchdule[2]= CosntDataDefine.CB_RECEIVE_FLAG;
-       myDataSchdule[3]= CosntDataDefine.CB_SEND_FLAG;
-       myDataSchdule[4]= CosntDataDefine.DATA_LINK_CONTROL;
-       myDataSchdule[8]= CosntDataDefine.OPERATE_TYPE_SET_REQUEST;
-       myDataSchdule[9]= CosntDataDefine.INFO_TYPE_LOGIN;
-       myDataSchdule[10]= CosntDataDefine.RESERVE_FLAG;
-       myDataSchdule[11]=0x00;
-       myDataSchdule[12]=0x00;
-       myDataSchdule[13]=0x00;
-       myDataSchdule[14]=0x00;
-       myDataSchdule[15]=0x00;
-       myDataSchdule[16]= CosntDataDefine.CB_HEADTAIL;
-       InetSocketAddress address = new InetSocketAddress(ip, port);
-       DatagramPacket sendPacket = new DatagramPacket(myDataSchdule, 17, address);
-       try {
-           socket.send(sendPacket);
-           logger.info("=============send the heart package to " + ip + ":" + port + " successfully!" );
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+   public void run(){
+      byte[] myDataSchdule=new byte[17];
+      Arrays.fill(myDataSchdule,(byte)0);
+      myDataSchdule[0]= CosntDataDefine.CB_HEADTAIL;
+      myDataSchdule[1]= CosntDataDefine.CB_VERSION_FLAG;
+      myDataSchdule[2]= CosntDataDefine.CB_RECEIVE_FLAG;
+      myDataSchdule[3]= CosntDataDefine.CB_SEND_FLAG;
+      myDataSchdule[4]= CosntDataDefine.DATA_LINK_CONTROL;
+      myDataSchdule[8]= CosntDataDefine.OPERATE_TYPE_SET_REQUEST;
+      myDataSchdule[9]= CosntDataDefine.INFO_TYPE_HEART_BERAT;
+      myDataSchdule[10]= CosntDataDefine.RESERVE_FLAG;
+      myDataSchdule[11]=0x00;
+      myDataSchdule[12]=0x00;
+      myDataSchdule[13]=0x00;
+      myDataSchdule[14]=0x00;
+      myDataSchdule[15]=0x00;
+      myDataSchdule[16]= CosntDataDefine.CB_HEADTAIL;
+      InetSocketAddress address = new InetSocketAddress(ip, port);
+      DatagramPacket sendPacket = new DatagramPacket(myDataSchdule, 17, address);
+      try {
+         socket.send(sendPacket);
+//           logger.info("=============send the heart package to " + ip + ":" + port + " successfully!" );
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
    }
 }

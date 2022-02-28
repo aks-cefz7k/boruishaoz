@@ -110,7 +110,7 @@ public class UdpServer {
 //                                hanlder.process_fso();
                                 hanlder.process(responceData);
                             } else {
-//                                logger.info("UdpServer hanlder is null!");
+                                logger.info("UdpServer hanlder is null!");
                             }
                         }
                     });

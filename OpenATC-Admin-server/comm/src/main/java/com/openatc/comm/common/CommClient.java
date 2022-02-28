@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import static com.openatc.comm.common.CommunicationType.COMM_UDP;
 
 
-//@Slf4j
 @Component
 public class CommClient {
     private static final String ocpProtype = "ocp";

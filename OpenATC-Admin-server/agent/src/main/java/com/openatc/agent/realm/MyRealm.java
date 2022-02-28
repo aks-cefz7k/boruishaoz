@@ -70,7 +70,6 @@ public class MyRealm extends AuthorizingRealm {
         JwtToken jwtToken = (JwtToken) authenticationToken;
         String token = jwtToken.getToken();
         String ip = jwtToken.getIp();
-        System.out.println("ip: " + ip);
         if (token == null) {
             throw new AuthenticationException("Token is null!");
         }

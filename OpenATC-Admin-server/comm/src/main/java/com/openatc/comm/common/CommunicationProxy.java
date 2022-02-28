@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import static com.openatc.comm.common.CommunicationType.COMM_UDP;
 import static com.openatc.comm.common.CommunicationType.COMM_UDP_HOSTPORT;
 
-
 public class CommunicationProxy {
     private static Logger logger = Logger.getLogger(CommClient.class.toString());
     Communication communication;

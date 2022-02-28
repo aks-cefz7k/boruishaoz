@@ -2,6 +2,8 @@ package com.openatc.configserver.utils;
 
 import org.eclipse.jetty.util.log.Logger;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 public class NoLogging implements Logger {
     @Override
     public String getName() {
@@ -65,4 +67,5 @@ public class NoLogging implements Logger {
     @Override
     public void ignore(Throwable ignored) {
     }
+
 }

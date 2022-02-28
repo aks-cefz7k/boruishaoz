@@ -190,7 +190,11 @@ public class MessageController {
         THisParams hisParams = new THisParams();
         User subject = (User) SecurityUtils.getSubject().getPrincipal();
         //操作者
-        hisParams.setOperator(subject.getUser_name());
+        try {
+            hisParams.setOperator(subject.getUser_name());
+        } catch (Exception e) {
+            logger.info("get no user from subject");
+        }
         //操作时间自动生成
         //操作源地址
         hisParams.setSource(ip);

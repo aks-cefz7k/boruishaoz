@@ -43,23 +43,23 @@ public class AscsDao {
     @Autowired(required = false)
     private JdbcTemplate jdbcTemplate;
 
-    public List<AscsBaseModel> getAscsByCode(String code){
+    public List<AscsBaseModel> getAscsByCode(String code) {
         String sql = "SELECT id, agentid,protocol, geometry, lastTime, descs,type,status,jsonparam, code FROM dev where code  = '" + code + "'";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return convertAscs(maps);
     }
 
-    public List<String> getAscsidByCode(String code){
+    public List<String> getAscsidByCode(String code) {
         String sql = "SELECT agentid FROM dev where code  = '" + code + "'";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         List<String> agentids = new ArrayList<>();
-        for (Map<String,Object> map : maps){
+        for (Map<String, Object> map : maps) {
             agentids.add(map.get("agentid").toString());
         }
         return agentids;
     }
 
-    public List<AscsBaseModel> getAscsNoCode(){
+    public List<AscsBaseModel> getAscsNoCode() {
         String sql = "SELECT id, agentid,protocol, geometry, lastTime, descs,type,status,jsonparam,code FROM dev where code is null ";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return convertAscs(maps);
@@ -195,8 +195,8 @@ public class AscsDao {
                         ascsModel.getType(),
                         ascsModel.getStatus(),
                         ascsModel.getProtocol(),
-                        ascsModel.getGeometry().toString(),
-                        ascsModel.getJsonparam().toString());
+                        ascsModel.getGeometry() == null ? null : ascsModel.getGeometry().toString(),
+                        ascsModel.getJsonparam() == null ? null : ascsModel.getJsonparam().toString());
             }
             return rows;
         } else {
@@ -420,14 +420,14 @@ public class AscsDao {
                 ascs.getJsonparam().toString(),
                 ascs.getCode(),
                 ascs.getAgentid()
-                );
+        );
 
         return 1;
     }
 
-    public void updateDevByCode(String code,String agentid){
+    public void updateDevByCode(String code, String agentid) {
         String sql = "update dev set code=? where agentid=? ";
-        jdbcTemplate.update(sql,code, agentid);
+        jdbcTemplate.update(sql, code, agentid);
     }
 
     public List<String> getAllAgentids() {

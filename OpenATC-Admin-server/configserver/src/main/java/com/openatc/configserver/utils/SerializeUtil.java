@@ -11,11 +11,7 @@
  **/
 package com.openatc.configserver.utils;
 
-import com.openatc.configserver.model.User;
-import org.apache.commons.codec.digest.DigestUtils;
-
 import java.io.*;
-import java.util.Base64;
 import java.util.Properties;
 
 public class SerializeUtil {
@@ -56,21 +52,26 @@ public class SerializeUtil {
 
     public static Object readObject(){
         String filePath = getUserFilePath();
+        File file = new File(filePath);
+        FileInputStream fs = null;
+
+        try {
+            fs = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            // 找不到文件
+            return null;
+        }
+
         Object object = null;
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(filePath)));
-            try {
-                object = objectInputStream.readObject();
-                objectInputStream.close();
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
+            ObjectInputStream objectInputStream = new ObjectInputStream(fs);
+            object = objectInputStream.readObject();
+            objectInputStream.close();
+        }
+        catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return object;

@@ -71,7 +71,7 @@ public class AgentHandler extends ICommHandler {
             String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
             //收到方案消息
             if (msg.getInfotype().equals("status/pattern")) {
-                stringRedisTemplate.opsForValue().set("status/pattern", gson.toJson(msg));
+                stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
                 stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
             }
             //收到其他消息
