@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.SocketException;
@@ -125,25 +126,23 @@ public class DevController {
     //得到所有设备
     @GetMapping(value = "/devs/all")
     public RESTRetBase GetDevAll() throws ParseException {
-        String sql = null;
-        if (isConfigMode) {
-            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (datetime('now', 'localtime') - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime, code FROM dev ORDER BY agentid";
-        } else {
-            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime, code FROM dev ORDER BY agentid";
-        }
-        List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
-        return RESTRetUtils.successObj(ascsBaseModels);
+        return GetDevs();
     }
 
     @GetMapping(value = "/devs")
     public RESTRetBase GetDevs() throws ParseException {
-        String sql = null;
-        if (isConfigMode) {
-            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (datetime('now', 'localtime') - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
-        } else {
-            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
-        }
+        String sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
+//        if (isConfigMode) {
+//            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (datetime('now', 'localtime') - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
+//        } else {
+//            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
+//        }
+        List<String> faultDevAgentids = mDao.getFaultDev();
         List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
+        for (AscsBaseModel ascsBaseModel : ascsBaseModels){
+            if (faultDevAgentids.contains(ascsBaseModel.getAgentid()))
+                ascsBaseModel.setState("FAULT");
+        }
         return RESTRetUtils.successObj(ascsBaseModels);
     }
 
@@ -154,7 +153,13 @@ public class DevController {
         List<AscsBaseModel> devList = new ArrayList<>();
         List<String> routeIntersectionIdList = gson.fromJson(jsonObject.get("routeIntersectionIdList"), List.class);
         for (String routeIntersectionId : routeIntersectionIdList) {
-            devList.add(mDao.getAscsByID(routeIntersectionId));
+            AscsBaseModel device = null;
+            try {
+                device = mDao.getAscsByID(routeIntersectionId);
+            } catch (EmptyResultDataAccessException e) {
+                return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_8001);
+            }
+            devList.add(device);
         }
         return RESTRetUtils.successObj(devList);
     }

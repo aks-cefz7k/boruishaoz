@@ -14,6 +14,7 @@ package com.openatc.agent.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.util.Set;
 
 @Data
@@ -48,6 +49,7 @@ public class Route {
 
     private Long routegroupid;
 
+    @Column(nullable = true)
     private boolean enable = false;
 
     @Transient

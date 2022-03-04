@@ -17,6 +17,7 @@ import com.google.gson.JsonParser;
 import com.openatc.agent.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -294,6 +295,12 @@ public class AscsDao {
             abm.add(tt);
         }
         return abm;
+    }
+
+    public List<String> getFaultDev() {
+        String sql = "select DISTINCT(agentid) from fault where m_un_fault_renew_time = 0";
+        List<String> list = jdbcTemplate.queryForList(sql, String.class);
+        return list;
     }
 
     public List<AscsBaseModel> getDevByPara(String sql) throws ParseException {

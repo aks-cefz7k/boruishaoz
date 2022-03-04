@@ -68,6 +68,9 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     //历史流量错误
     E_7001("7001","ftpClient connect failed!"),
 
+    //设备管理错误
+    E_8001("8001","device not found By Agentid"),
+
     //全局异常错误
     E_0001("0001","NullPointerException"),
     E_0002("0002","HttpRequestMethodNotSupportedException"),

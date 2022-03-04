@@ -179,6 +179,10 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         {
             return 28;
         }
+        if(operatorObj.equals(channellampstatus))
+        {
+            return 29;
+        }
         return 0;
     }
 
@@ -247,6 +251,9 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         }
         if(operatorObj==-85) {
             return channelstatus;
+        }
+        if(operatorObj==-84) {
+            return channellampstatus;
         }
         return null;
     }
@@ -766,6 +773,30 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                         {
                             dataChannelStatus=dataChannelStatusObject.toString();
                             byte[] dataSend = dataChannelStatus.getBytes("UTF-8");
+                            int dataSendCount = dataSend.length;
+                            dataSchdule=Arrays.copyOf(dataSchdule,dataSendCount+14);
+                            System.arraycopy(dataSend,0,dataSchdule,14,dataSendCount);
+                        }
+                        break;
+                    case 29:// 查询通道灯色状态
+                        Arrays.fill(dataSchdule,(byte)0);
+                        dataSchdule[0]=CB_VERSION_FLAG;
+                        dataSchdule[1]=CB_RECEIVE_FLAG;
+                        dataSchdule[2]=CB_SEND_FLAG;
+                        dataSchdule[3]=DATA_LINK_CONTROL;
+                        dataSchdule[7]=OPERATE_TYPE_QUERY_REQUEST;
+                        dataSchdule[8]=INFO_TYPE_CHANNEL_LAMP_STATUS;
+                        dataSchdule[9]=RESERVE_FLAG;
+                        dataSchdule[10]=0x00;
+                        dataSchdule[11]=0x00;
+                        dataSchdule[12]=0x00;
+                        dataSchdule[13]=0x00;
+                        String dataChannelLampStatus= null;
+                        JsonElement dataChannelLampStatusObject=sendData.getData();
+                        if(dataChannelLampStatusObject!= null)
+                        {
+                            dataChannelLampStatus=dataChannelLampStatusObject.toString();
+                            byte[] dataSend = dataChannelLampStatus.getBytes("UTF-8");
                             int dataSendCount = dataSend.length;
                             dataSchdule=Arrays.copyOf(dataSchdule,dataSendCount+14);
                             System.arraycopy(dataSend,0,dataSchdule,14,dataSendCount);
@@ -1373,7 +1404,25 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 }
                 return ReadDataScheduleSuccess;
             }
-
+            //信号机应答通道灯色
+            if((chOperateType == OPERATE_TYPE_QUERY_ANSWER)&&(chInfoType == INFO_TYPE_CHANNEL_LAMP_STATUS)) {
+                recvData.setOperation(StringOperatorType(chOperateType));
+                recvData.setAgentid(roadID);
+                recvData.setInfotype( StringOperatorObj(chInfoType));
+                Gson recvDataJson=new Gson();
+                if(tempData!=null) {
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if(tempData==null) {
+                    tempData="{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj=recvDataJson.fromJson(tempData,JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
             //信号机应答通道可检测
             if((chOperateType == OPERATE_TYPE_SET_ANSWER)&&(chInfoType == INFO_TYPE_SYSTEM_CHANNEL_CHECK)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
