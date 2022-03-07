@@ -33,12 +33,15 @@ public class FaultReceiver implements MessageListener {
         String agentid = messageJson.get("agentid").getAsString();
         JsonArray m_faultDeque = messageJson.getAsJsonObject("data").getAsJsonArray("m_FaultDeque");
 
-        for (JsonElement faultJson : m_faultDeque){
+        for (JsonElement faultJson : m_faultDeque) {
             Fault fault = gson.fromJson(faultJson.toString(), Fault.class);
             fault.setAgentid(agentid);
             Long id = faultDao.selectByAgentidAndMwFaultID(agentid, fault.getM_wFaultID());
             Fault dbFault = (id == null) ? faultDao.save(fault) : faultDao.save(fault.setId(id));
-            stringRedisTemplate.convertAndSend("asc:event/faultdata", gson.toJson(transformFault(dbFault)));
+            JsonObject jb = new JsonObject();
+            jb.addProperty("infotype", "event/faultdata");
+            jb.add("data", transformFault(dbFault));
+            stringRedisTemplate.convertAndSend("asc:event/faultdata", jb);
         }
     }
 
@@ -47,12 +50,12 @@ public class FaultReceiver implements MessageListener {
         if (fault.getM_unFaultOccurTime() != 0) {
             jsonObject.addProperty("m_unFaultOccurTime", DateUtil.longToString(fault.getM_unFaultOccurTime() * 1000));
         } else {
-            jsonObject.add("m_unFaultOccurTime", null);
+            jsonObject.addProperty("m_unFaultOccurTime", 0);
         }
         if (fault.getM_unFaultRenewTime() != 0) {
             jsonObject.addProperty("m_unFaultRenewTime", DateUtil.longToString(fault.getM_unFaultRenewTime() * 1000));
         } else {
-            jsonObject.add("m_unFaultRenewTime", null);
+            jsonObject.addProperty("m_unFaultRenewTime", 0);
         }
         return jsonObject;
     }

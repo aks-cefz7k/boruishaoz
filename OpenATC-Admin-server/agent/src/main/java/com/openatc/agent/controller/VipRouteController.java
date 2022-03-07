@@ -21,6 +21,7 @@ import java.net.SocketException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
@@ -152,7 +153,7 @@ public class VipRouteController {
 
     //执行勤务路线
     @PostMapping(value = "/viproute/execute")
-    public RESTRetBase executeVipRoutes(@RequestBody JsonObject jsonObject) throws SocketException, ParseException {
+    public RESTRetBase executeVipRoutes(@RequestBody JsonObject jsonObject) throws SocketException, ParseException, InterruptedException {
         int viprouteid = jsonObject.get("viprouteid").getAsInt();
         String agentid = jsonObject.get("agentid").getAsString();
         int operation = jsonObject.get("operation").getAsInt();
@@ -201,6 +202,15 @@ public class VipRouteController {
                         e.printStackTrace();
                     }
                 }
+                // 回自主控制
+                try {
+                    backSelfControl(agentid);
+                    log.info("执行自主控制");
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             });
             thread1.start();
         }
@@ -214,8 +224,16 @@ public class VipRouteController {
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
             log.info("取消执行，存入redis");
+            backSelfControl(agentid);
         }
         return RESTRetUtils.successObj();
+    }
+
+    private void backSelfControl(String agentid) throws SocketException, ParseException {
+        JsonObject selfControl = new JsonObject();
+        selfControl.addProperty("control", 0);
+        MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, selfControl);
+        messageController.postDevsMessage(null, selfMessage);
     }
 
     // 查询勤务路线路口状态

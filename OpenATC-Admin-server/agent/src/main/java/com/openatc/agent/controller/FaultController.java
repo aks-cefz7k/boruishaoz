@@ -68,12 +68,12 @@ public class FaultController {
         if (fault.getM_unFaultOccurTime() != 0) {
             jsonObject.addProperty("m_unFaultOccurTime", DateUtil.longToString(fault.getM_unFaultOccurTime() * 1000));
         } else {
-            jsonObject.add("m_unFaultOccurTime", null);
+            jsonObject.addProperty("m_unFaultOccurTime", 0);
         }
         if (fault.getM_unFaultRenewTime() != 0) {
             jsonObject.addProperty("m_unFaultRenewTime", DateUtil.longToString(fault.getM_unFaultRenewTime() * 1000));
         } else {
-            jsonObject.add("m_unFaultRenewTime", null);
+            jsonObject.addProperty("m_unFaultRenewTime", 0);
         }
         return jsonObject;
     }
