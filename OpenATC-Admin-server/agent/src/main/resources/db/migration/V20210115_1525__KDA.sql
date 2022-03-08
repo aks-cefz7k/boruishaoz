@@ -1,0 +1,1 @@
+ALTER TABLE "dev" ADD COLUMN platform varchar;

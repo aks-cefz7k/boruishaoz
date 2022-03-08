@@ -41,7 +41,7 @@ public class FaultReceiver implements MessageListener {
             JsonObject jb = new JsonObject();
             jb.addProperty("infotype", "event/faultdata");
             jb.add("data", transformFault(dbFault));
-            stringRedisTemplate.convertAndSend("asc:event/faultdata", jb);
+            stringRedisTemplate.convertAndSend("asc:event/faultdata", gson.toJson(jb));
         }
     }
 

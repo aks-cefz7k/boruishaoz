@@ -47,8 +47,8 @@ public class TemplateController {
 
     Gson gson = new Gson();
 
-    Set<Integer> ewPed = new HashSet<>(Arrays.asList(1, 2, 5, 6, 7, 8, 15));
-    Set<Integer> snPed = new HashSet<>(Arrays.asList(3, 4, 9, 10, 11, 12, 16));
+    Set<Integer> ewPed = new HashSet<>(Arrays.asList(15));
+    Set<Integer> snPed = new HashSet<>(Arrays.asList(16));
     /**
      * @return RESTRetBase
      * @Title: getTemplate
@@ -479,8 +479,8 @@ public class TemplateController {
             if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
                 for (Integer direction : peddirection) {
                     if (ewPed.contains(direction) && snPed.contains(direction)) return type = "999-000-00";
-                    if (ewPed.contains(direction)) return type = "104-05-" + phaseCountString;
-                    if (snPed.contains(direction)) return type = "104-06-" + phaseCountString;
+                    if (ewPed.contains(direction)) return type = "104-005-" + phaseCountString;
+                    if (snPed.contains(direction)) return type = "104-006-" + phaseCountString;
                 }
             }
         }
