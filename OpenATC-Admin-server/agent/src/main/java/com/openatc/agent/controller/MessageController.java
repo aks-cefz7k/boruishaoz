@@ -16,6 +16,7 @@ import com.openatc.agent.model.THisParams;
 import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
+import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.common.CommunicationType;
 import com.openatc.comm.data.MessageData;
@@ -63,11 +64,8 @@ public class MessageController {
     @Autowired
     protected CommClient commClient;
 
-    @Value("${agent.server.mode.config}")
-    private boolean isConfigMode;
-
-    @Value("${agent.server.shiro}")
-    private boolean shiroOpen;
+    @Autowired
+    protected TokenUtil tokenUtil;
 
     @Autowired(required = false)
     protected AscsDao mDao;
@@ -135,11 +133,7 @@ public class MessageController {
 
         //增加mode字段
         if (requestData.getOperation().equals("set-request") && requestData.getInfotype().equals("control/pattern")) {
-            if (!isConfigMode) {
-                requestData.getData().getAsJsonObject().addProperty("mode", 1);
-            } else {
-                requestData.getData().getAsJsonObject().addProperty("mode", 2);
-            }
+            requestData.getData().getAsJsonObject().addProperty("mode", 2);
         }
 
         // 获取responceData
@@ -152,9 +146,13 @@ public class MessageController {
         }
 
         // 把设置请求的操作保存到历史记录中
-        if (requestData.getOperation().equals("set-request") && isConfigMode == false) {
+        String token = null;
+        if (httpServletRequest != null){
+            token = httpServletRequest.getHeader("Authorization");
+        }
+        if (requestData.getOperation().equals("set-request") && token != null ) {
             logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp));
+            hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp,token));
         }
 
         if (responceData == null){
@@ -186,12 +184,12 @@ public class MessageController {
      * @Title: CreateHisParam
      * @Description: 生成一条操作记录
      */
-    private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip) {
+    private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip, String token) {
         THisParams hisParams = new THisParams();
-        User subject = (User) SecurityUtils.getSubject().getPrincipal();
+        String username = tokenUtil.getUsernameFromToken(token);
         //操作者
         try {
-            hisParams.setOperator(subject.getUser_name());
+            hisParams.setOperator(username);
         } catch (Exception e) {
             logger.info("get no user from subject");
         }

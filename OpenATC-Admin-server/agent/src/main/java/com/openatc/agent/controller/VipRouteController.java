@@ -72,13 +72,25 @@ public class VipRouteController {
     // 新增勤务路线
     @PostMapping(value = "/viproute")
     public RESTRetBase addVipRoutes(@RequestBody VipRoute routeEntity) {
+        VipRoute hasNoDevsRoute = new VipRoute();
+        hasNoDevsRoute.setName(routeEntity.getName());
         VipRoute r = vipRouteDao.findByName(routeEntity.getName());
         //校验路线名称是否重复
         if (r != null) {
             return RESTRetUtils.errorObj(E_6001);
         }
-        VipRoute dbRoute = vipRouteDao.save(routeEntity);
-        return RESTRetUtils.successObj(dbRoute);
+        VipRoute dbRoute = vipRouteDao.save(hasNoDevsRoute);
+        // 拿到id后更新
+        int dbRouteId = dbRoute.getId();
+        routeEntity.setId(dbRouteId);
+        Set<VipRouteDevice> devs = routeEntity.getDevs();
+        if (devs != null) {
+            for (VipRouteDevice vipRouteDevice : devs) {
+                vipRouteDevice.setViprouteid(dbRouteId);
+            }
+        }
+
+        return RESTRetUtils.successObj(updateVipRoute(routeEntity));
     }
 
     // 更新勤务路线
@@ -104,7 +116,7 @@ public class VipRouteController {
             VipRouteDevice dev = devs.iterator().next();
             location = dev.getLocation();
 
-            if(location != null){
+            if (location != null) {
                 for (VipRouteDevice device : devs) {
                     Map<String, Object> geometry = device.getGeometry();
                     if (geometry != null) {
