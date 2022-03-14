@@ -8,6 +8,7 @@ import org.hibernate.annotations.TypeDef;
 import org.springframework.boot.jackson.JsonObjectSerializer;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -27,7 +28,7 @@ public class VipRouteDevice {
 
     @Column(columnDefinition = "jsonb")
     @Type(type = "JsonbType")
-    private Map<String,Object> geometry;
+    private Map<String,Object> geometry = new HashMap<>();
 
     private double[] location;
 

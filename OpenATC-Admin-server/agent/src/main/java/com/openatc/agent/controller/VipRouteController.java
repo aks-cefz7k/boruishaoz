@@ -87,10 +87,11 @@ public class VipRouteController {
         if (devs != null) {
             for (VipRouteDevice vipRouteDevice : devs) {
                 vipRouteDevice.setViprouteid(dbRouteId);
+                vipRouteDevice.setGeometry(new HashMap<>());
             }
         }
 
-        return RESTRetUtils.successObj(updateVipRoute(routeEntity));
+        return updateVipRoute(routeEntity);
     }
 
     // 更新勤务路线
@@ -119,7 +120,8 @@ public class VipRouteController {
             if (location != null) {
                 for (VipRouteDevice device : devs) {
                     Map<String, Object> geometry = device.getGeometry();
-                    if (geometry != null) {
+                    System.out.println(geometry);
+                    if (geometry != null && geometry.toString() != "{}" ) {
                         List<Double> coordinates = (ArrayList) geometry.get(COORDINATES);
                         double[] devlocation = new double[]{getMercatorLon(coordinates.get(0)), getMercatorLat(coordinates.get(1))};
                         device.setLocation(devlocation);
