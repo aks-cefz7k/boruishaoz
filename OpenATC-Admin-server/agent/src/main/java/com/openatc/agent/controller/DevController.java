@@ -17,14 +17,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
-import com.openatc.comm.data.MessageData;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin
@@ -51,12 +48,8 @@ public class DevController {
     private OrgService orgService;
     @Autowired
     private TStatDao tStatDao;
-    @Autowired
-    private MessageController messageController;
 
-    @Value("${agent.server.mode.config}")
-    private boolean isConfigMode;
-    private Logger log = LoggerFactory.getLogger(DevController.class);
+    private Logger log = Logger.getLogger(DevController.class.toString());
 
     private Gson gson = new Gson();
 
@@ -172,24 +165,13 @@ public class DevController {
 
         return RESTRetUtils.successObj(ascsBaseModel);
 
-        //配置工具
-        //return RESTRetUtils.successObj(DataPool.getInstance().GetDevicebyID(id));
-
     }
 
     //得到某类型的设备
     @GetMapping(value = "/devs/type/{ptype}")
     public RESTRetBase GetDevByType(@PathVariable String ptype) throws ParseException {
-        String sql = null;
-        if (isConfigMode) {
-            sql =
-                    "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (datetime('now', 'localtime') - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='"
-                            + ptype + "'";
-        } else {
-            sql =
-                    "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='"
-                            + ptype + "'";
-        }
+        String sql = "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='"
+                + ptype + "'";
         return RESTRetUtils.successObj(mDao.getDevByPara(sql));
     }
 
@@ -204,9 +186,9 @@ public class DevController {
         for (Route route : routes) {
             Set<RouteIntersection> intersections = route.getDevs();
             Iterator<RouteIntersection> intersectionIterator = intersections.iterator();
-            while (intersectionIterator.hasNext()){
+            while (intersectionIterator.hasNext()) {
                 RouteIntersection next = intersectionIterator.next();
-                if (next.getAgentid().equals(id)){
+                if (next.getAgentid().equals(id)) {
                     intersectionIterator.remove();
                 }
             }

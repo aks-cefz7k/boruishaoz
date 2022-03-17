@@ -24,7 +24,6 @@ public class CustomGsonMessageConverter extends GsonHttpMessageConverter {
 
   CustomGsonMessageConverter() {
 
-    //builder.registerTypeAdapter(OffsetDateTime.class, new OffseOffsetDateTimeTypeConverter());
     builder.registerTypeAdapterFactory(new JtsAdapterFactory());
     builder.registerTypeAdapterFactory(new GeometryAdapterFactory());
     builder.registerTypeAdapter(Double.class, new DoubleJsonToGsonAdapter());

@@ -120,8 +120,8 @@ public class VipRouteController {
             if (location != null) {
                 for (VipRouteDevice device : devs) {
                     Map<String, Object> geometry = device.getGeometry();
-                    System.out.println(geometry);
-                    if (geometry != null && geometry.toString() != "{}" ) {
+                    if (geometry == null) device.setGeometry(new HashMap<>());
+                    if (geometry.toString() != "{}") {
                         List<Double> coordinates = (ArrayList) geometry.get(COORDINATES);
                         double[] devlocation = new double[]{getMercatorLon(coordinates.get(0)), getMercatorLat(coordinates.get(1))};
                         device.setLocation(devlocation);

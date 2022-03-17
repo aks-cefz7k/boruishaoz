@@ -14,19 +14,18 @@ package com.openatc.agent.controller;
 import com.openatc.agent.service.SysConfigRepository;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Logger;
+
 @RestController
 @CrossOrigin
 public class SysConfigController {
-
-    private Logger logger = LoggerFactory.getLogger(SysConfigController.class);
+    private Logger logger = Logger.getLogger(RouteController.class.toString());
 
     @Autowired(required = false)
     private SysConfigRepository sysConfigRepository;

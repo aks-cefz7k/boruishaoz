@@ -38,9 +38,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Repository
 public class AscsDao {
-    @Value("${agent.server.mode.config}")
-    private boolean isConfigMode;
-    //@Resource
+
+
     @Autowired(required = false)
     private JdbcTemplate jdbcTemplate;
 
@@ -170,12 +169,7 @@ public class AscsDao {
                     port = Double.valueOf(jsonparamMap.get("port").toString()).intValue();
                 }
                 if (jsonparamMap.get("ip").equals(devCover.getIp()) && port == devCover.getPort()) {
-                    String sql = null;
-                    if (isConfigMode) {
-                        sql = "update dev set name=?, type=?,status=?,protocol=?,geometry=?,jsonparam=?,lastTime=datetime('now', 'localtime') where id = ?";
-                    } else {
-                        sql = "update dev set name=?, type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
-                    }
+                    String sql = "update dev set name=?, type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
                     rows = jdbcTemplate.update(sql,
                             ascsModel.getName(),
                             ascsModel.getType(),
@@ -188,12 +182,7 @@ public class AscsDao {
                 }
             }
             if (updateCount == 0) {
-                String sql = null;
-                if (isConfigMode) {
-                    sql = "INSERT INTO dev(name,agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,?,datetime('now', 'localtime'))";
-                } else {
-                    sql = "INSERT INTO dev(name,agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
-                }
+                String sql = "INSERT INTO dev(name,agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
                 rows = jdbcTemplate.update(sql,
                         ascsModel.getName(),
                         System.currentTimeMillis() + "",
@@ -327,11 +316,9 @@ public class AscsDao {
             String geometry = (String) map.get("geometry");
             tt.setCode((String) map.get("code"));
             tt.setGeometry(gs.fromJson(geometry, MyGeometry.class));
-            if (!isConfigMode) {
-                tt.setState((String) map.get("state"));
-                if (map.get("lastTime") != null) {
-                    tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
-                }
+            tt.setState((String) map.get("state"));
+            if (map.get("lastTime") != null) {
+                tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
             }
             tt.setName((String) map.get("name"));
             JsonObject jsonparam = new JsonParser().parse(map.get("jsonparam").toString()).getAsJsonObject();
@@ -359,7 +346,7 @@ public class AscsDao {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(finalSql, new String[]{"id"});
-                    ps.setObject(1,ascs.getPlatform());
+                    ps.setObject(1, ascs.getPlatform());
                     ps.setObject(2, ascs.getGbid());
                     ps.setObject(3, ascs.getFirm());
                     ps.setObject(4, ascs.getAgentid());
@@ -498,12 +485,7 @@ public class AscsDao {
                     port = Double.valueOf(jsonparamMap.get("port").toString()).intValue();
                 }
                 if (jsonparamMap.get("ip").equals(devCover.getIp()) && port == devCover.getPort()) {
-                    String sql = null;
-                    if (isConfigMode) {
-                        sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=?,lastTime=datetime('now', 'localtime') where id = ?";
-                    } else {
-                        sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
-                    }
+                    String sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
                     rows = jdbcTemplate.update(sql,
                             ascsModel.getType(),
                             ascsModel.getStatus(),
@@ -515,12 +497,7 @@ public class AscsDao {
                 }
             }
             if (updateCount == 0) {
-                String sql = null;
-                if (isConfigMode) {
-                    sql = "INSERT INTO dev(agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,datetime('now', 'localtime'))";
-                } else {
-                    sql = "INSERT INTO dev(agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
-                }
+                String sql = "INSERT INTO dev(agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
                 rows = jdbcTemplate.update(sql,
                         System.currentTimeMillis() + "",
                         ascsModel.getType(),
