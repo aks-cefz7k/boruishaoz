@@ -14,6 +14,7 @@ package com.openatc.agent.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.util.Set;
 
 @Data
@@ -48,12 +49,13 @@ public class Route {
 
     private Long routegroupid;
 
-    private boolean enable = false;
+    @Column(nullable = true)
+    private Boolean enable;
 
     @Transient
     private Boolean flag; //过渡判断路线是否有路线组;
 
-    public Route(Long id, String name, String keyintsid, String direction, String opstrategy, int upspeed, int downspeed, int type, boolean enable) {
+    public Route(Long id, String name, String keyintsid, String direction, String opstrategy, int upspeed, int downspeed, int type, Boolean enable) {
         this.id = id;
         this.name = name;
         this.keyintsid = keyintsid;

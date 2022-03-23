@@ -35,5 +35,8 @@ public class AscsBaseModel {
     protected String protocol; //协议
     private String name;
     private String code;
-    private int comtype;
+    private String gbid;
+    private String firm;
+    private String platform;
+
 }

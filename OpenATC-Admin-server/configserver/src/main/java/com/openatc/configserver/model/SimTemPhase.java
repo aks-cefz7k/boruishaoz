@@ -17,6 +17,7 @@ import lombok.Data;
 public class SimTemPhase {
     private int id;
     private int[] direction;
+    private int[] peddirection;
 
     public int[] getDirection() {
         return direction.clone();
@@ -26,9 +27,10 @@ public class SimTemPhase {
         this.direction = direction.clone();
     }
 
-    public SimTemPhase(int id, int[] direction) {
+    public SimTemPhase(int id, int[] direction, int[] peddirection) {
         this.id = id;
         this.direction = direction.clone();
+        this.peddirection = direction.clone();
     }
 
     public SimTemPhase() {

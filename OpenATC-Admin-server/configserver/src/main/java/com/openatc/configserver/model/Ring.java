@@ -18,11 +18,14 @@ public class Ring {
     private int id;
     private String name;
     private int value;
-
-    public Ring(int id, String name, int value) {
+    private int minSplit;
+    private int mode;
+    public Ring(int id, String name, int value,int  minSplit,int mode) {
         this.id = id;
         this.name = name;
         this.value = value;
+        this.minSplit=minSplit;
+        this.mode=mode;
     }
 
     public Ring() {

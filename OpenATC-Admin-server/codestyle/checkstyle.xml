@@ -36,13 +36,13 @@
     <!-- 检查方法和构造函数的javadoc -->
     <module name="JavadocType">
       <property name="allowUnknownTags" value="true"/>
-      <message key="javadoc.missing" value="类注释：缺少Javadoc注释。"/>
+      <a1049Message key="javadoc.missing" value="类注释：缺少Javadoc注释。"/>
     </module>
     <module name="JavadocMethod">
       <property name="tokens" value="METHOD_DEF"/>
       <!--允许get set 方法没有注释-->
       <property name="allowMissingPropertyJavadoc" value="true"/>
-      <message key="javadoc.missing" value="方法注释：缺少Javadoc注释。"/>
+      <a1049Message key="javadoc.missing" value="方法注释：缺少Javadoc注释。"/>
     </module>
 
     <!-- 命名检查 -->
@@ -53,14 +53,14 @@
     <!-- 包名的检查（只允许小写字母），默认^[a-z]+(\.[a-zA-Z_][a-zA-Z_0-9_]*)*$ -->
     <module name="PackageName">
       <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
-      <message key="name.invalidPattern" value="包名 ''{0}'' 要符合 ''{1}''格式."/>
+      <a1049Message key="name.invalidPattern" value="包名 ''{0}'' 要符合 ''{1}''格式."/>
     </module>
     <!-- 仅仅是static型的变量（不包括static final型）的检查 -->
     <module name="StaticVariableName"/>
     <!-- Class或Interface名检查，默认^[A-Z][a-zA-Z0-9]*$-->
     <module name="TypeName">
       <property name="severity" value="warning"/>
-      <message key="name.invalidPattern" value="名称 ''{0}'' 要符合 ''{1}''格式."/>
+      <a1049Message key="name.invalidPattern" value="名称 ''{0}'' 要符合 ''{1}''格式."/>
     </module>
     <!-- 非static型变量的检查 -->
 

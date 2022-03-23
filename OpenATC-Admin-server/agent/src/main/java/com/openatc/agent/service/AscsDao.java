@@ -17,6 +17,7 @@ import com.google.gson.JsonParser;
 import com.openatc.agent.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -107,11 +108,14 @@ public class AscsDao {
     }
 
     public AscsBaseModel getAscsByID(String id) throws EnumConstantNotPresentException {
-        String sql = "SELECT id,name,agentid,protocol descs, geometry,type,status,jsonparam FROM dev WHERE agentid ='" + id + "'";
+        String sql = "SELECT id, platform, gbid, firm, name,agentid,protocol descs, geometry,type,status,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state FROM dev WHERE agentid ='" + id + "'";
         Map<String, Object> lvRet = jdbcTemplate.queryForMap(sql);
         AscsBaseModel ascBase = new AscsBaseModel();
         Gson gs = new Gson();
         ascBase.setId((int) lvRet.get("id"));
+        ascBase.setPlatform((String) lvRet.get("platform"));
+        ascBase.setGbid((String) lvRet.get("gbid"));
+        ascBase.setFirm((String) lvRet.get("firm"));
         ascBase.setAgentid((String) lvRet.get("agentid"));
         ascBase.setProtocol((String) lvRet.get("protocol"));
         ascBase.setStatus((int) lvRet.get("status"));
@@ -122,6 +126,7 @@ public class AscsDao {
         ascBase.setGeometry(gs.fromJson(geometry, MyGeometry.class));
         JsonObject jsonparam = new JsonParser().parse(lvRet.get("jsonparam").toString()).getAsJsonObject();
         ascBase.setJsonparam(jsonparam);
+        ascBase.setState((String) lvRet.get("state"));
         return ascBase;
     }
 
@@ -296,6 +301,12 @@ public class AscsDao {
         return abm;
     }
 
+    public List<String> getFaultDev() {
+        String sql = "select DISTINCT(agentid) from fault where m_un_fault_renew_time = 0";
+        List<String> list = jdbcTemplate.queryForList(sql, String.class);
+        return list;
+    }
+
     public List<AscsBaseModel> getDevByPara(String sql) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //使用Sqlite数据库时，两个请求同时访问会将数据库锁定，因此添加此处添加一个锁
@@ -305,6 +316,9 @@ public class AscsDao {
         for (Map map : lvRet) {
             AscsBaseModel tt = new AscsBaseModel();
             tt.setId((int) map.get("id"));
+            tt.setPlatform((String) map.get("platform"));
+            tt.setGbid((String) map.get("gbid"));
+            tt.setFirm((String) map.get("firm"));
             tt.setAgentid((String) map.get("agentid"));
             tt.setProtocol((String) map.get("protocol"));
             tt.setType((String) map.get("type"));
@@ -336,13 +350,8 @@ public class AscsDao {
     public AscsBaseModel insertDev(AscsBaseModel ascs) {
 
         int id = ascs.getId();
-        String sql = null;
+        String sql = "INSERT INTO dev(platform, gbid, firm, agentid,protocol,type,descs,status,geometry,jsonparam,name) VALUES (?, ?,?,?,?,?,?,?,?,to_json(?::json),?)";
         if (id == 0) {
-            if (isConfigMode) {
-                sql = "INSERT INTO dev(agentid,protocol,type,descs,status,geometry,jsonparam,name) VALUES (?,?,?,?,?,?,?,?)";
-            } else {
-                sql = "INSERT INTO dev(agentid,protocol,type,descs,status,geometry,jsonparam,name) VALUES (?,?,?,?,?,?,to_json(?::json),?)";
-            }
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
             String finalSql = sql;
@@ -350,30 +359,31 @@ public class AscsDao {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(finalSql, new String[]{"id"});
-                    ps.setObject(1, ascs.getAgentid());
-                    ps.setObject(2, ascs.getProtocol());
-                    ps.setObject(3, ascs.getType());
-                    ps.setObject(4, ascs.getDescs());
-                    ps.setObject(5, ascs.getStatus());
+                    ps.setObject(1,ascs.getPlatform());
+                    ps.setObject(2, ascs.getGbid());
+                    ps.setObject(3, ascs.getFirm());
+                    ps.setObject(4, ascs.getAgentid());
+                    ps.setObject(5, ascs.getProtocol());
+                    ps.setObject(6, ascs.getType());
+                    ps.setObject(7, ascs.getDescs());
+                    ps.setObject(8, ascs.getStatus());
                     if (ascs.getGeometry() != null) {
-                        ps.setObject(6, ascs.getGeometry().toString());
+                        ps.setObject(9, ascs.getGeometry().toString());
                     } else {
-                        ps.setObject(6, null);
+                        ps.setObject(9, null);
                     }
-                    ps.setObject(7, ascs.getJsonparam().toString());
-                    ps.setObject(8, ascs.getName());
+                    ps.setObject(10, ascs.getJsonparam().toString());
+                    ps.setObject(11, ascs.getName());
                     return ps;
                 }
             }, keyHolder);
 
             ascs.setId(keyHolder.getKey().intValue());
         } else {
-            if (isConfigMode) {
-                sql = "INSERT INTO dev(name,id,agentid,protocol,type,descs,status,geometry,jsonparam) VALUES (?,?,?,?,?,?,?,?,?)";
-            } else {
-                sql = "INSERT INTO dev(name,id,agentid,protocol,type,descs,status,geometry,jsonparam) VALUES (?,?,?,?,?,?,?,?,to_json(?::json))";
-            }
+            sql = "INSERT INTO dev(gbid,firm,name,id,agentid,protocol,type,descs,status,geometry,jsonparam) VALUES (?,?,?,?,?,?,?,?,?,?,to_json(?::json))";
             jdbcTemplate.update(sql,
+                    ascs.getGbid(),
+                    ascs.getFirm(),
                     ascs.getName(),
                     ascs.getId(),
                     ascs.getAgentid(),
@@ -399,18 +409,16 @@ public class AscsDao {
         String sql = "SELECT count(id) FROM dev where agentid = ?";
         long count = jdbcTemplate.queryForObject(sql, Long.class, ascs.getAgentid());
         //ID已存在，更新注册信息,不存在，返回；
-        if (count == 0)
-            return 0;
-        if (isConfigMode) {
-            sql = "update dev set name=?, type=? ,protocol=? ,descs=? ,status=? ,geometry=?,jsonparam=?, code=? where agentid=?";
-        } else {
-            sql = "update dev set name=?, type=? ,protocol=? ,descs=? ,status=? ,geometry= ?,jsonparam=(to_json(?::json)),code=? where agentid=?";
-        }
+        if (count == 0) return 0;
+        sql = "update dev set platform=?, gbid=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,status=? ,geometry= ?,jsonparam=(to_json(?::json)),code=? where agentid=?";
         String geometry = null;
         if (ascs.getGeometry() != null) {
             geometry = ascs.getGeometry().toString();
         }
         jdbcTemplate.update(sql,
+                ascs.getPlatform(),
+                ascs.getGbid(),
+                ascs.getFirm(),
                 ascs.getName(),
                 ascs.getType(),
                 ascs.getProtocol(),
@@ -439,6 +447,15 @@ public class AscsDao {
             }
         });
         return agentids;
+    }
+
+    public List<AscsBaseModel> alterStatus(List<AscsBaseModel> ascsBaseModels) {
+        List<String> faultDevAgentids = getFaultDev();
+        for (AscsBaseModel ascsBaseModel : ascsBaseModels) {
+            if (faultDevAgentids.contains(ascsBaseModel.getAgentid()))
+                ascsBaseModel.setState("FAULT");
+        }
+        return ascsBaseModels;
     }
 
     public int updateAscsByReport(DevCover devCover) {

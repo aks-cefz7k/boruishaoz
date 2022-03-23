@@ -60,6 +60,11 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 		return null;
 	}
 
+	public static String longToString(Long timestamp){
+		String format = sdfNormal.format(timestamp);
+		return format;
+	}
+
 	public static String getDailyString(Date date){
 		return dailyFormat.format(date);
 	}
