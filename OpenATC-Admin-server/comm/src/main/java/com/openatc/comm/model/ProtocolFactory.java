@@ -11,10 +11,10 @@
  **/
 package com.openatc.comm.model;
 
-import com.openatc.comm.common.CommunicationProxy;
 import com.openatc.comm.common.CommunicationType;
 
 public interface ProtocolFactory {
-    public CommunicationProxy createCommunication(CommunicationType communicationType);
+//    public CommunicationProxy createCommunication(CommunicationType communicationType);
+    public Communication createCommunication(Message message);
     public Message createMessage();
 }

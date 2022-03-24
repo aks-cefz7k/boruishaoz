@@ -15,6 +15,9 @@ public enum CommunicationType {
     COMM_UDP("udp"),
     COMM_UDP_HOSTPORT("udp-hp");
 
+    public static String OCP_PROTYPE  = "ocp";
+    public static String SCP_PROTYPE  = "scp";
+
     private String type;
     CommunicationType(String type) {
         this.type = type;
