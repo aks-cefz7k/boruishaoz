@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.logging.Logger;
 
@@ -29,7 +28,7 @@ import static com.openatc.comm.common.CommunicationType.*;
 @Component
 public class CommClient {
 
-    private static CommunicationType commType = COMM_UDP;
+    private static CommunicationType commType = COMM_UDP_CONFIGER;
 
     private Logger log = Logger.getLogger(CommClient.class.toString());
 
@@ -69,7 +68,7 @@ public class CommClient {
         }
 
         // 创建消息通讯对象
-        Communication communication = factory.createCommunication(message);
+        Communication communication = factory.createCommunication(message,commType);
 
         // 发送
         DatagramSocket socket = null;

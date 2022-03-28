@@ -15,6 +15,6 @@ import com.openatc.comm.common.CommunicationType;
 
 public interface ProtocolFactory {
 //    public CommunicationProxy createCommunication(CommunicationType communicationType);
-    public Communication createCommunication(Message message);
+    public Communication createCommunication(Message message, CommunicationType commType);
     public Message createMessage();
 }

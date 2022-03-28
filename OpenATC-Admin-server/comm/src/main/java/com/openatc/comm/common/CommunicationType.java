@@ -12,11 +12,13 @@
 package com.openatc.comm.common;
 
 public enum CommunicationType {
-    COMM_UDP("udp"),
+    COMM_UDP_CONFIGER("udp"),
     COMM_UDP_HOSTPORT("udp-hp");
 
     public static String OCP_PROTYPE  = "ocp";
     public static String SCP_PROTYPE  = "scp";
+
+    public static String OPERATOER_TYPE  = "report";
 
     private String type;
     CommunicationType(String type) {
