@@ -12,8 +12,7 @@ CREATE TABLE "dev" (
 "geometry" varchar COLLATE "default",
 "jsonparam" json,
 "agentid" varchar(255) COLLATE "default" DEFAULT 'error'::character varying NOT NULL,
-"protocol" varchar COLLATE "default",
-"code" varchar COLLATE "default"
+"protocol" varchar COLLATE "default"
 )
 WITH (OIDS=FALSE)
 

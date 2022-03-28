@@ -1,8 +1,8 @@
 -- Enable PostGIS (includes raster)
--- CREATE EXTENSION IF NOT EXISTS postgis;
+-- CREATE EXTENSION postgis;
 -- -- Enable Topology
--- CREATE EXTENSION IF NOT EXISTS postgis_topology;
+-- CREATE EXTENSION postgis_topology;
 -- -- fuzzy matching needed for Tiger
--- CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+-- CREATE EXTENSION fuzzystrmatch;
 -- -- Enable US Tiger Geocoder
--- CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;
+-- CREATE EXTENSION postgis_tiger_geocoder;

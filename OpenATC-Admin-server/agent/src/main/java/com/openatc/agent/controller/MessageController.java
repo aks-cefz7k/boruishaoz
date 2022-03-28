@@ -15,8 +15,8 @@ import com.openatc.agent.model.AscsBaseModel;
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.service.DeviceService;
 import com.openatc.agent.service.HisParamServiceImpl;
-import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.common.CommunicationType;
 import com.openatc.comm.data.MessageData;
@@ -24,7 +24,6 @@ import com.openatc.comm.packupack.CosntDataDefine;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -64,8 +63,11 @@ public class MessageController {
     @Autowired
     protected CommClient commClient;
 
+    @Value("${agent.server.shiro}")
+    private boolean shiroOpen;
+
     @Autowired
-    protected TokenUtil tokenUtil;
+    DeviceService deviceService;
 
     @Autowired(required = false)
     protected AscsDao mDao;
@@ -84,6 +86,7 @@ public class MessageController {
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
+        //System.out.println("测试");
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
         AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
         
@@ -117,11 +120,13 @@ public class MessageController {
             devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_101);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
+
         //判断消息类型是否为空
         if (requestData.getInfotype() == null) {
             devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_102);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
+
         //判断协议是否为空
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
@@ -133,7 +138,7 @@ public class MessageController {
 
         //增加mode字段
         if (requestData.getOperation().equals("set-request") && requestData.getInfotype().equals("control/pattern")) {
-            requestData.getData().getAsJsonObject().addProperty("mode", 2);
+            requestData.getData().getAsJsonObject().addProperty("mode", 1);
         }
 
         // 获取responceData
@@ -142,18 +147,15 @@ public class MessageController {
             responceData = commClient
                     .exange(ip, port, protocol, requestData);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
 
         // 把设置请求的操作保存到历史记录中
-        String token = null;
-        if (httpServletRequest != null){
-            token = httpServletRequest.getHeader("Authorization");
-        }
-        if (requestData.getOperation().equals("set-request") && token != null ) {
-            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp,token));
-        }
+//        String token = httpServletRequest.getParameter("jwt-token");
+//        if (requestData.getOperation().equals("set-request") && token != null ) {
+//            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
+//            hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp,token));
+//        }
 
         if (responceData == null){
             return RESTRetUtils.errorDetialObj(E_4004, devCommError);
@@ -177,6 +179,7 @@ public class MessageController {
         return RESTRetUtils.successObj(responceData);
     }
 
+
     /**
      * @param requestData  请求消息
      * @param responceData 应答消息
@@ -186,7 +189,7 @@ public class MessageController {
      */
     private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip, String token) {
         THisParams hisParams = new THisParams();
-        String username = tokenUtil.getUsernameFromToken(token);
+        String username = deviceService.getUsernameByToken(token);
         //操作者
         try {
             hisParams.setOperator(username);

@@ -36,8 +36,10 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Value;
 import org.springframework.stereotype.Component;
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.stereotype.Component;
 
 /**
  * 上位机接收设备主动上报的消息，收到后调用外部回调方法，具体处理方式需外部实现
@@ -59,8 +61,8 @@ public class UdpServer {
     private static Logger logger =  Logger.getLogger(UdpServer.class.toString());
     private ICommHandler hanlder;
 
-    @Value("${agent.subscribe.port}")
-    private int udpport;
+//    @Value("${agent.subscribe.port}")
+    private int udpport = 21003;
 
     public void run() {
         EventLoopGroup group = new NioEventLoopGroup();

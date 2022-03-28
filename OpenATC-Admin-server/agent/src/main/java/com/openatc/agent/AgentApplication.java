@@ -22,8 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
@@ -72,22 +70,6 @@ public class AgentApplication implements CommandLineRunner {
         SpringApplication.run(AgentApplication.class, args);
     }
 
-    //输出springboot加载的所有beans
-//    @Bean
-//    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-//        return args -> {
-//
-//            System.out.println("Let's inspect the beans provided by Spring Boot:");
-//
-//            String[] beanNames = ctx.getBeanDefinitionNames();
-//            Arrays.sort(beanNames);
-//            for (String beanName : beanNames) {
-//                System.out.println(beanName);
-//            }
-//
-//        };
-//    }
-
     @Override
     public void run(String... args) {
 //        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -103,22 +85,46 @@ public class AgentApplication implements CommandLineRunner {
 
     }
 
-    @Value("${server.http.port}")
-    private Integer httpPort;
+
+
+
+//    @Value("${server.http.port}")
+//    private Integer httpPort;
 
     /* SpringBoot 2.x版本(以及更高版本) 使用下面的代码 */
-    @Bean
-    public ServletWebServerFactory servletContainer() {
-        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-        tomcat.addAdditionalTomcatConnectors(createHTTPConnector());
-        return tomcat;
-    }
+//    @Bean
+//    public ServletWebServerFactory servletContainer() {
+//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+//        tomcat.addAdditionalTomcatConnectors(createHTTPConnector());
+//        return tomcat;
+//    }
+//
+//    private Connector createHTTPConnector() {
+//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+//        connector.setScheme("http");
+//        connector.setSecure(false);
+//        connector.setPort(httpPort);
+//        return connector;
+//    }
 
-    private Connector createHTTPConnector() {
-        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-        connector.setScheme("http");
-        connector.setSecure(false);
-        connector.setPort(httpPort);
-        return connector;
-    }
+
+
+//    @Value("${server.port}")
+//    private Integer httpPort;
+//
+//    /* SpringBoot 2.x版本(以及更高版本) 使用下面的代码 */
+//    @Bean
+//    public ServletWebServerFactory servletContainer() {
+//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+//        tomcat.addAdditionalTomcatConnectors(createHTTPConnector());
+//        return tomcat;
+//    }
+//
+//    private Connector createHTTPConnector() {
+//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+//        connector.setScheme("http");
+//        connector.setSecure(false);
+//        connector.setPort(httpPort);
+//        return connector;
+//    }
 }

@@ -36,9 +36,9 @@ public class UdpCommunicationStaticPort implements Communication {
     // 发送和接收消息的固定端口scp-UDP对象
     private static DatagramSocket scpSocket = null;
     // 接收ocp消息的线程
-    private static UdpReceiveThread ocpReceiveThread = new UdpReceiveThread(ocpSocket, new ocpMessage());
+    private static UdpReceiveThread ocpReceiveThread;
     // 接收scp消息的线程
-    private static UdpReceiveThread scpReceiveThread = new UdpReceiveThread(scpSocket, new scpMessage());
+    private static UdpReceiveThread scpReceiveThread;
     // 先把发送消息的KEY保存在map中，收到消息后，按KEY保存消息内容，再返回给客户端
     private static Map<String,UdpCommunicationStaticPort> messageMap = new HashMap();
 
@@ -56,15 +56,20 @@ public class UdpCommunicationStaticPort implements Communication {
         //创建socket对象,绑定固定端口
         try {
             // OCP固定21002端口
-            ocpSocket = new DatagramSocket(new InetSocketAddress(21002));
+            ocpSocket = new DatagramSocket(new InetSocketAddress(22002));
             // SCP固定22002端口
-            scpSocket = new DatagramSocket(new InetSocketAddress(22002));
+            scpSocket = new DatagramSocket(new InetSocketAddress(21002));
         } catch (SocketException e) {
             logger.info(e.getMessage());
         }
         //启动接收线程
+        ocpReceiveThread = new UdpReceiveThread(ocpSocket, new ocpMessage());
         ocpReceiveThread.start();
+        scpReceiveThread = new UdpReceiveThread(scpSocket, new scpMessage());
         scpReceiveThread.start();
+
+//        ocpReceiveThread.start();
+//        scpReceiveThread.start();
     }
 
     public UdpCommunicationStaticPort(String protype,Message m) {
@@ -77,8 +82,6 @@ public class UdpCommunicationStaticPort implements Communication {
 
     @Override
     public DatagramSocket sendData(String agentid,PackData packData, String ip, int port) throws IOException {
-
-        synchronized(logger) {
 
             // 保存消息的KEY
 //            messageKey = ip + port;
@@ -108,7 +111,6 @@ public class UdpCommunicationStaticPort implements Communication {
             thread = Thread.currentThread();
             messageMap.put(messageKey, this);
             logger.info("Send Data Thread#" + thread.getId());
-        }
 
 
         return datagramSocket;
