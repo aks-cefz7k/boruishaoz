@@ -15,23 +15,20 @@ import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
-//import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.util.logging.Logger;
 
-import static com.openatc.comm.common.CommunicationType.COMM_UDP;
+import static com.openatc.comm.common.CommunicationType.*;
 
 
 @Component
 public class CommClient {
-    private static final String ocpProtype = "ocp";
-    private static final String scpProtype = "scp";
-    private static CommunicationType commType = COMM_UDP;
+
+    private static CommunicationType commType = COMM_UDP_CONFIGER;
 
     private Logger log = Logger.getLogger(CommClient.class.toString());
 
@@ -47,15 +44,15 @@ public class CommClient {
         // 产品工厂类
         ProtocolFactory factory = new scpFactory();
         // 协议判断
-        if (protype.equals(ocpProtype)) {
+        if (protype.equals(OCP_PROTYPE)) {
             factory = new ocpFactory();
-        } else if (protype.equals(scpProtype)) {
+        } else if (protype.equals(SCP_PROTYPE)) {
             factory = new scpFactory();
         }
 
         // 创建消息处理对象
         Message message = factory.createMessage();
-        CommunicationProxy communication = factory.createCommunication(commType);
+//        CommunicationProxy communication = factory.createCommunication(commType);
 
         // 打包
         PackData packData = message.pack(sendMsg);
@@ -70,25 +67,30 @@ public class CommClient {
             return sendMsg;
         }
 
-        // 通讯
-        DatagramPacket datagramPacket = null;
+        // 创建消息通讯对象
+        Communication communication = factory.createCommunication(message,commType);
+
+        // 发送
+        DatagramSocket socket = null;
         try {
-            datagramPacket = communication.exange(packData, ip, port);
-        } catch (InterruptedIOException e) {//检测超时
-            log.info("exange error: Time out - " + e.getMessage());
-            return CreateErrorResponceData(e.getMessage());
-        } catch (IOException e) {// 其他错误
-            log.info("exange error: Other Error - " + e.getMessage());
+            socket = communication.sendData(sendMsg.getAgentid(),packData, ip, port);
+        } catch (IOException e) {
+            log.info("exange send error: " + e.getMessage());
             return CreateErrorResponceData(e.getMessage());
         }
 
-        if (datagramPacket == null) {
-            log.info("exange error: return packet is null");
-            return CreateErrorResponceData("Socker Error, Maybe too busy!");
+        // 接收-解析
+        MessageData responceData = null;
+        try {
+            responceData = communication.receiveData(socket);
+        } catch (IOException e) {
+            log.info("exange receive error: " + e.getMessage());
+            return CreateErrorResponceData(e.getMessage());
         }
 
         // 解析
-        MessageData responceData = message.uppack(datagramPacket);
+//        MessageData responceData = message.uppack(datagramPacket);
+
         return responceData;
     }
 

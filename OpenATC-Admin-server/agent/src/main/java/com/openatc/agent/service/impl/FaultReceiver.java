@@ -33,15 +33,13 @@ public class FaultReceiver implements MessageListener {
         String agentid = messageJson.get("agentid").getAsString();
         JsonArray m_faultDeque = messageJson.getAsJsonObject("data").getAsJsonArray("m_FaultDeque");
 
-        for (JsonElement faultJson : m_faultDeque) {
+        for (JsonElement faultJson : m_faultDeque){
             Fault fault = gson.fromJson(faultJson.toString(), Fault.class);
             fault.setAgentid(agentid);
             Long id = faultDao.selectByAgentidAndMwFaultID(agentid, fault.getM_wFaultID());
             Fault dbFault = (id == null) ? faultDao.save(fault) : faultDao.save(fault.setId(id));
-            JsonObject jb = new JsonObject();
-            jb.addProperty("infotype", "event/faultdata");
-            jb.add("data", transformFault(dbFault));
-            stringRedisTemplate.convertAndSend("asc:event/faultdata", gson.toJson(jb));
+            log.info( gson.toJson(transformFault(dbFault)));
+            stringRedisTemplate.convertAndSend("asc:event/faultdata", gson.toJson(transformFault(dbFault)));
         }
     }
 

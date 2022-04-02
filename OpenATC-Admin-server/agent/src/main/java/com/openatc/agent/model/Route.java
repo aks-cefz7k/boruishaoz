@@ -50,12 +50,12 @@ public class Route {
     private Long routegroupid;
 
     @Column(nullable = true)
-    private Boolean enable;
+    private boolean enable = false;
 
     @Transient
     private Boolean flag; //过渡判断路线是否有路线组;
 
-    public Route(Long id, String name, String keyintsid, String direction, String opstrategy, int upspeed, int downspeed, int type, Boolean enable) {
+    public Route(Long id, String name, String keyintsid, String direction, String opstrategy, int upspeed, int downspeed, int type, boolean enable) {
         this.id = id;
         this.name = name;
         this.keyintsid = keyintsid;

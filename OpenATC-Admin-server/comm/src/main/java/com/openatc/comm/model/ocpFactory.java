@@ -11,13 +11,24 @@
  **/
 package com.openatc.comm.model;
 
-import com.openatc.comm.common.CommunicationProxy;
 import com.openatc.comm.common.CommunicationType;
 
+import static com.openatc.comm.common.CommunicationType.*;
+
 public class ocpFactory implements ProtocolFactory {
+//    @Override
+//    public CommunicationProxy createCommunication(CommunicationType communicationType) {
+//        return new CommunicationProxy(communicationType);
+//    }
+
     @Override
-    public CommunicationProxy createCommunication(CommunicationType communicationType) {
-        return new CommunicationProxy(communicationType);
+    public Communication createCommunication(Message message, CommunicationType commType) {
+        if(commType == COMM_UDP_CONFIGER)
+            return new UdpCommunicationForConfiger(message);
+        else if (commType == COMM_UDP_HOSTPORT)
+            return new UdpCommunicationStaticPort(OCP_PROTYPE);
+        else
+            return null;
     }
 
     @Override
