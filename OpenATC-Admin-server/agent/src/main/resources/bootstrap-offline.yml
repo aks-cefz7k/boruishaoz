@@ -1,4 +1,4 @@
-spring:
-  cloud:
-    kubernetes:
-      enabled: false #不使用配置中心
+#spring:
+#  cloud:
+#    kubernetes:
+#      enabled: false #不使用配置中心

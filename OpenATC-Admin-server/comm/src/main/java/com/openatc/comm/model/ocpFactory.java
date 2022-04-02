@@ -22,11 +22,11 @@ public class ocpFactory implements ProtocolFactory {
 //    }
 
     @Override
-    public Communication createCommunication(Message message, CommunicationType commType) {
+    public Communication createCommunication(Message message, CommunicationType commType, int exangeType) {
         if(commType == COMM_UDP_CONFIGER)
             return new UdpCommunicationForConfiger(message);
         else if (commType == COMM_UDP_HOSTPORT)
-            return new UdpCommunicationStaticPort(OCP_PROTYPE);
+            return new UdpCommunicationStaticPort( OCP_PROTYPE, exangeType);
         else
             return null;
     }

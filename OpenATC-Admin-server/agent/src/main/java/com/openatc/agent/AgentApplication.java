@@ -15,17 +15,13 @@ package com.openatc.agent;
 import com.openatc.agent.handler.AgentHandler;
 import com.openatc.agent.model.FileProperties;
 import com.openatc.agent.utils.JwtFileUtil;
-import com.openatc.comm.common.UdpServer;
-import org.apache.catalina.connector.Connector;
+//import com.openatc.comm.common.UdpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -47,8 +43,8 @@ public class AgentApplication implements CommandLineRunner {
 
     private static Logger logger = Logger.getLogger(AgentApplication.class.toString());
 
-    @Autowired
-    private UdpServer udpServer;  //主动上报消息监听类
+//    @Autowired
+//    private UdpServer udpServer;  //主动上报消息监听类
 
     @Autowired
     private AgentHandler agentHandler;  //主动上报消息处理类
@@ -80,8 +76,8 @@ public class AgentApplication implements CommandLineRunner {
 //            e.printStackTrace();
         }
 //        new Thread(new UDPServer()).start();
-        udpServer.setHanlder(agentHandler);
-        udpServer.run();
+//        udpServer.setHanlder(agentHandler);
+//        udpServer.run();
 
     }
 
