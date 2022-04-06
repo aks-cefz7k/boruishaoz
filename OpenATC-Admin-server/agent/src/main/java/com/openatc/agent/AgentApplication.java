@@ -15,13 +15,20 @@ package com.openatc.agent;
 import com.openatc.agent.handler.AgentHandler;
 import com.openatc.agent.model.FileProperties;
 import com.openatc.agent.utils.JwtFileUtil;
-//import com.openatc.comm.common.UdpServer;
+import com.openatc.comm.model.UdpCommunicationStaticPort;
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -42,9 +49,6 @@ import java.util.logging.Logger;
 public class AgentApplication implements CommandLineRunner {
 
     private static Logger logger = Logger.getLogger(AgentApplication.class.toString());
-
-//    @Autowired
-//    private UdpServer udpServer;  //主动上报消息监听类
 
     @Autowired
     private AgentHandler agentHandler;  //主动上报消息处理类
@@ -73,54 +77,37 @@ public class AgentApplication implements CommandLineRunner {
             tokenlist = JwtFileUtil.initList();
         } catch (IOException e) {
             logger.info("token.txt not found...");
-//            e.printStackTrace();
         }
-//        new Thread(new UDPServer()).start();
-//        udpServer.setHanlder(agentHandler);
-//        udpServer.run();
 
+        // 设置主动上报的消息处理函数
+        UdpCommunicationStaticPort.hanlder = agentHandler;
     }
 
-
-
-
-//    @Value("${server.http.port}")
-//    private Integer httpPort;
-
-    /* SpringBoot 2.x版本(以及更高版本) 使用下面的代码 */
+    // SpringBoot2.x配置HTTPS,并实现HTTP访问自动转向HTTPS
 //    @Bean
 //    public ServletWebServerFactory servletContainer() {
-//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-//        tomcat.addAdditionalTomcatConnectors(createHTTPConnector());
+//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory(){
+//            @Override
+//            protected void postProcessContext(Context context) {
+//                SecurityConstraint securityConstraint = new SecurityConstraint();
+//                securityConstraint.setUserConstraint("CONFIDENTIAL");
+//                SecurityCollection collection = new SecurityCollection();
+//                collection.addPattern("/*");
+//                securityConstraint.addCollection(collection);
+//                context.addConstraint(securityConstraint);
+//            }
+//        };
+//        tomcat.addAdditionalTomcatConnectors(httpConnector());
 //        return tomcat;
 //    }
 //
-//    private Connector createHTTPConnector() {
-//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-//        connector.setScheme("http");
-//        connector.setSecure(false);
-//        connector.setPort(httpPort);
-//        return connector;
-//    }
-
-
-
-//    @Value("${server.port}")
-//    private Integer httpPort;
-//
-//    /* SpringBoot 2.x版本(以及更高版本) 使用下面的代码 */
 //    @Bean
-//    public ServletWebServerFactory servletContainer() {
-//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-//        tomcat.addAdditionalTomcatConnectors(createHTTPConnector());
-//        return tomcat;
-//    }
-//
-//    private Connector createHTTPConnector() {
+//    public Connector httpConnector() {
 //        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 //        connector.setScheme("http");
+//        connector.setPort(10003); // 监听Http的端口
 //        connector.setSecure(false);
-//        connector.setPort(httpPort);
+//        connector.setRedirectPort(10004); // 监听Http端口后转向Https端口
 //        return connector;
 //    }
 }
