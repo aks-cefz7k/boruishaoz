@@ -23,16 +23,16 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -98,8 +98,97 @@ public class AscsDao {
         return pl;
     }
 
+    public boolean isTableExist(String tableName) {
+        Connection conn = null;
+        ResultSet rs = null;
+
+        try {
+            conn = jdbcTemplate.getDataSource().getConnection();
+            DatabaseMetaData data = conn.getMetaData();
+            String[] types = {"TABLE"};
+            rs = data.getTables(null, null, tableName, types);
+            if (rs.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    @Transactional
+    public boolean modifyAgentid(String oldAgentid, String newAgentid) {
+        try {
+            if (isTableExist("dev")) {
+                String devSql = "update dev set agentid=? where agentid=?";
+                jdbcTemplate.update(devSql, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("fault")) {
+                String faultSql = "update fault set agentid=? where agentid=?";
+                jdbcTemplate.update(faultSql, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("ht_device")) {
+                String ht_deviceSql = "update ht_device set agentid=? where agentid=?";
+                jdbcTemplate.update(ht_deviceSql, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("intersection_dev")) {
+                String intersection_devSql = "update intersection_dev set agentid=? where agentid=?";
+                jdbcTemplate.update(intersection_devSql, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("operation_record")) {
+                String operation_record = "update operation_record set agentid=? where agentid=?";
+                jdbcTemplate.update(operation_record, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("scats_device")) {
+                String scats_device = "update scats_device set agentid=? where agentid=?";
+                jdbcTemplate.update(scats_device, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("t_control")) {
+                String t_control = "update t_control set agentid=? where agentid=?";
+                jdbcTemplate.update(t_control, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("t_stat")) {
+                String t_stat = "update t_stat set agentid=? where agentid=?";
+                jdbcTemplate.update(t_stat, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("t_params")) {
+                String t_params = "update t_params set agentid=? where agentid=?";
+                jdbcTemplate.update(t_params, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("trafficincident")) {
+                String trafficincident = "update trafficincident set agentid=? where agentid=?";
+                jdbcTemplate.update(trafficincident, newAgentid, oldAgentid);
+            }
+
+            if (isTableExist("vip_route_device")) {
+                String vip_route_device = "update vip_route_device set agentid=? where agentid=?";
+                jdbcTemplate.update(vip_route_device, newAgentid, oldAgentid);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     public List<AscsBaseModel> getAscsInfo() {
         String sql = "SELECT id,agentid,protocol, geometry, lastTime, descs,type,status,jsonparam FROM dev ";
+
 
         List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
 

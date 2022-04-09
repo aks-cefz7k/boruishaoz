@@ -16,21 +16,15 @@ import com.openatc.agent.handler.AgentHandler;
 import com.openatc.agent.model.FileProperties;
 import com.openatc.agent.utils.JwtFileUtil;
 import com.openatc.comm.model.UdpCommunicationStaticPort;
-import org.apache.catalina.Context;
-import org.apache.catalina.connector.Connector;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,6 +40,7 @@ import java.util.logging.Logger;
 @EnableScheduling
 @EnableConfigurationProperties({FileProperties.class})
 @ComponentScan({"com.openatc.agent", "com.openatc.comm", "com.openatc.core"})
+@EnableTransactionManagement
 public class AgentApplication implements CommandLineRunner {
 
     private static Logger logger = Logger.getLogger(AgentApplication.class.toString());

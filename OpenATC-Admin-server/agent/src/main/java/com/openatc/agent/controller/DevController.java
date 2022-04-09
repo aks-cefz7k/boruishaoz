@@ -53,6 +53,14 @@ public class DevController {
 
     private Gson gson = new Gson();
 
+    @PostMapping(value = "/devs/agentid")
+    public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
+        String oldAgentid = jsonObject.get("oldAgentid").getAsString();
+        String newAgentid = jsonObject.get("newAgentid").getAsString();
+        boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
+        return RESTRetUtils.successObj(result);
+    }
+
 
     @GetMapping(value = "/devs/user/{username}")
     public RESTRetBase GetAllAscsByUsername(@PathVariable String username) {
