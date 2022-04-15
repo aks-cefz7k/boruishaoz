@@ -59,8 +59,7 @@
 //    private static Logger logger =  Logger.getLogger(UdpServer.class.toString());
 //    private ICommHandler hanlder;
 //
-//    @Value("${agent.subscribe.port}")
-//    private int udpport;
+//    private int udpport = 21003;
 //
 //    public void run() {
 //        EventLoopGroup group = new NioEventLoopGroup();
@@ -104,8 +103,8 @@
 //                            }
 //                            // todo 把接收到的设备消息转换为API所需的对象
 //                            // 如果没有设置上报消息处理函数，则不进行处理
-//                            logger.info("Sender Host Address: " + packet.sender().getAddress().getHostAddress());
-//                            logger.info("Send msg: " + responceData);
+//                            logger.info("Receive from Host Address: " + packet.sender().getAddress().getHostAddress());
+//                            logger.info("Receive report msg: " + responceData);
 //                            if (hanlder != null) {
 ////                                hanlder.process_fso();
 //                                hanlder.process(responceData);

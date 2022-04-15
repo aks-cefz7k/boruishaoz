@@ -13,10 +13,14 @@ package com.openatc.comm.model;
 
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
+import com.openatc.comm.packupack.DataPackUpPack;
+import com.openatc.comm.packupack.DataSchedulePackUpPack;
+import io.netty.buffer.Unpooled;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
@@ -168,6 +172,21 @@ public class UdpCommunicationStaticPort implements Communication {
 
                     //收到主动上报的消息
                     if(responceData.getOperation().equals(OPERATOER_TYPE_REPORT)){
+                        // 收到信号机的注册消息并应答
+                        if(responceData.getInfotype().equals("login")){
+                            DataSchedulePackUpPack dataSchedulePackUpPack = new DataSchedulePackUpPack();
+                            DataPackUpPack askReadDataPackUpPack = new DataPackUpPack();
+                            byte[] askDataSchedule = dataSchedulePackUpPack.AskPackDataSchedule(responceData);//打包成数据表
+                            byte[] packData = new byte[1024];
+                            int askPackDataSize = askReadDataPackUpPack.packBuff(askDataSchedule, packData);
+                            packData = Arrays.copyOfRange(packData, 0, askPackDataSize);
+
+                            //生成发送包
+                            InetSocketAddress respnseAddress = new InetSocketAddress(addressStr, port);
+                            DatagramPacket sendPacket = new DatagramPacket(packData, askPackDataSize, respnseAddress);
+                            //发送数据
+                            datagramSocket.send(sendPacket);
+                        }
                         if (hanlder != null) {
                             hanlder.process(responceData);
                         } else {
@@ -175,6 +194,7 @@ public class UdpCommunicationStaticPort implements Communication {
                         }
                         continue;
                     }
+
 
                     //收到请求的应答消息
                     String messageKey = null;
