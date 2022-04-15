@@ -38,5 +38,6 @@ public class AscsBaseModel {
     private String gbid;
     private String firm;
     private String platform;
+    private String thirdplatformid;
 
 }

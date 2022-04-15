@@ -186,21 +186,13 @@ public class AscsDao {
         return true;
     }
 
-    public List<AscsBaseModel> getAscsInfo() {
-        String sql = "SELECT id,agentid,protocol, geometry, lastTime, descs,type,status,jsonparam FROM dev ";
-
-
-        List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
-
-        return convertAscs(lvRet);
-    }
-
     public AscsBaseModel getAscsByID(String id) throws EnumConstantNotPresentException {
-        String sql = "SELECT id, platform, gbid, firm, name,agentid,protocol descs, geometry,type,status,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state FROM dev WHERE agentid ='" + id + "'";
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, name,agentid,protocol descs, geometry,type,status,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state FROM dev WHERE agentid ='" + id + "'";
         Map<String, Object> lvRet = jdbcTemplate.queryForMap(sql);
         AscsBaseModel ascBase = new AscsBaseModel();
         Gson gs = new Gson();
         ascBase.setId((int) lvRet.get("id"));
+        ascBase.setThirdplatformid((String) lvRet.get("thirdplatformid"));
         ascBase.setPlatform((String) lvRet.get("platform"));
         ascBase.setGbid((String) lvRet.get("gbid"));
         ascBase.setFirm((String) lvRet.get("firm"));
@@ -394,6 +386,7 @@ public class AscsDao {
         for (Map map : lvRet) {
             AscsBaseModel tt = new AscsBaseModel();
             tt.setId((int) map.get("id"));
+            tt.setThirdplatformid((String) map.get("thirdplatformid"));
             tt.setPlatform((String) map.get("platform"));
             tt.setGbid((String) map.get("gbid"));
             tt.setFirm((String) map.get("firm"));
@@ -486,12 +479,13 @@ public class AscsDao {
         long count = jdbcTemplate.queryForObject(sql, Long.class, ascs.getAgentid());
         //ID已存在，更新注册信息,不存在，返回；
         if (count == 0) return 0;
-        sql = "update dev set platform=?, gbid=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,status=? ,geometry= ?,jsonparam=(to_json(?::json)),code=? where agentid=?";
+        sql = "update dev set thirdplatformid=?,platform=?, gbid=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,status=? ,geometry= ?,jsonparam=(to_json(?::json)),code=? where agentid=?";
         String geometry = null;
         if (ascs.getGeometry() != null) {
             geometry = ascs.getGeometry().toString();
         }
         jdbcTemplate.update(sql,
+                ascs.getThirdplatformid(),
                 ascs.getPlatform(),
                 ascs.getGbid(),
                 ascs.getFirm(),

@@ -77,21 +77,6 @@ public class DevController {
         return RESTRetUtils.successObj(devices);
     }
 
-    @GetMapping(value = "/devs/all/{val}")
-    public RESTRetBase GetAllAscsInfo(@PathVariable int val) {
-        List<AscsBaseModel> ascsModels = null;
-        //获取全部信号机
-        if (val == 0) {
-            ascsModels = mDao.getAscsInfo();
-        }
-        //获取在线信号机
-        else if (val == 1) {
-            ascsModels = mDao.getAscsInfoOnline();
-        }
-
-        return RESTRetUtils.successObj(ascsModels);
-    }
-
     @GetMapping(value = "/devs/orgnization/{code}")
     public RESTRetBase getAscsByCode(@PathVariable String code) {
         return RESTRetUtils.successObj(mDao.getAscsByCode(code));
@@ -133,7 +118,7 @@ public class DevController {
 
     @GetMapping(value = "/devs")
     public RESTRetBase GetDevs() throws ParseException {
-        String sql = "SELECT id, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
         mDao.alterStatus(ascsBaseModels);
         return RESTRetUtils.successObj(ascsBaseModels);
@@ -164,7 +149,7 @@ public class DevController {
     public RESTRetBase GetDevById(@PathVariable String id) throws ParseException {
         AscsBaseModel ascsBaseModel = null;
         String sql =
-                "SELECT id,platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime FROM dev WHERE agentid ='"
+                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime FROM dev WHERE agentid ='"
                         + id + "'";
         List<AscsBaseModel> listAscs = mDao.getDevByPara(sql);
         if (listAscs.size() > 0) {
