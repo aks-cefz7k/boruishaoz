@@ -22,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 
+import static com.openatc.comm.common.CommunicationType.EXANGE_TYPE_DEVICE;
+import static com.openatc.comm.common.CommunicationType.OCP_PROTYPE;
+
 public class ocpMessage implements Message {
     private static final String allFeature = "feature/all";
     public static final String setrequest = "set-request";
@@ -29,8 +32,8 @@ public class ocpMessage implements Message {
 
     @Override
     public PackData pack(MessageData sendMsg) throws UnsupportedEncodingException {
-        DataSchedulePackUpPack m_dataSchedulePackUpPack = new DataSchedulePackUpPack();
-        PackData packData = new PackData();
+        DataSchedulePackUpPack dataSchedulePackUpPack = new DataSchedulePackUpPack();
+        PackData packData;
         String infotype = sendMsg.getInfotype();
         String opertype = sendMsg.getOperation();
         if (infotype.equals(allFeature)&&opertype.equals(setrequest)) {
@@ -63,21 +66,20 @@ public class ocpMessage implements Message {
             md5data.setOperation(sendMsg.getOperation());
             md5data.setData(sendMsg.getData());
             md5data.setMd5(datamd5value);
-            byte[] m_dataSchedule = m_dataSchedulePackUpPack.PackDataSchedule(md5data);
+            byte[] m_dataSchedule = dataSchedulePackUpPack.PackDataSchedule(md5data);
             DataPackUpPack m_dataPackUpPack = new DataPackUpPack();
             byte[] m_packData = new byte[RECVBUFFER];
             int m_packDataSize = m_dataPackUpPack.packBuff(m_dataSchedule, m_packData);
             packData = new PackData(m_packData, m_packDataSize);
         } else {
-            byte[] m_dataSchedule = m_dataSchedulePackUpPack.PackDataSchedule(sendMsg);
-            if (m_dataSchedulePackUpPack.isZero(m_dataSchedule)) {
+            byte[] m_dataSchedule = dataSchedulePackUpPack.PackDataSchedule(sendMsg);
+            if (dataSchedulePackUpPack.isZero(m_dataSchedule)) {
                 return null;
             } else {
                 DataPackUpPack m_dataPackUpPack = new DataPackUpPack();
                 byte[] m_packData = new byte[RECVBUFFER];
                 int m_packDataSize = m_dataPackUpPack.packBuff(m_dataSchedule, m_packData);
-                packData.setM_packData(m_packData);
-                packData.setM_packDataSize(m_packDataSize);
+                packData = new PackData(m_packData, m_packDataSize);
             }
         }
         return packData;
@@ -101,5 +103,10 @@ public class ocpMessage implements Message {
             m_readDataReceive.ReadDataSchedule(responceData, m_dataSchedule, m_dataScheduleSize);
         }
         return responceData;
+    }
+
+    @Override
+    public int geyExangeType() {
+        return EXANGE_TYPE_DEVICE;
     }
 }

@@ -18,7 +18,12 @@ public enum CommunicationType {
     public static String OCP_PROTYPE  = "ocp";
     public static String SCP_PROTYPE  = "scp";
 
-    public static String OPERATOER_TYPE  = "report";
+    public static String OPERATOER_TYPE_REPORT = "report";
+
+    public static String PLATFORM_TYPE_OPENATC = "OpenATC";
+
+    public static int EXANGE_TYPE_DEVICE = 0;
+    public static int EXANGE_TYPE_CENTER = 1;
 
     private String type;
     CommunicationType(String type) {

@@ -1,4 +1,4 @@
-package com.openatc.agent.controller;
+//package com.openatc.agent.controller;
 
 
 
@@ -23,22 +23,22 @@ import java.text.ParseException;
 
 
 
-@RestController
-@CrossOrigin
-public class ThirdPlatMessageController {
-
-
-    @Autowired
-    private CommClient commClient;
-
-
-    @Value("${agent.thirdplat.ip}")
-    private String adapterIP;
-
-    @Value("${agent.thirdplat.port}")
-    private Integer adapterPort;
-
-    private String protocolType = "scp";
+//@RestController
+//@CrossOrigin
+//public class ThirdPlatMessageController {
+//
+//
+//    @Autowired
+//    private CommClient commClient;
+//
+//
+//    @Value("${agent.thirdplat.ip}")
+//    private String adapterIP;
+//
+//    @Value("${agent.thirdplat.port}")
+//    private Integer adapterPort;
+//
+//    private String protocolType = "scp";
 
 
 //    @PostMapping(value = "/centeradapter/custom")
@@ -61,4 +61,4 @@ public class ThirdPlatMessageController {
 //    }
 
 
-}
+//}

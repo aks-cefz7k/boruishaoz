@@ -39,7 +39,7 @@ public class CommClient {
         commType = type;
     }
 
-    public MessageData exange(String ip, int port, String protype, MessageData sendMsg) throws UnsupportedEncodingException {
+    public MessageData exange(String ip, int port, String protype, int platform, MessageData sendMsg) throws UnsupportedEncodingException {
 
         // 产品工厂类
         ProtocolFactory factory = new scpFactory();
@@ -68,7 +68,7 @@ public class CommClient {
         }
 
         // 创建消息通讯对象
-        Communication communication = factory.createCommunication(message,commType);
+        Communication communication = factory.createCommunication(message,commType, platform);
 
         // 发送
         DatagramSocket socket = null;

@@ -13,7 +13,6 @@ package com.openatc.agent.controller;
 
 import com.openatc.agent.model.AscsBaseModel;
 import com.openatc.agent.model.THisParams;
-import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.DeviceService;
 import com.openatc.agent.service.HisParamServiceImpl;
@@ -33,11 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.logging.Logger;
 
+import static com.openatc.comm.common.CommunicationType.*;
 import static com.openatc.core.common.IErrorEnumImplInner.*;
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
@@ -136,6 +135,12 @@ public class MessageController {
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
+        // 判断通讯类型是设备直连还是平台转发
+        String platform = ascsBaseModel.getPlatform();
+        int exangeType = EXANGE_TYPE_DEVICE;
+        if(platform != null)
+            exangeType = EXANGE_TYPE_CENTER;
+
         //增加mode字段
         if (requestData.getOperation().equals("set-request") && requestData.getInfotype().equals("control/pattern")) {
             requestData.getData().getAsJsonObject().addProperty("mode", 1);
@@ -145,7 +150,7 @@ public class MessageController {
         MessageData responceData = null;
         try {
             responceData = commClient
-                    .exange(ip, port, protocol, requestData);
+                    .exange(ip, port, protocol, exangeType,requestData);
         } catch (Exception e) {
             logger.info(e.getMessage());
         }
@@ -158,11 +163,11 @@ public class MessageController {
 //        }
 
         if (responceData == null){
-            return RESTRetUtils.errorDetialObj(E_4004, devCommError);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
 
         if (responceData.getOperation() == null){
-            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+            return RESTRetUtils.errorDetialObj(E_4006, devCommError);
         }
 
         //判断设备是否在线

@@ -14,7 +14,6 @@ package com.openatc.comm.model;
 import com.openatc.comm.common.CommunicationType;
 
 import static com.openatc.comm.common.CommunicationType.*;
-import static com.openatc.comm.common.CommunicationType.OCP_PROTYPE;
 
 public class scpFactory implements ProtocolFactory {
 //    @Override
@@ -23,12 +22,12 @@ public class scpFactory implements ProtocolFactory {
 //    }
 
     @Override
-    public Communication createCommunication(Message message, CommunicationType commType) {
+    public Communication createCommunication(Message message, CommunicationType commType, int exangeType) {
 
         if(commType == COMM_UDP_CONFIGER)
             return new UdpCommunicationForConfiger(message);
         else if (commType == COMM_UDP_HOSTPORT)
-            return new UdpCommunicationStaticPort(SCP_PROTYPE);
+            return new UdpCommunicationStaticPort(SCP_PROTYPE, exangeType);
         else
             return null;
     }

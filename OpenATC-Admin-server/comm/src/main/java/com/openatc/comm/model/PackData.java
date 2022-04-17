@@ -19,7 +19,10 @@ public class PackData {
     private int m_packDataSize;
 
     public PackData(byte[] m_packData, int m_packDataSize) {
-        this.m_packData = m_packData.clone();
+        this.m_packData = new byte[m_packDataSize];
+        for(int i=0; i<m_packDataSize; i++){
+            this.m_packData[i] = m_packData[i];
+        }
         this.m_packDataSize = m_packDataSize;
     }
 
@@ -27,11 +30,11 @@ public class PackData {
     }
 
     public byte[] getM_packData() {
-        return m_packData.clone();
+        return m_packData;
     }
 
     public void setM_packData(byte[] m_packData) {
-        this.m_packData = m_packData.clone();
+        this.m_packData = m_packData;
     }
 
     public void setValue(int nValue)
