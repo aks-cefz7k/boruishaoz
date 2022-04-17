@@ -27,8 +27,6 @@ import com.openatc.core.util.RESTRetUtils;
 import com.openatc.agent.model.*;
 import algorithm.Greenwave;
 import algorithm.Kdalgorithm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +37,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
@@ -52,7 +51,7 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
 @RestController
 @CrossOrigin
 public class RouteController {
-    private Logger logger = LoggerFactory.getLogger(RouteController.class);
+    private Logger logger = Logger.getLogger(RouteController.class.toString());
 
     @Autowired(required = false)
     private RouteDao routeDao;
