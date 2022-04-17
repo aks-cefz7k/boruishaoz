@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,12 +40,10 @@ import java.util.logging.Logger;
 @EnableScheduling
 @EnableConfigurationProperties({FileProperties.class})
 @ComponentScan({"com.openatc.agent", "com.openatc.comm", "com.openatc.core"})
+@EnableTransactionManagement
 public class AgentApplication implements CommandLineRunner {
 
     private static Logger logger = Logger.getLogger(AgentApplication.class.toString());
-
-//    @Autowired
-//    private UdpServer udpServer;  //主动上报消息监听类
 
     @Autowired
     private AgentHandler agentHandler;  //主动上报消息处理类
@@ -73,58 +72,37 @@ public class AgentApplication implements CommandLineRunner {
             tokenlist = JwtFileUtil.initList();
         } catch (IOException e) {
             logger.info("token.txt not found...");
-//            e.printStackTrace();
         }
 
         // 设置主动上报的消息处理函数
         UdpCommunicationStaticPort.hanlder = agentHandler;
-
-//        new Thread(new UDPServer()).start();
-//        udpServer.setHanlder(agentHandler);
-//        udpServer.run();
-
     }
 
-
-
-
-//    @Value("${server.http.port}")
-//    private Integer httpPort;
-
-    /* SpringBoot 2.x版本(以及更高版本) 使用下面的代码 */
+    // SpringBoot2.x配置HTTPS,并实现HTTP访问自动转向HTTPS
 //    @Bean
 //    public ServletWebServerFactory servletContainer() {
-//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-//        tomcat.addAdditionalTomcatConnectors(createHTTPConnector());
+//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory(){
+//            @Override
+//            protected void postProcessContext(Context context) {
+//                SecurityConstraint securityConstraint = new SecurityConstraint();
+//                securityConstraint.setUserConstraint("CONFIDENTIAL");
+//                SecurityCollection collection = new SecurityCollection();
+//                collection.addPattern("/*");
+//                securityConstraint.addCollection(collection);
+//                context.addConstraint(securityConstraint);
+//            }
+//        };
+//        tomcat.addAdditionalTomcatConnectors(httpConnector());
 //        return tomcat;
 //    }
 //
-//    private Connector createHTTPConnector() {
-//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-//        connector.setScheme("http");
-//        connector.setSecure(false);
-//        connector.setPort(httpPort);
-//        return connector;
-//    }
-
-
-
-//    @Value("${server.port}")
-//    private Integer httpPort;
-//
-//    /* SpringBoot 2.x版本(以及更高版本) 使用下面的代码 */
 //    @Bean
-//    public ServletWebServerFactory servletContainer() {
-//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-//        tomcat.addAdditionalTomcatConnectors(createHTTPConnector());
-//        return tomcat;
-//    }
-//
-//    private Connector createHTTPConnector() {
+//    public Connector httpConnector() {
 //        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 //        connector.setScheme("http");
+//        connector.setPort(10003); // 监听Http的端口
 //        connector.setSecure(false);
-//        connector.setPort(httpPort);
+//        connector.setRedirectPort(10004); // 监听Http端口后转向Https端口
 //        return connector;
 //    }
 }
