@@ -180,6 +180,12 @@ public class AscsDao {
                 String vip_route_device = "update vip_route_device set agentid=? where agentid=?";
                 jdbcTemplate.update(vip_route_device, newAgentid, oldAgentid);
             }
+
+            if (isTableExist("static_route_intersection")) {
+                String static_route_intersection = "update static_route_intersection set agentid=? where agentid=?";
+                jdbcTemplate.update(static_route_intersection, newAgentid, oldAgentid);
+            }
+
         } catch (Exception e) {
             return false;
         }
