@@ -451,6 +451,9 @@ public class TemplateController {
         if (retBase.getData() == null) {
             return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
         }
+        if (retBase.getData().getData() == null) {
+            return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
+        }
         JsonArray phaseArray = retBase.getData().getData().getAsJsonObject().get("phaseList").getAsJsonArray();
         int phaseCount = phaseArray.size();
         //相位用两位字符串表示，不足位数补0

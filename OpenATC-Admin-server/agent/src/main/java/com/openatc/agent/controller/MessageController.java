@@ -137,9 +137,9 @@ public class MessageController {
         }
 
         // 判断通讯类型是设备直连还是平台转发
-        String platform = ascsBaseModel.getPlatform();
+        String protocal = ascsBaseModel.getProtocol();
         int exangeType = EXANGE_TYPE_DEVICE;
-        if(platform != null)
+        if(protocal.equals(SCP_PROTYPE) )
             exangeType = EXANGE_TYPE_CENTER;
 
         //增加mode字段
