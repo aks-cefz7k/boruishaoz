@@ -13,6 +13,7 @@ package com.openatc.agent.controller;
 
 import com.openatc.agent.model.AscsBaseModel;
 import com.openatc.agent.model.THisParams;
+import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
@@ -136,9 +137,9 @@ public class MessageController {
         }
 
         // 判断通讯类型是设备直连还是平台转发
-        String platform = ascsBaseModel.getPlatform();
+        String protocal = ascsBaseModel.getProtocol();
         int exangeType = EXANGE_TYPE_DEVICE;
-        if(platform != null)
+        if(protocal.equals(SCP_PROTYPE) )
             exangeType = EXANGE_TYPE_CENTER;
 
         //增加mode字段

@@ -30,7 +30,7 @@ import static com.openatc.comm.common.CommunicationType.*;
 
 // 使用固定端口发送和监听UDP数据，适应端口映射网络
 public class UdpCommunicationStaticPort implements Communication {
-    private static final int TIMEOUT = 2000;
+    private static final int TIMEOUT = 3000;
     private static final int RECVBUFFER = 20 * 1024 * 1024;
     private static Logger logger = Logger.getLogger(UdpCommunicationStaticPort.class.toString());
 
@@ -55,8 +55,10 @@ public class UdpCommunicationStaticPort implements Communication {
 
     private static int indexTest = 0;
 
+    @Value("${agent.ocp.port}")
     private static int ocpSocketPort = 21003;
 
+    @Value("${agent.scp.port}")
     private static int scpSocketPort = 21002;
 
     public static ICommHandler hanlder;
