@@ -40,6 +40,8 @@ public class UdpCommunicationStaticPort implements Communication {
     private static UdpReceiveThread scpReceiveThread;
     // 先把发送消息的KEY保存在map中，收到消息后，按KEY保存消息内容，再返回给客户端
     private static Map<String,UdpCommunicationStaticPort> messageMap = new HashMap();
+    // 同步锁Map
+    private static Map<String,ReentrantLock> lockMap = new HashMap();
 
     private String messageKey; // 当前请求的设备ID，用于多线程同步
     private Thread thread; // 当前请求的线程对象
@@ -49,8 +51,6 @@ public class UdpCommunicationStaticPort implements Communication {
     private DatagramSocket datagramSocket;
     private int exangeType; // 当前设备的通讯平台
 
-    private static int indexTest = 0;
-
     @Value("${agent.ocp.port}")
     private static int ocpSocketPort = 21003;
 
@@ -58,6 +58,8 @@ public class UdpCommunicationStaticPort implements Communication {
     private static int scpSocketPort = 21002;
 
     public static ICommHandler hanlder;
+
+    private static ReentrantLock globalLock = new ReentrantLock();
 
     static {
 //        logger.setLevel(WARNING);
@@ -90,7 +92,6 @@ public class UdpCommunicationStaticPort implements Communication {
     @Override
     public DatagramSocket sendData(String agentid,PackData packData, String ip, int port) throws IOException {
 
-
         // 保存消息的KEY,如果是直连到设备，用IP+端口;如果是通过平台跳转，使用设备ID
         if(exangeType == EXANGE_TYPE_DEVICE)
             messageKey = ip + port;
@@ -98,14 +99,18 @@ public class UdpCommunicationStaticPort implements Communication {
             messageKey = agentid;
 
         // 按顺序进行消息通讯
-        if (messageMap.containsKey(messageKey)) {
-            lock = messageMap.get(messageKey).lock;
+        globalLock.lock();
+        if (lockMap.containsKey(messageKey)) {
+            lock = lockMap.get(messageKey);
         } else {
             lock = new ReentrantLock();
+            lockMap.put(messageKey,lock);
         }
+        globalLock.unlock();
+
 
         lock.lock();
-        logger.info("Message Lock : KEY:" + messageKey + " Index:" + (++indexTest));
+        logger.info("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
 
         //socket的发送地址和端口
         InetSocketAddress address = new InetSocketAddress(ip, port);
@@ -138,8 +143,9 @@ public class UdpCommunicationStaticPort implements Communication {
         }
 
         messageMap.remove(messageKey);
+        lockMap.remove(messageKey);
         lock.unlock();
-        logger.info("Message unLock : KEY:" + messageKey + " Index:" + indexTest);
+        logger.info("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
         return responceData;
     }
 
@@ -166,7 +172,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     MessageData responceData = message.uppack(recvPacket);
 
                     logger.info("Udp Receive Info:" +addressStr+":"+port);
-                    logger.info("Udp Receive Data:" +responceData.toString());
+//                    logger.info("Udp Receive Data:" +responceData.toString());
 
                     //收到主动上报的消息
                     if(responceData.getOperation().equals(OPERATOER_TYPE_REPORT)){
