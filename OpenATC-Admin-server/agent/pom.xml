@@ -73,10 +73,10 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.dataformat</groupId>-->
+<!--            <artifactId>jackson-dataformat-xml</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.auth0</groupId>
@@ -210,7 +210,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>kiss-registry:5000/${project.artifactId}</repository>
+<!--                    <repository>kiss-registry:5000/${project.artifactId}</repository>-->
+                    <repository>nexus.kedacom.com/content/repositories/yuanqu-snapshot/${project.artifactId}</repository>
                     <tag>${project.version}</tag>
                     <tag>latest</tag>
                     <buildArgs>
