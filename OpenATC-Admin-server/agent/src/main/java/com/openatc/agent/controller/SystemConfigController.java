@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class SystemConfigController {
 
     @Autowired
-    SystemConfigDao systemConfigDao;
+    private SystemConfigDao systemConfigDao;
 
     @GetMapping(value = "/systemconfig")
     public RESTRetBase getSystemConfig() {
@@ -36,6 +36,6 @@ public class SystemConfigController {
 
     @GetMapping(value = "/systemconfig/{module}")
     public RESTRetBase getSystemConfigByModule(@PathVariable String module) {
-        return RESTRetUtils.successObj(systemConfigDao.findAll());
+        return RESTRetUtils.successObj(systemConfigDao.findAllByModule(module));
     }
 }

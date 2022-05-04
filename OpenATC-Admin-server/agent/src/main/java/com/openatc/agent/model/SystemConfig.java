@@ -1,4 +1,4 @@
-package com.openatc.agent.model;//package com.kedacom.kiss.model;
+package com.openatc.agent.model;
 
 import lombok.Data;
 
