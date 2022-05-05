@@ -116,19 +116,21 @@ public class VipRouteController {
 
             VipRouteDevice dev = devs.iterator().next();
             location = dev.getLocation();
-
-            if (location != null) {
-                for (VipRouteDevice device : devs) {
-                    Map<String, Object> geometry = device.getGeometry();
-                    if (geometry == null) device.setGeometry(new HashMap<>());
-                    if (geometry.toString() != "{}") {
-                        List<Double> coordinates = (ArrayList) geometry.get(COORDINATES);
+            for (VipRouteDevice device : devs) {
+                Map<String, Object> geometry = device.getGeometry();
+                if (geometry == null) {
+                    device.setGeometry(new HashMap<>());
+                    continue;
+                }
+                if (geometry.toString() != "{}") {
+                    List<Double> coordinates = (ArrayList) geometry.get(COORDINATES);
+                    if (location != null){
                         double[] devlocation = new double[]{getMercatorLon(coordinates.get(0)), getMercatorLat(coordinates.get(1))};
                         device.setLocation(devlocation);
                     }
                 }
-                routeEntity.setDevs(devs);
             }
+            routeEntity.setDevs(devs);
 
             // 3 将设备信息更新到redis中
             for (VipRouteDevice vipRouteDevice : devs) {
