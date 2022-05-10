@@ -29,7 +29,7 @@ import static com.openatc.comm.common.CommunicationType.*;
 
 // 使用固定端口发送和监听UDP数据，适应端口映射网络
 public class UdpCommunicationStaticPort implements Communication {
-    private static final int TIMEOUT = 15 * 1000;
+    private static final int TIMEOUT = 5 * 1000;
     private static final int RECVBUFFER = 20 * 1024 * 1024;
     private static Logger logger = Logger.getLogger(UdpCommunicationStaticPort.class.toString());
 
@@ -107,12 +107,12 @@ public class UdpCommunicationStaticPort implements Communication {
             lock = lockMap.get(messageKey);
         } else {
             lock = new ReentrantLock();
-            lockMap.put(messageKey,lock);
         }
         globalLock.unlock();
 
 
         lock.lock();
+        lockMap.put(messageKey,lock);
         logger.info("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
 
         //socket的发送地址和端口
@@ -130,7 +130,7 @@ public class UdpCommunicationStaticPort implements Communication {
         datagramSocket.send(sendPacket);
         thread = Thread.currentThread();
         messageMap.put(messageKey, this);
-        logger.info("Send Data Thread#" + thread.getId() +"AgentID:" + agentid +  "IP:" + ip +"Port:" + port);
+        logger.info("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength());
 
 
         return datagramSocket;
@@ -178,11 +178,9 @@ public class UdpCommunicationStaticPort implements Communication {
                     InetAddress address = recvPacket.getAddress();
                     String addressStr = address.getHostAddress();
                     int port = recvPacket.getPort();
+                    logger.info("Udp Receive Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength());
+
                     MessageData responceData = message.uppack(recvPacket);
-
-                    logger.info("Udp Receive Info:" +addressStr+":"+port);
-//                    logger.info("Udp Receive Data:" +responceData.toString());
-
                     //收到主动上报的消息
                     if(responceData.getOperation() == null || responceData.getOperation().equals(OPERATOER_TYPE_REPORT)){
                         // 收到信号机的注册消息并应答
