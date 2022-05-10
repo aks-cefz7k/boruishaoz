@@ -156,6 +156,11 @@ public class MessageController {
             logger.info(e.getMessage());
         }
 
+        if (responceData == null){
+            devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_200);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+        }
+
         // 把设置请求的操作保存到历史记录中
         String token = null;
         if (httpServletRequest != null) {
@@ -166,11 +171,9 @@ public class MessageController {
             hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp, token));
         }
 
-        if (responceData == null){
-            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
-        }
 
         if (responceData.getOperation() == null){
+            devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_101);
             return RESTRetUtils.errorDetialObj(E_4006, devCommError);
         }
 
@@ -212,16 +215,19 @@ public class MessageController {
         hisParams.setAgentid(requestData.getAgentid());
         //消息类型
         hisParams.setInfotype(requestData.getInfotype());
-        //消息描述
-        hisParams.setStatus(responceData.getOperation());
         //请求内容
         try {
             hisParams.setRequestbody(requestData.getData().toString());
         } catch (Exception e) {
             hisParams.setRequestbody("{}");
         }
-        //响应内容
-        hisParams.setResponsebody(responceData.getData().toString());
+        if(responceData != null){
+            //消息描述
+            hisParams.setStatus(responceData.getOperation());
+            //响应内容
+            hisParams.setResponsebody(responceData.getData().toString());
+        }
+
         return hisParams;
     }
 

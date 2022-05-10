@@ -79,6 +79,11 @@ public class CommClient {
             return CreateErrorResponceData(e.getMessage());
         }
 
+        if(socket == null){
+            log.info("exange send error: socket return null");
+            return CreateErrorResponceData("exange send error: socket return null");
+        }
+
         // 接收-解析
         MessageData responceData = null;
         try {
