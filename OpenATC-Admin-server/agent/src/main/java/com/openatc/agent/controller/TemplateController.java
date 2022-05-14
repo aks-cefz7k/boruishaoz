@@ -444,7 +444,11 @@ public class TemplateController {
         MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.phase);
         RESTRet<MessageData> retBase = null;
         retBase = messageController.postDevsMessage(null, messageData);
-        if (retBase.getMessage().equals("Device not online!")) {
+        if (retBase.getCode().equals(E_4005.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_200);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+        }
+        if (retBase.getCode().equals(E_4003.getErrorCode())) {
             DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_301);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
