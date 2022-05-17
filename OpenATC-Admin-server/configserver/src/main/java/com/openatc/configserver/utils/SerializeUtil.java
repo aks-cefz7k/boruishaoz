@@ -17,7 +17,9 @@ import java.util.Properties;
 public class SerializeUtil {
     public static String getUserFilePath(){
         Properties properties = new Properties();
-        InputStream in = SerializeUtil.class.getResourceAsStream("/config/application.properties");
+//        InputStream in = SerializeUtil.class.getResourceAsStream("application.properties");
+        InputStream in = SerializeUtil.class.getClassLoader().getResourceAsStream("/application.properties");
+        System.out.println(in);
         try {
             properties.load(in);
         } catch (IOException e) {
@@ -51,7 +53,8 @@ public class SerializeUtil {
     }
 
     public static Object readObject(){
-        String filePath = getUserFilePath();
+//        String filePath = getUserFilePath();
+        String filePath = "u";
         File file = new File(filePath);
         FileInputStream fs = null;
 

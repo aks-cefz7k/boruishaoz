@@ -72,6 +72,7 @@ public class CommClient {
 
         // 发送
         DatagramSocket socket = null;
+        Long starttime = System.currentTimeMillis();
         try {
             socket = communication.sendData(sendMsg.getAgentid(),packData, ip, port);
         } catch (IOException e) {
@@ -81,8 +82,11 @@ public class CommClient {
 
         // 接收-解析
         MessageData responceData = null;
+        Long endtime = 0L;
         try {
             responceData = communication.receiveData(socket);
+            endtime = System.currentTimeMillis();
+            responceData.setDelay(endtime-starttime);
         } catch (IOException e) {
             log.info("exange receive error: " + e.getMessage());
             return CreateErrorResponceData(e.getMessage());

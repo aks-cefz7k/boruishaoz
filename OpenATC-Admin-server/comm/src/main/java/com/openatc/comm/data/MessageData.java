@@ -31,6 +31,7 @@ public class MessageData {
   String infotype;
   String createtime;
   JsonElement data;
+  Long delay;
 
   public MessageData(String agentid, String operation, String infotype, JsonElement data) {
     this.agentid = agentid;

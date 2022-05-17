@@ -11,6 +11,7 @@
  **/
 package com.openatc.comm.model;
 
+import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import com.openatc.comm.packupack.DataPackUpPack;
@@ -55,10 +56,10 @@ public class UdpCommunicationStaticPort implements Communication {
     private int exangeType; // 当前设备的通讯平台
 
 
-    private static int ocpSocketPort = 21003;
+    private static int ocpSocketPort = 31003;
 
 
-    private static int scpSocketPort = 21002;
+    private static int scpSocketPort = 31002;
 
     public static ICommHandler hanlder;
 
@@ -141,6 +142,8 @@ public class UdpCommunicationStaticPort implements Communication {
         try {
             Thread.sleep(TIMEOUT);
             logger.info("Time Out Thread#" + thread.getId());
+            lock.unlock();
+            return CreateErrorResponceData("Device not online!");
         } catch (InterruptedException e) {
             logger.info("Receive Data Thread#" + thread.getId());
         }
@@ -151,6 +154,16 @@ public class UdpCommunicationStaticPort implements Communication {
         logger.info("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
         return responceData;
     }
+
+    private static MessageData CreateErrorResponceData(String desc) {
+        MessageData responceData = new MessageData();
+        responceData.setOperation("Communication Error!");
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("desc", desc);
+        responceData.setData(jsonObject);
+        return responceData;
+    }
+
 
     private static class UdpReceiveThread extends Thread{
 
