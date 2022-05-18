@@ -177,7 +177,7 @@ public class MessageController {
         //判断设备是否在线
         if (responceData.getOperation().equals("Communication Error!")) {
             devCommError = RESTRetUtils.errorObj(agentid, errorresponse, infotype, E_301);
-            return RESTRetUtils.errorDetialObj(E_4003, devCommError);
+            return RESTRetUtils.errorDetialObj(E_4003, devCommError, responceData.getDelay());
         }
 
         //判断应答是否成功

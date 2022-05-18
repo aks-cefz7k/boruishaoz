@@ -249,6 +249,10 @@ public final class RESTRetUtils {
         return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommError);
     }
 
+    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, DevCommError devCommError, Long delay) {
+        return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommError, delay);
+    }
+
     public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, JsonElement jsonElement) {
         return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),jsonElement);
     }

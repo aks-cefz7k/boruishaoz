@@ -87,6 +87,7 @@ public class CommClient {
             responceData = communication.receiveData(socket);
             endtime = System.currentTimeMillis();
             responceData.setDelay(endtime-starttime);
+            log.info("receive responceData: " + responceData);
         } catch (IOException e) {
             log.info("exange receive error: " + e.getMessage());
             return CreateErrorResponceData(e.getMessage());
