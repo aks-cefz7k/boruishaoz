@@ -48,12 +48,10 @@ public class DeviceVedioController {
     @DeleteMapping(value = "/vedio/{agentid}")
     public RESTRetBase deleteVedios(@PathVariable String agentid){
         Integer integer = deviceVedioDao.deleteByAgentid(agentid);
-        System.out.println(integer+"--------------------------------------");
         if (integer == 1){
             return RESTRetUtils.successObj(true);
         }else{
             return RESTRetUtils.successObj(false);
-
         }
 
     }

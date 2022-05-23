@@ -186,6 +186,11 @@ public class AscsDao {
                 jdbcTemplate.update(static_route_intersection, newAgentid, oldAgentid);
             }
 
+            if (isTableExist("devs_video")) {
+                String devs_video = "update devs_video set agentid=? where agentid=?";
+                jdbcTemplate.update(devs_video, newAgentid, oldAgentid);
+            }
+
         } catch (Exception e) {
             return false;
         }

@@ -32,11 +32,12 @@ public class ocpMessage implements Message {
 
     @Override
     public PackData pack(MessageData sendMsg) throws UnsupportedEncodingException {
+        System.out.println("sendMsg" + sendMsg);
         DataSchedulePackUpPack dataSchedulePackUpPack = new DataSchedulePackUpPack();
         PackData packData;
         String infotype = sendMsg.getInfotype();
         String opertype = sendMsg.getOperation();
-        if (infotype.equals(allFeature)&&opertype.equals(setrequest)) {
+        if (infotype.equals(allFeature) && opertype.equals(setrequest)) {
             String datastr = "";
             DataParamMD5 dataMD5 = new DataParamMD5();
             //去除双引号
@@ -44,15 +45,15 @@ public class ocpMessage implements Message {
             if (data != null) {
                 String datastr1 = data.toString();
                 char stchar = '"';
-                char stchar1 =' ';
-                char stchar2= '\0';
-                char stchar3= '\t';
-                char stchar4= '\r';
-                char stchar5= '\n';
-                char stchar6= '\b';
+                char stchar1 = ' ';
+                char stchar2 = '\0';
+                char stchar3 = '\t';
+                char stchar4 = '\r';
+                char stchar5 = '\n';
+                char stchar6 = '\b';
                 StringBuffer stringBuffer = new StringBuffer("");
                 for (int i = 0; i < datastr1.length(); i++) {
-                    if (datastr1.charAt(i) != stchar&&datastr1.charAt(i) != stchar1&&datastr1.charAt(i) != stchar2&&datastr1.charAt(i) != stchar3&&datastr1.charAt(i) != stchar4&&datastr1.charAt(i) != stchar5&&datastr1.charAt(i) != stchar6) {
+                    if (datastr1.charAt(i) != stchar && datastr1.charAt(i) != stchar1 && datastr1.charAt(i) != stchar2 && datastr1.charAt(i) != stchar3 && datastr1.charAt(i) != stchar4 && datastr1.charAt(i) != stchar5 && datastr1.charAt(i) != stchar6) {
                         stringBuffer.append(datastr1.charAt(i));
                     }
                 }
@@ -60,6 +61,7 @@ public class ocpMessage implements Message {
             }
 
             String datamd5value = dataMD5.getMD5(datastr);
+
             MessageDataMD5 md5data = new MessageDataMD5(sendMsg);
             md5data.setAgentid(sendMsg.getAgentid());
             md5data.setInfotype(sendMsg.getInfotype());
@@ -88,7 +90,7 @@ public class ocpMessage implements Message {
     @Override
     public MessageData uppack(DatagramPacket recvPacket) throws UnsupportedEncodingException {
 
-        if(recvPacket == null){
+        if (recvPacket == null) {
             return null;
         }
 
