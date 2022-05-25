@@ -121,6 +121,12 @@ public class UdpCommunicationStaticPort implements Communication {
         //生成发送包
         DatagramPacket sendPacket = new DatagramPacket(packData.getM_packData(), packData.getM_packDataSize(), address);
 
+        // UDP最大发送长度64K
+        if(sendPacket.getLength() > 64000){
+            logger.info("Send Packet too Long! Send Data Thread#" + thread.getId() +"AgentID:" + agentid +  "IP:" + ip +"Port:" + port);
+            return null;
+        }
+
         //发送数据
         datagramSocket.send(sendPacket);
         thread = Thread.currentThread();

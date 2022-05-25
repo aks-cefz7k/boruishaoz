@@ -115,6 +115,7 @@ public class DeviceController {
         try {
             responceData = commClient
                     .exange(ip, port, protocol, 0, requestData);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
