@@ -15,6 +15,8 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.NonUniqueResultException;
+
 @Component
 @Scope("prototype")
 @Slf4j
@@ -33,12 +35,24 @@ public class FaultReceiver implements MessageListener {
         String agentid = messageJson.get("agentid").getAsString();
         JsonArray m_faultDeque = messageJson.getAsJsonObject("data").getAsJsonArray("m_FaultDeque");
 
-        for (JsonElement faultJson : m_faultDeque){
+        for (JsonElement faultJson : m_faultDeque) {
             Fault fault = gson.fromJson(faultJson.toString(), Fault.class);
+
             fault.setAgentid(agentid);
-            Long id = faultDao.selectByAgentidAndMwFaultID(agentid, fault.getM_wFaultID());
-            Fault dbFault = (id == null) ? faultDao.save(fault) : faultDao.save(fault.setId(id));
-            log.info( gson.toJson(transformFault(dbFault)));
+            Long id = null;
+            try {
+                id = faultDao.selectByAgentidAndMwFaultID(agentid, fault.getM_wFaultID());
+            } catch (NonUniqueResultException e) {
+                System.out.println("NonUniqueResultException");
+            }
+            Fault dbFault = null;
+            if (id == null) {
+                dbFault = faultDao.save(fault);
+            } else {
+                fault.setId(id);
+                dbFault = faultDao.save(fault);
+            }
+            log.info(gson.toJson(transformFault(dbFault)));
             stringRedisTemplate.convertAndSend("asc:event/faultdata", gson.toJson(transformFault(dbFault)));
         }
     }
@@ -55,7 +69,11 @@ public class FaultReceiver implements MessageListener {
         } else {
             jsonObject.addProperty("m_unFaultRenewTime", 0);
         }
-        return jsonObject;
+        JsonObject result = new JsonObject();
+        result.add("data", jsonObject);
+        result.addProperty("infotype", "event/faultdata");
+        result.addProperty("agentid", fault.getAgentid());
+        return result;
     }
 
 }

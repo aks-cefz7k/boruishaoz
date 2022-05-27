@@ -114,7 +114,8 @@ public class DeviceController {
         MessageData responceData = null;
         try {
             responceData = commClient
-                    .exange(ip, port, protocol, 0,requestData);
+                    .exange(ip, port, protocol, 0, requestData);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.openatc.agent.controller.DevController;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.utils.DateUtil;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 /**
@@ -47,6 +49,10 @@ public class AgentHandler extends ICommHandler {
 
     @Override
     public synchronized void process(MessageData msg) throws ParseException {
+        if (msg.getCreatetime() == null){
+            msg.setCreatetime(DateUtil.date2esstr(new Date()));
+        }
+        logger.info(msg.toString());
         Gson gson = new Gson();
         if (msg == null) {
             logger.info("AgentHandler/process: MessageData is null");

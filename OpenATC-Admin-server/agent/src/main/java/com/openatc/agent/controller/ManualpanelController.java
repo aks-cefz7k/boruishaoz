@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
@@ -40,16 +41,13 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
 @RestController
 public class ManualpanelController {
 
-    @Autowired
-    private MessageController messageController;
-
     private int[] ewSPhase = new int[]{1, 5}; //东西直行
-    private int[] nPPhase = new int[]{9, 10, 11}; //北向通行
+    private int[] nPPhase = new int[]{9, 10, 11, 12}; //北向通行
     private int[] ewLPhase = new int[]{2, 6}; //东西左转
-    private int[] wPPhase = new int[]{5, 6, 7}; //西向通行
-    private int[] ePPhase = new int[]{1, 2, 3}; //东向通行
+    private int[] wPPhase = new int[]{5, 6, 7, 8}; //西向通行
+    private int[] ePPhase = new int[]{1, 2, 3, 4}; //东向通行
     private int[] snSPhase = new int[]{9, 13}; //南北直行
-    private int[] sPPhase = new int[]{13, 14, 15}; //南向通行
+    private int[] sPPhase = new int[]{13, 14, 15, 16}; //南向通行
     private int[] snLPhase = new int[]{10, 14}; //南北左转
 
 
@@ -121,7 +119,7 @@ public class ManualpanelController {
         int[] direction = lsCheck.getDirection();
         boolean result = false;
         for (int j : arr) {
-            if (ArrayUtils.contains(direction, j)) {
+            if (Arrays.asList(direction).contains(j)) {
                 result = true;
                 break;
             }
@@ -144,15 +142,15 @@ public class ManualpanelController {
             int id = phaseArray.get(k).getAsJsonObject().get("id").getAsInt();
             for (int s : arr) {
                 if (x != 0) break;
-                if (ArrayUtils.contains(directions0, s)) {
+                if (Arrays.asList(directions0).contains(s)) {
                     for (int u = 0; u < phaseArray.size(); u++) {
                         if (u == k) continue;
                         int[] directions1 = gson.fromJson(phaseArray.get(u).getAsJsonObject().get("direction"), int[].class);
                         int[] concurrent2 = gson.fromJson(phaseArray.get(u).getAsJsonObject().get("concurrent"), int[].class);
                         int id2 = phaseArray.get(u).getAsJsonObject().get("id").getAsInt();
                         for (int m : arr) {
-                            if (ArrayUtils.contains(directions1, m)) {
-                                if (!(ArrayUtils.contains(concurrent2, id) && ArrayUtils.contains(concurrent0, id2))) {
+                            if (Arrays.asList(directions1).contains(m)) {
+                                if (!(Arrays.asList(concurrent2).contains(id) && Arrays.asList(concurrent0).contains(id2))) {
                                     channelList.get(i).add(new Channel(lsCheck.getId(), 1));
                                     x++;
                                     break;

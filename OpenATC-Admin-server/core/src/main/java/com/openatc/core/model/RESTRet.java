@@ -30,6 +30,8 @@ import static com.openatc.core.common.Constants.SUCCESS_MSG;
 @EqualsAndHashCode(callSuper = true)
 public class RESTRet<T> extends RESTRetBase {
 
+    private Long delay;
+
     public RESTRet(Integer tookMesc, String path) {
         setCode(SUCCESS_CODE);
         setMessage(SUCCESS_MSG);
@@ -50,6 +52,12 @@ public class RESTRet<T> extends RESTRetBase {
     public RESTRet(boolean success, String code, String message, T data) {
         super(success, code, message);
         this.data = data;
+    }
+
+    public RESTRet(boolean success, String code, String message, T data, Long delay) {
+        super(success, code, message);
+        this.data = data;
+        this.delay = delay;
     }
 
     public RESTRet(boolean success, String code, String message) {

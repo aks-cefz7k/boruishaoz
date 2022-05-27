@@ -186,6 +186,11 @@ public class AscsDao {
                 jdbcTemplate.update(static_route_intersection, newAgentid, oldAgentid);
             }
 
+            if (isTableExist("devs_video")) {
+                String devs_video = "update devs_video set agentid=? where agentid=?";
+                jdbcTemplate.update(devs_video, newAgentid, oldAgentid);
+            }
+
         } catch (Exception e) {
             return false;
         }
@@ -215,6 +220,119 @@ public class AscsDao {
         ascBase.setState((String) lvRet.get("state"));
         return ascBase;
     }
+
+    public int updateAscsonReport(DevCover devCover) {
+
+        AscsBaseModel ascsModel = new AscsBaseModel();
+        ascsModel.setType(devCover.getType());
+        ascsModel.setStatus(devCover.getStatus());
+
+        double lat = devCover.getLat();
+        double lng = devCover.getLng();
+        double[] str;
+        str = new double[]{lng, lat};
+        MyGeometry myGeometry = new MyGeometry();
+        myGeometry.setType("Point");
+        myGeometry.setCoordinates(str);
+
+        ascsModel.setGeometry(myGeometry);
+
+        JsonObject jo = new JsonObject();
+        jo.addProperty("ip", devCover.getIp());
+        jo.addProperty("port", devCover.getPort());
+        if (devCover.getModel() != null)
+            jo.addProperty("model", devCover.getModel());
+
+        ascsModel.setJsonparam(jo);
+        ascsModel.setAgentid(devCover.getAgentid());
+        ascsModel.setProtocol(devCover.getProtocol());
+        Gson gson = new Gson();
+        int updateCount = 0;
+        int rows = 0;
+        //判断是否存在该devid的记录
+        if (devCover.getAgentid() == null) {
+            String sqlIdAndJsonparamList = "SELECT id,jsonparam FROM dev";
+            List<Map<String, Object>> idAndJsonparamList = jdbcTemplate.queryForList(sqlIdAndJsonparamList);
+            for (Map<String, Object> idAndJson : idAndJsonparamList) {
+                Map jsonparamMap = gson.fromJson(idAndJson.get("jsonparam").toString(), Map.class);
+                int id = (int) idAndJson.get("id");
+                int port = 0;
+                if (!jsonparamMap.get("port").toString().equals("")) {
+                    port = Double.valueOf(jsonparamMap.get("port").toString()).intValue();
+                }
+                if (jsonparamMap.get("ip").equals(devCover.getIp()) && port == devCover.getPort()) {
+                    String sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
+                    rows = jdbcTemplate.update(sql,
+                            ascsModel.getType(),
+                            ascsModel.getStatus(),
+                            ascsModel.getProtocol(),
+                            ascsModel.getGeometry().toString(),
+                            ascsModel.getJsonparam().toString(),
+                            id);
+                    updateCount++;
+                }
+            }
+            if (updateCount == 0) {
+                String sql = "INSERT INTO dev(agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+                rows = jdbcTemplate.update(sql,
+                        System.currentTimeMillis() + "",
+                        ascsModel.getType(),
+                        ascsModel.getStatus(),
+                        ascsModel.getProtocol(),
+                        ascsModel.getGeometry() == null ? null : ascsModel.getGeometry().toString(),
+                        ascsModel.getJsonparam() == null ? null : ascsModel.getJsonparam().toString());
+            }
+            return rows;
+        } else {
+            String sql = "SELECT count(id) FROM dev where agentid = ?";
+            long count = jdbcTemplate.queryForObject(sql, Long.class, devCover.getAgentid());
+            if (count != 0) {
+                if (lat != 0 || lng != 0) {
+                    sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
+                    String strGeo = ascsModel.getGeometry().toString();
+                    rows = jdbcTemplate.update(sql,
+                            ascsModel.getType(),
+                            ascsModel.getStatus(),
+                            ascsModel.getProtocol(),
+                            strGeo,
+                            ascsModel.getJsonparam().toString(),
+                            devCover.getAgentid());
+                } else {
+                    sql = "update dev set type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
+                    rows = jdbcTemplate.update(sql,
+                            ascsModel.getType(),
+                            ascsModel.getStatus(),
+                            ascsModel.getProtocol(),
+                            ascsModel.getJsonparam().toString(),
+                            devCover.getAgentid());
+                }
+                return rows;
+            } else {
+                if (lat != 0 || lng != 0) {
+                    sql = "INSERT INTO dev(agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+                    rows = jdbcTemplate.update(sql,
+                            ascsModel.getAgentid(),
+                            ascsModel.getType(),
+                            ascsModel.getStatus(),
+                            ascsModel.getProtocol(),
+                            ascsModel.getGeometry().toString(),
+                            ascsModel.getJsonparam().toString());
+                } else {
+                    sql = "INSERT INTO dev(agentid,type,status,protocol,jsonparam,lastTime) VALUES (?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+                    rows = jdbcTemplate.update(sql,
+                            ascsModel.getAgentid(),
+                            ascsModel.getType(),
+                            ascsModel.getStatus(),
+                            ascsModel.getProtocol(),
+                            ascsModel.getJsonparam().toString());
+                }
+
+                return rows;
+            }
+        }
+    }
+
+
 
     public int updateAscs(DevCover devCover) {
 

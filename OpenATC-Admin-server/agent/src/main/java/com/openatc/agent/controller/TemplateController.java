@@ -47,8 +47,6 @@ public class TemplateController {
 
     Gson gson = new Gson();
 
-    Set<Integer> ewPed = new HashSet<>(Arrays.asList(15));
-    Set<Integer> snPed = new HashSet<>(Arrays.asList(16));
     /**
      * @return RESTRetBase
      * @Title: getTemplate
@@ -441,15 +439,11 @@ public class TemplateController {
         Set directionSet = new HashSet();
 
         //使用设备通讯接口获取相位
-        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.phase);
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
         RESTRet<MessageData> retBase = null;
         retBase = messageController.postDevsMessage(null, messageData);
-        if (retBase.getCode().equals(E_4005.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_200);
-            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
-        }
-        if (retBase.getCode().equals(E_4003.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_301);
+        if (retBase.getMessage().equals("Device not online!")) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_301);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
         if (retBase.getData() == null) {
@@ -459,47 +453,92 @@ public class TemplateController {
             return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
         }
         JsonArray phaseArray = retBase.getData().getData().getAsJsonObject().get("phaseList").getAsJsonArray();
+        JsonElement overlapElement = retBase.getData().getData().getAsJsonObject().get("overlaplList");
+        JsonArray overlapArray = new JsonArray();
+        if (overlapElement != null){
+            overlapArray = overlapElement.getAsJsonArray();
+        }
+        JsonArray phaseAndOverlapArray = new JsonArray();
+        phaseAndOverlapArray.addAll(phaseArray);
+        phaseAndOverlapArray.addAll(overlapArray);
         int phaseCount = phaseArray.size();
         //相位用两位字符串表示，不足位数补0
         String phaseCountString = String.format("%2d", phaseCount).replace(" ", "0");
-        //判断是否是T型或十字型路口
-        type = calTenOrType(phaseArray, type, directionSet, phaseCountString);
-        //判断是否是匝道类型的路开口
-        type = calRampType(phaseArray, type, phaseCountString);
-        //判断是不是人行横道
-        type = calPedCrossType(phaseArray, type, phaseCountString);
+
+        if (!directionConflict(phaseArray) && !directionConflict(overlapArray)){
+            //判断是否是T型或十字型路口
+            type = calTenOrType(phaseAndOverlapArray, type, directionSet, phaseCountString);
+            //判断是否是匝道类型的路开口
+            type = calRampType(phaseArray, type, phaseCountString);
+            //判断是不是人行横道
+            type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
+        }
 
         //返回的json对象
         JsonObject intersectionInfo = new JsonObject();
         intersectionInfo.addProperty("type", type);
         intersectionInfo.add("phaseList", phaseArray);
+        intersectionInfo.add("overlaplList", overlapArray);
         return RESTRetUtils.successObj(intersectionInfo);
+    }
+
+    /**
+     * 判断direction时候会有冲突
+     */
+    private boolean directionConflict(JsonArray jsonArray) {
+        Set set = new HashSet<>();
+        for (JsonElement jsonElement : jsonArray) {
+            int[] directions = gson.fromJson(jsonElement.getAsJsonObject().get("direction"), int[].class);
+            for (double direction : directions) {
+                if (set.contains(direction)) {
+                    return true;
+                } else {
+                    set.add(direction);
+                }
+            }
+        }
+        return false;
     }
 
     private String calPedCrossType(JsonArray phaseArray, String type, String phaseCountString) {
         for (JsonElement phase : phaseArray) {
             if (phase.getAsJsonObject().get("controltype") == null || phase.getAsJsonObject().get("peddirection") == null)
                 continue;
-            int[] peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), int[].class);
 
             // 确定为人行横道
             if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
-                for (Integer direction : peddirection) {
-                    if (ewPed.contains(direction) && snPed.contains(direction)) return type = "999-000-00";
-                    if (ewPed.contains(direction)) return type = "104-005-" + phaseCountString;
-                    if (snPed.contains(direction)) return type = "104-006-" + phaseCountString;
+                Set<Integer> peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), Set.class);
+                if (peddirection.contains(15) && peddirection.contains(16)) {
+                    return type = "999-000-00";
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        for (JsonElement phase : phaseArray) {
+            if (phase.getAsJsonObject().get("controltype") == null || phase.getAsJsonObject().get("peddirection") == null)
+                continue;
+
+            // 确定为人行横道
+            if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
+                Set<Integer> peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), Set.class);
+                if (peddirection.contains(15)) {
+                    return type = "104-005-" + phaseCountString;
+                } else if (peddirection.contains(16)) {
+                    return type = "104-006-" + phaseCountString;
+                } else {
+                    return type = "999-000-00";
                 }
             }
         }
         return type;
     }
 
-    private String calTenOrType(JsonArray phaseArray, String type, Set directionSet, String phaseCountString) {
-        for (JsonElement phase : phaseArray) {
-            int[] directions = gson.fromJson(phase.getAsJsonObject().get("direction"), int[].class);
-//            int[] peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), int[].class);
+    private String calTenOrType(JsonArray phaseAndOverlapArray, String type, Set directionSet, String phaseCountString) {
+        for (JsonElement phaseAndOverlap : phaseAndOverlapArray) {
+            int[] directions = gson.fromJson(phaseAndOverlap.getAsJsonObject().get("direction"), int[].class);
             for (double direction : directions) {
-//                alldirections.add(direction);
                 directionSet.add((int) Math.ceil(direction / 4));
             }
         }
