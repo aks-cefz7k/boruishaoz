@@ -55,10 +55,10 @@ public class UdpCommunicationStaticPort implements Communication {
     private int exangeType; // 当前设备的通讯平台
 
 
-    private static int ocpSocketPort = 21003;
+    private static int ocpSocketPort = 31003;
 
 
-    private static int scpSocketPort = 21002;
+    private static int scpSocketPort = 31002;
 
     public static ICommHandler hanlder;
 

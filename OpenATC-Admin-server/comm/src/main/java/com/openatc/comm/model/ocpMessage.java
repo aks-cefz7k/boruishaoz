@@ -32,7 +32,6 @@ public class ocpMessage implements Message {
 
     @Override
     public PackData pack(MessageData sendMsg) throws UnsupportedEncodingException {
-        System.out.println("sendMsg" + sendMsg);
         DataSchedulePackUpPack dataSchedulePackUpPack = new DataSchedulePackUpPack();
         PackData packData;
         String infotype = sendMsg.getInfotype();
