@@ -489,6 +489,7 @@ public class TemplateController {
         Set set = new HashSet<>();
         for (JsonElement jsonElement : jsonArray) {
             int[] directions = gson.fromJson(jsonElement.getAsJsonObject().get("direction"), int[].class);
+            if (directions == null || directions.length == 0) continue;
             for (double direction : directions) {
                 if (set.contains(direction)) {
                     return true;
@@ -538,6 +539,7 @@ public class TemplateController {
     private String calTenOrType(JsonArray phaseAndOverlapArray, String type, Set directionSet, String phaseCountString) {
         for (JsonElement phaseAndOverlap : phaseAndOverlapArray) {
             int[] directions = gson.fromJson(phaseAndOverlap.getAsJsonObject().get("direction"), int[].class);
+            if (directions == null || directions.length == 0) continue;
             for (double direction : directions) {
                 directionSet.add((int) Math.ceil(direction / 4));
             }

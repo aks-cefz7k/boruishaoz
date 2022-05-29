@@ -5,9 +5,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,6 +43,19 @@ public class FtpFileSystemUtil {
             return null;
         }
         return ftpClient;
+    }
+
+    public static boolean store(FTPClient ftpClient, MultipartFile file) {
+        try {
+            InputStream inputStream = file.getInputStream();
+            String fileName = file.getOriginalFilename();
+            ftpClient.changeWorkingDirectory("/usr/config");
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            return ftpClient.storeFile(new String(fileName.getBytes("utf-8"), "iso-8859-1"), inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static List<String> getFileNames(FTPClient ftpClient, String filePath) throws IOException {
