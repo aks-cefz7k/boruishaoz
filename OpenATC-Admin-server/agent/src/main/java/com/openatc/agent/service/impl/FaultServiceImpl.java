@@ -7,20 +7,20 @@ import com.google.gson.JsonObject;
 import com.openatc.agent.model.Fault;
 import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.utils.DateUtil;
-import lombok.extern.slf4j.Slf4j;
+import com.openatc.comm.data.MessageData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.NonUniqueResultException;
+import java.util.logging.Logger;
 
-@Component
-@Scope("prototype")
-@Slf4j
-public class FaultReceiver implements MessageListener {
+@Service
+public class FaultServiceImpl {
+
+    private Logger log = Logger.getLogger(FaultServiceImpl.class.toString());
+
     @Autowired
     FaultDao faultDao;
 
@@ -29,9 +29,8 @@ public class FaultReceiver implements MessageListener {
 
     Gson gson = new Gson();
 
-    @Override
-    public void onMessage(Message message, byte[] pattern) {
-        JsonObject messageJson = gson.fromJson(message.toString(), JsonObject.class);
+    public void processFaultMessage(MessageData msg) {
+        JsonObject messageJson = gson.fromJson(msg.toString(), JsonObject.class);
         String agentid = messageJson.get("agentid").getAsString();
         JsonArray m_faultDeque = messageJson.getAsJsonObject("data").getAsJsonArray("m_FaultDeque");
 
@@ -39,19 +38,8 @@ public class FaultReceiver implements MessageListener {
             Fault fault = gson.fromJson(faultJson.toString(), Fault.class);
 
             fault.setAgentid(agentid);
-            Long id = null;
-            try {
-                id = faultDao.selectByAgentidAndMwFaultID(agentid, fault.getM_wFaultID());
-            } catch (NonUniqueResultException e) {
-                System.out.println("NonUniqueResultException");
-            }
-            Fault dbFault = null;
-            if (id == null) {
-                dbFault = faultDao.save(fault);
-            } else {
-                fault.setId(id);
-                dbFault = faultDao.save(fault);
-            }
+            Long id = faultDao.selectByAgentidAndMwFaultID(agentid, fault.getM_wFaultID());
+            Fault dbFault = (id == null) ? faultDao.save(fault) : faultDao.save(fault.setId(id));
             log.info(gson.toJson(transformFault(dbFault)));
             stringRedisTemplate.convertAndSend("asc:event/faultdata", gson.toJson(transformFault(dbFault)));
         }
@@ -75,5 +63,4 @@ public class FaultReceiver implements MessageListener {
         result.addProperty("agentid", fault.getAgentid());
         return result;
     }
-
 }
