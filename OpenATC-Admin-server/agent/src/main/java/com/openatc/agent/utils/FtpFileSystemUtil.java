@@ -79,6 +79,42 @@ public class FtpFileSystemUtil {
         return arFiles;
     }
 
+    public static JsonObject getFault(FTPClient ftpClient, String fileName){
+        InputStream is = null;
+        String result = null;
+        try {
+            ftpClient.enterLocalPassiveMode();
+            is = ftpClient.retrieveFileStream(fileName);// 获取ftp上的文件
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();//捕获内存
+            // 文件读取方式一
+            int i = -1;
+            byte[] bytes = new byte[1024];
+            while ((i = is.read(bytes)) != -1) {
+                baos.write(bytes, 0, i);
+            }
+            result = new String(baos.toByteArray());
+            ftpClient.completePendingCommand();
+            log.info("FTP文件下载成功！");
+        } catch (Exception e) {
+            log.error("FTP文件下载失败！" + e);
+        } finally {
+            try {
+                if (is != null) is.close();
+            } catch (IOException e) {
+                log.error("下载流关闭失败" + e);
+                return null;
+            }
+        }
+        JsonObject jsonFile = null;
+        try {
+            jsonFile = gson.fromJson(result, JsonObject.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return jsonFile;
+    }
+
     public static JsonArray getJsonFile(FTPClient ftpClient, String fileName) {
         InputStream is = null;
         String result = null;

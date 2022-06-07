@@ -4,12 +4,18 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.Fault;
 import com.openatc.agent.service.FaultDao;
+import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
+import com.openatc.comm.data.MessageData;
+import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +25,9 @@ import java.util.Optional;
 public class FaultController {
     @Autowired
     FaultDao faultDao;
+
+    @Autowired
+    FaultServiceImpl faultService;
 
     Gson gson = new Gson();
 
@@ -78,5 +87,17 @@ public class FaultController {
             jsonObject.addProperty("m_unFaultRenewTime", 0);
         }
         return jsonObject;
+    }
+
+    @PostMapping(value = "/fault/history/ftp")
+    public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) throws IOException, ParseException {
+        // 1 获取信号机的用户名和密码
+        String username = jsonObject.get("username").getAsString();
+        String password = jsonObject.get("password").getAsString();
+
+        // 2 包装信号机的messageData
+        String agentid = jsonObject.get("agentid").getAsString();
+        RESTRetBase historyFlow = faultService.getHistoryFault(agentid, username, password);
+        return historyFlow;
     }
 }

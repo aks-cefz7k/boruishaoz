@@ -73,12 +73,12 @@ public class DeviceVedioController {
     }
 
 
-    @PutMapping(value = "/vedio")
+    @PutMapping(value = "/video")
     public RESTRetBase updateVedios(@RequestBody DeviceVedio deviceVedio) {
         return RESTRetUtils.successObj(deviceVedioDao.save(deviceVedio));
     }
 
-    @PostMapping(value = "/vedio")
+    @PostMapping(value = "/video")
     public RESTRetBase addVedios(@RequestBody DeviceVedio deviceVedio) {
         return RESTRetUtils.successObj(deviceVedioDao.save(deviceVedio));
     }
