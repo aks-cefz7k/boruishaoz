@@ -20,5 +20,4 @@ public class Overflow {
     private int controltime;          //时间
     private int level;                //等级
     private Boolean isopen;           //是否开启
-
 }

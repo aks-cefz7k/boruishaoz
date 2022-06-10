@@ -70,6 +70,8 @@ public class OverflowdetectorController {
         return RESTRetUtils.successObj(aa);
     }
 
+
+
     //得到某检测器id的所有路口相位信息
     @GetMapping(value = "/overflowdetectorinfo/{detectorid}")
     public RESTRetBase GetOverflowdetectorinfo(@PathVariable Long detectorid){
@@ -78,27 +80,41 @@ public class OverflowdetectorController {
         return RESTRetUtils.successObj(overflowRepository.findByDetectionid(detectorid));
     }
 
+
+
+
     //添加瓶颈检测器id的路口相位信息
-    @PostMapping(value = "/overflowdetectorinfo")
-    public RESTRetBase AddOverflow(@RequestBody Overflow ofdEntity) {
-        Overflow rr = overflowRepository.save(ofdEntity);
-        return RESTRetUtils.successObj(rr);
-    }
+//    @PostMapping(value = "/overflowdetectorinfo")
+//    public RESTRetBase AddOverflow(@RequestBody Overflow ofdEntity) {
+//        Overflow rr = overflowRepository.save(ofdEntity);
+//        return RESTRetUtils.successObj(rr);
+//    }
+
+
 
     //更新某瓶颈检测器下所有的路口相位信息
-    @PutMapping(value = "/overflow")
-    public RESTRetBase UpdateOverflow(@RequestBody List<Overflow> ofdEntity){
-        Iterable<Overflow> rg = ofdEntity;
+    @PutMapping(value = "/overflow/{detectionid}")
+    public RESTRetBase UpdateOverflow(@RequestBody List<Overflow> ofdEntity,@PathVariable Long detectionid){
+        //更新操作，前端每次更新一个瓶颈控制id下的一系列路口相位
+        //每次更新，应删除所属瓶颈控制下的所有信息，然后再添加信息
+        List<Overflow> tt = overflowRepository.findByDetectionid(detectionid);
+        for(Overflow of : tt)
+        {
+            Long id = of.getId();
+            overflowRepository.deleteById(id);
+        }
+        List<Overflow> rg = ofdEntity;
         //System.out.println("11");
         return RESTRetUtils.successObj(overflowRepository.saveAll(rg));
     }
-
+    
     //删除某检测器下的某id的路口相位信息
-    @DeleteMapping(value = "/overflowdetectorinfo/{id}")
-    public RESTRetBase DeleteOverflowdetectorinfo(@PathVariable Long id){
-        Optional<Overflow> tt = overflowRepository.findById(id);
-        Overflow aa = tt.get();
-        overflowRepository.deleteById(id);
-        return RESTRetUtils.successObj(aa);
-    }
+//    @DeleteMapping(value = "/overflowdetectorinfo/{id}")
+//    public RESTRetBase DeleteOverflowdetectorinfo(@PathVariable Long id){
+//        List<Overflow> tt = overflowRepository.findByDetectionid(id);
+//
+//
+//        System.out.println(tt);
+//        return RESTRetUtils.successObj(tt);
+//    }
 }
