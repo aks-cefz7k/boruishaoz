@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.openatc.agent.controller.DevController;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
@@ -44,12 +45,14 @@ public class AgentHandler extends ICommHandler {
     private boolean isRedisEnable;
     @Autowired
     public StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private FaultServiceImpl faultService;
 
     private String agenttype = "asc";
 
     @Override
     public synchronized void process(MessageData msg) throws ParseException {
-        if (msg.getCreatetime() == null){
+        if (msg.getCreatetime() == null) {
             msg.setCreatetime(DateUtil.date2esstr(new Date()));
         }
         logger.info(msg.toString());
@@ -80,6 +83,8 @@ public class AgentHandler extends ICommHandler {
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
                 stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
                 stringRedisTemplate.convertAndSend(key, gson.toJson(msg));
+            } else if (msg.getInfotype().equals("status/fault")) {
+                faultService.processFaultMessage(msg);
             }
             //收到其他消息
             else {

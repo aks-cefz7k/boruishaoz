@@ -11,6 +11,8 @@
  **/
 package com.openatc.agent.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.THisParams;
@@ -18,6 +20,7 @@ import com.openatc.agent.resmodel.PageOR;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.service.THisParamsDao;
 import com.openatc.core.model.RESTRetBase;
+import com.openatc.core.util.DateUtil;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_2004;
@@ -44,6 +48,7 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_2004;
 public class HisParamsController {
 
     private static Logger logger = Logger.getLogger(HisParamsController.class.toString());
+    Gson gson = new Gson();
 
     @Autowired(required = false)
     protected HisParamServiceImpl hisParamService;
@@ -120,8 +125,25 @@ public class HisParamsController {
 
     @GetMapping(value = "/devs/hisparams/{uuid}/export/request")  //对String作序列化处理了
     public RESTRetBase getOperationRecordReport(@PathVariable int uuid) {
+        //获取requestBody
         String requestBody = thisParamsDao.getRequestBodyById(uuid);
-        JsonObject returnData = new JsonParser().parse(requestBody).getAsJsonObject();
-        return RESTRetUtils.successObj(returnData);
+        JsonObject requsetBodyJson = new JsonParser().parse(requestBody).getAsJsonObject();
+        //获取reponseBody
+        String reponseBody = thisParamsDao.getResponseBodyById(uuid);
+        JsonObject reponseBodyJson = new JsonParser().parse(reponseBody).getAsJsonObject();
+
+        THisParams tHisParams = thisParamsDao.getPartThisParamsById(uuid);
+        JsonObject result = new JsonObject();
+        //t.id, t.operator, t.opertime, t.source, t.agentid, t.infotype, t.status
+        result.addProperty("id", tHisParams.getId());
+        result.addProperty("operator", tHisParams.getId());
+        result.addProperty("opertime", DateUtil.date2str(tHisParams.getOpertime()));
+        result.addProperty("source", tHisParams.getSource());
+        result.addProperty("agentid", tHisParams.getAgentid());
+        result.addProperty("infotype", tHisParams.getInfotype());
+        result.addProperty("status", tHisParams.getStatus());
+        result.add("requestbody", requsetBodyJson);
+        result.add("responsebody", reponseBodyJson);
+        return RESTRetUtils.successObj(result);
     }
 }
