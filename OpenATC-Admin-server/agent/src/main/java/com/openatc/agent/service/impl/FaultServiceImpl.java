@@ -53,7 +53,7 @@ public class FaultServiceImpl {
     private int port;
 
     public void processFaultMessage(MessageData msg) {
-        JsonObject messageJson = gson.fromJson(msg.toString(), JsonObject.class);
+        JsonObject messageJson = gson.fromJson(gson.toJson(msg), JsonObject.class);
         String agentid = messageJson.get("agentid").getAsString();
         JsonArray m_faultDeque = messageJson.getAsJsonObject("data").getAsJsonArray("m_FaultDeque");
 

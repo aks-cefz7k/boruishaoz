@@ -333,7 +333,6 @@ public class AscsDao {
     }
 
 
-
     public int updateAscs(DevCover devCover) {
 
         AscsBaseModel ascsModel = new AscsBaseModel();
@@ -718,10 +717,13 @@ public class AscsDao {
             String sql = "SELECT count(id) FROM dev where agentid = ?";
             long count = jdbcTemplate.queryForObject(sql, Long.class, devCover.getAgentid());
             if (count != 0) {
+                String findNameSql = "SELECT name FROM dev where agentid = ?";
+                String name = jdbcTemplate.queryForObject(findNameSql, String.class, devCover.getAgentid());
                 if (lat != 0 || lng != 0) {
-                    sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
+                    sql = "update dev set name = ?, type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
                     String strGeo = ascsModel.getGeometry().toString();
                     rows = jdbcTemplate.update(sql,
+                            name,
                             ascsModel.getType(),
                             ascsModel.getStatus(),
                             ascsModel.getProtocol(),
@@ -729,8 +731,9 @@ public class AscsDao {
                             ascsModel.getJsonparam().toString(),
                             devCover.getAgentid());
                 } else {
-                    sql = "update dev set type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
+                    sql = "update dev set name = ?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
                     rows = jdbcTemplate.update(sql,
+                            name,
                             ascsModel.getType(),
                             ascsModel.getStatus(),
                             ascsModel.getProtocol(),
@@ -740,7 +743,7 @@ public class AscsDao {
                 return rows;
             } else {
                 if (lat != 0 || lng != 0) {
-                    sql = "INSERT INTO dev(agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+                    sql = "INSERT INTO dev(agentid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
                     rows = jdbcTemplate.update(sql,
                             ascsModel.getAgentid(),
                             ascsModel.getType(),
@@ -749,7 +752,7 @@ public class AscsDao {
                             ascsModel.getGeometry().toString(),
                             ascsModel.getJsonparam().toString());
                 } else {
-                    sql = "INSERT INTO dev(agentid,type,status,protocol,jsonparam,lastTime) VALUES (?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+                    sql = "INSERT INTO dev(agentid,type,status,protocol,jsonparam,lastTime) VALUES (?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
                     rows = jdbcTemplate.update(sql,
                             ascsModel.getAgentid(),
                             ascsModel.getType(),
