@@ -4,6 +4,7 @@ package com.openatc.agent.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.openatc.agent.model.AscPattern;
+import com.openatc.agent.model.ControlMsg;
 import com.openatc.agent.model.OptDev;
 import com.openatc.agent.model.Overflow;
 import com.openatc.agent.service.OptService;
@@ -41,13 +42,13 @@ public class OverflowoptController {
     @Value("${server.port}")
     private String devUri;
 
-
+    //开启溢出控制
     @PostMapping (value = "/overflow/control/{id}")
     public RESTRetBase OverflowControl(@PathVariable String id)
     {
-        //根据detectionid开启溢出控制
+        //根据id开启溢出控制
         List<Overflow>  overflowList = new ArrayList<>();
-        overflowList = overflowRepository.findByDetectionid(Long.valueOf(id));
+        overflowList = overflowRepository.findByPatternid(Long.valueOf(id));
         for(Overflow ov: overflowList)
         {
             String agentid = String.valueOf(ov.getIntersectionid());
@@ -60,6 +61,24 @@ public class OverflowoptController {
 
         //optService.OptPatterns(overflowList);
         //optService.GetPattern("10095");
+        return RESTRetUtils.successObj(overflowList);
+    }
+
+    //恢复自主控制
+    @PostMapping(value = "/overflow/control/off/{id}")
+    public RESTRetBase OffOverflowControl(@PathVariable String id)
+    {
+        //根据id恢复自主控制
+        List<Overflow>  overflowList = new ArrayList<>();
+        overflowList = overflowRepository.findByPatternid(Long.valueOf(id));
+        for(Overflow ov: overflowList)
+        {
+            String agentid = String.valueOf(ov.getIntersectionid());
+            OptDev<ControlMsg> controlMsgOptDev = optService.AutoControl(agentid);
+            JSONObject jsonObject = (JSONObject) JSON.toJSON(controlMsgOptDev);
+            System.out.println(jsonObject);
+            RESTRet restRet = optService.HttpPost(devUri, jsonObject);
+        }
         return RESTRetUtils.successObj(overflowList);
     }
 }

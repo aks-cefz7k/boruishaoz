@@ -77,7 +77,7 @@ public class OverflowdetectorController {
     public RESTRetBase GetOverflowdetectorinfo(@PathVariable Long detectorid){
         logger.info("GetOverflowdetectorinfo");
         //获取某瓶颈检测器所有的配置信息
-        return RESTRetUtils.successObj(overflowRepository.findByDetectionid(detectorid));
+        return RESTRetUtils.successObj(overflowRepository.findByPatternid(detectorid));
     }
 
 
@@ -97,7 +97,7 @@ public class OverflowdetectorController {
     public RESTRetBase UpdateOverflow(@RequestBody List<Overflow> ofdEntity,@PathVariable Long detectionid){
         //更新操作，前端每次更新一个瓶颈控制id下的一系列路口相位
         //每次更新，应删除所属瓶颈控制下的所有信息，然后再添加信息
-        List<Overflow> tt = overflowRepository.findByDetectionid(detectionid);
+        List<Overflow> tt = overflowRepository.findByPatternid(detectionid);
         for(Overflow of : tt)
         {
             Long id = of.getId();
@@ -107,14 +107,6 @@ public class OverflowdetectorController {
         //System.out.println("11");
         return RESTRetUtils.successObj(overflowRepository.saveAll(rg));
     }
-    
-    //删除某检测器下的某id的路口相位信息
-//    @DeleteMapping(value = "/overflowdetectorinfo/{id}")
-//    public RESTRetBase DeleteOverflowdetectorinfo(@PathVariable Long id){
-//        List<Overflow> tt = overflowRepository.findByDetectionid(id);
-//
-//
-//        System.out.println(tt);
-//        return RESTRetUtils.successObj(tt);
-//    }
+
+
 }

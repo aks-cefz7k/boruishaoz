@@ -12,7 +12,7 @@ public class Overflow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long  detectionid;        //瓶颈检测器id
+    private Long  patternid;        //瓶颈控制方案索引
     private Long intersectionid;      //路口id
     private String phaseid;           //相位id
     private Integer[] description;    //描述

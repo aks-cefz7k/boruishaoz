@@ -25,9 +25,26 @@ public class OptService {
     @Value("${server.port}")
     private String devsuri;
 
+
+    public OptDev<ControlMsg> AutoControl(String agentid) {
+        //定周期是用于切方案，恢复自主控制无法切换方案，恢复信号机本来运行的方案
+        OptDev<ControlMsg> controlMsgOptDev = new OptDev<>();
+        controlMsgOptDev.setAgentid(agentid);
+        controlMsgOptDev.setInfotype("control/pattern");
+        controlMsgOptDev.setOperation("set-request");
+        controlMsgOptDev.setUser("admin");
+        controlMsgOptDev.setSource("center");
+        ControlMsg controlMsg = new ControlMsg();
+        controlMsg.setControl(0);
+        controlMsg.setTerminal(1);
+        controlMsg.setValue(0);
+        controlMsgOptDev.setData(controlMsg);
+        return controlMsgOptDev;
+    }
+
     //@brief 根据pattern对象得到干预对象方案
     //@overflowList：一组待优化路口相位
-    public OptDev GetInterruptPattern(AscPattern pattern, String agentid)
+    public OptDev<OptProgram> GetInterruptPattern(AscPattern pattern, String agentid)
     {
         //String agentid = pattern.getAgentid();
         List<OptRings> rings = pattern.getRings();
@@ -168,6 +185,7 @@ public class OptService {
         RESTRet res =  restTemplate.postForObject(url, entity, RESTRet.class);
         return res;
     }
+
 
 }
 

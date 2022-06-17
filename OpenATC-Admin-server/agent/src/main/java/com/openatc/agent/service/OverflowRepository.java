@@ -11,5 +11,5 @@ import java.util.List;
 public interface OverflowRepository extends JpaRepository<Overflow, Long> {
 
 
-    List<Overflow> findByDetectionid(Long detectionId);
+    List<Overflow> findByPatternid(Long patternId);
 }
