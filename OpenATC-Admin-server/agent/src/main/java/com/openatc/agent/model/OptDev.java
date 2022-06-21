@@ -1,10 +1,12 @@
 package com.openatc.agent.model;
 
 
+
 import lombok.Data;
 
+
 @Data
-public class OptDev {
+public class OptDev<T> {
 
 
     private     String              agentid;
@@ -12,7 +14,7 @@ public class OptDev {
     private     String              source;
     private     String              operation;
     private     String              infotype;
-    private OptProgram data;
+    private     T                   data;
 
 
 }
