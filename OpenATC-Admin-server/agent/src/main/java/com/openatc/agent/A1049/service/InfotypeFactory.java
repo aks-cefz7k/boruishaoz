@@ -13,6 +13,7 @@ public class InfotypeFactory {
         if (prMap.containsKey(type)) {
             infotypeProduct = prMap.get(type);
         } else {
+            //后续要根据不同类型，补充其他产品类
             if ("feature/detecter".equals(type)) {
                 infotypeProduct = new DetParamProduct();
             }

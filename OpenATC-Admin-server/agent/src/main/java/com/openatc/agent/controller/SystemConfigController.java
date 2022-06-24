@@ -5,6 +5,7 @@ import com.openatc.agent.service.SystemConfigDao;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,9 @@ public class SystemConfigController {
 
     @GetMapping(value = "/systemconfig")
     public RESTRetBase getSystemConfig() {
-        return RESTRetUtils.successObj(systemConfigDao.findAll());
+        Sort.Order order = Sort.Order.asc("module");
+        Sort sort = Sort.by(order);
+        return RESTRetUtils.successObj(systemConfigDao.findAll(sort));
     }
 
     @PostMapping(value = "/systemconfig")

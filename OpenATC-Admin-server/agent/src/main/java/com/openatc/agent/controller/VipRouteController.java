@@ -43,8 +43,10 @@ public class VipRouteController {
     @Autowired
     MessageController messageController;
 
+    @Autowired
+    DevController devController;
+
     private static final String ASC_VIPROUTE_STATUS = "asc:viproute/status:";
-    private static final String COORDINATES = "coordinates";
     private static final String ZEROSECONDS = "00:00";
     private Sort.Order order = Sort.Order.asc("id");
     private Sort sort = Sort.by(order);
@@ -53,14 +55,30 @@ public class VipRouteController {
 
     // 获取所有的勤务路线的全部信息
     @GetMapping(value = "/viproute")
-    public RESTRetBase getVipRoute() {
-        return RESTRetUtils.successObj(vipRouteDao.findAll(sort));
+    public RESTRetBase getVipRoute() throws ParseException {
+        List<VipRoute> vipRoutes = vipRouteDao.findAll(sort);
+        for (VipRoute vipRoute : vipRoutes) {
+            addGeometryToVipRoute(vipRoute);
+        }
+        return RESTRetUtils.successObj(vipRoutes);
     }
 
     // 获取单个勤务路线的全部信息
     @GetMapping(value = "/viproute/{id}")
-    public RESTRetBase getVipRouteById(@PathVariable int id) {
+    public RESTRetBase getVipRouteById(@PathVariable int id) throws ParseException {
+        VipRoute vipRoute = vipRouteDao.findById(id);
+        addGeometryToVipRoute(vipRoute);
         return RESTRetUtils.successObj(vipRouteDao.findById(id));
+    }
+
+    private void addGeometryToVipRoute(VipRoute vipRoute) throws ParseException {
+        Set<VipRouteDevice> vipRouteDevs = vipRoute.getDevs();
+        for (VipRouteDevice vipRouteDev : vipRouteDevs) {
+            String agentid = vipRouteDev.getAgentid();
+            RESTRet restRet = (RESTRet) devController.GetDevById(agentid);
+            AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
+            vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
+        }
     }
 
     // 查询所有勤务路线的简略信息
@@ -71,7 +89,7 @@ public class VipRouteController {
 
     // 新增勤务路线
     @PostMapping(value = "/viproute")
-    public RESTRetBase addVipRoutes(@RequestBody VipRoute routeEntity) {
+    public RESTRetBase addVipRoutes(@RequestBody VipRoute routeEntity) throws ParseException {
         VipRoute hasNoDevsRoute = new VipRoute();
         hasNoDevsRoute.setName(routeEntity.getName());
         VipRoute r = vipRouteDao.findByName(routeEntity.getName());
@@ -83,20 +101,12 @@ public class VipRouteController {
         // 拿到id后更新
         int dbRouteId = dbRoute.getId();
         routeEntity.setId(dbRouteId);
-        Set<VipRouteDevice> devs = routeEntity.getDevs();
-        if (devs != null) {
-            for (VipRouteDevice vipRouteDevice : devs) {
-                vipRouteDevice.setViprouteid(dbRouteId);
-                vipRouteDevice.setGeometry(new HashMap<>());
-            }
-        }
-
         return updateVipRoute(routeEntity);
     }
 
     // 更新勤务路线
     @PutMapping(value = "/viproute")
-    public RESTRetBase updateVipRoute(@RequestBody VipRoute routeEntity) {
+    public RESTRetBase updateVipRoute(@RequestBody VipRoute routeEntity) throws ParseException {
         int id = routeEntity.getId();
         // 0 执行前先判断一下是否存在执行中的设备，如果存在，抛出错误
         List<VipRouteDevice> vipRouteDevices = vipRouteDeviceDao.findByViprouteid(id);
@@ -108,40 +118,22 @@ public class VipRouteController {
         }
         // 1 首先删除这条路线之前的设备
         vipRouteDeviceDao.deleteByViprouteid(id);
-        double[] location = null;
+
         // 2 保存路线之前，要先计算墨卡托坐标
-        //   如果routeEntity中存在location字段，则表示不是第一次保存设备，不需要计算location(坐标)，直接更新即可
         Set<VipRouteDevice> devs = routeEntity.getDevs();
         if (devs != null && devs.size() != 0) {
-
-            VipRouteDevice dev = devs.iterator().next();
-            location = dev.getLocation();
-            for (VipRouteDevice device : devs) {
-                Map<String, Object> geometry = device.getGeometry();
-                if (geometry == null) {
-                    device.setGeometry(new HashMap<>());
-                    continue;
-                }
-                if (geometry.toString() != "{}") {
-                    List<Double> coordinates = (ArrayList) geometry.get(COORDINATES);
-                    if (location != null){
-                        double[] devlocation = new double[]{getMercatorLon(coordinates.get(0)), getMercatorLat(coordinates.get(1))};
-                        device.setLocation(devlocation);
-                    }
-                }
-            }
-            routeEntity.setDevs(devs);
-
             // 3 将设备信息更新到redis中
             for (VipRouteDevice vipRouteDevice : devs) {
                 VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(vipRouteDevice.getAgentid(), 0, "00:00");
                 stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + vipRouteDevice.getViprouteid() + ":" + vipRouteDevice.getAgentid(), gson.toJson(vipRouteDeviceStatus));
             }
-
         }
 
         // 4 保存到数据库中
         VipRoute dbRoute = vipRouteDao.save(routeEntity);
+
+        addGeometryToVipRoute(dbRoute);
+
         return RESTRetUtils.successObj(dbRoute);
     }
 

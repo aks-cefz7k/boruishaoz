@@ -3,6 +3,9 @@ package com.openatc.agent.A1049.model;
 import javax.persistence.criteria.CriteriaBuilder;
 
 public enum Infotype {
+    /**
+     * jsonInfotype需要修改成Openatc中的消息类型
+     */
     SYSINFO("SysInfo", "SysInfo"), //系统参数
     REGIONPARAM("RegionParam", "RegionParam"), //区域参数
     SUBREGIONPARAM("SubRegionParam", "SubRegionParam"), //子区参数

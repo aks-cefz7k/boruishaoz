@@ -25,9 +25,10 @@ public class VipRouteDevice {
 
     private String name;
 
-    @Column(columnDefinition = "jsonb")
-    @Type(type = "JsonbType")
-    private Map<String,Object> geometry;
+    @Transient
+//    @Column(columnDefinition = "jsonb")
+//    @Type(type = "JsonbType")
+    private MyGeometry geometry;
 
     private double[] location;
 

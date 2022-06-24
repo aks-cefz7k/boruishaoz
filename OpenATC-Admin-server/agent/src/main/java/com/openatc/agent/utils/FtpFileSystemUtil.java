@@ -5,9 +5,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,6 +45,22 @@ public class FtpFileSystemUtil {
         return ftpClient;
     }
 
+    public static boolean store(FTPClient ftpClient, MultipartFile file) {
+        try {
+
+            ftpClient.enterLocalPassiveMode();
+            InputStream inputStream = file.getInputStream();
+            String fileName = file.getOriginalFilename();
+            boolean b = ftpClient.changeWorkingDirectory("/usr/config");
+            if (b) log.info("check success");
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            return ftpClient.storeFile(new String(fileName.getBytes("utf-8"), "iso-8859-1"), inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static List<String> getFileNames(FTPClient ftpClient, String filePath) throws IOException {
         List<String> arFiles = new ArrayList<>();
         if (filePath.startsWith("/") && filePath.endsWith("/")) {
@@ -59,6 +77,42 @@ public class FtpFileSystemUtil {
             }
         }
         return arFiles;
+    }
+
+    public static JsonObject getFault(FTPClient ftpClient, String fileName){
+        InputStream is = null;
+        String result = null;
+        try {
+            ftpClient.enterLocalPassiveMode();
+            is = ftpClient.retrieveFileStream(fileName);// 获取ftp上的文件
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();//捕获内存
+            // 文件读取方式一
+            int i = -1;
+            byte[] bytes = new byte[1024];
+            while ((i = is.read(bytes)) != -1) {
+                baos.write(bytes, 0, i);
+            }
+            result = new String(baos.toByteArray());
+            ftpClient.completePendingCommand();
+            log.info("FTP文件下载成功！");
+        } catch (Exception e) {
+            log.error("FTP文件下载失败！" + e);
+        } finally {
+            try {
+                if (is != null) is.close();
+            } catch (IOException e) {
+                log.error("下载流关闭失败" + e);
+                return null;
+            }
+        }
+        JsonObject jsonFile = null;
+        try {
+            jsonFile = gson.fromJson(result, JsonObject.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return jsonFile;
     }
 
     public static JsonArray getJsonFile(FTPClient ftpClient, String fileName) {
