@@ -55,7 +55,7 @@ public class AgentHandler extends ICommHandler {
         if (msg.getCreatetime() == null) {
             msg.setCreatetime(DateUtil.date2esstr(new Date()));
         }
-        logger.info(msg.toString());
+//        logger.info(msg.toString());
         Gson gson = new Gson();
         if (msg == null) {
             logger.info("AgentHandler/process: MessageData is null");
@@ -91,8 +91,6 @@ public class AgentHandler extends ICommHandler {
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
                 stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
             }
-        } else {
-            logger.info(gson.toJson(msg));
         }
     }
 }
