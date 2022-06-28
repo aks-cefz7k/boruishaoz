@@ -6,7 +6,7 @@
 
     <groupId>com.openatc</groupId>
     <artifactId>agent</artifactId>
-    <version>1.14.0</version>
+    <version>1.15.0</version>
     <packaging>jar</packaging>
     <name>agent</name>
 
@@ -158,67 +158,67 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 <!--            Docker 打包插件-->
-<!--            <plugin>-->
-<!--                <groupId>com.spotify</groupId>-->
-<!--                <artifactId>dockerfile-maven-plugin</artifactId>-->
-<!--                <version>1.4.4</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>default</id>-->
-<!--                        <goals>-->
-<!--                            <goal>build</goal>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>tag-version</id>-->
-<!--                        <goals>-->
-<!--                            <goal>tag</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <tag>${project.version}</tag>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>tag-latest</id>-->
-<!--                        <goals>-->
-<!--                            <goal>tag</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <tag>latest</tag>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>push-latest</id>-->
-<!--                        <phase>none</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <tag>latest</tag>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>push-version</id>-->
-<!--                        <phase>none</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <tag>${project.version}</tag>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <configuration>-->
-<!--&lt;!&ndash;                    <repository>kiss-registry:5000/${project.artifactId}</repository>&ndash;&gt;-->
-<!--                    <repository>nexus.kedacom.com/content/repositories/yuanqu-snapshot/${project.artifactId}</repository>-->
-<!--                    <tag>${project.version}</tag>-->
-<!--                    <tag>latest</tag>-->
-<!--                    <buildArgs>-->
-<!--                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
-<!--                    </buildArgs>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.4</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>tag-version</id>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>tag-latest</id>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <tag>latest</tag>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>push-latest</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>latest</tag>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>push-version</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+<!--                    <repository>kiss-registry:5000/${project.artifactId}</repository>-->
+                    <repository>nexus.kedacom.com/content/repositories/yuanqu-snapshot/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <tag>latest</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
