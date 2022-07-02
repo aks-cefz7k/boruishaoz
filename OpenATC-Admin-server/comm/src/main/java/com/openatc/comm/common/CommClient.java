@@ -32,6 +32,10 @@ public class CommClient {
 
     private Logger log = Logger.getLogger(CommClient.class.toString());
 
+    public CommClient(){
+        LogUtil.SetLogLevelfromProp(log);
+    }
+
     // 设置通讯模式
     //  UDP - 随机端UDP口通讯
     //  UDP_HOSTPORT - 固定端口UDP通讯

@@ -11,6 +11,7 @@
  **/
 package com.openatc.comm.model;
 
+import com.openatc.comm.common.LogUtil;
 import com.openatc.comm.common.PropertiesUtil;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
@@ -57,6 +58,7 @@ public class UdpCommunicationStaticPort implements Communication {
     static {
 //        logger.setLevel(WARNING);
         //创建socket对象,绑定固定端口
+        LogUtil.SetLogLevelfromProp(logger);
         try {
             // OCP接收端口
             ocpSocket = new DatagramSocket(new InetSocketAddress(ocpSocketPort));
