@@ -73,16 +73,17 @@ public class CommClient {
         // 发送
         DatagramSocket socket = null;
         Long starttime = System.currentTimeMillis();
+        String agentId = sendMsg.getAgentid();
         try {
-            socket = communication.sendData(sendMsg.getAgentid(),packData, ip, port);
+            socket = communication.sendData(agentId,packData, ip, port);
         } catch (IOException e) {
             log.info("exange send error: " + e.getMessage());
-            return CreateErrorResponceData(e.getMessage());
+            return CreateErrorResponceData(agentId,e.getMessage());
         }
 
         if(socket == null){
             log.info("exange send error: socket return null");
-            return CreateErrorResponceData("exange send error: socket return null");
+            return CreateErrorResponceData(agentId,"exange send error: socket return null");
         }
 
         // 接收-解析
@@ -90,23 +91,28 @@ public class CommClient {
         Long endtime = 0L;
         try {
             responceData = communication.receiveData(socket);
-            endtime = System.currentTimeMillis();
-            responceData.setDelay(endtime-starttime);
-            log.info("receive responceData: " + responceData);
+
+            // 没有收到消息
+            if(responceData == null){
+                responceData = CreateErrorResponceData(agentId,"Responce Data is null");
+            }
+
+//            log.info("receive responceData: " + responceData);
         } catch (IOException e) {
             log.info("exange receive error: " + e.getMessage());
-            return CreateErrorResponceData(e.getMessage());
+            return CreateErrorResponceData(agentId,e.getMessage());
         }
 
-        // 解析
-//        MessageData responceData = message.uppack(datagramPacket);
 
+        endtime = System.currentTimeMillis();
+        responceData.setDelay(endtime-starttime);
         return responceData;
     }
 
-    private static MessageData CreateErrorResponceData(String desc) {
+    private static MessageData CreateErrorResponceData(String agentId,String desc) {
         MessageData responceData = new MessageData();
-        responceData.setOperation("Communication Error!");
+        responceData.setAgentid(agentId);
+        responceData.setOperation("error-response");
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("desc", desc);
         responceData.setData(jsonObject);

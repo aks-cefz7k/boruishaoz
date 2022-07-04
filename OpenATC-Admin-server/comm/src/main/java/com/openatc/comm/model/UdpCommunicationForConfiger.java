@@ -22,7 +22,7 @@ import java.net.SocketException;
 
 public class UdpCommunicationForConfiger implements Communication {
     private static final int TIMEOUT = 3000;
-    private static final int RECVBUFFER = 20 * 1024 * 1024;
+    private static final int RECVBUFFER = 64 * 1024;
 //    private static Logger logger = Logger.getLogger(UdpCommunication.class.toString());
 
     static DatagramSocket datagramSocket = null;

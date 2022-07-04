@@ -86,7 +86,6 @@ public class MessageController {
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
-        //System.out.println("测试");
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
         AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
 
@@ -153,7 +152,7 @@ public class MessageController {
             responceData = commClient
                     .exange(ip, port, protocol, exangeType,requestData);
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.info( "message exange error:" + e.getCause());
         }
 
         if (responceData == null){
