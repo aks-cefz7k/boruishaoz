@@ -78,7 +78,7 @@ public class HisParamsController {
 
         //分页获取
         Sort sort = new Sort(Sort.Direction.DESC, "opertime");
-        Pageable pageable = new PageRequest(pageNum - 1, pageRow, sort); //分页设置
+        Pageable pageable = PageRequest.of(pageNum - 1, pageRow, sort); //分页设置
         Page<THisParams> tHisParams = thisParamsDao.findPageThisParams(pageable);
         if (tHisParams.getSize() == 0) {
             return RESTRetUtils.errorObj(E_2004);

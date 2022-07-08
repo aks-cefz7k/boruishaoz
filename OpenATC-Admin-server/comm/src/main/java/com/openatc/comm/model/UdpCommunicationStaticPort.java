@@ -182,7 +182,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     // 收到不正确的消息
                     if(responceData.getOperation() == null){
                         sleep(100);
-                        logger.info("Udp Receive Incorrect Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength() + " Data:" + responceData );
+                        logger.warning("Udp Receive Incorrect Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength() + " Data:" + responceData );
                         continue;
                     }
                     //收到主动上报的消息

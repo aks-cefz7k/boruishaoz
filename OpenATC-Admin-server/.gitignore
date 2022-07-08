@@ -2,6 +2,7 @@
 /log
 /target
 /KDComm/target
+/static
 *.iml
 *.class
 *.lst

@@ -23,12 +23,12 @@ import java.util.List;
 @Component
 public class JwtFileUtil {
 
+    @Value("${agent.tokenfile.path}")
     private static String tokenFilePath;
 
-    @Value("${agent.tokenfile.path}")
-    public void setTokenFilePath(String tokenFilePath){
-        JwtFileUtil.tokenFilePath = tokenFilePath;
-    }
+//    public void setTokenFilePath(String tokenFilePath){
+//        JwtFileUtil.tokenFilePath = tokenFilePath;
+//    }
 
     public static List<String> initList() throws IOException {
         List<String> tokenlist = new ArrayList<>();

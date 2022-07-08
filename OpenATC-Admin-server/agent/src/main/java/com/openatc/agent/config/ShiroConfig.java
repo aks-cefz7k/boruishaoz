@@ -14,6 +14,7 @@ package com.openatc.agent.config;
 import com.openatc.agent.realm.JwtAuthenticationFilter;
 import com.openatc.agent.realm.MyRealm;
 import com.openatc.agent.realm.StatelessDefaultSubjectFactory;
+import com.openatc.comm.common.PropertiesUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -25,7 +26,6 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +43,8 @@ import java.util.Map;
 
 public class ShiroConfig {
 
+    private String shiroOpen = PropertiesUtil.getStringProperty("agent.server.shiro");;
+
     @Bean
     @DependsOn("securityManager")
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
@@ -53,17 +55,22 @@ public class ShiroConfig {
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
-        // 配置不会被拦截的链接 顺序判断
-        filterChainDefinitionMap.put("/", "anon");
-        filterChainDefinitionMap.put("/apiconfig.json", "anon");
-        filterChainDefinitionMap.put("/servConfig.json", "anon");
-        filterChainDefinitionMap.put("/favicon.ico", "anon");
-        filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/fonts/**", "anon");
-        filterChainDefinitionMap.put("/img/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/auth/login", "anon");
-        filterChainDefinitionMap.put("/**", "jwt");
+        if(shiroOpen.equals("true")){
+            // 配置不会被拦截的链接 顺序判断
+            filterChainDefinitionMap.put("/", "anon");
+            filterChainDefinitionMap.put("/apiconfig.json", "anon");
+            filterChainDefinitionMap.put("/servConfig.json", "anon");
+            filterChainDefinitionMap.put("/favicon.ico", "anon");
+            filterChainDefinitionMap.put("/css/**", "anon");
+            filterChainDefinitionMap.put("/fonts/**", "anon");
+            filterChainDefinitionMap.put("/img/**", "anon");
+            filterChainDefinitionMap.put("/js/**", "anon");
+            filterChainDefinitionMap.put("/auth/login", "anon");
+            filterChainDefinitionMap.put("/**", "jwt");
+        }
+        else{
+            filterChainDefinitionMap.put("/**", "anon");
+        }
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
