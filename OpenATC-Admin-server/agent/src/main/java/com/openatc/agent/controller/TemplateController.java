@@ -476,12 +476,17 @@ public class TemplateController {
         if (!directionConflict(phaseArray) && !directionConflict(overlapArray)) {
             //判断是否是T型或十字型路口
             type = calTenOrType(phaseAndOverlapArray, type, directionSet, phaseCountString);
-            //判断是不是人行横道
-            type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
+            if (type.equals("999-000-00")){
+                //判断是不是人行横道
+                type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
+            }
         }
 
         //判断是否是匝道类型的路开口
-        type = calRampType(phaseArray, type, phaseCountString);
+        if (type.equals("999-000-00")) {
+            type = calRampType(phaseArray, type, phaseCountString);
+        }
+
 
         //返回的json对象
         JsonObject intersectionInfo = new JsonObject();
@@ -571,14 +576,28 @@ public class TemplateController {
         return type;
     }
 
+    //判断方向是不是全空
+    public boolean allDirectionEmpty(Set<String> allStringDirections) {
+        Iterator<String> iterator = allStringDirections.iterator();
+        if (allStringDirections.size() == 1 && iterator.next().equals("")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     //判断匝道路口类型
     public String calRampType(JsonArray phaseArray, String type, String phaseCountString) {
         Map<Integer, String> map = new HashMap<>();
-        Set<Integer> controltypes = new HashSet();
+        //存放所有方向
+        Set<String> allStringDiretions = new HashSet<>();
+
         for (JsonElement phase : phaseArray) {
             // 没有方向,直接跳到下一个相位;
             if (phase.getAsJsonObject().get("direction") == null) continue;
             String stringDirections = arrayToString(gson.fromJson(phase.getAsJsonObject().get("direction"), int[].class));
+            allStringDiretions.add(stringDirections);
+
             int controltype = phase.getAsJsonObject().get("controltype") == null ? 0 : phase.getAsJsonObject().get("controltype").getAsInt();
             // map中没有控制类型, 添加到map中
             if (!map.containsKey(controltype)) {
@@ -593,8 +612,13 @@ public class TemplateController {
             }
         }
         // 检测map, 并查看是否是匝道类型，以及匝道的方向 (其实到这里基本上判断出就是匝道类型了，主要是判断匝道方向)
-        if (map.containsKey(2)) return type;
-        int direction = (int) Math.ceil(Double.parseDouble(map.get(1)) / 4);
+        if (allDirectionEmpty(allStringDiretions)) return type;
+        int direction = 1;
+        if (map.containsKey(0)) {
+            direction = (int) Math.ceil(Double.parseDouble(map.get(0)) / 4);
+        } else if (map.containsKey(1)) {
+            direction = (int) Math.ceil(Double.parseDouble(map.get(1)) / 4);
+        }
         switch (direction) {
             case 1:
                 type = "103-001-" + phaseCountString;
