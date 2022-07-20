@@ -158,6 +158,9 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         if (operatorObj.equals(channellampstatus)) {
             return 29;
         }
+		if (operatorObj.equals(systemcustom)) {
+            return 30;
+        }
         return 0;
     }
 
@@ -245,6 +248,9 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         }
         if (operatorObj == -84) {
             return channellampstatus;
+        }
+		if (operatorObj == -83) {
+            return systemcustom;
         }
         return null;
     }
@@ -769,6 +775,29 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
                         }
                         break;
+					case 30:// 查询设备参数
+                        Arrays.fill(dataSchdule, (byte) 0);
+                        dataSchdule[0] = CB_VERSION_FLAG;
+                        dataSchdule[1] = CB_RECEIVE_FLAG;
+                        dataSchdule[2] = CB_SEND_FLAG;
+                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
+                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
+                        dataSchdule[8] = INFO_TYPE_SYSTEM_CUSTOM;
+                        dataSchdule[9] = RESERVE_FLAG;
+                        dataSchdule[10] = 0x00;
+                        dataSchdule[11] = 0x00;
+                        dataSchdule[12] = 0x00;
+                        dataSchdule[13] = 0x00;
+                        String dataSystemCustom = null;
+                        JsonElement dataSystemCustomObject = sendData.getData();
+                        if (dataSystemCustomObject != null) {
+                            dataSystemCustom = dataSystemCustomObject.toString();
+                            byte[] dataSend = dataSystemCustom.getBytes("UTF-8");
+                            int dataSendCount = dataSend.length;
+                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
+                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
+                        }
+                        break;
                     default:
                         Arrays.fill(dataSchdule, (byte) 0);
                         //异常处理
@@ -1162,6 +1191,37 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             int dataSendSize = dataSend.length;
                             dataSchdule = Arrays.copyOf(dataSchdule, dataSendSize + 14);
                             System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendSize);
+                        }
+                        break;
+                    case 30://下载设备参数
+                        Arrays.fill(dataSchdule, (byte) 0);
+                        dataSchdule[0] = CB_VERSION_FLAG;
+                        dataSchdule[1] = CB_RECEIVE_FLAG;
+                        dataSchdule[2] = CB_SEND_FLAG;
+                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
+                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
+                        dataSchdule[8] = INFO_TYPE_SYSTEM_CUSTOM;
+                        dataSchdule[9] = RESERVE_FLAG;
+                        dataSchdule[10] = 0x00;
+                        dataSchdule[11] = 0x00;
+                        dataSchdule[12] = 0x00;
+                        dataSchdule[13] = 0x00;
+                        //数据内容
+                        dataSizeFlag = new byte[4];
+                        dataSendCount = 0;
+                        gson = new Gson();
+                        String dataSetSystemCustomParam = gson.toJson(sendData);
+
+//                        String AllParamJson= toFormat(dataSetAllParam,true,true);
+                        if (dataSetSystemCustomParam != null) {
+                            byte[] dataSend = dataSetSystemCustomParam.getBytes("UTF-8");
+                            dataSendCount = dataSend.length;
+                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
+                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
+                        }
+                        for (int i = 0; i < 4; i++) {
+                            dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
+                            dataSchdule[i + 10] = dataSizeFlag[i];
                         }
                         break;
                     default:
@@ -1849,6 +1909,45 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             }
             //信号灯组设置应答
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_GROUP)) {
+                recvData.setOperation(StringOperatorType(chOperateType));
+                recvData.setInfotype(StringOperatorObj(chInfoType));
+                recvData.setAgentid(roadID);
+                Gson recvDataJson = new Gson();
+                if (tempData != null) {
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if (tempData == null) {
+                    tempData = "{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+
+            //设备参数查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
+                recvData.setOperation(StringOperatorType(chOperateType));
+                recvData.setInfotype(StringOperatorObj(chInfoType));
+                recvData.setAgentid(roadID);
+                Gson recvDataJson = new Gson();
+                if (tempData != null) {
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if (tempData == null) {
+                    tempData = "{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+            //设备参数设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 recvData.setAgentid(roadID);

@@ -31,6 +31,10 @@ public class JwtFileUtil {
 //    }
 
     public static List<String> initList() throws IOException {
+
+        if(tokenFilePath == null)
+            return null;
+
         List<String> tokenlist = new ArrayList<>();
 
         Resource resource = new ClassPathResource(tokenFilePath);
