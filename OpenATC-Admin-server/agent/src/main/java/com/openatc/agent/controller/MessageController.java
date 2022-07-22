@@ -149,7 +149,7 @@ public class MessageController {
             responceData = commClient
                     .exange(ip, port, protocol, exangeType,requestData);
         } catch (Exception e) {
-            logger.info( "message exange error:" + e.getCause());
+            logger.warning( "message exange error:" + e.getCause());
         }
 
         if (responceData == null){

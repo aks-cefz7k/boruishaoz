@@ -3,6 +3,7 @@
 /target
 /KDComm/target
 /static
+/dist
 *.iml
 *.class
 *.lst

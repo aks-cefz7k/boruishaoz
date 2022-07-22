@@ -19,7 +19,7 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 
-
+// 使用随机端口发送和监听UDP数据，适用于配置工具的直连网络，不含监听主动上报消息功能
 public class UdpCommunicationForConfiger implements Communication {
     private static final int TIMEOUT = 3000;
     private static final int RECVBUFFER = 64 * 1024;

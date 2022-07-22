@@ -81,12 +81,12 @@ public class CommClient {
         try {
             socket = communication.sendData(agentId,packData, ip, port);
         } catch (IOException e) {
-            log.info("exange send error: " + e.getMessage());
+            log.warning("exange send error: " + e.getMessage());
             return CreateErrorResponceData(agentId,e.getMessage());
         }
 
         if(socket == null){
-            log.info("exange send error: socket return null");
+            log.warning("exange send error: socket return null");
             return CreateErrorResponceData(agentId,"exange send error: socket return null");
         }
 
@@ -103,7 +103,7 @@ public class CommClient {
 
 //            log.info("receive responceData: " + responceData);
         } catch (IOException e) {
-            log.info("exange receive error: " + e.getMessage());
+            log.warning("exange receive error: " + e.getMessage());
             return CreateErrorResponceData(agentId,e.getMessage());
         }
 

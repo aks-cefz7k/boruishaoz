@@ -69,14 +69,17 @@ public class AgentApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 //        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
+
+        logger.warning("shiroOpen：" + shiroOpen);
+        logger.warning("Current Path：" + System.getProperty("user.dir"));
+
         try {
             tokenlist = JwtFileUtil.initList();
         } catch (IOException e) {
             logger.info("token.txt not found...");
         }
 
-        logger.info("shiroOpen：" + shiroOpen);
-        logger.info("Current Path：" + System.getProperty("user.dir"));
+        logger.warning("token list：" + tokenlist);
 
         // 设置主动上报的消息处理函数
         UdpCommunicationStaticPort.hanlder = agentHandler;
