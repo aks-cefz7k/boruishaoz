@@ -144,7 +144,7 @@ public class UdpCommunicationStaticPort implements Communication {
         // 此处等待消息返回
         try {
             Thread.sleep(TIMEOUT);
-            logger.info("Time Out Thread#" + thread.getId());
+            logger.warning("Time Out Thread#" + thread.getId());
         } catch (InterruptedException e) {
             logger.info("Receive Data Thread#" + thread.getId());
         }
