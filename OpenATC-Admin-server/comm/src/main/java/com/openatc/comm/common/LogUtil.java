@@ -9,7 +9,9 @@ public class LogUtil {
     // 根据配置文件设置comm模块的打印类型
     public static void SetLogLevelfromProp(Logger log){
         String level = PropertiesUtil.getStringProperty("logging.level.root");
-        if(level.equals("info")){
+        if (level == null)
+            return;
+        else if(level.equals("info")){
             log.setLevel(Level.INFO);
         }
         else if(level.equals("warning")) {

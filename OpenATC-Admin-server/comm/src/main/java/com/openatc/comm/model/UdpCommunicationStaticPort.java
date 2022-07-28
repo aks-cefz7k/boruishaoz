@@ -59,6 +59,10 @@ public class UdpCommunicationStaticPort implements Communication {
 //        logger.setLevel(WARNING);
         //创建socket对象,绑定固定端口
         LogUtil.SetLogLevelfromProp(logger);
+
+        logger.info("Ocp Socket Port :" + ocpSocketPort);
+        logger.info("Scp Socket Port :" + scpSocketPort);
+
         try {
             // OCP接收端口
             ocpSocket = new DatagramSocket(new InetSocketAddress(ocpSocketPort));
