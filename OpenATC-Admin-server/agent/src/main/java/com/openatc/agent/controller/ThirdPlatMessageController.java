@@ -28,10 +28,8 @@ import java.text.ParseException;
 @CrossOrigin
 public class ThirdPlatMessageController {
 
-
     @Autowired
     private CommClient commClient;
-
 
     @Value("${agent.thirdplat.ip}")
     private String adapterIP;
@@ -40,8 +38,6 @@ public class ThirdPlatMessageController {
     private Integer adapterPort;
 
     private String protocolType = "scp";
-
-
 
     @PostMapping(value = "/centeradapter/custom")
     public RESTRet postDevsMessage(@RequestBody JsonObject jsonObject) throws SocketException, ParseException, UnsupportedEncodingException {
@@ -66,6 +62,5 @@ public class ThirdPlatMessageController {
         System.out.println("responsdata = " + responceData);
         return RESTRetUtils.successObj(responceData);
     }
-
 
 }

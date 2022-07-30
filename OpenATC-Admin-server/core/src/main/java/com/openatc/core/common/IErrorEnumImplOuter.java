@@ -11,6 +11,10 @@
  **/
 package com.openatc.core.common;
 
+
+
+
+
 /**
 * @ClassName: IErrorEnumImplOuter
 * @Description: 返回码第一层（包装的一层）错误信息
@@ -70,6 +74,11 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
 
     //设备管理错误
     E_8001("8001","device not found By Agentid"),
+
+    //控制相关
+    E_9001("9001","Overflow control failed"),
+    E_9002("9002","Auto control failed"),
+
 
     //全局异常错误
     E_0001("0001","NullPointerException"),
