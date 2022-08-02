@@ -48,12 +48,13 @@ public class AgentApplication implements CommandLineRunner {
     @Autowired
     private AgentHandler agentHandler;  //主动上报消息处理类
 
-
-    public static boolean shiroOpen;
     @Value("${agent.server.shiro}")
-    private void setShiroOpen(Boolean shiroOpen){
-        AgentApplication.shiroOpen = shiroOpen;
-    }
+    private String shiroOpen;
+       
+
+//    private void setShiroOpen(Boolean shiroOpen){
+//        AgentApplication.shiroOpen = shiroOpen;
+//    }
     public static List<String> tokenlist = null;
 
     /**
@@ -68,11 +69,17 @@ public class AgentApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 //        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
+
+        logger.warning("shiroOpen：" + shiroOpen);
+        logger.warning("Current Path：" + System.getProperty("user.dir"));
+
         try {
             tokenlist = JwtFileUtil.initList();
         } catch (IOException e) {
             logger.info("token.txt not found...");
         }
+
+        logger.warning("token list：" + tokenlist);
 
         // 设置主动上报的消息处理函数
         UdpCommunicationStaticPort.hanlder = agentHandler;

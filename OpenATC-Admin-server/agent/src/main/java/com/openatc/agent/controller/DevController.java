@@ -42,6 +42,8 @@ public class DevController {
     AscsBaseModel ascsModel;
     @Autowired(required = false)
     private RouteDao routeDao;
+    @Autowired
+    private VipRouteDao vipRouteDao;
     @Autowired(required = false)
     private UserDao userDao;
     @Autowired(required = false)
@@ -187,6 +189,20 @@ public class DevController {
                 }
             }
             routeDao.save(route);
+        }
+
+        //删除勤务路线的设备
+        List<VipRoute> vipRoutes = vipRouteDao.findAll();
+        for (VipRoute vipRoute : vipRoutes) {
+            Set<VipRouteDevice> devs = vipRoute.getDevs();
+            Iterator<VipRouteDevice> vipRouteDeviceIterator = devs.iterator();
+            while(vipRouteDeviceIterator.hasNext()){
+                VipRouteDevice next = vipRouteDeviceIterator.next();
+                if (next.getAgentid().equals(id)){
+                    vipRouteDeviceIterator.remove();
+                }
+            }
+            vipRouteDao.save(vipRoute);
         }
 
 

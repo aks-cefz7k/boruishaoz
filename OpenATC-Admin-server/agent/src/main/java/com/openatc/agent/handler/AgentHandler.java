@@ -58,12 +58,12 @@ public class AgentHandler extends ICommHandler {
 //        logger.info(msg.toString());
         Gson gson = new Gson();
         if (msg == null) {
-            logger.info("AgentHandler/process: MessageData is null");
+            logger.warning("AgentHandler/process: MessageData is null");
             return;
         }
 
         if (msg.getInfotype() == null) {
-            logger.info("AgentHandler/process: MessageData.operation()/.infotype is null");
+            logger.warning("AgentHandler/process: MessageData.operation()/.infotype is null");
             return;
         }
 
@@ -78,18 +78,18 @@ public class AgentHandler extends ICommHandler {
 //     收到其他消息
         else if (isRedisEnable) {
             String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
+
             //收到方案消息
             if (msg.getInfotype().equals("status/pattern")) {
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
                 stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
-                stringRedisTemplate.convertAndSend(key, gson.toJson(msg));
             } else if (msg.getInfotype().equals("status/fault")) {
                 faultService.processFaultMessage(msg);
             }
             //收到其他消息
             else {
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
-                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
+//                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
             }
         }
     }

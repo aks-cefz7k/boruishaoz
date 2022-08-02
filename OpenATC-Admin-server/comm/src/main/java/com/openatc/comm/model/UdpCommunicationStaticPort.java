@@ -11,6 +11,7 @@
  **/
 package com.openatc.comm.model;
 
+import com.openatc.comm.common.LogUtil;
 import com.openatc.comm.common.PropertiesUtil;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
@@ -25,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 import static com.openatc.comm.common.CommunicationType.*;
 
-// 使用固定端口发送和监听UDP数据，适应端口映射网络
+// 使用固定端口发送和监听UDP数据，适用于平台的端口映射网络
 public class UdpCommunicationStaticPort implements Communication {
     private static int TIMEOUT = PropertiesUtil.getIntProperty("agent.comm.timeout");
     private static int RECVBUFFER = 64 * 1024;
@@ -57,6 +58,7 @@ public class UdpCommunicationStaticPort implements Communication {
     static {
 //        logger.setLevel(WARNING);
         //创建socket对象,绑定固定端口
+        LogUtil.SetLogLevelfromProp(logger);
         try {
             // OCP接收端口
             ocpSocket = new DatagramSocket(new InetSocketAddress(ocpSocketPort));
@@ -142,9 +144,9 @@ public class UdpCommunicationStaticPort implements Communication {
         // 此处等待消息返回
         try {
             Thread.sleep(TIMEOUT);
-            logger.info("Time Out Thread#" + thread.getId());
+            logger.warning("Time Out ！ Thread#" + thread.getId());
         } catch (InterruptedException e) {
-            logger.info("Receive Data Thread#" + thread.getId());
+            logger.info("Receive Data ！ Thread#" + thread.getId());
         }
 
         messageMap.remove(messageKey);
@@ -179,8 +181,7 @@ public class UdpCommunicationStaticPort implements Communication {
 
                     // 收到不正确的消息
                     if(responceData.getOperation() == null){
-                        sleep(100);
-                        logger.info("Udp Receive Incorrect Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength() + " Data:" + responceData );
+                        logger.warning("Udp Receive Incorrect Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength() + " Data:" + responceData );
                         continue;
                     }
                     //收到主动上报的消息
@@ -204,7 +205,7 @@ public class UdpCommunicationStaticPort implements Communication {
                         if (hanlder != null) {
                             hanlder.process(responceData);
                         } else {
-                            logger.info("Receive report message！But ICommHanlder is null!");
+                            logger.warning("Receive report message！But ICommHanlder is null!");
                         }
                     }
                     //收到请求的应答消息
@@ -231,7 +232,7 @@ public class UdpCommunicationStaticPort implements Communication {
                         }
                     }
                 } catch (Exception e) {
-                    logger.info(e.getMessage());
+                    logger.info("Udp Receive Thread Exception:" + e.getMessage());
                 }
             }
         }

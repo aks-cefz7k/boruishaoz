@@ -63,9 +63,6 @@ public class MessageController {
     @Autowired
     protected CommClient commClient;
 
-    @Value("${agent.server.shiro}")
-    private boolean shiroOpen;
-
     @Autowired(required = false)
     protected AscsDao mDao;
 
@@ -152,7 +149,7 @@ public class MessageController {
             responceData = commClient
                     .exange(ip, port, protocol, exangeType,requestData);
         } catch (Exception e) {
-            logger.info( "message exange error:" + e.getCause());
+            logger.warning( "message exange error:" + e.getCause());
         }
 
         if (responceData == null){
@@ -199,13 +196,18 @@ public class MessageController {
      * @Description: 生成一条操作记录
      */
     private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip, String token) {
+
+        logger.info( "Create History Param - requestData： " + requestData + " token：" + token);
+
         THisParams hisParams = new THisParams();
         String username = tokenUtil.getUsernameFromToken(token);
+
         //操作者
-        try {
+        if(username == null){
+            hisParams.setOperator("");
+        }
+        else{
             hisParams.setOperator(username);
-        } catch (Exception e) {
-            logger.info("get no user from subject");
         }
         //操作时间自动生成
         //操作源地址

@@ -28,7 +28,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/organization")
 //@RequiresPermissions("sys:auth:permission:view")
-public class OrgController {
+public class
+OrgController {
 
     @Autowired
     private OrgService orgService;

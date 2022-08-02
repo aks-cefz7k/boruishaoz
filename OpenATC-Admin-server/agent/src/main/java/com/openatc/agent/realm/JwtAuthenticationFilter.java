@@ -99,9 +99,8 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
                 if (s.equals(checktoken)) return true;
             }
         }
-
-        //调试模式直接返回true
-        if (!AgentApplication.shiroOpen) return true;
+//        //调试模式直接返回true
+//        if (!AgentApplication.shiroOpen) return true;
 
         HttpServletResponse servletResponse = (HttpServletResponse) response;
 
