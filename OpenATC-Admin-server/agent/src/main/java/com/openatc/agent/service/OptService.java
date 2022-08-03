@@ -84,13 +84,15 @@ public class OptService {
 
 
 
-
     public AscPattern OptPattern(Overflow overflow)
     {
         String agentid = overflow.getIntersectionid().toString();   //设备id
         Integer phaseid = Integer.valueOf(overflow.getPhaseid());   //相位id
         int controltime = overflow.getControltime();                //相位控制时间
         AscPattern tempPattern = GetPattern(agentid);
+        if(tempPattern == null){
+            return null;
+        }
         List<List<Integer>> stages = tempPattern.getStages();
         List<AscPhase> phases = tempPattern.getPhase();
         double factor = 1.0;
@@ -107,6 +109,7 @@ public class OptService {
                 }
             }
         }
+
         factor = factor / param;
         int optCycle = tempPattern.getCycle();
         for(List<Integer> lst:stages)
@@ -136,7 +139,6 @@ public class OptService {
     }
 
 
-
     //@brief 对瓶颈id下的一组路口进行溢出优化
     //@overflowList：一组待优化路口相位
     public void OptPatterns(List<Overflow> overflowList)
@@ -150,10 +152,6 @@ public class OptService {
 
 
 
-
-
-
-
     public AscPattern GetPattern(String devid)
     {
         JSONObject js = new JSONObject();
@@ -162,7 +160,7 @@ public class OptService {
         js.put("operation", "get-request");
 
         RESTRet response = HttpPost(devsuri, js);
-        if(response == null)
+        if(response.isSuccess() == false)
             return null;
         Map data = (Map) ((Map) response.getData()).get("data");
 

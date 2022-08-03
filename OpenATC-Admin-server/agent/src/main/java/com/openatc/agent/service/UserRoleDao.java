@@ -30,3 +30,7 @@ public interface UserRoleDao extends JpaRepository<UserRole, Integer>{
 
     List<UserRole> findByUser(User user);
 }
+
+
+
+
