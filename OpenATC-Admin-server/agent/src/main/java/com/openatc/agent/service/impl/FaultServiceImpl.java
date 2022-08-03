@@ -63,7 +63,6 @@ public class FaultServiceImpl {
             fault.setAgentid(agentid);
             Long id = faultDao.selectByAgentidAndMwFaultID(agentid, fault.getM_wFaultID());
             Fault dbFault = (id == null) ? faultDao.save(fault) : faultDao.save(fault.setId(id));
-            log.info(gson.toJson(transformFault(dbFault)));
             stringRedisTemplate.convertAndSend("asc:event/faultdata", gson.toJson(transformFault(dbFault)));
         }
     }

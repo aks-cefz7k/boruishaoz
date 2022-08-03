@@ -47,6 +47,7 @@ public class UdpCommunicationStaticPort implements Communication {
     private ReentrantLock lock; // 同步锁，将同一个设备的请求按顺序排队发送
     private DatagramSocket datagramSocket;
     private int exangeType; // 当前设备的通讯平台
+    private String sendmsgtype;
 
     private static int ocpSocketPort = PropertiesUtil.getIntProperty("agent.comm.port.ocp");
     private static int scpSocketPort = PropertiesUtil.getIntProperty("agent.comm.port.scp");
@@ -60,8 +61,8 @@ public class UdpCommunicationStaticPort implements Communication {
         //创建socket对象,绑定固定端口
         LogUtil.SetLogLevelfromProp(logger);
 
-        logger.info("Ocp Socket Port :" + ocpSocketPort);
-        logger.info("Scp Socket Port :" + scpSocketPort);
+        logger.warning("Ocp Socket bind Port :" + ocpSocketPort);
+        logger.warning("Scp Socket bind Port :" + scpSocketPort);
 
         try {
             // OCP接收端口
@@ -69,16 +70,18 @@ public class UdpCommunicationStaticPort implements Communication {
             // SCP5接收端口
             scpSocket = new DatagramSocket(new InetSocketAddress(scpSocketPort));
         } catch (SocketException e) {
-            logger.info(e.getMessage());
+            logger.warning(e.getMessage());
         }
 
         //启动OCP接收线程
         int threadcount = PropertiesUtil.getIntProperty("agent.comm.thread.count.ocp");
+        logger.warning("Ocp thread count :" + threadcount);
         for(int i = 0;i<threadcount;i++){
             new UdpReceiveThread(ocpSocket, new ocpMessage()).start();
         }
         //启动SCP接收线程
         threadcount = PropertiesUtil.getIntProperty("agent.comm.thread.count.scp");
+        logger.warning("scp thread count :" + threadcount);
         for(int i = 0;i<threadcount;i++){
             new UdpReceiveThread(scpSocket, new scpMessage()).start();
         }
@@ -95,13 +98,15 @@ public class UdpCommunicationStaticPort implements Communication {
     }
 
     @Override
-    public DatagramSocket sendData(String agentid,PackData packData, String ip, int port) throws IOException {
+    public DatagramSocket sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) throws IOException {
 
         // 保存消息的KEY,如果是直连到设备，用IP+端口;如果是通过平台跳转，使用设备ID
         if(exangeType == EXANGE_TYPE_DEVICE)
             messageKey = ip + port;
         else if(exangeType == EXANGE_TYPE_CENTER)
             messageKey = agentid;
+
+        this.sendmsgtype = sendmsgtype;
 
         // 按顺序进行消息通讯
         globalLock.lock();
@@ -115,7 +120,7 @@ public class UdpCommunicationStaticPort implements Communication {
 
         lock.lock();
         lockMap.put(messageKey,lock);
-        logger.info("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
+        logger.warning("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
 
         //socket的发送地址和端口
         InetSocketAddress address = new InetSocketAddress(ip, port);
@@ -124,7 +129,7 @@ public class UdpCommunicationStaticPort implements Communication {
 
         // UDP最大发送长度64K
         if(sendPacket.getLength() > 64000){
-            logger.info("Send Packet too Long! Send Data Thread#" + thread.getId() +"AgentID:" + agentid +  "IP:" + ip +"Port:" + port);
+            logger.warning("Send Packet too Long! Send Data Thread#" + thread.getId() +"AgentID:" + agentid +  "IP:" + ip +"Port:" + port);
             return null;
         }
 
@@ -132,7 +137,7 @@ public class UdpCommunicationStaticPort implements Communication {
         datagramSocket.send(sendPacket);
         thread = Thread.currentThread();
         messageMap.put(messageKey, this);
-        logger.info("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength());
+        logger.warning("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
 
 
         return datagramSocket;
@@ -150,13 +155,13 @@ public class UdpCommunicationStaticPort implements Communication {
             Thread.sleep(TIMEOUT);
             logger.warning("Time Out ！ Thread#" + thread.getId());
         } catch (InterruptedException e) {
-            logger.info("Receive Data ！ Thread#" + thread.getId());
+            logger.warning("Receive Data ！ Thread#" + thread.getId());
         }
 
         messageMap.remove(messageKey);
         lockMap.remove(messageKey);
         lock.unlock();
-        logger.info("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
+        logger.warning("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
         return responceData;
     }
 
@@ -214,7 +219,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     }
                     //收到请求的应答消息
                     else{
-                        logger.info("Udp Receive Response Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength() + " Data:" + responceData );
+                        logger.warning("Udp Receive Response Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength() + " Data:" + responceData );
 
                         String messageKey = null;
                         int exangeType = message.geyExangeType();
@@ -227,16 +232,23 @@ public class UdpCommunicationStaticPort implements Communication {
 
                         // 查找应答对应的请求消息Key
                         UdpCommunicationStaticPort comm = messageMap.get(messageKey);
+                        String responceInfoType = responceData.getInfotype();
                         if (comm != null){
-                            comm.responceData = responceData;
-                            comm.thread.interrupt();
+                            if( responceInfoType == null || comm.sendmsgtype.equals(responceInfoType)){
+                                comm.responceData = responceData;
+                                comm.thread.interrupt();
+                            }
+                            else{
+                                logger.warning("Udp Receive MsgType error:" + responceInfoType);
+                            }
+
                         }
                         else{
-                            logger.info("Can not find UdpCommunication Fro Receive Msg : Key:" + messageKey);
+                            logger.warning("Can not find UdpCommunication Fro Receive Msg : Key:" + messageKey);
                         }
                     }
                 } catch (Exception e) {
-                    logger.info("Udp Receive Thread Exception:" + e.getMessage());
+                    logger.warning("Udp Receive Thread Exception:" + e.getMessage());
                 }
             }
         }

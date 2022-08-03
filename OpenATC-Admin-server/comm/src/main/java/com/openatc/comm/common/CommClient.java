@@ -54,6 +54,8 @@ public class CommClient {
             factory = new scpFactory();
         }
 
+        String sendmsgtype = sendMsg.getInfotype();
+
         // 创建消息处理对象
         Message message = factory.createMessage();
 //        CommunicationProxy communication = factory.createCommunication(commType);
@@ -79,7 +81,7 @@ public class CommClient {
         Long starttime = System.currentTimeMillis();
         String agentId = sendMsg.getAgentid();
         try {
-            socket = communication.sendData(agentId,packData, ip, port);
+            socket = communication.sendData(agentId,packData, ip, port,sendmsgtype);
         } catch (IOException e) {
             log.warning("exange send error: " + e.getMessage());
             return CreateErrorResponceData(agentId,e.getMessage());

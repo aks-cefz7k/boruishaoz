@@ -44,7 +44,7 @@ public class UdpCommunicationForConfiger implements Communication {
 
 
     @Override
-    public DatagramSocket sendData(String agentid,PackData packData, String ip, int port) throws IOException {
+    public DatagramSocket sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) throws IOException {
 //        logger.info("communication start: " + System.currentTimeMillis());
 
 //        if (datagramSocket == null) {
