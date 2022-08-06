@@ -645,8 +645,12 @@ public class AscsDao {
     public List<AscsBaseModel> alterStatus(List<AscsBaseModel> ascsBaseModels) {
         List<String> faultDevAgentids = getFaultDev();
         for (AscsBaseModel ascsBaseModel : ascsBaseModels) {
-            if (faultDevAgentids.contains(ascsBaseModel.getAgentid()))
+            if (faultDevAgentids.contains(ascsBaseModel.getAgentid())){
+                if(ascsBaseModel.getState().equals("DOWN")){
+                    continue;
+                }
                 ascsBaseModel.setState("FAULT");
+            }
         }
         return ascsBaseModels;
     }

@@ -37,19 +37,30 @@ public class JwtFileUtil {
 
         List<String> tokenlist = new ArrayList<>();
 
+        InputStream resourceAsStream = JwtFileUtil.class.getResourceAsStream(tokenFilePath);
+        BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream));
 
-//        String currentpath = System.getProperty("user.dir");
-//        String resPath = currentpath + "/" + tokenFilePath;
 
-        FileReader fr = new FileReader(tokenFilePath);
-        BufferedReader bf = new BufferedReader(fr);
+//        ClassPathResource classPathResource = new ClassPathResource("resources/properties");
+//        InputStream is = classPathResource.getInputStream();
+//        InputStreamReader isr = new InputStreamReader(is);
+//        BufferedReader br = new BufferedReader(isr);
+//        String data = null;
+//        System.out.println("呵呵呵" + br.readLine());
+
+
+        //String currentpath = System.getProperty("user.dir");
+        //String resPath = currentpath + "/" + tokenFilePath;
+
+        //FileReader fr = new FileReader(tokenFilePath);
+       // BufferedReader bf = new BufferedReader(fr);
         String str;
 
-        while ((str = bf.readLine()) != null) {
+        while ((str = br.readLine()) != null) {
             tokenlist.add(str);
         }
-        bf.close();
-        fr.close();
+        br.close();
+        //fr.close();
 
 
         return tokenlist;
