@@ -30,9 +30,9 @@ public class CommClient {
 
     private static CommunicationType commType = COMM_UDP_CONFIGER;
 
-    private Logger log = Logger.getLogger(CommClient.class.toString());
+    private static Logger log = Logger.getLogger(CommClient.class.toString());
 
-    public CommClient(){
+    static{
         LogUtil.SetLogLevelfromProp(log);
     }
 
