@@ -28,7 +28,7 @@ import static com.openatc.comm.common.CommunicationType.OCP_PROTYPE;
 public class ocpMessage implements Message {
     private static final String allFeature = "feature/all";
     public static final String setrequest = "set-request";
-    private static final int RECVBUFFER = 20 * 1024 * 1024;
+    private static final int RECVBUFFER = 64 * 1024;
 
     @Override
     public PackData pack(MessageData sendMsg) throws UnsupportedEncodingException {
