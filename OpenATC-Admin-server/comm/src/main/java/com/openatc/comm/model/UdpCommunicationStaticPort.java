@@ -178,6 +178,7 @@ public class UdpCommunicationStaticPort implements Communication {
 
         @Override
         public void run() {
+            logger.warning("New Udp Receive Thread Started:" + datagramSocket.getLocalPort());
             while(datagramSocket != null){
                 byte[] dataRecv = new byte[RECVBUFFER];
                 DatagramPacket recvPacket = new DatagramPacket(dataRecv, dataRecv.length);
