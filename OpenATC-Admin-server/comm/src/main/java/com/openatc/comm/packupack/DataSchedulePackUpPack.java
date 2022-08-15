@@ -213,7 +213,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         if (operatorObj == 0x10) {
             return detector;
         }
-        if (operatorObj == 0x24 || operatorObj == 0x20) {
+        if (operatorObj == 0x24 || operatorObj == 0x23||operatorObj == 0x18) {
             return allfeature;
         }
         if (operatorObj == -94) {

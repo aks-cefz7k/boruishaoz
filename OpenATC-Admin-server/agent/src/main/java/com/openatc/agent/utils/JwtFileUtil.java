@@ -40,10 +40,10 @@ public class JwtFileUtil {
 //        InputStream resourceAsStream = JwtFileUtil.class.getResourceAsStream(tokenFilePath);
 //        BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream));
 
-//        String currentpath = System.getProperty("user.dir");
-//        String resPath = currentpath + "/" + tokenFilePath;
+        String currentpath = System.getProperty("user.dir");
+        String resPath = currentpath + "/" + tokenFilePath;
 
-        FileReader fr = new FileReader(tokenFilePath);
+        FileReader fr = new FileReader(resPath);
         BufferedReader br = new BufferedReader(fr);
         String str;
 

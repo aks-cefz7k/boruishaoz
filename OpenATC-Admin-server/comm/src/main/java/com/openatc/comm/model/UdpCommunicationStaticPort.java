@@ -155,7 +155,7 @@ public class UdpCommunicationStaticPort implements Communication {
             Thread.sleep(TIMEOUT);
             logger.warning("Time Out ！ Thread#" + thread.getId());
         } catch (InterruptedException e) {
-            logger.warning("Receive Data ！ Thread#" + thread.getId());
+            logger.warning("Send & Receive Data Correct! Thread#" + thread.getId());
         }
 
         messageMap.remove(messageKey);
@@ -187,6 +187,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     InetAddress address = recvPacket.getAddress();
                     String addressStr = address.getHostAddress();
                     int port = recvPacket.getPort();
+                    logger.warning("Udp Receive Packet" + addressStr+" : "+port + " Length: " + recvPacket.getLength());
                     MessageData responceData = message.uppack(recvPacket);
 
                     // 收到不正确的消息
@@ -220,7 +221,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     }
                     //收到请求的应答消息
                     else{
-                        logger.warning("Udp Receive Response Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength() + " Data:" + responceData );
+                        logger.info("Udp Receive Response Data: " +addressStr+" : "+port + " Length: " + recvPacket.getLength() + " Data:" + responceData );
 
                         String messageKey = null;
                         int exangeType = message.geyExangeType();
@@ -240,7 +241,7 @@ public class UdpCommunicationStaticPort implements Communication {
                                 comm.thread.interrupt();
                             }
                             else{
-                                logger.warning("Udp Receive MsgType error:" + responceInfoType);
+                                logger.warning("Udp Receive InfoType error:" + responceInfoType);
                             }
 
                         }

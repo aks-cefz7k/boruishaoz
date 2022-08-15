@@ -50,6 +50,9 @@ public class AgentApplication implements CommandLineRunner {
 
     @Value("${agent.server.shiro}")
     private String shiroOpen;
+
+    @Value("${agent.buildtime}")
+    private String buildtime;
        
 
 //    private void setShiroOpen(Boolean shiroOpen){
@@ -70,6 +73,7 @@ public class AgentApplication implements CommandLineRunner {
     public void run(String... args) {
 //        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
 
+        logger.warning("App Build Time：" + buildtime);
         logger.warning("Is Shiro Open：" + shiroOpen);
         logger.warning("Current Path：" + System.getProperty("user.dir"));
 
