@@ -98,7 +98,7 @@ public class UdpCommunicationStaticPort implements Communication {
     }
 
     @Override
-    public DatagramSocket sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) throws IOException {
+    public int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) throws IOException {
 
         // 保存消息的KEY,如果是直连到设备，用IP+端口;如果是通过平台跳转，使用设备ID
         if(exangeType == EXANGE_TYPE_DEVICE)
@@ -130,7 +130,7 @@ public class UdpCommunicationStaticPort implements Communication {
         // UDP最大发送长度64K
         if(sendPacket.getLength() > 64000){
             logger.warning("Send Packet too Long! Send Data Thread#" + thread.getId() +"AgentID:" + agentid +  "IP:" + ip +"Port:" + port);
-            return null;
+            return -1;
         }
 
         //发送数据
@@ -140,16 +140,11 @@ public class UdpCommunicationStaticPort implements Communication {
         logger.warning("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
 
 
-        return datagramSocket;
+        return 0;
     }
 
     @Override
-    public MessageData receiveData(DatagramSocket socket) throws IOException {
-
-        if(socket == null){
-            return  null;
-        }
-
+    public MessageData receiveData() throws IOException {
         // 此处等待消息返回
         try {
             Thread.sleep(TIMEOUT);
@@ -188,7 +183,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     String addressStr = address.getHostAddress();
                     int port = recvPacket.getPort();
                     logger.warning("Udp Receive Packet" + addressStr+" : "+port + " Length: " + recvPacket.getLength());
-                    MessageData responceData = message.uppack(recvPacket);
+                    MessageData responceData = message.uppack(recvPacket.getData());
 
                     // 收到不正确的消息
                     if(responceData.getOperation() == null){

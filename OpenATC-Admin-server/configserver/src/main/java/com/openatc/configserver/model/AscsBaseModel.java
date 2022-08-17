@@ -26,9 +26,14 @@ public class AscsBaseModel {
     private int status;
     private String state;
 //    private MyGeometry geometry;
-//    private JsonNode jsonparam;
     private JsonObject jsonparam;
     private String agentid;
     protected String protocol; //协议
     private String name;
+    private String code;
+    private String gbid;
+    private String firm;
+    private String platform;
+    private String thirdplatformid;
+    private int sockettype;
 }
