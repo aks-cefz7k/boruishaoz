@@ -450,7 +450,7 @@ public class TemplateController {
         MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.phase);
         RESTRet<MessageData> retBase = null;
         retBase = deviceController.postDevsMessage(messageData);
-        if (retBase.getMessage().equals("Device not online!")) {
+        if (!retBase.isSuccess()) {
             DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_301);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
