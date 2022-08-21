@@ -28,8 +28,9 @@ import javax.ws.rs.core.MediaType;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.*;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_4005;
+import java.util.logging.Logger;
+
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 /**
  * @author kedacom
@@ -43,6 +44,8 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_4005;
 public class TemplateController {
 
     Gson gson = new Gson();
+    Logger logger = Logger.getLogger(DeviceController.class.getName());
+
 
     Set<Integer> ewPed = new HashSet<>(Arrays.asList(1, 2, 5, 6, 7, 8, 15));
     Set<Integer> snPed = new HashSet<>(Arrays.asList(3, 4, 9, 10, 11, 12, 16));
@@ -454,10 +457,19 @@ public class TemplateController {
             DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_301);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
-        if (retBase.getData() == null) {
+        MessageData md = retBase.getData();
+        if (md == null) {
+            logger.warning("Template MessageData Error:" + retBase);
             return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
         }
-        JsonArray phaseArray = retBase.getData().getData().getAsJsonObject().get("phaseList").getAsJsonArray();
+        JsonElement element = md.getData().getAsJsonObject().get("phaseList");
+        JsonArray phaseArray = null;
+        if(element != null)
+            phaseArray = element.getAsJsonArray();
+        else {
+            logger.warning("Template feature/phase Error:" + retBase);
+            return RESTRetUtils.errorObj(E_4002);
+        }
         int phaseCount = phaseArray.size();
         //相位用两位字符串表示，不足位数补0
         String phaseCountString = String.format("%2d", phaseCount).replace(" ", "0");

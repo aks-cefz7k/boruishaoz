@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramSocket;
 import java.util.logging.Logger;
 
 import static com.openatc.comm.common.CommunicationType.*;
@@ -45,6 +44,9 @@ public class CommClient {
     }
 
     public MessageData exange(String ip, int port, String protype, int platform, MessageData sendMsg,int socketType) throws UnsupportedEncodingException {
+
+//        long starttime = System.currentTimeMillis();
+//        long endtime = 0L;
 
         // 产品工厂类
         ProtocolFactory factory = new scpFactory();
@@ -72,7 +74,12 @@ public class CommClient {
             }
             return sendMsg;
         }
+//        endtime = System.currentTimeMillis();
+//        log.info("Send Msg:" + sendMsg );
+//        log.info("Pack Data time:"+ (endtime-starttime) );
 
+
+//        starttime = System.currentTimeMillis();
         // 设置通讯类型
         CommunicationType commType;
         if(socketType == COMM_SOCKET_TYPE_UDP && commServerType == COMM_SERVER_TYPE_CONFIGER){
@@ -88,7 +95,6 @@ public class CommClient {
 
         // 发送
         int sendrev = 0;
-        Long starttime = System.currentTimeMillis();
         String agentId = sendMsg.getAgentid();
         try {
             sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
@@ -102,9 +108,12 @@ public class CommClient {
             return CreateErrorResponceData(agentId,"exange send error: socket return null");
         }
 
+//        endtime = System.currentTimeMillis();
+//        log.info("Send Data time:"+ (endtime-starttime) );
+
+//        starttime = System.currentTimeMillis();
         // 接收-解析
         MessageData responceData = null;
-        Long endtime = 0L;
         try {
             responceData = communication.receiveData();
 
@@ -120,8 +129,11 @@ public class CommClient {
         }
 
 
-        endtime = System.currentTimeMillis();
-        responceData.setDelay(endtime-starttime);
+//        endtime = System.currentTimeMillis();
+//        responceData.setDelay(endtime-starttime);
+//        log.info("Receive & Unpack Data time:"+ (endtime-starttime) );
+//        log.info("Receive Msg:"+ responceData );
+
         return responceData;
     }
 

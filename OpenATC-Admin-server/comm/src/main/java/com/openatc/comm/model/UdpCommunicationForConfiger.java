@@ -23,7 +23,7 @@ import java.net.SocketException;
 public class UdpCommunicationForConfiger implements Communication {
     private static final int TIMEOUT = 3000;
     private static final int RECVBUFFER = 64 * 1024;
-//    private static Logger logger = Logger.getLogger(UdpCommunication.class.toString());
+//    private static Logger logger = Logger.getLogger(UdpCommunicationForConfiger.class.toString());
 
     static DatagramSocket datagramSocket = null;
 
@@ -69,13 +69,20 @@ public class UdpCommunicationForConfiger implements Communication {
 
     @Override
     public MessageData receiveData() throws IOException {
+//        long starttime = System.currentTimeMillis();
+//        long endtime = 0L;
+
         byte[] dataRecv = new byte[RECVBUFFER];
         DatagramPacket recvPacket = new DatagramPacket(dataRecv, dataRecv.length);
-//        logger.info("datagramSocket receivedata start:" + System.currentTimeMillis());
         datagramSocket.receive(recvPacket);
-//        logger.info("datagramSocket receivedata end: " + System.currentTimeMillis());
-//        logger.info("communication end: " + System.currentTimeMillis());
+//        endtime = System.currentTimeMillis();
+//        logger.info("Receive UDP Data Time:"+ (endtime-starttime) );
 
-        return message.uppack(recvPacket.getData());
+//        starttime = System.currentTimeMillis();
+        MessageData md = message.uppack(recvPacket.getData());
+//        endtime = System.currentTimeMillis();
+//        logger.info("Uppack UDP Data time:"+ (endtime-starttime) );
+
+        return md;
     }
 }

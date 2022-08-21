@@ -34,12 +34,9 @@ import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 @Path("/")
 public class DeviceController {
-    Logger logger = Logger.getLogger(DeviceController.class.getName());
 
     protected CommClient commClient = new CommClient();
-
     static AscsBaseModel ascsBaseModel = new AscsBaseModel();
-    static Gson gson = new Gson();
 
     static {
         ascsBaseModel.setId(0);
