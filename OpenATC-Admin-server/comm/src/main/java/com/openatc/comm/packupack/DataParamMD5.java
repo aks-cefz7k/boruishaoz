@@ -1,8 +1,11 @@
 package com.openatc.comm.packupack;
-import org.springframework.util.DigestUtils;
+//import org.springframework.util.DigestUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @ClassName: DataParamMD5
@@ -14,8 +17,19 @@ import java.net.URLEncoder;
 public class DataParamMD5 {
 
     public static String getMD5(String str) throws UnsupportedEncodingException {
-        String md5 = DigestUtils.md5DigestAsHex(str.getBytes("UTF-8"));
-        return md5;
+//        String md5 = DigestUtils.md5DigestAsHex(str.getBytes("UTF-8"));
+        byte[] secretBytes = null;
+        try {
+            secretBytes = MessageDigest.getInstance("md5").digest(
+                    str.getBytes());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("没有这个md5算法！");
+        }
+        String md5code = new BigInteger(1, secretBytes).toString(16);
+        for (int i = 0; i < 32 - md5code.length(); i++) {
+            md5code = "0" + md5code;
+        }
+        return md5code;
     }
     /**
      * @param  str
