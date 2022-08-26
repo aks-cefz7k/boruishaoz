@@ -25,20 +25,26 @@ public class UdpCommunicationForConfiger implements Communication {
     private static final int RECVBUFFER = 64 * 1024;
 //    private static Logger logger = Logger.getLogger(UdpCommunicationForConfiger.class.toString());
 
-    static DatagramSocket datagramSocket = null;
+    private DatagramSocket datagramSocket = null;
 
     private Message message;
 
-    static {
+//    static {
+//        try {
+//            datagramSocket = new DatagramSocket();
+//            datagramSocket.setSoTimeout(TIMEOUT);
+//        } catch (SocketException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public UdpCommunicationForConfiger(Message m) {
         try {
             datagramSocket = new DatagramSocket();
             datagramSocket.setSoTimeout(TIMEOUT);
         } catch (SocketException e) {
             e.printStackTrace();
         }
-    }
-
-    public UdpCommunicationForConfiger(Message m) {
         message = m;
     }
 
