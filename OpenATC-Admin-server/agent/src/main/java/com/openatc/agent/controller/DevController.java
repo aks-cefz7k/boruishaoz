@@ -204,8 +204,6 @@ public class DevController {
             }
             vipRouteDao.save(vipRoute);
         }
-
-
         return RESTRetUtils.successObj(as);
     }
 
