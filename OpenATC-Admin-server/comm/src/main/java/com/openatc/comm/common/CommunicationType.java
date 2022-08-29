@@ -13,7 +13,8 @@ package com.openatc.comm.common;
 
 public enum CommunicationType {
     COMM_UDP_CONFIGER("udp"),
-    COMM_UDP_HOSTPORT("udp-hp");
+    COMM_UDP_HOSTPORT("udp-hp"),
+    COMM_TCP("tcp");
 
     public static String OCP_PROTYPE  = "ocp";
     public static String SCP_PROTYPE  = "scp";
@@ -24,6 +25,12 @@ public enum CommunicationType {
 
     public static int EXANGE_TYPE_DEVICE = 0;
     public static int EXANGE_TYPE_CENTER = 1;
+
+    public static int COMM_SERVER_TYPE_CONFIGER = 0;
+    public static int COMM_SERVER_TYPE_CENTER = 1;
+
+    public static int COMM_SOCKET_TYPE_UDP = 0;
+    public static int COMM_SOCKET_TYPE_TCP = 1;
 
     private String type;
     CommunicationType(String type) {

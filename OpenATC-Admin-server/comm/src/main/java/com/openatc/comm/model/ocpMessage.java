@@ -87,14 +87,13 @@ public class ocpMessage implements Message {
     }
 
     @Override
-    public MessageData uppack(DatagramPacket recvPacket) throws UnsupportedEncodingException {
+    public MessageData uppack(byte[] dataSource) throws UnsupportedEncodingException {
 
-        if (recvPacket == null) {
+        if (dataSource == null) {
             return null;
         }
 
         MessageData responceData = new MessageData();
-        byte[] dataSource = recvPacket.getData();
         byte[] m_dataSchedule = new byte[RECVBUFFER];
         DataPackUpPack m_readDataPackUpPack = new DataPackUpPack();
         int m_dataScheduleSize = m_readDataPackUpPack.upPackBuff(dataSource, m_dataSchedule);

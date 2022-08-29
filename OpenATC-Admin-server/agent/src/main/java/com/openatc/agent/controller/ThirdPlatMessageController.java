@@ -23,6 +23,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.text.ParseException;
 
+import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_UDP;
+
 
 @RestController
 @CrossOrigin
@@ -54,7 +56,7 @@ public class ThirdPlatMessageController {
 
         try {
             responceData = commClient
-                    .exange(adapterIP, adapterPort, protocolType, 1, message);
+                    .exange(adapterIP, adapterPort, protocolType, 1, message,COMM_SOCKET_TYPE_UDP);
         } catch (Exception e) {
             e.printStackTrace();
         }

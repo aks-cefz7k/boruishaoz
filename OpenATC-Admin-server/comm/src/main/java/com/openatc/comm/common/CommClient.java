@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramSocket;
 import java.util.logging.Logger;
 
 import static com.openatc.comm.common.CommunicationType.*;
@@ -28,7 +27,8 @@ import static com.openatc.comm.common.CommunicationType.*;
 @Component
 public class CommClient {
 
-    private static CommunicationType commType = COMM_UDP_CONFIGER;
+    // 服务的类型，分为平台和配置软件
+    private static int commServerType = COMM_SERVER_TYPE_CONFIGER;
 
     private static Logger log = Logger.getLogger(CommClient.class.toString());
 
@@ -36,14 +36,17 @@ public class CommClient {
         LogUtil.SetLogLevelfromProp(log);
     }
 
-    // 设置通讯模式
-    //  UDP - 随机端UDP口通讯
-    //  UDP_HOSTPORT - 固定端口UDP通讯
-    public void setCommunicationType(CommunicationType type) {
-        commType = type;
+    // 设置服务通讯模式
+    //  UDP - 随机端UDP口通讯，用于配置软件服务
+    //  UDP_HOSTPORT - 固定端口UDP通讯，用于平台服务
+    public void setCommunicationServerType(int type) {
+        commServerType = type;
     }
 
-    public MessageData exange(String ip, int port, String protype, int platform, MessageData sendMsg) throws UnsupportedEncodingException {
+    public MessageData exange(String ip, int port, String protype, int platform, MessageData sendMsg,int socketType) throws UnsupportedEncodingException {
+
+//        long starttime = System.currentTimeMillis();
+//        long endtime = 0L;
 
         // 产品工厂类
         ProtocolFactory factory = new scpFactory();
@@ -58,7 +61,6 @@ public class CommClient {
 
         // 创建消息处理对象
         Message message = factory.createMessage();
-//        CommunicationProxy communication = factory.createCommunication(commType);
 
         // 打包
         PackData packData = message.pack(sendMsg);
@@ -72,31 +74,48 @@ public class CommClient {
             }
             return sendMsg;
         }
+//        endtime = System.currentTimeMillis();
+//        log.info("Send Msg:" + sendMsg );
+//        log.info("Pack Data time:"+ (endtime-starttime) );
+
+
+//        starttime = System.currentTimeMillis();
+        // 设置通讯类型
+        CommunicationType commType;
+        if(socketType == COMM_SOCKET_TYPE_UDP && commServerType == COMM_SERVER_TYPE_CONFIGER){
+            commType = COMM_UDP_CONFIGER;
+        }
+        else if(socketType == COMM_SOCKET_TYPE_TCP)
+            commType = COMM_TCP;
+        else
+            commType = COMM_UDP_HOSTPORT;
 
         // 创建消息通讯对象
         Communication communication = factory.createCommunication(message,commType, platform);
 
         // 发送
-        DatagramSocket socket = null;
-        Long starttime = System.currentTimeMillis();
+        int sendrev = 0;
         String agentId = sendMsg.getAgentid();
         try {
-            socket = communication.sendData(agentId,packData, ip, port,sendmsgtype);
+            sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
         } catch (IOException e) {
             log.warning("exange send error: " + e.getMessage());
             return CreateErrorResponceData(agentId,e.getMessage());
         }
 
-        if(socket == null){
+        if(sendrev != 0){
             log.warning("exange send error: socket return null");
             return CreateErrorResponceData(agentId,"exange send error: socket return null");
         }
 
+//        endtime = System.currentTimeMillis();
+//        log.info("Send Data time:"+ (endtime-starttime) );
+
+//        starttime = System.currentTimeMillis();
         // 接收-解析
         MessageData responceData = null;
-        Long endtime = 0L;
         try {
-            responceData = communication.receiveData(socket);
+            responceData = communication.receiveData();
 
             // 没有收到消息
             if(responceData == null){
@@ -110,8 +129,11 @@ public class CommClient {
         }
 
 
-        endtime = System.currentTimeMillis();
-        responceData.setDelay(endtime-starttime);
+//        endtime = System.currentTimeMillis();
+//        responceData.setDelay(endtime-starttime);
+//        log.info("Receive & Unpack Data time:"+ (endtime-starttime) );
+//        log.info("Receive Msg:"+ responceData );
+
         return responceData;
     }
 

@@ -155,12 +155,13 @@ public class UserController {
      * @Description: TODO
      */
     @GetMapping(value = "/auth/info")  //获取登录用户信息
-    public RESTRetBase edgeInfo() {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+    public RESTRetBase edgeInfo(@RequestHeader("Authorization") String token) {
 
-        if (user != null) {
-            List<String> rolenames = userDao.getRoleNamesByUsername(user.getUser_name());
-            user.setRoleNames(rolenames);
+        String username = tokenUtil.getUsernameFromToken(token);
+//        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        if (username != null) {
+            User user = userDao.getUserByUserName(username);
             return RESTRetUtils.successObj(user);
         }
         return RESTRetUtils.errorObj(E_3011);

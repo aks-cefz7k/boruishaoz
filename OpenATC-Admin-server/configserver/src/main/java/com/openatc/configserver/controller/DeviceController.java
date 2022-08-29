@@ -26,18 +26,17 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
 
+import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_TCP;
+import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_UDP;
 import static com.openatc.core.common.IErrorEnumImplInner.*;
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 
 @Path("/")
 public class DeviceController {
-    Logger logger = Logger.getLogger(DeviceController.class.getName());
 
     protected CommClient commClient = new CommClient();
-
     static AscsBaseModel ascsBaseModel = new AscsBaseModel();
-    static Gson gson = new Gson();
 
     static {
         ascsBaseModel.setId(0);
@@ -113,8 +112,8 @@ public class DeviceController {
         // 获取responceData
         MessageData responceData = null;
         try {
-            responceData = commClient
-                    .exange(ip, port, protocol, 0, requestData);
+
+            responceData = commClient.exange(ip, port, protocol, 0, requestData,ascsBaseModel.getSockettype());
 
         } catch (Exception e) {
             e.printStackTrace();
