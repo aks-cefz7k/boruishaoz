@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+
 @Path("/")
 @Singleton
 public class FileController {
@@ -28,7 +29,7 @@ public class FileController {
         int index;
         byte[] bytes = new byte[1024];
         FileOutputStream downloadFile = new FileOutputStream("/usr/config/"+fileName);
-//        FileOutputStream downloadFile = new FileOutputStream("C:\\Users\\jinjunlin\\Documents\\OpenATC-Admin\\open-atc-admin\\OpenATC-Admin-server\\configserver\\"+fileName);
+        //FileOutputStream downloadFile = new FileOutputStream("C:\\gitProject\\openatc-back-dev\\sysconfig\\"+fileName);
 
         while ((index = inputStream.read(bytes)) != -1) {
             downloadFile.write(bytes, 0, index);
