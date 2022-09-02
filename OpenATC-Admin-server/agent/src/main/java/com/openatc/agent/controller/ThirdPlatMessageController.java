@@ -30,8 +30,8 @@ import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_UDP;
 @CrossOrigin
 public class ThirdPlatMessageController {
 
-    @Autowired
-    private CommClient commClient;
+//    @Autowired
+    private CommClient commClient = new CommClient();
 
     @Value("${agent.thirdplat.ip}")
     private String adapterIP;

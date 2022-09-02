@@ -57,8 +57,8 @@ public class MessageController {
     @Autowired(required = false)
     protected DevController devController;
 
-    @Autowired
-    protected CommClient commClient;
+//    @Autowired
+    protected CommClient commClient = new CommClient();
 
     @Autowired(required = false)
     protected AscsDao mDao;
