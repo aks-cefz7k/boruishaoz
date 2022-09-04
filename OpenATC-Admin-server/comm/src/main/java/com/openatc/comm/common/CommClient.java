@@ -90,6 +90,8 @@ public class CommClient {
         else
             commType = COMM_UDP_HOSTPORT;
 
+//        commType = COMM_TCP;
+
         // 创建消息通讯对象
         Communication communication = factory.createCommunication(message,commType, platform);
 
@@ -99,12 +101,12 @@ public class CommClient {
         try {
             sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
         } catch (IOException e) {
-            log.warning("exange send error: " + e.getMessage());
+            log.warning("exange send error: " + e.getMessage() + " Message:" + sendMsg);
             return CreateErrorResponceData(agentId,e.getMessage());
         }
 
         if(sendrev != 0){
-            log.warning("exange send error: socket return null");
+            log.warning("exange send error: socket return null!" + " Message:" + sendMsg);
             return CreateErrorResponceData(agentId,"exange send error: socket return null");
         }
 
@@ -124,7 +126,7 @@ public class CommClient {
 
 //            log.info("receive responceData: " + responceData);
         } catch (IOException e) {
-            log.warning("exange receive error: " + e.getMessage());
+            log.warning("exange receive error: " + e.getMessage() + " Message:" + sendMsg);
             return CreateErrorResponceData(agentId,e.getMessage());
         }
 

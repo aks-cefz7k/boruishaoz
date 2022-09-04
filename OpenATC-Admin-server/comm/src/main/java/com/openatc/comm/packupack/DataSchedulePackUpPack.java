@@ -1207,21 +1207,22 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                         dataSchdule[12] = 0x00;
                         dataSchdule[13] = 0x00;
                         //数据内容
+                        String dataSetSystemCustomParam = null;
                         dataSizeFlag = new byte[4];
                         dataSendCount = 0;
-                        gson = new Gson();
-                        String dataSetSystemCustomParam = gson.toJson(sendData);
-
-//                        String AllParamJson= toFormat(dataSetAllParam,true,true);
-                        if (dataSetSystemCustomParam != null) {
-                            byte[] dataSend = dataSetSystemCustomParam.getBytes("UTF-8");
-                            dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
-                        for (int i = 0; i < 4; i++) {
-                            dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
-                            dataSchdule[i + 10] = dataSizeFlag[i];
+                        JsonElement strSetSystemCustomParam = sendData.getData();
+                        if(strSetSystemCustomParam != null){
+                            dataSetSystemCustomParam = strSetSystemCustomParam.toString();
+                            if (dataSetSystemCustomParam != null) {
+                                byte[] dataSend = dataSetSystemCustomParam.getBytes("UTF-8");
+                                dataSendCount = dataSend.length;
+                                dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
+                                System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
+                            }
+                            for (int i = 0; i < 4; i++) {
+                                dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
+                                dataSchdule[i + 10] = dataSizeFlag[i];
+                            }
                         }
                         break;
                     default:
