@@ -723,18 +723,20 @@ public class AscsDao {
             if (count != 0) {
                 String findNameSql = "SELECT name FROM dev where agentid = ?";
                 String name = jdbcTemplate.queryForObject(findNameSql, String.class, devCover.getAgentid());
-                if (lat != 0 || lng != 0) {
-                    sql = "update dev set name = ?, type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
-                    String strGeo = ascsModel.getGeometry().toString();
-                    rows = jdbcTemplate.update(sql,
-                            name,
-                            ascsModel.getType(),
-                            ascsModel.getStatus(),
-                            ascsModel.getProtocol(),
-                            strGeo,
-                            ascsModel.getJsonparam().toString(),
-                            devCover.getAgentid());
-                } else {
+//                if (lat != 0 || lng != 0) {
+//                    sql = "update dev set name = ?, type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
+//                    String strGeo = ascsModel.getGeometry().toString();
+//                    rows = jdbcTemplate.update(sql,
+//                            name,
+//                            ascsModel.getType(),
+//                            ascsModel.getStatus(),
+//                            ascsModel.getProtocol(),
+//                            strGeo,
+//                            ascsModel.getJsonparam().toString(),
+//                            devCover.getAgentid());
+//                } else
+                //主动上报携带经纬度信息，但不更新经纬度信息
+                {
                     sql = "update dev set name = ?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
                     rows = jdbcTemplate.update(sql,
                             name,

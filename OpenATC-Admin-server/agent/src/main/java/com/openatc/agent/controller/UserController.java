@@ -162,6 +162,11 @@ public class UserController {
 
         if (username != null) {
             User user = userDao.getUserByUserName(username);
+            if(user == null){
+                return RESTRetUtils.errorObj(E_3011);
+            }
+            List<String> roleNames= userDao.getRoleNamesByUsername(user.getUser_name());
+            user.setRoleNames(roleNames);
             return RESTRetUtils.successObj(user);
         }
         return RESTRetUtils.errorObj(E_3011);
