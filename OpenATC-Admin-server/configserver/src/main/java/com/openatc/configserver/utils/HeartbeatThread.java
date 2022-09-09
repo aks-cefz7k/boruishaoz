@@ -70,7 +70,7 @@ public class HeartbeatThread extends Thread {
         while(socket != null){
             try {
                 socket.send(sendPacket);
-                Thread.sleep(30000);
+                Thread.sleep(20000);
             } catch (IOException e) {
                 logger.warning("Heartbeat socket error:" + e.getMessage());
             } catch (InterruptedException e) {

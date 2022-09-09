@@ -11,20 +11,18 @@
  **/
 package com.openatc.comm.common;
 
-import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
-//import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
 import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
 
 
-//@Component
 public class CommClient {
 
     // 服务的类型，分为平台和配置软件
@@ -139,13 +137,4 @@ public class CommClient {
         return responceData;
     }
 
-    private static MessageData CreateErrorResponceData(String agentId,String desc) {
-        MessageData responceData = new MessageData();
-        responceData.setAgentid(agentId);
-        responceData.setOperation("error-response");
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("desc", desc);
-        responceData.setData(jsonObject);
-        return responceData;
-    }
 }

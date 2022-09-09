@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
 
 // 使用固定端口发送和监听UDP数据，适用于平台的端口映射网络
 public class UdpCommunicationStaticPort implements Communication {
@@ -41,7 +42,8 @@ public class UdpCommunicationStaticPort implements Communication {
     // 同步锁Map
     private static Map<String,ReentrantLock> lockMap = new HashMap();
 
-    private String messageKey; // 当前请求的设备ID，用于多线程同步
+    private String agentid; // 当前请求的设备KEY
+    private String messageKey; // 当前请求的设备KEY，用于多线程同步
     private Thread thread; // 当前请求的线程对象
     private MessageData responceData;
     private ReentrantLock lock; // 同步锁，将同一个设备的请求按顺序排队发送
@@ -101,6 +103,7 @@ public class UdpCommunicationStaticPort implements Communication {
     public int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) throws IOException {
 
         // 保存消息的KEY,如果是直连到设备，用IP+端口;如果是通过平台跳转，使用设备ID
+        this.agentid = agentid;
         if(exangeType == EXANGE_TYPE_DEVICE)
             messageKey = ip + port;
         else if(exangeType == EXANGE_TYPE_CENTER)
@@ -148,9 +151,10 @@ public class UdpCommunicationStaticPort implements Communication {
         // 此处等待消息返回
         try {
             Thread.sleep(TIMEOUT);
-            logger.warning("Time Out ！ Thread#" + thread.getId());
+            responceData = CreateErrorResponceData(agentid,"Receive Time Out or Receive Incorrect Data!");
+            logger.warning("Receive Time Out ! Thread#" + thread.getId());
         } catch (InterruptedException e) {
-            logger.warning("Send & Receive Data Correct! Thread#" + thread.getId());
+            logger.info("Send & Receive Data Correct! Thread#" + thread.getId());
         }
 
         messageMap.remove(messageKey);
@@ -236,12 +240,14 @@ public class UdpCommunicationStaticPort implements Communication {
                                 comm.thread.interrupt();
                             }
                             else{
+                                comm.responceData = CreateErrorResponceData(comm.agentid,"Udp Receive InfoType error:" + responceInfoType);
                                 logger.warning("Udp Receive InfoType error:" + responceInfoType);
                             }
 
                         }
                         else{
-                            logger.warning("Can not find UdpCommunication Fro Receive Msg : Key:" + messageKey);
+                            comm.responceData = CreateErrorResponceData(comm.agentid,"Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
+                            logger.warning("Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
                         }
                     }
                 } catch (Exception e) {
