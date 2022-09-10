@@ -20,6 +20,11 @@ public class MessageDataMD5  extends MessageData{
     String md5;
 
     public  MessageDataMD5(MessageData data){
+        this.setAgentid(data.getAgentid());
+        this.setInfotype(data.getInfotype());
+        this.setOperation(data.getOperation());
+        this.setData(data.getData());
+
 
     }
 }
