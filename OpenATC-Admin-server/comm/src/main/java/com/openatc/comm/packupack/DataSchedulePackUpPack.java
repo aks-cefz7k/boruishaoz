@@ -6,9 +6,12 @@ package com.openatc.comm.packupack;
  * @date 2019年10月30日 上午10:16:06
  */
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+
 import com.openatc.comm.data.MessageData;
+import com.openatc.comm.data.MessageDataMD5;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -1035,7 +1038,34 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                         int dataSendCount = 0;
                         Gson gson = new Gson();
                         String dataSetAllParam = gson.toJson(sendData);
+                        MessageData messageData = gson.fromJson(dataSetAllParam, MessageData.class);
+                        String datastr = null;
+                        JsonElement data = messageData.getData();
+                        if (data != null) {
+                            String datastr1 = data.toString();
+                            char stchar = '"';
+                            char stchar1 = ' ';
+                            char stchar2 = '\0';
+                            char stchar3 = '\t';
+                            char stchar4 = '\r';
+                            char stchar5 = '\n';
+                            char stchar6 = '\b';
+                            StringBuffer stringBuffer = new StringBuffer("");
+                            for (int i = 0; i < datastr1.length(); i++) {
+                                if (datastr1.charAt(i) != stchar && datastr1.charAt(i) != stchar1 && datastr1.charAt(i) != stchar2 && datastr1.charAt(i) != stchar3 && datastr1.charAt(i) != stchar4 && datastr1.charAt(i) != stchar5 && datastr1.charAt(i) != stchar6) {
+                                    stringBuffer.append(datastr1.charAt(i));
+                                }
+                            }
+                            datastr = stringBuffer.toString();
+                        }
+                        DataParamMD5 dataMD5 = new DataParamMD5();
 
+                        String datamd5value = dataMD5.getMD5(datastr);
+                        MessageDataMD5 md5data = new MessageDataMD5(messageData);
+                        md5data.setMd5(datamd5value);
+                        dataSetAllParam = gson.toJson(md5data);
+
+                        //String s = JSON.toJSONString(sendData);
 //                        String AllParamJson= toFormat(dataSetAllParam,true,true);
 
                         if (dataSetAllParam != null) {
