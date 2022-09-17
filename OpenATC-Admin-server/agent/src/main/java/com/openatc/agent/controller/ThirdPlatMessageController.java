@@ -11,6 +11,7 @@ import com.openatc.comm.data.ThirdPlatMessageData;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,9 +31,12 @@ public class ThirdPlatMessageController {
     @Autowired
     private CommClient commClient;
 
+    @Value("${agent.thirdplat.ip}")
+    private String adapterIP;
 
-    private String adapterIP = "192.168.14.99";
-    private Integer adapterPort = 14568;
+    @Value("${agent.thirdplat.port}")
+    private Integer adapterPort;
+
     private String protocolType = "scp";
 
 
