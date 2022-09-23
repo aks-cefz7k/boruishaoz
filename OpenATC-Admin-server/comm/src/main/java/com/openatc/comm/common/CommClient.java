@@ -11,8 +11,10 @@
  **/
 package com.openatc.comm.common;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
+import com.openatc.comm.data.ThirdPlatMessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
 import org.springframework.stereotype.Component;
@@ -93,6 +95,55 @@ public class CommClient {
 
         return responceData;
     }
+
+    public MessageData exangeThirdPlatMessage(String ip, int port, String protype, ThirdPlatMessageData sendMsg) throws UnsupportedEncodingException {
+        // 产品工厂类
+        ProtocolFactory factory = new scpFactory();
+        // 协议判断
+        if (protype.equals(ocpProtype)) {
+            factory = new ocpFactory();
+        } else if (protype.equals(scpProtype)) {
+            factory = new scpFactory();
+        }
+        // 创建消息处理对象
+        Message message = factory.createMessage();
+        CommunicationProxy communication = factory.createCommunication(commType);
+
+        // 打包
+        //PackData packData = message.pack(sendMsg);
+        Gson gson = new Gson();
+        byte[] dataSend = gson.toJson(sendMsg).getBytes("UTF-8");
+
+        // 通讯
+        DatagramPacket datagramPacket = null;
+        PackData packData = new PackData();
+        packData.setM_packData(dataSend);
+        packData.setM_packDataSize(dataSend.length);
+        try {
+            datagramPacket = communication.exange(packData, ip, port);
+        } catch (InterruptedIOException e) {//检测超时
+            log.info("exange error: Time out - " + e.getMessage());
+            return CreateErrorResponceData(e.getMessage());
+        } catch (IOException e) {// 其他错误
+            log.info("exange error: Other Error - " + e.getMessage());
+            return CreateErrorResponceData(e.getMessage());
+        }
+
+        if (datagramPacket == null) {
+            log.info("exange error: return packet is null");
+            return CreateErrorResponceData("Socker Error, Maybe too busy!");
+        }
+
+        String str_receive = new String(datagramPacket.getData(), 0, datagramPacket.getLength(),"UTF-8");
+        MessageData responceData = gson.fromJson(str_receive, MessageData.class);
+//        logger.info("receive Kedacom responceData: " + responceData);
+        return responceData;
+    }
+
+
+
+
+
 
     private static MessageData CreateErrorResponceData(String desc) {
         MessageData responceData = new MessageData();
