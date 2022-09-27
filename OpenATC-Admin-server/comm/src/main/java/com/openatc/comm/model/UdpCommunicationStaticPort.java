@@ -15,8 +15,7 @@ import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import com.openatc.comm.packupack.DataPackUpPack;
 import com.openatc.comm.packupack.DataSchedulePackUpPack;
-import io.netty.buffer.Unpooled;
-import org.springframework.beans.factory.annotation.Value;
+
 
 import java.io.IOException;
 import java.net.*;
@@ -55,10 +54,9 @@ public class UdpCommunicationStaticPort implements Communication {
     private DatagramSocket datagramSocket;
     private int exangeType; // 当前设备的通讯平台
 
-    @Value("${agent.ocp.port}")
+
     private static int ocpSocketPort = 21003;
 
-    @Value("${agent.scp.port}")
     private static int scpSocketPort = 21002;
 
     public static ICommHandler hanlder;
