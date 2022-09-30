@@ -335,7 +335,6 @@ export default {
   width: 442px;
   height: auto;
   z-index: 904;
-  background-color: #ffffff;
 }
 .tabsconatiner {
   margin: 10px;
