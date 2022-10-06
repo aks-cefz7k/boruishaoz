@@ -289,7 +289,9 @@ const zh = {
       'channellock': '通道锁定',
       'phaselock': '相位锁定',
       'programIntervention': '方案干预',
-      'channelDetection': '通道检测'
+      'channelDetection': '通道检测',
+      'emptyRouteName': '名称为空!',
+      'namerepeat': '名称重复!'
     },
     'gis': {
       'chooseLocationInfo': '请点击地图选择位置 !'
