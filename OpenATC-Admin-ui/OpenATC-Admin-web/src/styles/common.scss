@@ -12,6 +12,14 @@
  @charset "UTF-8";
  @import './theme/element-variables.scss';
  @import '../../node_modules/edgebase-front/src/styles/common.scss';
+ // 整体背景色
+ .app-wrapper1 {
+  @include clearfix;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: $--color-white;
+}
  // 主页样式
  .homeLayout {
     padding: 19px;
