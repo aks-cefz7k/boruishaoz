@@ -263,7 +263,7 @@ export default {
       })
     },
     updateRoute (data) {
-      if (this.checkRouteName(data)) {
+      if (!this.checkRouteName(data)) {
         return false
       }
       if (this.isEdit) {

@@ -291,7 +291,8 @@ const en = {
       'programIntervention': 'Program Intervention',
       'channelDetection': 'Channel Detection',
       'emptyRouteName': 'Empty Route Name !',
-      'namerepeat': 'Name Repeat !'
+      'namerepeat': 'Name Repeat !',
+      'notAllowedToEdit': 'Not allowed to edit processing data !'
     },
     'gis': {
       'chooseLocationInfo': 'Click the map to choose a location !'

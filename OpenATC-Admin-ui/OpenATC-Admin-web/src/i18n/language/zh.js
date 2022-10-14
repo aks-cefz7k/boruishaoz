@@ -291,7 +291,8 @@ const zh = {
       'programIntervention': '方案干预',
       'channelDetection': '通道检测',
       'emptyRouteName': '名称为空!',
-      'namerepeat': '名称重复!'
+      'namerepeat': '名称重复!',
+      'notAllowedToEdit': '执勤中的路线，不允许编辑!'
     },
     'gis': {
       'chooseLocationInfo': '请点击地图选择位置 !'
