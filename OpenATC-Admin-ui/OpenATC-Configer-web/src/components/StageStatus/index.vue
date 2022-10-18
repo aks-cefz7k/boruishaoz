@@ -77,45 +77,45 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.main-statgestatus {
-  position: relative;
-}
-.stage-line {
-  position: relative;
-  top: 7px;
-  width: 100%;
-  height: 1px;
-  background-color: #999999;
-  z-index:1;
-}
-.stage-verticalline {
-  position: absolute;
-  float: left;
-  width: 1px;
-  height: 14px;
-  background-color: #999999;
-  z-index:2;
-}
-.stage-text {
-  position: absolute;
-  float: left;
-  width: 25px;
-  background-color: #ffffff;
-  z-index:3;
-}
-.stage-span {
-  position: relative;
-  bottom: 3px;
-  left: 5px;
-  width: 15px;
-  height: 14px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 20px;
-  letter-spacing: 0px;
-  background-color: #ffffff;
-  color: #333333;
-}
+// .main-statgestatus {
+//   position: relative;
+// }
+// .stage-line {
+//   position: relative;
+//   top: 7px;
+//   width: 100%;
+//   height: 1px;
+//   background-color: #999999;
+//   z-index:1;
+// }
+// .stage-verticalline {
+//   position: absolute;
+//   float: left;
+//   width: 1px;
+//   height: 14px;
+//   background-color: #999999;
+//   z-index:2;
+// }
+// .stage-text {
+//   position: absolute;
+//   float: left;
+//   width: 25px;
+//   background-color: #ffffff;
+//   z-index:3;
+// }
+// .stage-span {
+//   position: relative;
+//   bottom: 3px;
+//   left: 5px;
+//   width: 15px;
+//   height: 14px;
+//   font-family: SourceHanSansCN-Regular;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 20px;
+//   letter-spacing: 0px;
+//   background-color: #ffffff;
+//   color: #333333;
+// }
 </style>

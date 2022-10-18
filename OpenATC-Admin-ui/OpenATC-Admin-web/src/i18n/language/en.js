@@ -289,7 +289,9 @@ const en = {
       'channellock': 'Channel Lock',
       'phaselock': 'Phase Lock',
       'programIntervention': 'Program Intervention',
-      'channelDetection': 'Channel Detection'
+      'channelDetection': 'Channel Detection',
+      'emptyRouteName': 'Empty Route Name !',
+      'namerepeat': 'Name Repeat !'
     },
     'gis': {
       'chooseLocationInfo': 'Click the map to choose a location !'
