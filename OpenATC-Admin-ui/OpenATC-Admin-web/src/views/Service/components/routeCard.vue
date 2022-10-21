@@ -27,24 +27,24 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.greenwaveoptimize.deviceid") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">{{ node.agentid }}</div>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.dutyroute.executionway") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">
                 {{ node.controlName }}
               </div>
@@ -53,12 +53,12 @@
         </el-col>
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.dutyroute.residentphase") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">{{ node.value }}</div>
             </el-col>
           </el-row>
@@ -67,47 +67,53 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.greenwaveoptimize.pattern") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">{{ node.terminalname }}</div>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.dutyroute.timeleft") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">{{ node.resttime }}</div>
             </el-col>
           </el-row>
         </el-col>
+        <el-col :span="8">
+          <el-row :gutter="10">
+            <div class="btn-bottom" v-show="tabName === 'second'">
+              <el-button
+                style="float: right;"
+                type="primary"
+                size="small"
+                v-show="node.state === 0"
+                @click="executeViproute"
+                :disabled="isBtnDisabled"
+                >{{ $t("openatc.dutyroute.executenow") }}</el-button
+              >
+              <el-button
+                style="float: right;"
+                type="primary"
+                size="small"
+                v-show="node.state === 1"
+                @click="executeViproute"
+                :disabled="isBtnDisabled"
+                >{{ $t("openatc.dutyroute.cancelexecute") }}</el-button
+              >
+            </div>
+          </el-row>
+        </el-col>
       </el-row>
-    </div>
-    <div class="btn-bottom" v-show="tabName === 'second'">
-      <el-button
-        style="float: right; padding: 3px 0"
-        type="text"
-        v-show="node.state === 0"
-        @click="executeViproute"
-        :disabled="isBtnDisabled"
-        >{{ $t("openatc.dutyroute.executenow") }}</el-button
-      >
-      <el-button
-        style="float: right; padding: 3px 0"
-        type="text"
-        v-show="node.state === 1"
-        @click="executeViproute"
-        :disabled="isBtnDisabled"
-        >{{ $t("openatc.dutyroute.cancelexecute") }}</el-button
-      >
     </div>
   </el-card>
 </template>
@@ -167,7 +173,8 @@ export default {
 }
 .btn-bottom {
   float: right;
-  margin: 15px;
+  margin-top: -5px;
+  margin-right: 15px;
 }
 
 .el-col {
@@ -176,5 +183,8 @@ export default {
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
+}
+.grid-content-label {
+  color: #909399;
 }
 </style>
