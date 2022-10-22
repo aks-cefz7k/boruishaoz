@@ -184,7 +184,7 @@ export default {
     },
     handleUpdateLampCtrboard () {
       this.data.forEach((ele, index) => {
-        ele.name = this.$t('edge.system.lampcontrolpanel') + index
+        ele.name = this.$t('edge.system.lampcontrolpanel') + Number(index + 1)
       })
     },
     handleExclusive () {
@@ -287,7 +287,7 @@ export default {
   margin-top: 40px;
 }
 .single-channel {
-  width: 140px;
+  width: 148px;
   height: 240px;
   background-color: #858585;
   border-radius: 4px;
