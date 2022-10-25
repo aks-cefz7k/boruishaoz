@@ -87,6 +87,11 @@
           <el-input-number size="small" controls-position="right" :min="0" :max="1000" :step="1" v-model.number="scope.row.yellowlamp" style="width: 100px;"></el-input-number>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.operation')" width="100">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleDelete(scope.$index,scope.row)">{{$t('edge.common.delete')}}</el-button>
+        </template>
+      </el-table-column>
       </el-table>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -472,6 +477,25 @@ export default {
         this.globalParamModel.deleteParamsByType('channellock', 0, channellock.length)
         this.channelList = []
         this.id = 1
+        this.$message({
+          type: 'success',
+          message: this.$t('edge.common.deletesucess')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('edge.common.deletecancel')
+        })
+      })
+    },
+    handleDelete (index, row) {
+      this.$confirm(this.$t('edge.channellock.deleteOnetip'),
+        this.$t('edge.common.alarm'), {
+          confirmButtonText: this.$t('edge.common.confirm'),
+          cancelButtonText: this.$t('edge.common.cancel'),
+          type: 'warning'
+        }).then(() => {
+        this.globalParamModel.deleteParamsByType('channellock', index, 1)
         this.$message({
           type: 'success',
           message: this.$t('edge.common.deletesucess')

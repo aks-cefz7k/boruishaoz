@@ -326,6 +326,7 @@ const zh = {
     },
     'channellock': {
       'deleteAlltip': '确认删除所有通道锁定？',
+      'deleteOnetip': '确认删除此通道锁定？',
       'starttime': '开始时间',
       'endtime': '结束时间',
       'transitiongreenflashtime': '过渡绿闪时间',

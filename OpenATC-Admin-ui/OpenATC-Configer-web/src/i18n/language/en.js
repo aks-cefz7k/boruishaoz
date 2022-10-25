@@ -328,6 +328,7 @@ const en = {
     },
     'channellock': {
       'deleteAlltip': 'Delete All channellock',
+      'deleteOnetip': 'Are you sure you want to delete this channel lock?',
       'starttime': 'Start Time',
       'endtime': 'End Time',
       'transitiongreenflashtime': 'Green Flashing Time',
