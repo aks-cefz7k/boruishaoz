@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <el-card class="box-card" v-show="isShow">
+  <el-card class="serviceroute-routeCard" v-show="isShow">
     <div slot="header" class="clearfix">
       <span
         ><strong>{{ $t("openatc.dutyroute.attributes") }}</strong></span
@@ -166,25 +166,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.box-card {
-  width: 100%;
-}
-.btn-bottom {
-  float: right;
-  margin-top: -5px;
-  margin-right: 15px;
-}
-
-.el-col {
-  border-radius: 4px;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-.grid-content-label {
-  color: #909399;
-}
-</style>

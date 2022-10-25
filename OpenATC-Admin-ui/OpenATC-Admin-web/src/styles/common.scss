@@ -891,6 +891,24 @@
         max-height: 590px;
       }
   }
+  .serviceroute-routeCard { 
+    width: 100%;
+    .btn-bottom {
+      float: right;
+      margin-top: -5px;
+      margin-right: 15px;
+    }
+    .el-col {
+      border-radius: 4px;
+    }
+    .grid-content {
+      border-radius: 4px;
+      min-height: 36px;
+    }
+    .grid-content-label {
+      color: $--color-text-secondary;
+    }
+  }
   // 头部样式
 .versioninfo {
     .el-dialog__headerbtn .el-dialog__close {
