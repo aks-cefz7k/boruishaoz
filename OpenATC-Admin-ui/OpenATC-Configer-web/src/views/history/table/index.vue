@@ -20,6 +20,7 @@
         :max-height="tableHeight"
         style="width: 100%"
         v-loading.body="listLoading"
+        :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
         id="footerBtn">
         <el-table-column
         type="index"
