@@ -121,3 +121,28 @@ export const images = [{
   // img: require('./images/South-Back.svg'),
   class: 'iconfont icon-icon-test1'
 }]
+
+export const pedimages = [
+  {
+    id: 2,
+    name: 'edge.phase.wped',
+    img: require('../../assets/intersection_state/west-ped.svg')
+  // class: 'iconfont icon-xihangren'
+  }, {
+    id: 1,
+    name: 'edge.phase.dped',
+    img: require('../../assets/intersection_state/east-ped.svg')
+  // class: 'iconfont icon-donghangren'
+  },
+  {
+    id: 3,
+    name: 'edge.phase.nped',
+    img: require('../../assets/intersection_state/north-ped.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 4,
+    name: 'edge.phase.sped',
+    img: require('../../assets/intersection_state/south-ped.svg')
+  // class: 'iconfont icon-nanhangren'
+  }]

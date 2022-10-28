@@ -182,6 +182,8 @@ const zh = {
     },
     'phase': {
       'desc': '描述',
+      'peddesc': '行人方向',
+      'controltype': '控制类型',
       'mingreen': '最小绿',
       'max1': '最大绿1',
       'max2': '最大绿2',
@@ -216,6 +218,10 @@ const zh = {
       'sl': '南左转',
       'sr': '南右转',
       'sb': '南掉头',
+      'dped': '东人行横道',
+      'wped': '西人行横道',
+      'sped': '南人行横道',
+      'nped': '北人行横道',
       'redyellow': '红黄'
     },
     'overlap': {

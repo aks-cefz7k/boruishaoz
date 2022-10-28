@@ -182,6 +182,8 @@ const en = {
     },
     'phase': {
       'desc': 'Description',
+      'peddesc': 'PedestrianDirection',
+      'controltype': 'ControlType',
       'mingreen': 'MinGreen',
       'max1': 'Max1',
       'max2': 'Max2',
@@ -217,6 +219,10 @@ const en = {
       'sl': 'South-Left',
       'sr': 'South-Right',
       'sb': 'South-Back',
+      'dped': 'East-Pedestrian',
+      'wped': 'West-Pedestrian',
+      'sped': 'South-Pedestrian',
+      'nped': 'North-Pedestrian',
       'redyellow': 'redyellow'
     },
     'overlap': {

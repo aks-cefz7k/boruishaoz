@@ -29,6 +29,20 @@
           <Tankuang :list="scope.row.direction" :imgs="imgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" @finsh="handlefinsh"/>
         </template>
       </el-table-column>
+      <el-table-column class="table-column" :label="$t('edge.phase.peddesc')" min-width="150" align="center">
+        <template slot-scope="scope">
+          <Tankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" @finsh="handlefinshped"/>
+        </template>
+      </el-table-column>
+      <el-table-column class="table-column" :label="$t('edge.phase.controltype')" min-width="150" align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.controltype" size="small">
+            <el-option v-for="item in controlTypeList" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+           <span v-text="getControlTypestr(scope.row)"></span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.mingreen')" min-width="100">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.mingreen" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
@@ -133,7 +147,8 @@
 <script>
 import Tankuang from '@/components/Tankuang'
 import { mapState } from 'vuex'
-import { images } from './utils.js'
+import { images, pedimages } from './utils.js'
+
 const clickoutside = {
   // 初始化指令
   bind (el, binding, vnode) {
@@ -177,7 +192,14 @@ export default {
       // imgs: images,
       showBottomName: false, // 用于控制弹框里是否在底部显示文字描述。
       lines: 4, // 弹框的行数
-      rows: 4 // 弹框的列数
+      rows: 4, // 弹框的列数
+      controlTypeList: [{
+        label: '主路',
+        value: 0
+      }, {
+        label: '支路',
+        value: 1
+      }]
     }
   },
   directives: { clickoutside },
@@ -195,6 +217,15 @@ export default {
     imgs () {
       let arrays = []
       images.forEach(v => {
+        let obj = Object.assign({}, v)
+        obj.name = this.$t(obj.name)
+        arrays.push(obj)
+      })
+      return arrays
+    },
+    pedimgs () {
+      let arrays = []
+      pedimages.forEach(v => {
         let obj = Object.assign({}, v)
         obj.name = this.$t(obj.name)
         arrays.push(obj)
@@ -330,6 +361,7 @@ export default {
       var phaseInitData = {
         id: this.id,
         direction: [],
+        peddirection: [], // 行人方向
         mingreen: 15,
         max1: 30,
         max2: 45,
@@ -342,7 +374,8 @@ export default {
         redyellow: 0,
         ring: 1,
         greenpulse: 5,
-        redpulse: 10
+        redpulse: 10,
+        controltype: 0 // 控制类型
       }
       this.globalParamModel.addParamsByType('phaseList', phaseInitData)
       // this.id++
@@ -384,6 +417,12 @@ export default {
           }
           return str.substr(1)
         }
+      }
+      return ''
+    },
+    getControlTypestr (val) {
+      if (val.controltype !== undefined) {
+        return this.controlTypeList.filter(ele => ele.value === val.controltype)[0].label
       }
       return ''
     },
@@ -457,6 +496,16 @@ export default {
         list.push(this.imgs[i].id)
       }
       this.$store.getters.tscParam.phaseList[index].direction = list
+    },
+    handlefinshped (value) {
+      let index = value.index
+      let status = value.status
+      let list = []
+      for (let i = 0; i < status.length; i++) {
+        if (!status[i]) continue
+        list.push(this.pedimgs[i].id)
+      }
+      this.$store.getters.tscParam.phaseList[index].peddirection = list
     }
   }
 }

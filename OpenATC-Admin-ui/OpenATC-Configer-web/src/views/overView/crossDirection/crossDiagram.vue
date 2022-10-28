@@ -82,18 +82,20 @@ export default {
     }
   },
   watch: {
-    intersection: {
+    tempType: {
       handler: function (val) {
         let crossType = val.split('-')[0]
-        let crossintersection = val.split('-')[1]
-        this.getCrossType(crossType, crossintersection)
+        let crossTempType = val.split('-')[1]
+        this.getCrossType(crossType, crossTempType)
       }
     },
     crossStatusData: {
       handler: function (val, oldVal) {
+        // 路口状态数据
         this.statusData = JSON.parse(JSON.stringify(val))
         this.phaseStatusList = val.phase
         if (!val.phase) {
+          // 黄山、全红、关灯状态下，相位字段不存在，此处根据control字段控制车道相位颜色
           switch (val.control) {
             case 1: this.handlePhaseStatus('黄闪')
               break
@@ -106,8 +108,10 @@ export default {
           this.isHasPhase = false
           return
         }
+
         this.curPhase = val.current_phase
         this.isHasPhase = true
+        // 正常情况下，获取车道相位、相位倒计时、行人相位的状态
         this.getPhaseStatus()
         this.getCurPhaseCountdown()
         this.getpedStatus()
@@ -133,7 +137,7 @@ export default {
       phaseStatusMap: new Map(), // 相位状态映射
       ColorMap: new Map([[0, '#828282'], [1, '#ff2828'], [2, '#f7b500'], [3, '#77fb65'], [4, '#77fb65'], [5, '#f7b500']]), // 当前相位状态 --- 0：关灯, 1：红, 2：黄,  3：绿, 4：绿闪, 5：黄闪
       SidewalkColorMap: new Map([[0, '#828282'], [1, '#e24b4b'], [3, '#7bd66b']]),
-      intersection: '', // 模版类型
+      tempType: '', // 模版类型
       crossType: '', // 路口底图类型
       isLoaded: false, // 是否成功加载底图
       isHasPhase: true, // 是否有相位状态数据
@@ -148,6 +152,7 @@ export default {
   },
   methods: {
     handleDefaultStatus () {
+      // 恢复默认状态
       if (this.LanePhaseData.length) {
         this.phaseCountdown = ''
         this.phaseCountdownColor = '#fff'
@@ -159,9 +164,6 @@ export default {
         this.sidewalkPhaseData.forEach(data => {
           data.color = '#fff'
         })
-        // this.$refs.SidewalkSvg.map(ref => {
-        //   ref.handleDefaultStatus()
-        // })
       }
       this.phaseCountdownList = []
       // 车道相位、行人相位恢复默认状态
@@ -171,7 +173,9 @@ export default {
       })
     },
     handlePhaseStatus (Control) {
+      // 控制黄闪、全红、关灯、默认情况下的车道相位颜色和倒计时颜色
       if (Control === '默认') {
+        // 倒计时恢复默认颜色
         this.phaseCountdownList.forEach(item => {
           item.phaseCountdown = ''
           item.id = ''
@@ -179,6 +183,7 @@ export default {
         })
       }
       if (this.LanePhaseData.length) {
+        // 车道相位设置对应颜色
         this.getPhasePos()
         const LanePhaseData = this.LanePhaseData.map(data => ({
           ...data,
@@ -188,7 +193,7 @@ export default {
       }
     },
     getPhaseStatus () {
-      // 得到相位状态（颜色）
+      // 得到车道相位状态（颜色）
       this.phaseStatusList.map(phase => {
         let phaseId = phase.id
         let phaseInfo = {
@@ -213,7 +218,7 @@ export default {
       this.LanePhaseData = JSON.parse(JSON.stringify(curLanePhaseData))
     },
     getCurPhaseCountdown () {
-      // 获取当前相位倒计时和颜色
+      // 获取当前相位倒计时颜色
       this.phaseCountdownList = []
       this.curPhase.forEach(curP => {
         this.phaseStatusList.forEach(phaseInfo => {
@@ -228,6 +233,7 @@ export default {
       })
     },
     getIntersectionInfo () {
+      // 获取路口信息
       const agentid = this.agentId || '0'
       getIntersectionInfo(agentid).then(res => {
         if (!res.data.success) {
@@ -241,13 +247,15 @@ export default {
         }
         this.isLoaded = true
         this.crossInfo = res.data.data
-        this.intersection = res.data.data.type
+        this.tempType = res.data.data.type
+        // 获取车道相位、行人相位信息（坐标、名称）
         this.getPhasePos()
+        this.getPedPhasePos()
       })
     },
     getPhasePos () {
+      // 车道相位信息
       this.LanePhaseData = []
-      this.sidewalkPhaseData = []
       this.crossInfo.phaseList.forEach((ele, i) => {
         ele.direction.forEach((dir, index) => {
           // 车道相位
@@ -259,6 +267,20 @@ export default {
             left: this.PhaseDataModel.getPhase(dir).x,
             top: this.PhaseDataModel.getPhase(dir).y
           })
+        })
+      })
+    },
+    getPedPhasePos () {
+      // 行人相位信息
+      this.sidewalkPhaseData = []
+      this.crossInfo.phaseList.forEach((ele, i) => {
+        // mock B
+        // ele.peddirection = []
+        // if (i === 0) {
+        //   ele.peddirection = [Number(i + 1)]
+        // }
+        // mock E
+        ele.peddirection.forEach((dir, index) => {
           // 行人相位
           if (this.PhaseDataModel.getSidePos(dir)) {
             this.sidewalkPhaseData.push({
@@ -273,33 +295,36 @@ export default {
         })
       })
       // 行人相位无，也要显示人行横道，与车道相位显示与否逻辑不同
-      this.handleCompleteSidewalkPhase()
+      // this.handleCompleteSidewalkPhase()
     },
-    handleCompleteSidewalkPhase () {
-      // 没有相位状态的车道也要显示，默认白色
-      let hasDirIds = this.sidewalkPhaseData.map(data => data.id)
-      let allIds = []
-      for (let key of this.PhaseDataModel.SidePosMap.keys()) {
-        allIds.push(key)
-      }
-      let diffIds = allIds.filter(function (val) { return hasDirIds.indexOf(val) === -1 })
-      diffIds.forEach(id => {
-        this.sidewalkPhaseData.push({
-          key: `${this.sidewalkPhaseData.length + 1}`,
-          phaseid: undefined, // 相位id，用于对应相位状态
-          id,
-          name: this.PhaseDataModel.getSidePos(id).name,
-          left: this.PhaseDataModel.getSidePos(id).x,
-          top: this.PhaseDataModel.getSidePos(id).y
-        })
-      })
-    },
-    getCrossType (type, intersection) {
+    // handleCompleteSidewalkPhase () {
+    //   // 没有相位状态的车道也要显示，默认白色
+    //   let hasDirIds = this.sidewalkPhaseData.map(data => data.id)
+    //   let allIds = []
+    //   for (let key of this.PhaseDataModel.SidePosMap.keys()) {
+    //     allIds.push(key)
+    //   }
+    //   let diffIds = allIds.filter(function (val) { return hasDirIds.indexOf(val) === -1 })
+    //   diffIds.forEach(id => {
+    //     this.sidewalkPhaseData.push({
+    //       key: `${this.sidewalkPhaseData.length + 1}`,
+    //       phaseid: undefined, // 相位id，用于对应相位状态
+    //       id,
+    //       name: this.PhaseDataModel.getSidePos(id).name,
+    //       left: this.PhaseDataModel.getSidePos(id).x,
+    //       top: this.PhaseDataModel.getSidePos(id).y
+    //     })
+    //   })
+    // },
+    getCrossType (type, tempType) {
+      // 路口类型对应底图决策
       if (type === '101') {
+        // 十字路口
         this.crossType = 'Crossroads'
       }
       if (type === '100') {
-        switch (intersection) {
+        // T型路口
+        switch (tempType) {
           case '001': this.crossType = 'TypeT-east'
             break
           case '002': this.crossType = 'TypeT-south'
@@ -311,6 +336,7 @@ export default {
         }
       }
       if (type === '999') {
+        // 其他路口
         this.crossType = 'Customroads'
       }
     },
