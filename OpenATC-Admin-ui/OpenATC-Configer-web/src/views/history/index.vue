@@ -163,19 +163,21 @@ export default {
       this.handlerFaultData()
     },
     leadingOutFault () {
-      let content = new Blob([JSON.stringify(this.allFault)])
-      // 生成url对象
-      let urlObject = window.URL || window.webkitURL || window
-      let url = urlObject.createObjectURL(content)
-      // 生成<a></a>DOM元素
-      let el = document.createElement('a')
-      // 链接赋值
-      el.href = url
-      el.download = 'fault.txt'
-      // 必须点击否则不会下载
-      el.click()
-      // 移除链接释放资源
-      urlObject.revokeObjectURL(url)
+      let boardTable = this.$refs.boardtable[0]
+      boardTable.exportExcel()
+      // let content = new Blob([JSON.stringify(this.allFault)])
+      // // 生成url对象
+      // let urlObject = window.URL || window.webkitURL || window
+      // let url = urlObject.createObjectURL(content)
+      // // 生成<a></a>DOM元素
+      // let el = document.createElement('a')
+      // // 链接赋值
+      // el.href = url
+      // el.download = 'fault.txt'
+      // // 必须点击否则不会下载
+      // el.click()
+      // // 移除链接释放资源
+      // urlObject.revokeObjectURL(url)
     },
     showLedDetailFault () {
       this.showDetailFault(5)
