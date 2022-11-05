@@ -16,7 +16,7 @@
     <div class="openatc-line"></div>
     <div class="openatc-menu">
       <el-menu-item index="home" style="display:inline">{{$t('openatc.main.homepage')}}</el-menu-item>
-      <el-menu-item index="gis" style="display:inline">{{$t('openatc.main.gis')}}</el-menu-item>
+      <!-- <el-menu-item index="gis" style="display:inline">{{$t('openatc.main.gis')}}</el-menu-item> -->
       <el-menu-item index="device" style="display:inline">{{$t('openatc.main.devicemanager')}}</el-menu-item>
       <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item>
       <!-- <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item> -->
