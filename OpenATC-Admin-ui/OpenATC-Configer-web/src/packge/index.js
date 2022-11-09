@@ -42,6 +42,7 @@ import overview from '../views/overView/index'
 import history from '../views/history/index'
 import usermgr from '../views/user/index'
 import dailyRecord from '../views/dailyRecord/index'
+import statistics from '../views/statistics/index'
 import dashboard from '../views/dashboard/index'
 import '@/styles/common.scss'
 import '@/styles/index.scss'
@@ -70,7 +71,8 @@ const components = {
   dashboard,
   overview,
   dailyRecord,
-  usermgr
+  usermgr,
+  statistics
 }
 
 const language = {
@@ -327,6 +329,19 @@ const subrouter = [
       meta: {
         title: 'edge.route.dailyRecord',
         icon: 'dailyrecord'
+      }
+    }]
+  },
+  {
+    path: '/statistics',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'Statistics',
+      component: statistics,
+      meta: {
+        title: 'edge.route.statistics',
+        icon: 'statistics'
       }
     }]
   }
