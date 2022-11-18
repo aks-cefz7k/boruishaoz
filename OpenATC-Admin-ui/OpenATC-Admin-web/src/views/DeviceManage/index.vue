@@ -101,16 +101,18 @@
           sortable
           align="center">
           </el-table-column>
-          <el-table-column :label="$t('openatc.devicemanager.operation')" align="center" width="180">
+          <el-table-column :label="$t('openatc.devicemanager.operation')" align="center" width="240">
           <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">{{$t('openatc.common.edit')}}</el-button>
               <el-button type="text" @click="handleToDetail(scope.row)">{{$t('openatc.common.detail')}}</el-button>
               <el-button type="text" @click="handleDelete(scope.row)">{{$t('openatc.common.delete')}}</el-button>
+              <el-button type="text" @click="handleFault(scope.row)">{{$t('openatc.devicemanager.faultDetail')}}</el-button>
           </template>
           </el-table-column>
       </el-table>
     </div>
     <Update ref="updateChild" :childTitle="childTitle"></Update>
+    <Fault-detail ref="faultDetail" :childTitle="childTitle"></Fault-detail>
   </div>
   <router-view></router-view>
 </div>
@@ -120,11 +122,13 @@ import router from '@/router'
 import { mapState } from 'vuex'
 import Messagebox from '../../components/MessageBox'
 import Update from './DeviceDialog/update'
+import FaultDetail from './DeviceDialog/FaultDetail'
 import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
+import { GetCurrentFaultByAgentid } from '@/api/fault'
 export default {
   name: 'device',
-  components: { Update, Messagebox, DeviceTags },
+  components: { Update, Messagebox, DeviceTags, FaultDetail },
   data () {
     return {
       tableHeight: 700,
@@ -235,9 +239,28 @@ export default {
       updateChild.onUpdateClick(dev)
     },
     handleDelete (row) {
+      this.childTitle = 'faultDetail'
       let dev = row
       this.deleteId = dev.agentid
       this.messageboxVisible = true
+    },
+    handleFault (row) {
+      let _this = this
+      GetCurrentFaultByAgentid(row.agentid).then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return false
+        } else {
+          let list = res.data.data
+          if (list && list.length > 0) {
+            this.childTitle = 'faultDetail'
+            let component = _this.$refs.faultDetail
+            component.onViewFaultClick(list)
+          } else {
+            this.$message.info(this.$t('openatc.common.nodata'))
+          }
+        }
+      })
     },
     cancle () {
       this.messageboxVisible = false
@@ -247,14 +270,14 @@ export default {
         if (!res.data.success) {
           this.$message.error(res.data.message)
           this.$message({
-            message: '删除失败!',
+            message: this.$t('openatc.common.deletefailed'),
             type: 'error',
             duration: 1 * 1000
           })
           return
         }
         this.$message({
-          message: '删除成功！',
+          message: this.$t('openatc.common.deletesuccess'),
           type: 'success'
         })
         this.messageboxVisible = false

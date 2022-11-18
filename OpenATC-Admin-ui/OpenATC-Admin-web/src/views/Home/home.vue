@@ -55,6 +55,7 @@ import DevsStateChart from './devsStateChart'
 import FaultList from './faultList'
 import router from '@/router'
 import { GetAllDevice } from '@/api/device'
+import { GetAllCurrentFault } from '@/api/fault'
 import LottieAnim from './lottieDemo/index'
 import deviceAnim from '../../../static/lottiejson/deviceManager.json'
 import userAnim from '../../../static/lottiejson/userManager.json'
@@ -150,7 +151,6 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        const fault = new Map()
         this.resetData()
         res.data.data.forEach(ele => {
           if (ele.state === 'UP') {
@@ -159,17 +159,17 @@ export default {
           if (ele.state === 'DOWN') {
             this.chartData[1].value++
           }
-          if (ele.status !== 0) {
-            let key = this.faultTypeMap.get(ele.status)
-            this.faultList.maxValue++
-            if (fault.has(key)) {
-              fault.set(key, fault.get(key) + 1)
-            } else {
-              fault.set(key, 1)
-            }
-          }
         })
-        this.faultList.data = fault
+      })
+      GetAllCurrentFault().then(res => {
+        let list = []
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return false
+        } else {
+          list = res.data.data
+        }
+        this.faultList = list
       })
     }
   },

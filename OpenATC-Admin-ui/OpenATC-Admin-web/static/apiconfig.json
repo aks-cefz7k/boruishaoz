@@ -228,5 +228,30 @@
     "key": "getViprouteStatus",
     "url": "/viproute",
     "method": "get"
+  },
+  {
+    "key": "GetAllCurrentFault",
+    "url": "/fault/current",
+    "method": "get"
+  },
+  {
+    "key": "GetAllHistoryFault",
+    "url": "/fault/history",
+    "method": "get"
+  },
+  {
+    "key": "GetCurrentFaultByAgentid",
+    "url": "/fault",
+    "method": "get"
+  },
+  {
+    "key": "GetAllHistoryFaultByAgentid",
+    "url": "/fault",
+    "method": "get"
+  },
+  {
+    "key": "DeleteFaultById",
+    "url": "/fault",
+    "method": "delete"
   }
 ]

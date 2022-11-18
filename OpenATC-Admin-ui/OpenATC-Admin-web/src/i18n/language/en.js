@@ -31,7 +31,8 @@ const en = {
       'placeholder': 'Select',
       'operation': 'Operation',
       'operationsuccess': 'Operation Success !',
-      'authtip': 'No access !'
+      'authtip': 'No access !',
+      'nodata': 'No Data !'
     },
     'button': {
       'OK': 'OK',
@@ -39,7 +40,8 @@ const en = {
       'expandall': 'Expand All',
       'collapseall': 'Collapse All',
       'search': 'Search',
-      'location': 'Location'
+      'location': 'Location',
+      'ignore': 'Ignore'
     },
     'login': {
       'username': 'user_name',
@@ -108,7 +110,15 @@ const en = {
       'enterId': 'Please enter device ID',
       'entername': 'Please enter device name',
       'enterrequired': 'Please fill in the required items!',
-      'deletedevice': 'Do you want to delete this device?'
+      'deletedevice': 'Do you want to delete this device?',
+      'faultDetail': 'FaultDetail',
+      'faultMaintype': 'Main Type',
+      'faultSubtype': 'Sub Type',
+      'faultOccurtime': 'Occur Time',
+      'boardCardType': 'BoardCard Type',
+      'faultGrade': 'Grade',
+      'faultValue': 'Value',
+      'crowsid': 'Crows ID'
     },
     'usermanager': {
       'username': 'Username',
