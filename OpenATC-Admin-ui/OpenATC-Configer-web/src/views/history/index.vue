@@ -63,7 +63,9 @@ export default {
       greenLampSubtypeMap: new Map([[0, ''], [1, '未输出有效电压'], [2, '输出电压低于输入电压过多'], [3, '输出电压高于输入电压'], [4, '关闭输出但实际电压仍然输出'], [5, '关闭输出但实际电压部分输出'], [6, '线路残留电压过高']]),
       greenLampSubtypeMapEn: new Map([[0, ''], [1, 'Output Volatage Is Fail'], [2, 'Output Volatage Is Low'], [3, 'Output Volatage Is High'], [4, 'Off Output Volatage Is high'], [5, 'Off Output Volatage Is low'], [6, 'Residual Voltage Is Over-High']]),
       lampPowerSubtypeMap: new Map([[0, ''], [1, '功率异常增加'], [2, '功率异常减少'], [3, '功率无输出'], [4, '关闭状态有功率输出']]),
-      lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']])
+      lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']]),
+      LampGroupSubtypeMap: new Map([[0, ''], [1, '红灯故障'], [2, '黄灯故障'], [3, '绿灯故障']]),
+      LampGroupSubtypeMapEn: new Map([[0, ''], [1, 'Red Lamp Fault'], [2, 'Yellow Lamp Fault'], [3, 'Green Lamp Fault']])
     }
   },
   created () {
@@ -104,6 +106,8 @@ export default {
             data.m_wSubFaultType = this.greenLampSubtypeMapEn.get(data.m_wSubFaultType)
           } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
             data.m_wSubFaultType = this.lampPowerSubtypeMapEn.get(data.m_wSubFaultType)
+          } else if (data.m_wFaultType === 212) {
+            data.m_wSubFaultType = this.LampGroupSubtypeMapEn.get(data.m_wSubFaultType)
           } else {
             data.m_wSubFaultType = ''
           }
@@ -116,6 +120,8 @@ export default {
             data.m_wSubFaultType = this.greenLampSubtypeMap.get(data.m_wSubFaultType)
           } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
             data.m_wSubFaultType = this.lampPowerSubtypeMap.get(data.m_wSubFaultType)
+          } else if (data.m_wFaultType === 212) {
+            data.m_wSubFaultType = this.LampGroupSubtypeMap.get(data.m_wSubFaultType)
           } else {
             data.m_wSubFaultType = ''
           }
@@ -163,19 +169,21 @@ export default {
       this.handlerFaultData()
     },
     leadingOutFault () {
-      let content = new Blob([JSON.stringify(this.allFault)])
-      // 生成url对象
-      let urlObject = window.URL || window.webkitURL || window
-      let url = urlObject.createObjectURL(content)
-      // 生成<a></a>DOM元素
-      let el = document.createElement('a')
-      // 链接赋值
-      el.href = url
-      el.download = 'fault.txt'
-      // 必须点击否则不会下载
-      el.click()
-      // 移除链接释放资源
-      urlObject.revokeObjectURL(url)
+      let boardTable = this.$refs.boardtable[0]
+      boardTable.exportExcel()
+      // let content = new Blob([JSON.stringify(this.allFault)])
+      // // 生成url对象
+      // let urlObject = window.URL || window.webkitURL || window
+      // let url = urlObject.createObjectURL(content)
+      // // 生成<a></a>DOM元素
+      // let el = document.createElement('a')
+      // // 链接赋值
+      // el.href = url
+      // el.download = 'fault.txt'
+      // // 必须点击否则不会下载
+      // el.click()
+      // // 移除链接释放资源
+      // urlObject.revokeObjectURL(url)
     },
     showLedDetailFault () {
       this.showDetailFault(5)

@@ -200,28 +200,22 @@ export default {
         if (dev.geometry === undefined) continue
         let coordinates = dev.geometry.coordinates
         let devPoint = [coordinates[1], coordinates[0]]
+        let iconUrl = require('../../assets/gis/devicefault.png')
         if (dev.state === 'UP') {
-          let onlineIcon = L.icon({
-            iconUrl: require('../../assets/gis/deviceonline.png'),
-            iconSize: [24, 27],
-            title: 'UP',
-            alt: dev,
-            iconAnchor: [12, 27]
-          })
-          let marker = L.marker(devPoint, { icon: onlineIcon })
-          markers.push(marker)
+          iconUrl = require('../../assets/gis/deviceonline.png')
         } else if (dev.state === 'DOWN') {
-          let notOnlineIcon = L.icon({
-            iconUrl: require('../../assets/gis/devicenotonline.png'),
-            iconSize: [24, 27],
-            title: 'DOWN',
-            alt: dev,
-            iconAnchor: [12, 27]
-          })
-          let marker = L.marker(devPoint, { icon: notOnlineIcon }).on('click', this.onMarkerClick)
-          // 添加marker来设置点击事件
-          markers.push(marker)
+          iconUrl = require('../../assets/gis/devicenotonline.png')
         }
+        let notOnlineIcon = L.icon({
+          iconUrl: iconUrl,
+          iconSize: [24, 27],
+          title: dev.state,
+          alt: dev,
+          iconAnchor: [12, 27]
+        })
+        let marker = L.marker(devPoint, { icon: notOnlineIcon }).on('click', this.onMarkerClick)
+        // 添加marker来设置点击事件
+        markers.push(marker)
       }
       this.citiesLayer = L.layerGroup(markers)
       this.map.addLayer(this.citiesLayer)
@@ -239,6 +233,7 @@ export default {
       }
       if (marker) {
         let _latlng = marker._latlng
+        this.map.flyTo(_latlng)
         marker.openPopup(_latlng)
       }
     },

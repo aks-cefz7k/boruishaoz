@@ -11,33 +11,38 @@
  **/
 <template>
 <div class="faultList">
-    <div class="total" :style="{ width: '100%', marginBottom: totalMarginBottom }">
+    <div class="total" :style="{ width: '100%' }">
         <div class="Img"></div>
         <div class="text">
             {{$t('openatc.home.faultsum')}}
         </div>
         <div class="num">{{maxValue}}</div>
     </div>
-    <div class="title" :style="{marginBottom: titleMarginBottom}">
-        <div class="faultName" :style="{width: typeNameWidth}">{{$t('openatc.home.faulttype')}}</div>
-        <div class="faultNum" :style="{width: faultNumWidth}">
-           {{$t('openatc.home.quantity')}}
-        </div>
-    </div>
     <div class="content" :style="{maxHeight: maxListHeight}">
-        <div v-for="(item, index) in faultDevsData"
-            :key=index
-            style="height: 48px;">
-          <div class="typeName" :style="{width: typeNameWidth}">{{item.typeName}}</div>
-          <div class="list">
-            <HorizontalChildren :name="item.typeName"
-                backColor='#ebeef5'
-                :isShowText="false"
-                :dataList="[{value: item.number, maxNum: maxValue, color: '#e94f4f' }]"
-                :mainwidth="chartWidth">
-            </HorizontalChildren>
-          </div>
-        </div>
+      <el-table
+        :data="faultDevsData"
+        style="width: 100%"
+         :height="maxListHeight"
+        :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
+        >
+        <el-table-column
+          prop="agentid"
+          :label="$t('openatc.devicemanager.crowsid')"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="m_unFaultOccurTime"
+          :label="$t('openatc.devicemanager.faultOccurtime')"
+          sortable
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="m_wFaultType"
+          :label="$t('openatc.devicemanager.faultMaintype')"
+          sortable
+          :formatter="formatterType">
+        </el-table-column>
+      </el-table>
     </div>
 </div>
 </template>
@@ -77,15 +82,22 @@ export default {
   },
   methods: {
     initData () {
-      const data = []
-      this.maxValue = this.faultList.maxValue
-      this.faultList.data.forEach(function (value, key) {
-        data.push({
-          typeName: key,
-          number: value
-        })
-      })
-      this.faultDevsData = data
+      this.maxValue = this.faultList.length
+      this.faultDevsData = this.faultList
+    },
+    formatterType (row, column) {
+      let res
+      let typeCode = row.m_wFaultType
+      if (typeCode >= 101 && typeCode <= 199) {
+        res = this.$t('edge.fault.tab1')
+      } else if (typeCode >= 201 && typeCode <= 299) {
+        res = this.$t('edge.fault.tab2')
+      } else if (typeCode >= 301 && typeCode <= 399) {
+        res = this.$t('edge.fault.tab3')
+      } else if (typeCode >= 401 && typeCode <= 499) {
+        res = this.$t('edge.fault.tab4')
+      }
+      return res
     }
   },
   created () {

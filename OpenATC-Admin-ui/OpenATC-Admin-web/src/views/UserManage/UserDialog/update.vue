@@ -74,6 +74,15 @@
             </el-input>
         </el-form-item>
         <el-form-item
+            :label="$t('openatc.devicemanager.IP')"
+            prop="login_ip_limit">
+            <el-input
+            type="text"
+            v-model="tempUser.login_ip_limit"
+            @keyup.enter.native="updateUser">
+            </el-input>
+        </el-form-item>
+        <el-form-item
             :label="$t('openatc.usermanager.organization')"
             prop="organization">
             <el-input
@@ -131,6 +140,23 @@ import chooseOrganizationDialog from '@/views/Organization/components/chooseOrga
 export default {
   components: {chooseOrganizationDialog},
   data () {
+    var checkIp = (rule, value, callback) => {
+      // if (value === '') {
+      //   return callback(
+      //     new Error(this.$t('openatc.devicemanager.enterIp'))
+      //   )
+      // }
+      const ipReg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+      if (ipReg.test(value)) {
+        this.ip_status = true
+        callback()
+      } else {
+        this.ip_status = false
+        return callback(
+          new Error(this.$t('openatc.devicemanager.correctIp'))
+        )
+      }
+    }
     var checkPhone = (rule, value, callback) => {
       if (!value) {
         this.phone_status = true
@@ -189,7 +215,8 @@ export default {
         organization: '',
         nick_name: '',
         mobile_phone: '',
-        email: ''
+        email: '',
+        login_ip_limit: ''
       },
       rules: {
         user_name: [
@@ -197,6 +224,9 @@ export default {
         ],
         password: [
           { required: true, message: this.$t('openatc.usermanager.pleaseenter'), trigger: 'blur' }
+        ],
+        login_ip_limit: [
+          { validator: checkIp, trigger: 'blur' }
         ],
         email: [{ validator: checkEmail, trigger: 'blur' }],
         mobile_phone: [{ validator: checkPhone, trigger: 'blur' }],
@@ -237,7 +267,7 @@ export default {
         this.$message.error(this.$t('openatc.usermanager.selectonerole'))
         return
       }
-      if (this.tempUser.newpass === '' && this.tempUser.nick_name === this.user.nick_name && this.tempUser.email === this.user.email && this.tempUser.mobile_phone === this.user.mobile_phone && this.tempUser.organization === this.user.organization && this.roleNames === this.user.roleNames) {
+      if (this.tempUser.newpass === '' && this.tempUser.nick_name === this.user.nick_name && this.tempUser.email === this.user.email && this.tempUser.mobile_phone === this.user.mobile_phone && this.tempUser.organization === this.user.organization && this.roleNames === this.user.roleNames && this.tempUser.login_ip_limit === this.user.login_ip_limit) {
         this.$message.error(this.$t('openatc.usermanager.nochanges'))
         return
       }
@@ -286,6 +316,9 @@ export default {
       if (this.tempUser.organization !== this.user.organization) {
         params.organization = this.tempUser.organization
       }
+      if (this.tempUser.login_ip_limit !== this.user.login_ip_limit) {
+        params.login_ip_limit = this.tempUser.login_ip_limit
+      }
       params.roleNames = this.roleNames
       return params
     },
@@ -299,6 +332,7 @@ export default {
       this.tempUser.nick_name = user.nick_name
       this.tempUser.organization = user.organization
       this.tempUser.user_name = user.user_name
+      this.tempUser.login_ip_limit = user.login_ip_limit
       this.roleNames = user.roleNames
       this.getAllRoles()
       // this.dialogFormVisible = !this.dialogFormVisible

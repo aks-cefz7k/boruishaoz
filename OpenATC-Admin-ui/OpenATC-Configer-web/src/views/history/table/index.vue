@@ -69,6 +69,8 @@
 
 <script>
 // import { getFault } from '@/api/fault'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   name: 'bordertable',
   props: {
@@ -121,6 +123,22 @@ export default {
     },
     stateFormat (row, column) {
       return row.m_byFaultDescValue + ''
+    },
+    exportExcel () {
+      /* generate workbook object from table */
+      var xlsxParam = { raw: true } // 导出的内容只做解析，不进行格式转换
+      var wb = XLSX.utils.table_to_book(document.querySelector('#footerBtn'), xlsxParam)
+
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'fault.xlsx')
+      } catch (e) {
+        if (typeof console !== 'undefined') {
+          console.log(e, wbout)
+        }
+      }
+      return wbout
     }
     // handlerFaultData () {
     //   let filterId = Number(this.activeName)

@@ -31,7 +31,8 @@ const zh = {
       'placeholder': '请选择',
       'operation': '操作',
       'operationsuccess': '操作成功',
-      'authtip': '没有权限访问 !'
+      'authtip': '没有权限访问 !',
+      'nodata': '没有数据 !'
     },
     'button': {
       'OK': '确定',
@@ -39,7 +40,8 @@ const zh = {
       'expandall': '全部展开',
       'collapseall': '全部折叠',
       'search': '搜索',
-      'location': '位置'
+      'location': '位置',
+      'ignore': '忽略'
     },
     'login': {
       'username': '用户名',
@@ -108,7 +110,15 @@ const zh = {
       'enterId': '请输入设备ID',
       'entername': '请输入设备名称',
       'enterrequired': '请填写必填项!',
-      'deletedevice': '是否删除此设备?'
+      'deletedevice': '是否删除此设备?',
+      'faultDetail': '故障信息',
+      'faultMaintype': '故障主类型',
+      'faultSubtype': '故障子类型',
+      'faultOccurtime': '发生时间',
+      'boardCardType': '板卡类型',
+      'faultGrade': '故障等级',
+      'faultValue': '故障值',
+      'crowsid': '路口ID'
     },
     'usermanager': {
       'username': '用户名称',

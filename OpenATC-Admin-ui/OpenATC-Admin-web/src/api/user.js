@@ -25,7 +25,7 @@ export const GetUsrInfoList = () => {
   return api.Send({}, {})
 }
 
-export const AddUsr = (usrName, nickName, email, phone, passwd, roles, organization) => {
+export const AddUsr = (usrName, nickName, email, phone, passwd, roles, organization, ip) => {
   let api = new Authapi('addUsrs')
 
   let param = {
@@ -37,7 +37,8 @@ export const AddUsr = (usrName, nickName, email, phone, passwd, roles, organizat
     'status': 1,
     'ext_infos': '',
     'roleNames': roles,
-    'password': GetPassswordEncode(usrName, passwd)
+    'password': GetPassswordEncode(usrName, passwd),
+    'login_ip_limit': ip
   }
 
   return api.Send({}, param)
