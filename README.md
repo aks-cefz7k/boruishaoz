@@ -91,8 +91,152 @@ PROJECT_FOLDER
 │  ├─algorithm   //算法包
 │  ├─KDComm        //通讯包，用于服务和设备的通讯
 │  └─KDCore        //异常包，存放服务的错误代码和信息
-├─OpenATC-Admin-ui //前端项目
-└─uploads
+└─OpenATC-Admin-ui // 前端项目
+    ├─OpenATC-Admin-web // 平台主项目
+    │  ├─build // 打包配置
+    │  ├─config // 项目基础配置信息
+    │  ├─src // 业务逻辑块
+    │  │  ├─api
+    │  │  ├─assets
+    │  │  │  ├─404_images
+    │  │  │  ├─gis
+    │  │  │  ├─home
+    │  │  │  └─icon
+    │  │  ├─components
+    │  │  │  ├─HorizontalChildren
+    │  │  │  ├─Kanban
+    │  │  │  ├─MessageBox
+    │  │  │  ├─OpenATCCard
+    │  │  │  ├─PatternStatus
+    │  │  │  ├─SvgIcon
+    │  │  │  ├─TreeTable
+    │  │  │  ├─TscBottom
+    │  │  │  └─XRDDirSelector
+    │  │  ├─i18n
+    │  │  │  └─language
+    │  │  ├─icons
+    │  │  │  └─svg
+    │  │  ├─mock
+    │  │  │  └─service
+    │  │  ├─model
+    │  │  │  └─tree
+    │  │  ├─router
+    │  │  ├─store
+    │  │  │  └─modules
+    │  │  ├─styles
+    │  │  │  └─theme
+    │  │  ├─utils
+    │  │  └─views
+    │  │      ├─compose
+    │  │      │  └─components
+    │  │      ├─DeviceManage
+    │  │      │  └─DeviceDialog
+    │  │      ├─GisManager
+    │  │      │  └─components
+    │  │      ├─GreenWaveOptimize
+    │  │      │  ├─components
+    │  │      │  ├─pattern
+    │  │      │  │  └─planChart
+    │  │      │  │      └─model
+    │  │      │  └─tables
+    │  │      │      └─components
+    │  │      ├─Home
+    │  │      │  └─lottieDemo
+    │  │      ├─login
+    │  │      ├─OperationRecord
+    │  │      ├─Organization
+    │  │      │  └─components
+    │  │      ├─Service
+    │  │      │  ├─components
+    │  │      │  ├─pattern
+    │  │      │  │  └─planChart
+    │  │      │  └─tables
+    │  │      │      └─components
+    │  │      └─UserManage
+    │  │          └─UserDialog
+    │  └─static
+    │      └─lottiejson
+    └─OpenATC-Configer-web // 配置工具项目（该项目以组件的形式嵌套在平台主项目里）
+        ├─build // 打包配置
+        ├─config // 项目基础配置
+        ├─src // 业务逻辑块
+        │  ├─api
+        │  ├─assets
+        │  │  ├─404_images
+        │  │  ├─icon
+        │  │  ├─intersection_state
+        │  │  └─intersection_type
+        │  ├─components // 工具类
+        │  │  ├─Breadcrumb
+        │  │  ├─FloatImgBtn
+        │  │  ├─Hamburger
+        │  │  ├─Kanban
+        │  │  ├─MessageBox
+        │  │  ├─PatternStatus
+        │  │  ├─StageStatus
+        │  │  ├─SvgIcon
+        │  │  ├─Tankuang
+        │  │  ├─TreeTable
+        │  │  ├─TscBottom
+        │  │  └─XRDDirSelector
+        │  ├─EdgeMgr
+        │  │  └─controller
+        │  ├─i18n
+        │  │  └─language
+        │  ├─icons
+        │  │  └─svg
+        │  ├─lib
+        │  │  └─publicjs
+        │  │      └─KissWSSub
+        │  ├─packge
+        │  ├─router
+        │  ├─store
+        │  │  └─modules
+        │  ├─styles
+        │  │  └─theme
+        │  ├─ThemeStyle
+        │  ├─utils
+        │  └─views
+        │      ├─channel
+        │      ├─channelLock
+        │      ├─control
+        │      ├─controlPanel
+        │      ├─dailyRecord
+        │      ├─dashboard
+        │      ├─date
+        │      ├─detector
+        │      ├─deviceInfo
+        │      ├─history
+        │      │  ├─dialog
+        │      │  └─table
+        │      ├─importTempDialog
+        │      │  └─crossDirection
+        │      │      └─baseImg
+        │      ├─layout
+        │      │  ├─components
+        │      │  │  └─Sidebar
+        │      │  └─mixin
+        │      ├─login
+        │      ├─optimize
+        │      ├─overlap
+        │      ├─overView
+        │      │  ├─crossDirection
+        │      │  │  └─baseImg
+        │      │  └─textPage
+        │      ├─pattern
+        │      ├─pedestrianDetector
+        │      ├─phase
+        │      │  └─images
+        │      ├─plan
+        │      ├─statistics
+        │      ├─system
+        │      │  ├─channelControl
+        │      │  ├─manualControl
+        │      │  └─systemDialog
+        │      ├─tree
+        │      └─user
+        │          └─UserDialog
+        └─static
 ```
 
 ---
@@ -114,8 +258,12 @@ PROJECT_FOLDER
     ``` bash
     # 克隆项目
     git clone https://github.com/apache/****-admin.git
+	
+	# 打包OpenATC-Config-web项目（该项目为平台主项目的组件项目，故需要提前打包，不然直接编译会出现找不到edgebase-front依赖包的情况。）
+	npm install
+	npm run package
 
-    # 安装依赖
+    # 安装OpenATC-Admin-web主项目依赖
     npm install
 
     # 建议不要用cnpm  安装有各种诡异的bug 可以通过如下操作解决npm速度慢的问题
