@@ -96,13 +96,13 @@ PROJECT_FOLDER
     │  ├─build // 打包配置
     │  ├─config // 项目基础配置信息
     │  ├─src // 业务逻辑块
-    │  │  ├─api
-    │  │  ├─assets
+    │  │  ├─api // 接口api
+    │  │  ├─assets // 静态图片块
     │  │  │  ├─404_images
     │  │  │  ├─gis
     │  │  │  ├─home
     │  │  │  └─icon
-    │  │  ├─components
+    │  │  ├─components // 组件类
     │  │  │  ├─HorizontalChildren
     │  │  │  ├─Kanban
     │  │  │  ├─MessageBox
@@ -112,21 +112,21 @@ PROJECT_FOLDER
     │  │  │  ├─TreeTable
     │  │  │  ├─TscBottom
     │  │  │  └─XRDDirSelector
-    │  │  ├─i18n
+    │  │  ├─i18n // 国际化配置块
     │  │  │  └─language
-    │  │  ├─icons
+    │  │  ├─icons // svg静态图片块
     │  │  │  └─svg
     │  │  ├─mock
     │  │  │  └─service
-    │  │  ├─model
+    │  │  ├─model // 基础模型块
     │  │  │  └─tree
-    │  │  ├─router
-    │  │  ├─store
+    │  │  ├─router // 路由配置
+    │  │  ├─store // 存储配置
     │  │  │  └─modules
-    │  │  ├─styles
+    │  │  ├─styles // 皮肤样式配置
     │  │  │  └─theme
-    │  │  ├─utils
-    │  │  └─views
+    │  │  ├─utils // 工具类
+    │  │  └─views // 页面文件
     │  │      ├─compose
     │  │      │  └─components
     │  │      ├─DeviceManage
@@ -160,13 +160,13 @@ PROJECT_FOLDER
         ├─build // 打包配置
         ├─config // 项目基础配置
         ├─src // 业务逻辑块
-        │  ├─api
-        │  ├─assets
+        │  ├─api // 接口api
+        │  ├─assets // 静态图片块
         │  │  ├─404_images
         │  │  ├─icon
         │  │  ├─intersection_state
         │  │  └─intersection_type
-        │  ├─components // 工具类
+        │  ├─components // 组件类
         │  │  ├─Breadcrumb
         │  │  ├─FloatImgBtn
         │  │  ├─Hamburger
@@ -179,24 +179,24 @@ PROJECT_FOLDER
         │  │  ├─TreeTable
         │  │  ├─TscBottom
         │  │  └─XRDDirSelector
-        │  ├─EdgeMgr
+        │  ├─EdgeMgr // 逻辑管理类
         │  │  └─controller
-        │  ├─i18n
+        │  ├─i18n // 国际化配置块
         │  │  └─language
-        │  ├─icons
+        │  ├─icons // svg静态图片块
         │  │  └─svg
-        │  ├─lib
+        │  ├─lib // 模板类
         │  │  └─publicjs
         │  │      └─KissWSSub
-        │  ├─packge
-        │  ├─router
-        │  ├─store
+        │  ├─packge // 项目打包配置
+        │  ├─router // 路由配置
+        │  ├─store // 存储配置
         │  │  └─modules
-        │  ├─styles
+        │  ├─styles // 皮肤样式配置
         │  │  └─theme
-        │  ├─ThemeStyle
-        │  ├─utils
-        │  └─views
+        │  ├─ThemeStyle // element ui样式配置
+        │  ├─utils // 工具类
+        │  └─views // 页面文件
         │      ├─channel
         │      ├─channelLock
         │      ├─control
