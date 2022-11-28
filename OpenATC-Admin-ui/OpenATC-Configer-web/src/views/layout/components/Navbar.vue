@@ -394,11 +394,6 @@ export default {
           return
         }
         let allTscParam = data.data.data.data
-        // mock
-        // allTscParam.phaseList.forEach(ele => {
-        //   ele.peddirection = [1, 3]
-        // })
-        // mock
         if (allTscParam.manualpanel === undefined) {
           allTscParam.manualpanel = {}
         }

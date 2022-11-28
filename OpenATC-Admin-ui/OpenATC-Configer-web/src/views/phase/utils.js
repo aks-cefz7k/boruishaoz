@@ -130,18 +130,18 @@ export const pedimages = [
   // class: 'iconfont icon-xihangren'
   }, {
     id: 1,
-    name: 'edge.phase.dped',
+    name: 'edge.phase.eped',
     img: require('../../assets/intersection_state/east-ped.svg')
   // class: 'iconfont icon-donghangren'
   },
   {
-    id: 3,
+    id: 4,
     name: 'edge.phase.nped',
     img: require('../../assets/intersection_state/north-ped.svg')
   // class: 'iconfont icon-beihangren'
   },
   {
-    id: 4,
+    id: 3,
     name: 'edge.phase.sped',
     img: require('../../assets/intersection_state/south-ped.svg')
   // class: 'iconfont icon-nanhangren'

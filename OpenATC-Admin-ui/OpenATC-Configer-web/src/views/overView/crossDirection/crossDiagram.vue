@@ -170,21 +170,7 @@ export default {
       isHasPhase: true, // 是否有相位状态数据
       phaseControlColorMap: new Map([['黄闪', '#f7b500'], ['全红', '#ff2828'], ['关灯', '#828282'], ['默认', '#fff']]),
       sidewalkPhaseData: [], // 行人相位
-      resetflag: true, // 离线后，控制行人相位、车道相位reset标识
-      // mock
-      rampMock: {
-        phaseList: [{
-          'id': 1,
-          'direction': [9],
-          'controltype': 0
-        },
-        {
-          'id': 2,
-          'direction': [9],
-          'controltype': 1
-        }
-        ]
-      }
+      resetflag: true // 离线后，控制行人相位、车道相位reset标识
     }
   },
   methods: {
@@ -232,6 +218,13 @@ export default {
           color: this.phaseControlColorMap.get(Control)
         }))
         this.LanePhaseData = JSON.parse(JSON.stringify(LanePhaseData))
+      }
+      if (this.sidewalkPhaseData.length) {
+        const sidewalkPhaseData = this.sidewalkPhaseData.map(data => ({
+          ...data,
+          color: this.phaseControlColorMap.get(Control)
+        }))
+        this.sidewalkPhaseData = JSON.parse(JSON.stringify(sidewalkPhaseData))
       }
     },
     getPhaseStatus () {
@@ -290,10 +283,6 @@ export default {
         this.isLoaded = true
         this.crossInfo = res.data.data
         this.tempType = res.data.data.type
-        // mock B 模拟匝道路口
-        // this.crossInfo = this.rampMock
-        // this.tempType = '103-004-03'
-        // mock E
         // 获取车道相位、行人相位信息（坐标、名称）
         this.mainType = this.tempType.split('-')[0]
         this.mainDirection = this.tempType.split('-')[1]
@@ -356,12 +345,6 @@ export default {
       // 行人相位信息
       this.sidewalkPhaseData = []
       this.crossInfo.phaseList.forEach((ele, i) => {
-        // mock B 行人相位描述
-        ele.peddirection = []
-        if (i < 4) {
-          ele.peddirection = [Number(i + 1)]
-        }
-        // mock E
         ele.peddirection.forEach((dir, index) => {
           // 行人相位
           if (this.PhaseDataModel.getSidePos(dir)) {

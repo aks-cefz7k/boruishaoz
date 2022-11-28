@@ -219,7 +219,7 @@ const en = {
       'sl': 'South-Left',
       'sr': 'South-Right',
       'sb': 'South-Back',
-      'dped': 'East-Pedestrian',
+      'eped': 'East-Pedestrian',
       'wped': 'West-Pedestrian',
       'sped': 'South-Pedestrian',
       'nped': 'North-Pedestrian',
