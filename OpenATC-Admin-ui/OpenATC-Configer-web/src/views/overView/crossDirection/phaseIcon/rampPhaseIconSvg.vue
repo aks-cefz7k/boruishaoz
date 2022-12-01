@@ -87,11 +87,11 @@ export default {
   props: {
     IconLengh: { // 相位图标长度
       type: String,
-      default: '61.6px'
+      default: '75px'
     },
     IconWdith: { // 相位图标宽度
       type: String,
-      default: '61.6px'
+      default: '75px'
     },
     Data: {
       type: Object

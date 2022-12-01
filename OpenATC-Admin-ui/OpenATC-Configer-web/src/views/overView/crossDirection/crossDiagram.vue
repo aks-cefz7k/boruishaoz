@@ -345,19 +345,21 @@ export default {
       // 行人相位信息
       this.sidewalkPhaseData = []
       this.crossInfo.phaseList.forEach((ele, i) => {
-        ele.peddirection.forEach((dir, index) => {
+        if (ele.peddirection) {
+          ele.peddirection.forEach((dir, index) => {
           // 行人相位
-          if (this.PhaseDataModel.getSidePos(dir)) {
-            this.sidewalkPhaseData.push({
-              key: `${i}-${index}`,
-              phaseid: ele.id, // 相位id，用于对应相位状态
-              id: dir,
-              name: this.PhaseDataModel.getSidePos(dir).name,
-              left: this.PhaseDataModel.getSidePos(dir).x,
-              top: this.PhaseDataModel.getSidePos(dir).y
-            })
-          }
-        })
+            if (this.PhaseDataModel.getSidePos(dir)) {
+              this.sidewalkPhaseData.push({
+                key: `${i}-${index}`,
+                phaseid: ele.id, // 相位id，用于对应相位状态
+                id: dir,
+                name: this.PhaseDataModel.getSidePos(dir).name,
+                left: this.PhaseDataModel.getSidePos(dir).x,
+                top: this.PhaseDataModel.getSidePos(dir).y
+              })
+            }
+          })
+        }
       })
       // 行人相位无，也要显示人行横道，与车道相位显示与否逻辑不同
       // this.handleCompleteSidewalkPhase()
