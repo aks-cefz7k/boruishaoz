@@ -484,7 +484,8 @@ const en = {
       'remote1': 'Restart',
       'remote2': 'Authorize',
       'remote3': 'Custom',
-      'test': 'Test'
+      'test': 'Test',
+      'realTimeChannel': 'Real time channel'
     },
     'optimize': {
       'strategy': 'Optimization strategy',

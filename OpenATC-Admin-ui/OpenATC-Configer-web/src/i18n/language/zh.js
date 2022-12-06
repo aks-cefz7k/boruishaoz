@@ -482,7 +482,8 @@ const zh = {
       'remote1': '重启',
       'remote2': '授权',
       'remote3': '自定义',
-      'test': '检测'
+      'test': '检测',
+      'realTimeChannel': '实时通道'
     },
     'optimize': {
       'strategy': '优化策略',
