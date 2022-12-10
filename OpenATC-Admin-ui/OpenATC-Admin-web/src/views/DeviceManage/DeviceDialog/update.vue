@@ -180,7 +180,7 @@ export default {
         name: '',
         descs: '',
         type: 'asc',
-        protocol: 'kedacom',
+        protocol: 'ocp',
         ip: '',
         port: '',
         lng: 0,

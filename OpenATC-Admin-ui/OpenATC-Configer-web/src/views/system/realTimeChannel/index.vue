@@ -129,7 +129,11 @@ export default {
         if (light === 0) continue
         let id = channel.id
         let num = parseInt(id / 4)
-        let index = (id % 4) === 0 ? 4 : (id % 4)
+        let index = id % 4
+        if (index === 0) {
+          num--
+          index = 4
+        }
         this.data[num].channels[index - 1].lamps[light - 1].selected = true
       }
     }
