@@ -132,6 +132,7 @@ const zh = {
       'nocablecoordination': '无电缆协调',
       'phasewalk': '行人过街',
       'websteroptimization': 'Webster单点优化',
+      'inductivePedestrianCrossControl': '感应式行人过街控制',
       'selfadaption': '自适应控制',
       'custom': '自定义',
       'controlmodevalue': '控制方式数值',
@@ -173,6 +174,7 @@ const zh = {
       'modelList9': '自适应控制',
       'modelList10': '无电缆协调',
       'modelList12': '行人过街',
+      'modelList19': '感应式行人过街',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
       'canceled': '已取消',
@@ -222,7 +224,9 @@ const zh = {
       'wped': '西人行横道',
       'sped': '南人行横道',
       'nped': '北人行横道',
-      'redyellow': '红黄'
+      'redyellow': '红黄',
+      'vehiclethresh': '车辆排队阈值',
+      'pedestrianthresh': '行人等待阈值'
     },
     'overlap': {
       'desc': '描述',
@@ -273,7 +277,8 @@ const zh = {
       'ControlOption6': '单点感应控制',
       'ControlOption9': '自适应控制',
       'ControlOption10': '无电缆控制',
-      'ControlOption12': '行人过街控制'
+      'ControlOption12': '行人过街控制',
+      'ControlOption19': '感应式行人过街控制'
     },
     'date': {
       'desc': '描述',
@@ -370,7 +375,17 @@ const zh = {
       'erraticCounts': '最大请求数（个/分钟）',
       'operation': '操作',
       'deletetip': '确认删除此行人检测器？',
-      'mostdata': '最多只能创建8条数据！'
+      'mostdata': '最多只能创建8条数据！',
+      'type': '检测器类型',
+      'typeOption': 'typeOption',
+      'typeOption0': '线圈',
+      'typeOption1': '雷达',
+      'typeOption2': '视频',
+      'region': '检测器区域',
+      'regionOption': 'regionOption',
+      'regionOption0': '默认',
+      'regionOption1': '等待区域',
+      'regionOption2': '过街区域'
     },
     'deviceinfo': {
       'deviceinfo': '设备信息: ',

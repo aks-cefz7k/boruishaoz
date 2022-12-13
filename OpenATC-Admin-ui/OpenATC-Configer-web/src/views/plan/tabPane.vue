@@ -388,6 +388,8 @@ export default {
         value: 10
       }, {
         value: 12
+      }, {
+        value: 19
       }],
       controlStatus: true
     }

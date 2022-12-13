@@ -132,6 +132,7 @@ const en = {
       'nocablecoordination': 'Nocable Control',
       'phasewalk': 'Pedestrian Crossing Control',
       'websteroptimization': 'Webster Single Point Optimization',
+      'inductivePedestrianCrossControl': 'Inductive Pedestrian Crossing Control',
       'selfadaption': 'Self-Adaption',
       'custom': 'Custom',
       'controlmodevalue': 'Control Value',
@@ -173,6 +174,7 @@ const en = {
       'modelList9': 'Self-Adaption',
       'modelList10': 'Nocable Control',
       'modelList12': 'phasewalk',
+      'modelList19': 'Inductive Pedestrian Crossing Control',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
       'canceled': 'Cancelled',
@@ -223,7 +225,9 @@ const en = {
       'wped': 'West-Pedestrian',
       'sped': 'South-Pedestrian',
       'nped': 'North-Pedestrian',
-      'redyellow': 'redyellow'
+      'redyellow': 'redyellow',
+      'vehiclethresh': 'Vehicle Queuing Threshold',
+      'pedestrianthresh': 'Pedestrian waiting Threshold'
     },
     'overlap': {
       'desc': 'Description',
@@ -275,7 +279,8 @@ const en = {
       'ControlOption6': 'Free Control',
       'ControlOption9': 'Self-Adaption',
       'ControlOption10': 'Nocable Control',
-      'ControlOption12': 'Pedestrian Crossing Control'
+      'ControlOption12': 'Pedestrian Crossing Control',
+      'ControlOption19': 'Inductive Pedestrian Crossing Control'
     },
     'date': {
       'desc': 'Description',
@@ -372,7 +377,17 @@ const en = {
       'erraticCounts': 'Erratic Counts(one/min）',
       'operation': 'Operation',
       'deletetip': 'Delete This Detector',
-      'mostdata': 'There are at most 8 data !'
+      'mostdata': 'There are at most 8 data !',
+      'type': 'Detector Type',
+      'typeOption': 'typeOption',
+      'typeOption0': 'Coil',
+      'typeOption1': 'Radar',
+      'typeOption2': 'Video',
+      'region': 'Detector Area',
+      'regionOption': 'regionOption',
+      'regionOption0': 'Default',
+      'regionOption1': 'Waiting Area',
+      'regionOption2': 'Cross Street Area'
     },
     'deviceinfo': {
       'deviceinfo': 'Device Info:',

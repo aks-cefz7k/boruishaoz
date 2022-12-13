@@ -95,6 +95,7 @@
                       <el-option :label="$t('edge.overview.nocablecoordination')" value="10"></el-option>
                       <el-option :label="$t('edge.overview.phasewalk')" value="12"></el-option>
                       <el-option :label="$t('edge.overview.websteroptimization')" value="14"></el-option>
+                      <el-option :label="$t('edge.overview.inductivePedestrianCrossControl')" value="19"></el-option>
                       <el-option :label="$t('edge.overview.custom')" value="999"></el-option>
                   </el-select>
               </el-form-item>
@@ -298,6 +299,10 @@ export default {
         id: 12,
         iconClass: 'xingrenguojie',
         iconName: '行人过街'
+      }, {
+        id: 19,
+        iconClass: 'ganyingshixingrenguojie',
+        iconName: '感应式行人过街控制'
       }],
       currModel: -1,
       preselectModel: -1, // 预选方案
@@ -579,7 +584,7 @@ export default {
         }
         this.$message.success(this.$t('edge.common.querysucess'))
         let patternData = data.data.data.data
-        let patternList = [0, 1, 2, 4, 5, 6, 10, 12, 14]
+        let patternList = [0, 1, 2, 4, 5, 6, 10, 12, 14, 19]
         if (patternList.includes(patternData.control)) {
           this.form.control = String(patternData.control)
         } else {

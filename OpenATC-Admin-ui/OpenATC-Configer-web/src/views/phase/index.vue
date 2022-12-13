@@ -118,6 +118,20 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" prop="created_at" :label="$t('edge.phase.vehiclethresh')" min-width="100">
+        <template slot-scope="scope">
+          <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.vehiclethresh" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.vehiclethresh}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" prop="created_at" :label="$t('edge.phase.pedestrianthresh')" min-width="100">
+        <template slot-scope="scope">
+          <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.pedestrianthresh" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.pedestrianthresh}}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" :label="$t('edge.phase.ring')" min-width="100">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="1" :max="4" :step="1" v-model.number="scope.row.ring" @change="handleRingEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
@@ -375,6 +389,8 @@ export default {
         ring: 1,
         greenpulse: 5,
         redpulse: 10,
+        vehiclethresh: 30,
+        pedestrianthresh: 30,
         controltype: 0 // 控制类型
       }
       this.globalParamModel.addParamsByType('phaseList', phaseInitData)
