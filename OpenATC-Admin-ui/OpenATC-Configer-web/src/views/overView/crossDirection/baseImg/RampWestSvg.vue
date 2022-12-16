@@ -336,7 +336,7 @@ C4.9,395.6,9.7,396.6,14.4,397.6z"
 </template>
 <script>
 export default {
-  name: 'rampEastroad',
+  name: 'rampWestroad',
   data () {
     return {}
   },

@@ -11,11 +11,11 @@
  **/
 <template>
   <div class="crossImg">
-    <div class="centerText" v-if="crossType !== 'Customroads'">
+    <div class="centerText" v-if="crossType !== 'Customroads'" :class="{'countdownBg': isLoaded}">
       <!-- 相位倒计时 -->
-      <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase && mainType !== '103'">
+      <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
         <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
-          <span style="float: left;font-size: 20px;color: #fff;width: 80px;">{{$t('edge.overview.phase')}}{{curPhase.id}} :</span>
+          <span style="float: left;font-size: 20px;color: #fff;width: 68px;">{{$t('edge.overview.phase')}}{{curPhase.id}}:</span>
           <span style="float: left;">{{curPhase.phaseCountdown}}</span>
         </div>
       </div>
@@ -135,9 +135,9 @@ export default {
         this.isHasPhase = true
         // 正常情况下，获取车道相位、相位倒计时、行人相位的状态
         this.getPhaseStatus()
+        this.getCurPhaseCountdown()
         if (this.mainType === '100' || this.mainType === '101') {
-          // 城市道路才显示人行道状态和相位倒计时
-          this.getCurPhaseCountdown()
+          // 城市道路才显示人行道状态
           this.getpedStatus()
         }
       },
@@ -467,8 +467,8 @@ export default {
 }
 .centerText {
   position: absolute;
-  width: 250px;
-  height: 150px;
+  width: 140px;
+  height: 140px;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -488,6 +488,10 @@ export default {
   color: #fff;
   width: 150px;
   margin: 0 auto;
+}
+.countdownBg {
+  border-radius: 50%;
+  background-color: rgba(94, 90, 90, 0.8);
 }
 .centerText .text {
   display: inline-block;
