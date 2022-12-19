@@ -362,9 +362,9 @@ export default {
         if (val.query !== undefined) {
           this.agentId = this.$route.query.agentid
           setIframdevid(this.agentId)
-          this.ip = this.$route.query.IP
-          this.port = this.$route.query.port
-          this.protocol = this.$route.query.protocol
+          // this.ip = this.$route.query.IP
+          // this.port = this.$route.query.port
+          // this.protocol = this.$route.query.protocol
           this.resetCrossDiagram()
         }
       },
@@ -376,9 +376,9 @@ export default {
     if (this.$route.query !== undefined && Object.keys(this.$route.query).length) {
       this.agentId = this.$route.query.agentid
       setIframdevid(this.agentId)
-      this.ip = this.$route.query.IP
-      this.port = this.$route.query.port
-      this.protocol = this.$route.query.protocol
+      // this.ip = this.$route.query.IP
+      // this.port = this.$route.query.port
+      // this.protocol = this.$route.query.protocol
       this.resetCrossDiagram()
       this.registerMessage() // 注册消息
     } else {
@@ -450,6 +450,9 @@ export default {
           return
         }
         this.devStatus = 3
+        this.ip = data.data.data.data.ip
+        this.port = data.data.data.data.port
+        this.protocol = data.data.data.data.protocol
         this.clearPatternInterval() // 清除其他定时器
         this.clearVolumeInterval()
         this.phaseControlTimer = setInterval(() => {
