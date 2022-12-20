@@ -449,10 +449,17 @@ export default {
           this.reSend()
           return
         }
+        let res = data.data.data.data
+        let obj = {
+          ip: '',
+          port: '',
+          protocol: ''
+        }
+        let newRes = {...obj, ...res}
         this.devStatus = 3
-        this.ip = data.data.data.data.ip
-        this.port = data.data.data.data.port
-        this.protocol = data.data.data.data.protocol
+        this.ip = newRes.ip
+        this.port = newRes.port
+        this.protocol = newRes.protocol
         this.clearPatternInterval() // 清除其他定时器
         this.clearVolumeInterval()
         this.phaseControlTimer = setInterval(() => {
