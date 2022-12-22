@@ -105,7 +105,7 @@ export default {
     let viewW = document.documentElement.clientWidth - 40
     this.totalMarginBottom = (24 / 1080 * viewH).toFixed(0) + 'px'
     this.titleMarginBottom = (30 / 1080 * viewH).toFixed(0) + 'px'
-    this.maxListHeight = (330 / 1080 * viewH).toFixed(0) + 'px'
+    this.maxListHeight = (350 / 1080 * viewH).toFixed(0) + 'px'
     this.typeNameWidth = (142 / 1920 * viewW).toFixed(0) + 'px'
     this.faultNumWidth = (295 / 1920 * viewW).toFixed(0) + 'px'
     this.chartWidth = (400 / 1920 * viewW).toFixed(0) + 'px'

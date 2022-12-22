@@ -12,9 +12,9 @@
 <template>
   <div class="openatc-gis">
     <div id="map"></div>
-    <div class="showLayout">
       <transition name="slide">
-        <div class="tabsconatiner" v-show="toggleShow">
+    <div class="showLayout"  v-show="toggleShow">
+        <div class="tabsconatiner">
           <device
             :devicesData="devList"
             ref="device"
@@ -22,6 +22,7 @@
             @setDeviceLocation="setDeviceLocation"
           ></device>
         </div>
+    </div>
       </transition>
       <div
         :class="[toggleshowisActive ? 'toggle_show' : 'active']"
@@ -34,7 +35,6 @@
           v-on:animCreated="handleAnimation"
         />
       </div>
-    </div>
     <div class="map-position">
       经度{{ lngLat.lng }} 纬度{{ lngLat.lat }} 层级 {{ zoom }}
     </div>
@@ -330,6 +330,7 @@ export default {
   width: 442px;
   height: auto;
   z-index: 904;
+  background-color: #ffffff;
 }
 .tabsconatiner {
   margin: 10px;
@@ -355,14 +356,16 @@ export default {
 .toggle_show {
   position: absolute;
   cursor: pointer;
-  right: -25px;
-  top: 0px;
+  right: 17px;
+  top: 70px;
+  z-index:100001;
 }
 .active {
   position: absolute;
   cursor: pointer;
-  right: -25px;
-  top: 0px;
+  right: 17px;
+  top: 70px;
+  z-index:100001;
 }
 .init-toggle {
   position: absolute;
