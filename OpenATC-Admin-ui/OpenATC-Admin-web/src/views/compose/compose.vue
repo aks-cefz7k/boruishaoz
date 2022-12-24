@@ -35,7 +35,7 @@ export default {
           let operateId = this.$store.getters.operateId
           this.saveCurDevInfo(operateId)
           let currDev = this.$store.getters.deviceTags.filter(dev => dev.id === operateId)
-          let query = {IP: currDev[0].jsonparam.ip, port: currDev[0].jsonparam.port, agentid: currDev[0].agentid, protocol: currDev[0].protocol, isfromatc: true}
+          let query = {agentid: currDev[0].agentid, isfromatc: true}
           router.push({
             path: '/overview/index',
             query
@@ -65,7 +65,7 @@ export default {
       let allDevsInfo = this.$store.getters.deviceInfos
       // 当前操作设备变化时
       const curDevInfo = allDevsInfo.filter(dev => dev.id === operateId)[0]
-      let query = {IP: curDevInfo.jsonparam.ip, port: curDevInfo.jsonparam.port, agentid: curDevInfo.agentid, protocol: curDevInfo.protocol, isfromatc: true}
+      let query = {agentid: curDevInfo.agentid, isfromatc: true}
       window.sessionStorage.setItem('curTagDevInfo', JSON.stringify(query))
     }
   }

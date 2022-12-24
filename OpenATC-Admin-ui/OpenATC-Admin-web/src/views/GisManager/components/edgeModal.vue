@@ -43,11 +43,12 @@ export default {
   },
   methods: {
     getHost () {
-      let host = window.location.href.split('//')[1].split('/')[0]
-      if (host === 'dolphin-dev.kedacom.com') {
-        return 'dolphin-dev.kedacom.com/openatc'
+      let host = `${window.location.href.split('//')[1].split('/')[0]}`
+      if (process.env.NODE_ENV === 'development') {
+        return host
+      } else {
+        return `${host}/openatc`
       }
-      return host
     },
     closeFormDialog () {
       // 弹窗关闭，将标识恢复默认值
@@ -55,7 +56,7 @@ export default {
       this.dialogVisible = false
     },
     openSingleEdge (dev) {
-      this.url = `http://${this.getHost()}/#/overviewNew/index?IP=${dev.jsonparam.ip}&port=${dev.jsonparam.port}&agentid=${dev.agentid}&protocol=${dev.protocol}&isfromatc=true`
+      this.url = `http://${this.getHost()}/#/overviewNew/index?agentid=${dev.agentid}&isfromatc=true`
       this.dialogVisible = !this.dialogVisible
     },
     getClientHeight () {
