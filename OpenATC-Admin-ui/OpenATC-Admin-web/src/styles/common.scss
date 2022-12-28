@@ -152,6 +152,9 @@
         float: left;
       }
     }
+    .el-table thead {
+      color: $--color-text-regular;
+    }
 }
 .leftPart .chartPart .el-progress--circle .el-progress__text .content .sum {
     font-size: 66px;
@@ -287,6 +290,9 @@
         line-height: 40px;
         min-width: 66px;
         margin-bottom: 7px;
+      }
+      .el-table thead {
+        color: $--color-text-regular;
       }
 }
 // 设备管理页面样式
