@@ -47,6 +47,7 @@
           stripe
           v-loading.body="listLoading"
           style="width: 100%"
+          max-height="660px"
         >
           <el-table-column type="index" label="#" align="center">
           </el-table-column>
