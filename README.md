@@ -284,6 +284,13 @@ PROJECT_FOLDER
     # 预览发布环境效果 + 静态资源分析
     npm run preview  --report
     ```
+
+#### 第三方通过url跳转配置界面说明
+    ``` bash
+    # 跳转路径
+    https://dolphin-dev.kedacom.com/openatc/#/overviewNew/index?agentid=${设备id}&isfromatc=true
+
+
 ---
 
 ### 后端部分
