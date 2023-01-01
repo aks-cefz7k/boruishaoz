@@ -19,6 +19,7 @@
       :data="patternTableData"
       style="width: 100%"
       @current-change="handleCurrentChange"
+      max-height="700px"
     >
       <el-table-column type="index" label="#" align="center"> </el-table-column>
       <el-table-column
