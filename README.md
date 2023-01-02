@@ -288,7 +288,7 @@ PROJECT_FOLDER
 #### 第三方通过url跳转配置界面说明
     ``` bash
     # 跳转路径
-    https://dolphin-dev.kedacom.com/openatc/#/overviewNew/index?agentid=${设备id}&isfromatc=true
+    `https://dolphin-dev.kedacom.com/openatc/#/overviewNew/index?agentid=${设备id}&isfromatc=true`
 
 
 ---
