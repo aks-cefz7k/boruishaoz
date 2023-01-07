@@ -10,8 +10,8 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="container-main">
-    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked">
+  <div class="container-main" :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top'}">
+    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!fromControlPlatform">
       <div slot="icon" class="sloat-icon">
         <i class="iconfont icon-tuxingjiemian" style="color: #ffffff;" v-show="!isShowGui"></i>
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
@@ -118,7 +118,11 @@
     </div>
     <div class="tuxingjiemian" v-show="isShowGui">
       <div class="tuxing-left">
-        <div class="crossDirection-display">
+        <div class="crossDirection-display" :class="{'largeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
+          'middleCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
+          'smallCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
+          'miniCrossImg': curBodyWidth <= 960 && curBodyWidth > 720,
+          'superminiCrossImg': curBodyWidth <= 720 }">
           <CrossDiagram v-if="reset" :crossStatusData="crossStatusData" :agentId="agentId" :devStatus="devStatus"/>
         </div>
         <div class="pattern-status">
@@ -156,7 +160,7 @@
             <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
           </div>
           <div style="margin-top: 5px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
-          <div style="margin-left: 15px; width: 100%; height: auto;">
+          <div style="margin-left: 15px; width: 100%; overflow: hidden;">
             <div class="control-model" v-for="(item, index) in modelList" :key="index">
               <div :class="currModel===item.id ? 'single-model-select' : 'single-model'" @click="selectModel(item.id)" :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''">
               <!-- <div :class="currModel===item.id ? 'single-model-select' : (preselectModel == item.id ? 'single-model-preselect' : 'single-model')" @click="selectModel(item.id)"> -->
@@ -165,7 +169,7 @@
               </div>
             </div>
           </div>
-          <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
+          <div style="margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
           <!-- <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div> -->
           <div style="margin-left: 15px; width: 100%; height: auto;">
             <div class="control-model" v-for="(item, index) in stagesList" :key="index">
@@ -187,6 +191,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { getTscControl, putTscControl, getTscPattern, getTscCurrentVolume, queryDevice } from '@/api/control'
 import { registerMessage, uploadSingleTscParam } from '@/api/param'
 import { setIframdevid } from '@/utils/auth'
@@ -353,13 +358,27 @@ export default {
       phaseList: [], // 当前相位集合
       patternStatusList: [], // 显示方案状态的相关数据集合
       barrierList: [], // 方案状态中屏障的数据集合
-      intervalFlag: true
+      intervalFlag: true,
+      shrink: 1,
+      fromControlPlatform: false
     }
+  },
+  computed: {
+    ...mapState({
+      curBodyWidth: state => state.globalParam.curBodyWidth,
+      curBodyHeight: state => state.globalParam.curBodyHeight
+    })
   },
   watch: {
     $route: {
       handler: function (val, oldVal) {
         if (val.query !== undefined) {
+          if (this.$route.query.shrink) {
+            this.shrink = Number(this.$route.query.shrink)
+          }
+          if (this.$route.query.fromControlPlatform) {
+            this.fromControlPlatform = true
+          }
           this.agentId = this.$route.query.agentid
           setIframdevid(this.agentId)
           // this.ip = this.$route.query.IP
@@ -387,6 +406,12 @@ export default {
     // this.registerMessage() // 注册消息
   },
   mounted () {
+    if (this.$route.query.shrink) {
+      this.shrink = Number(this.$route.query.shrink)
+    }
+    if (this.$route.query.fromControlPlatform) {
+      this.fromControlPlatform = true
+    }
   },
   methods: {
     handleChangeTable (name) {

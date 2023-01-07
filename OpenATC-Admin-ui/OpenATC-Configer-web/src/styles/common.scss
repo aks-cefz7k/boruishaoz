@@ -362,7 +362,7 @@ border: 1px solid #f0f0f0;
 .container-main {
   width: 100%;
   height: 880px;
-  min-width: 1250px;
+  // min-width: 1250px;
   background: $--color-white;
   .iconfont {
     font-family: "iconfont" !important;
@@ -632,9 +632,9 @@ border: 1px solid #f0f0f0;
   /*当屏幕小于等于1680px的屏幕样式*/
   @media only screen and (max-width: 1680px){
     .crossDirection-display{
-          transform: scale(0.9);
-          transform-origin: center top;
-      }
+      transform: scale(0.9);
+      // transform-origin: center top;
+    }
     .centerText .text {
       font-size: 14px;
     }
@@ -642,9 +642,9 @@ border: 1px solid #f0f0f0;
   /*当屏幕小于等于1440px的屏幕样式*/
   @media only screen and (max-width: 1440px){
     .crossDirection-display{
-          transform: scale(0.8);
-          /* transform-origin: center top; */
-      }
+      transform: scale(0.8);
+      /* transform-origin: center top; */
+    }
     .centerText .text {
       font-size: 18px;
     }
@@ -652,13 +652,46 @@ border: 1px solid #f0f0f0;
    /*当屏幕小于等于1280px的屏幕样式*/
   @media only screen and (max-width: 1280px){
     .crossDirection-display{
-          transform: scale(0.7);
-          transform-origin: center top;
-      }
+      transform: scale(0.65);
+      // transform-origin: center top;
+    }
     .centerText .text {
       font-size: 20px;
     }
    }
+   /*当屏幕小于等于960px的屏幕样式*/
+  @media only screen and (max-width: 960px){
+    .crossDirection-display{
+      transform: scale(0.5);
+    }
+    .centerText .text {
+      font-size: 14px;
+    }
+   }
+    /*当屏幕小于等于720px的屏幕样式*/
+  @media only screen and (max-width: 720px){
+    .crossDirection-display{
+      transform: scale(0.45);
+    }
+    .centerText .text {
+      font-size: 14px;
+    }
+   }
+  .largeCrossImg {
+    transform: scale(0.9);
+  }
+  .middleCrossImg {
+    transform: scale(0.8);
+  }
+  .smallCrossImg {
+    transform: scale(0.65);
+  }
+  .miniCrossImg {
+    transform: scale(0.5);
+  }
+  .superminiCrossImg {
+    transform: scale(0.45);
+  }
   .pattern-status {
     height: 200px;
     margin-left: 20px;
@@ -687,8 +720,10 @@ border: 1px solid #f0f0f0;
   .tuxing-right {
     float: left;
     margin-top: 20px;
-    width: 35%;
+    width: 37%;
     height: 840px;
+    box-sizing: border-box;
+    padding-left: 10px;
   }
   .cross-mess {
     margin-left: 5px;
@@ -705,7 +740,7 @@ border: 1px solid #f0f0f0;
     float: left;
     margin-top: 10px;
     width: 95%;
-    min-width: 600px;
+    // min-width: 600px;
     // height: 180px;
     background-color: $--color-white;
   }

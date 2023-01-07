@@ -79,7 +79,9 @@ const Global = {
     tscParam: JSON.parse(JSON.stringify(tscParam)),
     curPath: '/overview/index',
     copiedTscParam: defaultCopiedTscParam,
-    routers: []
+    routers: [],
+    curBodyWidth: 1920,
+    curBodyHeight: 1080
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -106,11 +108,15 @@ const Global = {
     CLEAR_COPY: (state) => {
       state.copiedTscParam = null
       sessionStorage.removeItem('tscParam')
-    }
+    },
     // ,
     // SET_ROUTERS: (state, routers) => {
     //   state.routers = JSON.parse(JSON.stringify(routers))
     // }
+    SAVE_BODY_DOM_SIZE: (state, size) => {
+      state.curBodyWidth = size.width
+      state.curBodyHeight = size.height
+    }
   },
   actions: {
     SaveTscParam ({ commit }, data) {
@@ -130,8 +136,7 @@ const Global = {
     },
     ClearCopy ({ commit }) {
       commit('CLEAR_COPY')
-    }
-    // ,
+    },
     // GenerateRoutes ({
     //   commit
     // }, {curRoutes, noPermission}) {
@@ -147,6 +152,9 @@ const Global = {
     //     commit('SET_ROUTERS', curRoutes)
     //   }
     // }
+    SaveBodyDomSize ({ commit }, size) {
+      commit('SAVE_BODY_DOM_SIZE', size)
+    }
   }
 }
 export default Global

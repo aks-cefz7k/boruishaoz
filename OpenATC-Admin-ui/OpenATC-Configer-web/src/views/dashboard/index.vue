@@ -462,7 +462,7 @@ export default {
 .container-main {
   width: 100%;
   height: 880px;
-  min-width: 1250px;
+  // min-width: 1250px;
   background: #f8f8f8;
 }
 .container-left {

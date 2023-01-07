@@ -12,8 +12,8 @@
 <template>
   <div class="app-wrapper" :class="classObj">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-    <sidebar class="sidebar-container"></sidebar>
-    <div class="main-container">
+    <sidebar class="sidebar-container" v-if="!fromControlPlatform"></sidebar>
+    <div class="main-container" :class="{'changeMainPosition': fromControlPlatform}">
       <navbar></navbar>
       <app-main></app-main>
     </div>
@@ -34,6 +34,11 @@ export default {
     Navbar,
     Sidebar,
     AppMain
+  },
+  data () {
+    return {
+      fromControlPlatform: false
+    }
   },
   mixins: [ResizeMixin],
   computed: {
@@ -84,6 +89,9 @@ export default {
         let agentId = this.$route.query.agentid
         setIframdevid(agentId)
       }
+    }
+    if (this.$route.query.fromControlPlatform) {
+      this.fromControlPlatform = true
     }
     //  else { // 单机设备情况下，需要先创建一个设备
     //   let deviceInfo = {}
@@ -141,4 +149,7 @@ export default {
   //   position: absolute;
   //   z-index: 999;
   // }
+  .changeMainPosition {
+    margin-left: 0px !important;
+  }
 </style>
