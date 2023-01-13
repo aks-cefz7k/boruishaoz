@@ -93,10 +93,7 @@ export default {
       // faultTypeMap 故障种类，前端写死的假数据
       // faultTypeMap: new Map([[1, '检测器报警'], [2, '灯故障'], [3, '断电故障'], [4, '通讯故障']]),
       faultTypeMap: new Map([[201, '灯控板在线个数异常'], [202, '灯组红绿同亮'], [203, '所有灯组红灯全灭'], [204, '绿冲突'], [1, '检测器报警'], [2, '灯故障'], [3, '断电故障'], [4, '通讯故障']]),
-      faultList: {
-        maxValue: 0,
-        data: new Map()
-      },
+      faultList: [],
       chartData: [{
         name: '在线',
         value: 0
@@ -135,7 +132,6 @@ export default {
       }
     },
     resetData () {
-      this.faultList.maxValue = 0
       this.chartData = [{
         name: '在线',
         value: 0

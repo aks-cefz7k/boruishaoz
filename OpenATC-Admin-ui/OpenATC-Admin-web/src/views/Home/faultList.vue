@@ -53,7 +53,7 @@ export default {
   name: 'faultList',
   props: {
     faultList: {
-      type: Object
+      type: Array
     }
   },
   watch: {
