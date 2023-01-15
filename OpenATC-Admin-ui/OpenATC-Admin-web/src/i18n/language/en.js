@@ -265,7 +265,7 @@ const en = {
       'clickaddroute': 'Click to add a new route',
       'nochooseplan': 'No chosen plan！',
       'routePreview': 'Route Preview',
-      'routeState': 'Route State',
+      'routeState': 'Route Control',
       'dutyrouteconfig': 'Dutyroute Config',
       'node': 'Node',
       'plan': 'Plan',

@@ -17,7 +17,7 @@
       width="60%"
       :close-on-click-modal="false"
       @close='closeFormDialog'>
-    <div class="content" :style="{maxHeight: maxListHeight}">
+    <div class="content">
       <el-table
         :data="faultList"
         style="width: 100%"
