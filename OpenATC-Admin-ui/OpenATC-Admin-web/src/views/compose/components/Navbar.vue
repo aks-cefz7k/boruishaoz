@@ -361,4 +361,7 @@ export default {
     margin-right: 30px;
     float: right;
   }
+.el-menu--horizontal {
+    border-bottom: solid 1px $--border-color-base!important;
+}
 </style>

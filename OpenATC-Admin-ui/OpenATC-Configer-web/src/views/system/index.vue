@@ -463,9 +463,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.app-container {
-  min-width: 1730px;
-}
+// .app-container {
+//   min-width: 1730px;
+// }
 // .signal-version-name {
 //   margin-top: 20px;
 //   margin-left: 30px;
