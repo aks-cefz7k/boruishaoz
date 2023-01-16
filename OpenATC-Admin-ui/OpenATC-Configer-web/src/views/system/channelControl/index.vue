@@ -36,7 +36,6 @@
     <div class="title">通道信息</div>
     <el-table
       :data="list"
-      stripe
       max-height="500"
       style="width: 100%">
       <el-table-column

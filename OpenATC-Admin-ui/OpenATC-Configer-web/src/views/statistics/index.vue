@@ -40,7 +40,6 @@
             <el-table
             :data="tableData"
             height="380"
-            stripe
             size="small"
             style="width: 100%"
             v-loading.body="listLoading"

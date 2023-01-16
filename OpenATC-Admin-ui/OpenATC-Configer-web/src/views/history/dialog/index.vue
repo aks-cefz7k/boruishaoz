@@ -16,7 +16,6 @@
             <el-table
             :data="dialogDetailFault"
             height="350"
-            stripe
             size="small"
             style="width: 100%"
             v-loading.body="listLoading"

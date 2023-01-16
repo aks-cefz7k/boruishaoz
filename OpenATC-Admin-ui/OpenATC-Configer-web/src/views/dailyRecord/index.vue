@@ -14,7 +14,6 @@
   <div>
     <el-table
         :data="recordList"
-        stripe
         size="mini"
         :max-height="tableHeight"
         v-loading.body="listLoading"
