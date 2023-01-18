@@ -43,12 +43,14 @@ export default {
   },
   methods: {
     getHost () {
-      let host = `${window.location.href.split('//')[1].split('/')[0]}`
+      let res
+      let host = `${window.location.href.split('#')[0]}` + 'openatc'
       if (process.env.NODE_ENV === 'development') {
-        return host
+        res = host.replace('/openatc', '')
       } else {
-        return `${host}/openatc`
+        res = `${host}`
       }
+      return res
     },
     closeFormDialog () {
       // 弹窗关闭，将标识恢复默认值
@@ -56,7 +58,7 @@ export default {
       this.dialogVisible = false
     },
     openSingleEdge (dev) {
-      this.url = `http://${this.getHost()}/#/overviewNew/index?agentid=${dev.agentid}&isfromatc=true`
+      this.url = `${this.getHost()}/#/overviewNew/index?agentid=${dev.agentid}&isfromatc=true`
       this.dialogVisible = !this.dialogVisible
     },
     getClientHeight () {

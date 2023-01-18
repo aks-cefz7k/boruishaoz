@@ -138,7 +138,7 @@
         <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
         <div class="cross-module" style="height: 130px;">
           <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
             <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
             <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
             <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
@@ -152,7 +152,7 @@
           <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
           <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
         </div>
-        <div class="cross-module" :style="{'height':controlHeight+'px'}">
+        <div class="cross-module">
           <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
           <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
           <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
@@ -179,9 +179,9 @@
               </div>
             </div>
           </div>
-          <div style="margin-top: 100px; margin-left: 5px; width: 100%; height: 22px;">
+          <div style="margin-top: 100px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation">
             <div style="float: left;">
-              <el-button style="margin-left: 12px;" type="primary" size="mini" @click="patternCommit" v-show="isOperation">{{$t('edge.overview.implement')}}</el-button>
+              <el-button style="margin-left: 12px;" type="primary" size="mini" @click="patternCommit">{{$t('edge.overview.implement')}}</el-button>
             </div>
           </div>
         </div>
@@ -317,7 +317,7 @@ export default {
       currentStage: 0,
       stagesList: [],
       isOperation: false, // 是否为手动可操作状态
-      controlHeight: 380,
+      controlHeight: 430,
       showList: [{
         iconClass: 'model',
         name: '控制模式',
@@ -805,7 +805,7 @@ export default {
       if (!this.isOperation) {
         this.$route.params.flag = true
         this.isOperation = !this.isOperation
-        this.controlHeight = 430
+        this.controlHeight = 480
         this.tempPatternid = this.controlData.patternid
         let autonomyControl = {
           id: 0,

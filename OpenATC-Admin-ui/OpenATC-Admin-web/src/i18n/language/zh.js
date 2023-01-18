@@ -264,8 +264,8 @@ const zh = {
     'dutyroute': {
       'clickaddroute': '点击添加按钮添加路线',
       'nochooseplan': '未选中任何路线！',
-      'routePreview': '线路预览',
-      'routeState': '线路状态',
+      'routePreview': '路线预览',
+      'routeState': '路线控制',
       'dutyrouteconfig': '勤务路线配置',
       'node': '节点',
       'plan': '预案',

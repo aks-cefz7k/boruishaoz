@@ -36,7 +36,6 @@
     <div class="title">通道信息</div>
     <el-table
       :data="list"
-      stripe
       max-height="500"
       style="width: 100%">
       <el-table-column
@@ -287,13 +286,13 @@ export default {
   margin-top: 40px;
 }
 .single-channel {
-  width: 148px;
-  height: 240px;
-  background-color: #858585;
-  border-radius: 4px;
-  border: solid 1px #dcdcdc;
-  float: left;
-  margin-right: 20px;
+  // width: 148px;
+  // height: 240px;
+  // background-color: #858585;
+  // border-radius: 4px;
+  // border: solid 1px #dcdcdc;
+  // float: left;
+  // margin-right: 20px;
   // .name {
   //   height: 40px;
   //   background: #f8fbff;

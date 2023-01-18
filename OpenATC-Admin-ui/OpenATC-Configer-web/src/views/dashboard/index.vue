@@ -81,7 +81,6 @@
             :span-method="objectSpanMethod"
             :cell-class-name="addClass"
             size="mini"
-            stripe
             style="width: 100%">
             <el-table-column
               align="center"

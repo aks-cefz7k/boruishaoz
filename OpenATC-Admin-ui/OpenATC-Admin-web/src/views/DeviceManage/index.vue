@@ -35,7 +35,6 @@
     <div class="devs-table">
       <el-table
           :data="tableData.filter(data => !devsfilter || (data.agentid !== undefined && data.agentid.toLowerCase().includes(devsfilter.toLowerCase())) || (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(devsfilter.toLowerCase())) || (data.name !== undefined && data.name.toLowerCase().includes(devsfilter.toLowerCase())))"
-          stripe
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"

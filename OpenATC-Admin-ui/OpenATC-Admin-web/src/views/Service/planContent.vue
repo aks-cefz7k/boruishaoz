@@ -187,9 +187,11 @@ export default {
             item.controlName = controlName
             for (let dev of this.devicesData) {
               if (item.agentid === dev.agentid) {
-                item = Object.assign(item, dev)
+                item.stateName = dev.state
+                break
               }
             }
+            break
           }
         }
       }

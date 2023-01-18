@@ -30,7 +30,6 @@
   <div class="atc-table">
     <el-table
         :data="tableData.filter(data => !schfilter || (data.user_name !== undefined && data.user_name.toLowerCase().includes(schfilter.toLowerCase())) || (data.nick_name !== undefined && data.nick_name.toLowerCase().includes(schfilter.toLowerCase())))"
-        stripe
         size="mini"
         :max-height="tableHeight"
         v-loading.body="listLoading"
