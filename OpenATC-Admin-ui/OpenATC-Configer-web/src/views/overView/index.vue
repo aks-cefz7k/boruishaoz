@@ -127,7 +127,11 @@
           <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
           <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
           <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
-          <PatternStatus style="margin-top: 30px;" :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus>
+          <PatternStatus style="margin-top: 30px;"
+                        :cycle="crossStatusData.cycle"
+                        :syncTime="crossStatusData.syncTime"
+                        :patternStatusList="patternStatusList"
+                        :barrierList="barrierList"></PatternStatus>
         </div>
       </div>
       <div class="tuxing-right">
@@ -852,6 +856,21 @@ export default {
     },
     queryDevParams () {
       queryDevice().then(res => {
+        // res.data.data = {
+        //   'id': 192,
+        //   'lastTime': '2021-01-11 15:56:58',
+        //   'type': 'v-atc',
+        //   'status': 0,
+        //   'state': 'UP',
+        //   'jsonparam': {
+        //     'ip': '192.168.14.189',
+        //     'port': 10030,
+        //     'model': 'OpenATC_Software_Version 1.0.0'
+        //   },
+        //   'agentid': '30031',
+        //   'protocol': 'ocp',
+        //   'comtype': 0
+        // }
         if (!res.data.success) {
           this.$message.error(res.data.message)
           return
@@ -861,6 +880,8 @@ export default {
         this.port = devParams.port
         this.protocol = res.data.data.protocol
         this.agentId = res.data.data.agentid
+
+        // setIframdevid(this.agentId)
         this.resetCrossDiagram()
         this.registerMessage() // 注册消息
       })
