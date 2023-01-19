@@ -34,7 +34,6 @@
           class="deviceTable"
           :data="devicesTableData"
           row-key="id"
-          stripe
           v-loading.body="listLoading"
           style="width: 100%">
           <el-table-column

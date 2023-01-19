@@ -52,7 +52,6 @@
       <div class="manual-tables-bottom">
         <el-table
           :data="manualList"
-          stripe
           size="small"
           :max-height="tableHeight"
           v-loading.body="listLoading"

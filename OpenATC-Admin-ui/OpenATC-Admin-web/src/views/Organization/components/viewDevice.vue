@@ -33,7 +33,6 @@
       <div>
         <el-table
           :data="list"
-          stripe
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"

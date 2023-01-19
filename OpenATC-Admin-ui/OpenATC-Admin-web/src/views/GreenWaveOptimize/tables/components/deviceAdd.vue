@@ -26,7 +26,6 @@
     <div class="devs-table">
       <el-table
           ref="addDeviceTable"
-          stripe
           size="mini"
           style="width: 100%"
           v-loading.body="listLoading"

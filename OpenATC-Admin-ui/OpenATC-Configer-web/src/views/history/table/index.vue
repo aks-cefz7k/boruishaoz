@@ -15,7 +15,6 @@
     <div class="atc-table">
     <el-table
         :data="tableData"
-        stripe
         size="small"
         :max-height="tableHeight"
         style="width: 100%"

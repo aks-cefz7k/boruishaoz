@@ -35,7 +35,6 @@
     <div class="devs-table">
       <el-table
           :data="tableData.filter(data => !devsfilter || (data.agentid !== undefined && data.agentid.toLowerCase().includes(devsfilter.toLowerCase())) || (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(devsfilter.toLowerCase())) || (data.name !== undefined && data.name.toLowerCase().includes(devsfilter.toLowerCase())))"
-          stripe
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -173,21 +172,24 @@ export default {
     this.getList()
   },
   methods: {
-    getTag (row) { // 新规则，只根据state（DOWN,UP,FAULT）判断设备状态
+    getTag (row) {
       if (row.state === 'DOWN') {
         return {
           label: this.$t('openatc.devicemanager.offline'),
           type: 'info'
         }
-      } else if (row.state === 'UP') {
-        return {
-          label: this.$t('openatc.devicemanager.online'),
-          type: 'success'
-        }
       } else {
-        return {
-          label: this.$t('openatc.devicemanager.fault'),
-          type: 'danger'
+        if (row.status === 0) {
+          // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
+          return {
+            label: this.$t('openatc.devicemanager.online'),
+            type: 'success'
+          }
+        } else {
+          return {
+            label: this.$t('openatc.devicemanager.fault'),
+            type: 'danger'
+          }
         }
       }
     },

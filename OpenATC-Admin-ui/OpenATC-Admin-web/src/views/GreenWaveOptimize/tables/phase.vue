@@ -12,7 +12,6 @@
 <template>
   <div class="phasePanel">
     <el-table
-      stripe
       highlight-current-row
       ref="phaseTable"
       class="phaseTable"

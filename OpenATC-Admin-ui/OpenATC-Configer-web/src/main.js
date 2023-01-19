@@ -25,7 +25,7 @@ import Echarts from 'echarts'
 import '@/icons' // icon
 import '@/permission' // permission control
 import './assets/icon/iconfont.css'
-import '@/styles/common.scss'
+// import '@/styles/common.scss'
 
 import i18n from './i18n'
 

@@ -23,7 +23,7 @@
  // 主页样式
  .homeLayout {
     padding: 19px;
-    background-color: #eff1f4;
+    background-color: $--background-color-base;
     height: 100%;
     .top {
         height: 53%;
@@ -86,7 +86,7 @@
     .total {
         // width: 554px;
         height: 54px;
-        background: #f8f8f8;
+        background: $--color-black;
         // margin-bottom: 24px;
         display: flex;
         align-items: center;
@@ -218,7 +218,7 @@
         justify-content: center;
         > div {
             width: calc(100% - 50px);
-            background-color: #f8f8f8;
+            background-color: $--color-black;
             display: flex;
             align-items: center;
         }
@@ -270,7 +270,7 @@
     .cardTitle {
         height: 52px;
         line-height: 52px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid $--border-color-base;
         font-size: 18px;
         color: $--color-text-regular;
         font-family: MicrosoftYaHei;
@@ -972,7 +972,7 @@
     position: fixed;
     height: 100%;
     width: 100%;
-    background-color: #f2f9ff;
+    background-color: $--background-color-base;
     .switch-language {
         cursor:pointer;
         margin-top: 20px;

@@ -138,7 +138,7 @@
         <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
         <div class="cross-module" style="height: 130px;">
           <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
             <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
             <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
             <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
@@ -159,7 +159,7 @@
             <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
             <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
           </div>
-          <div style="margin-top: 5px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
+          <div style="margin-top: 20px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
           <div style="margin-left: 15px; width: 100%; height: auto;">
             <div class="control-model" v-for="(item, index) in modelList" :key="index">
               <div :class="currModel===item.id ? 'single-model-select' : 'single-model'" @click="selectModel(item.id)" :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''">
@@ -169,7 +169,7 @@
               </div>
             </div>
           </div>
-          <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
+          <div style="margin-top: 170px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
           <!-- <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div> -->
           <div style="margin-left: 15px; width: 100%; height: auto;">
             <div class="control-model" v-for="(item, index) in stagesList" :key="index">
@@ -316,7 +316,7 @@ export default {
       currentStage: 0,
       stagesList: [],
       isOperation: false, // 是否为手动可操作状态
-      controlHeight: 380,
+      controlHeight: 430,
       showList: [{
         iconClass: 'model',
         name: '控制模式',
@@ -784,7 +784,7 @@ export default {
       if (!this.isOperation) {
         this.$route.params.flag = true
         this.isOperation = !this.isOperation
-        this.controlHeight = 430
+        this.controlHeight = 480
         this.tempPatternid = this.controlData.patternid
         let autonomyControl = {
           id: 0,

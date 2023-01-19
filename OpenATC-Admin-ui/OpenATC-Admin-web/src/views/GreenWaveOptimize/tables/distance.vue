@@ -12,7 +12,6 @@
 <template>
   <div class="distancePanel">
     <el-table
-      stripe
       highlight-current-row
       ref="distanceTable"
       class="distanceTable"

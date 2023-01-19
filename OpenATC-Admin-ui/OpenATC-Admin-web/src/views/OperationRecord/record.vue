@@ -25,7 +25,6 @@
      <div class="atc-table">
     <el-table
         :data="tableData.filter(data => !schfilter || (data.operator !== undefined && data.operator.toLowerCase().includes(schfilter.toLowerCase())) || (data.description !== undefined && data.description.toLowerCase().includes(schfilter.toLowerCase())))"
-        stripe
         size="mini"
         :max-height="tableHeight"
         style="width: 100%"
