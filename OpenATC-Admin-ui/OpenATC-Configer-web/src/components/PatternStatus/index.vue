@@ -32,6 +32,8 @@
       <div v-for="(item, index) in barrierList" :key="index + '1'">
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
       </div>
+      <div class="curTimeDiv" :style="{'left':paddingLeft, 'background-color': '#409EFF'}">{{ timeNumDevide }}</div>
+      <div class="curTimeLine" :style="{'left':paddingLeft, 'height':barrierHeight}"></div>
     </div>
 </template>
 <script>
@@ -53,6 +55,23 @@ export default {
     },
     barrierList: {
       type: Array
+    },
+    cycle: {
+      type: Number
+    },
+    syncTime: {
+      type: Number
+    }
+  },
+  computed: {
+    paddingLeft () {
+      let curPercent = (this.cycle - this.syncTime) / this.cycle
+      let res = curPercent * 100 + '%'
+      return res
+    },
+    timeNumDevide () {
+      let res = this.syncTime + '/' + this.cycle
+      return res
     }
   },
   watch: {
@@ -73,8 +92,6 @@ export default {
       let patternLength = this.patternStatusList.length
       this.barrierHeight = (patternLength * 35 + 21) + 'px'
     }
-  },
-  computed: {
   }
 }
 </script>
@@ -115,5 +132,23 @@ export default {
   width: 2px;
   // height: 99px;
   background-color: #787878;
+}
+.curTimeLine {
+  position: absolute;
+  top: -10px;
+  width: 2px;
+  background-color: #409EFF;
+}
+.curTimeDiv {
+  position: absolute;
+  z-index:50;
+  top: -21px;
+  margin-left: -30px;
+  text-align:center;
+  vertical-align: middle;
+  width: 60px;
+  height: 19px;
+  color:#FFFFFF;
+  background-color: #409EFF;
 }
 </style>

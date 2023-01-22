@@ -131,7 +131,11 @@
           <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
           <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
           <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
-          <PatternStatus style="margin-top: 30px;" :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus>
+          <PatternStatus style="margin-top: 30px;"
+                        :cycle="crossStatusData.cycle"
+                        :syncTime="crossStatusData.syncTime"
+                        :patternStatusList="patternStatusList"
+                        :barrierList="barrierList"></PatternStatus>
         </div>
       </div>
       <div class="tuxing-right">
@@ -160,7 +164,7 @@
             <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
           </div>
           <div style="margin-top: 5px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
-          <div style="margin-left: 15px; width: 100%; overflow: hidden;">
+          <div style="padding-left: 15px; width: 100%; overflow: hidden;">
             <div class="control-model" v-for="(item, index) in modelList" :key="index">
               <div :class="currModel===item.id ? 'single-model-select' : 'single-model'" @click="selectModel(item.id)" :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''">
               <!-- <div :class="currModel===item.id ? 'single-model-select' : (preselectModel == item.id ? 'single-model-preselect' : 'single-model')" @click="selectModel(item.id)"> -->
@@ -171,7 +175,7 @@
           </div>
           <div style="margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
           <!-- <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div> -->
-          <div style="margin-left: 15px; width: 100%; height: auto;">
+          <div style="padding-left: 15px; width: 100%; height: auto;">
             <div class="control-model" v-for="(item, index) in stagesList" :key="index">
               <div :class="currentStage===index + 1 ? 'single-model-select' : 'single-model'" @click="selectStages(index + 1)" :style="preselectStages == index + 1 ? 'border: solid 1px #409eff;' : ''">
                 <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
@@ -877,6 +881,21 @@ export default {
     },
     queryDevParams () {
       queryDevice().then(res => {
+        // res.data.data = {
+        //   'id': 192,
+        //   'lastTime': '2021-01-11 15:56:58',
+        //   'type': 'v-atc',
+        //   'status': 0,
+        //   'state': 'UP',
+        //   'jsonparam': {
+        //     'ip': '192.168.14.189',
+        //     'port': 10030,
+        //     'model': 'OpenATC_Software_Version 1.0.0'
+        //   },
+        //   'agentid': '30031',
+        //   'protocol': 'ocp',
+        //   'comtype': 0
+        // }
         if (!res.data.success) {
           this.$message.error(res.data.message)
           return
@@ -886,6 +905,8 @@ export default {
         this.port = devParams.port
         this.protocol = res.data.data.protocol
         this.agentId = res.data.data.agentid
+
+        // setIframdevid(this.agentId)
         this.resetCrossDiagram()
         this.registerMessage() // 注册消息
       })
