@@ -65,8 +65,11 @@ export default {
   },
   computed: {
     paddingLeft () {
-      let curPercent = (this.cycle - this.syncTime) / this.cycle
-      let res = curPercent * 100 + '%'
+      let res = '0%'
+      if (this.cycle && this.cycle > 0) {
+        let curPercent = (this.cycle - this.syncTime) / this.cycle
+        res = curPercent * 100 + '%'
+      }
       return res
     },
     timeNumDevide () {

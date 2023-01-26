@@ -132,8 +132,8 @@
           <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
           <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
           <PatternStatus style="margin-top: 30px;"
-                        :cycle="crossStatusData.cycle"
-                        :syncTime="crossStatusData.syncTime"
+                        :cycle="crossStatusData ? crossStatusData.cycle : 0"
+                        :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
                         :patternStatusList="patternStatusList"
                         :barrierList="barrierList"></PatternStatus>
         </div>
