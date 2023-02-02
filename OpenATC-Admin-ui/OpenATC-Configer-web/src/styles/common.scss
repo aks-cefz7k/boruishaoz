@@ -1212,3 +1212,47 @@ color: $--color-text-secondary;
 .el-menu--horizontal {
   border-bottom: solid 1px $--border-color-base!important;
 }
+// PatternStatus
+.main-patternstatus {
+  .ring-num {
+    float: left;
+    margin-top:7px;
+    margin-left: 5px;
+    font-family: SourceHanSansCN-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: $--color-white;
+  }
+  .ring-phase {
+    float: left;
+    margin-left: 5px;
+    margin-top:1px;
+  }
+  .divider {
+    position: absolute;
+    top: -10px;
+    width: 2px;
+    background-color: #787878;
+  }
+  .curTimeLine {
+    position: absolute;
+    top: -10px;
+    width: 2px;
+    background-color: $--color-primary;
+  }
+  .curTimeDiv {
+    position: absolute;
+    z-index:50;
+    top: -21px;
+    margin-left: -30px;
+    text-align:center;
+    vertical-align: middle;
+    width: 60px;
+    height: 19px;
+    color:$--color-white;
+    background-color: $--color-primary;
+  }
+}

@@ -54,6 +54,7 @@ const zh = {
       'optimize': '优化',
       'control': '控制',
       'deviceInfo': '设备信息',
+      'adaptiveParameter': '自适应参数',
       'user': '用户',
       'dailyRecord': '日志',
       'controlPanel': '手动面板',
@@ -412,6 +413,19 @@ const zh = {
       'deviceinfostyle': 'margin-left: 50px; top: 10px;',
       'deviceparamstyle': 'margin-left: 50px; top: 10px;',
       'deviceselflearningstyle': 'margin-left: 50px; top: 15px;'
+    },
+    'singleoptim': {
+      'deletetip': '确认删除？',
+      'selfControlParams': '自适应控制参数',
+      'lossTimeOfGreenBeginning': '绿初损失时间（秒）',
+      'lossTimeOfYellowEnding': '黄末损失时间（秒）',
+      'saturationFlow': '饱和流量（辆/小时）',
+      'cycleAdjustmentFactor': '周期调整因子',
+      'selfLearningModeOnOrOff': '自学习模式',
+      'staticWeight': '静态权重',
+      'phaseStaticFactor': '相位静态因子',
+      'createPatternFirst': '请先创建方案',
+      'gratterThanOne': '数值之和不能大于1'
     },
     'controlpanel': {
       'controlmode': '控制模式',

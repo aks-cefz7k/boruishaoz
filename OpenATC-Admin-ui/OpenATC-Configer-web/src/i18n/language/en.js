@@ -54,6 +54,7 @@ const en = {
       'optimize': 'Optimize',
       'control': 'Control',
       'deviceInfo': 'DeviceInfo',
+      'adaptiveParameter': 'AdaptiveParameter',
       'user': 'User',
       'dailyRecord': 'DailyRecord',
       'controlPanel': 'ControlPanel',
@@ -414,6 +415,19 @@ const en = {
       'deviceinfostyle': 'margin-left: 100px; top: 10px;',
       'deviceparamstyle': 'margin-left: 170px; top: 10px;',
       'deviceselflearningstyle': 'margin-left: 100px; top: 15px;'
+    },
+    'singleoptim': {
+      'deletetip': 'Sure to delete ？',
+      'selfControlParams': 'Self Control Params',
+      'lossTimeOfGreenBeginning': 'LossTime Of Green Beginning(second)',
+      'lossTimeOfYellowEnding': 'LossTime Of Yellow Ending(second)',
+      'saturationFlow': 'Saturation Flow(vehidle/hour)',
+      'cycleAdjustmentFactor': 'Cycle Adjustment Factor',
+      'selfLearningModeOnOrOff': 'Self Learning Mode',
+      'staticWeight': 'Static Weight',
+      'phaseStaticFactor': 'Phase Static Factor',
+      'createPatternFirst': 'Please create pattern first',
+      'gratterThanOne': 'The sum must less than one '
     },
     'controlpanel': {
       'controlmode': 'Control Mode',

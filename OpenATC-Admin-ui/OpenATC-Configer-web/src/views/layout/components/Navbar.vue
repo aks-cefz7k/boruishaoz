@@ -409,6 +409,9 @@ export default {
         if (allTscParam.channellock === undefined) {
           allTscParam.channellock = []
         }
+        if (allTscParam.singleoptim === undefined) {
+          allTscParam.singleoptim = []
+        }
         this.globalParamModel.setGlobalParams(allTscParam)
         this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
       })

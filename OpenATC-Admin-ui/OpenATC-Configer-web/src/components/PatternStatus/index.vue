@@ -32,7 +32,7 @@
       <div v-for="(item, index) in barrierList" :key="index + '1'">
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
       </div>
-      <div class="curTimeDiv" :style="{'left':paddingLeft, 'background-color': '#409EFF'}">{{ timeNumDevide }}</div>
+      <div class="curTimeDiv" v-show="cycle && cycle > 0" :style="{'left':paddingLeft, 'background-color': '#409EFF'}">{{ timeNumDevide }}</div>
       <div class="curTimeLine" :style="{'left':paddingLeft, 'height':barrierHeight}"></div>
     </div>
 </template>
@@ -73,7 +73,7 @@ export default {
       return res
     },
     timeNumDevide () {
-      let res = this.syncTime + '/' + this.cycle
+      let res = (this.cycle - this.syncTime) + '/' + this.cycle
       return res
     }
   },
@@ -110,48 +110,5 @@ export default {
 .first-1 {
   float: left;
   // text-align: center;
-}
-.ring-num {
-  float: left;
-  margin-top:7px;
-  margin-left: 5px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #ffffff;
-}
-.ring-phase {
-  float: left;
-  margin-left: 5px;
-  margin-top:1px;
-}
-.divider {
-  position: absolute;
-  top: -10px;
-  // left: 370px;
-  width: 2px;
-  // height: 99px;
-  background-color: #787878;
-}
-.curTimeLine {
-  position: absolute;
-  top: -10px;
-  width: 2px;
-  background-color: #409EFF;
-}
-.curTimeDiv {
-  position: absolute;
-  z-index:50;
-  top: -21px;
-  margin-left: -30px;
-  text-align:center;
-  vertical-align: middle;
-  width: 60px;
-  height: 19px;
-  color:#FFFFFF;
-  background-color: #409EFF;
 }
 </style>

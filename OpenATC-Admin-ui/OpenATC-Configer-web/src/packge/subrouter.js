@@ -181,6 +181,15 @@ const subRouter = [{
     }
   },
   {
+    path: 'adaptiveParameter',
+    name: 'adaptiveParameter',
+    component: () => import('@/views/adaptiveParameter/index'),
+    meta: {
+      title: 'edge.route.adaptiveParameter',
+      icon: 'adaptiveParameter'
+    }
+  },
+  {
     path: 'controlPanel',
     name: 'controlPanel',
     component: () => import('@/views/controlPanel/index'),
