@@ -864,7 +864,7 @@ border: 1px solid #f0f0f0;
   position: absolute;
   float: left;
   width: 25px;
-  background-color: $--color-white;
+  background-color: $--background-color-base;
   z-index:3;
 }
 .stage-span {
@@ -879,7 +879,7 @@ border: 1px solid #f0f0f0;
   font-stretch: normal;
   line-height: 20px;
   letter-spacing: 0px;
-  background-color: $--color-white;
+  background-color: $--background-color-base;
   color: $--color-text-primary;
 }
 .container-right .el-form-item__label {
