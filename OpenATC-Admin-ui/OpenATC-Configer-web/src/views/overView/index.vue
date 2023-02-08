@@ -116,17 +116,18 @@
         </div>
       </div>
     </div>
-    <div class="tuxingjiemian" v-show="isShowGui">
+    <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
       <div class="tuxing-left">
-        <div class="crossDirection-display" :class="{'largeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
-          'middleCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
-          'smallCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
-          'miniCrossImg': curBodyWidth <= 960 && curBodyWidth > 720,
-          'superminiCrossImg': curBodyWidth <= 720 }">
+        <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
+          'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
+          'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
+          'smallCrossImg': curBodyWidth <= 960 && curBodyWidth > 720,
+          'miniCrossImg': curBodyWidth <= 720 && curBodyWidth > 650,
+          'superminiCrossImg': curBodyWidth <= 650 }">
           <CrossDiagram v-if="reset" :crossStatusData="crossStatusData" :agentId="agentId" :devStatus="devStatus"/>
         </div>
         <div class="pattern-status">
-          <div class="pattern-name">{{$t('edge.overview.patternstate')}}</div>
+          <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
           <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
           <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
           <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
