@@ -18,7 +18,7 @@
   position: relative;
   height: 100%;
   width: 100%;
-  background: $--color-white;
+  background: $--background-color-base;
 }
  // 主页样式
  .homeLayout {
@@ -325,7 +325,7 @@
     }
     .atc-table {
         position: absolute;
-        top: 150px;
+        top: 130px;
         left: 20px;
         right: 20px;
         border: solid 1px $--border-color-lighter;
@@ -339,9 +339,11 @@
         height: calc(100vh - 50px);
         color: $--color-text-primary;
         border-right: solid 1px $--border-color-lighter;
+        background-color: $--color-white;
     }
     .el-main {
       height: calc(100vh - 50px);
+      background-color: $--background-color-base;
     }
   }
   .planContent {
@@ -375,7 +377,7 @@
           transition: .1s;
           font-size: 14px;
           border-radius: 4px;
-          color: $--color-white;
+          color: $--button-primary-font-color;
           background-color: $--color-primary;
           border-color: $--color-primary;
           cursor: pointer;
@@ -434,9 +436,9 @@
         overflow-y: auto;
         border-right: none;
       }
-      .el-menu-item.is-active {
-        background: #eaeaea;
-      }
+      // .el-menu-item.is-active {
+      //   background: #eaeaea;
+      // }
       /* 蒙层样式 */
       .mask {
         position: fixed;
@@ -460,7 +462,7 @@
           transition: .1s;
           font-size: 14px;
           border-radius: 4px;
-          color: $--color-white;
+          color: $--button-primary-font-color;
           background-color: $--color-primary;
           border-color: $--color-primary;
           cursor: pointer;
@@ -642,7 +644,7 @@
   .openatc-operationrecord {
     .atc-table {
         position: absolute;
-        top: 150px;
+        top: 130px;
         left: 20px;
         right: 20px;
         border: solid 1px $--border-color-lighter;
@@ -662,9 +664,11 @@
         height: calc(100vh - 50px);
         color: $--color-text-primary;
         border-right: solid 1px $--border-color-lighter;
+        background-color: $--color-white;
       }
       .el-main {
         height: calc(100vh - 50px);
+        background-color: $--background-color-base;
       }
   }
   .serviceroute-planmenu {
@@ -674,9 +678,9 @@
         overflow-y: auto;
         border-right: none;
       }
-      .el-menu-item.is-active {
-        background: #eaeaea;
-      }
+      // .el-menu-item.is-active {
+      //   background: $--color-primary;
+      // }
       /* 蒙层样式 */
       .mask {
         position: fixed;
@@ -700,13 +704,13 @@
         transition: 0.1s;
         font-size: 14px;
         border-radius: 4px;
-        color: $--color-white;
+        color: $--button-primary-font-color;
         background-color: $--color-primary;
         border-color: $--color-primary;
         cursor: pointer;
       }
       .btnGroup button:hover {
-        color: #fff;
+        color: $--button-primary-font-color;
         background-color: $--color-primary;
         border-color: $--color-primary;
         opacity: 0.8;
@@ -783,13 +787,13 @@
         transition: 0.1s;
         font-size: 14px;
         border-radius: 4px;
-        color: $--color-white;
+        color: $--button-primary-font-color;
         background-color: $--color-primary;
         border-color: $--color-primary;
         cursor: pointer;
       }
       .btnGroup button:hover {
-        color: $--color-white;
+        color: $--button-primary-font-color;
         background-color: $--color-primary;
         border-color: $--color-primary;
         opacity: 0.8;

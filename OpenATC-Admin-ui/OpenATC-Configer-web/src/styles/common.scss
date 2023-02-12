@@ -627,9 +627,12 @@ border: 1px solid #f0f0f0;
   }
   .tuxing-left {
     float: left;
-    margin-top: 20px;
-    width: 63%;
-    height: 840px;
+    // margin-top: 20px;
+    margin-left: 1%;
+    width: 62%;
+    height: 860px;
+    background-color: $--color-white;
+    border: solid 1px $--border-color-lighter;
   }
   .crossDirection-display {
     height: 650px;
@@ -686,6 +689,7 @@ border: 1px solid #f0f0f0;
     height: 200px;
     margin-left: 20px;
     margin-top: 20px;
+    margin-right: 20px;
   }
   .pattern-name {
     display: inline;
@@ -710,14 +714,18 @@ border: 1px solid #f0f0f0;
   }
   .tuxing-right {
     float: left;
-    margin-top: 20px;
-    width: 37%;
-    height: 840px;
+    // margin-top: 20px;
+    margin-left: 1%;
+    width: 35%;
+    height: 860px;
     box-sizing: border-box;
-    padding-left: 10px;
+    // padding-left: 10px;
+    background-color: $--color-white;
+    border: solid 1px $--border-color-lighter;
   }
   .cross-mess {
-    margin-left: 5px;
+    margin-left: 15px;
+    margin-top: 15px;
     height: 20px;
     font-family: SourceHanSansCN-Regular;
     font-size: 20px;
@@ -729,7 +737,8 @@ border: 1px solid #f0f0f0;
   }
   .cross-module {
     float: left;
-    margin-top: 20px;
+    margin-top: 5px;
+    margin-left: 15px;
     width: 98%;
     padding-bottom: 20px;
     // min-width: 600px;

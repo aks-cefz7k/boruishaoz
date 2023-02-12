@@ -164,7 +164,7 @@
             <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
             <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
           </div>
-          <div style="margin-top: 5px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
+          <div style="margin-top: 15px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
           <div style="padding-left: 15px; width: 100%; overflow: hidden;">
             <div class="control-model" v-for="(item, index) in modelList" :key="index">
               <div :class="currModel===item.id ? 'single-model-select' : 'single-model'" @click="selectModel(item.id)" :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''">
@@ -174,7 +174,7 @@
               </div>
             </div>
           </div>
-          <div style="margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
+          <div style="margin-left: 5px; margin-top: 15px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
           <!-- <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div> -->
           <div style="padding-left: 15px; width: 100%; height: auto;">
             <div class="control-model" v-for="(item, index) in stagesList" :key="index">

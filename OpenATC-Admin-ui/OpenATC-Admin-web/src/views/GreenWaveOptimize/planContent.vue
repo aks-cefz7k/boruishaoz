@@ -334,13 +334,13 @@ export default {
     transition: .1s;
     font-size: 14px;
     border-radius: 4px;
-    color: $--color-white;
+    color: $--button-primary-font-color;
     background-color: $--color-primary;
     border-color: $--color-primary;
     cursor: pointer;
 }
 .btnGroup button:hover {
-    color: $--color-white;
+    color: $--button-primary-font-color;
     background-color: $--color-primary;
     border-color: $--color-primary;
     opacity: 0.8;
@@ -413,7 +413,7 @@ export default {
     transition: .1s;
     font-size: 14px;
     border-radius: 4px;
-    color: $--color-white;
+    color: $--button-primary-font-color;
     background-color: $--color-primary;
     border-color: $--color-primary;
     cursor: pointer;
