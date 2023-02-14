@@ -43,6 +43,13 @@
             </el-input>
         </el-form-item>
         <el-form-item
+            :label="$t('openatc.devicemanager.firm')"
+            prop="firm">
+            <el-select v-model="deviceInfo.firm" placeholder="" style="width:100%">
+                <el-option v-for="firm in firmList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item
             :label="$t('openatc.devicemanager.type')"
             prop="type">
             <el-select v-model="deviceInfo.type" placeholder="" style="width:100%">
@@ -184,7 +191,8 @@ export default {
         ip: '',
         port: '',
         lng: 0,
-        lat: 0
+        lat: 0,
+        firm: 'Kedacom'
       },
       rules: {
         type: [
@@ -204,8 +212,21 @@ export default {
         ],
         name: [
           { required: true, message: this.$t('openatc.devicemanager.entername'), trigger: 'blur' }
+        ],
+        firm: [
+          { required: true, message: this.$t('openatc.devicemanager.choosetype'), trigger: 'blur' }
         ]
-      }
+      },
+      firmList: [{
+        label: '科达',
+        value: 'Kedacom'
+      }, {
+        label: '泰科',
+        value: 'Tyco'
+      }, {
+        label: '华通',
+        value: 'Huatong'
+      }]
     }
   },
   methods: {
@@ -341,7 +362,7 @@ export default {
   padding: 10px 72px 38px 0;
 }
 // 自定义校验规则的labal加上*号
-.dev-update .ipLabel .el-form-item__label:before,  .dev-update .portLabel .el-form-item__label:before{
+.dev-update .ipLabel .el-form-item__label:before,  .dev-update .portLabel .el-form-item__label:before, .dev-update .portLabel .el-form-item__label:before{
     content: '*';
     color: #f56c6c;
     margin-right: 4px;

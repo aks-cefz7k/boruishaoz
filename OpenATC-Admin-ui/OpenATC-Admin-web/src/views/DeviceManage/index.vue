@@ -57,6 +57,12 @@
           align="center">
           </el-table-column>
           <el-table-column
+          prop="firm"
+          :label="$t('openatc.devicemanager.firm')"
+          sortable
+          align="center">
+          </el-table-column>
+          <el-table-column
           prop="type"
           :label="$t('openatc.devicemanager.type')"
           sortable
@@ -135,7 +141,8 @@ export default {
       childTitle: 'adddevice',
       messageboxVisible: false,
       tableData: [],
-      listLoading: false // 数据加载等待动画
+      listLoading: false, // 数据加载等待动画
+      firmMap: new Map([['Kedacom', '科达'], ['Tyco', '泰科'], ['Huatong', '华通']])
     }
   },
   mounted: function () {
@@ -201,7 +208,10 @@ export default {
           return
         }
         this.listLoading = false
-        this.tableData = res.data.data
+        this.tableData = res.data.data.map(data => ({
+          ...data,
+          firm: this.firmMap.get(data.firm)
+        }))
       })
     },
     handleToDetail (row) {
