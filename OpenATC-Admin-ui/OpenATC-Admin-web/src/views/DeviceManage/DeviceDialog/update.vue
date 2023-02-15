@@ -279,7 +279,7 @@ export default {
         }
         this.dialogFormVisible = false
         this.$message({
-          message: this.$t('edge.common.addsuccess'),
+          message: this.$t('openatc.common.addsuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
@@ -302,7 +302,7 @@ export default {
         if (!res.data.success) {
           this.$message.error(res.data.message)
           this.$message({
-            message: this.$t('edge.common.updatefailed'),
+            message: this.$t('openatc.common.updatefailed'),
             type: 'error',
             duration: 1 * 1000
           })
@@ -310,7 +310,7 @@ export default {
         }
         this.dialogFormVisible = false
         this.$message({
-          message: this.$t('edge.common.updatesuccess'),
+          message: this.$t('openatc.common.updatesuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
