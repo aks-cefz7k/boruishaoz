@@ -57,12 +57,6 @@
           align="center">
           </el-table-column>
           <el-table-column
-          prop="firm"
-          :label="$t('openatc.devicemanager.firm')"
-          sortable
-          align="center">
-          </el-table-column>
-          <el-table-column
           prop="type"
           :label="$t('openatc.devicemanager.type')"
           sortable
@@ -77,6 +71,18 @@
           <el-table-column
           prop="jsonparam.port"
           :label="$t('openatc.devicemanager.port')"
+          align="center">
+          </el-table-column>
+           <el-table-column
+          prop="platform"
+          :label="$t('openatc.devicemanager.platform')"
+          sortable
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="firm"
+          :label="$t('openatc.devicemanager.firm')"
+          sortable
           align="center">
           </el-table-column>
           <el-table-column

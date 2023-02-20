@@ -43,13 +43,6 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            :label="$t('openatc.devicemanager.firm')"
-            prop="firm">
-            <el-select v-model="deviceInfo.firm" placeholder="" style="width:100%">
-                <el-option v-for="firm in firmList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item
             :label="$t('openatc.devicemanager.type')"
             prop="type">
             <el-select v-model="deviceInfo.type" placeholder="" style="width:100%">
@@ -83,6 +76,20 @@
             v-model="deviceInfo.port"
             @keyup.enter.native="submitDeviceInfo('device')">
             </el-input>
+        </el-form-item>
+        <el-form-item
+            :label="$t('openatc.devicemanager.platform')"
+            prop="platform">
+            <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%">
+                <el-option v-for="firm in platformList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item
+            :label="$t('openatc.devicemanager.firm')"
+            prop="firm">
+            <el-select v-model="deviceInfo.firm" placeholder="" style="width:100%" clearable>
+                <el-option v-for="firm in firmList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
+            </el-select>
         </el-form-item>
         <el-form-item
             :label="$t('openatc.devicemanager.describe')"
@@ -192,7 +199,8 @@ export default {
         port: '',
         lng: 0,
         lat: 0,
-        firm: 'Kedacom'
+        firm: '',
+        platform: 'OpenATC'
       },
       rules: {
         type: [
@@ -213,8 +221,8 @@ export default {
         name: [
           { required: true, message: this.$t('openatc.devicemanager.entername'), trigger: 'blur' }
         ],
-        firm: [
-          { required: true, message: this.$t('openatc.devicemanager.choosetype'), trigger: 'blur' }
+        platform: [
+          { required: true, message: this.$t('openatc.devicemanager.chooseplatform'), trigger: 'blur' }
         ]
       },
       firmList: [{
@@ -226,6 +234,16 @@ export default {
       }, {
         label: '华通',
         value: 'Huatong'
+      }],
+      platformList: [{
+        label: 'OpenATC',
+        value: 'OpenATC'
+      }, {
+        label: 'SCATS',
+        value: 'SCATS'
+      }, {
+        label: 'HUATONG',
+        value: 'HUATONG'
       }]
     }
   },
