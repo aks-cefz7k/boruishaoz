@@ -739,7 +739,7 @@ border: 1px solid #f0f0f0;
     float: left;
     margin-top: 5px;
     padding-left: 15px;
-    width: 98%;
+    width: 90%;
     padding-bottom: 20px;
     // min-width: 600px;
     // height: 180px;
@@ -889,7 +889,7 @@ border: 1px solid #f0f0f0;
   position: absolute;
   float: left;
   width: 25px;
-  background-color: $--background-color-base;
+  background-color: $--color-white;
   z-index:3;
 }
 .stage-span {
@@ -904,7 +904,7 @@ border: 1px solid #f0f0f0;
   font-stretch: normal;
   line-height: 20px;
   letter-spacing: 0px;
-  background-color: $--background-color-base;
+  background-color: $--color-white;
   color: $--color-text-primary;
 }
 .container-right .el-form-item__label {
