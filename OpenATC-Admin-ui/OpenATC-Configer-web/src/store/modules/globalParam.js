@@ -81,7 +81,8 @@ const Global = {
     copiedTscParam: defaultCopiedTscParam,
     routers: [],
     curBodyWidth: 1920,
-    curBodyHeight: 1080
+    curBodyHeight: 1080,
+    FuncSort: 'allFunc'
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -116,6 +117,9 @@ const Global = {
     SAVE_BODY_DOM_SIZE: (state, size) => {
       state.curBodyWidth = size.width
       state.curBodyHeight = size.height
+    },
+    SAVE_FUNNCTION_LEVEL: (state, FUNC) => {
+      state.FuncSort = FUNC
     }
   },
   actions: {
@@ -154,6 +158,9 @@ const Global = {
     // }
     SaveBodyDomSize ({ commit }, size) {
       commit('SAVE_BODY_DOM_SIZE', size)
+    },
+    SaveFunctionLevel ({ commit }, FUNC) {
+      commit('SAVE_FUNNCTION_LEVEL', FUNC)
     }
   }
 }

@@ -17,6 +17,7 @@
 
 <script>
 import { getLanguage } from '@/utils/auth'
+import { queryDevice } from '@/api/control'
 export default {
   name: 'App',
   data () {
@@ -34,6 +35,25 @@ export default {
       },
       // 深度观察监听
       deep: true
+    }
+  },
+  methods: {
+    getPlatform () {
+      queryDevice().then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return
+        }
+        let platform = res.data.data.platform
+        let func = 'allFunc'
+        if (platform === 'OpenATC') {
+          func = 'allFunc'
+        }
+        if (platform === 'SCATS' || platform === 'HUATONG') {
+          func = 'basicFunc'
+        }
+        this.$store.dispatch('SaveFunctionLevel', func)
+      })
     }
   },
   mounted: function () {
@@ -55,6 +75,7 @@ export default {
         this.bodyDomSize.height = document.getElementById('app').clientHeight
       }, false)
     })
+    this.getPlatform()
   }
 }
 </script>

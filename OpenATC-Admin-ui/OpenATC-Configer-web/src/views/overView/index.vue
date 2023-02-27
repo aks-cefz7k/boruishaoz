@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="container-main" :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top'}">
-    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!fromControlPlatform">
+    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="FuncSort === 'allFunc'">
       <div slot="icon" class="sloat-icon">
         <i class="iconfont icon-tuxingjiemian" style="color: #ffffff;" v-show="!isShowGui"></i>
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
@@ -167,7 +167,10 @@
           <div style="margin-top: 15px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
           <div style="padding-left: 15px; width: 100%; overflow: hidden;">
             <div class="control-model" v-for="(item, index) in modelList" :key="index">
-              <div :class="currModel===item.id ? 'single-model-select' : 'single-model'" @click="selectModel(item.id)" :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''">
+              <div :class="currModel===item.id ? 'single-model-select' : 'single-model'"
+              @click="selectModel(item.id)"
+              :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''"
+              v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
               <!-- <div :class="currModel===item.id ? 'single-model-select' : (preselectModel == item.id ? 'single-model-preselect' : 'single-model')" @click="selectModel(item.id)"> -->
                 <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
                 <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
@@ -365,13 +368,14 @@ export default {
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
       shrink: 1,
-      fromControlPlatform: false
+      basicFuncControlId: [1, 4, 5] // 基础功能包含的控制方式： 黄闪、步进、定周期
     }
   },
   computed: {
     ...mapState({
       curBodyWidth: state => state.globalParam.curBodyWidth,
-      curBodyHeight: state => state.globalParam.curBodyHeight
+      curBodyHeight: state => state.globalParam.curBodyHeight,
+      FuncSort: state => state.globalParam.FuncSort
     })
   },
   watch: {
@@ -380,9 +384,6 @@ export default {
         if (val.query !== undefined) {
           if (this.$route.query.shrink) {
             this.shrink = Number(this.$route.query.shrink)
-          }
-          if (this.$route.query.fromControlPlatform) {
-            this.fromControlPlatform = true
           }
           this.agentId = this.$route.query.agentid
           setIframdevid(this.agentId)
@@ -413,9 +414,6 @@ export default {
   mounted () {
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
-    }
-    if (this.$route.query.fromControlPlatform) {
-      this.fromControlPlatform = true
     }
   },
   methods: {

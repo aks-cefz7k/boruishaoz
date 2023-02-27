@@ -12,8 +12,8 @@
 <template>
   <div class="app-wrapper" :class="classObj">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-    <sidebar class="sidebar-container" v-if="!fromControlPlatform"></sidebar>
-    <div class="main-container" :class="{'changeMainPosition': fromControlPlatform}">
+    <sidebar class="sidebar-container" v-if="FuncSort === 'allFunc'"></sidebar>
+    <div class="main-container" :class="{'changeMainPosition': FuncSort === 'basicFunc'}">
       <navbar></navbar>
       <app-main></app-main>
     </div>
@@ -27,6 +27,7 @@ import GlobalParamsModel from '@/EdgeMgr/controller/globalParamsMgr'
 import { setIframdevid } from '@/utils/auth'
 // import { AddDevice } from '@/api/control'
 import router from '@/router'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Layout',
@@ -37,7 +38,6 @@ export default {
   },
   data () {
     return {
-      fromControlPlatform: false
     }
   },
   mixins: [ResizeMixin],
@@ -54,7 +54,10 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
-    }
+    },
+    ...mapState({
+      FuncSort: state => state.globalParam.FuncSort
+    })
   },
   watch: {
     $route: {
@@ -89,9 +92,6 @@ export default {
         let agentId = this.$route.query.agentid
         setIframdevid(agentId)
       }
-    }
-    if (this.$route.query.fromControlPlatform) {
-      this.fromControlPlatform = true
     }
     //  else { // 单机设备情况下，需要先创建一个设备
     //   let deviceInfo = {}
