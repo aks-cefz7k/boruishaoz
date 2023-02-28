@@ -10,186 +10,188 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="container-main" :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top'}">
+  <div class="container-main">
     <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="FuncSort === 'allFunc'">
       <div slot="icon" class="sloat-icon">
         <i class="iconfont icon-tuxingjiemian" style="color: #ffffff;" v-show="!isShowGui"></i>
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
       </div>
     </FloatImgBtn>
-    <div class="wenzijiemian" v-show="!isShowGui">
-      <div class="container-left">
-        <div class="container-left-top">
-          <div class="agent-div">
-            <div style="height: 210px;">
-              <div class="agent-icon">
-                <div v-show="devStatus===3"><div class="yuanxing" style="background: rgba(64, 158, 255, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #409eff;"></div><div class="dev-status" style="color: #409eff; left: 40px;">{{$t('edge.overview.online')}}</div></div>
-                <div v-show="devStatus===2"><div class="yuanxing" style="background: rgba(179, 179, 179, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #b3b3b3;"></div><div class="dev-status" style="color: #b3b3b3; left: 40px;">{{$t('edge.overview.offline')}}</div></div>
-                <div v-show="devStatus===1"><div class="yuanxing" style="background: rgba(230, 162, 60, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #e6a23c;"></div><div class="dev-status" style="color: #e6a23c; left: 30px;">{{$t('edge.overview.onlineing')}}</div></div>
+    <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
+      <div class="wenzijiemian" v-show="!isShowGui">
+        <div class="container-left">
+          <div class="container-left-top">
+            <div class="agent-div">
+              <div style="height: 210px;">
+                <div class="agent-icon">
+                  <div v-show="devStatus===3"><div class="yuanxing" style="background: rgba(64, 158, 255, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #409eff;"></div><div class="dev-status" style="color: #409eff; left: 40px;">{{$t('edge.overview.online')}}</div></div>
+                  <div v-show="devStatus===2"><div class="yuanxing" style="background: rgba(179, 179, 179, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #b3b3b3;"></div><div class="dev-status" style="color: #b3b3b3; left: 40px;">{{$t('edge.overview.offline')}}</div></div>
+                  <div v-show="devStatus===1"><div class="yuanxing" style="background: rgba(230, 162, 60, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #e6a23c;"></div><div class="dev-status" style="color: #e6a23c; left: 30px;">{{$t('edge.overview.onlineing')}}</div></div>
+                </div>
+                <div class="agent-num">
+                  <div class="agent-id">{{$t('edge.overview.ipaddress')}}</div>
+                  <div class="agent-number">{{ip}}</div>
+                  <div class="agent-port">{{$t('edge.overview.deviceport')}}</div>
+                  <div class="port-number">{{port}}</div>
+                  <div class="agent-port">{{$t('edge.overview.agreement')}}</div>
+                  <div class="port-number">{{protocol}}</div>
+                </div>
               </div>
-              <div class="agent-num">
-                <div class="agent-id">{{$t('edge.overview.ipaddress')}}</div>
-                <div class="agent-number">{{ip}}</div>
-                <div class="agent-port">{{$t('edge.overview.deviceport')}}</div>
-                <div class="port-number">{{port}}</div>
-                <div class="agent-port">{{$t('edge.overview.agreement')}}</div>
-                <div class="port-number">{{protocol}}</div>
+              <div style="height: 210px;">
+                <div style="float: left; height: 50%; width: 50%; text-align: center;">
+                  <div class="curr-grade">{{controlData.current_stage}}</div>
+                  <div class="curr-num">{{$t('edge.overview.currentstage')}}</div>
+                </div>
+                <div style="float: right; height: 50%; width: 50%; text-align: center;">
+                  <div class="curr-grade">{{controlData.total_stages}}</div>
+                  <div class="curr-num">{{$t('edge.overview.allstagesnum')}}</div>
+                </div>
+                <div style="float: left; height: 50%; width: 50%; text-align: center;">
+                  <div class="curr-grade">{{controlData.patternid}}</div>
+                  <div class="curr-num">{{$t('edge.overview.patternnum')}}</div>
+                </div>
+                <div style="float: right; height: 50%; width: 50%; text-align: center;">
+                  <div class="curr-grade">{{controlData.name}}</div>
+                  <div class="curr-num">{{$t('edge.overview.patternname')}}</div>
+                </div>
               </div>
             </div>
-            <div style="height: 210px;">
-              <div style="float: left; height: 50%; width: 50%; text-align: center;">
-                <div class="curr-grade">{{controlData.current_stage}}</div>
-                <div class="curr-num">{{$t('edge.overview.currentstage')}}</div>
+            <div class="other-div" v-for="(item, index) in showList" :key="index">
+              <div style="height: 70px;">
+                <div class="model-tupian"><svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon></div><div class="model-name">{{$t('edge.overview.showlist' + item.label)}}</div>
+                <div class="to-detail" v-if="item.name === '当前/剩余时间' || item.name === '实时流量'" @click="handleChangeTable(item.name)">{{$t('edge.overview.details')}}</div>
               </div>
-              <div style="float: right; height: 50%; width: 50%; text-align: center;">
-                <div class="curr-grade">{{controlData.total_stages}}</div>
-                <div class="curr-num">{{$t('edge.overview.allstagesnum')}}</div>
-              </div>
-              <div style="float: left; height: 50%; width: 50%; text-align: center;">
-                <div class="curr-grade">{{controlData.patternid}}</div>
-                <div class="curr-num">{{$t('edge.overview.patternnum')}}</div>
-              </div>
-              <div style="float: right; height: 50%; width: 50%; text-align: center;">
-                <div class="curr-grade">{{controlData.name}}</div>
-                <div class="curr-num">{{$t('edge.overview.patternname')}}</div>
+              <div>
+                <div class="control-center" v-if="!item.insertHtml">{{item.value}}</div>
+                <div class="control-time" v-if="item.insertHtml">
+                  <span class="time">{{curTime}}</span><span class="time">{{syncTime}}</span>
+                </div>
               </div>
             </div>
           </div>
-          <div class="other-div" v-for="(item, index) in showList" :key="index">
-            <div style="height: 70px;">
-              <div class="model-tupian"><svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon></div><div class="model-name">{{$t('edge.overview.showlist' + item.label)}}</div>
-              <div class="to-detail" v-if="item.name === '当前/剩余时间' || item.name === '实时流量'" @click="handleChangeTable(item.name)">{{$t('edge.overview.details')}}</div>
-            </div>
-            <div>
-              <div class="control-center" v-if="!item.insertHtml">{{item.value}}</div>
-              <div class="control-time" v-if="item.insertHtml">
-                <span class="time">{{curTime}}</span><span class="time">{{syncTime}}</span>
-              </div>
-            </div>
+          <!-- 实时相位表格 -->
+          <div class="container-left-bottom" v-if="curTable === 'phase'">
+            <CurPhase ref="currentPhase" :controlData="controlData" :tableData="tableData"/>
+          </div>
+          <!-- 实时流量表格 -->
+          <div class="container-left-bottom" v-if="curTable === 'currentvolume'">
+            <CurVolume :volumeData="volumeData"/>
           </div>
         </div>
-        <!-- 实时相位表格 -->
-        <div class="container-left-bottom" v-if="curTable === 'phase'">
-          <CurPhase ref="currentPhase" :controlData="controlData" :tableData="tableData"/>
-        </div>
-        <!-- 实时流量表格 -->
-        <div class="container-left-bottom" v-if="curTable === 'currentvolume'">
-          <CurVolume :volumeData="volumeData"/>
+        <div class="container-right">
+          <div class="control-right">
+            <el-form ref="form" :model="form" label-width="110px">
+              <el-form-item :label="$t('edge.control.mode_style')" v-if="form.mode != ''">
+                  <div>{{form.mode}}</div>
+                </el-form-item>
+                <el-form-item :label="$t('edge.control.control_style')">
+                    <el-select v-model="form.control" :placeholder="$t('edge.common.select')">
+                        <el-option :label="$t('edge.overview.autocontrol')" value="0"></el-option>
+                        <el-option :label="$t('edge.overview.yellowflash')" value="1"></el-option>
+                        <el-option :label="$t('edge.overview.allred')" value="2"></el-option>
+                        <el-option :label="$t('edge.overview.step')" value="4"></el-option>
+                        <el-option :label="$t('edge.overview.fixedperiod')" value="5"></el-option>
+                        <el-option :label="$t('edge.overview.inductioncontrol')" value="6"></el-option>
+                        <el-option :label="$t('edge.overview.selfadaption')" value="9"></el-option>
+                        <el-option :label="$t('edge.overview.nocablecoordination')" value="10"></el-option>
+                        <el-option :label="$t('edge.overview.phasewalk')" value="12"></el-option>
+                        <el-option :label="$t('edge.overview.websteroptimization')" value="14"></el-option>
+                        <el-option :label="$t('edge.overview.inductivePedestrianCrossControl')" value="19"></el-option>
+                        <el-option :label="$t('edge.overview.custom')" value="999"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="$t('edge.overview.controlmodevalue')">
+                    <el-input v-model="controlNum" style="width: 70%" :disabled="form.control!=='999'"></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('edge.control.pattern')">
+                    <el-input v-model="form.terminal" style="width: 70%"></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('edge.control.value')">
+                    <el-input v-model="form.value" style="width: 70%"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit" size="small">{{$t('edge.common.setup')}}</el-button>
+                    <el-button type="primary" @click="onGet" size="small">{{$t('edge.common.query')}}</el-button>
+                </el-form-item>
+            </el-form>
+          </div>
         </div>
       </div>
-      <div class="container-right">
-        <div class="control-right">
-          <el-form ref="form" :model="form" label-width="110px">
-            <el-form-item :label="$t('edge.control.mode_style')" v-if="form.mode != ''">
-                <div>{{form.mode}}</div>
-              </el-form-item>
-              <el-form-item :label="$t('edge.control.control_style')">
-                  <el-select v-model="form.control" :placeholder="$t('edge.common.select')">
-                      <el-option :label="$t('edge.overview.autocontrol')" value="0"></el-option>
-                      <el-option :label="$t('edge.overview.yellowflash')" value="1"></el-option>
-                      <el-option :label="$t('edge.overview.allred')" value="2"></el-option>
-                      <el-option :label="$t('edge.overview.step')" value="4"></el-option>
-                      <el-option :label="$t('edge.overview.fixedperiod')" value="5"></el-option>
-                      <el-option :label="$t('edge.overview.inductioncontrol')" value="6"></el-option>
-                      <el-option :label="$t('edge.overview.selfadaption')" value="9"></el-option>
-                      <el-option :label="$t('edge.overview.nocablecoordination')" value="10"></el-option>
-                      <el-option :label="$t('edge.overview.phasewalk')" value="12"></el-option>
-                      <el-option :label="$t('edge.overview.websteroptimization')" value="14"></el-option>
-                      <el-option :label="$t('edge.overview.inductivePedestrianCrossControl')" value="19"></el-option>
-                      <el-option :label="$t('edge.overview.custom')" value="999"></el-option>
-                  </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('edge.overview.controlmodevalue')">
-                  <el-input v-model="controlNum" style="width: 70%" :disabled="form.control!=='999'"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('edge.control.pattern')">
-                  <el-input v-model="form.terminal" style="width: 70%"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('edge.control.value')">
-                  <el-input v-model="form.value" style="width: 70%"></el-input>
-              </el-form-item>
-              <el-form-item>
-                  <el-button type="primary" @click="onSubmit" size="small">{{$t('edge.common.setup')}}</el-button>
-                  <el-button type="primary" @click="onGet" size="small">{{$t('edge.common.query')}}</el-button>
-              </el-form-item>
-          </el-form>
-        </div>
-      </div>
-    </div>
-    <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
-      <div class="tuxing-left">
-        <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
-          'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
-          'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
-          'smallCrossImg': curBodyWidth <= 960 && curBodyWidth > 720,
-          'miniCrossImg': curBodyWidth <= 720 && curBodyWidth > 650,
-          'superminiCrossImg': curBodyWidth <= 650 }">
-          <CrossDiagram v-if="reset" :crossStatusData="crossStatusData" :agentId="agentId" :devStatus="devStatus"/>
-        </div>
-        <div class="pattern-status">
-          <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
-          <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
-          <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
-          <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
-          <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
-          <PatternStatus style="margin-top: 30px;"
-                        :cycle="crossStatusData ? crossStatusData.cycle : 0"
-                        :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
-                        :patternStatusList="patternStatusList"
-                        :barrierList="barrierList"></PatternStatus>
-        </div>
-      </div>
-      <div class="tuxing-right">
-        <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
-        <div class="cross-module" style="height: 130px;">
-          <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
-          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
-            <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
-            <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
-            <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
+      <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
+        <div class="tuxing-left">
+          <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
+            'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
+            'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
+            'smallCrossImg': curBodyWidth <= 960 && curBodyWidth > 720,
+            'miniCrossImg': curBodyWidth <= 720 && curBodyWidth > 650,
+            'superminiCrossImg': curBodyWidth <= 650 }">
+            <CrossDiagram v-if="reset" :crossStatusData="crossStatusData" :agentId="agentId" :devStatus="devStatus"/>
           </div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div>
-          <!-- <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
-        </div>
-        <div style="margin-top: 220px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
-          <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
-          <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
-        </div>
-        <div class="cross-module">
-          <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
-          <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
-            <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
-            <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
+          <div class="pattern-status">
+            <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
+            <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
+            <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
+            <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
+            <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
+            <PatternStatus style="margin-top: 30px;"
+                          :cycle="crossStatusData ? crossStatusData.cycle : 0"
+                          :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
+                          :patternStatusList="patternStatusList"
+                          :barrierList="barrierList"></PatternStatus>
           </div>
-          <div style="margin-top: 15px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
-          <div style="padding-left: 15px; width: 100%; overflow: hidden;">
-            <div class="control-model" v-for="(item, index) in modelList" :key="index">
-              <div :class="currModel===item.id ? 'single-model-select' : 'single-model'"
-              @click="selectModel(item.id)"
-              :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''"
-              v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
-              <!-- <div :class="currModel===item.id ? 'single-model-select' : (preselectModel == item.id ? 'single-model-preselect' : 'single-model')" @click="selectModel(item.id)"> -->
-                <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
-                <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
+        </div>
+        <div class="tuxing-right">
+          <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
+          <div class="cross-module" style="height: 130px;">
+            <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
+            <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+              <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
+              <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
+              <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
+            </div>
+            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div>
+            <!-- <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
+            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
+            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
+          </div>
+          <div style="margin-top: 220px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
+            <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
+            <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
+          </div>
+          <div class="cross-module">
+            <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
+            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
+            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
+            </div>
+            <div style="margin-top: 15px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
+            <div style="padding-left: 15px; width: 100%; overflow: hidden;">
+              <div class="control-model" v-for="(item, index) in modelList" :key="index">
+                <div :class="currModel===item.id ? 'single-model-select' : 'single-model'"
+                @click="selectModel(item.id)"
+                :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''"
+                v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
+                <!-- <div :class="currModel===item.id ? 'single-model-select' : (preselectModel == item.id ? 'single-model-preselect' : 'single-model')" @click="selectModel(item.id)"> -->
+                  <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
+                  <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div style="margin-left: 5px; margin-top: 15px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
-          <!-- <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div> -->
-          <div style="padding-left: 15px; width: 100%; height: auto;">
-            <div class="control-model" v-for="(item, index) in stagesList" :key="index">
-              <div :class="currentStage===index + 1 ? 'single-model-select' : 'single-model'" @click="selectStages(index + 1)" :style="preselectStages == index + 1 ? 'border: solid 1px #409eff;' : ''">
-                <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
-                <div class="current-stage-num">{{index + 1}}</div>
+            <div style="margin-left: 5px; margin-top: 15px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
+            <!-- <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div> -->
+            <div style="padding-left: 15px; width: 100%; height: auto;">
+              <div class="control-model" v-for="(item, index) in stagesList" :key="index">
+                <div :class="currentStage===index + 1 ? 'single-model-select' : 'single-model'" @click="selectStages(index + 1)" :style="preselectStages == index + 1 ? 'border: solid 1px #409eff;' : ''">
+                  <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
+                  <div class="current-stage-num">{{index + 1}}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div style="margin-top: 100px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation">
-            <div style="float: left;">
-              <el-button style="margin-left: 12px;" type="primary" size="mini" @click="patternCommit">{{$t('edge.overview.implement')}}</el-button>
+            <div style="margin-top: 100px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation">
+              <div style="float: left;">
+                <el-button style="margin-left: 12px;" type="primary" size="mini" @click="patternCommit">{{$t('edge.overview.implement')}}</el-button>
+              </div>
             </div>
           </div>
         </div>
