@@ -12,12 +12,17 @@
  @charset "UTF-8";
  @import './theme/element-variables.scss';
  @import '../../node_modules/edgebase-front/src/styles/common.scss';
+ @import './mixin.scss';
  // 整体背景色
  .app-wrapper1 {
   @include clearfix;
   position: relative;
   height: 100%;
   width: 100%;
+  background: $--background-color-base;
+}
+.appMain {
+  height: calc(100% - 50px);
   background: $--background-color-base;
 }
  // 主页样式
@@ -66,12 +71,12 @@
         font-size: 20px;
       }
       .user-manage {
-        background: url('./assets/home/usersManage.png');
+        background: url('../assets/home/usersManage.png');
         background-repeat: no-repeat;
         background-position:center center;
       }
       .operation-record {
-        background: url('./assets/home/operateRecord.png');
+        background: url('../assets/home/operateRecord.png');
         background-repeat: no-repeat;
         background-position:center center;
       }
@@ -100,7 +105,7 @@
           background-size: 30px 30px;
           background-repeat: no-repeat;
           background-position:center center;
-          background-image: url('./assets/home/trouble.png');
+          background-image: url('../assets/home/trouble.png');
         }
         .text {
             float: left;
@@ -242,7 +247,7 @@
                 float: left;
             }
             .upImg {
-                background-image: url('./assets/home/online.png');
+                background-image: url('../assets/home/online.png');
             }
             .num {
                 font-size: 54px;
@@ -255,7 +260,7 @@
                 float: left;
             }
             .downImg {
-                background-image: url('./assets/home/offline.png');
+                background-image: url('../assets/home/offline.png');
             }
             .num {
                 font-size: 54px;

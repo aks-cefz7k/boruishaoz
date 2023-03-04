@@ -42,8 +42,9 @@ export default {
 </script>
 
 <style lang="scss">
+ @import "../../styles/theme/element-variables.scss";
 #app .adminEdge {
-  border-top: 1px solid #eee;
+  border-top: 1px solid $--border-color-base;
 }
 #app .sidebar-container {
     -webkit-transition: width 0.28s;
@@ -51,7 +52,7 @@ export default {
     width: 180px;
     height: 940px;;
     position:absolute;
-    border-right: 1px solid #eee;
+    border-right: 1px solid $--border-color-base;
     bottom: 0;
     left: 0;
     z-index: 1001;
