@@ -78,6 +78,20 @@
             </el-input>
         </el-form-item>
         <el-form-item
+            :label="$t('openatc.devicemanager.platform')"
+            prop="platform">
+            <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%">
+                <el-option v-for="firm in platformList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item
+            :label="$t('openatc.devicemanager.firm')"
+            prop="firm">
+            <el-select v-model="deviceInfo.firm" placeholder="" style="width:100%" clearable>
+                <el-option v-for="firm in firmList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item
             :label="$t('openatc.devicemanager.describe')"
             prop="descs">
             <el-input
@@ -184,7 +198,9 @@ export default {
         ip: '',
         port: '',
         lng: 0,
-        lat: 0
+        lat: 0,
+        firm: '',
+        platform: 'OpenATC'
       },
       rules: {
         type: [
@@ -204,8 +220,31 @@ export default {
         ],
         name: [
           { required: true, message: this.$t('openatc.devicemanager.entername'), trigger: 'blur' }
+        ],
+        platform: [
+          { required: true, message: this.$t('openatc.devicemanager.chooseplatform'), trigger: 'blur' }
         ]
-      }
+      },
+      firmList: [{
+        label: '科达',
+        value: 'Kedacom'
+      }, {
+        label: '泰科',
+        value: 'Tyco'
+      }, {
+        label: '华通',
+        value: 'Huatong'
+      }],
+      platformList: [{
+        label: 'OpenATC',
+        value: 'OpenATC'
+      }, {
+        label: 'SCATS',
+        value: 'SCATS'
+      }, {
+        label: 'HUATONG',
+        value: 'HUATONG'
+      }]
     }
   },
   methods: {
@@ -258,7 +297,7 @@ export default {
         }
         this.dialogFormVisible = false
         this.$message({
-          message: this.$t('edge.common.addsuccess'),
+          message: this.$t('openatc.common.addsuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
@@ -281,7 +320,7 @@ export default {
         if (!res.data.success) {
           this.$message.error(res.data.message)
           this.$message({
-            message: this.$t('edge.common.updatefailed'),
+            message: this.$t('openatc.common.updatefailed'),
             type: 'error',
             duration: 1 * 1000
           })
@@ -289,7 +328,7 @@ export default {
         }
         this.dialogFormVisible = false
         this.$message({
-          message: this.$t('edge.common.updatesuccess'),
+          message: this.$t('openatc.common.updatesuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
@@ -341,7 +380,7 @@ export default {
   padding: 10px 72px 38px 0;
 }
 // 自定义校验规则的labal加上*号
-.dev-update .ipLabel .el-form-item__label:before,  .dev-update .portLabel .el-form-item__label:before{
+.dev-update .ipLabel .el-form-item__label:before,  .dev-update .portLabel .el-form-item__label:before, .dev-update .portLabel .el-form-item__label:before{
     content: '*';
     color: #f56c6c;
     margin-right: 4px;
