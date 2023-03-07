@@ -240,6 +240,7 @@ const en = {
       'mostdata': 'There are at most 16 data !'
     },
     'pattern': {
+      'property': 'Property',
       'desc': 'Description',
       'offset': 'Offset',
       'cycle': 'Cycle',
@@ -257,7 +258,16 @@ const en = {
       'modeOption7': 'Omit Call',
       'coordphaseOption1': 'Coordination Phase',
       'coordphaseOption2': 'Key Phase',
-      'coordphaseOption4': 'Fixed Phase'
+      'coordphaseOption4': 'Fixed Phase',
+      'forbiddenstage': 'Forbidden Stage',
+      'screenstage': 'Screen Stage',
+      'coordinatestage': 'Coordinate Stage ',
+      'delaystart': 'Delay Start ',
+      'advanceend': 'Advance End',
+      'stageConfig': 'Stage Config',
+      'ringConfig': 'Ring Config',
+      'stage': 'Stage',
+      'agentidError': '获取设备ID失败!'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',

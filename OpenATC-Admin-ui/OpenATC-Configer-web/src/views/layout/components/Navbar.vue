@@ -353,7 +353,8 @@ export default {
         for (let pattern of patternList) {
           for (let rings of pattern.rings) {
             for (let i = 0; i < rings.length; i++) {
-              rings[i] = (({ name, id, value, mode, options, minSplit }) => ({ name, id, value, mode, options, minSplit }))(rings[i])
+              rings[i] = (({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
+                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }))(rings[i])
             }
           }
         }

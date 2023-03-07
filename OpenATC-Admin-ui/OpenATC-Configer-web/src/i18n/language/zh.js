@@ -238,6 +238,7 @@ const zh = {
       'mostdata': '最多只能创建16条数据!'
     },
     'pattern': {
+      'property': '属性',
       'desc': '描述',
       'offset': '相位差',
       'cycle': '周期',
@@ -255,7 +256,16 @@ const zh = {
       'modeOption7': '忽略相位',
       'coordphaseOption1': '协调相位',
       'coordphaseOption2': '关键相位',
-      'coordphaseOption4': '固定相位'
+      'coordphaseOption4': '固定相位',
+      'forbiddenstage': '相位阶段禁止',
+      'screenstage': '相位阶段屏蔽',
+      'coordinatestage': '协调相位阶段 ',
+      'delaystart': '晚启动时间 ',
+      'advanceend': '早结束时间',
+      'stageConfig': '阶段配置',
+      'ringConfig': '环配置',
+      'stage': '阶段',
+      'agentidError': '获取设备ID失败!'
     },
     'plan': {
       'tipcontext': '请输入计划名！',
