@@ -40,9 +40,12 @@
       <RampWestRoadsSvg v-if="crossType === 'ramp-west'" />
       <RampNorthRoadsSvg v-if="crossType === 'ramp-north'" />
       <RampSouthRoadsSvg v-if="crossType === 'ramp-south'" />
+      <!-- 路段行人过街 -->
+      <PedSectionSNSvg v-if="crossType === 'ped-section-south-north'" />
+      <PedSectionEWSvg v-if="crossType === 'ped-section-east-west'" />
     </div>
     <!-- 城市道路状态-->
-    <div v-if="mainType === '100' || mainType === '101'">
+    <div v-if="mainType === '100' || mainType === '101' || mainType === '104'">
       <!-- 人行道 -->
       <div class="sidewalk" v-if="resetflag && isLoaded">
         <SidewalkSvg v-for="side in sidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
@@ -76,6 +79,8 @@ import RampWestRoadsSvg from './baseImg/RampWestSvg'
 import RampNorthRoadsSvg from './baseImg/RampNorthSvg'
 import RampSouthRoadsSvg from './baseImg/RampSouthSvg'
 import RampPhaseIconSvg from './phaseIcon/rampPhaseIconSvg'
+import PedSectionEWSvg from './baseImg/PedSectionEWSvg'
+import PedSectionSNSvg from './baseImg/PedSectionSNSvg'
 export default {
   name: 'crossDiagram',
   components: {
@@ -92,7 +97,9 @@ export default {
     RampWestRoadsSvg,
     RampNorthRoadsSvg,
     RampSouthRoadsSvg,
-    RampPhaseIconSvg
+    RampPhaseIconSvg,
+    PedSectionEWSvg,
+    PedSectionSNSvg
   },
   props: {
     crossStatusData: {
@@ -136,8 +143,8 @@ export default {
         // 正常情况下，获取车道相位、相位倒计时、行人相位的状态
         this.getPhaseStatus()
         this.getCurPhaseCountdown()
-        if (this.mainType === '100' || this.mainType === '101') {
-          // 城市道路才显示人行道状态
+        if (this.mainType === '100' || this.mainType === '101' || this.mainType === '104') {
+          // 城市道路和路段行人过街才显示人行道状态
           this.getpedStatus()
         }
       },
@@ -286,7 +293,7 @@ export default {
         // 获取车道相位、行人相位信息（坐标、名称）
         this.mainType = this.tempType.split('-')[0]
         this.mainDirection = this.tempType.split('-')[1]
-        if (this.mainType === '100' || this.mainType === '101') {
+        if (this.mainType === '100' || this.mainType === '101' || this.mainType === '104') {
           // 城市道路加载车道相位坐标和人行道坐标
           this.getPhasePos()
           this.getPedPhasePos()
@@ -412,6 +419,15 @@ export default {
           case '003': this.crossType = 'ramp-west'
             break
           case '004': this.crossType = 'ramp-north'
+            break
+        }
+      }
+      if (this.mainType === '104') {
+        // 路段行人过街
+        switch (this.mainDirection) {
+          case '006': this.crossType = 'ped-section-east-west'
+            break
+          case '005': this.crossType = 'ped-section-south-north'
             break
         }
       }

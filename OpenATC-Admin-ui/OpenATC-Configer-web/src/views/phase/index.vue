@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column class="table-column" :label="$t('edge.phase.peddesc')" min-width="150" align="center">
         <template slot-scope="scope">
-          <Tankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" @finsh="handlefinshped"/>
+          <PedTankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" @finsh="handlefinshped"/>
         </template>
       </el-table-column>
       <el-table-column class="table-column" :label="$t('edge.phase.controltype')" min-width="150" align="center">
@@ -160,6 +160,7 @@
 
 <script>
 import Tankuang from '@/components/Tankuang'
+import PedTankuang from '@/components/PedTankuang'
 import { mapState } from 'vuex'
 import { images, pedimages } from './utils.js'
 
@@ -192,7 +193,8 @@ const clickoutside = {
 export default {
   name: 'phase',
   components: {
-    Tankuang
+    Tankuang,
+    PedTankuang
   },
   data () {
     return {
@@ -208,11 +210,14 @@ export default {
       lines: 4, // 弹框的行数
       rows: 4, // 弹框的列数
       controlTypeList: [{
-        label: '主路',
+        label: this.$t('edge.phase.mainroad'),
         value: 0
       }, {
-        label: '支路',
+        label: this.$t('edge.phase.bypass'),
         value: 1
+      }, {
+        label: this.$t('edge.phase.pedestrianonly'),
+        value: 2
       }]
     }
   },
