@@ -89,7 +89,7 @@ export default {
     getPercentage () {
       this.sum = this.chartData[0].value + this.chartData[1].value
       if (!this.sum) return
-      this.percentage = (this.chartData[0].value / this.sum).toFixed(1) * 100
+      this.percentage = (this.chartData[0].value / this.sum).toFixed(2) * 100
     },
     calculateChartSize () {
       if (document.getElementById('leftPart').clientHeight - 130 < document.getElementById('leftPart').clientWidth - 30) {
