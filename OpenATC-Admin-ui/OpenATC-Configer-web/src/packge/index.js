@@ -30,6 +30,7 @@ import channelLock from '../views/channelLock/index'
 import detector from '../views/detector/index'
 import pedDetector from '../views/pedestrianDetector/index'
 import deviceInfo from '../views/deviceInfo/index'
+import adaptiveParameter from '../views/adaptiveParameter/index'
 import controlPanel from '../views/controlPanel/index'
 import en from '../i18n/language/en'
 import zh from '../i18n/language/zh'
@@ -61,6 +62,7 @@ const components = {
   channelLock,
   pedDetector,
   deviceInfo,
+  adaptiveParameter,
   controlPanel,
   Layout,
   // LoginFunc,
@@ -254,6 +256,15 @@ const subrouter = [
       meta: {
         title: 'edge.route.deviceInfo',
         icon: 'deviceinfo'
+      }
+    },
+    {
+      path: 'adaptiveParameter',
+      name: 'adaptiveParameter',
+      component: adaptiveParameter,
+      meta: {
+        title: 'edge.route.adaptiveParameter',
+        icon: 'adaptiveParameter'
       }
     },
     {

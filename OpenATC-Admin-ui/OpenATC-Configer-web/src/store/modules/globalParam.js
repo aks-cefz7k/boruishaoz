@@ -52,7 +52,9 @@ const tscParam = {
   },
   manualpanel: {
     mingreen: 15
-  }
+  },
+  singleoptim: [
+  ]
 }
 let defaultCopiedTscParam = null
 try {

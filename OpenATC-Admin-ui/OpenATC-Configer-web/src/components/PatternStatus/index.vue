@@ -32,7 +32,7 @@
       <div v-for="(item, index) in barrierList" :key="index + '1'">
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
       </div>
-      <div class="curTimeDiv" :style="{'left':paddingLeft, 'background-color': '#409EFF'}">{{ timeNumDevide }}</div>
+      <div class="curTimeDiv" v-show="cycle && cycle > 0" :style="{'left':paddingLeft, 'background-color': '#409EFF'}">{{ timeNumDevide }}</div>
       <div class="curTimeLine" :style="{'left':paddingLeft, 'height':barrierHeight}"></div>
     </div>
 </template>
@@ -73,7 +73,7 @@ export default {
       return res
     },
     timeNumDevide () {
-      let res = this.syncTime + '/' + this.cycle
+      let res = (this.cycle - this.syncTime) + '/' + this.cycle
       return res
     }
   },
@@ -154,4 +154,16 @@ export default {
 //   color:#FFFFFF;
 //   background-color: #409EFF;
 // }
+.main-patternstatus {
+  position: relative;
+}
+.ring-first {
+  margin-top: 1px;
+  width: 100%;
+  height: 34px;
+}
+.first-1 {
+  float: left;
+  // text-align: center;
+}
 </style>
