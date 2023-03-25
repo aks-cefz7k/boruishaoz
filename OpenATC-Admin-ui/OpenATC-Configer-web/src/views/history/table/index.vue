@@ -169,13 +169,13 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-.atc-table {
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px #e6e6e6;
-  overflow: auto;
-}
+// .atc-table {
+//   top: 150px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px #e6e6e6;
+//   overflow: auto;
+// }
 .edit-button {
   float: left;
   // margin-left: 10px;
