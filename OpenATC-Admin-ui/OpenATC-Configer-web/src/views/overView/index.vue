@@ -154,7 +154,7 @@
             <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
             <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
           </div>
-          <div style="margin-top: 220px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
+          <div style="margin-top: 140px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
             <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
             <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
           </div>
