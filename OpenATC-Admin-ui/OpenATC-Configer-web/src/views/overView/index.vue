@@ -393,6 +393,7 @@ export default {
           // this.port = this.$route.query.port
           // this.protocol = this.$route.query.protocol
           this.resetCrossDiagram()
+          this.getPlatform()
         }
       },
       // 深度观察监听
@@ -414,6 +415,7 @@ export default {
     // this.registerMessage() // 注册消息
   },
   mounted () {
+    this.getPlatform()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
     }
@@ -983,18 +985,36 @@ export default {
     },
     isEqualsForArray (listA, listB) {
       return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))
+    },
+    getPlatform () {
+      queryDevice().then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return
+        }
+        let platform = res.data.data.platform
+        let func = 'allFunc'
+        if (platform === 'OpenATC') {
+          func = 'allFunc'
+        }
+        if (platform === 'SCATS' || platform === 'HUATONG') {
+          func = 'basicFunc'
+        }
+        this.$store.dispatch('SaveFunctionLevel', func)
+      })
     }
   },
   beforeDestroy () {
     this.clearPatternInterval() // 清除定时器
     this.clearVolumeInterval()
     this.clearRegisterMessageTimer() // 清除定时器
+  },
+  destroyed () {
+    // this.clearPatternInterval() // 清除定时器
+    // this.clearVolumeInterval()
+    // this.clearRegisterMessageTimer() // 清除定时器
+    this.getPlatform()
   }
-  // destroyed () {
-  //   this.clearPatternInterval() // 清除定时器
-  //   this.clearVolumeInterval()
-  //   this.clearRegisterMessageTimer() // 清除定时器
-  // }
 }
 </script>
 
