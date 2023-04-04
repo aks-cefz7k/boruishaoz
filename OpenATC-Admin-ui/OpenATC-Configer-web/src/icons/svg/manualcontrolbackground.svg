@@ -1,9 +1,9 @@
 <svg id="手动控制背景" xmlns="http://www.w3.org/2000/svg" width="848" height="600" viewBox="0 0 848 600">
   <defs>
     <style>
-      .cls-1 {
+      <!-- .cls-1 {
         fill: #eff7ff;
-      }
+      } -->
 
       .cls-1, .cls-3, .cls-5, .cls-7 {
         fill-rule: evenodd;
@@ -49,7 +49,7 @@
       }
     </style>
   </defs>
-  <path id="矩形_987" data-name="矩形 987" class="cls-1" d="M13256,2391h848v600.01h-848V2391Z" transform="translate(-13256 -2391)"/>
+  <!-- <path id="矩形_987" data-name="矩形 987" class="cls-1" d="M13256,2391h848v600.01h-848V2391Z" transform="translate(-13256 -2391)"/> -->
   <path id="圆角矩形_988" data-name="圆角矩形 988" class="cls-2" d="M102.6,22H713.9a10,10,0,0,1,10,10V566a10,10,0,0,1-10,10H102.6a0,0,0,0,1,0,0V22A0,0,0,0,1,102.6,22Z"/>
   <path id="圆角矩形_988_拷贝" data-name="圆角矩形 988 拷贝" class="cls-3" d="M14011,2413h50a10.016,10.016,0,0,1,10,10v534a10.016,10.016,0,0,1-10,10h-50a9.953,9.953,0,0,1-10-10V2423A9.953,9.953,0,0,1,14011,2413Z" transform="translate(-13256 -2391)"/>
   <path id="圆角矩形_988_拷贝_2" data-name="圆角矩形 988 拷贝 2" class="cls-4" d="M42.5,22h60.1a0,0,0,0,1,0,0V576a0,0,0,0,1,0,0H42.5a10,10,0,0,1-10-10V32A10,10,0,0,1,42.5,22Z"/>
