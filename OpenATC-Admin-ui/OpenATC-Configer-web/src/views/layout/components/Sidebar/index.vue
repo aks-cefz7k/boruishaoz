@@ -43,17 +43,9 @@ export default {
   components: { SidebarItem },
   data () {
     return {
-      // isfromatc: false,
       openeds: ['TSC']
     }
   },
-  // watch: {
-  //   $route (val) {
-  //     if (val.query !== undefined && val.query.isfromatc !== undefined && val.query.isfromatc === true) {
-  //       this.isfromatc = true
-  //     }
-  //   }
-  // },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -121,9 +113,6 @@ export default {
     }
   },
   mounted () {
-    // if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === true) {
-    //   this.isfromatc = true
-    // }
     if (!this.roles.length) {
       this.getUserInfo()
     }

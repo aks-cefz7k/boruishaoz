@@ -18,7 +18,7 @@
       mode="horizontal"
     >
       <hamburger
-        v-if="FuncSort === 'allFunc'"
+        v-if="!hideMenu"
         class="hamburger-container"
         :toggleClick="toggleSideBar"
         :isActive="sidebar.opened"
@@ -249,7 +249,7 @@ export default {
     ...mapState({
       copiedTscParam: state => state.globalParam.copiedTscParam,
       userInfo: state => state.user.userInfo,
-      FuncSort: state => state.globalParam.FuncSort
+      hideMenu: state => state.globalParam.hideMenu
     }),
     userInfo: {
       get: function () {
@@ -281,12 +281,15 @@ export default {
     } else {
       this.isShowMenu = false
     }
-    // if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === 'true') {
-    //   this.isShowLogout = false
-    // }
     if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
       // 增加判断toSingleEdge，解决isfromatc参数丢失问题
       this.isShowLogout = false
+    }
+    if (this.$route.query.hideMenu === true || this.$route.query.hideMenu === 'true') {
+      // 如果传参hideMenu就隐藏菜单，其余情况均不隐藏
+      this.$store.dispatch('SetMenuVisible', true)
+    } else {
+      this.$store.dispatch('SetMenuVisible', false)
     }
     // this.extendErrorCodeMap() // 扩展错误码的map集合
   },

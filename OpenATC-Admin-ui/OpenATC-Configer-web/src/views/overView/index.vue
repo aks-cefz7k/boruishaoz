@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="container-main">
-    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="FuncSort === 'allFunc'">
+    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!hideMenu">
       <div slot="icon" class="sloat-icon">
         <i class="iconfont icon-tuxingjiemian" style="color: #ffffff;" v-show="!isShowGui"></i>
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
@@ -377,7 +377,8 @@ export default {
     ...mapState({
       curBodyWidth: state => state.globalParam.curBodyWidth,
       curBodyHeight: state => state.globalParam.curBodyHeight,
-      FuncSort: state => state.globalParam.FuncSort
+      FuncSort: state => state.globalParam.FuncSort,
+      hideMenu: state => state.globalParam.hideMenu
     })
   },
   watch: {

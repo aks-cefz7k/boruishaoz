@@ -84,7 +84,8 @@ const Global = {
     routers: [],
     curBodyWidth: 1920,
     curBodyHeight: 1080,
-    FuncSort: 'allFunc'
+    FuncSort: 'allFunc',
+    hideMenu: false
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -122,6 +123,9 @@ const Global = {
     },
     SAVE_FUNNCTION_LEVEL: (state, FUNC) => {
       state.FuncSort = FUNC
+    },
+    SET_MENU_VISIBLE: (state, isHideMenu) => {
+      state.hideMenu = isHideMenu
     }
   },
   actions: {
@@ -163,6 +167,9 @@ const Global = {
     },
     SaveFunctionLevel ({ commit }, FUNC) {
       commit('SAVE_FUNNCTION_LEVEL', FUNC)
+    },
+    SetMenuVisible ({ commit }, isHideMenu) {
+      commit('SET_MENU_VISIBLE', isHideMenu)
     }
   }
 }
