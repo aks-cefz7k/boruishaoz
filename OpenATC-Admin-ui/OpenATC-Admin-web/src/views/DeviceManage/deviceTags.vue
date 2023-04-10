@@ -185,7 +185,7 @@ export default {
   .highlightTag {
     background-color: $--color-primary;
     border-color: $--color-primary;
-    color: $--color-white;
+    color: #FFFFFF;
   }
   // .normalTag {
   //   background-color: $--border-color-extra-light;

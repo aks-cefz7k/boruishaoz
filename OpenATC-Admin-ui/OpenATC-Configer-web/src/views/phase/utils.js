@@ -124,25 +124,95 @@ export const images = [{
 
 export const pedimages = [
   {
-    id: 2,
-    name: 'edge.phase.wped',
-    img: require('../../assets/intersection_state/west-ped.svg')
-  // class: 'iconfont icon-xihangren'
-  }, {
     id: 1,
     name: 'edge.phase.eped',
-    img: require('../../assets/intersection_state/east-ped.svg')
+    img: require('../../assets/sidewalk_type/east-ped.svg')
   // class: 'iconfont icon-donghangren'
   },
   {
-    id: 4,
-    name: 'edge.phase.nped',
-    img: require('../../assets/intersection_state/north-ped.svg')
-  // class: 'iconfont icon-beihangren'
+    id: 2,
+    name: 'edge.phase.wped',
+    img: require('../../assets/sidewalk_type/west-ped.svg')
+  // class: 'iconfont icon-xihangren'
   },
   {
     id: 3,
     name: 'edge.phase.sped',
-    img: require('../../assets/intersection_state/south-ped.svg')
+    img: require('../../assets/sidewalk_type/south-ped.svg')
+  // class: 'iconfont icon-nanhangren'
+  },
+  {
+    id: 4,
+    name: 'edge.phase.nped',
+    img: require('../../assets/sidewalk_type/north-ped.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 5,
+    name: 'edge.phase.etped',
+    img: require('../../assets/sidewalk_type/east-top.svg')
+  // class: 'iconfont icon-xihangren'
+  }, {
+    id: 6,
+    name: 'edge.phase.ebped',
+    img: require('../../assets/sidewalk_type/east-bottom.svg')
+  // class: 'iconfont icon-donghangren'
+  },
+  {
+    id: 7,
+    name: 'edge.phase.wtped',
+    img: require('../../assets/sidewalk_type/west-top.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 8,
+    name: 'edge.phase.wbped',
+    img: require('../../assets/sidewalk_type/west-bottom.svg')
+  // class: 'iconfont icon-nanhangren'
+  },
+  {
+    id: 9,
+    name: 'edge.phase.slped',
+    img: require('../../assets/sidewalk_type/south-left.svg')
+  // class: 'iconfont icon-xihangren'
+  }, {
+    id: 10,
+    name: 'edge.phase.srped',
+    img: require('../../assets/sidewalk_type/south-right.svg')
+  // class: 'iconfont icon-donghangren'
+  },
+  {
+    id: 11,
+    name: 'edge.phase.nlped',
+    img: require('../../assets/sidewalk_type/north-left.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 12,
+    name: 'edge.phase.nrped',
+    img: require('../../assets/sidewalk_type/north-right.svg')
+  // class: 'iconfont icon-nanhangren'
+  },
+  {
+    id: 13,
+    name: 'edge.phase.xrped',
+    img: require('../../assets/sidewalk_type/X-right.svg')
+  // class: 'iconfont icon-xihangren'
+  }, {
+    id: 14,
+    name: 'edge.phase.xlped',
+    img: require('../../assets/sidewalk_type/X-left.svg')
+  // class: 'iconfont icon-donghangren'
+  },
+  {
+    id: 15,
+    name: 'edge.phase.ewped',
+    img: require('../../assets/sidewalk_type/east-west-ped.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 16,
+    name: 'edge.phase.snped',
+    img: require('../../assets/sidewalk_type/south-north-ped.svg')
   // class: 'iconfont icon-nanhangren'
   }]

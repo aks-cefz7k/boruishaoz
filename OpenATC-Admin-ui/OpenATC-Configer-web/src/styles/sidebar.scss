@@ -35,6 +35,7 @@
     }
     .scrollbar-wrapper {
       height: calc(100% + 15px);
+      overflow-x: hidden;
       .el-scrollbar__view {
         height: 100%;
       }

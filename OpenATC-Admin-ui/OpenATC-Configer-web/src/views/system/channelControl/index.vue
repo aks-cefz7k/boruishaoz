@@ -156,15 +156,21 @@ export default {
     }
   },
   mounted () {
+    this.globalParamModel = this.$store.getters.globalParamModel
     this.handleCreateLampCtrboard()
   },
   beforeUpdate () {
+    this.globalParamModel = this.$store.getters.globalParamModel
     this.handleUpdateLampCtrboard()
   },
   methods: {
     handleCreateLampCtrboard () {
+      let channel = this.globalParamModel.getParamsByType('channelList')
+      let channelIdList = channel.map(ele => ele.id)
       this.data = []
+      if (channel.length === 0) return
       for (let i = 1; i <= 10; i++) {
+        if (!this.isHasLampCtrboard(i, channelIdList)) continue
         let lamp = {}
         lamp.lampctrboardnum = i
         // lamp.name = `灯控板${i}`
@@ -180,6 +186,13 @@ export default {
         this.data.push(lamp)
       }
       console.log(this.data)
+    },
+    isHasLampCtrboard (i, channelIdList) {
+      let index = i * 4
+      if (channelIdList.includes(index) || channelIdList.includes(index - 1) || channelIdList.includes(index - 2) || channelIdList.includes(index - 3)) {
+        return true
+      }
+      return false
     },
     handleUpdateLampCtrboard () {
       this.data.forEach((ele, index) => {

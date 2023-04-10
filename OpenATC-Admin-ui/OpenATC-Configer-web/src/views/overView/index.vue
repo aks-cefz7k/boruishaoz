@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="container-main">
-    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="FuncSort === 'allFunc'">
+    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!hideMenu">
       <div slot="icon" class="sloat-icon">
         <i class="iconfont icon-tuxingjiemian" style="color: #ffffff;" v-show="!isShowGui"></i>
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
@@ -154,7 +154,7 @@
             <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
             <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
           </div>
-          <div style="margin-top: 220px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
+          <div style="margin-top: 140px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
             <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
             <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
           </div>
@@ -377,7 +377,8 @@ export default {
     ...mapState({
       curBodyWidth: state => state.globalParam.curBodyWidth,
       curBodyHeight: state => state.globalParam.curBodyHeight,
-      FuncSort: state => state.globalParam.FuncSort
+      FuncSort: state => state.globalParam.FuncSort,
+      hideMenu: state => state.globalParam.hideMenu
     })
   },
   watch: {
@@ -393,6 +394,7 @@ export default {
           // this.port = this.$route.query.port
           // this.protocol = this.$route.query.protocol
           this.resetCrossDiagram()
+          this.getPlatform()
         }
       },
       // 深度观察监听
@@ -414,6 +416,7 @@ export default {
     // this.registerMessage() // 注册消息
   },
   mounted () {
+    this.getPlatform()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
     }
@@ -983,18 +986,36 @@ export default {
     },
     isEqualsForArray (listA, listB) {
       return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))
+    },
+    getPlatform () {
+      queryDevice().then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return
+        }
+        let platform = res.data.data.platform
+        let func = 'allFunc'
+        if (platform === 'OpenATC') {
+          func = 'allFunc'
+        }
+        if (platform === 'SCATS' || platform === 'HUATONG') {
+          func = 'basicFunc'
+        }
+        this.$store.dispatch('SaveFunctionLevel', func)
+      })
     }
   },
   beforeDestroy () {
     this.clearPatternInterval() // 清除定时器
     this.clearVolumeInterval()
     this.clearRegisterMessageTimer() // 清除定时器
+  },
+  destroyed () {
+    // this.clearPatternInterval() // 清除定时器
+    // this.clearVolumeInterval()
+    // this.clearRegisterMessageTimer() // 清除定时器
+    this.getPlatform()
   }
-  // destroyed () {
-  //   this.clearPatternInterval() // 清除定时器
-  //   this.clearVolumeInterval()
-  //   this.clearRegisterMessageTimer() // 清除定时器
-  // }
 }
 </script>
 

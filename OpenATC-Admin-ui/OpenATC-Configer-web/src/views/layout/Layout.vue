@@ -12,8 +12,8 @@
 <template>
   <div class="app-wrapper" :class="classObj">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-    <sidebar class="sidebar-container" v-if="FuncSort === 'allFunc'"></sidebar>
-    <div class="main-container" :class="{'changeMainPosition': FuncSort === 'basicFunc'}">
+    <sidebar class="sidebar-container" v-if="!hideMenu"></sidebar>
+    <div class="main-container" :class="{'changeMainPosition': hideMenu}">
       <navbar></navbar>
       <app-main></app-main>
     </div>
@@ -56,7 +56,7 @@ export default {
       }
     },
     ...mapState({
-      FuncSort: state => state.globalParam.FuncSort
+      hideMenu: state => state.globalParam.hideMenu
     })
   },
   watch: {
