@@ -299,6 +299,15 @@ border: 1px solid #f0f0f0;
   color: $--color-white;
   border-radius: 3px 3px 0 0;
 }
+.board-table-header {
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  text-align: center;
+  margin-bottom: -20px;
+  font-size: 12px;
+  color: $--color-info;;
+}
 
 .board-column-content {
   height: auto;

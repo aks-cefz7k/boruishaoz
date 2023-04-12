@@ -212,15 +212,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.board-table-header {
-  height: 30px;
-  line-height: 30px;
-  overflow: hidden;
-  text-align: center;
-  margin-bottom: -20px;
-  font-size: 12px;
-  color: #909399;
-}
 .col-content {
   width: 100%;
 }
