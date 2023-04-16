@@ -140,7 +140,6 @@ export default {
       if (diff === 0) {
         return false
       }
-      debugger
       this.$emit('onStageDelaystartChange', diff, this.rowIndex, this.subIndex)
     },
     onAdvanceendChange (newVal, oldVal) {
