@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="board-column" style="width:40%;">
+  <div class="board-column" style="width:40%;margin-left:40px;">
     <div class="board-column-header">
       {{headerText}}
     </div>
