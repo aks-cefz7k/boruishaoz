@@ -297,8 +297,8 @@ PROJECT_FOLDER
 | 参数名 | 必选 | 类型 | 说明 | 可选项 |
 | -------- | -------- | -------- | -------- | -------- |
 | agentid    | 是 | number | 设备id | 10001 |
-| isfromatc    | 否 | boolean (default: false) | 控制国际化切换、出、修改密码功能是否可见,传true则不可 见 | true |
-| hideMenu    | 否 | boolean (default: false) | 控制左侧功能菜单、页切换到文字界面的图标是否可见，传true   则不可见 | true |
+| isfromatc    | 否 | boolean (default: false) | 控制国际化切换、登出、修改密码功能是否可见,传true则不可见 | true |
+| hideMenu    | 否 | boolean (default: false) | 控制左侧菜单栏以及切换到文字界面的图标是否可见，传true则不可见 | true |
 | shrink    | 否 | number | 首页主内容区域缩放比例（取值为0~1之间） |0.8 |
 
 
