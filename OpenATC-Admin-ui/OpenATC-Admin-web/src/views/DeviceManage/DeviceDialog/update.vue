@@ -148,23 +148,23 @@ export default {
   //   }
   // },
   data () {
-    var checkIp = (rule, value, callback) => {
-      if (value === '') {
-        return callback(
-          new Error(this.$t('openatc.devicemanager.enterIp'))
-        )
-      }
-      const ipReg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
-      if (ipReg.test(value)) {
-        this.ip_status = true
-        callback()
-      } else {
-        this.ip_status = false
-        return callback(
-          new Error(this.$t('openatc.devicemanager.correctIp'))
-        )
-      }
-    }
+    // var checkIp = (rule, value, callback) => {
+    //   if (value === '') {
+    //     return callback(
+    //       new Error(this.$t('openatc.devicemanager.enterIp'))
+    //     )
+    //   }
+    //   const ipReg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+    //   if (ipReg.test(value)) {
+    //     this.ip_status = true
+    //     callback()
+    //   } else {
+    //     this.ip_status = false
+    //     return callback(
+    //       new Error(this.$t('openatc.devicemanager.correctIp'))
+    //     )
+    //   }
+    // }
     var checkPort = (rule, value, callback) => {
       if (value === '') {
         return callback(
@@ -209,9 +209,9 @@ export default {
         protocol: [
           { required: true, message: this.$t('openatc.devicemanager.chooseprotocol'), trigger: 'blur' }
         ],
-        ip: [
-          { validator: checkIp, trigger: 'blur' }
-        ],
+        // ip: [
+        //   { validator: checkIp, trigger: 'blur' }
+        // ],
         port: [
           { validator: checkPort, trigger: 'blur' }
         ],

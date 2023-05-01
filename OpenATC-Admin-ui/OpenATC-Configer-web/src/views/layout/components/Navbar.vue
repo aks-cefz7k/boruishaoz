@@ -14,11 +14,11 @@
     <Messagebox :visible="readDiologVisible" :text="`${$t('edge.main.readDevice')}${copiedAgentid} ${$t('edge.main.readPattern')}`" @cancle="cancleRead" @ok="handleRead"/>
     <ImportTempDialog ref="importTemp" v-if="importVisible" :imortVisible="importVisible" @closeImportTemp="closeImportTemp"/>
     <el-menu
+      v-if="!hideMenu"
       class="navbar"
       mode="horizontal"
     >
       <hamburger
-        v-if="!hideMenu"
         class="hamburger-container"
         :toggleClick="toggleSideBar"
         :isActive="sidebar.opened"
