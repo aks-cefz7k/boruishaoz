@@ -154,7 +154,6 @@ export default {
     getAllRecord () {
       this.listLoading = true
       getHisParamsList(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
-        debugger
         if (data.data.success !== true) {
           this.listLoading = false
           if (data.data.code === '20004') {
