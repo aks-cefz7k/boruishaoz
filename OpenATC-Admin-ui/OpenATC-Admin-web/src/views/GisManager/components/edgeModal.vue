@@ -44,12 +44,13 @@ export default {
   methods: {
     getHost () {
       let res
-      let host = `${window.location.href.split('#')[0]}` + 'openatc'
-      if (process.env.NODE_ENV === 'development') {
-        res = host.replace('/openatc', '')
-      } else {
-        res = `${host}`
-      }
+      let host = `${window.location.href.split('#')[0]}`
+      // if (process.env.NODE_ENV === 'development') {
+      //   res = host.replace('/openatc', '')
+      // } else {
+      //   res = `${host}`
+      // }
+      res = `${host}`
       return res
     },
     closeFormDialog () {
