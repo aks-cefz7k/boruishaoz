@@ -202,11 +202,11 @@ export default {
       return maxCycle
     },
     doChange (val) {
-      if (val.mode === 7) {
-        val.value = 0
-      } else {
-        val.value = 30
-      }
+      // if (val.mode === 7) {
+      //   val.value = 0
+      // } else {
+      //   val.value = 30
+      // }
     }
   }
 }

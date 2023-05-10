@@ -39,7 +39,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <span>{{$t('edge.pedestrianDetector.typeOption' + scope.row.region)}}</span>
+          <span>{{$t('edge.pedestrianDetector.typeOption' + scope.row.type)}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('edge.pedestrianDetector.region')" min-width="100" align="center">
