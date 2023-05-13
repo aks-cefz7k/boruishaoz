@@ -54,7 +54,7 @@
         <el-form-item
             :label="$t('openatc.devicemanager.protocol')"
             prop="protocol">
-            <el-select v-model="deviceInfo.protocol" placeholder="" style="width:100%">
+            <el-select v-model="deviceInfo.protocol" placeholder="" style="width:100%" @change="doChangeProtocol">
                 <el-option label="scp" value="scp"></el-option>
                 <el-option label="ocp" value="ocp"></el-option>
             </el-select>
@@ -80,7 +80,7 @@
         <el-form-item
             :label="$t('openatc.devicemanager.platform')"
             prop="platform">
-            <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%">
+            <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%" :disabled="platformCheck">
                 <el-option v-for="firm in platformList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
             </el-select>
         </el-form-item>
@@ -220,10 +220,10 @@ export default {
         ],
         name: [
           { required: true, message: this.$t('openatc.devicemanager.entername'), trigger: 'blur' }
-        ],
-        platform: [
-          { required: true, message: this.$t('openatc.devicemanager.chooseplatform'), trigger: 'blur' }
         ]
+        // platform: [
+        //   { required: true, message: this.$t('openatc.devicemanager.chooseplatform'), trigger: 'blur' }
+        // ]
       },
       firmList: [{
         label: '科达',
@@ -244,7 +244,8 @@ export default {
       }, {
         label: 'HUATONG',
         value: 'HUATONG'
-      }]
+      }],
+      platformCheck: false
     }
   },
   methods: {
@@ -347,6 +348,13 @@ export default {
         this.deviceInfo = JSON.parse(JSON.stringify(this.tempDevice))
         return
       }
+      if (dev.protocol === 'ocp') {
+        this.platformCheck = true
+        dev.platform = ''
+      } else {
+        this.platformCheck = false
+        dev.platform = 'OpenATC'
+      }
       // 编辑
       const device = JSON.parse(JSON.stringify(dev))
       let lng = 0
@@ -367,6 +375,15 @@ export default {
       // 表单重置
       this.dialogFormVisible = false
       this.$refs[formData].resetFields()
+    },
+    doChangeProtocol (val) {
+      if (val === 'ocp') {
+        this.deviceInfo.platform = ''
+        this.platformCheck = true
+      } else {
+        this.platformCheck = false
+        this.deviceInfo.platform = 'OpenATC'
+      }
     }
   }
 }
