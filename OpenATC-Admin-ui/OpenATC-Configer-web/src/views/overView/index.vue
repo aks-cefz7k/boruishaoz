@@ -370,7 +370,7 @@ export default {
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
       shrink: 1,
-      basicFuncControlId: [1, 4, 5] // 基础功能包含的控制方式： 黄闪、步进、定周期
+      basicFuncControlId: [0, 1, 4, 5] // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
     }
   },
   computed: {
