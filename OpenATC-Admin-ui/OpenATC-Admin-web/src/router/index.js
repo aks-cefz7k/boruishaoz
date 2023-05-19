@@ -169,6 +169,14 @@ export const constantRouterMapOfLogin = [{
   }]
 },
 {
+  path: '/jupyter',
+  component: compose,
+  children: [{
+    path: '',
+    component: () => import('@/views/Jupyter/index')
+  }]
+},
+{
   path: '/404',
   component: () => import('@/views/404'),
   hidden: true

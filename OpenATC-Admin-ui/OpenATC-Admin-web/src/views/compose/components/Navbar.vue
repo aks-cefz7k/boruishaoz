@@ -25,6 +25,7 @@
       <el-menu-item index="organization" style="display:inline">{{$t('openatc.main.organization')}}</el-menu-item>
       <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item>
       <!-- <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item> -->
+      <el-menu-item index="jupyter" style="display:inline">{{$t('openatc.main.script')}}</el-menu-item>
     </div>
     <div class="openatc-operate">
       <div class="admin">
@@ -108,7 +109,8 @@ export default {
         greenwave: '/greenWaveOptimize',
         operate: '/operaterecord',
         organization: '/organization',
-        dutyroute: '/dutyroute'
+        dutyroute: '/dutyroute',
+        jupyter: '/jupyter'
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,

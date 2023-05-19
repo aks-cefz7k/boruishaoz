@@ -60,6 +60,7 @@ const en = {
       'greenwaveoptimize': 'Greenwave Optimize',
       'operationrecord': 'Operation Record',
       'organization': 'Organization',
+      'script': 'Script',
       'dutyroute': 'Duty Route',
       'realname': 'RealName',
       'telno': 'Telno',

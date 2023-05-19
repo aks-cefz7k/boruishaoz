@@ -60,6 +60,7 @@ const zh = {
       'greenwaveoptimize': '绿波协调',
       'operationrecord': '操作记录',
       'organization': '组织机构',
+      'script': '脚本',
       'dutyroute': '勤务路线',
       'realname': '真实姓名',
       'telno': '联系电话',
