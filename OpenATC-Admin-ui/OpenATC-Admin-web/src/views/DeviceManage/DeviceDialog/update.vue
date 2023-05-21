@@ -17,6 +17,23 @@
         width="913px"
         :close-on-click-modal="false"
         @close='closeFormDialog'>
+        <el-dialog
+          width="700px"
+          :title="$t('openatc.devicemanager.updateDeviceId')"
+          :visible.sync="innerVisible"
+          append-to-body>
+          <el-form ref="deviceId" :model="innerForm">
+            <el-form-item :label="$t('openatc.devicemanager.deviceid')" label-width="15%">
+              <el-input v-model="innerForm.id" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div
+            slot="footer"
+            class="dialog-footer">
+                <el-button @click="resetInnerForm('deviceId')">{{$t('openatc.button.Cancel')}}</el-button>
+                <el-button type="primary" @click="submitDeviceId()">{{$t('openatc.button.OK')}}</el-button>
+            </div>
+        </el-dialog>
         <el-form
         class="dialog-footer"
         ref="device"
@@ -30,6 +47,15 @@
             type="text"
             v-model="deviceInfo.agentid"
             :disabled="!!deviceInfo.id"
+            @keyup.enter.native="submitDeviceInfo('device')">
+            </el-input>
+        </el-form-item>
+        <el-form-item
+            :label="$t('openatc.devicemanager.thirdplatformid')"
+            prop="thirdplatformid">
+            <el-input
+            type="text"
+            v-model="deviceInfo.thirdplatformid"
             @keyup.enter.native="submitDeviceInfo('device')">
             </el-input>
         </el-form-item>
@@ -54,7 +80,7 @@
         <el-form-item
             :label="$t('openatc.devicemanager.protocol')"
             prop="protocol">
-            <el-select v-model="deviceInfo.protocol" placeholder="" style="width:100%">
+            <el-select v-model="deviceInfo.protocol" placeholder="" style="width:100%" @change="doChangeProtocol">
                 <el-option label="scp" value="scp"></el-option>
                 <el-option label="ocp" value="ocp"></el-option>
             </el-select>
@@ -80,7 +106,7 @@
         <el-form-item
             :label="$t('openatc.devicemanager.platform')"
             prop="platform">
-            <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%">
+            <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%" :disabled="platformCheck">
                 <el-option v-for="firm in platformList" :key="firm.label" :label="firm.label" :value="firm.value"></el-option>
             </el-select>
         </el-form-item>
@@ -124,13 +150,14 @@
         class="dialog-footer">
             <el-button @click="resetForm('device')">{{$t('openatc.button.Cancel')}}</el-button>
             <el-button type="primary" @click="submitDeviceInfo('device')">{{$t('openatc.button.OK')}}</el-button>
+            <el-button type="primary" @click="innerVisible = true" class="change-deviceid" v-show="showModifyIdButton">{{$t('openatc.devicemanager.updateDeviceId')}}</el-button>
         </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { AddDevice, UpdateDevice } from '@/api/device'
+import { AddDevice, UpdateDevice, UpdateDeviceId } from '@/api/device'
 export default {
   name: 'deviceUpdate',
   props: {
@@ -186,15 +213,17 @@ export default {
     }
     return {
       dialogFormVisible: false,
+      innerVisible: false,
       ip_status: true,
       port_status: true,
       deviceInfo: {},
       tempDevice: {
         agentid: '',
+        thirdplatformid: '',
         name: '',
         descs: '',
         type: 'asc',
-        protocol: 'ocp',
+        protocol: 'scp',
         ip: '',
         port: '',
         lng: 0,
@@ -220,10 +249,10 @@ export default {
         ],
         name: [
           { required: true, message: this.$t('openatc.devicemanager.entername'), trigger: 'blur' }
-        ],
-        platform: [
-          { required: true, message: this.$t('openatc.devicemanager.chooseplatform'), trigger: 'blur' }
         ]
+        // platform: [
+        //   { required: true, message: this.$t('openatc.devicemanager.chooseplatform'), trigger: 'blur' }
+        // ]
       },
       firmList: [{
         label: '科达',
@@ -244,7 +273,10 @@ export default {
       }, {
         label: 'HUATONG',
         value: 'HUATONG'
-      }]
+      }],
+      platformCheck: false,
+      innerForm: {},
+      showModifyIdButton: false
     }
   },
   methods: {
@@ -273,6 +305,45 @@ export default {
           this.$message.error(this.$t('openatc.devicemanager.enterrequired'))
           return false
         }
+      })
+    },
+    submitDeviceId () {
+      if (this.innerForm.id === '') {
+        this.$message.error(this.$t('openatc.devicemanager.deviceNotNull'))
+        return
+      }
+      if (this.innerForm.id === this.deviceInfo.agentid) {
+        this.$message.error(this.$t('openatc.devicemanager.oldIdNotConsistentNewId'))
+        return
+      }
+      this.updateDeviceId()
+    },
+    updateDeviceId () {
+      let _vue = this
+      let data = {
+        oldAgentid: _vue.deviceInfo.agentid,
+        newAgentid: _vue.innerForm.id
+      }
+      UpdateDeviceId(data).then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          this.$message({
+            message: this.$t('openatc.common.updatefailed'),
+            type: 'error',
+            duration: 1 * 1000
+          })
+          return
+        }
+        this.innerVisible = false
+        this.dialogFormVisible = false
+        this.$message({
+          message: this.$t('openatc.common.updatesuccess'),
+          type: 'success',
+          duration: 1 * 1000,
+          onClose: () => {
+            _vue.$parent.getList()
+          }
+        })
       })
     },
     addDevice () {
@@ -345,7 +416,16 @@ export default {
       if (!dev) {
         // 新增置空
         this.deviceInfo = JSON.parse(JSON.stringify(this.tempDevice))
+        this.showModifyIdButton = false
         return
+      }
+      this.showModifyIdButton = true
+      if (dev.protocol === 'ocp') {
+        this.platformCheck = true
+        dev.platform = ''
+      } else {
+        this.platformCheck = false
+        dev.platform = 'OpenATC'
       }
       // 编辑
       const device = JSON.parse(JSON.stringify(dev))
@@ -362,11 +442,31 @@ export default {
         lng: lng,
         lat: lat
       }
+      this.innerForm = {
+        id: dev.agentid
+      }
     },
     resetForm (formData) {
       // 表单重置
       this.dialogFormVisible = false
       this.$refs[formData].resetFields()
+    },
+    resetInnerForm (formData) {
+      // 内层表单重置
+      this.innerVisible = false
+      this.$refs[formData].resetFields()
+      this.innerForm = {
+        id: this.deviceInfo.agentid
+      }
+    },
+    doChangeProtocol (val) {
+      if (val === 'ocp') {
+        this.deviceInfo.platform = ''
+        this.platformCheck = true
+      } else {
+        this.platformCheck = false
+        this.deviceInfo.platform = 'OpenATC'
+      }
     }
   }
 }

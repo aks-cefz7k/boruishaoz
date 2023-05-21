@@ -80,6 +80,11 @@
     "method": "put"
   },
   {
+    "key": "updateDeviceId",
+    "url": "/devs/agentid",
+    "method": "post"
+  },
+  {
     "key": "addDevice",
     "url": "/devs",
     "method": "post"

@@ -121,7 +121,11 @@ const en = {
       'boardCardType': 'BoardCard Type',
       'faultGrade': 'Grade',
       'faultValue': 'Value',
-      'crowsid': 'Crows ID'
+      'crowsid': 'Crows ID',
+      'updateDeviceId': 'Modify ID',
+      'deviceNotNull': 'Device ID cannot be empty!',
+      'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
+      'thirdplatformid': 'Third party ID'
     },
     'usermanager': {
       'username': 'Username',
