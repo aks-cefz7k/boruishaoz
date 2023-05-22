@@ -442,7 +442,7 @@ const en = {
       'deviceinfostyle': 'margin-left: 100px; top: 10px;',
       'deviceparamstyle': 'margin-left: 170px; top: 10px;',
       'deviceselflearningstyle': 'margin-left: 100px; top: 15px;',
-      'faultdetect': 'Fault Detect: ',
+      'faultdetect': 'Fault Detect',
       'closegreenandredon': 'Close Green And Red On: ',
       'closenoredon': 'Close No Red On: ',
       'detectgapgreenandredon': 'Detect Gap Green And Red On（0.1s）: ',

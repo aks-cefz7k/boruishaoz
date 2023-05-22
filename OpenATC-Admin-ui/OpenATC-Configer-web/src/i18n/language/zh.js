@@ -440,7 +440,7 @@ const zh = {
       'deviceinfostyle': 'margin-left: 50px; top: 10px;',
       'deviceparamstyle': 'margin-left: 50px; top: 10px;',
       'deviceselflearningstyle': 'margin-left: 50px; top: 15px;',
-      'faultdetect': '故障检测: ',
+      'faultdetect': '故障检测参数',
       'closegreenandredon': '红绿同亮检测: ',
       'closenoredon': '无红灯亮起检测: ',
       'detectgapgreenandredon': '红绿同亮检测时间间隔(0.1秒):',

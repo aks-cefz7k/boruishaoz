@@ -99,6 +99,46 @@
                   </el-select>
             </el-col>
           </el-row>
+
+          <div class="device-second-title">{{$t('edge.deviceinfo.faultdetect')}}</div>
+          <el-row class="demo-autocomplete" :gutter="30">
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenandredon')}}</div>
+              <el-input v-model="customInfo.faultdetect.detectgapgreenandredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.detectgapnoredon')}}</div>
+              <el-input v-model="customInfo.faultdetect.detectgapnoredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenconflict')}}</div>
+              <el-input v-model="customInfo.faultdetect.detectgapgreenconflict" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+            </el-col>
+          </el-row>
+          <el-row class="demo-autocomplete" :gutter="30">
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.closegreenandredon')}}
+                <el-switch
+                  style="padding-left: 5px;"
+                  v-model="customInfo.faultdetect.closegreenandredon"
+                  active-color="#409EFF"
+                  :active-value="1"
+                  :inactive-value="0">
+                </el-switch>
+              </div>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.closenoredon')}}
+                <el-switch
+                  style="padding-left: 5px;"
+                  v-model="customInfo.faultdetect.closenoredon"
+                  active-color="#409EFF"
+                  :active-value="1"
+                  :inactive-value="0">
+                </el-switch>
+              </div>
+            </el-col>
+          </el-row>
           <div class="device-second-title">{{$t('edge.deviceinfo.cascade')}}</div>
           <el-row class="demo-autocomplete" :gutter="30">
             <el-col :span="4">
@@ -145,7 +185,7 @@
           </el-row>
         </div>
 
-         <div class="device-netcard">
+        <div class="device-netcard">
           <div class="device-info">{{$t('edge.deviceinfo.netcardInfo')}}</div>
           <div v-for="(item, index) in customInfo.netcard" :key="index">
             <div class="device-second-title">IP{{index + 1}}</div>
@@ -189,48 +229,6 @@
                         :placeholder="$t('edge.common.entercontent')"
                         oninput="this.value=this.value.replace(/[^\.\d]/g,'')"
                         @blur="checkPort(customInfo.centerip.port)"></el-input>
-            </el-col>
-          </el-row>
-        </div>
-
-        <div class="device-fault-detect">
-          <div class="device-info">{{$t('edge.deviceinfo.faultdetect')}}</div>
-          <el-row class="demo-autocomplete" :gutter="30">
-            <el-col :span="4">
-              <div class="sub-title">{{$t('edge.deviceinfo.closegreenandredon')}}
-                <el-switch
-                  style="padding-left: 5px;"
-                  v-model="customInfo.faultdetect.closegreenandredon"
-                  active-color="#409EFF"
-                  :active-value="1"
-                  :inactive-value="0">
-                </el-switch>
-              </div>
-            </el-col>
-            <el-col :span="4">
-              <div class="sub-title">{{$t('edge.deviceinfo.closenoredon')}}
-                <el-switch
-                  style="padding-left: 5px;"
-                  v-model="customInfo.faultdetect.closenoredon"
-                  active-color="#409EFF"
-                  :active-value="1"
-                  :inactive-value="0">
-                </el-switch>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row class="demo-autocomplete" :gutter="30">
-            <el-col :span="4">
-              <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenandredon')}}</div>
-              <el-input v-model="customInfo.faultdetect.detectgapgreenandredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
-            </el-col>
-            <el-col :span="4">
-              <div class="sub-title">{{$t('edge.deviceinfo.detectgapnoredon')}}</div>
-              <el-input v-model="customInfo.faultdetect.detectgapnoredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
-            </el-col>
-            <el-col :span="4">
-              <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenconflict')}}</div>
-              <el-input v-model="customInfo.faultdetect.detectgapgreenconflict" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
             </el-col>
           </el-row>
         </div>
