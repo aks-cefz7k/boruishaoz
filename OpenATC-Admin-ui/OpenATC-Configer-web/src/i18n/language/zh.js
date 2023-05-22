@@ -439,7 +439,15 @@ const zh = {
       'slavecascadeoffset': '从机级联偏移量: ',
       'deviceinfostyle': 'margin-left: 50px; top: 10px;',
       'deviceparamstyle': 'margin-left: 50px; top: 10px;',
-      'deviceselflearningstyle': 'margin-left: 50px; top: 15px;'
+      'deviceselflearningstyle': 'margin-left: 50px; top: 15px;',
+      'faultdetect': '故障检测参数',
+      'closegreenandredon': '红绿同亮检测: ',
+      'closenoredon': '无红灯亮起检测: ',
+      'detectgapgreenandredon': '红绿同亮检测时间间隔(0.1秒):',
+      'detectgapnoredon': '无红灯亮起检测时间间隔(0.1秒):',
+      'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
+      'startOrderParams': '启动时序参数 ',
+      'netcardInfo': '网卡信息: '
     },
     'singleoptim': {
       'deletetip': '确认删除？',

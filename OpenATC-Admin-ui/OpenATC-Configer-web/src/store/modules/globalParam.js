@@ -24,6 +24,9 @@ const tscParam = {
     intersectionid: Number,
     siteid: '',
     selflearning: 0,
+    fixintersectioninfo: '',
+    commuport: 0,
+    commutype: '',
     netcard: [{
       ip: '',
       subnetmask: '',
@@ -48,6 +51,13 @@ const tscParam = {
       startyellowflash: 6,
       startallred: 6,
       greenwavecycle: 5
+    },
+    faultdetect: {
+      closegreenandredon: 0,
+      detectgapgreenandredon: 0,
+      closenoredon: 0,
+      detectgapnoredon: 0,
+      detectgapgreenconflict: 0
     }
   },
   manualpanel: {
