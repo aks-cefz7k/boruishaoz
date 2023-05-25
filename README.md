@@ -307,6 +307,17 @@ PROJECT_FOLDER
     `https://dolphin-dev.kedacom.com/openatc/#/overviewNew/index?agentid=10001&isfromatc=true&hideMenu=true`
 
 
+#### chrome浏览器下，脚本页面无法正常登陆解决方法
+
+##### 原因
+    Chrome浏览器默认限制了第三方Cookie，这将影响正常登录，需要更改浏览器的隐私设置，解除限制后重试
+
+##### 解决方法
+    chrome://flags/   把这句复制到浏览器，回车
+    SameSite by default cookies
+    Cookies without SameSite must be secure
+    找到上面这两两项设置成 Disable即可
+
 ---
 
 ### 后端部分
