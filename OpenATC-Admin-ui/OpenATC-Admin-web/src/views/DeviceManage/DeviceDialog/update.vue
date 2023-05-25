@@ -263,6 +263,9 @@ export default {
       }, {
         label: '华通',
         value: 'Huatong'
+      }, {
+        label: '海信',
+        value: 'HAIXIN'
       }],
       platformList: [{
         label: 'OpenATC',
@@ -273,6 +276,9 @@ export default {
       }, {
         label: 'HUATONG',
         value: 'HUATONG'
+      }, {
+        label: 'HiCon',
+        value: 'HiCon'
       }],
       platformCheck: false,
       innerForm: {},
