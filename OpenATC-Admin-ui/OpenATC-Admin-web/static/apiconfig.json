@@ -258,5 +258,30 @@
     "key": "DeleteFaultById",
     "url": "/fault",
     "method": "delete"
+  },
+  {
+    "key": "get_all_systemconfig",
+    "url": "/systemconfig",
+    "method": "get"
+  },
+  {
+    "key": "get_systemconfig_by_module",
+    "url": "/systemconfig",
+    "method": "get"
+  },
+  {
+    "key": "add_systemconfig",
+    "url": "/systemconfig",
+    "method": "post"
+  },
+  {
+    "key": "update_systemconfig",
+    "url": "/systemconfig",
+    "method": "put"
+  },
+  {
+    "key": "delete_systemconfig",
+    "url": "/systemconfig",
+    "method": "delete"
   }
 ]
