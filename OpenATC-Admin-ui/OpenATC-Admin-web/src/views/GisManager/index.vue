@@ -13,16 +13,16 @@
   <div class="openatc-gis">
     <div id="map"></div>
       <transition name="slide">
-    <div class="showLayout"  v-show="toggleShow">
-        <div class="tabsconatiner">
-          <device
-            :devicesData="devList"
-            ref="device"
-            @setCurrent="setCurrentMarker"
-            @setDeviceLocation="setDeviceLocation"
-          ></device>
+        <div class="showLayout"  v-show="toggleShow">
+            <div class="tabsconatiner">
+              <device
+                :devicesData="devList"
+                ref="device"
+                @setCurrent="setCurrentMarker"
+                @setDeviceLocation="setDeviceLocation"
+              ></device>
+            </div>
         </div>
-    </div>
       </transition>
       <div
         :class="[toggleshowisActive ? 'toggle_show' : 'active']"
@@ -36,7 +36,9 @@
         />
       </div>
     <div class="map-position">
-      经度{{ lngLat.lng }} 纬度{{ lngLat.lat }} 层级 {{ zoom }}
+      {{this.$t('openatc.devicemanager.longitude') }} {{ lngLat.lng }}
+      {{this.$t('openatc.devicemanager.latitude') }}  {{ lngLat.lat }}
+      {{this.$t('openatc.devicemanager.layerLevel') }} {{ zoom }}
     </div>
   </div>
 </template>
@@ -46,7 +48,7 @@ import L from 'leaflet'
 import { GetAllDevice } from '@/api/device'
 import lottie from 'vue-lottie'
 import device from './components/device'
-import Anim from './toggleData.json'
+import Anim from './toggleDataDark.json'
 export default {
   components: {
     lottie,
@@ -89,73 +91,9 @@ export default {
       L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       ).addTo(map)
-      // L.tileLayer(
-      //   'http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}'
-      // ).addTo(map)
       this.map = map// data上需要挂载
       window.map = map
       this.getAllAdevice()
-      // var markers = []
-      // // 系统默认的marker,有一个蓝色图标
-      // //   var marker1 = L.marker([39.550339, 116.115129])
-      // //   // 自定义的circleMarker
-      // //   var marker2 = L.circleMarker([39.550339, 116.126129], {
-      // //     stroke: true,
-      // //     color: '#aaaaaa',
-      // //     weight: 1,
-      // //     opacity: 1,
-      // //     fillColor: '#00e400',
-      // //     fillOpacity: 1,
-      // //     radius: 10
-      // //   })
-      // //   // 用html的div来创建icon，但是有缺陷
-      // //   var icon3 = L.divIcon({
-      // //     html: '<div style=\'width: 15px;height:15px;border-radius: 50%;background-color:#00e400 ;\'></div>',
-      // //     iconAnchor: [1, 1]})
-      // //   var marker3 = L.marker([39.550339, 116.197129], { icon: icon3 })
-      // //   // 用html的div的样式来创建marker的icon，注意需要加className属性，否则会出现marker1的问题
-      // //   var icon4 = L.divIcon({
-      // //     html: '<div style=\'width:24px;height:24px;border-radius:4px;background-color:#00e400 ;\'></div>',
-      // //     className: 'ss' })
-      // //   var marker4 = L.marker([39.550339, 116.148129], { icon: icon4 })
-      // var myIcon = L.icon({
-      //   iconUrl: require('../../assets/gis/deviceonline.png'),
-      //   title: '在线设备'
-      //   // iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-      //   // iconSize: [10, 40]
-      //   // iconAnchor: [22, 94],
-      //   // popupAnchor: [-3, -76],
-      //   // shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-      //   // shadowUrl: '../../assets/images/deviceonline.png',
-      //   // shadowSize: [68, 95],
-      //   // shadowAnchor: [22, 94]
-      // })
-      // // L.marker([39.550339, 116.114129], {icon: myIcon}).addTo(map)
-      // var marker5 = L.marker([31.23636, 121.53413], { icon: myIcon })
-      // var onlineIcon = L.icon({
-      //   iconUrl: require('../../assets/gis/devicenotonline.png'),
-      //   title: '离线设备',
-      //   bubblingMouseEvents: true
-      // })
-      // var marker6 = L.marker([31.25636, 121.53413], { icon: onlineIcon })
-      // var faultIcon = L.icon({
-      //   iconUrl: require('../../assets/gis/devicefault.png'),
-      //   title: '故障设备',
-      //   bubblingMouseEvents: true
-      // })
-      // var marker7 = L.marker([31.27636, 121.53413], { icon: faultIcon })
-      // //   markers.push(marker1)
-      // //   markers.push(marker2)
-      // //   markers.push(marker3)
-      // //   markers.push(marker4)
-      // markers.push(marker5)
-      // markers.push(marker6)
-      // markers.push(marker7)
-      // this.citiesLayer = L.layerGroup(markers)
-      // console.log(this.citiesLayer)
-      // map.addLayer(this.citiesLayer)
-      // this.addMessage()
-      // // map.removeLayer(citiesLayer)
     },
     addMapEvent () {
       let _this = this
@@ -323,7 +261,7 @@ export default {
   color: rgba(254, 254, 254, 0.7);
 }
 
-.showLayout {
+/* .showLayout {
   position: fixed;
   top: 70px;
   right: 38px;
@@ -331,17 +269,18 @@ export default {
   height: auto;
   z-index: 904;
   background-color: #ffffff;
-}
+} */
 .tabsconatiner {
   margin: 10px;
   position: relative;
   width: 100% - 20px;
   height: 100% - 20px;
+  opacity: 0.95;
 }
 .addbtn {
   position: absolute;
   right: 5px;
-  z-index: 99;
+  /* z-index: 99; */
   top: 7px;
   width: auto;
   height: auto;

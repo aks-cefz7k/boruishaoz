@@ -300,6 +300,18 @@
         color: $--color-text-regular;
       }
 }
+// GIS页面样式
+.openatc-gis {
+    .showLayout {
+      position: fixed;
+      top: 70px;
+      right: 38px;
+      width: 442px;
+      height: auto;
+      z-index: 904;
+      background-color: $--color-white;
+    }
+}
 // 设备管理页面样式
 .openatc-device {
     .tag-container {
