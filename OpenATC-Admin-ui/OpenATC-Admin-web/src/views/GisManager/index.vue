@@ -46,6 +46,7 @@
 
 import L from 'leaflet'
 import { GetAllDevice } from '@/api/device'
+import { SystemconfigApi } from '@/api/systemconfig.js'
 import lottie from 'vue-lottie'
 import device from './components/device'
 import Anim from './toggleDataDark.json'
@@ -63,6 +64,10 @@ export default {
         lat: '0.00000000'
       },
       zoom: 12,
+      minZoom: 3,
+      maxZoom: 18,
+      center: [31.23636, 121.53413],
+      gis: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       toggleShow: true,
       toggleshowisActive: true,
       defaultOptions: { animationData: Anim, loop: false, autoplay: false },
@@ -70,17 +75,25 @@ export default {
     }
   },
   mounted () {
-    this.initMap()
-    this.addMapEvent()
+    this.init()
+    // this.getGisConfig()
+    // this.initMap()
+    // this.addMapEvent()
   },
   methods: {
+    async init () {
+      await this.getGisConfig()
+      await this.initMap()
+      await this.addMapEvent()
+    },
     initMap () {
+      let _this = this
       let map = L.map('map', {
-        minZoom: 3,
-        maxZoom: 18,
+        minZoom: _this.minZoom,
+        maxZoom: _this.maxZoom,
         // center: [39.550339, 116.114129],
-        center: [31.23636, 121.53413],
-        zoom: 12,
+        center: _this.center,
+        zoom: _this.zoom,
         zoomControl: false,
         attributionControl: false,
         crs: L.CRS.EPSG3857,
@@ -89,11 +102,75 @@ export default {
       })
       window.map = map
       L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        _this.gis
       ).addTo(map)
-      this.map = map// data上需要挂载
+      // L.tileLayer(
+      //   'http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}'
+      // ).addTo(map)
+      _this.map = map// data上需要挂载
       window.map = map
-      this.getAllAdevice()
+      _this.getAllAdevice()
+      // var markers = []
+      // // 系统默认的marker,有一个蓝色图标
+      // //   var marker1 = L.marker([39.550339, 116.115129])
+      // //   // 自定义的circleMarker
+      // //   var marker2 = L.circleMarker([39.550339, 116.126129], {
+      // //     stroke: true,
+      // //     color: '#aaaaaa',
+      // //     weight: 1,
+      // //     opacity: 1,
+      // //     fillColor: '#00e400',
+      // //     fillOpacity: 1,
+      // //     radius: 10
+      // //   })
+      // //   // 用html的div来创建icon，但是有缺陷
+      // //   var icon3 = L.divIcon({
+      // //     html: '<div style=\'width: 15px;height:15px;border-radius: 50%;background-color:#00e400 ;\'></div>',
+      // //     iconAnchor: [1, 1]})
+      // //   var marker3 = L.marker([39.550339, 116.197129], { icon: icon3 })
+      // //   // 用html的div的样式来创建marker的icon，注意需要加className属性，否则会出现marker1的问题
+      // //   var icon4 = L.divIcon({
+      // //     html: '<div style=\'width:24px;height:24px;border-radius:4px;background-color:#00e400 ;\'></div>',
+      // //     className: 'ss' })
+      // //   var marker4 = L.marker([39.550339, 116.148129], { icon: icon4 })
+      // var myIcon = L.icon({
+      //   iconUrl: require('../../assets/gis/deviceonline.png'),
+      //   title: '在线设备'
+      //   // iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      //   // iconSize: [10, 40]
+      //   // iconAnchor: [22, 94],
+      //   // popupAnchor: [-3, -76],
+      //   // shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+      //   // shadowUrl: '../../assets/images/deviceonline.png',
+      //   // shadowSize: [68, 95],
+      //   // shadowAnchor: [22, 94]
+      // })
+      // // L.marker([39.550339, 116.114129], {icon: myIcon}).addTo(map)
+      // var marker5 = L.marker([31.23636, 121.53413], { icon: myIcon })
+      // var onlineIcon = L.icon({
+      //   iconUrl: require('../../assets/gis/devicenotonline.png'),
+      //   title: '离线设备',
+      //   bubblingMouseEvents: true
+      // })
+      // var marker6 = L.marker([31.25636, 121.53413], { icon: onlineIcon })
+      // var faultIcon = L.icon({
+      //   iconUrl: require('../../assets/gis/devicefault.png'),
+      //   title: '故障设备',
+      //   bubblingMouseEvents: true
+      // })
+      // var marker7 = L.marker([31.27636, 121.53413], { icon: faultIcon })
+      // //   markers.push(marker1)
+      // //   markers.push(marker2)
+      // //   markers.push(marker3)
+      // //   markers.push(marker4)
+      // markers.push(marker5)
+      // markers.push(marker6)
+      // markers.push(marker7)
+      // this.citiesLayer = L.layerGroup(markers)
+      // console.log(this.citiesLayer)
+      // map.addLayer(this.citiesLayer)
+      // this.addMessage()
+      // // map.removeLayer(citiesLayer)
     },
     addMapEvent () {
       let _this = this
@@ -234,6 +311,41 @@ export default {
         let updateChild = _this.$refs.device.$refs.updateChild
         updateChild.onUpdateClick(dev, true)
         // L.popup().setLatLng(e.latlng).setContent(e.latlng.toString()).openOn(this.map)
+      })
+    },
+    getGisConfig () {
+      return new Promise((resolve, reject) => {
+        SystemconfigApi.GetSystemconfigByModule('gis').then((data) => {
+          let res = data.data
+          if (!res.success) {
+            console.log('datas:' + res)
+            throw new Error('get gis error')
+          } else {
+            for (let config of data.data.data) {
+              if (config['key'] === 'minZoom') {
+                this.minZoom = Number(config['value'])
+              }
+              if (config['key'] === 'maxZoom') {
+                this.maxZoom = Number(config['value'])
+              }
+              if (config['key'] === 'center') {
+                let cen = config['value']
+                let ss = cen.split(',')
+                let s1 = ss[0].replace('[', '')
+                let s2 = ss[1].replace(']', '').trim()
+                this.center = [Number(s1), Number(s2)]
+              }
+              if (config['key'] === 'zoom') {
+                this.zoom = Number(config['value'])
+              }
+              if (config['key'] === 'gis') {
+                this.gis = config['value'] + ''
+                // this.gis = 'http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x}'
+              }
+            }
+            resolve(data.data.data)
+          }
+        })
       })
     }
   }
