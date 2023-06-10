@@ -123,14 +123,14 @@ export default {
 <style scoped>
 .block {
   width: 100%;
-  height: 650px;
+  height: 80%;
   margin: 50px;
   /* border: 1px solid red; */
 }
 .card-div {
   /* position: absolute; */
   padding-left: 80px;
-  width: 850px;
+  width: 65%;
 }
 .block >>> .el-scrollbar__wrap {
   overflow-x: hidden;

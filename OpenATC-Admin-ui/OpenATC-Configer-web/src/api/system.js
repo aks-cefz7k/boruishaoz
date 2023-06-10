@@ -245,3 +245,14 @@ export const channeltest = () => {
   data.infotype = 'status/channeltest'
   return api.Send({}, data)
 }
+
+// 获取通道灯色状态
+export const getRealTimeChannel = () => {
+  let api = new Authapi('getrealtimechannel')
+  var iframdevid = getIframdevid()
+  let data = {}
+  data.agentid = iframdevid
+  data.operation = 'get-request'
+  data.infotype = 'status/channellamp'
+  return api.Send({}, data)
+}

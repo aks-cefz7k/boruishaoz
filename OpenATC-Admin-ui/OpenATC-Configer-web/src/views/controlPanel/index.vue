@@ -52,7 +52,6 @@
       <div class="manual-tables-bottom">
         <el-table
           :data="manualList"
-          stripe
           size="small"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -427,7 +426,7 @@ export default {
   height: 600px;
   margin-left: 30px;
   margin-top: 30px;
-  background-color: #eff7ff;
+  // background-color: #eff7ff;
 }
 .manualControl-kanban {
   width: 100%;

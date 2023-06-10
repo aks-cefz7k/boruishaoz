@@ -14,6 +14,7 @@
     <Messagebox :visible="readDiologVisible" :text="`${$t('edge.main.readDevice')}${copiedAgentid} ${$t('edge.main.readPattern')}`" @cancle="cancleRead" @ok="handleRead"/>
     <ImportTempDialog ref="importTemp" v-if="importVisible" :imortVisible="importVisible" @closeImportTemp="closeImportTemp"/>
     <el-menu
+      v-if="!hideMenu"
       class="navbar"
       mode="horizontal"
     >
@@ -247,7 +248,8 @@ export default {
     ]),
     ...mapState({
       copiedTscParam: state => state.globalParam.copiedTscParam,
-      userInfo: state => state.user.userInfo
+      userInfo: state => state.user.userInfo,
+      hideMenu: state => state.globalParam.hideMenu
     }),
     userInfo: {
       get: function () {
@@ -279,12 +281,15 @@ export default {
     } else {
       this.isShowMenu = false
     }
-    // if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === 'true') {
-    //   this.isShowLogout = false
-    // }
     if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
       // 增加判断toSingleEdge，解决isfromatc参数丢失问题
       this.isShowLogout = false
+    }
+    if (this.$route.query.hideMenu === true || this.$route.query.hideMenu === 'true') {
+      // 如果传参hideMenu就隐藏菜单，其余情况均不隐藏
+      this.$store.dispatch('SetMenuVisible', true)
+    } else {
+      this.$store.dispatch('SetMenuVisible', false)
     }
     // this.extendErrorCodeMap() // 扩展错误码的map集合
   },
@@ -345,20 +350,25 @@ export default {
       this.importVisible = true
     },
     normalData () {
-      // 去除patternList里的description对象
-      // let patternList = this.globalParamModel.getParamsByType('patternList')
-      // for (let pattern of patternList) {
-      //   for (let rings of pattern.rings) {
-      //     for (let i = 0; i < rings.length; i++) {
-      //       rings[i] = (({ name, id, value }) => ({ name, id, value }))(rings[i])
-      //     }
-      //   }
-      // }
-      // 去除channelList里的typeAndSouce
-      let channelList = this.globalParamModel.getParamsByType('channelList')
-      for (let i = 0; i < channelList.length; i++) {
-        let channel = channelList[i]
-        this.$store.getters.tscParam.channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
+      if (this.value === 'all' || this.value === 'pattern') {
+        // 去除patternList里的description对象
+        let patternList = this.globalParamModel.getParamsByType('patternList')
+        for (let pattern of patternList) {
+          for (let rings of pattern.rings) {
+            for (let i = 0; i < rings.length; i++) {
+              rings[i] = (({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
+                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }))(rings[i])
+            }
+          }
+        }
+      }
+      if (this.value === 'all' || this.value === 'channel') {
+        // 去除channelList里的typeAndSouce
+        let channelList = this.globalParamModel.getParamsByType('channelList')
+        for (let i = 0; i < channelList.length; i++) {
+          let channel = channelList[i]
+          this.$store.getters.tscParam.channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
+        }
       }
     },
     toggleSideBar () {
@@ -400,6 +410,9 @@ export default {
         if (allTscParam.channellock === undefined) {
           allTscParam.channellock = []
         }
+        if (allTscParam.singleoptim === undefined) {
+          allTscParam.singleoptim = []
+        }
         this.globalParamModel.setGlobalParams(allTscParam)
         this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
       })
@@ -425,15 +438,11 @@ export default {
       })
     },
     download () {
-      // const tscParam = this.globalParamModel.getGlobalParams()
-      // this.lockScreen()
       let typeStr = this.value
-      // if (typeStr !== 'all') {
-      //   this.lockScreen()
-      //   this.singleDownload(typeStr, tscParam)
-      //   return
-      // }
-      // this.normalData() // 规范数据格式
+      if (typeStr !== 'all') {
+        this.singleDownload(typeStr)
+        return
+      }
       // 下发数据前的基本校验
       if (!this.baseCheck()) {
         return
@@ -441,11 +450,11 @@ export default {
       this.normalData() // 规范数据格式
       let tscParam = this.globalParamModel.getGlobalParams()
       let newTscParam = this.handleTscParam(tscParam)
-      if (typeStr !== 'all') {
-        this.lockScreen()
-        this.singleDownload(typeStr, newTscParam)
-        return
-      }
+      // if (typeStr !== 'all') {
+      //   this.lockScreen()
+      //   this.singleDownload(typeStr, newTscParam)
+      //   return
+      // }
       // const tscParam = this.globalParamModel.getGlobalParams()
       this.lockScreen()
       downloadTscParam(this.$store.state.user.user_name, newTscParam).then(data => {
@@ -502,34 +511,38 @@ export default {
     },
     handleTscParam (tscParam) {
       let newTscParam = this.cloneObjectFn(tscParam)
-      let dateList = newTscParam.dateList
-      for (let dates of dateList) {
-        let date = dates.date
-        let day = dates.day
-        let month = dates.month
-        if (date.includes('全选')) {
-          let index = date.indexOf('全选')
-          date.splice(index, 1) // 排除全选选项
-        } else if (date.includes('All')) {
-          let index = date.indexOf('All')
-          date.splice(index, 1) // 排除全选选项
-        }
-        if (day.includes(8)) {
-          let index = day.indexOf(8)
-          day.splice(index, 1) // 排除全选选项
-        }
-        if (month.includes(0)) {
-          let index = month.indexOf(0)
-          month.splice(index, 1) // 排除全选选项
+      if (this.value === 'all' || this.value === 'date') {
+        let dateList = newTscParam.dateList
+        for (let dates of dateList) {
+          let date = dates.date
+          let day = dates.day
+          let month = dates.month
+          if (date.includes('全选')) {
+            let index = date.indexOf('全选')
+            date.splice(index, 1) // 排除全选选项
+          } else if (date.includes('All')) {
+            let index = date.indexOf('All')
+            date.splice(index, 1) // 排除全选选项
+          }
+          if (day.includes(8)) {
+            let index = day.indexOf(8)
+            day.splice(index, 1) // 排除全选选项
+          }
+          if (month.includes(0)) {
+            let index = month.indexOf(0)
+            month.splice(index, 1) // 排除全选选项
+          }
         }
       }
-      let patternList = newTscParam.patternList
-      for (let pattern of patternList) {
-        let rings = pattern.rings
-        for (let ring of rings) {
-          if (ring.length === 0) continue
-          for (let rg of ring) {
-            rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+      if (this.value === 'all' || this.value === 'pattern') {
+        let patternList = newTscParam.patternList
+        for (let pattern of patternList) {
+          let rings = pattern.rings
+          for (let ring of rings) {
+            if (ring.length === 0) continue
+            for (let rg of ring) {
+              rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+            }
           }
         }
       }
@@ -546,8 +559,12 @@ export default {
       if (list.includes(4)) arr[2] = 1
       return arr
     },
-    singleDownload (typeStr, tscParam) {
-      downloadSingleTscParam(typeStr, tscParam).then(data => {
+    singleDownload (typeStr) {
+      this.normalData() // 规范数据格式
+      let tscParam = this.globalParamModel.getGlobalParams()
+      let newTscParam = this.handleTscParam(tscParam)
+      this.lockScreen()
+      downloadSingleTscParam(typeStr, newTscParam).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {

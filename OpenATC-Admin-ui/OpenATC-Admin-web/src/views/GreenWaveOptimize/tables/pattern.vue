@@ -12,7 +12,6 @@
 <template>
   <div class="patternPanel">
     <el-table
-      stripe
       highlight-current-row
       ref="patternTable"
       class="patternTable"

@@ -131,6 +131,9 @@ export default {
           break
         }
       }
+      if (!res) {
+        return false
+      }
       this.$emit('onChange', res)
     },
     init (val) {

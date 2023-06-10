@@ -31,7 +31,8 @@ const zh = {
       'placeholder': '请选择',
       'operation': '操作',
       'operationsuccess': '操作成功',
-      'authtip': '没有权限访问 !'
+      'authtip': '没有权限访问 !',
+      'nodata': '没有数据 !'
     },
     'button': {
       'OK': '确定',
@@ -39,7 +40,8 @@ const zh = {
       'expandall': '全部展开',
       'collapseall': '全部折叠',
       'search': '搜索',
-      'location': '位置'
+      'location': '位置',
+      'ignore': '忽略'
     },
     'login': {
       'username': '用户名',
@@ -58,6 +60,7 @@ const zh = {
       'greenwaveoptimize': '绿波协调',
       'operationrecord': '操作记录',
       'organization': '组织机构',
+      'script': '脚本',
       'dutyroute': '勤务路线',
       'realname': '真实姓名',
       'telno': '联系电话',
@@ -84,6 +87,8 @@ const zh = {
       'devicelist': '设备列表',
       'deviceid': '设备ID',
       'devicename': '设备名称',
+      'firm': '厂商',
+      'platform': '平台',
       'type': '类型',
       'IP': 'IP',
       'port': '端口',
@@ -97,6 +102,7 @@ const zh = {
       'operation': '操作',
       'longitude': '经度',
       'latitude': '纬度',
+      'layerLevel': '层级',
       'adddevice': '新增设备',
       'editdevice': '编辑设备',
       'enterIp': '请输入IP',
@@ -105,10 +111,23 @@ const zh = {
       'correctport': '请填写合法的端口!',
       'choosetype': '请选择类型',
       'chooseprotocol': '请选择协议',
+      'chooseplatform': '请选择平台',
       'enterId': '请输入设备ID',
       'entername': '请输入设备名称',
       'enterrequired': '请填写必填项!',
-      'deletedevice': '是否删除此设备?'
+      'deletedevice': '是否删除此设备?',
+      'faultDetail': '故障信息',
+      'faultMaintype': '故障主类型',
+      'faultSubtype': '故障子类型',
+      'faultOccurtime': '发生时间',
+      'boardCardType': '板卡类型',
+      'faultGrade': '故障等级',
+      'faultValue': '故障值',
+      'crowsid': '路口ID',
+      'updateDeviceId': '修改设备ID',
+      'deviceNotNull': '设备ID不能为空！',
+      'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
+      'thirdplatformid': '第三方ID'
     },
     'usermanager': {
       'username': '用户名称',
@@ -254,8 +273,8 @@ const zh = {
     'dutyroute': {
       'clickaddroute': '点击添加按钮添加路线',
       'nochooseplan': '未选中任何路线！',
-      'routePreview': '线路预览',
-      'routeState': '线路状态',
+      'routePreview': '路线预览',
+      'routeState': '路线控制',
       'dutyrouteconfig': '勤务路线配置',
       'node': '节点',
       'plan': '预案',
@@ -289,7 +308,10 @@ const zh = {
       'channellock': '通道锁定',
       'phaselock': '相位锁定',
       'programIntervention': '方案干预',
-      'channelDetection': '通道检测'
+      'channelDetection': '通道检测',
+      'emptyRouteName': '名称为空!',
+      'namerepeat': '名称重复!',
+      'notAllowedToEdit': '执勤中的路线，不允许编辑!'
     },
     'gis': {
       'chooseLocationInfo': '请点击地图选择位置 !'

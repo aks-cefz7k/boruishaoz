@@ -203,8 +203,8 @@ export default {
     updateRouteName (data) {
       RenameViproute(data).then(res => {
         if (!res.data.success) {
-          if (res.data.code === '5001') {
-            this.$message.error(this.$t('openatc.greenwaveoptimize.namerepeat'))
+          if (res.data.code === '6001') {
+            this.$message.error(this.$t('openatc.dutyroute.namerepeat'))
           } else {
             this.$message.error(res.data.message)
           }
@@ -221,11 +221,31 @@ export default {
         })
       })
     },
+    checkRouteName (nameObj) {
+      let res = true
+      let name = nameObj.name
+      if (name === '' || name.trim() === '') {
+        this.$message.error(this.$t('openatc.dutyroute.emptyRouteName'))
+        res = false
+        return res
+      }
+      for (let item of this.planData) {
+        if (name === item.name) {
+          this.$message.error(this.$t('openatc.dutyroute.namerepeat'))
+          res = false
+          return res
+        }
+      }
+      return res
+    },
     addRoute (data) {
+      if (!this.checkRouteName(data)) {
+        return false
+      }
       AddViproute(data).then(res => {
         if (!res.data.success) {
-          if (res.data.code === '5001') {
-            this.$message.error(this.$t('openatc.greenwaveoptimize.namerepeat'))
+          if (res.data.code === '6001') {
+            this.$message.error(this.$t('openatc.dutyroute.namerepeat'))
           } else {
             this.$message.error(res.data.message)
           }
@@ -243,6 +263,9 @@ export default {
       })
     },
     updateRoute (data) {
+      if (!this.checkRouteName(data)) {
+        return false
+      }
       if (this.isEdit) {
         const obj = {
           ...data,

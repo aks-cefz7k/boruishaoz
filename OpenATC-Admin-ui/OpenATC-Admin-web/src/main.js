@@ -15,13 +15,15 @@ import Vue from 'vue'
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
+// import './styles/index.scss'
 // import 'element-ui/lib/theme-chalk/index.css'
 // import './styles/theme/element-variables.scss'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import Echarts from 'echarts'
 
 import App from './App'
-import router from './router'
+// import './styles/index.scss'
+// import router from './router'
 import store from './store'
 
 import '@/icons' // icon
@@ -30,7 +32,9 @@ import './assets/icon/iconfont.css'
 import 'leaflet/dist/leaflet.css'
 
 import Edgebase from 'edgebase-front'
+import './styles/index.scss'
 
+import router from './router'
 import i18n from './i18n'
 import VueKonva from 'vue-konva'
 import './mock'

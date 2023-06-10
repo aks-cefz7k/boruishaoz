@@ -29,6 +29,32 @@
           <span>{{scope.row.desc}}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('edge.pedestrianDetector.type')" min-width="100" align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.type" size="small">
+            <el-option
+              v-for="item in typeOption"
+              :key="item.value"
+              :label="$t('edge.pedestrianDetector.typeOption' + item.value)"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span>{{$t('edge.pedestrianDetector.typeOption' + scope.row.type)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('edge.pedestrianDetector.region')" min-width="100" align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.region" size="small">
+            <el-option
+              v-for="item in regionOption"
+              :key="item.value"
+              :label="$t('edge.pedestrianDetector.regionOption' + item.value)"
+              :value="item.value">
+            </el-option>
+          </el-select>
+           <span>{{$t('edge.pedestrianDetector.regionOption' + scope.row.region)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.pedestrianDetector.callPhase')">
         <template slot-scope="scope">
           <el-select v-model="scope.row.callphase" :placeholder="$t('edge.common.select')" size="small" clearable>
@@ -107,7 +133,21 @@ export default {
       screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false,
       CallPhaseOption: [],
-      id: 1
+      id: 1,
+      typeOption: [{
+        value: 0
+      }, {
+        value: 1
+      }, {
+        value: 2
+      }],
+      regionOption: [{
+        value: 0
+      }, {
+        value: 1
+      }, {
+        value: 2
+      }]
     }
   },
   directives: { clickoutside },
@@ -237,6 +277,8 @@ export default {
       }
       var pedDetectorInitData = {
         id: this.id,
+        type: 0,
+        region: 0,
         callphase: '',
         noactivity: 30,
         maxpresence: 45,

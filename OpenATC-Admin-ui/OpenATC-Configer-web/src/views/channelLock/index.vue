@@ -87,6 +87,11 @@
           <el-input-number size="small" controls-position="right" :min="0" :max="1000" :step="1" v-model.number="scope.row.yellowlamp" style="width: 100px;"></el-input-number>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.operation')" width="100">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleDelete(scope.$index,scope.row)">{{$t('edge.common.delete')}}</el-button>
+        </template>
+      </el-table-column>
       </el-table>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -483,6 +488,25 @@ export default {
         })
       })
     },
+    handleDelete (index, row) {
+      this.$confirm(this.$t('edge.channellock.deleteOnetip'),
+        this.$t('edge.common.alarm'), {
+          confirmButtonText: this.$t('edge.common.confirm'),
+          cancelButtonText: this.$t('edge.common.cancel'),
+          type: 'warning'
+        }).then(() => {
+        this.globalParamModel.deleteParamsByType('channellock', index, 1)
+        this.$message({
+          type: 'success',
+          message: this.$t('edge.common.deletesucess')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('edge.common.deletecancel')
+        })
+      })
+    },
     onAdd () {
       this.increaseId()
       let channel = this.globalParamModel.getParamsByType('channelList')
@@ -577,13 +601,13 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .control-model .el-input__inner {
   -webkit-appearance: none;
-  background-color: #fff;
+  // background-color: #fff;
   background-image: none;
   border-radius: 4px;
-  border: 1px solid #dcdfe6;
+  // border: 1px solid #dcdfe6;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  color: #606266;
+  // color: #606266;
   display: inline-block;
   font-size: inherit;
   height: 34px;

@@ -22,7 +22,6 @@
         show-checkbox
         node-key="id"
         ref="tree"
-        check-strictly="true"
         default-expand-all
         @check="treeCheck"
         top="20"

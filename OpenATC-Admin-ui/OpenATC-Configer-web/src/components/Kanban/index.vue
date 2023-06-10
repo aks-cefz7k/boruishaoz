@@ -10,9 +10,25 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="board-column">
+  <div class="board-column" style="width:40%;margin-left:40px;">
     <div class="board-column-header">
       {{headerText}}
+    </div>
+    <div class="board-table-header">
+      <el-row :gutter="13">
+        <el-col :span="2">{{this.$t('edge.overview.phase')}}
+        </el-col>
+        <el-col :span="4">{{this.$t('edge.overview.phasesplit')}}
+        </el-col>
+        <el-col :span="5">{{this.$t('edge.detector.mode')}}
+        </el-col>
+        <el-col :span="5">{{this.$t('edge.pattern.property')}}
+        </el-col>
+        <el-col :span="4">{{this.$t('edge.pattern.delaystart')}}
+        </el-col>
+        <el-col :span="4">{{this.$t('edge.pattern.advanceend')}}
+        </el-col>
+      </el-row>
     </div>
     <draggable
       class="board-column-content"
@@ -20,19 +36,19 @@
       :options="options">
       <div class="board-item" v-for="element in list" :key="element.id">
         <el-row :gutter="13">
-          <el-col :span="3">
-        <el-tooltip class="item" effect="dark" placement="left">
-          <div slot="content">{{element.name}}</div>
-          <div class="phase-description">
-            <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
-          </div>
-        </el-tooltip>
+          <el-col :span="2">
+            <el-tooltip class="item" effect="dark" placement="left">
+              <div slot="content">{{element.name}}</div>
+              <div class="phase-description">
+                <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
+              </div>
+            </el-tooltip>
         </el-col>
-        <el-col :span="6">
-        <el-input-number controls-position="right" size="small" :min="0" :max="255" :step="1" v-model.number="element.value" ref="type" :disabled="element.mode === 7"></el-input-number>
+        <el-col :span="4">
+          <el-input-number :controls="false" class="col-content" size="small" :min="0" :max="255" :step="1" v-model.number="element.value" ref="type" :disabled="element.mode === 7"></el-input-number>
         </el-col>
-        <el-col :span="7">
-          <el-select v-model="element.mode" size="small" @change="doChange(element)" :placeholder="$t('edge.common.select')">
+        <el-col :span="5">
+          <el-select v-model="element.mode" class="col-content"  size="small" @change="doChange(element)" :placeholder="$t('edge.common.select')">
             <el-option
               v-for="item in modeOption"
               :key="item.value"
@@ -41,8 +57,8 @@
             </el-option>
           </el-select>
         </el-col>
-        <el-col :span="7">
-          <el-select v-model="element.options" size="small" multiple collapse-tags :placeholder="$t('edge.common.select')">
+        <el-col :span="5">
+          <el-select v-model="element.options" class="col-content" size="small" multiple collapse-tags :placeholder="$t('edge.common.select')">
             <el-option
               v-for="item in coordphaseOption"
               :key="item.value"
@@ -50,6 +66,12 @@
               :value="item.value">
             </el-option>
           </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-input-number :controls="false" class="col-content" size="small" :min="0" :max="255" :step="1" v-model.number="element.delaystart" ref="type"></el-input-number>
+        </el-col>
+        <el-col :span="4">
+          <el-input-number :controls="false" class="col-content" size="small" :min="0" :max="255" :step="1" v-model.number="element.advanceend" ref="type"></el-input-number>
         </el-col>
         </el-row>
       </div>
@@ -180,14 +202,17 @@ export default {
       return maxCycle
     },
     doChange (val) {
-      if (val.mode === 7) {
-        val.value = 0
-      } else {
-        val.value = 30
-      }
+      // if (val.mode === 7) {
+      //   val.value = 0
+      // } else {
+      //   val.value = 30
+      // }
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.col-content {
+  width: 100%;
+}
 </style>

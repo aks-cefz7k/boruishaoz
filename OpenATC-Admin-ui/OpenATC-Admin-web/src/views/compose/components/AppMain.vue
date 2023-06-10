@@ -27,8 +27,8 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-  @import "src/styles/mixin.scss";
-  .appMain {
-    height: calc(100% - 50px);
-  }
+  // @import "src/styles/mixin.scss";
+  // .appMain {
+  //   height: calc(100% - 50px);
+  // }
 </style>

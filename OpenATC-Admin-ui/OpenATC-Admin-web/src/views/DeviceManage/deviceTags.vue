@@ -117,7 +117,7 @@ export default {
       const curPath = this.$store.getters.openedPath
       router.push({
         path: curPath,
-        query: {IP: tag.jsonparam.ip, port: tag.jsonparam.port, agentid: tag.agentid, protocol: tag.protocol, isfromatc: true}
+        query: {agentid: tag.agentid, isfromatc: true}
       })
       this.$store.dispatch('ResetTscParam')
       setTimeout(() => {
@@ -129,7 +129,7 @@ export default {
       let allDevsInfo = this.$store.getters.deviceInfos
       // 当前操作设备变化时
       const curDevInfo = allDevsInfo.filter(dev => dev.id === operateId)[0]
-      let query = {IP: curDevInfo.jsonparam.ip, port: curDevInfo.jsonparam.port, agentid: curDevInfo.agentid, protocol: curDevInfo.protocol, isfromatc: true}
+      let query = {agentid: curDevInfo.agentid, isfromatc: true}
       window.sessionStorage.setItem('curTagDevInfo', JSON.stringify(query))
     }
   }
@@ -185,7 +185,7 @@ export default {
   .highlightTag {
     background-color: $--color-primary;
     border-color: $--color-primary;
-    color: $--color-white;
+    color: #FFFFFF;
   }
   // .normalTag {
   //   background-color: $--border-color-extra-light;

@@ -21,9 +21,6 @@
               <div v-show="devStatus===1"><div class="yuanxing" style="background: rgba(230, 162, 60, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #e6a23c;"></div><div class="dev-status" style="color: #e6a23c; left: 30px;">联机中</div></div>
             </div>
             <div class="agent-num">
-              <!-- <div class="lianji-success" v-show="devStatus===3">在线</div>
-              <div class="lianji-fail" v-show="devStatus===2">离线</div>
-              <div class="lianji-wait" v-show="devStatus===1">联机中...</div> -->
               <div class="agent-id">IP地址</div>
               <div class="agent-number">{{ip}}</div>
               <div class="agent-port">设备端口</div>
@@ -81,7 +78,6 @@
             :span-method="objectSpanMethod"
             :cell-class-name="addClass"
             size="mini"
-            stripe
             style="width: 100%">
             <el-table-column
               align="center"
@@ -462,7 +458,7 @@ export default {
 .container-main {
   width: 100%;
   height: 880px;
-  min-width: 1250px;
+  // min-width: 1250px;
   background: #f8f8f8;
 }
 .container-left {

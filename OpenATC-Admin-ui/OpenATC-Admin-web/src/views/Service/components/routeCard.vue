@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <el-card class="box-card" v-show="isShow">
+  <el-card class="serviceroute-routeCard" v-show="isShow">
     <div slot="header" class="clearfix">
       <span
         ><strong>{{ $t("openatc.dutyroute.attributes") }}</strong></span
@@ -27,24 +27,24 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.greenwaveoptimize.deviceid") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">{{ node.agentid }}</div>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.dutyroute.executionway") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">
                 {{ node.controlName }}
               </div>
@@ -53,12 +53,12 @@
         </el-col>
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.dutyroute.residentphase") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">{{ node.value }}</div>
             </el-col>
           </el-row>
@@ -67,47 +67,69 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
+            <el-col :span="10">
+              <div class="grid-content-label">
+                {{ $t('openatc.devicemanager.state') }}:
+              </div>
+            </el-col>
+            <el-col :span="14">
               <div class="grid-content bg-purple">
+                <template>
+                  <div>
+                      <el-tag size="medium" effect="plain" :type="getTag(node).type">{{ getTag(node).label }}</el-tag>
+                  </div>
+                </template>
+                <!-- {{ getDeviceState (node)}} -->
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row :gutter="10">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.greenwaveoptimize.pattern") }}:
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="14">
               <div class="grid-content bg-purple">{{ node.terminalname }}</div>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="8">
           <el-row :gutter="10">
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
+            <el-col :span="10">
+              <div class="grid-content-label">
                 {{ $t("openatc.dutyroute.timeleft") }}:
               </div>
             </el-col>
-            <el-col :span="12">
-              <div class="grid-content bg-purple">{{ node.resttime }}</div>
+            <el-col :span="14">
+              <template class="grid-content bg-purple">{{ node.resttime }}</template>
+              <el-button
+                v-show="tabName === 'second'"
+                style="float: right;"
+                type="primary"
+                size="small"
+                @click="executeViproute"
+                >
+                <template v-if="!node.state || node.state === 0">
+                  {{ $t("openatc.dutyroute.executenow") }}
+                </template>
+                <template v-else>
+                  {{ $t("openatc.dutyroute.cancelexecute") }}
+                </template>
+                </el-button
+              >
             </el-col>
+            <!-- <div class="btn-bottom" v-show="tabName === 'second'">
+            </div> -->
+          <!-- </el-row>
+          <el-row :gutter="10"> -->
           </el-row>
         </el-col>
+        <!-- <el-col :span="8">
+        </el-col> -->
       </el-row>
-    </div>
-    <div class="btn-bottom" v-show="tabName === 'second'">
-      <el-button
-        style="float: right; padding: 3px 0"
-        type="text"
-        v-show="node.state === 0"
-        @click="executeViproute"
-        :disabled="isBtnDisabled"
-        >{{ $t("openatc.dutyroute.executenow") }}</el-button
-      >
-      <el-button
-        style="float: right; padding: 3px 0"
-        type="text"
-        v-show="node.state === 1"
-        @click="executeViproute"
-        :disabled="isBtnDisabled"
-        >{{ $t("openatc.dutyroute.cancelexecute") }}</el-button
-      >
     </div>
   </el-card>
 </template>
@@ -156,25 +178,26 @@ export default {
         }
         this.$emit('research')
       })
+    },
+    getTag (row) {
+      if (row.stateName === 'DOWN') {
+        return {
+          label: this.$t('openatc.devicemanager.offline'),
+          type: 'info'
+        }
+      } else if (row.stateName === 'UP') {
+        return {
+          label: this.$t('openatc.devicemanager.online'),
+          type: 'success'
+        }
+      } else {
+        return {
+          label: this.$t('openatc.devicemanager.fault'),
+          type: 'danger'
+        }
+      }
     }
+
   }
 }
 </script>
-
-<style>
-.box-card {
-  width: 100%;
-}
-.btn-bottom {
-  float: right;
-  margin: 15px;
-}
-
-.el-col {
-  border-radius: 4px;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-</style>

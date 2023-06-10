@@ -31,7 +31,8 @@ const en = {
       'placeholder': 'Select',
       'operation': 'Operation',
       'operationsuccess': 'Operation Success !',
-      'authtip': 'No access !'
+      'authtip': 'No access !',
+      'nodata': 'No Data !'
     },
     'button': {
       'OK': 'OK',
@@ -39,7 +40,8 @@ const en = {
       'expandall': 'Expand All',
       'collapseall': 'Collapse All',
       'search': 'Search',
-      'location': 'Location'
+      'location': 'Location',
+      'ignore': 'Ignore'
     },
     'login': {
       'username': 'user_name',
@@ -58,6 +60,7 @@ const en = {
       'greenwaveoptimize': 'Greenwave Optimize',
       'operationrecord': 'Operation Record',
       'organization': 'Organization',
+      'script': 'Script',
       'dutyroute': 'Duty Route',
       'realname': 'RealName',
       'telno': 'Telno',
@@ -84,6 +87,8 @@ const en = {
       'devicelist': 'Device List',
       'deviceid': 'Device Id',
       'devicename': 'Device Name',
+      'firm': 'Firm',
+      'platform': 'Platform',
       'type': 'Type',
       'IP': 'IP',
       'port': 'Port',
@@ -97,6 +102,7 @@ const en = {
       'operation': 'Operation',
       'longitude': 'Longitude',
       'latitude': 'Latitude',
+      'layerLevel': '层级',
       'adddevice': 'Add Device',
       'editdevice': 'Edit Device',
       'enterIp': 'Please enter IP',
@@ -105,10 +111,23 @@ const en = {
       'correctport': 'Please fill in the legal port!',
       'choosetype': 'Please select type',
       'chooseprotocol': 'Please select protocol',
+      'chooseplatform': 'Please select platform',
       'enterId': 'Please enter device ID',
       'entername': 'Please enter device name',
       'enterrequired': 'Please fill in the required items!',
-      'deletedevice': 'Do you want to delete this device?'
+      'deletedevice': 'Do you want to delete this device?',
+      'faultDetail': 'FaultDetail',
+      'faultMaintype': 'Main Type',
+      'faultSubtype': 'Sub Type',
+      'faultOccurtime': 'Occur Time',
+      'boardCardType': 'BoardCard Type',
+      'faultGrade': 'Grade',
+      'faultValue': 'Value',
+      'crowsid': 'Crows ID',
+      'updateDeviceId': 'Modify ID',
+      'deviceNotNull': 'Device ID cannot be empty!',
+      'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
+      'thirdplatformid': 'Third party ID'
     },
     'usermanager': {
       'username': 'Username',
@@ -255,7 +274,7 @@ const en = {
       'clickaddroute': 'Click to add a new route',
       'nochooseplan': 'No chosen plan！',
       'routePreview': 'Route Preview',
-      'routeState': 'Route State',
+      'routeState': 'Route Control',
       'dutyrouteconfig': 'Dutyroute Config',
       'node': 'Node',
       'plan': 'Plan',
@@ -289,7 +308,10 @@ const en = {
       'channellock': 'Channel Lock',
       'phaselock': 'Phase Lock',
       'programIntervention': 'Program Intervention',
-      'channelDetection': 'Channel Detection'
+      'channelDetection': 'Channel Detection',
+      'emptyRouteName': 'Empty Route Name !',
+      'namerepeat': 'Name Repeat !',
+      'notAllowedToEdit': 'Not allowed to edit processing data !'
     },
     'gis': {
       'chooseLocationInfo': 'Click the map to choose a location !'

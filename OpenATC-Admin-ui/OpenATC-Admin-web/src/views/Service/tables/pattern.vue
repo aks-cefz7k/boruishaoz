@@ -12,13 +12,13 @@
 <template>
   <div class="serviceroute-pattern">
     <el-table
-      stripe
       highlight-current-row
       ref="patternTable"
       class="patternTable"
       :data="patternTableData"
       style="width: 100%"
       @current-change="handleCurrentChange"
+      max-height="700px"
     >
       <el-table-column type="index" label="#" align="center"> </el-table-column>
       <el-table-column

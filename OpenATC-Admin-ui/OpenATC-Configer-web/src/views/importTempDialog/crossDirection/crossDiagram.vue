@@ -14,11 +14,11 @@
   <div class="crossImg">
     <!-- 路口底图 -->
     <div class="baseImg">
-      <CrossRoadsSvg v-if="crossType === 'Crossroads'"/>
-      <TShapeEastRoadsSvg v-if="crossType === 'TypeT-east'"/>
-      <TShapeWestRoadsSvg v-if="crossType === 'TypeT-west'"/>
-      <TShapeNorthRoadsSvg v-if="crossType === 'TypeT-north'"/>
-      <TShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'"/>
+      <CrossRoadsSvg v-if="crossType === 'Crossroads'" Width="439px" Height="328px" :showPed="true" />
+      <TShapeEastRoadsSvg v-if="crossType === 'TypeT-east'" Width="439px" Height="328px" :showPed="true" />
+      <TShapeWestRoadsSvg v-if="crossType === 'TypeT-west'" Width="439px" Height="328px" :showPed="true" />
+      <TShapeNorthRoadsSvg v-if="crossType === 'TypeT-north'" Width="439px" Height="328px" :showPed="true" />
+      <TShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'" Width="439px" Height="328px" :showPed="true" />
       <!-- 其他路口 -->
       <CustomRoadsSvg v-if="crossType === 'Customroads'"/>
     </div>
@@ -32,11 +32,11 @@
 <script>
 import PhaseIconSvg from './phaseIconSvg'
 import PhaseDataModel from './utils.js'
-import CrossRoadsSvg from './baseImg/CrossRoadsSvg'
-import TShapeEastRoadsSvg from './baseImg/TShapeEastRoadsSvg'
-import TShapeWestRoadsSvg from './baseImg/TShapeWestRoadsSvg.vue'
-import TShapeNorthRoadsSvg from './baseImg/TShapeNorthRoadsSvg.vue'
-import TShapeSouthRoadsSvg from './baseImg/TShapeSouthRoadsSvg.vue'
+import CrossRoadsSvg from '../../overView/crossDirection/baseImg/CrossRoadsSvg'
+import TShapeEastRoadsSvg from '../../overView/crossDirection/baseImg/TShapeEastRoadsSvg'
+import TShapeWestRoadsSvg from '../../overView/crossDirection/baseImg/TShapeWestRoadsSvg.vue'
+import TShapeNorthRoadsSvg from '../../overView/crossDirection/baseImg/TShapeNorthRoadsSvg.vue'
+import TShapeSouthRoadsSvg from '../../overView/crossDirection/baseImg/TShapeSouthRoadsSvg.vue'
 import CustomRoadsSvg from './baseImg/CustomRoadsSvg.vue'
 export default {
   name: 'crossDiagram',

@@ -12,15 +12,16 @@
 <template>
   <div class="openatc-gis">
     <div id="map"></div>
-    <div class="showLayout">
       <transition name="slide">
-        <div class="tabsconatiner" v-show="toggleShow">
-          <device
-            :devicesData="devList"
-            ref="device"
-            @setCurrent="setCurrentMarker"
-            @setDeviceLocation="setDeviceLocation"
-          ></device>
+        <div class="showLayout"  v-show="toggleShow">
+            <div class="tabsconatiner">
+              <device
+                :devicesData="devList"
+                ref="device"
+                @setCurrent="setCurrentMarker"
+                @setDeviceLocation="setDeviceLocation"
+              ></device>
+            </div>
         </div>
       </transition>
       <div
@@ -34,9 +35,10 @@
           v-on:animCreated="handleAnimation"
         />
       </div>
-    </div>
     <div class="map-position">
-      经度{{ lngLat.lng }} 纬度{{ lngLat.lat }} 层级 {{ zoom }}
+      {{this.$t('openatc.devicemanager.longitude') }} {{ lngLat.lng }}
+      {{this.$t('openatc.devicemanager.latitude') }}  {{ lngLat.lat }}
+      {{this.$t('openatc.devicemanager.layerLevel') }} {{ zoom }}
     </div>
   </div>
 </template>
@@ -44,9 +46,10 @@
 
 import L from 'leaflet'
 import { GetAllDevice } from '@/api/device'
+import { SystemconfigApi } from '@/api/systemconfig.js'
 import lottie from 'vue-lottie'
 import device from './components/device'
-import Anim from './toggleData.json'
+import Anim from './toggleDataDark.json'
 export default {
   components: {
     lottie,
@@ -61,6 +64,10 @@ export default {
         lat: '0.00000000'
       },
       zoom: 12,
+      minZoom: 3,
+      maxZoom: 18,
+      center: [31.23636, 121.53413],
+      gis: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       toggleShow: true,
       toggleshowisActive: true,
       defaultOptions: { animationData: Anim, loop: false, autoplay: false },
@@ -68,17 +75,25 @@ export default {
     }
   },
   mounted () {
-    this.initMap()
-    this.addMapEvent()
+    this.init()
+    // this.getGisConfig()
+    // this.initMap()
+    // this.addMapEvent()
   },
   methods: {
+    async init () {
+      await this.getGisConfig()
+      await this.initMap()
+      await this.addMapEvent()
+    },
     initMap () {
+      let _this = this
       let map = L.map('map', {
-        minZoom: 3,
-        maxZoom: 18,
+        minZoom: _this.minZoom,
+        maxZoom: _this.maxZoom,
         // center: [39.550339, 116.114129],
-        center: [31.23636, 121.53413],
-        zoom: 12,
+        center: _this.center,
+        zoom: _this.zoom,
         zoomControl: false,
         attributionControl: false,
         crs: L.CRS.EPSG3857,
@@ -87,14 +102,14 @@ export default {
       })
       window.map = map
       L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        _this.gis
       ).addTo(map)
       // L.tileLayer(
       //   'http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}'
       // ).addTo(map)
-      this.map = map// data上需要挂载
+      _this.map = map// data上需要挂载
       window.map = map
-      this.getAllAdevice()
+      _this.getAllAdevice()
       // var markers = []
       // // 系统默认的marker,有一个蓝色图标
       // //   var marker1 = L.marker([39.550339, 116.115129])
@@ -200,28 +215,22 @@ export default {
         if (dev.geometry === undefined) continue
         let coordinates = dev.geometry.coordinates
         let devPoint = [coordinates[1], coordinates[0]]
+        let iconUrl = require('../../assets/gis/devicefault.png')
         if (dev.state === 'UP') {
-          let onlineIcon = L.icon({
-            iconUrl: require('../../assets/gis/deviceonline.png'),
-            iconSize: [24, 27],
-            title: 'UP',
-            alt: dev,
-            iconAnchor: [12, 27]
-          })
-          let marker = L.marker(devPoint, { icon: onlineIcon })
-          markers.push(marker)
+          iconUrl = require('../../assets/gis/deviceonline.png')
         } else if (dev.state === 'DOWN') {
-          let notOnlineIcon = L.icon({
-            iconUrl: require('../../assets/gis/devicenotonline.png'),
-            iconSize: [24, 27],
-            title: 'DOWN',
-            alt: dev,
-            iconAnchor: [12, 27]
-          })
-          let marker = L.marker(devPoint, { icon: notOnlineIcon }).on('click', this.onMarkerClick)
-          // 添加marker来设置点击事件
-          markers.push(marker)
+          iconUrl = require('../../assets/gis/devicenotonline.png')
         }
+        let notOnlineIcon = L.icon({
+          iconUrl: iconUrl,
+          iconSize: [24, 27],
+          title: dev.state,
+          alt: dev,
+          iconAnchor: [12, 27]
+        })
+        let marker = L.marker(devPoint, { icon: notOnlineIcon }).on('click', this.onMarkerClick)
+        // 添加marker来设置点击事件
+        markers.push(marker)
       }
       this.citiesLayer = L.layerGroup(markers)
       this.map.addLayer(this.citiesLayer)
@@ -239,6 +248,7 @@ export default {
       }
       if (marker) {
         let _latlng = marker._latlng
+        this.map.flyTo(_latlng)
         marker.openPopup(_latlng)
       }
     },
@@ -302,6 +312,41 @@ export default {
         updateChild.onUpdateClick(dev, true)
         // L.popup().setLatLng(e.latlng).setContent(e.latlng.toString()).openOn(this.map)
       })
+    },
+    getGisConfig () {
+      return new Promise((resolve, reject) => {
+        SystemconfigApi.GetSystemconfigByModule('gis').then((data) => {
+          let res = data.data
+          if (!res.success) {
+            console.log('datas:' + res)
+            throw new Error('get gis error')
+          } else {
+            for (let config of data.data.data) {
+              if (config['key'] === 'minZoom') {
+                this.minZoom = Number(config['value'])
+              }
+              if (config['key'] === 'maxZoom') {
+                this.maxZoom = Number(config['value'])
+              }
+              if (config['key'] === 'center') {
+                let cen = config['value']
+                let ss = cen.split(',')
+                let s1 = ss[0].replace('[', '')
+                let s2 = ss[1].replace(']', '').trim()
+                this.center = [Number(s1), Number(s2)]
+              }
+              if (config['key'] === 'zoom') {
+                this.zoom = Number(config['value'])
+              }
+              if (config['key'] === 'gis') {
+                this.gis = config['value'] + ''
+                // this.gis = 'http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x}'
+              }
+            }
+            resolve(data.data.data)
+          }
+        })
+      })
     }
   }
 }
@@ -328,7 +373,7 @@ export default {
   color: rgba(254, 254, 254, 0.7);
 }
 
-.showLayout {
+/* .showLayout {
   position: fixed;
   top: 70px;
   right: 38px;
@@ -336,17 +381,18 @@ export default {
   height: auto;
   z-index: 904;
   background-color: #ffffff;
-}
+} */
 .tabsconatiner {
   margin: 10px;
   position: relative;
   width: 100% - 20px;
   height: 100% - 20px;
+  opacity: 0.95;
 }
 .addbtn {
   position: absolute;
   right: 5px;
-  z-index: 99;
+  /* z-index: 99; */
   top: 7px;
   width: auto;
   height: auto;
@@ -361,14 +407,16 @@ export default {
 .toggle_show {
   position: absolute;
   cursor: pointer;
-  right: -25px;
-  top: 0px;
+  right: 17px;
+  top: 70px;
+  z-index:100001;
 }
 .active {
   position: absolute;
   cursor: pointer;
-  right: -25px;
-  top: 0px;
+  right: 17px;
+  top: 70px;
+  z-index:100001;
 }
 .init-toggle {
   position: absolute;

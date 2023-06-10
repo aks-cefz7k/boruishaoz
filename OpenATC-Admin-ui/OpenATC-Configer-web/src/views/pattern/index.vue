@@ -15,10 +15,31 @@
     <el-table :data="patternList" :max-height="tableHeight" highlight-current-row @current-change="handleCurrentChange" @expand-change="expandChange" ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
         <template slot-scope="scope">
-          <div class="components-container board">
-          <!-- <div class="components-container board" style="overflow-x:auto;"> -->
-            <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="$t('edge.pattern.ring')+n" :index="scope.$index" @handleSplit="handleSplit"/>
-          </div>
+          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="stage">
+              <el-scrollbar :vertical="false">
+                <div class="stage-panel-contener">
+                  <StageKanban v-for="(stage,index) in stagesList"
+                    class="kanban todo"
+                    :key="index"
+                    :stage="stage"
+                    :options="scope.row.options"
+                    :header-text="$t('edge.pattern.stage') + Number(index + 1)"
+                    :rowIndex="scope.$index"
+                    :subIndex="index"
+                    @onStageSplitChange="onStageSplitChange"
+                    @onStageDelaystartChange="onStageDelaystartChange"
+                    @onStageAdvanceendChange="onStageAdvanceendChange"
+                    />
+                </div>
+              </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
+              <div class="components-container board">
+                <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="$t('edge.pattern.ring')+n" :index="scope.$index" @handleSplit="handleSplit"/>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </template>
       </el-table-column>
       <el-table-column align="center" label="No" minWidth="40">
@@ -43,6 +64,21 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.pattern.forbiddenstage')" prop="forbiddenstage">
+        <template slot-scope="scope">
+          <el-input size="small" v-model="scope.row.forbiddenstage"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('edge.pattern.screenstage')" prop="screenstage">
+        <template slot-scope="scope">
+          <el-input size="small" v-model="scope.row.screenstage"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('edge.pattern.coordinatestage')" prop="coordinatestage">
+        <template slot-scope="scope">
+          <el-input size="small" v-model="scope.row.coordinatestage"></el-input>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">
         <template slot-scope="scope">
           <el-button type="text"  @click="handleDelete(scope.$index, scope.row)">{{$t('edge.common.delete')}}</el-button>
@@ -60,13 +96,17 @@
 
 <script>
 import Kanban from '@/components/Kanban'
+import StageKanban from '@/views/pattern/StageKanban'
 import PatternStatus from '@/components/PatternStatus'
 import { mapState } from 'vuex'
+import { getTscControl } from '@/api/control'
+import { getIframdevid } from '@/utils/auth'
 export default {
   name: 'patterns',
   components: {
     Kanban,
-    PatternStatus
+    PatternStatus,
+    StageKanban
   },
   data () {
     return {
@@ -82,7 +122,9 @@ export default {
       barrierList: [],
       isShowPatternStatus: false,
       currPatternName: '--',
-      patternStatusIndex: -1
+      patternStatusIndex: -1,
+      activeName: 'stage',
+      stagesList: []
     }
   },
   computed: {
@@ -200,41 +242,22 @@ export default {
       var newPattern = JSON.parse(JSON.stringify(Pattern))
       const phaseList = JSON.parse(JSON.stringify(this.globalParamModel.getParamsByType('phaseList')))
       for (let phase of phaseList) {
+        let ring = {}
+        ring.name = 'Phase ' + phase.id
+        ring.desc = this.getPhaseDescription(phase.direction)
+        ring.id = phase.id
+        ring.value = 30
+        ring.mode = 2
+        ring.options = []
+        ring.delaystart = 0
+        ring.advanceend = 0
         if (phase.ring === 1) {
-          let ring = {}
-          ring.name = 'Phase ' + phase.id
-          ring.desc = this.getPhaseDescription(phase.direction)
-          ring.id = phase.id
-          ring.value = 30
-          ring.mode = 2
-          ring.options = []
           newPattern.rings[0].push(ring)
         } else if (phase.ring === 2) {
-          let ring = {}
-          ring.name = 'Phase ' + phase.id
-          ring.desc = this.getPhaseDescription(phase.direction)
-          ring.id = phase.id
-          ring.value = 30
-          ring.mode = 2
-          ring.options = []
           newPattern.rings[1].push(ring)
         } else if (phase.ring === 3) {
-          let ring = {}
-          ring.name = 'Phase ' + phase.id
-          ring.desc = this.getPhaseDescription(phase.direction)
-          ring.id = phase.id
-          ring.value = 30
-          ring.mode = 2
-          ring.options = []
           newPattern.rings[2].push(ring)
         } else if (phase.ring === 4) {
-          let ring = {}
-          ring.name = 'Phase ' + phase.id
-          ring.desc = this.getPhaseDescription(phase.direction)
-          ring.id = phase.id
-          ring.value = 30
-          ring.mode = 2
-          ring.options = []
           newPattern.rings[3].push(ring)
         }
         // pahseIndex++
@@ -455,13 +478,121 @@ export default {
         this.currPatternName = val1.desc
       }
       this.handleCurrentChange(val1)
-      // if (val2.length === 0) { // 此种情况为收起看板
-      //   this.handleCurrentChange(val1)
-      // }
+      if (val2.length > 0) { // 此种情况为收起看板
+        this.getRowStages(val1.rings)
+      }
     },
     handleSplit (index) {
       let currPattern = this.patternList[index]
       this.handleCurrentChange(currPattern)
+      this.getRowStages(currPattern.rings)
+    },
+    handleClick (tab, event) {
+      if (tab.paneName === 'stage') {
+      }
+    },
+    getRowStages (rings) {
+      let agentId = getIframdevid()
+      // agentId = '40001'
+      if (!agentId) {
+        this.$message.warning(this.$t('edge.pattern.agentidError'))
+        return false
+      }
+      getTscControl(agentId).then((data) => {
+        this.intervalFlag = true
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        let TscData = JSON.parse(JSON.stringify(data.data.data.data))
+        this.handleStageData(TscData, rings) // 处理阶段（驻留）stage数据
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    handleStageData (data, rings) {
+      let stagesList = []
+      let stages = data.stages
+      for (let i = 0; i < stages.length; i++) {
+        let stage = stages[i]
+        let stageItem = this.getStageItem(stage, rings)
+        stagesList.push(stageItem)
+      }
+      this.stagesList = stagesList
+    },
+    getStageItem (stageArr, ringsList) {
+      let res = {
+        split: 0, // 阶段绿性比
+        stages: stageArr,
+        delaystart: 0,
+        advanceend: 0
+      }
+      let splitArr = []
+      let delaystartArr = []
+      let advanceendArr = []
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            let split = ring.value
+            let delaystart = ring.delaystart
+            let advanceend = ring.advanceend
+            splitArr.push(split)
+            delaystartArr.push(delaystart)
+            advanceendArr.push(advanceend)
+          }
+        }
+      }
+      splitArr.sort(function (a, b) { return a - b })
+      delaystartArr.sort(function (a, b) { return b - a })
+      advanceendArr.sort(function (a, b) { return a - b })
+      res.split = splitArr.length > 0 ? splitArr[0] : 0
+      res.delaystart = delaystartArr.length > 0 ? delaystartArr[0] : 0
+      res.advanceend = advanceendArr.length > 0 ? advanceendArr[0] : 0
+      return res
+    },
+    onStageSplitChange (diff, rowIndex, subIndex) {
+      let stageArr = this.stagesList[subIndex].stages
+      let row = this.patternList[rowIndex]
+      let ringsList = row.rings
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            ring.value = (ring.value ? ring.value : 0) + diff
+            continue
+          }
+        }
+      }
+    },
+    onStageDelaystartChange (diff, rowIndex, subIndex) {
+      let stageArr = this.stagesList[subIndex].stages
+      let row = this.patternList[rowIndex]
+      let ringsList = row.rings
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            ring.delaystart = (ring.delaystart ? ring.delaystart : 0) + diff
+            continue
+          }
+        }
+      }
+    },
+    onStageAdvanceendChange (diff, rowIndex, subIndex) {
+      let stageArr = this.stagesList[subIndex].stages
+      let row = this.patternList[rowIndex]
+      let ringsList = row.rings
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            ring.advanceend = (ring.advanceend ? ring.advanceend : 0) + diff
+            continue
+          }
+        }
+      }
     }
   }
 }
@@ -472,7 +603,7 @@ export default {
     width: 100%;
     margin-left: 10px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-direction: row;
     align-items: flex-start;
   }
@@ -483,22 +614,9 @@ export default {
       }
     }
   }
-  // .pattern-figure {
-  //   position: fixed;
-  //   width: 88%;
-  //   bottom: 30px;
-  // }
-  // .pattern-status {
-  //   display: inline;
-  //   font-family: SourceHanSansCN-Regular;
-  //   font-size: 20px;
-  //   font-weight: normal;
-  //   font-stretch: normal;
-  //   line-height: 22px;
-  //   letter-spacing: 0px;
-  //   color: #303133;
-  // }
-  // .pattern-explain {
-  //   float: right;
-  // }
+  .stage-panel-contener {
+    display: flex;
+    flex-direction: row;
+    align-content:flex-start;
+  }
 </style>

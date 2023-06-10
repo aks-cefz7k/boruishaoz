@@ -46,6 +46,11 @@ export const UpdateDevice = (data) => {
   return api.Send({}, params, [])
 }
 
+export const UpdateDeviceId = (data) => {
+  let api = new Authapi('updateDeviceId')
+  return api.Send({}, data, [])
+}
+
 export const DeleteDevice = (id) => {
   let api = new Authapi('deleteDevice')
 
@@ -58,5 +63,6 @@ export default {
   GetAllDevice,
   AddDevice,
   UpdateDevice,
-  DeleteDevice
+  DeleteDevice,
+  UpdateDeviceId
 }

@@ -33,7 +33,6 @@
       <div>
         <el-table
           :data="list"
-          stripe
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -247,7 +246,7 @@ export default {
       }
       router.push({
         path: !curPath || curPath === '/overview/index' ? '/overview/index' : curPath,
-        query: { IP: dev.jsonparam.ip, port: dev.jsonparam.port, agentid: dev.agentid, protocol: dev.protocol, isfromatc: true }
+        query: { agentid: dev.agentid, isfromatc: true }
       })
     },
     handleFilter () {

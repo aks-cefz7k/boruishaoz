@@ -12,8 +12,8 @@
 <template>
   <div class="app-wrapper" :class="classObj">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-    <sidebar class="sidebar-container"></sidebar>
-    <div class="main-container">
+    <sidebar class="sidebar-container" v-if="!hideMenu"></sidebar>
+    <div class="main-container" :class="{'changeMainPosition': hideMenu}">
       <navbar></navbar>
       <app-main></app-main>
     </div>
@@ -27,6 +27,7 @@ import GlobalParamsModel from '@/EdgeMgr/controller/globalParamsMgr'
 import { setIframdevid } from '@/utils/auth'
 // import { AddDevice } from '@/api/control'
 import router from '@/router'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Layout',
@@ -34,6 +35,10 @@ export default {
     Navbar,
     Sidebar,
     AppMain
+  },
+  data () {
+    return {
+    }
   },
   mixins: [ResizeMixin],
   computed: {
@@ -49,7 +54,10 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
-    }
+    },
+    ...mapState({
+      hideMenu: state => state.globalParam.hideMenu
+    })
   },
   watch: {
     $route: {
@@ -125,19 +133,23 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "src/styles/mixin.scss";
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
-  }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
+  // .app-wrapper {
+  //   @include clearfix;
+  //   position: relative;
+  //   height: 100%;
+  //   width: 100%;
+  //   background: red;
+  // }
+  // .drawer-bg {
+  //   background: red;
+  //   opacity: 0.3;
+  //   width: 100%;
+  //   top: 0;
+  //   height: 100%;
+  //   position: absolute;
+  //   z-index: 999;
+  // }
+  .changeMainPosition {
+    margin-left: 0px !important;
   }
 </style>

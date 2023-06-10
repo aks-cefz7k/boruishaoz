@@ -32,6 +32,8 @@
       <div v-for="(item, index) in barrierList" :key="index + '1'">
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
       </div>
+      <div class="curTimeDiv" v-show="cycle && cycle > 0" :style="{'left':paddingLeft, 'background-color': '#409EFF'}">{{ timeNumDevide }}</div>
+      <div class="curTimeLine" :style="{'left':paddingLeft, 'height':barrierHeight}"></div>
     </div>
 </template>
 <script>
@@ -53,6 +55,26 @@ export default {
     },
     barrierList: {
       type: Array
+    },
+    cycle: {
+      type: Number
+    },
+    syncTime: {
+      type: Number
+    }
+  },
+  computed: {
+    paddingLeft () {
+      let res = '0%'
+      if (this.cycle && this.cycle > 0) {
+        let curPercent = (this.cycle - this.syncTime) / this.cycle
+        res = curPercent * 100 + '%'
+      }
+      return res
+    },
+    timeNumDevide () {
+      let res = (this.cycle - this.syncTime) + '/' + this.cycle
+      return res
     }
   },
   watch: {
@@ -73,8 +95,6 @@ export default {
       let patternLength = this.patternStatusList.length
       this.barrierHeight = (patternLength * 35 + 21) + 'px'
     }
-  },
-  computed: {
   }
 }
 </script>
@@ -90,30 +110,5 @@ export default {
 .first-1 {
   float: left;
   // text-align: center;
-}
-.ring-num {
-  float: left;
-  margin-top:7px;
-  margin-left: 5px;
-  font-family: SourceHanSansCN-Regular;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #ffffff;
-}
-.ring-phase {
-  float: left;
-  margin-left: 5px;
-  margin-top:1px;
-}
-.divider {
-  position: absolute;
-  top: -10px;
-  // left: 370px;
-  width: 2px;
-  // height: 99px;
-  background-color: #787878;
 }
 </style>

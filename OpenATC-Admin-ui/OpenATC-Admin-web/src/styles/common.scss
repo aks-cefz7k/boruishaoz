@@ -12,10 +12,23 @@
  @charset "UTF-8";
  @import './theme/element-variables.scss';
  @import '../../node_modules/edgebase-front/src/styles/common.scss';
+ @import './mixin.scss';
+ // 整体背景色
+ .app-wrapper1 {
+  @include clearfix;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: $--background-color-base;
+}
+.appMain {
+  height: calc(100% - 57px);
+  background: $--background-color-base;
+}
  // 主页样式
  .homeLayout {
     padding: 19px;
-    background-color: #eff1f4;
+    background-color: $--background-color-base;
     height: 100%;
     .top {
         height: 53%;
@@ -58,12 +71,12 @@
         font-size: 20px;
       }
       .user-manage {
-        background: url('./assets/home/usersManage.png');
+        background: url('../assets/home/usersManage.png');
         background-repeat: no-repeat;
         background-position:center center;
       }
       .operation-record {
-        background: url('./assets/home/operateRecord.png');
+        background: url('../assets/home/operateRecord.png');
         background-repeat: no-repeat;
         background-position:center center;
       }
@@ -78,7 +91,7 @@
     .total {
         // width: 554px;
         height: 54px;
-        background: #f8f8f8;
+        background: $--color-black;
         // margin-bottom: 24px;
         display: flex;
         align-items: center;
@@ -92,7 +105,7 @@
           background-size: 30px 30px;
           background-repeat: no-repeat;
           background-position:center center;
-          background-image: url('./assets/home/trouble.png');
+          background-image: url('../assets/home/trouble.png');
         }
         .text {
             float: left;
@@ -143,6 +156,9 @@
       .list {
         float: left;
       }
+    }
+    .el-table thead {
+      color: $--color-text-regular;
     }
 }
 .leftPart .chartPart .el-progress--circle .el-progress__text .content .sum {
@@ -207,7 +223,7 @@
         justify-content: center;
         > div {
             width: calc(100% - 50px);
-            background-color: #f8f8f8;
+            background-color: $--color-black;
             display: flex;
             align-items: center;
         }
@@ -231,7 +247,7 @@
                 float: left;
             }
             .upImg {
-                background-image: url('./assets/home/online.png');
+                background-image: url('../assets/home/online.png');
             }
             .num {
                 font-size: 54px;
@@ -244,7 +260,7 @@
                 float: left;
             }
             .downImg {
-                background-image: url('./assets/home/offline.png');
+                background-image: url('../assets/home/offline.png');
             }
             .num {
                 font-size: 54px;
@@ -259,7 +275,7 @@
     .cardTitle {
         height: 52px;
         line-height: 52px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid $--border-color-base;
         font-size: 18px;
         color: $--color-text-regular;
         font-family: MicrosoftYaHei;
@@ -280,6 +296,21 @@
         min-width: 66px;
         margin-bottom: 7px;
       }
+      .el-table thead {
+        color: $--color-text-regular;
+      }
+}
+// GIS页面样式
+.openatc-gis {
+    .showLayout {
+      position: fixed;
+      top: 70px;
+      right: 38px;
+      width: 442px;
+      height: auto;
+      z-index: 904;
+      background-color: $--color-white;
+    }
 }
 // 设备管理页面样式
 .openatc-device {
@@ -311,7 +342,7 @@
     }
     .atc-table {
         position: absolute;
-        top: 150px;
+        top: 130px;
         left: 20px;
         right: 20px;
         border: solid 1px $--border-color-lighter;
@@ -325,9 +356,11 @@
         height: calc(100vh - 50px);
         color: $--color-text-primary;
         border-right: solid 1px $--border-color-lighter;
+        background-color: $--color-white;
     }
     .el-main {
       height: calc(100vh - 50px);
+      background-color: $--background-color-base;
     }
   }
   .planContent {
@@ -361,7 +394,7 @@
           transition: .1s;
           font-size: 14px;
           border-radius: 4px;
-          color: $--color-white;
+          color: $--button-primary-font-color;
           background-color: $--color-primary;
           border-color: $--color-primary;
           cursor: pointer;
@@ -420,9 +453,9 @@
         overflow-y: auto;
         border-right: none;
       }
-      .el-menu-item.is-active {
-        background: #eaeaea;
-      }
+      // .el-menu-item.is-active {
+      //   background: #eaeaea;
+      // }
       /* 蒙层样式 */
       .mask {
         position: fixed;
@@ -446,7 +479,7 @@
           transition: .1s;
           font-size: 14px;
           border-radius: 4px;
-          color: $--color-white;
+          color: $--button-primary-font-color;
           background-color: $--color-primary;
           border-color: $--color-primary;
           cursor: pointer;
@@ -628,7 +661,7 @@
   .openatc-operationrecord {
     .atc-table {
         position: absolute;
-        top: 150px;
+        top: 130px;
         left: 20px;
         right: 20px;
         border: solid 1px $--border-color-lighter;
@@ -648,9 +681,11 @@
         height: calc(100vh - 50px);
         color: $--color-text-primary;
         border-right: solid 1px $--border-color-lighter;
+        background-color: $--color-white;
       }
       .el-main {
         height: calc(100vh - 50px);
+        background-color: $--background-color-base;
       }
   }
   .serviceroute-planmenu {
@@ -660,9 +695,9 @@
         overflow-y: auto;
         border-right: none;
       }
-      .el-menu-item.is-active {
-        background: #eaeaea;
-      }
+      // .el-menu-item.is-active {
+      //   background: $--color-primary;
+      // }
       /* 蒙层样式 */
       .mask {
         position: fixed;
@@ -686,13 +721,13 @@
         transition: 0.1s;
         font-size: 14px;
         border-radius: 4px;
-        color: $--color-white;
+        color: $--button-primary-font-color;
         background-color: $--color-primary;
         border-color: $--color-primary;
         cursor: pointer;
       }
       .btnGroup button:hover {
-        color: #fff;
+        color: $--button-primary-font-color;
         background-color: $--color-primary;
         border-color: $--color-primary;
         opacity: 0.8;
@@ -769,13 +804,13 @@
         transition: 0.1s;
         font-size: 14px;
         border-radius: 4px;
-        color: $--color-white;
+        color: $--button-primary-font-color;
         background-color: $--color-primary;
         border-color: $--color-primary;
         cursor: pointer;
       }
       .btnGroup button:hover {
-        color: $--color-white;
+        color: $--button-primary-font-color;
         background-color: $--color-primary;
         border-color: $--color-primary;
         opacity: 0.8;
@@ -883,6 +918,24 @@
         max-height: 590px;
       }
   }
+  .serviceroute-routeCard { 
+    width: 100%;
+    .btn-bottom {
+      float: right;
+      margin-top: -5px;
+      margin-right: 15px;
+    }
+    .el-col {
+      border-radius: 4px;
+    }
+    .grid-content {
+      border-radius: 4px;
+      min-height: 36px;
+    }
+    .grid-content-label {
+      color: $--color-text-secondary;
+    }
+  }
   // 头部样式
 .versioninfo {
     .el-dialog__headerbtn .el-dialog__close {
@@ -940,7 +993,7 @@
     position: fixed;
     height: 100%;
     width: 100%;
-    background-color: #f2f9ff;
+    background-color: $--background-color-base;
     .switch-language {
         cursor:pointer;
         margin-top: 20px;

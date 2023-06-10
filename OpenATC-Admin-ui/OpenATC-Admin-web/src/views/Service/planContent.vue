@@ -187,9 +187,11 @@ export default {
             item.controlName = controlName
             for (let dev of this.devicesData) {
               if (item.agentid === dev.agentid) {
-                item = Object.assign(item, dev)
+                item.stateName = dev.state
+                break
               }
             }
+            break
           }
         }
       }
@@ -203,12 +205,30 @@ export default {
     handleClick (tab, event) {
       this.activeName = tab.name
     },
+    checkEdit () {
+      let res = true
+      for (let item of this.route.devs) {
+        if (item.state === 1) {
+          res = false
+          this.$message.warning(this.$t('openatc.dutyroute.notAllowedToEdit'))
+          break
+        }
+      }
+      return res
+    },
     handleEdit () {
+      if (!this.checkEdit()) {
+        return false
+      }
       if (this.maskVisible && this.addNum <= 1) {
         if (this.addNum === 1) {
           this.maskVisible = false
         }
         this.addNum++
+      } else {
+        if (this.maskVisible) {
+          this.addNum = 1
+        }
       }
       if (!this.maskVisible) {
         // 获取单个协调路线的全部信息

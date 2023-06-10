@@ -11,11 +11,11 @@
  **/
 <template>
   <div class="crossImg">
-    <div class="centerText" v-if="crossType !== 'Customroads'">
+    <div class="centerText" v-if="crossType !== 'Customroads'" :class="{'countdownBg': isLoaded}">
       <!-- 相位倒计时 -->
       <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
         <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
-          <span style="float: left;font-size: 20px;color: #fff;width: 80px;">{{$t('edge.overview.phase')}}{{curPhase.id}} :</span>
+          <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('edge.overview.phase')}}{{curPhase.id}}:</span>
           <span style="float: left;">{{curPhase.phaseCountdown}}</span>
         </div>
       </div>
@@ -27,6 +27,7 @@
     </div>
     <!-- 路口底图 -->
     <div class="baseImg">
+      <!-- 城市道路 -->
       <CrossRoadsSvg v-if="crossType === 'Crossroads'"/>
       <TShapeEastRoadsSvg v-if="crossType === 'TypeT-east'"/>
       <TShapeWestRoadsSvg v-if="crossType === 'TypeT-west'"/>
@@ -34,19 +35,35 @@
       <TShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'"/>
       <!-- 其他路口 -->
       <CustomRoadsSvg v-if="crossType === 'Customroads'"/>
+      <!-- 匝道 -->
+      <RampEastRoadsSvg v-if="crossType === 'ramp-east'" />
+      <RampWestRoadsSvg v-if="crossType === 'ramp-west'" />
+      <RampNorthRoadsSvg v-if="crossType === 'ramp-north'" />
+      <RampSouthRoadsSvg v-if="crossType === 'ramp-south'" />
+      <!-- 路段行人过街 -->
+      <PedSectionSNSvg v-if="crossType === 'ped-section-south-north'" />
+      <PedSectionEWSvg v-if="crossType === 'ped-section-east-west'" />
     </div>
-    <!-- 人行道 -->
-    <div class="sidewalk" v-if="resetflag && crossType !== 'Customroads' && isLoaded">
-      <SidewalkSvg v-for="side in sidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
+    <!-- 城市道路状态-->
+    <div v-if="mainType === '100' || mainType === '101' || mainType === '104'">
+      <!-- 人行道 -->
+      <div class="sidewalk" v-if="resetflag && isLoaded">
+        <SidewalkSvg v-for="side in sidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
+      </div>
+      <!-- 车道相位 -->
+      <div v-if="resetflag">
+        <PhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item"/>
+      </div>
     </div>
-    <!-- 车道相位 -->
-    <div v-if="resetflag && crossType !== 'Customroads'">
-      <PhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item"/>
+    <!-- 匝道状态 -->
+      <!-- 车道相位 -->
+    <div v-if="resetflag && mainType === '103'">
+      <RampPhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item" />
     </div>
   </div>
 </template>
 <script>
-import PhaseIconSvg from './phaseIconSvg'
+import PhaseIconSvg from './phaseIcon/phaseIconSvg'
 import PhaseDataModel from './utils.js'
 import { getIntersectionInfo } from '@/api/template'
 import CrossRoadsSvg from './baseImg/CrossRoadsSvg'
@@ -57,6 +74,13 @@ import TShapeSouthRoadsSvg from './baseImg/TShapeSouthRoadsSvg.vue'
 import CustomRoadsSvg from './baseImg/CustomRoadsSvg.vue'
 import RefreshSvg from './baseImg/refreshSvg'
 import SidewalkSvg from './baseImg/SidewalkSvg'
+import RampEastRoadsSvg from './baseImg/RampEastSvg'
+import RampWestRoadsSvg from './baseImg/RampWestSvg'
+import RampNorthRoadsSvg from './baseImg/RampNorthSvg'
+import RampSouthRoadsSvg from './baseImg/RampSouthSvg'
+import RampPhaseIconSvg from './phaseIcon/rampPhaseIconSvg'
+import PedSectionEWSvg from './baseImg/PedSectionEWSvg'
+import PedSectionSNSvg from './baseImg/PedSectionSNSvg'
 export default {
   name: 'crossDiagram',
   components: {
@@ -68,7 +92,14 @@ export default {
     TShapeSouthRoadsSvg,
     CustomRoadsSvg,
     RefreshSvg,
-    SidewalkSvg
+    SidewalkSvg,
+    RampEastRoadsSvg,
+    RampWestRoadsSvg,
+    RampNorthRoadsSvg,
+    RampSouthRoadsSvg,
+    RampPhaseIconSvg,
+    PedSectionEWSvg,
+    PedSectionSNSvg
   },
   props: {
     crossStatusData: {
@@ -82,18 +113,18 @@ export default {
     }
   },
   watch: {
-    intersection: {
+    tempType: {
       handler: function (val) {
-        let crossType = val.split('-')[0]
-        let crossintersection = val.split('-')[1]
-        this.getCrossType(crossType, crossintersection)
+        this.getCrossType()
       }
     },
     crossStatusData: {
       handler: function (val, oldVal) {
+        // 路口状态数据
         this.statusData = JSON.parse(JSON.stringify(val))
         this.phaseStatusList = val.phase
         if (!val.phase) {
+          // 黄山、全红、关灯状态下，相位字段不存在，此处根据control字段控制车道相位颜色
           switch (val.control) {
             case 1: this.handlePhaseStatus('黄闪')
               break
@@ -106,11 +137,16 @@ export default {
           this.isHasPhase = false
           return
         }
+
         this.curPhase = val.current_phase
         this.isHasPhase = true
+        // 正常情况下，获取车道相位、相位倒计时、行人相位的状态
         this.getPhaseStatus()
         this.getCurPhaseCountdown()
-        this.getpedStatus()
+        if (this.mainType === '100' || this.mainType === '101' || this.mainType === '104') {
+          // 城市道路和路段行人过街才显示人行道状态
+          this.getpedStatus()
+        }
       },
       // 深度观察监听
       deep: true
@@ -133,21 +169,20 @@ export default {
       phaseStatusMap: new Map(), // 相位状态映射
       ColorMap: new Map([[0, '#828282'], [1, '#ff2828'], [2, '#f7b500'], [3, '#77fb65'], [4, '#77fb65'], [5, '#f7b500']]), // 当前相位状态 --- 0：关灯, 1：红, 2：黄,  3：绿, 4：绿闪, 5：黄闪
       SidewalkColorMap: new Map([[0, '#828282'], [1, '#e24b4b'], [3, '#7bd66b']]),
-      intersection: '', // 模版类型
+      tempType: '', // 模版类型
+      mainType: '101', // 路口形状
+      mainDirection: '000', // 路口方向
       crossType: '', // 路口底图类型
       isLoaded: false, // 是否成功加载底图
       isHasPhase: true, // 是否有相位状态数据
       phaseControlColorMap: new Map([['黄闪', '#f7b500'], ['全红', '#ff2828'], ['关灯', '#828282'], ['默认', '#fff']]),
-      sidewalkPos: {
-        left: '309px',
-        top: '199px'
-      },
       sidewalkPhaseData: [], // 行人相位
       resetflag: true // 离线后，控制行人相位、车道相位reset标识
     }
   },
   methods: {
     handleDefaultStatus () {
+      // 恢复默认状态
       if (this.LanePhaseData.length) {
         this.phaseCountdown = ''
         this.phaseCountdownColor = '#fff'
@@ -159,9 +194,6 @@ export default {
         this.sidewalkPhaseData.forEach(data => {
           data.color = '#fff'
         })
-        // this.$refs.SidewalkSvg.map(ref => {
-        //   ref.handleDefaultStatus()
-        // })
       }
       this.phaseCountdownList = []
       // 车道相位、行人相位恢复默认状态
@@ -171,7 +203,9 @@ export default {
       })
     },
     handlePhaseStatus (Control) {
+      // 控制黄闪、全红、关灯、默认情况下的车道相位颜色和倒计时颜色
       if (Control === '默认') {
+        // 倒计时恢复默认颜色
         this.phaseCountdownList.forEach(item => {
           item.phaseCountdown = ''
           item.id = ''
@@ -179,22 +213,35 @@ export default {
         })
       }
       if (this.LanePhaseData.length) {
-        this.getPhasePos()
+        // if (this.mainType === '100' || this.mainType === '101') {
+        //   // 车道相位设置对应颜色
+        //   this.getPhasePos()
+        // }
+        // if (this.mainType === '103') {
+        //   this.getRampPhasePos()
+        // }
         const LanePhaseData = this.LanePhaseData.map(data => ({
           ...data,
           color: this.phaseControlColorMap.get(Control)
         }))
         this.LanePhaseData = JSON.parse(JSON.stringify(LanePhaseData))
       }
+      if (this.sidewalkPhaseData.length) {
+        const sidewalkPhaseData = this.sidewalkPhaseData.map(data => ({
+          ...data,
+          color: this.phaseControlColorMap.get(Control)
+        }))
+        this.sidewalkPhaseData = JSON.parse(JSON.stringify(sidewalkPhaseData))
+      }
     },
     getPhaseStatus () {
-      // 得到相位状态（颜色）
+      // 得到车道相位状态（颜色）
       this.phaseStatusList.map(phase => {
         let phaseId = phase.id
         let phaseInfo = {
           type: phase.type,
           phaseCountdown: phase.countdown,
-          pedtype: phase.pedtype // mock
+          pedtype: phase.pedtype
         }
         this.phaseStatusMap.set(phaseId, phaseInfo)
       })
@@ -213,7 +260,7 @@ export default {
       this.LanePhaseData = JSON.parse(JSON.stringify(curLanePhaseData))
     },
     getCurPhaseCountdown () {
-      // 获取当前相位倒计时和颜色
+      // 获取当前相位倒计时颜色
       this.phaseCountdownList = []
       this.curPhase.forEach(curP => {
         this.phaseStatusList.forEach(phaseInfo => {
@@ -228,6 +275,7 @@ export default {
       })
     },
     getIntersectionInfo () {
+      // 获取路口信息
       const agentid = this.agentId || '0'
       getIntersectionInfo(agentid).then(res => {
         if (!res.data.success) {
@@ -241,13 +289,24 @@ export default {
         }
         this.isLoaded = true
         this.crossInfo = res.data.data
-        this.intersection = res.data.data.type
-        this.getPhasePos()
+        this.tempType = res.data.data.type
+        // 获取车道相位、行人相位信息（坐标、名称）
+        this.mainType = this.tempType.split('-')[0]
+        this.mainDirection = this.tempType.split('-')[1]
+        if (this.mainType === '100' || this.mainType === '101' || this.mainType === '104') {
+          // 城市道路加载车道相位坐标和人行道坐标
+          this.getPhasePos()
+          this.getPedPhasePos()
+        }
+        if (this.mainType === '103') {
+          // 获取匝道道路的主路和支路的相位坐标
+          this.getRampPhasePos()
+        }
       })
     },
     getPhasePos () {
+      // 车道相位信息
       this.LanePhaseData = []
-      this.sidewalkPhaseData = []
       this.crossInfo.phaseList.forEach((ele, i) => {
         ele.direction.forEach((dir, index) => {
           // 车道相位
@@ -259,47 +318,87 @@ export default {
             left: this.PhaseDataModel.getPhase(dir).x,
             top: this.PhaseDataModel.getPhase(dir).y
           })
-          // 行人相位
-          if (this.PhaseDataModel.getSidePos(dir)) {
-            this.sidewalkPhaseData.push({
-              key: `${i}-${index}`,
-              phaseid: ele.id, // 相位id，用于对应相位状态
-              id: dir,
-              name: this.PhaseDataModel.getSidePos(dir).name,
-              left: this.PhaseDataModel.getSidePos(dir).x,
-              top: this.PhaseDataModel.getSidePos(dir).y
-            })
+        })
+      })
+    },
+    getRampPhasePos () {
+      // 匝道车道相位信息
+      this.LanePhaseData = []
+      this.crossInfo.phaseList.forEach((ele, i) => {
+        ele.direction.forEach((dir, index) => {
+          if (ele.controltype === 0) {
+            this.handlePhasePosData(`${i}-${index}`, ele, dir, this.PhaseDataModel.getMainPhasePos)
+          }
+          if (ele.controltype === 1) {
+            this.handlePhasePosData(`${i}-${index}`, ele, dir, this.PhaseDataModel.getSidePhasePos)
           }
         })
       })
-      // 行人相位无，也要显示人行横道，与车道相位显示与否逻辑不同
-      this.handleCompleteSidewalkPhase()
+      console.log(this.LanePhaseData)
     },
-    handleCompleteSidewalkPhase () {
-      // 没有相位状态的车道也要显示，默认白色
-      let hasDirIds = this.sidewalkPhaseData.map(data => data.id)
-      let allIds = []
-      for (let key of this.PhaseDataModel.SidePosMap.keys()) {
-        allIds.push(key)
-      }
-      let diffIds = allIds.filter(function (val) { return hasDirIds.indexOf(val) === -1 })
-      diffIds.forEach(id => {
-        this.sidewalkPhaseData.push({
-          key: `${this.sidewalkPhaseData.length + 1}`,
-          phaseid: undefined, // 相位id，用于对应相位状态
-          id,
-          name: this.PhaseDataModel.getSidePos(id).name,
-          left: this.PhaseDataModel.getSidePos(id).x,
-          top: this.PhaseDataModel.getSidePos(id).y
-        })
+    handlePhasePosData (key, phase, dir) {
+      let posInfo = phase.controltype === 0 ? this.PhaseDataModel.getMainPhasePos(dir) : this.PhaseDataModel.getSidePhasePos(dir)
+      this.LanePhaseData.push({
+        key,
+        controlType: phase.controltype,
+        phaseid: phase.id, // 相位id，用于对应相位状态
+        id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
+        name: posInfo.name,
+        left: posInfo.x,
+        top: posInfo.y
       })
     },
-    getCrossType (type, intersection) {
-      if (type === '101') {
+    getPedPhasePos () {
+      // 行人相位信息
+      this.sidewalkPhaseData = []
+      this.crossInfo.phaseList.forEach((ele, i) => {
+        if (ele.peddirection) {
+          ele.peddirection.forEach((dir, index) => {
+          // 行人相位
+            if (this.PhaseDataModel.getSidePos(dir)) {
+              this.sidewalkPhaseData.push({
+                key: `${i}-${index}`,
+                phaseid: ele.id, // 相位id，用于对应相位状态
+                id: dir,
+                name: this.PhaseDataModel.getSidePos(dir).name,
+                left: this.PhaseDataModel.getSidePos(dir).x,
+                top: this.PhaseDataModel.getSidePos(dir).y
+              })
+            }
+          })
+        }
+      })
+      // 行人相位无，也要显示人行横道，与车道相位显示与否逻辑不同
+      // this.handleCompleteSidewalkPhase()
+    },
+    // handleCompleteSidewalkPhase () {
+    //   // 没有相位状态的车道也要显示，默认白色
+    //   let hasDirIds = this.sidewalkPhaseData.map(data => data.id)
+    //   let allIds = []
+    //   for (let key of this.PhaseDataModel.SidePosMap.keys()) {
+    //     allIds.push(key)
+    //   }
+    //   let diffIds = allIds.filter(function (val) { return hasDirIds.indexOf(val) === -1 })
+    //   diffIds.forEach(id => {
+    //     this.sidewalkPhaseData.push({
+    //       key: `${this.sidewalkPhaseData.length + 1}`,
+    //       phaseid: undefined, // 相位id，用于对应相位状态
+    //       id,
+    //       name: this.PhaseDataModel.getSidePos(id).name,
+    //       left: this.PhaseDataModel.getSidePos(id).x,
+    //       top: this.PhaseDataModel.getSidePos(id).y
+    //     })
+    //   })
+    // },
+    getCrossType () {
+      // 路口类型对应底图决策
+      if (this.mainType === '101') {
+        // 十字路口
         this.crossType = 'Crossroads'
       }
-      if (type === '100') {
-        switch (intersection) {
+      if (this.mainType === '100') {
+        // T型路口
+        switch (this.mainDirection) {
           case '001': this.crossType = 'TypeT-east'
             break
           case '002': this.crossType = 'TypeT-south'
@@ -310,7 +409,30 @@ export default {
             break
         }
       }
-      if (type === '999') {
+      if (this.mainType === '103') {
+        // 匝道
+        switch (this.mainDirection) {
+          case '001': this.crossType = 'ramp-east'
+            break
+          case '002': this.crossType = 'ramp-south'
+            break
+          case '003': this.crossType = 'ramp-west'
+            break
+          case '004': this.crossType = 'ramp-north'
+            break
+        }
+      }
+      if (this.mainType === '104') {
+        // 路段行人过街
+        switch (this.mainDirection) {
+          case '006': this.crossType = 'ped-section-east-west'
+            break
+          case '005': this.crossType = 'ped-section-south-north'
+            break
+        }
+      }
+      if (this.mainType === '999') {
+        // 其他路口
         this.crossType = 'Customroads'
       }
     },
@@ -361,8 +483,8 @@ export default {
 }
 .centerText {
   position: absolute;
-  width: 250px;
-  height: 150px;
+  width: 140px;
+  height: 140px;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -382,6 +504,10 @@ export default {
   color: #fff;
   width: 150px;
   margin: 0 auto;
+}
+.countdownBg {
+  border-radius: 50%;
+  background-color: rgba(94, 90, 90, 0.8);
 }
 .centerText .text {
   display: inline-block;

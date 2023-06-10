@@ -89,41 +89,6 @@
         </div>
       </div>
     </el-tab-pane>
-    <!-- <el-tab-pane label="IP" name="ip">
-        <div class="system-information">
-            <div class="currsystemtime">
-                <div class="signal-version-name">IP数据设置：</div>
-                <div class="signal-version-value" style="height: 110px;">
-                    <div>
-                        <div class="software" style="top: 20px;"><div style="float: left;">IP：</div><div style="margin-left: 70px;">{{ip}}</div></div>
-                        <div class="software" style="top: 30px;"><div style="float: left;">子网掩码：</div><div style="margin-left: 70px;">{{subnetmask}}</div></div>
-                        <div class="software" style="top: 40px;"><div style="float: left;">网关：</div><div style="margin-left: 70px;">{{gateway}}</div></div>
-                    </div>
-                </div>
-                <div class="signal-version-bottom">
-                    <el-button type="primary" @click="editSignIp" size="mini">设置</el-button>
-                </div>
-            </div>
-      </div>
-    </el-tab-pane> -->
-    <!-- <el-tab-pane label="串口" name="serialPort">
-        <div class="system-information">
-            <div class="currsystemtime">
-                <div class="signal-version-name">串口数据：</div>
-                <div class="signal-version-value" style="height: 140px;">
-                    <div>
-                        <div class="software" style="top: 30px;"><div style="float: left;">波特率：</div><div style="margin-left: 85px;">{{Baudrate}}</div></div>
-                        <div class="software" style="top: 40px;"><div style="float: left;">数据位：</div><div style="margin-left: 85px;">{{databit}}</div></div>
-                        <div class="software" style="top: 50px;"><div style="float: left;">停止位：</div><div style="margin-left: 85px;">{{stopbit}}</div></div>
-                        <div class="software" style="top: 60px;"><div style="float: left;">奇偶校验位：</div><div style="margin-left: 85px;">{{paritybit}}</div></div>
-                    </div>
-                </div>
-                <div class="signal-version-bottom">
-                    <el-button type="primary" @click="editSerialPort" size="mini">设置</el-button>
-                </div>
-            </div>
-      </div>
-    </el-tab-pane> -->
     <el-tab-pane :label="$t('edge.system.remotecontrol')" name="remote">
         <div class="system-information">
             <div class="currsystemtime">
@@ -165,6 +130,9 @@
     <el-tab-pane :label="$t('edge.system.channeldetection')" name="channel">
       <channelControl />
     </el-tab-pane>
+    <el-tab-pane :label="$t('edge.system.realTimeChannel')" name="realTimeChannel">
+      <realTimeChannel ref="realTimeChannel"></realTimeChannel>
+    </el-tab-pane>
     <!-- <el-tab-pane label="手动控制" name="manual">
       <manualControl></manualControl>
     </el-tab-pane> -->
@@ -187,10 +155,11 @@ import signip from './systemDialog/signIp'
 import updatefile from './systemDialog/updateFile'
 import manualControl from './manualControl'
 import channelControl from './channelControl'
+import realTimeChannel from './realTimeChannel'
 import { getSignVersion, getSystemTime, getParamVersion, getCode, getSignIp, getSerialPort, setRemoteControl, getRemoteDebug, setRemoteDebug, udiskupdate } from '@/api/system'
 export default {
   name: 'system',
-  components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl },
+  components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel },
   data () {
     return {
       activeName: 'information',
@@ -269,7 +238,13 @@ export default {
   },
   methods: {
     handleClick (tab, event) {
-      console.log(tab, event)
+      if (tab.name === 'realTimeChannel') {
+        let realTimeChannel = this.$refs.realTimeChannel
+        realTimeChannel.initData()
+      } else {
+        let realTimeChannel = this.$refs.realTimeChannel
+        realTimeChannel.clearChannelInterval() // 切换tab标签的时候清除实时通道的定时器
+      }
     },
     getSignVersion () {
       getSignVersion().then((data) => {
@@ -488,9 +463,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.app-container {
-  min-width: 1730px;
-}
+// .app-container {
+//   min-width: 1730px;
+// }
 // .signal-version-name {
 //   margin-top: 20px;
 //   margin-left: 30px;

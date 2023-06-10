@@ -54,6 +54,7 @@ const zh = {
       'optimize': '优化',
       'control': '控制',
       'deviceInfo': '设备信息',
+      'adaptiveParameter': '自适应参数',
       'user': '用户',
       'dailyRecord': '日志',
       'controlPanel': '手动面板',
@@ -132,6 +133,7 @@ const zh = {
       'nocablecoordination': '无电缆协调',
       'phasewalk': '行人过街',
       'websteroptimization': 'Webster单点优化',
+      'inductivePedestrianCrossControl': '感应式行人过街控制',
       'selfadaption': '自适应控制',
       'custom': '自定义',
       'controlmodevalue': '控制方式数值',
@@ -173,6 +175,7 @@ const zh = {
       'modelList9': '自适应控制',
       'modelList10': '无电缆协调',
       'modelList12': '行人过街',
+      'modelList19': '感应式行人过街',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
       'canceled': '已取消',
@@ -182,6 +185,8 @@ const zh = {
     },
     'phase': {
       'desc': '描述',
+      'peddesc': '行人方向',
+      'controltype': '控制类型',
       'mingreen': '最小绿',
       'max1': '最大绿1',
       'max2': '最大绿2',
@@ -216,7 +221,28 @@ const zh = {
       'sl': '南左转',
       'sr': '南右转',
       'sb': '南掉头',
-      'redyellow': '红黄'
+      'eped': '东人行横道',
+      'wped': '西人行横道',
+      'sped': '南人行横道',
+      'nped': '北人行横道',
+      'etped': '东人行横道-上',
+      'ebped': '东人行横道-下',
+      'wtped': '西人行横道-上',
+      'wbped': '西人行横道-下',
+      'slped': '南人行横道-左',
+      'srped': '南人行横道-右',
+      'nlped': '北人行横道-左',
+      'nrped': '北人行横道-右',
+      'xrped': 'X人行横道-/',
+      'xlped': 'X人行横道-\\',
+      'ewped': '东西路段人行横道',
+      'snped': '南北路段人行横道',
+      'redyellow': '红黄',
+      'vehiclethresh': '车辆排队阈值',
+      'pedestrianthresh': '行人等待阈值',
+      'mainroad': '主路',
+      'bypass': '支路',
+      'pedestrianonly': '仅行人'
     },
     'overlap': {
       'desc': '描述',
@@ -227,6 +253,7 @@ const zh = {
       'mostdata': '最多只能创建16条数据!'
     },
     'pattern': {
+      'property': '属性',
       'desc': '描述',
       'offset': '相位差',
       'cycle': '周期',
@@ -244,7 +271,16 @@ const zh = {
       'modeOption7': '忽略相位',
       'coordphaseOption1': '协调相位',
       'coordphaseOption2': '关键相位',
-      'coordphaseOption4': '固定相位'
+      'coordphaseOption4': '固定相位',
+      'forbiddenstage': '相位阶段禁止',
+      'screenstage': '相位阶段屏蔽',
+      'coordinatestage': '协调相位阶段 ',
+      'delaystart': '晚启动时间 ',
+      'advanceend': '早结束时间',
+      'stageConfig': '阶段配置',
+      'ringConfig': '环配置',
+      'stage': '阶段',
+      'agentidError': '获取设备ID失败!'
     },
     'plan': {
       'tipcontext': '请输入计划名！',
@@ -267,7 +303,8 @@ const zh = {
       'ControlOption6': '单点感应控制',
       'ControlOption9': '自适应控制',
       'ControlOption10': '无电缆控制',
-      'ControlOption12': '行人过街控制'
+      'ControlOption12': '行人过街控制',
+      'ControlOption19': '感应式行人过街控制'
     },
     'date': {
       'desc': '描述',
@@ -326,6 +363,7 @@ const zh = {
     },
     'channellock': {
       'deleteAlltip': '确认删除所有通道锁定？',
+      'deleteOnetip': '确认删除此通道锁定？',
       'starttime': '开始时间',
       'endtime': '结束时间',
       'transitiongreenflashtime': '过渡绿闪时间',
@@ -363,7 +401,19 @@ const zh = {
       'erraticCounts': '最大请求数（个/分钟）',
       'operation': '操作',
       'deletetip': '确认删除此行人检测器？',
-      'mostdata': '最多只能创建8条数据！'
+      'mostdata': '最多只能创建8条数据！',
+      'type': '检测器类型',
+      'typeOptionundefined': '',
+      'typeOption': 'typeOption',
+      'typeOption0': '线圈',
+      'typeOption1': '雷达',
+      'typeOption2': '视频',
+      'region': '检测器区域',
+      'regionOptionundefined': '',
+      'regionOption': 'regionOption',
+      'regionOption0': '默认',
+      'regionOption1': '等待区域',
+      'regionOption2': '过街区域'
     },
     'deviceinfo': {
       'deviceinfo': '设备信息: ',
@@ -389,7 +439,28 @@ const zh = {
       'slavecascadeoffset': '从机级联偏移量: ',
       'deviceinfostyle': 'margin-left: 50px; top: 10px;',
       'deviceparamstyle': 'margin-left: 50px; top: 10px;',
-      'deviceselflearningstyle': 'margin-left: 50px; top: 15px;'
+      'deviceselflearningstyle': 'margin-left: 50px; top: 15px;',
+      'faultdetect': '故障检测参数',
+      'closegreenandredon': '红绿同亮检测: ',
+      'closenoredon': '无红灯亮起检测: ',
+      'detectgapgreenandredon': '红绿同亮检测时间间隔(0.1秒):',
+      'detectgapnoredon': '无红灯亮起检测时间间隔(0.1秒):',
+      'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
+      'startOrderParams': '启动时序参数 ',
+      'netcardInfo': '网卡信息: '
+    },
+    'singleoptim': {
+      'deletetip': '确认删除？',
+      'selfControlParams': '自适应控制参数',
+      'lossTimeOfGreenBeginning': '绿初损失时间（秒）',
+      'lossTimeOfYellowEnding': '黄末损失时间（秒）',
+      'saturationFlow': '饱和流量（辆/小时）',
+      'cycleAdjustmentFactor': '周期调整因子',
+      'selfLearningModeOnOrOff': '自学习模式',
+      'staticWeight': '静态权重',
+      'phaseStaticFactor': '相位静态因子',
+      'createPatternFirst': '请先创建方案',
+      'gratterThanOne': '数值之和不能大于1'
     },
     'controlpanel': {
       'controlmode': '控制模式',
@@ -475,7 +546,8 @@ const zh = {
       'remote1': '重启',
       'remote2': '授权',
       'remote3': '自定义',
-      'test': '检测'
+      'test': '检测',
+      'realTimeChannel': '实时通道'
     },
     'optimize': {
       'strategy': '优化策略',

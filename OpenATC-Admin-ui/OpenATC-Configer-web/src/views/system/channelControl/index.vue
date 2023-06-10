@@ -36,7 +36,6 @@
     <div class="title">通道信息</div>
     <el-table
       :data="list"
-      stripe
       max-height="500"
       style="width: 100%">
       <el-table-column
@@ -157,15 +156,21 @@ export default {
     }
   },
   mounted () {
+    this.globalParamModel = this.$store.getters.globalParamModel
     this.handleCreateLampCtrboard()
   },
   beforeUpdate () {
+    this.globalParamModel = this.$store.getters.globalParamModel
     this.handleUpdateLampCtrboard()
   },
   methods: {
     handleCreateLampCtrboard () {
+      let channel = this.globalParamModel.getParamsByType('channelList')
+      let channelIdList = channel.map(ele => ele.id)
       this.data = []
+      if (channel.length === 0) return
       for (let i = 1; i <= 10; i++) {
+        if (!this.isHasLampCtrboard(i, channelIdList)) continue
         let lamp = {}
         lamp.lampctrboardnum = i
         // lamp.name = `灯控板${i}`
@@ -182,9 +187,16 @@ export default {
       }
       console.log(this.data)
     },
+    isHasLampCtrboard (i, channelIdList) {
+      let index = i * 4
+      if (channelIdList.includes(index) || channelIdList.includes(index - 1) || channelIdList.includes(index - 2) || channelIdList.includes(index - 3)) {
+        return true
+      }
+      return false
+    },
     handleUpdateLampCtrboard () {
       this.data.forEach((ele, index) => {
-        ele.name = this.$t('edge.system.lampcontrolpanel') + index
+        ele.name = this.$t('edge.system.lampcontrolpanel') + Number(index + 1)
       })
     },
     handleExclusive () {
@@ -287,13 +299,13 @@ export default {
   margin-top: 40px;
 }
 .single-channel {
-  width: 140px;
-  height: 240px;
-  background-color: #858585;
-  border-radius: 4px;
-  border: solid 1px #dcdcdc;
-  float: left;
-  margin-right: 20px;
+  // width: 148px;
+  // height: 240px;
+  // background-color: #858585;
+  // border-radius: 4px;
+  // border: solid 1px #dcdcdc;
+  // float: left;
+  // margin-right: 20px;
   // .name {
   //   height: 40px;
   //   background: #f8fbff;

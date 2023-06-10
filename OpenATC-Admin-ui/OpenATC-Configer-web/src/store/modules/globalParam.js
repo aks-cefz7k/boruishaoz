@@ -24,6 +24,9 @@ const tscParam = {
     intersectionid: Number,
     siteid: '',
     selflearning: 0,
+    fixintersectioninfo: '',
+    commuport: 0,
+    commutype: '',
     netcard: [{
       ip: '',
       subnetmask: '',
@@ -48,11 +51,20 @@ const tscParam = {
       startyellowflash: 6,
       startallred: 6,
       greenwavecycle: 5
+    },
+    faultdetect: {
+      closegreenandredon: 0,
+      detectgapgreenandredon: 0,
+      closenoredon: 0,
+      detectgapnoredon: 0,
+      detectgapgreenconflict: 0
     }
   },
   manualpanel: {
     mingreen: 15
-  }
+  },
+  singleoptim: [
+  ]
 }
 let defaultCopiedTscParam = null
 try {
@@ -79,7 +91,11 @@ const Global = {
     tscParam: JSON.parse(JSON.stringify(tscParam)),
     curPath: '/overview/index',
     copiedTscParam: defaultCopiedTscParam,
-    routers: []
+    routers: [],
+    curBodyWidth: 1920,
+    curBodyHeight: 1080,
+    FuncSort: 'allFunc',
+    hideMenu: false
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -106,11 +122,21 @@ const Global = {
     CLEAR_COPY: (state) => {
       state.copiedTscParam = null
       sessionStorage.removeItem('tscParam')
-    }
+    },
     // ,
     // SET_ROUTERS: (state, routers) => {
     //   state.routers = JSON.parse(JSON.stringify(routers))
     // }
+    SAVE_BODY_DOM_SIZE: (state, size) => {
+      state.curBodyWidth = size.width
+      state.curBodyHeight = size.height
+    },
+    SAVE_FUNNCTION_LEVEL: (state, FUNC) => {
+      state.FuncSort = FUNC
+    },
+    SET_MENU_VISIBLE: (state, isHideMenu) => {
+      state.hideMenu = isHideMenu
+    }
   },
   actions: {
     SaveTscParam ({ commit }, data) {
@@ -130,8 +156,7 @@ const Global = {
     },
     ClearCopy ({ commit }) {
       commit('CLEAR_COPY')
-    }
-    // ,
+    },
     // GenerateRoutes ({
     //   commit
     // }, {curRoutes, noPermission}) {
@@ -147,6 +172,15 @@ const Global = {
     //     commit('SET_ROUTERS', curRoutes)
     //   }
     // }
+    SaveBodyDomSize ({ commit }, size) {
+      commit('SAVE_BODY_DOM_SIZE', size)
+    },
+    SaveFunctionLevel ({ commit }, FUNC) {
+      commit('SAVE_FUNNCTION_LEVEL', FUNC)
+    },
+    SetMenuVisible ({ commit }, isHideMenu) {
+      commit('SET_MENU_VISIBLE', isHideMenu)
+    }
   }
 }
 export default Global

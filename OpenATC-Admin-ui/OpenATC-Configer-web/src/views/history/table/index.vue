@@ -15,11 +15,11 @@
     <div class="atc-table">
     <el-table
         :data="tableData"
-        stripe
         size="small"
         :max-height="tableHeight"
         style="width: 100%"
         v-loading.body="listLoading"
+        :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
         id="footerBtn">
         <el-table-column
         type="index"
@@ -68,6 +68,8 @@
 
 <script>
 // import { getFault } from '@/api/fault'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   name: 'bordertable',
   props: {
@@ -120,6 +122,22 @@ export default {
     },
     stateFormat (row, column) {
       return row.m_byFaultDescValue + ''
+    },
+    exportExcel () {
+      /* generate workbook object from table */
+      var xlsxParam = { raw: true } // 导出的内容只做解析，不进行格式转换
+      var wb = XLSX.utils.table_to_book(document.querySelector('#footerBtn'), xlsxParam)
+
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'fault.xlsx')
+      } catch (e) {
+        if (typeof console !== 'undefined') {
+          console.log(e, wbout)
+        }
+      }
+      return wbout
     }
     // handlerFaultData () {
     //   let filterId = Number(this.activeName)
@@ -151,13 +169,13 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-.atc-table {
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px #e6e6e6;
-  overflow: auto;
-}
+// .atc-table {
+//   top: 150px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px #e6e6e6;
+//   overflow: auto;
+// }
 .edit-button {
   float: left;
   // margin-left: 10px;

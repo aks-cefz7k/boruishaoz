@@ -54,6 +54,7 @@ const en = {
       'optimize': 'Optimize',
       'control': 'Control',
       'deviceInfo': 'DeviceInfo',
+      'adaptiveParameter': 'AdaptiveParameter',
       'user': 'User',
       'dailyRecord': 'DailyRecord',
       'controlPanel': 'ControlPanel',
@@ -132,6 +133,7 @@ const en = {
       'nocablecoordination': 'Nocable Control',
       'phasewalk': 'Pedestrian Crossing Control',
       'websteroptimization': 'Webster Single Point Optimization',
+      'inductivePedestrianCrossControl': 'Inductive Pedestrian Crossing Control',
       'selfadaption': 'Self-Adaption',
       'custom': 'Custom',
       'controlmodevalue': 'Control Value',
@@ -173,6 +175,7 @@ const en = {
       'modelList9': 'Self-Adaption',
       'modelList10': 'Nocable Control',
       'modelList12': 'phasewalk',
+      'modelList19': 'Inductive Pedestrian Crossing Control',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
       'canceled': 'Cancelled',
@@ -182,6 +185,8 @@ const en = {
     },
     'phase': {
       'desc': 'Description',
+      'peddesc': 'PedestrianDirection',
+      'controltype': 'ControlType',
       'mingreen': 'MinGreen',
       'max1': 'Max1',
       'max2': 'Max2',
@@ -217,7 +222,28 @@ const en = {
       'sl': 'South-Left',
       'sr': 'South-Right',
       'sb': 'South-Back',
-      'redyellow': 'redyellow'
+      'eped': 'East-Pedestrian',
+      'wped': 'West-Pedestrian',
+      'sped': 'South-Pedestrian',
+      'nped': 'North-Pedestrian',
+      'etped': 'East-Top-Pedestrian',
+      'ebped': 'East-Bottom-Pedestrian',
+      'wtped': 'West-Top-Pedestrian',
+      'wbped': 'West-Bottom-Pedestrian',
+      'slped': 'South-Left-Pedestrian',
+      'srped': 'South-Right-Pedestrian',
+      'nlped': 'North-Left-Pedestrian',
+      'nrped': 'North-Right-Pedestrian',
+      'xrped': 'X-/-Pedestrian',
+      'xlped': 'X-\\-Pedestrian',
+      'ewped': 'East-West-Pedestrian',
+      'snped': 'South-North-Pedestrian',
+      'redyellow': 'redyellow',
+      'vehiclethresh': 'Vehicle Queuing Threshold',
+      'pedestrianthresh': 'Pedestrian waiting Threshold',
+      'mainroad': 'main road',
+      'bypass': 'by-pass',
+      'pedestrianonly': 'pedestrian only'
     },
     'overlap': {
       'desc': 'Description',
@@ -229,6 +255,7 @@ const en = {
       'mostdata': 'There are at most 16 data !'
     },
     'pattern': {
+      'property': 'Property',
       'desc': 'Description',
       'offset': 'Offset',
       'cycle': 'Cycle',
@@ -246,7 +273,16 @@ const en = {
       'modeOption7': 'Omit Call',
       'coordphaseOption1': 'Coordination Phase',
       'coordphaseOption2': 'Key Phase',
-      'coordphaseOption4': 'Fixed Phase'
+      'coordphaseOption4': 'Fixed Phase',
+      'forbiddenstage': 'Forbidden Stage',
+      'screenstage': 'Screen Stage',
+      'coordinatestage': 'Coordinate Stage ',
+      'delaystart': 'Delay Start ',
+      'advanceend': 'Advance End',
+      'stageConfig': 'Stage Config',
+      'ringConfig': 'Ring Config',
+      'stage': 'Stage',
+      'agentidError': '获取设备ID失败!'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
@@ -269,7 +305,8 @@ const en = {
       'ControlOption6': 'Free Control',
       'ControlOption9': 'Self-Adaption',
       'ControlOption10': 'Nocable Control',
-      'ControlOption12': 'Pedestrian Crossing Control'
+      'ControlOption12': 'Pedestrian Crossing Control',
+      'ControlOption19': 'Inductive Pedestrian Crossing Control'
     },
     'date': {
       'desc': 'Description',
@@ -328,6 +365,7 @@ const en = {
     },
     'channellock': {
       'deleteAlltip': 'Delete All channellock',
+      'deleteOnetip': 'Are you sure you want to delete this channel lock?',
       'starttime': 'Start Time',
       'endtime': 'End Time',
       'transitiongreenflashtime': 'Green Flashing Time',
@@ -365,7 +403,19 @@ const en = {
       'erraticCounts': 'Erratic Counts(one/min）',
       'operation': 'Operation',
       'deletetip': 'Delete This Detector',
-      'mostdata': 'There are at most 8 data !'
+      'mostdata': 'There are at most 8 data !',
+      'type': 'Detector Type',
+      'typeOptionundefined': '',
+      'typeOption': 'typeOption',
+      'typeOption0': 'Coil',
+      'typeOption1': 'Radar',
+      'typeOption2': 'Video',
+      'region': 'Detector Area',
+      'regionOption': 'regionOption',
+      'regionOptionundefined': '',
+      'regionOption0': 'Default',
+      'regionOption1': 'Waiting Area',
+      'regionOption2': 'Cross Street Area'
     },
     'deviceinfo': {
       'deviceinfo': 'Device Info:',
@@ -391,7 +441,28 @@ const en = {
       'slavecascadeoffset': 'Slave Cascade Offset:',
       'deviceinfostyle': 'margin-left: 100px; top: 10px;',
       'deviceparamstyle': 'margin-left: 170px; top: 10px;',
-      'deviceselflearningstyle': 'margin-left: 100px; top: 15px;'
+      'deviceselflearningstyle': 'margin-left: 100px; top: 15px;',
+      'faultdetect': 'Fault Detect',
+      'closegreenandredon': 'Close Green And Red On: ',
+      'closenoredon': 'Close No Red On: ',
+      'detectgapgreenandredon': 'Detect Gap Green And Red On（0.1s）: ',
+      'detectgapnoredon': 'Detect Gap No Red On（0.1s）: ',
+      'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
+      'startOrderParams': 'Start Order Params ',
+      'netcardInfo': 'Netcard Info: '
+    },
+    'singleoptim': {
+      'deletetip': 'Sure to delete ？',
+      'selfControlParams': 'Self Control Params',
+      'lossTimeOfGreenBeginning': 'LossTime Of Green Beginning(second)',
+      'lossTimeOfYellowEnding': 'LossTime Of Yellow Ending(second)',
+      'saturationFlow': 'Saturation Flow(vehidle/hour)',
+      'cycleAdjustmentFactor': 'Cycle Adjustment Factor',
+      'selfLearningModeOnOrOff': 'Self Learning Mode',
+      'staticWeight': 'Static Weight',
+      'phaseStaticFactor': 'Phase Static Factor',
+      'createPatternFirst': 'Please create pattern first',
+      'gratterThanOne': 'The sum must less than one '
     },
     'controlpanel': {
       'controlmode': 'Control Mode',
@@ -477,7 +548,8 @@ const en = {
       'remote1': 'Restart',
       'remote2': 'Authorize',
       'remote3': 'Custom',
-      'test': 'Test'
+      'test': 'Test',
+      'realTimeChannel': 'Real time channel'
     },
     'optimize': {
       'strategy': 'Optimization strategy',

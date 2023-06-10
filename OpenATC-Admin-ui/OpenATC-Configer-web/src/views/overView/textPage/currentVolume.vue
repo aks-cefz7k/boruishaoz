@@ -24,7 +24,6 @@
               :data="tableData"
               size="mini"
               max-height="300"
-              stripe
               style="width: 100%">
               <el-table-column
                 align="center"

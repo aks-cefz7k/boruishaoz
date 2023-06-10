@@ -18,7 +18,6 @@
           class="deviceTable"
           :data="devicesTableData"
           row-key="id"
-          stripe
           max-height="600"
           highlight-current-row
           @current-change="handleCurrentChange"
