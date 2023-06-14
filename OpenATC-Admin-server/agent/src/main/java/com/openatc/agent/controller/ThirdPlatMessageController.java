@@ -1,26 +1,21 @@
 package com.openatc.agent.controller;
 
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> dev-backend
+
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
-<<<<<<< HEAD
+
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 
-=======
-//import com.openatc.comm.data.ThirdPlatMessageData;
-import com.openatc.core.model.RESTRet;
-import com.openatc.core.util.RESTRetUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
->>>>>>> dev-backend
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -51,10 +46,6 @@ public class ThirdPlatMessageController {
     private String protocolType = "scp";
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> dev-backend
     @PostMapping(value = "/centeradapter/custom")
     public RESTRet postDevsMessage(@RequestBody JsonObject jsonObject) throws SocketException, ParseException, UnsupportedEncodingException {
 
@@ -81,7 +72,3 @@ public class ThirdPlatMessageController {
 
 
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> dev-backend

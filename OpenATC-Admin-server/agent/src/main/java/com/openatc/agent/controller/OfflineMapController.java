@@ -16,13 +16,11 @@ import java.io.InputStream;
 @RequestMapping(value = "/xyz")
 public class OfflineMapController {
 
-<<<<<<< HEAD
-    //String dataPath = "C:\\MapDownload\\OSM";
-    String dataPath = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
-=======
-    String dataPath = "C:\\MapDownload\\OSM";
+
     //String dataPath = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
->>>>>>> dev-backend
+
+    String dataPath = "C:\\MapDownload\\OSM";
+
 
     @RequestMapping(value = "/{name}/{level}/{col}/{rowExtention:.+}", method = RequestMethod.GET)
     public void xyz(@PathVariable String name, @PathVariable String level, @PathVariable String col, @PathVariable String rowExtention, HttpServletResponse response) {
