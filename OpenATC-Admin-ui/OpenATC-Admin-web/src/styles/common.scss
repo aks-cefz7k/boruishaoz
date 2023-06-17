@@ -311,6 +311,13 @@
       z-index: 904;
       background-color: $--color-white;
     }
+    .icon-choose {
+      color: $--color-text-secondary;
+      margin: -25px 0;
+    }
+    .el-icon-location {
+      color: $--color-primary;
+    }
 }
 // 设备管理页面样式
 .openatc-device {

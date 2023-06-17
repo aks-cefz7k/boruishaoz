@@ -65,6 +65,12 @@
           >
           </el-input>
         </el-form-item>
+        <el-form-item>
+          <div class="icon-choose" @click="onChooseLocationClick">
+            <i class="el-icon-location"></i>
+            {{this.$t('openatc.gis.clickToChooseLocationInfo') }}
+          </div>
+        </el-form-item>
         <el-form-item
           :label="$t('openatc.usermanager.organization')"
           prop="organization"
@@ -175,15 +181,9 @@ export default {
     closeFormDialog () {
       this.resetForm('device')
     },
-    onUpdateClick (dev, isSelectLocation = false) {
-      this.dialogFormVisible = !this.dialogFormVisible
-      if (!dev) {
-        // 新增置空
-        this.deviceInfo = JSON.parse(JSON.stringify(this.tempDevice))
-        return
-      }
-      // 编辑
-      const device = JSON.parse(JSON.stringify(dev))
+    onUpdateClick (row, isSelectLocation = false) {
+      this.dialogFormVisible = true
+      let device = row
       let lng = device.lng ? device.lng : 0
       let lat = device.lat ? device.lat : 0
       if (!isSelectLocation) {
@@ -201,9 +201,9 @@ export default {
       }
     },
     resetForm (formData) {
-      // 表单重置
       this.dialogFormVisible = false
-      this.$refs[formData].resetFields()
+      // 表单重置
+      // this.$refs[formData].resetFields()
     },
     relateOrganization (orgPath) {
       let chooseOrganization = this.$refs.chooseOrganization
@@ -213,6 +213,10 @@ export default {
       let temp = Object.assign({}, this.deviceInfo)
       temp.code = path
       this.deviceInfo = temp
+    },
+    onChooseLocationClick () {
+      this.dialogFormVisible = false
+      this.$parent.onLocationClick(this.deviceInfo)
     }
   }
 }

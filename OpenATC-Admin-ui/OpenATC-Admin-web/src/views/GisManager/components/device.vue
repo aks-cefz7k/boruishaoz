@@ -66,9 +66,6 @@
               <el-button type="text" @click="handleEdit(scope.row)">{{
                 $t("openatc.common.edit")
               }}</el-button>
-              <el-button type="text" @click="onLocationClick(scope.row)">{{
-                $t("openatc.button.location")
-              }}</el-button>
               <el-button type="text" @click="onDetailClick(scope.row)">{{
                 $t("openatc.common.detail")
               }}</el-button>
@@ -138,9 +135,14 @@ export default {
       }
     },
     handleEdit (row) {
-      let dev = row
+      this.curDevice = row
       let updateChild = this.$refs.updateChild
-      updateChild.onUpdateClick(dev)
+      updateChild.onUpdateClick(row)
+    },
+    setNewLocation (lngLat) {
+      this.curDevice.lng = lngLat.lng
+      this.curDevice.lat = lngLat.lat
+      this.handleEdit(this.curDevice)
     },
     onLocationClick (row) {
       this.$emit('setDeviceLocation', row)

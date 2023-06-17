@@ -314,7 +314,8 @@ const zh = {
       'notAllowedToEdit': '执勤中的路线，不允许编辑!'
     },
     'gis': {
-      'chooseLocationInfo': '请点击地图选择位置 !'
+      'chooseLocationInfo': '请点击地图选择位置 !',
+      'clickToChooseLocationInfo': '点击图标去地图上选择位置 !'
     }
   }
 }

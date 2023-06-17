@@ -110,67 +110,6 @@ export default {
       _this.map = map// data上需要挂载
       window.map = map
       _this.getAllAdevice()
-      // var markers = []
-      // // 系统默认的marker,有一个蓝色图标
-      // //   var marker1 = L.marker([39.550339, 116.115129])
-      // //   // 自定义的circleMarker
-      // //   var marker2 = L.circleMarker([39.550339, 116.126129], {
-      // //     stroke: true,
-      // //     color: '#aaaaaa',
-      // //     weight: 1,
-      // //     opacity: 1,
-      // //     fillColor: '#00e400',
-      // //     fillOpacity: 1,
-      // //     radius: 10
-      // //   })
-      // //   // 用html的div来创建icon，但是有缺陷
-      // //   var icon3 = L.divIcon({
-      // //     html: '<div style=\'width: 15px;height:15px;border-radius: 50%;background-color:#00e400 ;\'></div>',
-      // //     iconAnchor: [1, 1]})
-      // //   var marker3 = L.marker([39.550339, 116.197129], { icon: icon3 })
-      // //   // 用html的div的样式来创建marker的icon，注意需要加className属性，否则会出现marker1的问题
-      // //   var icon4 = L.divIcon({
-      // //     html: '<div style=\'width:24px;height:24px;border-radius:4px;background-color:#00e400 ;\'></div>',
-      // //     className: 'ss' })
-      // //   var marker4 = L.marker([39.550339, 116.148129], { icon: icon4 })
-      // var myIcon = L.icon({
-      //   iconUrl: require('../../assets/gis/deviceonline.png'),
-      //   title: '在线设备'
-      //   // iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-      //   // iconSize: [10, 40]
-      //   // iconAnchor: [22, 94],
-      //   // popupAnchor: [-3, -76],
-      //   // shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-      //   // shadowUrl: '../../assets/images/deviceonline.png',
-      //   // shadowSize: [68, 95],
-      //   // shadowAnchor: [22, 94]
-      // })
-      // // L.marker([39.550339, 116.114129], {icon: myIcon}).addTo(map)
-      // var marker5 = L.marker([31.23636, 121.53413], { icon: myIcon })
-      // var onlineIcon = L.icon({
-      //   iconUrl: require('../../assets/gis/devicenotonline.png'),
-      //   title: '离线设备',
-      //   bubblingMouseEvents: true
-      // })
-      // var marker6 = L.marker([31.25636, 121.53413], { icon: onlineIcon })
-      // var faultIcon = L.icon({
-      //   iconUrl: require('../../assets/gis/devicefault.png'),
-      //   title: '故障设备',
-      //   bubblingMouseEvents: true
-      // })
-      // var marker7 = L.marker([31.27636, 121.53413], { icon: faultIcon })
-      // //   markers.push(marker1)
-      // //   markers.push(marker2)
-      // //   markers.push(marker3)
-      // //   markers.push(marker4)
-      // markers.push(marker5)
-      // markers.push(marker6)
-      // markers.push(marker7)
-      // this.citiesLayer = L.layerGroup(markers)
-      // console.log(this.citiesLayer)
-      // map.addLayer(this.citiesLayer)
-      // this.addMessage()
-      // // map.removeLayer(citiesLayer)
     },
     addMapEvent () {
       let _this = this
@@ -265,18 +204,32 @@ export default {
       this.map.addLayer(this.citiesLayer)
     },
     addMessage () {
+      let _this = this
       this.citiesLayer.eachLayer(function (layer) {
         let options = layer.options.icon.options
         let devData = options.alt
-        let date = devData.lastTime
-        if (devData.state === 'UP') {
-          let status = '在线'
-          layer.bindPopup('<div style=\'font-size: 14px;\'><span style=\'color: #005bac ;\'>' + status + '</span>&nbsp&nbsp<span style=\'color: #666666;\'>' + date + '</span></div>')
-        } else if (devData.state === 'DOWN') {
-          let status = '离线'
-          layer.bindPopup('<div style=\'font-size: 14px;\'><span style=\'color: #676767 ;\'>' + status + '</span>&nbsp&nbsp<span style=\'color: #666666;\'>' + date + '</span></div>')
-        }
+        let content = _this.getPopupContent(devData)
+        layer.bindPopup(content)
       })
+    },
+    getPopupContent (devData) {
+      let agentid = devData.agentid
+      let date = devData.lastTime
+      let status = '在线'
+      if (devData.state === 'UP') {
+        status = '在线'
+      } else if (devData.state === 'DOWN') {
+        status = '离线'
+      } else {
+        status = '故障'
+      }
+      let content =
+      `
+        <div>设备${agentid}</div>
+        <div>${status}</div>
+        <div>${date}</div>
+      `
+      return content
     },
     handleAnimation (anim) {
       this.anim = anim
@@ -298,19 +251,15 @@ export default {
         this.anim.playSegments([17, 25], true)
       }
     },
-    setDeviceLocation (dev) {
+    setDeviceLocation () {
       this.editMode = true
-      this.deviceInfo = dev
       let _this = this
       _this.map.on('click', function (e) {
         _this.lngLat.lng = _this.computedLngLat(String(e.latlng.lng))
         _this.lngLat.lat = _this.computedLngLat(String(e.latlng.lat))
-        _this.deviceInfo.lng = _this.lngLat.lng
-        _this.deviceInfo.lat = _this.lngLat.lat
-        let dev = _this.deviceInfo
-        let updateChild = _this.$refs.device.$refs.updateChild
-        updateChild.onUpdateClick(dev, true)
-        // L.popup().setLatLng(e.latlng).setContent(e.latlng.toString()).openOn(this.map)
+        let device = _this.$refs.device
+        device.setNewLocation(_this.lngLat)
+        _this.map.off('click')
       })
     },
     getGisConfig () {

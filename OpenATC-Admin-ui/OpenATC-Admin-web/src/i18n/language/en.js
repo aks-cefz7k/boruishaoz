@@ -314,7 +314,8 @@ const en = {
       'notAllowedToEdit': 'Not allowed to edit processing data !'
     },
     'gis': {
-      'chooseLocationInfo': 'Click the map to choose a location !'
+      'chooseLocationInfo': 'Click the map to choose a location !',
+      'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!'
     }
   }
 }
