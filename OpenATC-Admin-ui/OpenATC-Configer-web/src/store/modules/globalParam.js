@@ -95,7 +95,8 @@ const Global = {
     curBodyWidth: 1920,
     curBodyHeight: 1080,
     FuncSort: 'allFunc',
-    hideMenu: false
+    hideMenu: false,
+    graphicMode: false // 为true时，切换到图形界面模式，只显示路口图部分
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -136,6 +137,9 @@ const Global = {
     },
     SET_MENU_VISIBLE: (state, isHideMenu) => {
       state.hideMenu = isHideMenu
+    },
+    SET_GRAPHIC_MODE: (state, isSwitchGraphicMode) => {
+      state.graphicMode = isSwitchGraphicMode
     }
   },
   actions: {
@@ -180,6 +184,9 @@ const Global = {
     },
     SetMenuVisible ({ commit }, isHideMenu) {
       commit('SET_MENU_VISIBLE', isHideMenu)
+    },
+    SetGraphicMode ({ commit }, isSwitchGraphicMode) {
+      commit('SET_GRAPHIC_MODE', isSwitchGraphicMode)
     }
   }
 }
