@@ -102,6 +102,7 @@ const zh = {
       'operation': '操作',
       'longitude': '经度',
       'latitude': '纬度',
+      'layerLevel': '层级',
       'adddevice': '新增设备',
       'editdevice': '编辑设备',
       'enterIp': '请输入IP',

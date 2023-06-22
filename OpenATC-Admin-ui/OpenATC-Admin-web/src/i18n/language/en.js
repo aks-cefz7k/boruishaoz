@@ -102,6 +102,7 @@ const en = {
       'operation': 'Operation',
       'longitude': 'Longitude',
       'latitude': 'Latitude',
+      'layerLevel': '层级',
       'adddevice': 'Add Device',
       'editdevice': 'Edit Device',
       'enterIp': 'Please enter IP',
