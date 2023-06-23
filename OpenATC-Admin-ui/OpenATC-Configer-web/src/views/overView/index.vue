@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="container-main">
-    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!hideMenu">
+    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!hideMenu && !graphicMode">
       <div slot="icon" class="sloat-icon">
         <i class="iconfont icon-tuxingjiemian" style="color: #ffffff;" v-show="!isShowGui"></i>
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
@@ -118,7 +118,7 @@
         </div>
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
-        <div class="tuxing-left">
+        <div class="tuxing-left" :class="{'changeWidth': graphicMode}">
           <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
             'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
             'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
@@ -140,7 +140,7 @@
                           :barrierList="barrierList"></PatternStatus>
           </div>
         </div>
-        <div class="tuxing-right">
+        <div class="tuxing-right" v-if="!graphicMode">
           <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
           <div class="cross-module" style="height: 130px;">
             <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
@@ -378,7 +378,8 @@ export default {
       curBodyWidth: state => state.globalParam.curBodyWidth,
       curBodyHeight: state => state.globalParam.curBodyHeight,
       FuncSort: state => state.globalParam.FuncSort,
-      hideMenu: state => state.globalParam.hideMenu
+      hideMenu: state => state.globalParam.hideMenu,
+      graphicMode: state => state.globalParam.graphicMode
     })
   },
   watch: {
@@ -1020,6 +1021,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.changeWidth {
+  width: 98% !important;
+}
 // .container-main {
 //   width: 100%;
 //   height: 880px;
