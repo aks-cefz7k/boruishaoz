@@ -105,6 +105,7 @@ const zh = {
       'protocoltype': '协议类型',
       'signalID': '信号机ID',
       'signalIP': '信号机IP',
+      'platform': '平台类型',
       'online': '在线',
       'offline': '离线',
       'onlineing': '联机中...',
@@ -184,7 +185,7 @@ const zh = {
       'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！'
     },
     'phase': {
-      'desc': '描述',
+      'desc': '车道方向',
       'peddesc': '行人方向',
       'controltype': '控制类型',
       'mingreen': '最小绿',
@@ -280,6 +281,7 @@ const zh = {
       'stageConfig': '阶段配置',
       'ringConfig': '环配置',
       'stage': '阶段',
+      'phase': '相位',
       'agentidError': '获取设备ID失败!'
     },
     'plan': {

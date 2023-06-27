@@ -105,6 +105,7 @@ const en = {
       'protocoltype': 'Protocol',
       'signalID': 'Signal ID',
       'signalIP': 'Signal IP',
+      'platform': 'platform',
       'online': 'Online',
       'offline': 'Offline',
       'onlineing': 'Offline...',
@@ -184,7 +185,7 @@ const en = {
       'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!'
     },
     'phase': {
-      'desc': 'Description',
+      'desc': 'LaneDirection',
       'peddesc': 'PedestrianDirection',
       'controltype': 'ControlType',
       'mingreen': 'MinGreen',
@@ -282,6 +283,7 @@ const en = {
       'stageConfig': 'Stage Config',
       'ringConfig': 'Ring Config',
       'stage': 'Stage',
+      'phase': 'Phase',
       'agentidError': '获取设备ID失败!'
     },
     'plan': {

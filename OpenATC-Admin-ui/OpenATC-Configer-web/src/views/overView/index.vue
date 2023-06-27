@@ -124,10 +124,12 @@
             'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
             'smallCrossImg': curBodyWidth <= 960 && curBodyWidth > 720,
             'miniCrossImg': curBodyWidth <= 720 && curBodyWidth > 650,
-            'superminiCrossImg': curBodyWidth <= 650 }">
+            'superminiCrossImg': curBodyWidth <= 650 && curBodyWidth > 350,
+            'minimumCrossImg': curBodyWidth <= 350,
+            'changePaddingBottom': graphicMode }">
             <CrossDiagram v-if="reset" :crossStatusData="crossStatusData" :agentId="agentId" :devStatus="devStatus"/>
           </div>
-          <div class="pattern-status">
+          <div class="pattern-status" v-if="!graphicMode">
             <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
@@ -142,9 +144,9 @@
         </div>
         <div class="tuxing-right" v-if="!graphicMode">
           <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
-          <div class="cross-module" style="height: 130px;">
-            <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
-            <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+          <div class="cross-module">
+            <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
+            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
               <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
               <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
               <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
@@ -153,8 +155,9 @@
             <!-- <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
             <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
             <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
+            <div style="margin-top: 5px; margin-left: 5px;" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
           </div>
-          <div style="margin-top: 140px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
+          <div style="margin-top: 170px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
             <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
             <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
           </div>
@@ -277,6 +280,8 @@ export default {
       mode: '2',
       loading: {},
       agentId: '0',
+      agentName: '--',
+      platform: undefined,
       isShowGui: true,
       modelList: [{
         id: 1,
@@ -910,7 +915,10 @@ export default {
         this.port = devParams.port
         this.protocol = res.data.data.protocol
         this.agentId = res.data.data.agentid
-
+        if (res.data.data.name) {
+          this.agentName = res.data.data.name
+        }
+        this.platform = res.data.data.platform
         // setIframdevid(this.agentId)
         this.resetCrossDiagram()
         this.registerMessage() // 注册消息
@@ -994,12 +1002,15 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        let platform = res.data.data.platform
+        if (res.data.data.name) {
+          this.agentName = res.data.data.name
+        }
+        this.platform = res.data.data.platform
         let func = 'allFunc'
-        if (platform === 'OpenATC') {
+        if (this.platform === 'OpenATC') {
           func = 'allFunc'
         }
-        if (platform === 'SCATS' || platform === 'HUATONG') {
+        if (this.platform === 'SCATS' || this.platform === 'HUATONG') {
           func = 'basicFunc'
         }
         this.$store.dispatch('SaveFunctionLevel', func)
@@ -1021,9 +1032,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.changeWidth {
-  width: 98% !important;
-}
 // .container-main {
 //   width: 100%;
 //   height: 880px;
