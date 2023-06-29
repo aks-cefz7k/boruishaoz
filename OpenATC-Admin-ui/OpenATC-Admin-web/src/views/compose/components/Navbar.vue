@@ -62,9 +62,10 @@
                 <div class="laber-value">{{userInfo.email}}</div>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item divided command="a">{{$t('openatc.main.changepass')}}</el-dropdown-item>
-            <el-dropdown-item command="b">{{$t('openatc.main.about')}}</el-dropdown-item>
-            <el-dropdown-item command="c">{{$t('openatc.main.signout')}}</el-dropdown-item>
+            <el-dropdown-item divided command="changepass">{{$t('openatc.main.changepass')}}</el-dropdown-item>
+            <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
+            <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
+            <el-dropdown-item command="signout">{{$t('openatc.main.signout')}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -83,6 +84,7 @@
   </el-menu>
   <modifypasswd ref="modifypasswdChild"></modifypasswd>
   <versioninfo ref="versioninfoChild"></versioninfo>
+  <SystemSettings ref="settinngChild"></SystemSettings>
   <!-- <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
     <div>123456</div>
 </el-dialog> -->
@@ -92,12 +94,13 @@
 import router from '@/router'
 import modifypasswd from './modifyPasswd'
 import versioninfo from './versionInfo'
+import SystemSettings from './SystemSettings'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
 import { setLanguage } from '@/utils/auth'
 export default {
   name: 'navbar',
-  components: { modifypasswd, versioninfo },
+  components: { modifypasswd, versioninfo, SystemSettings },
   data () {
     return {
       activeIndex: '',
@@ -162,11 +165,13 @@ export default {
     },
     handleCommand (command) {
       switch (command) {
-        case 'a': this.modifyPasswd()
+        case 'changepass': this.modifyPasswd()
           break
-        case 'b': this.showVersion()
+        case 'about': this.showVersion()
           break
-        case 'c': this.logout()
+        case 'signout': this.logout()
+          break
+        case 'systemsettings': this.showSettings()
           break
         default: router.push({ path: '/' })
       }
@@ -183,6 +188,10 @@ export default {
     modifyPasswd () {
       let modifypasswdChild = this.$refs.modifypasswdChild
       modifypasswdChild.onPasswdClick(this.userInfo.user_name)
+    },
+    showSettings () {
+      let settinngChild = this.$refs.settinngChild
+      settinngChild.show()
     },
     setActive (path) {
       // 设置当前激活导航栏

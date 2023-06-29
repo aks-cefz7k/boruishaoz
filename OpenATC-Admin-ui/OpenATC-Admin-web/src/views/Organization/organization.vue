@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div>
     <div class="filter-container">
       <el-form>
         <el-form-item>
@@ -215,7 +215,7 @@ export default {
  @import "../../styles/theme/element-variables.scss";
 .atc-table {
   position: absolute;
-  top: 150px;
+  top: 130px;
   left: 20px;
   right: 20px;
   border: solid 1px $--border-color-lighter;

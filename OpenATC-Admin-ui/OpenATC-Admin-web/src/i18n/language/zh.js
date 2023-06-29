@@ -66,6 +66,7 @@ const zh = {
       'telno': '联系电话',
       'email': '电子邮箱',
       'changepass': '修改密码',
+      'systemsettings': '系统设置',
       'about': '关于',
       'signout': '退出',
       'language': '语言'
@@ -316,6 +317,16 @@ const zh = {
     'gis': {
       'chooseLocationInfo': '请点击地图选择位置 !',
       'clickToChooseLocationInfo': '点击图标去地图上选择位置 !'
+    },
+    'systemsettings': {
+      'id': 'ID',
+      'module': '模块',
+      'name': '名称',
+      'content': '内容',
+      'operate': '操作',
+      'addconfig': '配置新增',
+      'updateconfig': '配置编辑',
+      'deleteconfig': '是否删除此配置？'
     }
   }
 }

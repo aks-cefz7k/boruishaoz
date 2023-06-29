@@ -66,6 +66,7 @@ const en = {
       'telno': 'Telno',
       'email': 'Email',
       'changepass': 'Changepass',
+      'systemsettings': 'System Settings',
       'about': 'About',
       'signout': 'Sign Out',
       'language': 'Language'
@@ -316,6 +317,16 @@ const en = {
     'gis': {
       'chooseLocationInfo': 'Click the map to choose a location !',
       'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!'
+    },
+    'systemsettings': {
+      'id': 'ID',
+      'module': 'Module',
+      'name': 'Name',
+      'content': 'Content',
+      'operate': 'Operate',
+      'addconfig': 'Add Config',
+      'updateconfig': 'Update Config',
+      'deleteconfig': 'Do you want to delete this config?'
     }
   }
 }
