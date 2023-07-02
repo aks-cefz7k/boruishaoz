@@ -15,12 +15,20 @@
       <transition name="slide">
         <div class="showLayout"  v-show="toggleShow">
             <div class="tabsconatiner">
-              <device
-                :devicesData="devList"
-                ref="device"
-                @setCurrent="setCurrentMarker"
-                @setDeviceLocation="setDeviceLocation"
-              ></device>
+              <div class="tabBox">
+                <el-tabs :tab-position="tabPosition" style="height: 200px;">
+                  <el-tab-pane label="设备状态">
+                    <device
+                      :devicesData="devList"
+                      ref="device"
+                      @setCurrent="setCurrentMarker"
+                      @setDeviceLocation="setDeviceLocation">
+                    </device>
+                  </el-tab-pane>
+                  <el-tab-pane label="特勤路线">特勤路线</el-tab-pane>
+                  <el-tab-pane label="协调路线">协调路线</el-tab-pane>
+                </el-tabs>
+              </div>
             </div>
         </div>
       </transition>
@@ -57,6 +65,7 @@ export default {
   },
   data () {
     return {
+      tabPosition: 'right',
       citiesLayer: null,
       devList: [],
       lngLat: {
@@ -116,7 +125,6 @@ export default {
       _this.map.on('mousemove', function (e) {
         _this.lngLat.lng = _this.computedLngLat(String(e.latlng.lat))
         _this.lngLat.lat = _this.computedLngLat(String(e.latlng.lng))
-        // L.popup().setLatLng(e.latlng).setContent(e.latlng.toString()).openOn(map)
       })
       var boxMap = document.getElementById('map')
       L.DomEvent.on(boxMap, 'wheel', function (e) {
@@ -322,15 +330,6 @@ export default {
   color: rgba(254, 254, 254, 0.7);
 }
 
-/* .showLayout {
-  position: fixed;
-  top: 70px;
-  right: 38px;
-  width: 442px;
-  height: auto;
-  z-index: 904;
-  background-color: #ffffff;
-} */
 .tabsconatiner {
   margin: 10px;
   position: relative;
@@ -398,5 +397,22 @@ export default {
   position: absolute;
   text-align: center;
   margin-bottom: 40px;
+}
+</style>
+
+<style lang="scss">
+.tabBox{
+  margin-top: 20px;
+  .el-tabs--right{
+    height: auto !important;
+    .el-tabs__item{
+      width: 40px;
+      line-height: 24px;
+      height: auto;
+      word-wrap: break-word;
+      white-space: pre-line;
+      margin-bottom: 20px;
+    }
+  }
 }
 </style>
