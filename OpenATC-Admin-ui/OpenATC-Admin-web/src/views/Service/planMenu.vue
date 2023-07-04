@@ -302,11 +302,11 @@ export default {
 </script>
 
 <style lang="scss">
- @import "../../styles/theme/element-variables.scss";
-.btnGroup .operate .el-dropdown-link {
-  color: $--color-primary;
-  cursor: pointer;
-}
+//  @import "../../styles/theme/element-variables.scss";
+// .btnGroup .operate .el-dropdown-link {
+//   color: $--color-primary;
+//   cursor: pointer;
+// }
 </style>
 
 <style lang="scss" scoped>
