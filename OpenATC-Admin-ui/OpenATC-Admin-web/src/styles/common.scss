@@ -411,6 +411,12 @@
       //     background-color: #66b1ff;
       //     border-color: #66b1ff;
       // }
+      .btnGroup button:hover {
+          color: $--button-primary-font-color;
+          background-color: $--color-primary;
+          border-color: $--color-primary;
+          opacity: 0.8;
+      }
       .btnGroup > button {
         float: left;
         position: relative;
