@@ -10,11 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<<<<<<< HEAD
-  <div>
-=======
   <div class="app-container openatc-organization">
->>>>>>> ec6442aa2695f1d4519613c306b72677e3341322
     <div class="filter-container">
       <el-form>
         <el-form-item>
