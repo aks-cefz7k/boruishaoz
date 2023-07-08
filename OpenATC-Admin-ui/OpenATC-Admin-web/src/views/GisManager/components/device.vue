@@ -188,17 +188,15 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-// .devicePanel {
-//   border: solid 1px $--border-color-lighter;
-// }
-// .addbtn {
-//   padding: 0;
-//   width: 12.5%;
-//   height: 40px;
-//   text-align: center;
-//   float: right;
-//   line-height: 40px;
-//   min-width: 66px;
-//   margin-bottom: 7px;
-// }
+
+ // 滚动条的宽度
+  /deep/ .el-table__body-wrapper::-webkit-scrollbar {
+    width: 6px; // 横向滚动条
+    height: 6px; // 纵向滚动条 必写
+  }
+  // 滚动条的滑块
+  /deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 3px;
+  }
 </style>

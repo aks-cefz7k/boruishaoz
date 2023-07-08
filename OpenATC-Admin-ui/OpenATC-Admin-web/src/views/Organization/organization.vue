@@ -10,7 +10,11 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
+<<<<<<< HEAD
   <div>
+=======
+  <div class="app-container openatc-organization">
+>>>>>>> ec6442aa2695f1d4519613c306b72677e3341322
     <div class="filter-container">
       <el-form>
         <el-form-item>
@@ -212,18 +216,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
- @import "../../styles/theme/element-variables.scss";
-.atc-table {
-  position: absolute;
-  top: 130px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px $--border-color-lighter;
-  overflow: auto;
-}
-.filter-container {
-  float: right;
-  margin-top: 20px;
-  margin-right: 20px;
-}
+// .atc-table {
+//   position: absolute;
+//   top: 130px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+// }
+// .filter-container {
+//   float: right;
+//   margin-top: 20px;
+//   margin-right: 20px;
+// }
 </style>
