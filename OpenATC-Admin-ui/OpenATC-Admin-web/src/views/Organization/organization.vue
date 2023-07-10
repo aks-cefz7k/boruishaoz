@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container openatc-organization">
+  <div class="openatc-organization">
     <div class="filter-container">
       <el-form>
         <el-form-item>
