@@ -152,6 +152,13 @@ export default {
       this.isShow = false
     }
   },
+  mounted () {
+    if (getTheme() === 'dark') {
+      require('../../../styles/theme/element-variables.scss')
+    } else {
+      require('../../../styles/theme/element-light.scss')
+    }
+  },
   methods: {
     handleJump (key) {
       router.push({
@@ -235,50 +242,52 @@ export default {
     switchToChinese () {
       this.$i18n.locale = 'zh'
       setLanguage(this.$i18n.locale)
+      // setTheme('dark')
       location.reload()
     },
     switchToEngLish () {
       this.$i18n.locale = 'en'
       setLanguage(this.$i18n.locale)
+      // setTheme('light')
       location.reload()
     }
   }
 }
 </script>
 <style lang="scss">
- @import "../../../styles/theme/element-variables.scss";
+ //  @import "../../../styles/theme/element-variables.scss";
 .el-menu-demo {
   padding: 0 18px;
 }
-.openatc-main {
-  float:left;
-  height: 50px;
-  line-height: 50px;
-  font-family: MicrosoftYaHei;
-  font-size: 22px;
-  font-weight: bold;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: $--color-text-primary;
-}
-.openatc-line {
-  float:left;
-  margin-left: 20px;
-  margin-top: 19px;
-  width: 1px;
-  height: 14px;
-  background-color: $--color-text-placeholder;
-}
-.openatc-menu {
-  float:left;
-  font-family: MicrosoftYaHei;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-primary;
-}
+// .openatc-main {
+//   float:left;
+//   height: 50px;
+//   line-height: 50px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 22px;
+//   font-weight: bold;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: $--color-text-primary;
+// }
+// .openatc-line {
+//   float:left;
+//   margin-left: 20px;
+//   margin-top: 19px;
+//   width: 1px;
+//   height: 14px;
+//   background-color: $--color-text-placeholder;
+// }
+// .openatc-menu {
+//   float:left;
+//   font-family: MicrosoftYaHei;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-primary;
+// }
 .openatc-operate {
   cursor: pointer;
   float: right;
@@ -288,91 +297,91 @@ export default {
     float: left;
   }
 }
-.el-menu-demo  {
-.el-dropdown-menu {
-  width: 228px;
-  .el-dropdown-menu__item {
-    color: $--color-text-regular;
-  }
-  .label {
-    font-size: 12px;
-    color: $--color-text-secondary;
-    margin-bottom: 12px;
-  }
-  .content {
-    font-size: 12px;
-    color: $--color-text-primary;
-  }
-  .user {
-    font-family: MicrosoftYaHei;
-    padding: 0 24px;
-    .name {
-      font-size: 20px;
-      color: $--color-primary;
-      margin-bottom: 14px;
-      margin-top: 13px;
-    }
-  }
-  .message {
-    font-family: MicrosoftYaHei;
-    padding: 16px 24px 0 24px;
-    margin-bottom: 10px;
-    .email {
-      margin-top: 22px;
-    }
-    .content {
-      font-size: 14px;
-    }
-  }
-}
-}
-.user-name {
-  width: 58px;
-  height: 21px;
-  margin-top: 10px;
-  font-family: MicrosoftYaHei;
-  font-size: 20px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-primary;
-}
-.organization {
-  margin-top: 8px;
-}
-.real-name {
-  margin-top: 14px;
-  margin-bottom: 10px;
-}
-.laber-name {
-  width: 48px;
-  height: 13px;
-  font-family: MicrosoftYaHei;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-text-secondary;
-}
-.laber-value {
-  margin-top: 5px;
-  font-family: MicrosoftYaHei;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-text-primary;
-}
-.switch-language {
-    cursor: pointer;
-    margin-top: 17px;
-    margin-right: 30px;
-    float: right;
-  }
-.el-menu--horizontal {
-    border-bottom: solid 1px $--border-color-base!important;
-}
+// .el-menu-demo  {
+// .el-dropdown-menu {
+//   width: 228px;
+//   .el-dropdown-menu__item {
+//     color: $--color-text-regular;
+//   }
+//   .label {
+//     font-size: 12px;
+//     color: $--color-text-secondary;
+//     margin-bottom: 12px;
+//   }
+//   .content {
+//     font-size: 12px;
+//     color: $--color-text-primary;
+//   }
+//   .user {
+//     font-family: MicrosoftYaHei;
+//     padding: 0 24px;
+//     .name {
+//       font-size: 20px;
+//       color: $--color-primary;
+//       margin-bottom: 14px;
+//       margin-top: 13px;
+//     }
+//   }
+//   .message {
+//     font-family: MicrosoftYaHei;
+//     padding: 16px 24px 0 24px;
+//     margin-bottom: 10px;
+//     .email {
+//       margin-top: 22px;
+//     }
+//     .content {
+//       font-size: 14px;
+//     }
+//   }
+// }
+// }
+// .user-name {
+//   width: 58px;
+//   height: 21px;
+//   margin-top: 10px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 20px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-primary;
+// }
+// .organization {
+//   margin-top: 8px;
+// }
+// .real-name {
+//   margin-top: 14px;
+//   margin-bottom: 10px;
+// }
+// .laber-name {
+//   width: 48px;
+//   height: 13px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 12px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-text-secondary;
+// }
+// .laber-value {
+//   margin-top: 5px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-text-primary;
+// }
+// .switch-language {
+//     cursor: pointer;
+//     margin-top: 17px;
+//     margin-right: 30px;
+//     float: right;
+//   }
+// .el-menu--horizontal {
+//     border-bottom: solid 1px $--border-color-base!important;
+// }
 </style>

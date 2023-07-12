@@ -32,12 +32,13 @@ import './assets/icon/iconfont.css'
 import 'leaflet/dist/leaflet.css'
 
 import Edgebase from 'edgebase-front'
-import './styles/index.scss'
+// import './styles/index.scss'
 
 import router from './router'
 import i18n from './i18n'
 import VueKonva from 'vue-konva'
 import './mock'
+import { getTheme } from '@/utils/auth'
 
 window.dev = process.env.NODE_ENV
 
@@ -52,6 +53,12 @@ Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)
 Vue.use(VueKonva)
 Vue.config.productionTip = false
+
+if (getTheme() === 'dark') {
+  require('./styles/dark/index.scss')
+} else {
+  require('./styles/light/index.scss')
+}
 
 // mian test hg
 new Vue({
