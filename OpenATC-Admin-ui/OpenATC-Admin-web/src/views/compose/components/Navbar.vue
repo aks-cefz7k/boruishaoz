@@ -97,7 +97,7 @@ import versioninfo from './versionInfo'
 import SystemSettings from './SystemSettings'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
-import { setLanguage } from '@/utils/auth'
+import { setLanguage, getTheme } from '@/utils/auth'
 export default {
   name: 'navbar',
   components: { modifypasswd, versioninfo, SystemSettings },
