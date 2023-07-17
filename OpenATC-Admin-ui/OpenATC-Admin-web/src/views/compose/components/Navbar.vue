@@ -154,9 +154,9 @@ export default {
   },
   mounted () {
     if (getTheme() === 'dark') {
-      require('../../../styles/theme/element-variables.scss')
+      require('../../../styles/dark/theme/element-dark.scss')
     } else {
-      require('../../../styles/theme/element-light.scss')
+      require('../../../styles/light/theme/element-light.scss')
     }
   },
   methods: {
