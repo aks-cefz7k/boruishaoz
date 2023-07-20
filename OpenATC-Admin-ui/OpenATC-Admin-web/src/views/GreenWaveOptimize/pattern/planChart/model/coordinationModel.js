@@ -16,6 +16,7 @@
  * @Modified By:
  */
 import echarts from 'echarts'
+import { getTheme } from '@/utils/auth'
 export default class CoordinationModel {
   constructor () {
     this.rourte = {}
@@ -97,7 +98,7 @@ export default class CoordinationModel {
         show: true,
         position: 'bottom',
         offset: [0, 5],
-        color: '#666666',
+        color: getTheme() === 'light' ? '#666666' : '#B9BABF',
         formatter: function (val) {
           return _vue.getXName(val.data[0])
         }
@@ -621,6 +622,9 @@ export default class CoordinationModel {
             interval: 0
             // rotate: 30
           },
+          nameTextStyle: {
+            color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+          },
           min: -50,
           max: this.getMaxX() + 50
         }
@@ -637,7 +641,18 @@ export default class CoordinationModel {
             show: false
           },
           splitLine: {
-            show: true
+            show: true,
+            lineStyle: {
+              color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
+            }
+          },
+          nameTextStyle: {
+            color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+          },
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
           },
           min: 0,
           max: this.getMaxY() * 3
