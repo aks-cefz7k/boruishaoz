@@ -449,7 +449,8 @@ const zh = {
       'detectgapnoredon': '无红灯亮起检测时间间隔(0.1秒):',
       'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
       'startOrderParams': '启动时序参数 ',
-      'netcardInfo': '网卡信息: '
+      'netcardInfo': '网卡信息: ',
+      'stepType': '步进类型'
     },
     'singleoptim': {
       'deletetip': '确认删除？',
