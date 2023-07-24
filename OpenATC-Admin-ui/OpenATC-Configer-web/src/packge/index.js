@@ -45,7 +45,7 @@ import usermgr from '../views/user/index'
 import dailyRecord from '../views/dailyRecord/index'
 import statistics from '../views/statistics/index'
 import dashboard from '../views/dashboard/index'
-import '@/styles/common.scss'
+// import '@/styles/common.scss'
 import '@/styles/index.scss'
 import '@/assets/icon/iconfont.css'
 
