@@ -12,38 +12,44 @@
 <template>
   <div class="openatc-gis">
     <div id="map"></div>
-      <transition name="slide">
-        <div class="showLayout"  v-show="toggleShow">
-            <div class="tabsconatiner">
-              <div class="tabBox">
-                <el-tabs :tab-position="tabPosition" style="height: 200px;">
-                  <el-tab-pane label="设备状态">
-                    <device ref="device">
-                    </device>
-                  </el-tab-pane>
-                  <el-tab-pane label="特勤路线">特勤路线</el-tab-pane>
-                  <el-tab-pane label="协调路线">协调路线</el-tab-pane>
-                </el-tabs>
-              </div>
-            </div>
+    <transition name="slide">
+      <div class="showLayout"  v-show="toggleShow">
+        <div class="tabsconatiner">
+          <device v-if="bizType === 'deviceState'" ref="device"> </device>
         </div>
-      </transition>
-      <div
-        :class="[toggleshowisActive ? 'toggle_show' : 'active']"
-        @click="handletoggleshow"
-      >
-        <lottie
-          :options="defaultOptions"
-          :width="30"
-          :height="30"
-          v-on:animCreated="handleAnimation"
-        />
       </div>
-    <div class="map-position">
-      {{this.$t('openatc.devicemanager.longitude') }} {{ lngLat.lng }}
-      {{this.$t('openatc.devicemanager.latitude') }}  {{ lngLat.lat }}
-      {{this.$t('openatc.devicemanager.layerLevel') }} {{ zoom }}
+    </transition>
+    <div
+      :class="[toggleshowisActive ? 'toggle_show' : 'active']"
+      @click="handletoggleshow"
+    >
+      <lottie
+        :options="defaultOptions"
+        :width="30"
+        :height="30"
+        v-on:animCreated="handleAnimation"
+      />
     </div>
+    <div class="header">
+      <el-radio-group v-model="bizType">
+        <el-radio label="deviceState">设备状态</el-radio>
+        <el-radio label="dutyRoute">特勤路线</el-radio>
+        <el-radio label="coordinateRoute">协调路线</el-radio>
+      </el-radio-group>
+    </div>
+    <div class="footer-left">
+      <div>
+        <el-radio-group v-model="mapType">
+          <el-radio-button label="2D">地图</el-radio-button>
+          <el-radio-button label="3D">卫星</el-radio-button>
+        </el-radio-group>
+      </div>
+    </div>
+      <div class="footer-right">
+        {{this.$t('openatc.devicemanager.longitude') }} {{ lngLat.lng }}
+        {{this.$t('openatc.devicemanager.latitude') }}  {{ lngLat.lat }}
+        {{this.$t('openatc.devicemanager.layerLevel') }} {{ zoom }}
+      </div>
   </div>
 </template>
 <script>
@@ -60,8 +66,8 @@ export default {
   },
   data () {
     return {
-      tabPosition: 'right',
-      citiesLayer: null,
+      bizType: 'deviceState',
+      mapType: '2D',
       devList: [],
       lngLat: {
         lng: '0.00000000',
@@ -133,12 +139,6 @@ export default {
       }
       return text
     },
-    hideLayer () {
-      this.map.removeLayer(this.citiesLayer)
-    },
-    showLayer () {
-      this.map.addLayer(this.citiesLayer)
-    },
     handleAnimation (anim) {
       this.anim = anim
       this.anim.addEventListener('loopComplete', () => {
@@ -203,105 +203,11 @@ export default {
   width: 100%;
   height: 94.5vh;
 }
-.map-position {
-  width: 18rem;
-  height: 1.1rem;
-  line-height: 1.1rem;
-  background-color: #30353b;
-  border-radius: 0.1rem;
-  text-align: center;
-  user-select: none;
-  position: absolute;
-  bottom: 1rem;
-  right: 3.3rem;
-  z-index: 903;
-  font-size: 0.6rem;
-  color: rgba(254, 254, 254, 0.7);
-}
-
 .tabsconatiner {
   margin: 10px;
   position: relative;
   width: 100% - 20px;
   height: 100% - 20px;
   opacity: 0.95;
-}
-.addbtn {
-  position: absolute;
-  right: 5px;
-  /* z-index: 99; */
-  top: 7px;
-  width: auto;
-  height: auto;
-}
-.addicon {
-  color: #42daff;
-  font-size: 26px;
-}
-.addicon:hover {
-  color: rgb(32, 163, 195);
-}
-.toggle_show {
-  position: absolute;
-  cursor: pointer;
-  right: 17px;
-  top: 70px;
-  z-index:100001;
-}
-.active {
-  position: absolute;
-  cursor: pointer;
-  right: 17px;
-  top: 70px;
-  z-index:100001;
-}
-.init-toggle {
-  position: absolute;
-  cursor: pointer;
-  right: 440px;
-  top: 0px;
-}
-.slide-enter-active {
-  transition: all 0.5s linear;
-}
-.slide-leave-active {
-  transition: all 0.5s linear;
-}
-.slide-enter {
-  transform: translateX(100%);
-  opacity: 0;
-}
-.slide-leave-to {
-  transform: translateX(100%);
-  opacity: 0;
-}
-</style>
-<style>
-.leaflet-popup-content-wrapper {
-  padding: 1px;
-  text-align: left;
-  border-radius: 6px;
-}
-.leaflet-popup {
-  position: absolute;
-  text-align: center;
-  margin-bottom: 40px;
-}
-</style>
-
-<style lang="scss">
-.tabBox{
-  margin-top: 20px;
-  .el-tabs--right{
-    height: auto !important;
-    .el-tabs__item{
-      width: 40px;
-      line-height: 24px;
-      height: auto;
-      word-wrap: break-word;
-      white-space: pre-line;
-      margin-bottom: 20px;
-    }
-  }
 }
 </style>
