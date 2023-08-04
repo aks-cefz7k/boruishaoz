@@ -69,7 +69,10 @@ const zh = {
       'systemsettings': '系统设置',
       'about': '关于',
       'signout': '退出',
-      'language': '语言'
+      'language': '语言',
+      'skin': '皮肤',
+      'dark': '暗色',
+      'light': '亮色'
     },
     'home': {
       'devicestatus': '设备状态',

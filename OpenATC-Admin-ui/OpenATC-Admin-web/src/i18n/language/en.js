@@ -69,7 +69,10 @@ const en = {
       'systemsettings': 'System Settings',
       'about': 'About',
       'signout': 'Sign Out',
-      'language': 'Language'
+      'language': 'Language',
+      'skin': 'Skin',
+      'dark': 'Dark',
+      'light': 'Light'
     },
     'home': {
       'devicestatus': 'Device Status',
