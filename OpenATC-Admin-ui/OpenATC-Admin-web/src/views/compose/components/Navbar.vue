@@ -70,6 +70,19 @@
         </el-dropdown>
       </div>
     </div>
+
+    <div class="switch-language">
+        <el-dropdown trigger="click" @command="switchTheme">
+          <span class="el-dropdown-link">
+            {{$t('openatc.main.skin')}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="dark">{{$t('openatc.main.dark')}}</el-dropdown-item>
+            <el-dropdown-item command="light">{{$t('openatc.main.light')}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+
     <div class="switch-language">
         <el-dropdown trigger="click" @command="switchLanguage">
           <span class="el-dropdown-link">
@@ -97,7 +110,7 @@ import versioninfo from './versionInfo'
 import SystemSettings from './SystemSettings'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
-import { setLanguage, getTheme } from '@/utils/auth'
+import { setLanguage, getTheme, setTheme } from '@/utils/auth'
 export default {
   name: 'navbar',
   components: { modifypasswd, versioninfo, SystemSettings },
@@ -239,16 +252,35 @@ export default {
           break
       }
     },
+    switchTheme (command) {
+      switch (command) {
+        case 'dark':
+          this.switchToDark()
+          break
+        case 'light':
+          this.switchToLight()
+          break
+        default:
+          console.log(command)
+          break
+      }
+    },
+    switchToDark () {
+      setTheme('dark')
+      location.reload()
+    },
+    switchToLight () {
+      setTheme('light')
+      location.reload()
+    },
     switchToChinese () {
       this.$i18n.locale = 'zh'
       setLanguage(this.$i18n.locale)
-      // setTheme('dark')
       location.reload()
     },
     switchToEngLish () {
       this.$i18n.locale = 'en'
       setLanguage(this.$i18n.locale)
-      // setTheme('light')
       location.reload()
     }
   }

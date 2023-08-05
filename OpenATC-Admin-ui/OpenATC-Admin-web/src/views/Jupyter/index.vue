@@ -34,13 +34,6 @@ export default {
       this.isShow = value
     },
     getJupyterUrl () {
-      // SystemconfigApi.AddSystemconfig({
-      //   'module': 'jupyter',
-      //   'key': 'url',
-      //   'value': 'http://192.168.14.168:8888/tree'
-      // }).then(data => {
-      //   debugger
-      // })
       // 从系统配置中获取jupyter notebook 跳转url
       return new Promise((resolve, reject) => {
         SystemconfigApi.GetSystemconfigByModule('jupyter').then((data) => {
