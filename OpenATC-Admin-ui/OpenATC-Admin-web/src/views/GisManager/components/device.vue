@@ -81,38 +81,125 @@
 </template>
 <script>
 // import router from '@/router'
+import L from 'leaflet'
+import { GetAllDevice } from '@/api/device'
 import Update from './update'
 import EdgeModal from './edgeModal'
 export default {
   name: 'device',
   components: { Update, EdgeModal },
   props: {
-    devicesData: {
-      type: Array
-    }
+    // devicesData: {
+    //   type: Array
+    // }
   },
   watch: {
-    devicesData: {
-      handler: function (val) {
-        this.devicesTableData = JSON.parse(JSON.stringify(val))
-      },
-      deep: true
-    }
   },
   data () {
     return {
-      chooseDevice: null,
+      map: null,
+      lngLat: {
+        lng: '0.00000000',
+        lat: '0.00000000'
+      },
       editDevicevisible: false,
       devicesTableData: [],
       messageboxVisible: false,
       listLoading: false, // 表格数据加载等待动画
-      allDevs: [], // 所有设备
       curDevice: undefined, // 当前所选设备信息
       loading: false,
-      innerDrawer: false // 里面的drawer
+      deviceFaultIcon: require('@/assets/gis/devicefault.png'),
+      deviceOnlineIcon: require('@/assets/gis/deviceonline.png'),
+      deviceNotOnlineIcon: require('@/assets/gis/devicenotonline.png'),
+      deviceLayer: null,
+      devList: []
     }
   },
+  mounted () {
+    let _this = this
+    this.$nextTick(() => {
+      _this.getAllAdevice()
+    })
+  },
+  destroyed () {
+  },
   methods: {
+    getAllAdevice () {
+      GetAllDevice().then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return
+        }
+        this.devList = res.data.data
+        this.devicesTableData = this.devList
+        console.log(window.map)
+        this.map = window.map
+        this.handleMapDevice(this.devList)
+      })
+    },
+    handleMapDevice (devs) {
+      if (this.deviceLayer) {
+        this.deviceLayer.clearLayers()
+      }
+      let markers = []
+      for (let dev of devs) {
+        if (dev.geometry === undefined) continue
+        let coordinates = dev.geometry.coordinates
+        let devPoint = [coordinates[1], coordinates[0]]
+        let iconUrl = this.deviceFaultIcon
+        if (dev.state === 'UP') {
+          iconUrl = this.deviceOnlineIcon
+        } else if (dev.state === 'DOWN') {
+          iconUrl = this.deviceNotOnlineIcon
+        }
+        let notOnlineIcon = L.icon({
+          iconUrl: iconUrl,
+          iconSize: [24, 27],
+          title: dev.state,
+          alt: dev,
+          iconAnchor: [12, 27]
+        })
+        let marker = L.marker(devPoint, { icon: notOnlineIcon }).on('click', this.onMarkerClick)
+        // 添加marker来设置点击事件
+        markers.push(marker)
+      }
+      this.deviceLayer = L.layerGroup(markers)
+      this.map.addLayer(this.deviceLayer)
+      this.addMessage()
+    },
+    onMarkerClick (e) {
+      let dev = e.target.options.icon.options.alt
+      let row = this.devList.filter(item => item.id === dev.id)[0]
+      this.setCurrent(row)
+    },
+    addMessage () {
+      let _this = this
+      this.deviceLayer.eachLayer(function (layer) {
+        let options = layer.options.icon.options
+        let devData = options.alt
+        let content = _this.getPopupContent(devData)
+        layer.bindPopup(content)
+      })
+    },
+    getPopupContent (devData) {
+      let agentid = devData.agentid
+      let date = devData.lastTime
+      let status = '在线'
+      if (devData.state === 'UP') {
+        status = '在线'
+      } else if (devData.state === 'DOWN') {
+        status = '离线'
+      } else {
+        status = '故障'
+      }
+      let content =
+      `
+        <div>设备${agentid}</div>
+        <div>${status}</div>
+        <div>${date}</div>
+      `
+      return content
+    },
     getTag (row) {
       if (row.state === 'DOWN') {
         return {
@@ -142,11 +229,22 @@ export default {
     setNewLocation (lngLat) {
       this.curDevice.lng = lngLat.lng
       this.curDevice.lat = lngLat.lat
-      this.handleEdit(this.curDevice)
+      let updateChild = this.$refs.updateChild
+      updateChild.onUpdateClick(this.curDevice, true)
     },
     onLocationClick (row) {
-      this.$emit('setDeviceLocation', row)
+      this.setDeviceLocation(row)
       this.$message.info(this.$t('openatc.gis.chooseLocationInfo'))
+    },
+    setDeviceLocation () {
+      this.editMode = true
+      let _this = this
+      _this.map.on('click', function (e) {
+        _this.lngLat.lng = String(e.latlng.lng)
+        _this.lngLat.lat = String(e.latlng.lat)
+        _this.setNewLocation(_this.lngLat)
+        _this.map.off('click')
+      })
     },
     onDetailClick (row) {
       const dev = row
@@ -154,7 +252,14 @@ export default {
       edgeModalChild.openSingleEdge(dev)
     },
     getList () {
-      this.$parent.getAllAdevice()
+      this.hideLayer(this.deviceLayer)
+      this.getAllAdevice()
+    },
+    hideLayer () {
+      this.map.removeLayer(this.deviceLayer)
+    },
+    showLayer () {
+      this.map.addLayer(this.deviceLayer)
     },
     setCurrent (row) {
       this.$refs.singleTable.setCurrentRow(row)
@@ -162,8 +267,24 @@ export default {
     handleCurrentChange (val) {
       this.currentRow = val
     },
+    setCurrentMarker (dev) {
+      let marker
+      let layers = this.deviceLayer._layers
+      for (var x in layers) {
+        let layer = layers[x]
+        if (layer.options.icon.options.alt.id === dev.id) {
+          marker = layer
+          break
+        }
+      }
+      if (marker) {
+        let _latlng = marker._latlng
+        this.map.flyTo(_latlng)
+        marker.openPopup(_latlng)
+      }
+    },
     onRowClick (row) {
-      this.$emit('setCurrent', row)
+      this.setCurrentMarker(row)
     }
   }
 }

@@ -18,11 +18,7 @@
               <div class="tabBox">
                 <el-tabs :tab-position="tabPosition" style="height: 200px;">
                   <el-tab-pane label="设备状态">
-                    <device
-                      :devicesData="devList"
-                      ref="device"
-                      @setCurrent="setCurrentMarker"
-                      @setDeviceLocation="setDeviceLocation">
+                    <device ref="device">
                     </device>
                   </el-tab-pane>
                   <el-tab-pane label="特勤路线">特勤路线</el-tab-pane>
@@ -53,7 +49,6 @@
 <script>
 
 import L from 'leaflet'
-import { GetAllDevice } from '@/api/device'
 import { SystemconfigApi } from '@/api/systemconfig.js'
 import lottie from 'vue-lottie'
 import device from './components/device'
@@ -79,15 +74,11 @@ export default {
       gis: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       toggleShow: true,
       toggleshowisActive: true,
-      defaultOptions: { animationData: Anim, loop: false, autoplay: false },
-      deviceInfo: null
+      defaultOptions: { animationData: Anim, loop: false, autoplay: false }
     }
   },
   mounted () {
     this.init()
-    // this.getGisConfig()
-    // this.initMap()
-    // this.addMapEvent()
   },
   methods: {
     async init () {
@@ -118,7 +109,7 @@ export default {
       // ).addTo(map)
       _this.map = map// data上需要挂载
       window.map = map
-      _this.getAllAdevice()
+      // _this.getAllAdevice()
     },
     addMapEvent () {
       let _this = this
@@ -142,102 +133,11 @@ export default {
       }
       return text
     },
-    getAllAdevice () {
-      this.map.off('click')
-      GetAllDevice().then(res => {
-        if (!res.data.success) {
-          this.$message.error(res.data.message)
-          return
-        }
-        this.devList = res.data.data
-        this.handleMapDevice(this.devList)
-      })
-    },
-    handleMapDevice (devs) {
-      if (this.citiesLayer) {
-        this.citiesLayer.clearLayers()
-      }
-      let markers = []
-      for (let dev of devs) {
-        if (dev.geometry === undefined) continue
-        let coordinates = dev.geometry.coordinates
-        let devPoint = [coordinates[1], coordinates[0]]
-        let iconUrl = require('../../assets/gis/devicefault.png')
-        if (dev.state === 'UP') {
-          iconUrl = require('../../assets/gis/deviceonline.png')
-        } else if (dev.state === 'DOWN') {
-          iconUrl = require('../../assets/gis/devicenotonline.png')
-        }
-        let notOnlineIcon = L.icon({
-          iconUrl: iconUrl,
-          iconSize: [24, 27],
-          title: dev.state,
-          alt: dev,
-          iconAnchor: [12, 27]
-        })
-        let marker = L.marker(devPoint, { icon: notOnlineIcon }).on('click', this.onMarkerClick)
-        // 添加marker来设置点击事件
-        markers.push(marker)
-      }
-      this.citiesLayer = L.layerGroup(markers)
-      this.map.addLayer(this.citiesLayer)
-      this.addMessage()
-    },
-    setCurrentMarker (dev) {
-      let marker
-      let layers = this.citiesLayer._layers
-      for (var x in layers) {
-        let layer = layers[x]
-        if (layer.options.icon.options.alt.id === dev.id) {
-          marker = layer
-          break
-        }
-      }
-      if (marker) {
-        let _latlng = marker._latlng
-        this.map.flyTo(_latlng)
-        marker.openPopup(_latlng)
-      }
-    },
-    onMarkerClick (e) {
-      let dev = e.target.options.icon.options.alt
-      let devicesTableData = this.$refs.device.devicesTableData
-      let row = devicesTableData.filter(item => item.id === dev.id)[0]
-      this.$refs.device.setCurrent(row)
-    },
     hideLayer () {
       this.map.removeLayer(this.citiesLayer)
     },
     showLayer () {
       this.map.addLayer(this.citiesLayer)
-    },
-    addMessage () {
-      let _this = this
-      this.citiesLayer.eachLayer(function (layer) {
-        let options = layer.options.icon.options
-        let devData = options.alt
-        let content = _this.getPopupContent(devData)
-        layer.bindPopup(content)
-      })
-    },
-    getPopupContent (devData) {
-      let agentid = devData.agentid
-      let date = devData.lastTime
-      let status = '在线'
-      if (devData.state === 'UP') {
-        status = '在线'
-      } else if (devData.state === 'DOWN') {
-        status = '离线'
-      } else {
-        status = '故障'
-      }
-      let content =
-      `
-        <div>设备${agentid}</div>
-        <div>${status}</div>
-        <div>${date}</div>
-      `
-      return content
     },
     handleAnimation (anim) {
       this.anim = anim
@@ -258,17 +158,6 @@ export default {
         this.onSpeedChange(0.2)
         this.anim.playSegments([17, 25], true)
       }
-    },
-    setDeviceLocation () {
-      this.editMode = true
-      let _this = this
-      _this.map.on('click', function (e) {
-        _this.lngLat.lng = _this.computedLngLat(String(e.latlng.lng))
-        _this.lngLat.lat = _this.computedLngLat(String(e.latlng.lat))
-        let device = _this.$refs.device
-        device.setNewLocation(_this.lngLat)
-        _this.map.off('click')
-      })
     },
     getGisConfig () {
       return new Promise((resolve, reject) => {

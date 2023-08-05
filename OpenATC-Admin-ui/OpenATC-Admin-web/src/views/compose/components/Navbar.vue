@@ -70,6 +70,19 @@
         </el-dropdown>
       </div>
     </div>
+
+    <div class="switch-language">
+        <el-dropdown trigger="click" @command="switchTheme">
+          <span class="el-dropdown-link">
+            {{$t('openatc.main.skin')}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="dark">{{$t('openatc.main.dark')}}</el-dropdown-item>
+            <el-dropdown-item command="light">{{$t('openatc.main.light')}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+
     <div class="switch-language">
         <el-dropdown trigger="click" @command="switchLanguage">
           <span class="el-dropdown-link">
@@ -97,7 +110,7 @@ import versioninfo from './versionInfo'
 import SystemSettings from './SystemSettings'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
-import { setLanguage } from '@/utils/auth'
+import { setLanguage, getTheme, setTheme } from '@/utils/auth'
 export default {
   name: 'navbar',
   components: { modifypasswd, versioninfo, SystemSettings },
@@ -150,6 +163,13 @@ export default {
     this.setActive()
     if (this.fromKstpPath.indexOf(this.devicePath) !== -1) {
       this.isShow = false
+    }
+  },
+  mounted () {
+    if (getTheme() === 'dark') {
+      require('../../../styles/dark/theme/element-dark.scss')
+    } else {
+      require('../../../styles/light/theme/element-light.scss')
     }
   },
   methods: {
@@ -232,6 +252,27 @@ export default {
           break
       }
     },
+    switchTheme (command) {
+      switch (command) {
+        case 'dark':
+          this.switchToDark()
+          break
+        case 'light':
+          this.switchToLight()
+          break
+        default:
+          console.log(command)
+          break
+      }
+    },
+    switchToDark () {
+      setTheme('dark')
+      location.reload()
+    },
+    switchToLight () {
+      setTheme('light')
+      location.reload()
+    },
     switchToChinese () {
       this.$i18n.locale = 'zh'
       setLanguage(this.$i18n.locale)
@@ -246,39 +287,39 @@ export default {
 }
 </script>
 <style lang="scss">
- @import "../../../styles/theme/element-variables.scss";
+ //  @import "../../../styles/theme/element-variables.scss";
 .el-menu-demo {
   padding: 0 18px;
 }
-.openatc-main {
-  float:left;
-  height: 50px;
-  line-height: 50px;
-  font-family: MicrosoftYaHei;
-  font-size: 22px;
-  font-weight: bold;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: $--color-text-primary;
-}
-.openatc-line {
-  float:left;
-  margin-left: 20px;
-  margin-top: 19px;
-  width: 1px;
-  height: 14px;
-  background-color: $--color-text-placeholder;
-}
-.openatc-menu {
-  float:left;
-  font-family: MicrosoftYaHei;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-primary;
-}
+// .openatc-main {
+//   float:left;
+//   height: 50px;
+//   line-height: 50px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 22px;
+//   font-weight: bold;
+//   font-stretch: normal;
+//   letter-spacing: 0px;
+//   color: $--color-text-primary;
+// }
+// .openatc-line {
+//   float:left;
+//   margin-left: 20px;
+//   margin-top: 19px;
+//   width: 1px;
+//   height: 14px;
+//   background-color: $--color-text-placeholder;
+// }
+// .openatc-menu {
+//   float:left;
+//   font-family: MicrosoftYaHei;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-primary;
+// }
 .openatc-operate {
   cursor: pointer;
   float: right;
@@ -288,91 +329,91 @@ export default {
     float: left;
   }
 }
-.el-menu-demo  {
-.el-dropdown-menu {
-  width: 228px;
-  .el-dropdown-menu__item {
-    color: $--color-text-regular;
-  }
-  .label {
-    font-size: 12px;
-    color: $--color-text-secondary;
-    margin-bottom: 12px;
-  }
-  .content {
-    font-size: 12px;
-    color: $--color-text-primary;
-  }
-  .user {
-    font-family: MicrosoftYaHei;
-    padding: 0 24px;
-    .name {
-      font-size: 20px;
-      color: $--color-primary;
-      margin-bottom: 14px;
-      margin-top: 13px;
-    }
-  }
-  .message {
-    font-family: MicrosoftYaHei;
-    padding: 16px 24px 0 24px;
-    margin-bottom: 10px;
-    .email {
-      margin-top: 22px;
-    }
-    .content {
-      font-size: 14px;
-    }
-  }
-}
-}
-.user-name {
-  width: 58px;
-  height: 21px;
-  margin-top: 10px;
-  font-family: MicrosoftYaHei;
-  font-size: 20px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-primary;
-}
-.organization {
-  margin-top: 8px;
-}
-.real-name {
-  margin-top: 14px;
-  margin-bottom: 10px;
-}
-.laber-name {
-  width: 48px;
-  height: 13px;
-  font-family: MicrosoftYaHei;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-text-secondary;
-}
-.laber-value {
-  margin-top: 5px;
-  font-family: MicrosoftYaHei;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-text-primary;
-}
-.switch-language {
-    cursor: pointer;
-    margin-top: 17px;
-    margin-right: 30px;
-    float: right;
-  }
-.el-menu--horizontal {
-    border-bottom: solid 1px $--border-color-base!important;
-}
+// .el-menu-demo  {
+// .el-dropdown-menu {
+//   width: 228px;
+//   .el-dropdown-menu__item {
+//     color: $--color-text-regular;
+//   }
+//   .label {
+//     font-size: 12px;
+//     color: $--color-text-secondary;
+//     margin-bottom: 12px;
+//   }
+//   .content {
+//     font-size: 12px;
+//     color: $--color-text-primary;
+//   }
+//   .user {
+//     font-family: MicrosoftYaHei;
+//     padding: 0 24px;
+//     .name {
+//       font-size: 20px;
+//       color: $--color-primary;
+//       margin-bottom: 14px;
+//       margin-top: 13px;
+//     }
+//   }
+//   .message {
+//     font-family: MicrosoftYaHei;
+//     padding: 16px 24px 0 24px;
+//     margin-bottom: 10px;
+//     .email {
+//       margin-top: 22px;
+//     }
+//     .content {
+//       font-size: 14px;
+//     }
+//   }
+// }
+// }
+// .user-name {
+//   width: 58px;
+//   height: 21px;
+//   margin-top: 10px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 20px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-primary;
+// }
+// .organization {
+//   margin-top: 8px;
+// }
+// .real-name {
+//   margin-top: 14px;
+//   margin-bottom: 10px;
+// }
+// .laber-name {
+//   width: 48px;
+//   height: 13px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 12px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-text-secondary;
+// }
+// .laber-value {
+//   margin-top: 5px;
+//   font-family: MicrosoftYaHei;
+//   font-size: 14px;
+//   font-weight: normal;
+//   font-stretch: normal;
+//   line-height: 14px;
+//   letter-spacing: 0px;
+//   color: $--color-text-primary;
+// }
+// .switch-language {
+//     cursor: pointer;
+//     margin-top: 17px;
+//     margin-right: 30px;
+//     float: right;
+//   }
+// .el-menu--horizontal {
+//     border-bottom: solid 1px $--border-color-base!important;
+// }
 </style>

@@ -451,7 +451,8 @@ const en = {
       'detectgapnoredon': 'Detect Gap No Red On（0.1s）: ',
       'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
       'startOrderParams': 'Start Order Params ',
-      'netcardInfo': 'Netcard Info: '
+      'netcardInfo': 'Netcard Info: ',
+      'stepType': 'Step Type'
     },
     'singleoptim': {
       'deletetip': 'Sure to delete ？',

@@ -149,9 +149,11 @@ export default {
     },
     updateDevice () {
       let _vue = this
+      let lng = Number(this.deviceInfo.lng)
+      let lat = Number(this.deviceInfo.lat)
       let geometry = {
         type: 'Point',
-        coordinates: [this.deviceInfo.lng, this.deviceInfo.lat]
+        coordinates: [lng, lat]
       }
       let devInfo = this.deviceInfo
       devInfo.geometry = geometry
@@ -186,7 +188,7 @@ export default {
       let device = row
       let lng = device.lng ? device.lng : 0
       let lat = device.lat ? device.lat : 0
-      if (!isSelectLocation) {
+      if (!isSelectLocation) { // 修改时回填
         if (device.geometry !== undefined) {
           lng = device.geometry.coordinates[0]
           lat = device.geometry.coordinates[1]
