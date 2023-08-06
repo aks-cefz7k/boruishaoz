@@ -21,14 +21,12 @@
     </transition>
     <div
       :class="[toggleshowisActive ? 'toggle_show' : 'active']"
-      @click="handletoggleshow"
-    >
+      @click="handletoggleshow">
       <lottie
         :options="defaultOptions"
         :width="30"
         :height="30"
-        v-on:animCreated="handleAnimation"
-      />
+        v-on:animCreated="handleAnimation"/>
     </div>
     <div class="header">
       <el-radio-group v-model="bizType">
@@ -37,24 +35,24 @@
         <el-radio label="coordinateRoute">协调路线</el-radio>
       </el-radio-group>
     </div>
-    <div class="footer-left">
+    <!-- <div class="footer-left">
       <div>
         <el-radio-group v-model="mapType">
           <el-radio-button label="2D">地图</el-radio-button>
           <el-radio-button label="3D">卫星</el-radio-button>
         </el-radio-group>
       </div>
+    </div> -->
+    <div class="footer-right">
+      {{this.$t('openatc.devicemanager.longitude') }} {{ lngLat.lng }}
+      {{this.$t('openatc.devicemanager.latitude') }}  {{ lngLat.lat }}
+      {{this.$t('openatc.devicemanager.layerLevel') }} {{ zoom }}
     </div>
-      <div class="footer-right">
-        {{this.$t('openatc.devicemanager.longitude') }} {{ lngLat.lng }}
-        {{this.$t('openatc.devicemanager.latitude') }}  {{ lngLat.lat }}
-        {{this.$t('openatc.devicemanager.layerLevel') }} {{ zoom }}
-      </div>
   </div>
 </template>
 <script>
-
 import L from 'leaflet'
+import 'leaflet.chinatmsproviders'
 import { SystemconfigApi } from '@/api/systemconfig.js'
 import lottie from 'vue-lottie'
 import device from './components/device'
@@ -80,7 +78,8 @@ export default {
       gis: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       toggleShow: true,
       toggleshowisActive: true,
-      defaultOptions: { animationData: Anim, loop: false, autoplay: false }
+      defaultOptions: { animationData: Anim, loop: false, autoplay: false },
+      tianDiTuKey: '3bfb2112c0920226f0592fd64cd2c70d'
     }
   },
   mounted () {
@@ -94,18 +93,19 @@ export default {
     },
     initMap () {
       let _this = this
-      let map = L.map('map', {
-        minZoom: _this.minZoom,
-        maxZoom: _this.maxZoom,
-        // center: [39.550339, 116.114129],
-        center: _this.center,
-        zoom: _this.zoom,
-        zoomControl: false,
-        attributionControl: false,
-        crs: L.CRS.EPSG3857,
-        dragging: true,
-        editMode: false
-      })
+      let map = _this.loadMapType()
+      // let map = L.map('map', {
+      //   minZoom: _this.minZoom,
+      //   maxZoom: _this.maxZoom,
+      //   // center: [39.550339, 116.114129],
+      //   center: _this.center,
+      //   zoom: _this.zoom,
+      //   zoomControl: false,
+      //   attributionControl: false,
+      //   crs: L.CRS.EPSG3857,
+      //   dragging: true,
+      //   editMode: false
+      // })
       window.map = map
       L.tileLayer(
         _this.gis
@@ -115,7 +115,6 @@ export default {
       // ).addTo(map)
       _this.map = map// data上需要挂载
       window.map = map
-      // _this.getAllAdevice()
     },
     addMapEvent () {
       let _this = this
@@ -139,25 +138,51 @@ export default {
       }
       return text
     },
-    handleAnimation (anim) {
-      this.anim = anim
-      this.anim.addEventListener('loopComplete', () => {
-        console.log('当前循环下播放完成！')
+    loadMapType () {
+      let normalm = L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {
+        key: this.tianDiTuKey,
+        maxZoom: this.maxZoom,
+        minZoom: this.minZoom
       })
-    },
-    onSpeedChange (speed) {
-      this.anim.setSpeed(speed)
-    },
-    handletoggleshow () {
-      this.toggleshowisActive = !this.toggleshowisActive
-      this.toggleShow = !this.toggleShow
-      if (!this.toggleshowisActive) {
-        this.onSpeedChange(0.2)
-        this.anim.playSegments([0, 8], true)
-      } else {
-        this.onSpeedChange(0.2)
-        this.anim.playSegments([17, 25], true)
+      let normala = L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion', {
+        key: this.tianDiTuKey,
+        maxZoom: this.maxZoom,
+        minZoom: this.minZoom
+      })
+      let imgm = L.tileLayer.chinaProvider('TianDiTu.Satellite.Map', {
+        key: this.tianDiTuKey,
+        maxZoom: this.maxZoom,
+        minZoom: this.minZoom
+      })
+      let imga = L.tileLayer.chinaProvider('TianDiTu.Satellite.Annotion', {
+        key: this.tianDiTuKey,
+        maxZoom: this.maxZoom,
+        minZoom: this.minZoom
+      })
+      let normal = L.layerGroup([normalm, normala])
+      let image = L.layerGroup([imgm, imga])
+      let baseLayers = {
+        '地图': normal,
+        '影像': image
       }
+      let overlayLayers = {}
+      let map = L.map('map', {
+        layers: [normal],
+        minZoom: this.minZoom,
+        maxZoom: this.maxZoom,
+        center: this.center,
+        zoom: this.zoom,
+        zoomControl: false,
+        attributionControl: false,
+        crs: L.CRS.EPSG3857,
+        dragging: true,
+        editMode: false
+      })
+      let options = {
+        position: 'bottomleft'
+      }
+      L.control.layers(baseLayers, overlayLayers, options).addTo(map)
+      return map
     },
     getGisConfig () {
       return new Promise((resolve, reject) => {
@@ -193,6 +218,26 @@ export default {
           }
         })
       })
+    },
+    handleAnimation (anim) {
+      this.anim = anim
+      this.anim.addEventListener('loopComplete', () => {
+        console.log('当前循环下播放完成！')
+      })
+    },
+    onSpeedChange (speed) {
+      this.anim.setSpeed(speed)
+    },
+    handletoggleshow () {
+      this.toggleshowisActive = !this.toggleshowisActive
+      this.toggleShow = !this.toggleShow
+      if (!this.toggleshowisActive) {
+        this.onSpeedChange(0.2)
+        this.anim.playSegments([0, 8], true)
+      } else {
+        this.onSpeedChange(0.2)
+        this.anim.playSegments([17, 25], true)
+      }
     }
   }
 }

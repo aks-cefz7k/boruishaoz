@@ -309,9 +309,10 @@
     width: 280px;
     height: 40px;
     z-index: 904;
-    line-height: 32px;
+    line-height: 35px;
     font-size: 30px;
     background-color: #30353b;
+    text-indent: -5px;
     text-align: center;
   }
   /deep/ .el-radio__input{
