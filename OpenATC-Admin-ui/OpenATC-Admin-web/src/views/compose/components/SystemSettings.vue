@@ -37,6 +37,9 @@
             <el-form-item :label="$t('openatc.systemsettings.content')" label-width="15%">
               <el-input v-model="innerForm.value" autocomplete="off"></el-input>
             </el-form-item>
+             <el-form-item :label="$t('openatc.systemsettings.desc')" label-width="15%">
+              <el-input type="textarea" v-model="innerForm.desc" :rows="3"></el-input>
+            </el-form-item>
           </el-form>
           <div
             slot="footer"
@@ -55,26 +58,31 @@
         <el-table-column
           prop="id"
           :label="$t('openatc.systemsettings.id')"
-          min-width="18%">
+          min-width="13%">
         </el-table-column>
         <el-table-column
           prop="module"
           :label="$t('openatc.systemsettings.module')"
-          min-width="19%">
+          min-width="15%">
         </el-table-column>
         <el-table-column
           prop="key"
           :label="$t('openatc.systemsettings.name')"
-          min-width="23%">
+          min-width="19%">
         </el-table-column>
         <el-table-column
           prop="value"
           :label="$t('openatc.systemsettings.content')"
-          min-width="26%">
+          min-width="22%">
+        </el-table-column>
+        <el-table-column
+          prop="desc"
+          :label="$t('openatc.systemsettings.desc')"
+          min-width="20%">
         </el-table-column>
         <el-table-column
           :label="$t('openatc.systemsettings.operate')"
-          min-width="14%"
+          min-width="11%"
           align="center">
           <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">{{
@@ -104,7 +112,8 @@ export default {
       innerForm: {
         module: '',
         key: '',
-        value: ''
+        value: '',
+        desc: ''
       }
     }
   },
