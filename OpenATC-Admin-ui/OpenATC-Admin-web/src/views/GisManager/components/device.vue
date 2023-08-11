@@ -11,6 +11,7 @@
  **/
 <template>
   <div class="gis-devicePanel">
+    <div class="title">设备状态</div>
     <div>
       <div class="devicePanel">
         <el-table
@@ -122,6 +123,7 @@ export default {
     })
   },
   destroyed () {
+    this.hideLayer()
   },
   methods: {
     getAllAdevice () {
@@ -289,35 +291,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.devicePanel .el-table td,
-.el-table th {
-  padding: 3px 0;
-}
-.deviceTable .el-table__row {
-  cursor: pointer;
-}
-
-.el-table .warning-row {
-  background: oldlace;
-}
-
-.el-table .success-row {
-  background: #f0f9eb;
-}
-</style>
-
-<style lang="scss" scoped>
-
- // 滚动条的宽度
-  /deep/ .el-table__body-wrapper::-webkit-scrollbar {
-    width: 6px; // 横向滚动条
-    height: 6px; // 纵向滚动条 必写
-  }
-  // 滚动条的滑块
-  /deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
-    background-color: #ddd;
-    border-radius: 3px;
-  }
-</style>

@@ -223,19 +223,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" rel="stylesheet/scss">
-.dev-update .el-dialog__body {
-  padding: 30px 72px 30px 0;
-}
-.el-dialog__footer {
-  padding: 10px 72px 38px 0;
-}
-// 自定义校验规则的labal加上*号
-.dev-update .ipLabel .el-form-item__label:before,
-.dev-update .portLabel .el-form-item__label:before {
-  content: "*";
-  color: #f56c6c;
-  margin-right: 4px;
-}
-</style>
