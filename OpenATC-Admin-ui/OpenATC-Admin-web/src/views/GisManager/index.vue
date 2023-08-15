@@ -16,6 +16,7 @@
       <div class="showLayout"  v-show="toggleShow">
         <div class="tabsconatiner">
           <device v-if="bizType === 'deviceState'" ref="device"> </device>
+          <greenWaveCharts v-if="bizType === 'coordinateRoute'" ref="greenwavecharts"> </greenWaveCharts>
         </div>
       </div>
     </transition>
@@ -58,11 +59,13 @@ import L from 'leaflet'
 import { SystemconfigApi } from '@/api/systemconfig.js'
 import lottie from 'vue-lottie'
 import device from './components/device'
+import greenWaveCharts from './components/greenWaveCharts/index'
 import Anim from './toggleDataDark.json'
 export default {
   components: {
     lottie,
-    device
+    device,
+    greenWaveCharts
   },
   data () {
     return {

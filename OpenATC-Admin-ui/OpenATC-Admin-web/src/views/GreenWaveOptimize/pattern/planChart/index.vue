@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import CDTModel from './model/coordinationModel.js'
+import CDTModel from '../../../compose/components/planChart/coordinationModel.js'
 export default {
   name: 'echartsStyle',
   components: {},
