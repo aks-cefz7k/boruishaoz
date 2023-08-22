@@ -326,6 +326,7 @@ const zh = {
       'module': '模块',
       'name': '名称',
       'content': '内容',
+      'desc': '描述',
       'operate': '操作',
       'addconfig': '配置新增',
       'updateconfig': '配置编辑',

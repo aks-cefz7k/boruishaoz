@@ -326,6 +326,7 @@ const en = {
       'module': 'Module',
       'name': 'Name',
       'content': 'Content',
+      'desc': 'Desc',
       'operate': 'Operate',
       'addconfig': 'Add Config',
       'updateconfig': 'Update Config',

@@ -1002,6 +1002,12 @@ export default {
           this.$message.error(res.data.message)
           return
         }
+
+        let devParams = res.data.data.jsonparam
+        this.ip = devParams.ip
+        this.port = devParams.port
+        this.protocol = res.data.data.protocol
+        this.agentId = res.data.data.agentid
         if (res.data.data.name) {
           this.agentName = res.data.data.name
         }
