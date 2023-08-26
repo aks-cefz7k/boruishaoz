@@ -319,7 +319,8 @@ const en = {
     },
     'gis': {
       'chooseLocationInfo': 'Click the map to choose a location !',
-      'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!'
+      'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!',
+      'crossRoad': 'Cross Road'
     },
     'systemsettings': {
       'id': 'ID',

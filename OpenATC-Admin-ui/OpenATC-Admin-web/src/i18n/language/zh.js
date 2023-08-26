@@ -319,7 +319,8 @@ const zh = {
     },
     'gis': {
       'chooseLocationInfo': '请点击地图选择位置 !',
-      'clickToChooseLocationInfo': '点击图标去地图上选择位置 !'
+      'clickToChooseLocationInfo': '点击图标去地图上选择位置 !',
+      'crossRoad': '路口'
     },
     'systemsettings': {
       'id': 'ID',

@@ -16,6 +16,7 @@
       <div class="showLayout"  v-show="toggleShow">
         <div class="tabsconatiner">
           <device v-if="bizType === 'deviceState'" ref="device"> </device>
+          <dutyRoute v-if="bizType === 'dutyRoute'" ref="dutyRoute"> </dutyRoute>
           <greenWaveCharts v-if="bizType === 'coordinateRoute'" ref="greenwavecharts"> </greenWaveCharts>
         </div>
       </div>
@@ -57,12 +58,14 @@ import 'leaflet.chinatmsproviders'
 import { SystemconfigApi } from '@/api/systemconfig.js'
 import lottie from 'vue-lottie'
 import device from './components/device'
+import dutyRoute from './components/dutyRoute/dutyRoute'
 import greenWaveCharts from './components/greenWaveCharts/index'
 import Anim from './toggleDataDark.json'
 export default {
   components: {
     lottie,
     device,
+    dutyRoute,
     greenWaveCharts
   },
   data () {
@@ -179,7 +182,8 @@ export default {
         attributionControl: false,
         crs: L.CRS.EPSG3857,
         dragging: true,
-        editMode: false
+        editMode: false,
+        preferCanvas: true
       })
       let options = {
         position: 'bottomleft'
