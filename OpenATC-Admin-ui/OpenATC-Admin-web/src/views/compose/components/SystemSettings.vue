@@ -38,7 +38,7 @@
               <el-input v-model="innerForm.value" autocomplete="off"></el-input>
             </el-form-item>
              <el-form-item :label="$t('openatc.systemsettings.desc')" label-width="15%">
-              <el-input type="textarea" v-model="innerForm.desc" :rows="3"></el-input>
+              <el-input type="textarea" v-model="innerForm.description" :rows="3"></el-input>
             </el-form-item>
           </el-form>
           <div
@@ -76,7 +76,7 @@
           min-width="22%">
         </el-table-column>
         <el-table-column
-          prop="desc"
+          prop="description"
           :label="$t('openatc.systemsettings.desc')"
           min-width="20%">
         </el-table-column>
@@ -113,7 +113,7 @@ export default {
         module: '',
         key: '',
         value: '',
-        desc: ''
+        description: ''
       }
     }
   },
@@ -122,6 +122,7 @@ export default {
       this.dialogTableVisible = false
     },
     show () {
+      this.getAllConfig()
       this.dialogTableVisible = true
     },
     getAllConfig () {
@@ -137,11 +138,16 @@ export default {
     handleAdd () {
       this.isEdit = false
       this.innerVisible = true
+      this.innerForm = {
+        module: '',
+        key: '',
+        value: ''
+      }
     },
     handleEdit (row) {
       this.isEdit = true
       this.innerVisible = true
-      this.innerForm = row
+      this.innerForm = JSON.parse(JSON.stringify(row))
     },
     handleDelete (id) {
       this.$confirm(this.$t('openatc.systemsettings.deleteconfig'), this.$t('openatc.common.tipsmodaltitle'), {
@@ -216,7 +222,7 @@ export default {
     }
   },
   mounted () {
-    this.getAllConfig()
+    // this.getAllConfig()
   }
 }
 </script>
