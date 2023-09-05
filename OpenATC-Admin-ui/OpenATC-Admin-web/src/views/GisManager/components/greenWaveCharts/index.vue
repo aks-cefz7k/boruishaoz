@@ -274,6 +274,9 @@ export default {
         _this.deviceGroupLayer = ''
       }
     }
+  },
+  destroyed () {
+    this.clearLayer()
   }
 }
 </script>
