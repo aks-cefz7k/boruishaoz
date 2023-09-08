@@ -103,7 +103,6 @@ export default {
       let polylines = []
       this.deviceMarks = []
       for (let data of dataList) {
-        debugger
         if (data.devs.length === 0) continue
         let geometry = _this.getGeometry(data)
         // let routeId = data.id
