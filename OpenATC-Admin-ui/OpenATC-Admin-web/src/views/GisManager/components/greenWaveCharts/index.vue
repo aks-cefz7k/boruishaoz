@@ -12,7 +12,7 @@
 <template>
   <div class="gis-planchart" style="width: 100%; height: 600px;">
     <div class="title">{{routeName}}</div>
-    <div class="planchart-name">实时时距图</div>
+    <div class="planchart-name">{{$t('openatc.devicemanager.timeSpaceGraph')}}</div>
     <div id="echarts" style="width: 100%; height: 90%;"></div>
 </div>
 </template>
@@ -143,9 +143,9 @@ export default {
       let keyintsid = data.keyintsid === undefined ? '--' : data.keyintsid
       let html = ''
       if (status) {
-        html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #ecf5ff; border-radius: 2px; border: solid 1px #d9ecff;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #409eff;">启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">关键路口：' + keyintsid + '</div></div></div>'
+        html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #ecf5ff; border-radius: 2px; border: solid 1px #d9ecff;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #409eff;">启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
       } else {
-        html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #f4f4f5; border-radius: 2px; border: solid 1px #e9e9eb;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #909399;">未启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">关键路口：' + keyintsid + '</div></div></div>'
+        html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #f4f4f5; border-radius: 2px; border: solid 1px #e9e9eb;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #909399;">未启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
       }
       return html
     },
@@ -191,7 +191,8 @@ export default {
           } else {
             if (res.code === '4003') {
               let agentid = res.data.agentid
-              this.$message.error('设备' + agentid + '不在线!')
+              // this.$message.error('设备' + agentid + '不在线!')
+              this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
               // return
             }
             console.log(res.message)
