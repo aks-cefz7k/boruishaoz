@@ -23,6 +23,16 @@
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
+      <el-table-column class="table-column" :label="$t('edge.phase.desc')" min-width="150" align="center">
+        <template slot-scope="scope">
+          <Tankuang :list="scope.row.direction" :imgs="imgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" :showSpan="showSpan" @finsh="handlefinsh"/>
+        </template>
+      </el-table-column>
+      <el-table-column class="table-column" :label="$t('edge.phase.peddesc')" min-width="150" align="center">
+        <template slot-scope="scope">
+          <PedTankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" :showSpan="showSpan" @finsh="handlefinshped"/>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.overlap.desc')">
         <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"  @change="handleEdit(scope.$index, scope.row)"></el-input>
@@ -55,16 +65,28 @@
 <script>
 import { getPhaseDesc } from '@/utils/phasedesc.js'
 import { mapState } from 'vuex'
+import { images, pedimages } from '../phase/utils.js'
+import Tankuang from '@/components/Tankuang'
+import PedTankuang from '@/components/PedTankuang'
 export default {
   name: 'overlap',
-  components: { },
+  components: {
+    Tankuang,
+    PedTankuang
+  },
   data () {
     return {
       tableHeight: 760,
       screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false,
       includedPhasess: [],
-      id: 1
+      id: 1,
+      direction: [],
+      peddirection: [], // 行人方向
+      showBottomName: false, // 用于控制弹框里是否在底部显示文字描述。
+      lines: 4, // 弹框的行数
+      rows: 4, // 弹框的列数
+      showSpan: false
     }
   },
   filters: {
@@ -78,6 +100,24 @@ export default {
     }
   },
   computed: {
+    imgs () {
+      let arrays = []
+      images.forEach(v => {
+        let obj = Object.assign({}, v)
+        obj.name = this.$t(obj.name)
+        arrays.push(obj)
+      })
+      return arrays
+    },
+    pedimgs () {
+      let arrays = []
+      pedimages.forEach(v => {
+        let obj = Object.assign({}, v)
+        obj.name = this.$t(obj.name)
+        arrays.push(obj)
+      })
+      return arrays
+    },
     ...mapState({
       overlaplList: state => state.globalParam.tscParam.overlaplList
     })
@@ -214,6 +254,26 @@ export default {
         var value2 = b[property]
         return value1 - value2
       }
+    },
+    handlefinsh (value) {
+      let index = value.index
+      let status = value.status
+      let list = []
+      for (let i = 0; i < status.length; i++) {
+        if (!status[i]) continue
+        list.push(this.imgs[i].id)
+      }
+      this.$store.getters.tscParam.overlaplList[index].direction = list
+    },
+    handlefinshped (value) {
+      let index = value.index
+      let status = value.status
+      let list = []
+      for (let i = 0; i < status.length; i++) {
+        if (!status[i]) continue
+        list.push(this.pedimgs[i].id)
+      }
+      this.$store.getters.tscParam.overlaplList[index].peddirection = list
     }
     // checkLane (value, index) {
     //   this.$store.getters.tscParam.overlaplList[index].Lane = value.replace(/[^\d\,]/g, '')
