@@ -150,12 +150,12 @@ export default {
           this.getpedStatus()
           this.getOverlapPedStatus()
         }
-        console.log('this.phaseStatusMap 相位状态映射', this.phaseStatusMap)
-        console.log('LanePhaseData 车道相位', this.LanePhaseData)
-        console.log('sidewalkPhaseData 行人相位', this.sidewalkPhaseData)
-        console.log('overlapPhaseStatusMap 跟随相位状态映射', this.overlapPhaseStatusMap)
-        console.log('overlapLanePhaseData 车道跟随相位', this.overlapLanePhaseData)
-        console.log('this.overlapsidewalkPhaseData 行人跟随相位', this.overlapsidewalkPhaseData)
+        // console.log('this.phaseStatusMap 相位状态映射', this.phaseStatusMap)
+        // console.log('LanePhaseData 车道相位', this.LanePhaseData)
+        // console.log('sidewalkPhaseData 行人相位', this.sidewalkPhaseData)
+        // console.log('overlapPhaseStatusMap 跟随相位状态映射', this.overlapPhaseStatusMap)
+        // console.log('overlapLanePhaseData 车道跟随相位', this.overlapLanePhaseData)
+        // console.log('this.overlapsidewalkPhaseData 行人跟随相位', this.overlapsidewalkPhaseData)
         // 算法综合车道相位与车道跟随相位的状态
         this.comparePhaseStatus()
         // 算法综合行人相位与行人跟随相位的状态
