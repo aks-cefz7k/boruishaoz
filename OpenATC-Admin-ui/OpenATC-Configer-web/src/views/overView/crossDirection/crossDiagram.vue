@@ -48,11 +48,11 @@
     <div v-if="mainType === '100' || mainType === '101' || mainType === '104'">
       <!-- 人行道 -->
       <div class="sidewalk" v-if="resetflag && isLoaded">
-        <SidewalkSvg v-for="side in sidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
+        <SidewalkSvg v-for="side in compSidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
       </div>
       <!-- 车道相位 -->
       <div v-if="resetflag">
-        <PhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item"/>
+        <PhaseIconSvg v-for="item in compLanePhaseData" :key="item.key" :Data="item"/>
       </div>
     </div>
     <!-- 匝道状态 -->
@@ -192,17 +192,19 @@ export default {
       phaseControlColorMap: new Map([['黄闪', '#f7b500'], ['全红', '#ff2828'], ['关灯', '#828282'], ['默认', '#fff']]),
       sidewalkPhaseData: [], // 行人相位
       overlapsidewalkPhaseData: [], // 行人跟随相位
-      resetflag: true // 离线后，控制行人相位、车道相位reset标识
+      resetflag: true, // 离线后，控制行人相位、车道相位reset标识
+      compLanePhaseData: [], // 对比车道相位和车道跟随相位后，显示的数据
+      compSidewalkPhaseData: [] // // 对比行人相位和车道跟随相位后，显示的数据
     }
   },
   methods: {
     comparePhaseStatus () {
       // 对比车道： 跟随相位和相位的状态数据
-      this.LanePhaseData = this.compare(this.LanePhaseData, this.overlapLanePhaseData, 'type')
+      this.compLanePhaseData = this.compare(this.LanePhaseData, this.overlapLanePhaseData, 'type')
     },
     comparePedStatus () {
       // 对比人行道： 跟随相位和相位的状态数据
-      this.sidewalkPhaseData = this.compare(this.sidewalkPhaseData, this.overlapsidewalkPhaseData, 'pedtype')
+      this.compSidewalkPhaseData = this.compare(this.sidewalkPhaseData, this.overlapsidewalkPhaseData, 'pedtype')
     },
     compare (arr1, arr2, field) {
       // 对比数据算法：相同direction（peddirection），即同方向的情况下，需要综合考虑相位和跟随相位的状态。
@@ -454,16 +456,18 @@ export default {
       if (!this.crossInfo.overlaplList) return
       this.overlapLanePhaseData = []
       this.crossInfo.overlaplList.forEach((ele, i) => {
-        ele.direction.forEach((dir, index) => {
-          this.overlapLanePhaseData.push({
-            key: this.getUniqueKey(),
-            phaseid: ele.id, // 相位id，用于对应相位状态
-            id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
-            name: this.PhaseDataModel.getPhase(dir).name,
-            left: this.PhaseDataModel.getPhase(dir).x,
-            top: this.PhaseDataModel.getPhase(dir).y
+        if (ele.direction) {
+          ele.direction.forEach((dir, index) => {
+            this.overlapLanePhaseData.push({
+              key: this.getUniqueKey(),
+              phaseid: ele.id, // 相位id，用于对应相位状态
+              id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
+              name: this.PhaseDataModel.getPhase(dir).name,
+              left: this.PhaseDataModel.getPhase(dir).x,
+              top: this.PhaseDataModel.getPhase(dir).y
+            })
           })
-        })
+        }
       })
     },
     getRampPhasePos () {
