@@ -124,6 +124,9 @@ export default {
         this.statusData = JSON.parse(JSON.stringify(val))
         this.phaseStatusList = val.phase
         this.overlapStatusList = val.overlap
+        // 默认显示相位数据（包括黄闪、全红、关灯状态下，或者匝道，均不做比对跟随相位的处理）
+        this.compLanePhaseData = JSON.parse(JSON.stringify(this.LanePhaseData))
+        this.compSidewalkPhaseData = JSON.parse(JSON.stringify(this.sidewalkPhaseData))
         if (!val.phase && !this.overlapStatusList) {
           // 黄闪、全红、关灯状态下，相位字段(跟随相位字段)不存在，此处根据control字段控制车道相位颜色
           switch (val.control) {
@@ -149,6 +152,10 @@ export default {
           // 城市道路和路段行人过街才显示人行道状态
           this.getpedStatus()
           this.getOverlapPedStatus()
+          // 算法对比行人相位与行人跟随相位的状态
+          this.comparePedStatus()
+          // 算法对比车道相位与车道跟随相位的状态
+          this.comparePhaseStatus()
         }
         // console.log('this.phaseStatusMap 相位状态映射', this.phaseStatusMap)
         // console.log('LanePhaseData 车道相位', this.LanePhaseData)
@@ -156,10 +163,6 @@ export default {
         // console.log('overlapPhaseStatusMap 跟随相位状态映射', this.overlapPhaseStatusMap)
         // console.log('overlapLanePhaseData 车道跟随相位', this.overlapLanePhaseData)
         // console.log('this.overlapsidewalkPhaseData 行人跟随相位', this.overlapsidewalkPhaseData)
-        // 算法综合车道相位与车道跟随相位的状态
-        this.comparePhaseStatus()
-        // 算法综合行人相位与行人跟随相位的状态
-        this.comparePedStatus()
       },
       // 深度观察监听
       deep: true
@@ -284,15 +287,15 @@ export default {
     },
     handleDefaultStatus () {
       // 恢复默认状态
-      if (this.LanePhaseData.length) {
+      if (this.compLanePhaseData.length) {
         this.phaseCountdown = ''
         this.phaseCountdownColor = '#fff'
-        this.LanePhaseData.forEach(data => {
+        this.compLanePhaseData.forEach(data => {
           data.color = '#fff'
         })
       }
-      if (this.sidewalkPhaseData.length) {
-        this.sidewalkPhaseData.forEach(data => {
+      if (this.compSidewalkPhaseData.length) {
+        this.compSidewalkPhaseData.forEach(data => {
           data.color = '#fff'
         })
       }
@@ -313,7 +316,7 @@ export default {
           item.phaseCountdownColor = '#fff'
         })
       }
-      if (this.LanePhaseData.length) {
+      if (this.compLanePhaseData.length) {
         // if (this.mainType === '100' || this.mainType === '101') {
         //   // 车道相位设置对应颜色
         //   this.getPhasePos()
@@ -321,18 +324,18 @@ export default {
         // if (this.mainType === '103') {
         //   this.getRampPhasePos()
         // }
-        const LanePhaseData = this.LanePhaseData.map(data => ({
+        const compLanePhaseData = this.compLanePhaseData.map(data => ({
           ...data,
           color: this.phaseControlColorMap.get(Control)
         }))
-        this.LanePhaseData = JSON.parse(JSON.stringify(LanePhaseData))
+        this.compLanePhaseData = JSON.parse(JSON.stringify(compLanePhaseData))
       }
-      if (this.sidewalkPhaseData.length) {
-        const sidewalkPhaseData = this.sidewalkPhaseData.map(data => ({
+      if (this.compSidewalkPhaseData.length) {
+        const compSidewalkPhaseData = this.compSidewalkPhaseData.map(data => ({
           ...data,
           color: this.phaseControlColorMap.get(Control)
         }))
-        this.sidewalkPhaseData = JSON.parse(JSON.stringify(sidewalkPhaseData))
+        this.compSidewalkPhaseData = JSON.parse(JSON.stringify(compSidewalkPhaseData))
       }
     },
     getPhaseStatus () {
