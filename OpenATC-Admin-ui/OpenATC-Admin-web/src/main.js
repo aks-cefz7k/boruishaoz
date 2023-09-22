@@ -55,9 +55,11 @@ Vue.use(VueKonva)
 Vue.config.productionTip = false
 
 if (getTheme() === 'dark') {
-  require('./styles/dark/index.scss')
+  // require('./styles/dark/index.scss')
+  import('./styles/dark/index.scss')
 } else {
-  require('./styles/light/index.scss')
+  // require('./styles/light/index.scss')
+  import('./styles/light/index.scss')
 }
 
 // mian test hg
