@@ -11,173 +11,206 @@
  **/
 <template>
   <div class="gis-planchart" style="width: 100%; height: 600px;">
-    <div class="title">协调路线名称</div>
-    <div class="planchart-name">实时时距图</div>
+    <div class="title">{{routeName}}</div>
+    <div class="planchart-name">{{$t('openatc.devicemanager.timeSpaceGraph')}}</div>
     <div id="echarts" style="width: 100%; height: 90%;"></div>
 </div>
 </template>
 
 <script>
 import echarts from 'echarts'
+import L from 'leaflet'
 import CDTModel from '../../../compose/components/planChart/coordinationModel.js'
-// import { RouteOper } from '../../../service/RouteBaseApi.js'
+import { GetAllRoute, getAllPatternOfRoute } from '@/api/route'
+import { GetAllDevice } from '@/api/device'
 export default {
   name: 'echartsStyle',
   components: {},
-  props: {
-    greenWaveData: {
-      type: Object,
-      default: null
-    }
-  },
   data () {
     return {
+      routeOptimizeMap: new Map(),
+      allDevice: [],
+      routeName: '--',
+      routeLayer: '',
+      deviceMarks: [],
+      deviceGroupLayer: '',
+      deviceFaultIcon: require('@/assets/gis/devicefault.png'),
+      deviceOnlineIcon: require('@/assets/gis/deviceonline.png'),
+      deviceNotOnlineIcon: require('@/assets/gis/devicenotonline.png'),
       direction: '',
       routerData: {},
       isShowUpCard: false,
       isShowDownCard: false,
-      green: [],
-      routeId: -1
+      green: []
     }
   },
   mounted () {
-    var dom = document.getElementById('echarts')
-    this.myChart = echarts.init(dom)
-    this.CDTModel = new CDTModel()
     const _this = this
+    var dom = document.getElementById('echarts')
+    _this.myChart = echarts.init(dom)
+    _this.CDTModel = new CDTModel()
     window.onresize = function () {
       _this.myChart.resize()
     }
-    // _this.routeId = _this.greenWaveData.id
-    // _this.getAllPatternOfRoute()
-    _this.initPlanChart()
+    _this.$nextTick(() => {
+      _this.init()
+    })
   },
   created () {
   },
   methods: {
-    getAllPatternOfRoute () {
-    //   if (this.routeId === -1) return
-    //   RouteOper.getAllPatternOfRoute(this.routeId).then(res => {
-    //     if (!res.data.success) {
-    //       if (res.data.code === '4003') {
-    //         let agentid = res.data.data.agentid
-    //         this.$message.error('设备' + agentid + '不在线!')
-    //         return
-    //       }
-    //       this.$message.error(res.data.message)
-    //       return
-    //     }
-    //     this.patternList = res.data.data.devs
-    //     this.initPlanChart()
-    //   })
+    async init () {
+      this.map = window.map
+      await this.getAllDevice()
+      this.getAllRouteOptimize()
     },
-    initPlanChart () {
-      let greenwave = []
-      //   let routeData = this.greenWaveData
-      //   let patternList = this.patternList
-      let routeData = {
-        devs: [{
-          agentid: '10040',
-          backphasedirection: [1, 2, 3],
-          backphaseid: 1,
-          distance: 300,
-          forwardphasedirection: [9, 11, 13, 14],
-          forwardphaseid: 1,
-          id: 171,
-          patterndes: '',
-          patternid: 1,
-          routeid: 250,
-          sortid: 1,
-          width: 20
-        }, {
-          agentid: '10041',
-          backphasedirection: [1, 2, 3],
-          backphaseid: 1,
-          distance: 300,
-          forwardphasedirection: [9, 11, 13, 14],
-          forwardphaseid: 1,
-          id: 172,
-          patterndes: '',
-          patternid: 1,
-          routeid: 250,
-          sortid: 2,
-          width: 20
-        }],
-        direction: 'up',
-        downspeed: 30,
-        enable: true,
-        id: 250,
-        keyintsid: '10040',
-        name: '28',
-        routegroupid: 1,
-        type: 0,
-        upspeed: 30
+    getAllDevice () {
+      return new Promise((resolve, reject) => {
+        GetAllDevice().then((data) => {
+          let res = data.data
+          if (res.success) {
+            this.allDevice = res.data
+            resolve(res.data)
+          } else {
+            console.log(res.message)
+            resolve([])
+          }
+        }, () => {
+          console.log('GetAllDevice Error')
+          reject(new Error('GetAllDevice Error'))
+        })
+      })
+    },
+    getAllRouteOptimize () {
+      if (this.routeLayer !== '') {
+        console.log('协调路线图层已存在！')
       }
-      let patternList = [{
-        agentid: '10040',
-        feature: {
-          patternList: [{
-            cycle: 90,
-            desc: '',
-            id: 1,
-            offset: 0,
-            rings: [[{
-              desc: [{id: 13}, {id: 14}],
-              id: 1,
-              mode: 2,
-              name: 'phase1',
-              value: 30
-            }, {
-              desc: [{id: 13}, {id: 14}],
-              id: 1,
-              mode: 2,
-              name: 'phase1',
-              value: 30
-            }, {
-              desc: [{id: 9}, {id: 11}],
-              id: 3,
-              mode: 2,
-              name: 'phase3',
-              value: 30
-            }], [], [], []]
-          }]
+      GetAllRoute().then((data) => {
+        // 获取所有路线信息成功
+        let res = data.data
+        if (res.success) {
+          this.allRoute = res.data
+          this.createRouteOptimize(this.allRoute)
+        } else {
+          console.log(data.message)
         }
-      }, {
-        agentid: '10041',
-        feature: {
-          patternList: [{
-            cycle: 120,
-            desc: '',
-            id: 1,
-            offset: 0,
-            rings: [[{
-              desc: [{id: 1}, {id: 2}, {id: 3}],
-              id: 1,
-              mode: 2,
-              name: 'phase1',
-              value: 30
-            }, {
-              desc: [{id: 13}, {id: 14}, {id: 15}],
-              id: 1,
-              mode: 2,
-              name: 'phase1',
-              value: 30
-            }, {
-              desc: [{id: 5}, {id: 6}, {id: 7}],
-              id: 3,
-              mode: 2,
-              name: 'phase3',
-              value: 30
-            }, {
-              desc: [{id: 9}, {id: 10}, {id: 11}],
-              id: 4,
-              mode: 2,
-              name: 'phase4',
-              value: 30
-            }], [], [], []]
-          }]
+      }, () => {
+        console.log('getAllRouteOptimize Error')
+      })
+    },
+    createRouteOptimize (dataList) {
+      let _this = this
+      let polylines = []
+      this.deviceMarks = []
+      for (let data of dataList) {
+        if (data.devs.length === 0) continue
+        let geometry = _this.getGeometry(data)
+        // let routeId = data.id
+        let status = data.enable
+        var polylineOptions = {
+          color: status ? '#67c23a' : '#007dc5',
+          weight: 8,
+          routeId: data.id,
+          status: status,
+          name: data.name,
+          keyintsid: data.keyintsid
+          // opacity: 0.9
         }
-      }]
+        let polyline = L.polyline(geometry, polylineOptions).on('click', this.onPolylineClick)
+        polylines.push(polyline)
+        // _this.map.addLayer(polyline)
+      }
+      this.deviceGroupLayer = L.layerGroup(this.deviceMarks)
+      _this.map.addLayer(this.deviceGroupLayer)
+      _this.routeLayer = L.layerGroup(polylines)
+      _this.map.addLayer(_this.routeLayer)
+      this.addRoutePopup()
+    },
+    onPolylineClick (e) {
+      let routeId = e.target.options.routeId
+      this.showPlanchart(routeId)
+    },
+    addRoutePopup () {
+      let _this = this
+      _this.routeLayer.eachLayer(function (layer) {
+        let content = _this.getPopupContent(layer.options)
+        layer.bindPopup(content)
+      })
+    },
+    getPopupContent (data) {
+      let routeName = data.name
+      let status = data.status
+      let keyintsid = data.keyintsid === undefined ? '--' : data.keyintsid
+      let html = ''
+      if (status) {
+        html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #ecf5ff; border-radius: 2px; border: solid 1px #d9ecff;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #409eff;">启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
+      } else {
+        html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #f4f4f5; border-radius: 2px; border: solid 1px #e9e9eb;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #909399;">未启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
+      }
+      return html
+    },
+    getGeometry (data) {
+      let devs = data.devs
+      devs.sort((a, b) => {
+        return a.sortid > b.sortid
+      })
+      let coordinatesList = []
+      for (let dev of devs) {
+        let agentid = dev.agentid
+        let deviceInfo = this.allDevice.filter((item) => {
+          return item.agentid === agentid
+        })
+        if (deviceInfo.length === 0 || deviceInfo[0].geometry === undefined) continue
+        let latlngs = [deviceInfo[0].geometry.coordinates[1], deviceInfo[0].geometry.coordinates[0]]
+        coordinatesList.push(latlngs)
+        let iconUrl = this.deviceFaultIcon
+        if (deviceInfo[0].state === 'UP') {
+          iconUrl = this.deviceOnlineIcon
+        } else if (deviceInfo[0].state === 'DOWN') {
+          iconUrl = this.deviceNotOnlineIcon
+        }
+        let notOnlineIcon = L.icon({
+          iconUrl: iconUrl,
+          iconSize: [24, 27],
+          // title: dev.state,
+          // alt: dev,
+          iconAnchor: [12, 27]
+        })
+        let deviceMark = L.marker(latlngs, { icon: notOnlineIcon }).addTo(this.map)
+        this.deviceMarks.push(deviceMark)
+      }
+      return coordinatesList
+    },
+    getAllPatternOfRoute (id) {
+      return new Promise((resolve, reject) => {
+        getAllPatternOfRoute(id).then((data) => {
+          let res = data.data
+          if (res.success) {
+            // this.allDevice = res.data
+            resolve(res.data.devs)
+          } else {
+            if (res.code === '4003') {
+              let agentid = res.data.agentid
+              // this.$message.error('设备' + agentid + '不在线!')
+              this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
+              // return
+            }
+            console.log(res.message)
+            resolve([])
+          }
+        }, () => {
+          console.log('GetAllDevice Error')
+          reject(new Error('GetAllDevice Error'))
+        })
+      })
+    },
+    async showPlanchart (routeId) {
+      let greenwave = []
+      let routeData = this.allRoute.filter((item) => {
+        return item.id === routeId
+      })[0]
+      this.routeName = routeData.name
+      let patternList = await this.getAllPatternOfRoute(routeId)
       if (greenwave.length === 0) {
         this.isShowUpCard = false
         this.isShowDownCard = false
@@ -197,10 +230,6 @@ export default {
         // this.$message.error('方案为空！')
         return
       }
-      // this.direction = routeData.direction;
-      // this.keyintsid = routeData.keyintsid;
-      // this.upspeed = routeData.upspeed;
-      // this.downspeed = routeData.downspeed;
       let devs = routeData.devs
       for (let inter of devs) {
         // let obj = {};
@@ -232,7 +261,22 @@ export default {
       if (this.myChart.getOption() !== undefined) {
         this.myChart.clear()
       }
+    },
+    clearLayer () {
+      let _this = this
+      if (_this.routeLayer !== '') {
+        _this.map.removeLayer(_this.routeLayer)
+        _this.routeLayer = ''
+      }
+      if (_this.deviceGroupLayer !== '') {
+        _this.map.removeLayer(_this.deviceGroupLayer)
+        // _this.deviceGroupLayer.clearLayers()
+        _this.deviceGroupLayer = ''
+      }
     }
+  },
+  destroyed () {
+    this.clearLayer()
   }
 }
 </script>
@@ -253,21 +297,5 @@ export default {
   }
   .clearfix:after {
     clear: both
-  }
-  // .box-card {
-  //   background-color: #fbfbfb;
-  //   border-radius: 4px;
-  //   border: solid 1px #EBEEF5;
-  // }
-</style>
-<style rel="stylesheet/scss" lang="scss">
-  .up-card .el-card__header {
-    padding: 10px 20px;
-    border-bottom: 1px solid #EBEEF5;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  .up-card .el-card__body {
-    padding: 10px;
   }
 </style>

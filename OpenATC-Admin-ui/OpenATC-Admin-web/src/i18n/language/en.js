@@ -131,7 +131,9 @@ const en = {
       'updateDeviceId': 'Modify ID',
       'deviceNotNull': 'Device ID cannot be empty!',
       'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
-      'thirdplatformid': 'Third party ID'
+      'thirdplatformid': 'Third party ID',
+      'timeSpaceGraph': 'Time space graph',
+      'keyintersection': 'Key Intersection：'
     },
     'usermanager': {
       'username': 'Username',

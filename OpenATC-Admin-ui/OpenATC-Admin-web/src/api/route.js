@@ -17,6 +17,12 @@ export const GetSimpleRoute = () => {
   return api.Send({}, {}, [])
 }
 
+export const GetAllRoute = () => {
+  let api = new Authapi('GetAllRoute')
+
+  return api.Send({}, {}, [])
+}
+
 export const GetRouteInfo = (id) => {
   let api = new Authapi('getRouteInfo')
   let paramList = [id]

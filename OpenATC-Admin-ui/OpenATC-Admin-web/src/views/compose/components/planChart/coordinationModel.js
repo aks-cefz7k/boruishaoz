@@ -16,7 +16,7 @@
  * @Modified By:
  */
 import echarts from 'echarts'
-import { getTheme } from '@/utils/auth'
+import { getTheme, getLanguage } from '@/utils/auth'
 export default class CoordinationModel {
   constructor () {
     this.rourte = {}
@@ -606,7 +606,7 @@ export default class CoordinationModel {
       xAxis: [
         {
           type: 'value',
-          name: '距离（m）',
+          name: getLanguage() === 'zh' ? '距离（m）' : 'Distance(m)',
           nameGap: 5,
           axisTick: {
             show: false,
@@ -632,7 +632,7 @@ export default class CoordinationModel {
       yAxis: [
         {
           type: 'value',
-          name: '时间（s）',
+          name: getLanguage() === 'zh' ? '时间（s）' : 'Time(s)',
           axisLine: {
             show: true,
             onZero: false

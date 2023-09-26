@@ -25,7 +25,7 @@
             <span v-text="name" :class="showBottomName ? 'showSpan' : 'hiddenSpan'"></span>
             <el-input slot="reference" size="small" v-model="name" :readonly="true"></el-input>
           </el-popover>
-          <span v-text="name" class="showSpan"></span>
+          <span v-text="name" class="showSpan" v-show="showSpan"></span>
     </div>
 </template>
 <script>
@@ -63,6 +63,10 @@ export default {
     },
     rows: {
       type: Number
+    },
+    showSpan: {
+      type: Boolean,
+      default: true
     }
   },
   created () {

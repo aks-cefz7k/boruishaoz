@@ -131,7 +131,9 @@ const zh = {
       'updateDeviceId': '修改设备ID',
       'deviceNotNull': '设备ID不能为空！',
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
-      'thirdplatformid': '第三方ID'
+      'thirdplatformid': '第三方ID',
+      'timeSpaceGraph': '实时时距图',
+      'keyintersection': '关键路口：'
     },
     'usermanager': {
       'username': '用户名称',
