@@ -60,7 +60,9 @@ import lottie from 'vue-lottie'
 import device from './components/device'
 import dutyRoute from './components/dutyRoute/dutyRoute'
 import greenWaveCharts from './components/greenWaveCharts/index'
-import Anim from './toggleDataDark.json'
+import { getTheme } from '@/utils/auth'
+import AnimDark from './toggleDataDark.json'
+import Anim from './toggleData.json'
 export default {
   components: {
     lottie,
@@ -84,12 +86,20 @@ export default {
       gis: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       toggleShow: true,
       toggleshowisActive: true,
-      defaultOptions: { animationData: Anim, loop: false, autoplay: false },
       tianDiTuKey: '3bfb2112c0920226f0592fd64cd2c70d'
     }
   },
   mounted () {
     this.init()
+  },
+  computed: {
+    defaultOptions () {
+      let res = { animationData: Anim, loop: false, autoplay: false }
+      if (getTheme() === 'dark') {
+        res = { animationData: AnimDark, loop: false, autoplay: false }
+      }
+      return res
+    }
   },
   methods: {
     async init () {
@@ -125,8 +135,8 @@ export default {
     addMapEvent () {
       let _this = this
       _this.map.on('mousemove', function (e) {
-        _this.lngLat.lng = _this.computedLngLat(String(e.latlng.lat))
-        _this.lngLat.lat = _this.computedLngLat(String(e.latlng.lng))
+        _this.lngLat.lng = _this.computedLngLat(String(e.latlng.lng))
+        _this.lngLat.lat = _this.computedLngLat(String(e.latlng.lat))
       })
       var boxMap = document.getElementById('map')
       L.DomEvent.on(boxMap, 'wheel', function (e) {
