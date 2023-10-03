@@ -375,7 +375,8 @@ export default {
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
       shrink: 1,
-      basicFuncControlId: [0, 1, 4, 5] // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
+      basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
+      isResend: true
     }
   },
   computed: {
@@ -481,11 +482,15 @@ export default {
           this.devStatus = 2
           if (data.data.code === '4003') {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
-            this.reSend()
+            if (this.isResend) {
+              this.reSend()
+            }
             return
           }
           this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
-          this.reSend()
+          if (this.isResend) {
+            this.reSend()
+          }
           return
         }
         let res = data.data.data.data
@@ -549,13 +554,17 @@ export default {
             this.clearPatternInterval() // 清除其他定时器
             this.clearVolumeInterval()
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
-            this.reSend()
+            if (this.isResend) {
+              this.reSend()
+            }
             return
           }
           this.$message.error(data.data.message)
           this.clearPatternInterval() // 清除其他定时器
           this.clearVolumeInterval()
-          this.reSend()
+          if (this.isResend) {
+            this.reSend()
+          }
           return
         }
         // let param = JSON.parse(data.data.data)
@@ -767,7 +776,9 @@ export default {
     reconnectionDev () {
       registerMessage(this.agentId).then(data => {
         if (!data.data.success) {
-          this.reSend()
+          if (this.isResend) {
+            this.reSend()
+          }
           return
         }
         this.devStatus = 3
@@ -1023,15 +1034,16 @@ export default {
       })
     }
   },
-  beforeDestroy () {
+  // beforeDestroy () {
+  //   this.clearPatternInterval() // 清除定时器
+  //   this.clearVolumeInterval()
+  //   this.clearRegisterMessageTimer() // 清除定时器
+  // },
+  destroyed () {
+    this.isResend = false
     this.clearPatternInterval() // 清除定时器
     this.clearVolumeInterval()
     this.clearRegisterMessageTimer() // 清除定时器
-  },
-  destroyed () {
-    // this.clearPatternInterval() // 清除定时器
-    // this.clearVolumeInterval()
-    // this.clearRegisterMessageTimer() // 清除定时器
     this.getPlatform()
   }
 }
