@@ -1,0 +1,88 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+.flvlist {
+  .iconfont {
+    width: 14px;
+    height: 14px;
+    color: $--color-primary;
+    font-size: 14px;
+    margin-right: 9px;
+  }
+}
+.flvplayer {
+  width: 100%;
+  position: relative;
+  .iconfont {
+    width: 14px;
+    height: 14px;
+    color: $--color-primary;
+    font-size: 14px;
+  }
+  .flv-header {
+    width: 100%;
+    color: $--color-text-regular;
+    height: 30px;
+    background-color: $--border-color-extra-light;
+    // border-radius: 4px 4px 0px 0px;
+    box-sizing: border-box;
+    position: relative;
+    .title {
+      position: absolute;
+      left: 14px;
+      top: 9px;
+      font-family: SourceHanSansCN-Regular;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 14px;
+      letter-spacing: 0px;
+      color: $--color-text-regular;
+    }
+    .list-icon {
+      position: absolute;
+      right:4px;
+      top: 9px;
+      cursor: pointer;
+      line-height: 14px;
+      z-index: 9;
+      > div {
+        float: left;
+        margin-right: 10px;
+      }
+    }
+  }
+  .flv-content {
+    text-align: center;
+    // background-color: #000;
+  }
+}
+.flvlist-dropdown {
+  color: $--color-text-regular;
+  .iconfont {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    margin-right: 9px;
+    color: $--color-text-regular
+  }
+  .active {
+    color: $--color-primary;
+    .iconfont {
+      color: $--color-primary;
+    }
+  }
+  .el-dropdown-menu__item:not(.is-disabled):hover, .el-dropdown-menu__item:focus {
+    .iconfont {
+      color: $--color-primary;
+    }
+  }
+}
