@@ -311,7 +311,7 @@
     z-index: 904;
     line-height: 35px;
     font-size: 30px;
-    background-color: #30353b;
+    background-color: $--color-white;
     text-indent: -5px;
     text-align: center;
   }
@@ -326,7 +326,7 @@
     width: auto;
     height: auto;
     line-height: 1.1rem;
-    background-color: #30353b;
+    background-color: $--color-white;
     border-radius: 0.1rem;
     text-align: center;
     user-select: none;
@@ -337,7 +337,7 @@
     width: 18rem;
     height: 1.1rem;
     line-height: 1.1rem;
-    background-color: #30353b;
+    background-color: $--color-white;
     border-radius: 0.1rem;
     text-align: center;
     user-select: none;
@@ -346,7 +346,6 @@
     right: 3.3rem;
     z-index: 903;
     font-size: 0.6rem;
-    color: rgba(254, 254, 254, 0.7);
   }
   .addbtn {
     position: absolute;
@@ -401,7 +400,7 @@
     position: fixed;
     top: 70px;
     right: 38px;
-    width: 442px;
+    width: 470px;
     height: auto;
     z-index: 904;
     background-color: $--color-white;
@@ -469,6 +468,32 @@
       content: "*";
       color: #f56c6c;
       margin-right: 4px;
+    }
+  }
+}
+//gis dutyroute tab
+.gis-duteRoute {
+  overflow: hidden;
+  .title {
+    margin: 0 0 15px 0 ;
+    color: #fff;
+  }
+  .dutyRoute-routeCard { 
+    width: 100%;
+    .btn-bottom {
+      float: right;
+      margin-top: -5px;
+      margin-right: 15px;
+    }
+    .el-col {
+      border-radius: 4px;
+    }
+    .grid-content {
+      border-radius: 4px;
+      min-height: 36px;
+    }
+    .grid-content-label {
+      color: $--color-text-secondary;
     }
   }
 }

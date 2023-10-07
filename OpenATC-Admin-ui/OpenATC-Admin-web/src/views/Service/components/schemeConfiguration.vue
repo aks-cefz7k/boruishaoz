@@ -203,7 +203,7 @@ export default {
         }
         let geometry = dev.geometry
         let location = dev.location
-        if (geometry && geometry.length > 0) {
+        if (geometry && geometry.coordinates && geometry.coordinates.length > 0) {
           item.geometry = geometry
         }
         if (location && location.length > 0) {
