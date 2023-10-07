@@ -35,11 +35,14 @@
   Created: 2019/12/11
 */
 import { updateFile } from '@/api/param'
+import { setRemoteControl } from '@/api/system'
 export default {
   data () {
     return {
       dialogFormVisible: false,
-      file: ''
+      file: '',
+      username: '',
+      password: ''
     }
   },
   name: 'updatefile',
@@ -47,7 +50,9 @@ export default {
   created () {
   },
   methods: {
-    onUpdateFile () {
+    onUpdateFile (username, password) {
+      this.username = username
+      this.password = password
       this.dialogFormVisible = !this.dialogFormVisible
     },
     closeFormDialog () {
@@ -66,6 +71,8 @@ export default {
       event.preventDefault()
       let formData = new FormData()
       formData.append('file', this.file)
+      formData.append('username', this.username)
+      formData.append('password', this.password)
       updateFile(formData).then((data) => {
         let res = data.data
         if (!res.success) {
@@ -76,16 +83,55 @@ export default {
           this.$message.error(data.data.message)
           return
         }
-        let msg = '更新成功！'
+        let msg = this.$t('edge.common.updatesucess')
         this.closeFormDialog()
         this.$message({
           message: msg,
           type: 'success',
           duration: 1 * 1000
         })
+        this.$confirm(this.$t('edge.system.isReboot'),
+          this.$t('edge.common.alarm'), {
+            confirmButtonText: this.$t('edge.common.confirm'),
+            cancelButtonText: this.$t('edge.common.cancel'),
+            type: 'warning'
+          }).then(() => {
+          this.setRemoteControl()
+          this.$message({
+            type: 'success',
+            message: this.$t('edge.system.rebootSuccess')
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: this.$t('edge.system.rebootFaile')
+          })
+        })
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
+      })
+    },
+    setRemoteControl () {
+      setRemoteControl('reboot').then(data => {
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        let msg = this.$t('edge.system.resetSuccess')
+        this.$message({
+          message: msg,
+          type: 'success',
+          duration: 1 * 1000
+          // onClose: () => {
+          //   this.$parent.getCode()
+          // }
+        })
       })
     }
   }
