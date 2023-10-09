@@ -36,6 +36,9 @@
 */
 import { updateFile } from '@/api/param'
 import { setRemoteControl } from '@/api/system'
+import {
+  getIframdevid
+} from '../../../utils/auth'
 export default {
   data () {
     return {
@@ -70,7 +73,9 @@ export default {
     submitForm (event) {
       event.preventDefault()
       let formData = new FormData()
+      let iframdevid = getIframdevid()
       formData.append('file', this.file)
+      formData.append('agentid', iframdevid)
       formData.append('username', this.username)
       formData.append('password', this.password)
       updateFile(formData).then((data) => {
@@ -97,10 +102,10 @@ export default {
             type: 'warning'
           }).then(() => {
           this.setRemoteControl()
-          this.$message({
-            type: 'success',
-            message: this.$t('edge.system.rebootSuccess')
-          })
+          // this.$message({
+          //   type: 'success',
+          //   message: this.$t('edge.system.rebootSuccess')
+          // })
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -123,7 +128,7 @@ export default {
           this.$message.error(data.data.message)
           return
         }
-        let msg = this.$t('edge.system.resetSuccess')
+        let msg = this.$t('edge.system.rebootSuccess')
         this.$message({
           message: msg,
           type: 'success',
