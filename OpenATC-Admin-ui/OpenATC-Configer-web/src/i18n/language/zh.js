@@ -550,7 +550,11 @@ const zh = {
       'remote2': '授权',
       'remote3': '自定义',
       'test': '检测',
-      'realTimeChannel': '实时通道'
+      'realTimeChannel': '实时通道',
+      'isReboot': '系统文件下载成功,是否重启设备？',
+      'rebootSuccess': '重启成功！',
+      'rebootFaile': '重启失败！',
+      'resetSuccess': '设置成功！'
     },
     'optimize': {
       'strategy': '优化策略',

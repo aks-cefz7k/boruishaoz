@@ -552,7 +552,11 @@ const en = {
       'remote2': 'Authorize',
       'remote3': 'Custom',
       'test': 'Test',
-      'realTimeChannel': 'Real time channel'
+      'realTimeChannel': 'Real time channel',
+      'isReboot': 'The system file is downloaded successfully. Do you want to restart the device?',
+      'rebootSuccess': 'Restart successfully!',
+      'rebootFaile': 'Restart failed!',
+      'resetSuccess': 'Set successfully!'
     },
     'optimize': {
       'strategy': 'Optimization strategy',
