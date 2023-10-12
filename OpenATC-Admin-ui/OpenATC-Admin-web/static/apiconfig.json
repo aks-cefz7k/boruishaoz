@@ -288,5 +288,35 @@
     "key": "delete_systemconfig",
     "url": "/systemconfig",
     "method": "delete"
+  },
+  {
+    "key": "GetAllVideos",
+    "url": " /video",
+    "method": "get"
+  },
+  {
+    "key": "GetRouteVideos",
+    "url": "/video/list",
+    "method": "get"
+  },
+  {
+    "key": "GetCrossVideos",
+    "url": "/video",
+    "method": "get"
+  },
+  {
+    "key": "AddDeviceVideo",
+    "url": "/video",
+    "method": "post"
+  },
+  {
+    "key": "UpdateDeviceVideo",
+    "url": "/video",
+    "method": "put"
+  },
+  {
+    "key": "DeleteDeviceVideo",
+    "url": "/video/single",
+    "method": "delete"
   }
 ]

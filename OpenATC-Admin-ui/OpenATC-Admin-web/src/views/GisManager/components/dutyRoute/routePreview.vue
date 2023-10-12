@@ -20,14 +20,15 @@
           </div>
           <div>
           </div>
-          <div class="resttime"
+          <!-- <div class="resttime"
                v-show="tabName === 'second' && step.state === 1">
             {{ step.resttime }}
-          </div>
+          </div> -->
           <div class="card-div">
             <route-card
               :node="step"
               :tabName="tabName"
+              :isShowVideo="route.isShowVideo"
               ref="routeCard"
               @research="research"
             ></route-card>

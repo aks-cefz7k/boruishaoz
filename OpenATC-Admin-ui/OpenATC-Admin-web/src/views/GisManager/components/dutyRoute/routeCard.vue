@@ -113,14 +113,23 @@
           </el-row>
         </el-col>
       </el-row>
+      <el-row :gutter="0" v-if="isShowVideo">
+        <el-col :span="24">
+          <Flv :curDevVideos="node.videos"></Flv>
+        </el-col>
+      </el-row>
     </div>
   </el-card>
 </template>
 
 <script>
 import { ExecuteViproute } from '@/api/service'
+import Flv from '@/components/Flvjs/index.vue'
 export default {
   name: 'nodeCard',
+  components: {
+    Flv
+  },
   props: {
     node: {
       type: Object
@@ -128,6 +137,10 @@ export default {
     tabName: {
       type: String,
       default: 'second'
+    },
+    isShowVideo: {
+      type: Boolean,
+      defaultValue: false
     }
   },
   data () {

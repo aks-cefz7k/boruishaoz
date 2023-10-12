@@ -14,7 +14,7 @@
     <div class="title">{{route ? route.name : '特勤路线'}}</div>
     <div>
       <div class="devicePanel">
-        <routePreview ref="updateChild" :route="route"></routePreview>
+        <routePreview ref="updateChild" :route="route" @research="research"></routePreview>
       </div>
     </div>
     <select-control v-show="false" ref="selectControl"></select-control>
@@ -24,6 +24,8 @@
 import L from 'leaflet'
 import 'leaflet-polylinedecorator'
 import { GetAllViproutes, GetSingleViproute, GetViprouteStatus } from '@/api/service'
+import { SystemconfigApi } from '@/api/systemconfig.js'
+import { GetRouteVideos } from '@/api/deviceVideo'
 import routePreview from './routePreview'
 import SelectControl from '@/views/Service/components/SelectControl'
 
@@ -53,6 +55,7 @@ export default {
       devList: [],
       routeList: [],
       lineArr: [],
+      routeVideoArr: [],
       chooseId: 0,
       options: {
         weight: 8
@@ -61,7 +64,31 @@ export default {
         weight: 12,
         color: 'green'
       },
-      route: {}
+      route: {},
+      deviceIds: [],
+      testVideoList: [
+        {
+          id: 1,
+          name: '视频1',
+          url: 'ws://192.168.13.104:38080/live/video4.flv?st=1619332780604'
+        },
+        {
+          id: 2,
+          name: '视频2',
+          url: 'ws://192.168.13.104:38080/live/TESTID.flv?st=1619332798860'
+        },
+        {
+          id: 3,
+          name: '视频3',
+          url: 'ws://192.168.13.104:38080/live/demo5.flv?st=1619332812724'
+        }
+        // {
+        //   id: 4,
+        //   name: '视频4',
+        //   url: 'http://192.168.14.195:90/video/123.mp4'
+        // }
+      ],
+      isShowVideo: false
     }
   },
   watch: {
@@ -74,6 +101,7 @@ export default {
     this.$nextTick(() => {
       _this.map = window.map
       _this.getList()
+      _this.isShowVideos()
     })
   },
   destroyed () {
@@ -84,6 +112,20 @@ export default {
       let res
       res = this.$refs.selectControl.getNameById(control)
       return res
+    },
+    getRouteVideos () {
+      let _this = this
+      return new Promise((resolve, reject) => {
+        GetRouteVideos(_this.deviceIds).then(res => {
+          debugger
+          if (!res.data.success) {
+            _this.$message.error(res.data.message)
+            return
+          }
+          _this.routeVideoArr = res.data.data
+          resolve(_this.routeVideoArr)
+        })
+      })
     },
     getSingleViproute () {
       let _this = this
@@ -140,6 +182,7 @@ export default {
       await this.getSingleViproute()
       await this.getViprouteStatus()
       await this.getDeviceByIds()
+      await this.getRouteVideos()
       for (let item of this.routeData.devs) {
         for (let state of this.stateList) {
           if (item.agentid === state.agentid) {
@@ -150,17 +193,22 @@ export default {
             for (let dev of this.devicesData) {
               if (item.agentid === dev.agentid) {
                 item.stateName = dev.state
-                break
               }
+              let videos = []
+              for (let vi of this.routeVideoArr) {
+                if (item.agentid === vi.agentid) {
+                  videos.push(vi)
+                }
+              }
+              item.videos = videos
+              // item.videos = this.testVideoList
             }
             break
           }
         }
       }
-      if (!this.routeData || this.routeData.devs.length === 0) {
-        this.maskVisible = true
-        // 模拟一次手动点击，触发tip显示
-        this.$refs.editbtn.click()
+      if (this.routeData) {
+        this.routeData.isShowVideo = this.isShowVideo
       }
       this.route = this.routeData
     },
@@ -281,7 +329,7 @@ export default {
       `
         <div>设备${agentid}</div>
         <div>${status}</div>
-        <div>${date}</div>
+        <div>${date || ''}</div>
       `
       return content
     },
@@ -412,7 +460,6 @@ export default {
         // tab
         _this.chooseId = item.route.id
         // _this.hideLayer()
-        // debugger
         // _this.drawLines()
         // 高亮
         // _this.highLightLine(latlngs)
@@ -440,6 +487,35 @@ export default {
         decorator: decorator
       }
       return res
+    },
+    getGisConfig () {
+      let _this = this
+      return new Promise((resolve, reject) => {
+        SystemconfigApi.GetSystemconfigByModule('gis').then((data) => {
+          let res = data.data
+          if (!res.success) {
+            console.log('datas:' + res)
+          } else {
+            for (let config of data.data.data) {
+              if (config['key'] === 'isShowVideo') {
+                if (config['value'] === 'true') {
+                  _this.isShowVideo = true
+                } else {
+                  _this.isShowVideo = false
+                }
+                break
+              }
+            }
+            resolve(data.data.data)
+          }
+        })
+      })
+    },
+    async isShowVideos (node) {
+      await this.getGisConfig()
+    },
+    research () {
+      this.setRoute()
     }
   }
 }
