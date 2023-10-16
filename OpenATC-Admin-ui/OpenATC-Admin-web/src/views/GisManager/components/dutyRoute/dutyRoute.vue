@@ -58,11 +58,12 @@ export default {
       routeVideoArr: [],
       chooseId: 0,
       options: {
-        weight: 8
+        weight: 8,
+        color: '#409EFF'
       },
       newOptions: {
         weight: 12,
-        color: 'green'
+        color: '#67C23A'
       },
       route: {},
       deviceIds: [],
@@ -117,7 +118,6 @@ export default {
       let _this = this
       return new Promise((resolve, reject) => {
         GetRouteVideos(_this.deviceIds).then(res => {
-          debugger
           if (!res.data.success) {
             _this.$message.error(res.data.message)
             return
@@ -201,7 +201,7 @@ export default {
                 }
               }
               item.videos = videos
-              // item.videos = this.testVideoList
+              // item.videos = this.testVideoList //测试数据
             }
             break
           }
@@ -212,7 +212,7 @@ export default {
       }
       this.route = this.routeData
     },
-    getAllAdevice () {
+    getAllViproutes () {
       GetAllViproutes().then(res => {
         if (!res.data.success) {
           this.$message.error(res.data.message)
@@ -235,7 +235,7 @@ export default {
       this.handleMapDevice(this.devList)
     },
     drawLines () {
-      // this.hideLayer()
+      this.hideLineLayer()
       for (let item of this.routeList) {
         let latlngs = []
         for (let dev of item.devs) {
@@ -247,16 +247,14 @@ export default {
           latlngs.push(coordinates.reverse())
         }
         if (latlngs) {
-          let options = {
-            weight: 8
-          }
+          let options = this.options
           if (item.id === this.chooseId) {
-            options = {
-              weight: 12,
-              color: 'green'
-            }
+            options = this.newOptions
           }
           let res = this.drawLine(latlngs, options)
+          if (item.id === this.chooseId) {
+            this.oldLine = res.routeLine
+          }
           let record = {
             id: res.lineId,
             routeLine: res.routeLine,
@@ -264,7 +262,6 @@ export default {
             route: item
           }
           this.lineArr.push(record)
-          console.log(this.lineArr)
         }
       }
     },
@@ -385,11 +382,13 @@ export default {
       edgeModalChild.openSingleEdge(dev)
     },
     getList () {
-      // this.hideLayer(this.deviceLayer)
-      this.getAllAdevice()
+      this.getAllViproutes()
     },
     hideLayer () {
       this.map.removeLayer(this.deviceLayer)
+      this.hideLineLayer()
+    },
+    hideLineLayer () {
       for (let i = 0; i < this.lineArr.length; i++) {
         let item = this.lineArr[i]
         this.map.removeLayer(item.routeLine)
@@ -425,27 +424,6 @@ export default {
     onRowClick (row) {
       this.setCurrentMarker(row)
     },
-    highLightLine (latlngs, id) {
-      let _this = this
-      for (let i = 0; i < _this.lineArr.length; i++) {
-        let item = _this.lineArr[i]
-        _this.map.removeLayer(item.routeLine)
-        _this.map.removeLayer(item.decorator)
-        let lineId = item.id
-        let newOptions = _this.options
-        if (id === lineId) {
-          newOptions = _this.newOptions
-          let res = _this.drawLine(latlngs, newOptions)
-          let record = {
-            id: res.lineId,
-            routeLine: res.routeLine,
-            decorator: res.decorator,
-            route: item.route
-          }
-          _this.lineArr.splice(i, 1, record)
-        }
-      }
-    },
     drawLine (latlngs, options) {
       let res
       // 轨迹线
@@ -457,12 +435,12 @@ export default {
           console.log('no change')
           return false
         }
-        // tab
+        // tab切换
         _this.chooseId = item.route.id
-        // _this.hideLayer()
-        // _this.drawLines()
         // 高亮
-        // _this.highLightLine(latlngs)
+        _this.oldLine.setStyle(_this.options)
+        routeLine.setStyle(_this.newOptions)
+        _this.oldLine = routeLine
       })
       // 轨迹方向箭头
       let decorator = L.polylineDecorator(routeLine, {
