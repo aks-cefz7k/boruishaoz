@@ -13,7 +13,7 @@
   <div class="gis-planchart" style="width: 100%; height: 600px;">
     <div class="title">{{routeName}}</div>
     <div class="planchart-name">{{$t('openatc.devicemanager.timeSpaceGraph')}}</div>
-    <div id="echarts" style="width: 100%; height: 90%;"></div>
+    <div id="echarts" style="width: 450px; height: 540px;"></div>
 </div>
 </template>
 
@@ -205,6 +205,7 @@ export default {
       })
     },
     async showPlanchart (routeId) {
+      this.clearMyChart()
       let greenwave = []
       let routeData = this.allRoute.filter((item) => {
         return item.id === routeId
