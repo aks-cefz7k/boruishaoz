@@ -14,7 +14,10 @@
     <div class="title">{{route ? route.name : '特勤路线'}}</div>
     <div>
       <div class="devicePanel">
-        <routePreview ref="updateChild" :route="route" @research="research"></routePreview>
+        <routePreview ref="updateChild"
+                      :route="route"
+                      @research="research"
+                      @onCardClick="onCardClick"></routePreview>
       </div>
     </div>
     <select-control v-show="false" ref="selectControl"></select-control>
@@ -244,7 +247,7 @@ export default {
             console.log('no geometry: ' + dev)
             continue
           }
-          latlngs.push(coordinates.reverse())
+          latlngs.push(coordinates.slice().reverse())
         }
         if (latlngs) {
           let options = this.options
@@ -313,20 +316,9 @@ export default {
     },
     getPopupContent (devData) {
       let agentid = devData.agentid
-      let date = devData.lastTime
-      let status = '在线'
-      if (devData.state === 'UP') {
-        status = '在线'
-      } else if (devData.state === 'DOWN') {
-        status = '离线'
-      } else {
-        status = '故障'
-      }
       let content =
       `
-        <div>设备${agentid}</div>
-        <div>${status}</div>
-        <div>${date || ''}</div>
+        <div> ${this.$t('openatc.gis.crossRoad')}${agentid}</div>
       `
       return content
     },
@@ -494,6 +486,15 @@ export default {
     },
     research () {
       this.setRoute()
+    },
+    onCardClick (dev) {
+      let contents = this.getPopupContent(dev)
+      let latlng = dev.geometry.coordinates.slice().reverse()
+      let popup = L.popup()
+        .setLatLng(latlng)
+        .setContent(contents)
+        .openOn(this.map)
+      console.log(popup)
     }
   }
 }

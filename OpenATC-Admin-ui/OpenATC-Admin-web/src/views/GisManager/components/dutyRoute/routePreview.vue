@@ -102,6 +102,10 @@ export default {
       return res
     },
     onStepClick (index) {
+      this.changeCard(index)
+      this.$emit('onCardClick', this.route.devs[index])
+    },
+    changeCard (index) {
       this.activeIndex = index
       this.$refs.routeCard[index].show()
       this.showIndex = index
@@ -116,9 +120,7 @@ export default {
         }
       }
       if (index >= 0) {
-        // let stepDom = this.$refs.timeline[index]
-        // stepDom.click()
-        this.onStepClick(index)
+        this.changeCard(index)
       }
     },
     research () {
