@@ -98,7 +98,7 @@
               <template style="padding:5px;">{{ node.resttime }}</template>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <el-button  v-show="tabName === 'second'"
                           style="float: right;padding:5px;"
-                          type="primary"
+                          :type="getButtonType(node)"
                           size="small"
                           @click="executeViproute">
                 <template v-if="!node.state || node.state === 0">
@@ -192,6 +192,13 @@ export default {
           type: 'danger'
         }
       }
+    },
+    getButtonType (node) {
+      let res = 'warning'
+      if (!node.state || node.state === 0) {
+        res = 'primary'
+      }
+      return res
     }
   }
 }
