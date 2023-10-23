@@ -29,12 +29,12 @@ import 'leaflet-polylinedecorator'
 import { GetAllViproutes, GetSingleViproute, GetViprouteStatus } from '@/api/service'
 import { SystemconfigApi } from '@/api/systemconfig.js'
 import { GetRouteVideos } from '@/api/deviceVideo'
+import { GetAllDevice, GetDeviceByIds } from '@/api/device'
 import routePreview from './routePreview'
 import SelectControl from '@/views/Service/components/SelectControl'
 
-import { GetDeviceByIds } from '@/api/device'
 export default {
-  name: 'device',
+  name: 'dutyRoute',
   components: { routePreview, SelectControl },
   props: {
   },
@@ -61,13 +61,14 @@ export default {
       routeVideoArr: [],
       chooseId: 0,
       options: {
-        weight: 8,
-        color: '#409EFF'
+        weight: 10,
+        color: '#909399'
       },
       newOptions: {
         weight: 12,
-        color: '#67C23A'
+        color: '#409EFF'
       },
+      popup: null,
       route: {},
       deviceIds: [],
       testVideoList: [
@@ -102,6 +103,7 @@ export default {
   },
   mounted () {
     let _this = this
+    this.getAllAdevice()
     this.$nextTick(() => {
       _this.map = window.map
       _this.getList()
@@ -112,6 +114,15 @@ export default {
     this.hideLayer()
   },
   methods: {
+    getAllAdevice () {
+      GetAllDevice().then(res => {
+        if (!res.data.success) {
+          this.$message.error(res.data.message)
+          return
+        }
+        this.allDevList = res.data.data
+      })
+    },
     getControlName (control) {
       let res
       res = this.$refs.selectControl.getNameById(control)
@@ -232,6 +243,10 @@ export default {
       this.devList = []
       for (let item of this.routeList) {
         for (let dev of item.devs) {
+          let list = this.allDevList.filter(ele => ele.agentid === dev.agentid)
+          if (list && list.length === 1) {
+            dev.state = list[0].state
+          }
           this.devList.push(dev)
         }
       }
@@ -377,7 +392,12 @@ export default {
       this.getAllViproutes()
     },
     hideLayer () {
-      this.map.removeLayer(this.deviceLayer)
+      if (this.deviceLayer) {
+        this.map.removeLayer(this.deviceLayer)
+      }
+      if (this.popup) {
+        this.map.removeLayer(this.popup)
+      }
       this.hideLineLayer()
     },
     hideLineLayer () {
@@ -490,11 +510,10 @@ export default {
     onCardClick (dev) {
       let contents = this.getPopupContent(dev)
       let latlng = dev.geometry.coordinates.slice().reverse()
-      let popup = L.popup()
+      this.popup = L.popup()
         .setLatLng(latlng)
         .setContent(contents)
         .openOn(this.map)
-      console.log(popup)
     }
   }
 }
