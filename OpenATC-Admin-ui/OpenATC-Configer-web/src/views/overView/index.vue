@@ -774,27 +774,29 @@ export default {
       this.loading.close()
     },
     reconnectionDev () {
-      registerMessage(this.agentId).then(data => {
-        if (!data.data.success) {
-          if (this.isResend) {
-            this.reSend()
-          }
-          return
-        }
-        this.devStatus = 3
-        this.clearPatternInterval() // 清除其他定时器
-        this.clearVolumeInterval()
-        this.phaseControlTimer = setInterval(() => {
-          if (this.intervalFlag) {
-            this.initData()
-          }
-          // this.initData()
-        }, 1000)
-        this.getVolume()
-        this.volumeControlTimer = setInterval(() => {
-          this.getVolume()
-        }, 300000)
-      })
+      this.registerMessage()
+      // registerMessage(this.agentId).then(data => {
+      //   if (!data.data.success) {
+      //     if (this.isResend) {
+      //       this.reSend()
+      //     }
+      //     return
+      //   }
+      //   this.devStatus = 3
+      //   this.clearPatternInterval() // 清除其他定时器
+      //   this.clearVolumeInterval()
+      //   this.phaseControlTimer = setInterval(() => {
+      //     if (this.intervalFlag) {
+      //       this.initData()
+      //     }
+      //     // this.initData()
+      //   }, 1000)
+      //   this.getVolume()
+      //   this.volumeControlTimer = setInterval(() => {
+      //     this.getVolume()
+      //   }, 300000)
+      //   this.getPhase()
+      // })
     },
     onFloatBtnClicked () {
       this.isShowGui = !this.isShowGui
