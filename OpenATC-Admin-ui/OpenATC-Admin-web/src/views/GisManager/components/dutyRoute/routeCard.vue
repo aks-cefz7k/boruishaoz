@@ -11,41 +11,8 @@
  **/
 <template>
   <el-card class="dutyRoute-routeCard" v-show="isShow">
-    <!-- <div slot="header" class="clearfix"> -->
-      <!-- <span><strong>{{ $t("openatc.dutyroute.attributes") }}</strong></span> -->
-      <!-- <el-button  v-show="tabName === 'second'"
-                          style="float: right;"
-                          type="primary"
-                          size="samll"
-                          @click="executeViproute">
-                  <template v-if="!node.state || node.state === 0">
-                    {{ $t("openatc.dutyroute.executenow") }}
-                  </template>
-                  <template v-else>
-                    {{ $t("openatc.dutyroute.cancelexecute") }}
-                  </template>
-                </el-button> -->
-      <!-- <el-button
-        style="float: right; padding: 3px 0"
-        type="text"
-        icon="el-icon-close"
-        @click.stop="onCloseClick">
-      </el-button> -->
-    <!-- </div> -->
     <div class="text item">
       <el-row :gutter="20">
-        <!-- <el-col :span="8">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <div class="grid-content-label">
-                {{ $t("openatc.greenwaveoptimize.deviceid") }}:
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div class="grid-content bg-purple">{{ node.agentid }}</div>
-            </el-col>
-          </el-row>
-        </el-col> -->
         <el-col :span="12">
           <el-row :gutter="0">
             <el-col :span="10">

@@ -9,7 +9,7 @@ export const GetAllVideos = () => {
 export const GetRouteVideos = (ids) => {
   let api = new Authapi('GetRouteVideos')
   const params = {
-    videolist: ids
+    videoList: ids
   }
   return api.Send({}, params, [])
 }

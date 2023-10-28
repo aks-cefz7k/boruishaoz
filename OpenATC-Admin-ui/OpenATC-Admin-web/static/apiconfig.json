@@ -297,7 +297,7 @@
   {
     "key": "GetRouteVideos",
     "url": "/video/list",
-    "method": "get"
+    "method": "post"
   },
   {
     "key": "GetCrossVideos",
