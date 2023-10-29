@@ -106,7 +106,7 @@ const en = {
       'operation': 'Operation',
       'longitude': 'Longitude',
       'latitude': 'Latitude',
-      'layerLevel': '层级',
+      'layerLevel': 'Level',
       'adddevice': 'Add Device',
       'editdevice': 'Edit Device',
       'enterIp': 'Please enter IP',
@@ -322,7 +322,12 @@ const en = {
     'gis': {
       'chooseLocationInfo': 'Click the map to choose a location !',
       'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!',
-      'crossRoad': 'Cross Road'
+      'crossRoad': 'Cross Road',
+      'gisNormal': 'Map',
+      'gisStatellite': 'Statellite',
+      'deviceState': 'Device State',
+      'dutyRoute': 'Duty Route',
+      'coordinateRoute': 'Coordinate Route'
     },
     'systemsettings': {
       'id': 'ID',

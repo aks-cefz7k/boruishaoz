@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="gis-duteRoute">
-    <div class="title">{{route ? route.name : '特勤路线'}}</div>
+    <div class="title">{{route ? route.name : this.$t('openatc.gis.deviceState')}}</div>
     <div>
       <div class="devicePanel">
         <routePreview ref="updateChild"

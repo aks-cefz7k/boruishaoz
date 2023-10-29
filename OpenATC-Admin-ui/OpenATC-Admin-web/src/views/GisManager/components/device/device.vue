@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="gis-devicePanel">
-    <div class="title">设备状态</div>
+    <div class="title">{{this.$t('openatc.gis.deviceState') }}</div>
     <div>
       <div class="devicePanel">
         <el-table

@@ -322,7 +322,12 @@ const zh = {
     'gis': {
       'chooseLocationInfo': '请点击地图选择位置 !',
       'clickToChooseLocationInfo': '点击图标去地图上选择位置 !',
-      'crossRoad': '路口'
+      'crossRoad': '路口',
+      'gisNormal': '地图',
+      'gisStatellite': '影像',
+      'deviceState': '设备状态',
+      'dutyRoute': '特勤路线',
+      'coordinateRoute': '协调路线'
     },
     'systemsettings': {
       'id': 'ID',

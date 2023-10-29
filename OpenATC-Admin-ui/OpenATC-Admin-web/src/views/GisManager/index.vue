@@ -32,19 +32,11 @@
     </div>
     <div class="header">
       <el-radio-group v-model="bizType">
-        <el-radio label="deviceState">设备状态</el-radio>
-        <el-radio label="dutyRoute">特勤路线</el-radio>
-        <el-radio label="coordinateRoute">协调路线</el-radio>
+        <el-radio label="deviceState">{{this.$t('openatc.gis.deviceState') }}</el-radio>
+        <el-radio label="dutyRoute">{{this.$t('openatc.gis.dutyRoute') }}</el-radio>
+        <el-radio label="coordinateRoute">{{this.$t('openatc.gis.coordinateRoute') }}</el-radio>
       </el-radio-group>
     </div>
-    <!-- <div class="footer-left">
-      <div>
-        <el-radio-group v-model="mapType">
-          <el-radio-button label="2D">地图</el-radio-button>
-          <el-radio-button label="3D">卫星</el-radio-button>
-        </el-radio-group>
-      </div>
-    </div> -->
     <div class="footer-right">
       {{this.$t('openatc.devicemanager.longitude') }} {{ lngLat.lng }}
       {{this.$t('openatc.devicemanager.latitude') }}  {{ lngLat.lat }}
@@ -84,8 +76,12 @@ export default {
       maxZoom: 18,
       center: [31.23636, 121.53413],
       gis: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      gisNormal: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      gisStatellite: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       toggleShow: true,
       toggleshowisActive: true,
+      gisBoundLeftTop: [31.36360615, 121.30622863],
+      gisBoundRightBottom: [31.11040156, 121.95270538],
       tianDiTuKey: '3bfb2112c0920226f0592fd64cd2c70d'
     }
   },
@@ -109,7 +105,8 @@ export default {
     },
     initMap () {
       let _this = this
-      let map = _this.loadMapType()
+      // let map = _this.loadMapType()
+      let map = _this.loadLocalMapType()
       // let map = L.map('map', {
       //   minZoom: _this.minZoom,
       //   maxZoom: _this.maxZoom,
@@ -122,12 +119,13 @@ export default {
       //   dragging: true,
       //   editMode: false
       // })
-      window.map = map
-      L.tileLayer(
-        _this.gis
-      ).addTo(map)
+      let corner1 = L.latLng(this.gisBoundLeftTop[0], this.gisBoundLeftTop[1]) // 设置左上角经纬度
+      let corner2 = L.latLng(this.gisBoundRightBottom[0], this.gisBoundRightBottom[1]) // 设置右下点经纬度
+      let bounds = L.latLngBounds(corner1, corner2) // 构建视图限制范围
+      map.setMaxBounds(bounds)
+
       // L.tileLayer(
-      //   'http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}'
+      //   _this.gis
       // ).addTo(map)
       _this.map = map// data上需要挂载
       window.map = map
@@ -153,6 +151,36 @@ export default {
         text = num
       }
       return text
+    },
+    loadLocalMapType () {
+      // let mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
+
+      let grayscale = L.tileLayer(this.gisNormal, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1})
+      let streets = L.tileLayer(this.gisStatellite, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1})
+
+      let baseLayers = {
+        '地图': grayscale,
+        '影像': streets
+      }
+      let overlayLayers = {}
+      let map = L.map('map', {
+        layers: [grayscale],
+        minZoom: this.minZoom,
+        maxZoom: this.maxZoom,
+        center: this.center,
+        zoom: this.zoom,
+        zoomControl: false,
+        attributionControl: false,
+        crs: L.CRS.EPSG3857,
+        dragging: true,
+        editMode: false,
+        preferCanvas: true
+      })
+      let options = {
+        position: 'bottomleft'
+      }
+      L.control.layers(baseLayers, overlayLayers, options).addTo(map)
+      return map
     },
     loadMapType () {
       let normalm = L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {
@@ -226,9 +254,39 @@ export default {
               if (config['key'] === 'zoom') {
                 this.zoom = Number(config['value'])
               }
+              if (config['key'] === 'gisNormal') {
+                this.gisNormal = config['value']
+              }
+              if (config['key'] === 'gisStatellite') {
+                this.gisStatellite = config['value']
+              }
+              if (config['key'] === 'gisBoundLeftTop') {
+                let cen = config['value']
+                let ss = cen.split(',')
+                let s1 = ss[0].replace('[', '')
+                let s2 = ss[1].replace(']', '').trim()
+                this.gisBoundLeftTop = [Number(s1), Number(s2)]
+              }
+              if (config['key'] === 'gisBoundRightBottom') {
+                let cen = config['value']
+                let ss = cen.split(',')
+                let s1 = ss[0].replace('[', '')
+                let s2 = ss[1].replace(']', '').trim()
+                this.gisBoundRightBottom = [Number(s1), Number(s2)]
+              }
               if (config['key'] === 'gis') {
                 this.gis = config['value'] + ''
-                // this.gis = 'http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x}'
+                // this.gis = 'http://192.168.14.168:7080/PBS/rest/services/MyPBSService/MapServer/tile/{z}/{y}/{x}'
+                // let gisNormal = 'http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x}'
+                // let gisStatellite = 'http://192.168.14.168:7081/PBS/rest/services/MyPBSService2/MapServer/tile/{z}/{y}/{x}'
+                // this.gisNormal = gisNormal
+                // this.gisStatellite = gisStatellite
+                // this.gis = gisStatellite
+
+                // this.center = [31.22784056, 121.68148040]
+                // this.zoom = 12
+                // this.minZoom = 12
+                // this.maxZoom = 18
               }
             }
             resolve(data.data.data)
