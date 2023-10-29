@@ -11,7 +11,7 @@
  **/
 <template>
 <!-- 单视频播放组件 -->
-  <div class="flvplayer">
+  <div class="flvplayer" v-if="!!curVideoInfo">
     <div class="flv-header">
       <span class="title">{{ this.Title || title }}</span>
       <span class="list-icon">
@@ -34,8 +34,7 @@ export default {
   name: 'flvplayer',
   props: {
     curVideoInfo: { // 当前播放的视频信息
-      type: Object,
-      default: () => {}
+      type: Object
     },
     Width: {
       type: String,
@@ -55,7 +54,7 @@ export default {
     }
   },
   mounted () {
-    if (!this.curVideoInfo) return
+    if (!this.curVideoInfo || this.curVideoInfo === {}) return
     if (this.curVideoInfo.hasOwnProperty('name')) {
       this.title = this.curVideoInfo.name
     }
@@ -77,6 +76,7 @@ export default {
   methods: {
     createVideo () {
       if (flvjs.isSupported()) {
+        if (!this.curVideoInfo) return
         this.curVideoInfo.videoElement = document.getElementById(`videoElement${this.curVideoInfo.id}`)
         let flvPlayer = flvjs.createPlayer({
           type: 'flv',
@@ -111,6 +111,7 @@ export default {
     }
   },
   destroyed () {
+    if (!this.curVideoInfo) return
     this.flv_destroy(this.curVideoInfo.flvPlayer)
   }
 }

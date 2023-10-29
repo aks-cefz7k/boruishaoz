@@ -53,6 +53,15 @@ export default {
       type: String
     }
   },
+  watch: {
+    curDevVideos: {
+      handler: function (val) {
+        if (!val.length) return
+        this.switchVideo(val[0].id)
+      },
+      deep: true
+    }
+  },
   data () {
     return {
       resetVedioDom: false,
