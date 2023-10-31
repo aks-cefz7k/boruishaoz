@@ -283,5 +283,30 @@
     "key": "delete_systemconfig",
     "url": "/systemconfig",
     "method": "delete"
+  },
+  {
+    "key": "get_overflow_detector",
+    "url": "/overflowdetector",
+    "method": "get"
+  },
+  {
+    "key": "add_overflow_detector",
+    "url": "/overflowdetector",
+    "method": "post"
+  },
+  {
+    "key": "update_overflow_detector",
+    "url": "/overflowdetector",
+    "method": "put"
+  },
+  {
+    "key": "del_overflow_detector",
+    "url": "/overflowdetector",
+    "method": "delete"
+  },
+  {
+    "key": "update_overflows",
+    "url": "/overflow",
+    "method": "put"
   }
 ]

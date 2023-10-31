@@ -32,7 +32,9 @@ const zh = {
       'operation': '操作',
       'operationsuccess': '操作成功',
       'authtip': '没有权限访问 !',
-      'nodata': '没有数据 !'
+      'nodata': '没有数据 !',
+      'canceloperate': '操作已取消！',
+      'submitsuccess': '提交成功！'
     },
     'button': {
       'OK': '确定',
@@ -41,7 +43,9 @@ const zh = {
       'collapseall': '全部折叠',
       'search': '搜索',
       'location': '位置',
-      'ignore': '忽略'
+      'ignore': '忽略',
+      'modify': '修改',
+      'submit': '提交'
     },
     'login': {
       'username': '用户名',
@@ -60,6 +64,7 @@ const zh = {
       'greenwaveoptimize': '绿波协调',
       'operationrecord': '操作记录',
       'organization': '组织机构',
+      'bottleneckcontrol': '瓶颈控制',
       'script': '脚本',
       'dutyroute': '勤务路线',
       'realname': '真实姓名',
@@ -316,6 +321,35 @@ const zh = {
     'gis': {
       'chooseLocationInfo': '请点击地图选择位置 !',
       'clickToChooseLocationInfo': '点击图标去地图上选择位置 !'
+    },
+    'bottleneckcontrol': {
+      'detector': '检测器',
+      'switchsavereminder': '切换瓶颈控制列表，不会保存当前配置，确认切换么?',
+      'bottlenecklist': '瓶颈控制列表',
+      'detectorid': '方案ID',
+      'desc': '描述',
+      'type': '类型',
+      'status': '状态',
+      'port': '端口',
+      'name': '名称',
+      'deviceid': '设备ID',
+      'phaseid': '相位ID',
+      'controllevel': '控制等级',
+      'controltype': '控制类型',
+      'controltime': '相位时长（秒）',
+      'choosedev': '选择设备',
+      'phase': '相位',
+      'one-level': '一级',
+      'two-level': '二级',
+      'three-level': '三级',
+      'queue': '排队',
+      'overflow': '溢出',
+      'triggering': '触发中',
+      'nottriggered': '未触发',
+      'greenextension': '绿灯延长',
+      'greenreduction': '绿灯缩减',
+      'bottleneckinfo': '瓶颈控制信息',
+      'isdeletedetector': '确认删除检测器'
     }
   }
 }

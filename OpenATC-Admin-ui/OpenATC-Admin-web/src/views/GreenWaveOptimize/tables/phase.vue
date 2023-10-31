@@ -71,7 +71,7 @@
 </template>
 <script>
 import { getTscPhase } from '@/api/route'
-import { images } from './utils.js'
+import { images } from '@/utils/phaseList.js'
 import XRDDirSelector from '../../../components/XRDDirSelector/index'
 export default {
   name: 'phase',
