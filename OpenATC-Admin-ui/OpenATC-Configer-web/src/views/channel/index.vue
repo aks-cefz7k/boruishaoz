@@ -219,6 +219,7 @@ export default {
       this.typeOptions[0].children = phasetype
       this.typeOptions[1].children = phasetype
       this.typeOptions[2].children = patterntype
+      this.typeOptions[3].children = patterntype
       let channel = this.globalParamModel.getParamsByType('channelList')
       for (let obj of channel) {
         let list = []

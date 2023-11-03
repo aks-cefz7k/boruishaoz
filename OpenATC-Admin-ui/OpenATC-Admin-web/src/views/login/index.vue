@@ -51,7 +51,8 @@
 
 <script>
 import { login } from '../../api/login'
-import { SetSimuUserKey, setLanguage } from '@/utils/auth'
+import { SetSimuUserKey, setLanguage, getLanguage, setTheme } from '@/utils/auth'
+import { SystemconfigApi } from '@/api/systemconfig.js'
 // import axios from 'axios'
 
 export default {
@@ -133,6 +134,7 @@ export default {
               this.loading = false
               SetSimuUserKey(this.loginForm.user_name)
               this.loginInterface.loginSucess(data.data.data.token)
+              this.loadDefaultConfig()
             })
             .catch(err => {
               this.loading = false
@@ -144,6 +146,59 @@ export default {
           return false
         }
       })
+    },
+    loadLanguageConfig () {
+      // 从接口获取默认语言并设置
+      SystemconfigApi.GetSystemconfigByModule('language').then((data) => {
+        let res = data.data
+        if (!res.success) {
+          throw new Error('get language error')
+        } else {
+          for (let config of data.data.data) {
+            if (config['value'] === 'zh') {
+              this.$i18n.locale = 'zh'
+            } else if (config['value'] === 'en') {
+              this.$i18n.locale = 'en'
+            } else {
+              this.setLanguageFromStorage()
+            }
+            setLanguage(this.$i18n.locale)
+          }
+        }
+      })
+    },
+    setLanguageFromStorage () {
+      // 从浏览器存储中读取语言配置
+      let language = getLanguage()
+      if (language === 'zh') {
+        this.$i18n.locale = 'zh'
+      } else if (language === 'en') {
+        this.$i18n.locale = 'en'
+      }
+    },
+    loadThemeConfig () {
+      // 从接口获取默认皮肤并设置
+      SystemconfigApi.GetSystemconfigByModule('theme').then((data) => {
+        let res = data.data
+        if (!res.success) {
+          throw new Error('get theme error')
+        } else {
+          for (let config of data.data.data) {
+            if (config['value'] === 'dark') {
+              setTheme('dark')
+              require('../../styles/dark/index.scss')
+            } else if (config['value'] === 'light') {
+              setTheme('light')
+              require('../../styles/light/index.scss')
+            }
+          }
+        }
+      })
+    },
+    loadDefaultConfig  () {
+      // 加载系统默认配置
+      this.loadLanguageConfig()
+      this.loadThemeConfig()
     },
     switchLanguage (command) {
       switch (command) {

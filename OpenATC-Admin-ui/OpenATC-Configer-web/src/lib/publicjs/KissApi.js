@@ -99,7 +99,7 @@ export class KissApi {
       url: apiUrl,
       method: urlInfo.method,
       headers: this.headerInfo,
-      timeout: 1000 * 10,
+      timeout: 1000 * 60,
       data: data,
       params: this._assingJson(param, this.defaultParam)
     }

@@ -100,6 +100,11 @@
     "method": "get"
   },
   {
+    "key": "GetAllRoute",
+    "url": "/route",
+    "method": "get"
+  },
+  {
     "key": "getAllPatternOfRoute",
     "url": "/route/pattern/upload",
     "method": "get"
@@ -282,6 +287,36 @@
   {
     "key": "delete_systemconfig",
     "url": "/systemconfig",
+    "method": "delete"
+  },
+  {
+    "key": "GetAllVideos",
+    "url": " /video",
+    "method": "get"
+  },
+  {
+    "key": "GetRouteVideos",
+    "url": "/video/list",
+    "method": "post"
+  },
+  {
+    "key": "GetCrossVideos",
+    "url": "/video",
+    "method": "get"
+  },
+  {
+    "key": "AddDeviceVideo",
+    "url": "/video",
+    "method": "post"
+  },
+  {
+    "key": "UpdateDeviceVideo",
+    "url": "/video",
+    "method": "put"
+  },
+  {
+    "key": "DeleteDeviceVideo",
+    "url": "/video/single",
     "method": "delete"
   },
   {

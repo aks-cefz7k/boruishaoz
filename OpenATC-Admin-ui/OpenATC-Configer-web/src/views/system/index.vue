@@ -116,8 +116,17 @@
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
                 <div class="signal-version-name">{{$t('edge.system.systemupdate')}}：</div>
                 <div class="signal-version-bottom">
-                    <el-button type="primary" @click="chooseFile" size="mini">{{$t('edge.system.selectfile')}}</el-button>
+                    <!-- <el-button type="primary" @click="chooseFile" size="mini">{{$t('edge.system.selectfile')}}</el-button> -->
+                    <div class="statistics-name">{{$t('edge.statistics.username')}}</div>
+                    <div class="statistics-input">
+                      <el-input v-model="userName" :placeholder="$t('edge.statistics.usernameplaceholder')" size="small"></el-input>
+                    </div>
+                    <div class="statistics-name">{{$t('edge.statistics.pass')}}</div>
+                    <div class="statistics-input">
+                      <el-input v-model="password" :placeholder="$t('edge.statistics.passplaceholder')" size="small" show-password></el-input>
+                    </div>
                 </div>
+                <el-button type="primary" @click="chooseFile" size="mini" style="margin-left: 20px;">{{$t('edge.system.selectfile')}}</el-button>
             </div>
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
                 <div class="signal-version-name">{{$t('edge.system.dataupdate')}}：</div>
@@ -205,7 +214,9 @@ export default {
         // label: '无限制',
         value: 0,
         id: '3'
-      }]
+      }],
+      userName: '',
+      password: ''
     }
   },
   watch: {
@@ -417,8 +428,14 @@ export default {
       editSerialport.onEditSerialPort(this.Baudrate, this.databit, this.stopbit, this.paritybit)
     },
     chooseFile () {
+      let username = this.userName
+      let password = this.password
+      if (username === '' || password === '') {
+        this.$message.error(this.$t('edge.statistics.userpassnotnull'))
+        return
+      }
       let updateFile = this.$refs.updateFile
-      updateFile.onUpdateFile()
+      updateFile.onUpdateFile(username, password)
     },
     editRemoteDebug () {
       setRemoteDebug(this.remoteDebugInfo).then(data => {
@@ -431,7 +448,7 @@ export default {
           this.$message.error(data.data.message)
           return
         }
-        let msg = '设置成功！'
+        let msg = this.$t('edge.system.resetSuccess')
         this.$message({
           message: msg,
           type: 'success',
@@ -450,7 +467,7 @@ export default {
           this.$message.error(data.data.message)
           return
         }
-        let msg = '更新成功！'
+        let msg = this.$t('edge.common.updatesucess')
         this.$message({
           message: msg,
           type: 'success',

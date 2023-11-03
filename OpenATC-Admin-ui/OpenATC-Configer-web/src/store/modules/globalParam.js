@@ -27,6 +27,7 @@ const tscParam = {
     fixintersectioninfo: '',
     commuport: 0,
     commutype: '',
+    steptype: '',
     netcard: [{
       ip: '',
       subnetmask: '',

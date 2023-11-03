@@ -105,6 +105,7 @@ const en = {
       'protocoltype': 'Protocol',
       'signalID': 'Signal ID',
       'signalIP': 'Signal IP',
+      'platform': 'platform',
       'online': 'Online',
       'offline': 'Offline',
       'onlineing': 'Offline...',
@@ -184,7 +185,7 @@ const en = {
       'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!'
     },
     'phase': {
-      'desc': 'Description',
+      'desc': 'LaneDirection',
       'peddesc': 'PedestrianDirection',
       'controltype': 'ControlType',
       'mingreen': 'MinGreen',
@@ -282,6 +283,7 @@ const en = {
       'stageConfig': 'Stage Config',
       'ringConfig': 'Ring Config',
       'stage': 'Stage',
+      'phase': 'Phase',
       'agentidError': '获取设备ID失败!'
     },
     'plan': {
@@ -449,7 +451,8 @@ const en = {
       'detectgapnoredon': 'Detect Gap No Red On（0.1s）: ',
       'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
       'startOrderParams': 'Start Order Params ',
-      'netcardInfo': 'Netcard Info: '
+      'netcardInfo': 'Netcard Info: ',
+      'stepType': 'Step Type'
     },
     'singleoptim': {
       'deletetip': 'Sure to delete ？',
@@ -549,7 +552,11 @@ const en = {
       'remote2': 'Authorize',
       'remote3': 'Custom',
       'test': 'Test',
-      'realTimeChannel': 'Real time channel'
+      'realTimeChannel': 'Real time channel',
+      'isReboot': 'The system file is downloaded successfully. Do you want to restart the device?',
+      'rebootSuccess': 'Restart successfully!',
+      'rebootFaile': 'Restart failed!',
+      'resetSuccess': 'Set successfully!'
     },
     'optimize': {
       'strategy': 'Optimization strategy',

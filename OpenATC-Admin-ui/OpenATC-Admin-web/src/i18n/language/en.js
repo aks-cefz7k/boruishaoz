@@ -71,9 +71,13 @@ const en = {
       'telno': 'Telno',
       'email': 'Email',
       'changepass': 'Changepass',
+      'systemsettings': 'System Settings',
       'about': 'About',
       'signout': 'Sign Out',
-      'language': 'Language'
+      'language': 'Language',
+      'skin': 'Skin',
+      'dark': 'Dark',
+      'light': 'Light'
     },
     'home': {
       'devicestatus': 'Device Status',
@@ -132,7 +136,9 @@ const en = {
       'updateDeviceId': 'Modify ID',
       'deviceNotNull': 'Device ID cannot be empty!',
       'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
-      'thirdplatformid': 'Third party ID'
+      'thirdplatformid': 'Third party ID',
+      'timeSpaceGraph': 'Time space graph',
+      'keyintersection': 'Key Intersection：'
     },
     'usermanager': {
       'username': 'Username',
@@ -320,7 +326,19 @@ const en = {
     },
     'gis': {
       'chooseLocationInfo': 'Click the map to choose a location !',
-      'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!'
+      'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!',
+      'crossRoad': 'Cross Road'
+    },
+    'systemsettings': {
+      'id': 'ID',
+      'module': 'Module',
+      'name': 'Name',
+      'content': 'Content',
+      'desc': 'Desc',
+      'operate': 'Operate',
+      'addconfig': 'Add Config',
+      'updateconfig': 'Update Config',
+      'deleteconfig': 'Do you want to delete this config?'
     },
     'bottleneckcontrol': {
       'detector': 'Detector',

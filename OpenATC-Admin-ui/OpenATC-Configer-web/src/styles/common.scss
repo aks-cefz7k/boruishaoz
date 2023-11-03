@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 @import "./mixin.scss";
-@import './theme/element-variables.scss';
+// @import './theme/element-variables.scss';
 
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
@@ -650,6 +650,12 @@ border: 1px solid $--border-color-base;
     // transform-origin: center top;
     padding-top: 30px;
   }
+  .changeWidth {
+    width: 98% !important;
+  }
+  .changePaddingBottom {
+    padding-bottom: 30px;
+  }
   /*当屏幕小于等于1680px的屏幕样式*/
   @media only screen and (max-width: 1680px){
     .crossDirection-display{
@@ -889,6 +895,10 @@ border: 1px solid $--border-color-base;
  .superminiCrossImg {
   //  transform: scale(0.35);
    zoom: 0.35;
+ }
+ .minimumCrossImg {
+  //  transform: scale(0.25);
+   zoom: 0.25;
  }
 }
 .main-statgestatus {

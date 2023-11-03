@@ -149,9 +149,11 @@ export default {
     },
     updateDevice () {
       let _vue = this
+      let lng = Number(this.deviceInfo.lng)
+      let lat = Number(this.deviceInfo.lat)
       let geometry = {
         type: 'Point',
-        coordinates: [this.deviceInfo.lng, this.deviceInfo.lat]
+        coordinates: [lng, lat]
       }
       let devInfo = this.deviceInfo
       devInfo.geometry = geometry
@@ -186,7 +188,7 @@ export default {
       let device = row
       let lng = device.lng ? device.lng : 0
       let lat = device.lat ? device.lat : 0
-      if (!isSelectLocation) {
+      if (!isSelectLocation) { // 修改时回填
         if (device.geometry !== undefined) {
           lng = device.geometry.coordinates[0]
           lat = device.geometry.coordinates[1]
@@ -221,19 +223,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" rel="stylesheet/scss">
-.dev-update .el-dialog__body {
-  padding: 30px 72px 30px 0;
-}
-.el-dialog__footer {
-  padding: 10px 72px 38px 0;
-}
-// 自定义校验规则的labal加上*号
-.dev-update .ipLabel .el-form-item__label:before,
-.dev-update .portLabel .el-form-item__label:before {
-  content: "*";
-  color: #f56c6c;
-  margin-right: 4px;
-}
-</style>

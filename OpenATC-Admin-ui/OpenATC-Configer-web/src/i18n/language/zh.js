@@ -105,6 +105,7 @@ const zh = {
       'protocoltype': '协议类型',
       'signalID': '信号机ID',
       'signalIP': '信号机IP',
+      'platform': '平台类型',
       'online': '在线',
       'offline': '离线',
       'onlineing': '联机中...',
@@ -184,7 +185,7 @@ const zh = {
       'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！'
     },
     'phase': {
-      'desc': '描述',
+      'desc': '车道方向',
       'peddesc': '行人方向',
       'controltype': '控制类型',
       'mingreen': '最小绿',
@@ -280,6 +281,7 @@ const zh = {
       'stageConfig': '阶段配置',
       'ringConfig': '环配置',
       'stage': '阶段',
+      'phase': '相位',
       'agentidError': '获取设备ID失败!'
     },
     'plan': {
@@ -447,7 +449,8 @@ const zh = {
       'detectgapnoredon': '无红灯亮起检测时间间隔(0.1秒):',
       'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
       'startOrderParams': '启动时序参数 ',
-      'netcardInfo': '网卡信息: '
+      'netcardInfo': '网卡信息: ',
+      'stepType': '步进类型'
     },
     'singleoptim': {
       'deletetip': '确认删除？',
@@ -547,7 +550,11 @@ const zh = {
       'remote2': '授权',
       'remote3': '自定义',
       'test': '检测',
-      'realTimeChannel': '实时通道'
+      'realTimeChannel': '实时通道',
+      'isReboot': '系统文件下载成功,是否重启设备？',
+      'rebootSuccess': '重启成功！',
+      'rebootFaile': '重启失败！',
+      'resetSuccess': '设置成功！'
     },
     'optimize': {
       'strategy': '优化策略',
