@@ -366,15 +366,17 @@ export default {
     },
     getOverlapPhaseStatus () {
       // 得到车道跟随相位状态（颜色）
-      this.overlapStatusList.map(phase => {
-        let phaseId = phase.id
-        let phaseInfo = {
-          type: phase.type,
-          phaseCountdown: phase.countdown,
-          pedtype: phase.pedtype
-        }
-        this.overlapPhaseStatusMap.set(phaseId, phaseInfo)
-      })
+      if (this.overlapStatusList) {
+        this.overlapStatusList.map(phase => {
+          let phaseId = phase.id
+          let phaseInfo = {
+            type: phase.type,
+            phaseCountdown: phase.countdown,
+            pedtype: phase.pedtype
+          }
+          this.overlapPhaseStatusMap.set(phaseId, phaseInfo)
+        })
+      }
       let curLanePhaseData = []
       for (let i = 0; i < this.overlapLanePhaseData.length; i++) {
         let curPhaseStatus = this.overlapPhaseStatusMap.get(this.overlapLanePhaseData[i].phaseid)
@@ -642,7 +644,15 @@ export default {
       for (let i = 0; i < this.overlapsidewalkPhaseData.length; i++) {
         if (this.overlapsidewalkPhaseData[i].phaseid) {
           let curPhaseStatus = this.overlapPhaseStatusMap.get(this.overlapsidewalkPhaseData[i].phaseid)
-          if (!curPhaseStatus) continue
+          if (!curPhaseStatus) {
+            // 无状态的行人道,也显示出来
+            const data = {
+              ...this.overlapsidewalkPhaseData[i],
+              pedtype: undefined
+            }
+            curPedStatus.push(data)
+            continue
+          }
           const data = {
             ...this.overlapsidewalkPhaseData[i],
             pedtype: curPhaseStatus.pedtype,
