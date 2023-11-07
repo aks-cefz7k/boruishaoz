@@ -182,7 +182,9 @@ const en = {
       'canceled': 'Cancelled',
       'nextcycleeffic': 'Successful execution, the next cycle will take effect!',
       'transitioneffic': 'The execution is successful. It will take effect after the transition switch!',
-      'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!'
+      'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!',
+      'delay': 'Delay time',
+      'duration': 'Duration'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -681,6 +683,7 @@ const en = {
       'relatecancel': 'Relate Canceled!',
       'upload': 'Upload',
       'select': 'Select',
+      'input': 'Please enter a word',
       'entercontent': 'Please enter the content',
       'commit': 'Commit',
       'commitandexecute': 'CommitAndExecute',
