@@ -109,6 +109,12 @@
                 <el-form-item :label="$t('edge.control.value')">
                     <el-input v-model="form.value" style="width: 70%"></el-input>
                 </el-form-item>
+                <el-form-item :label="$t('edge.overview.delay')">
+                    <el-input v-model="form.delay" style="width: 70%"></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('edge.overview.duration')">
+                    <el-input v-model="form.duration" style="width: 70%"></el-input>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" size="small">{{$t('edge.common.setup')}}</el-button>
                     <el-button type="primary" @click="onGet" size="small">{{$t('edge.common.query')}}</el-button>
@@ -168,6 +174,17 @@
               <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
               <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
             </div>
+
+            <div style="margin-top: 7px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempDelay" size="mini" :placeholder="$t('edge.common.input')"></el-input></div>
+            </div>
+
+            <div style="margin-top: 7px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempDuration" size="mini" :placeholder="$t('edge.common.input')"></el-input></div>
+            </div>
+
             <div style="margin-top: 15px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
             <div style="padding-left: 15px; width: 100%; overflow: hidden;">
               <div class="control-model" v-for="(item, index) in modelList" :key="index">
@@ -233,7 +250,9 @@ export default {
         control: '',
         terminal: '',
         mode: '',
-        value: ''
+        value: '',
+        delay: '',
+        duration: ''
       },
       controlNum: '',
       spanArr: [],
@@ -370,6 +389,8 @@ export default {
       volumeData: null,
       curTable: 'phase',
       tempPatternid: 0, // 控制方式手动操作的情况下的控制编号的临时值。
+      tempDelay: 0, // 控制方式手动操作的情况下的延迟时间的临时值。
+      tempDuration: 0, // 控制方式手动操作的情况下的持续时间的临时值。
       phaseList: [], // 当前相位集合
       patternStatusList: [], // 显示方案状态的相关数据集合
       barrierList: [], // 方案状态中屏障的数据集合
@@ -618,6 +639,8 @@ export default {
       // control.pattern = Number(this.form.pattern)
       control.terminal = Number(this.form.terminal)
       control.value = Number(this.form.value)
+      control.delay = Number(this.form.delay)
+      control.duration = Number(this.form.duration)
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
@@ -659,6 +682,8 @@ export default {
         // this.form.mode = this.ParamsMode.get(patternData.mode)
         // this.form.mode = this.ParamsModeEn.get(patternData.mode)
         this.form.value = patternData.value
+        this.form.delay = patternData.delay
+        this.form.duration = patternData.duration
       }).catch(error => {
         this.unlockScreen()
         this.$message.error(error)
@@ -834,6 +859,8 @@ export default {
         this.isOperation = !this.isOperation
         this.controlHeight = 480
         this.tempPatternid = this.controlData.patternid
+        this.tempDelay = this.controlData.delay
+        this.tempDuration = this.controlData.duration
         let autonomyControl = {
           id: 0,
           iconClass: 'zizhukongzhi',
@@ -852,6 +879,8 @@ export default {
           this.preselectModel = -1
           this.preselectStages = -1
           this.tempPatternid = 0
+          this.tempDelay = 0
+          this.tempDuration = 0
           this.modelList = this.modelList.filter((item) => {
             return item.id !== 0
           })
@@ -874,6 +903,8 @@ export default {
       })
       control.control = that.preselectModel === -1 ? that.currModel : that.preselectModel
       control.terminal = Number(that.tempPatternid)
+      control.delay = Number(that.tempDelay)
+      control.duration = Number(that.tempDuration)
       control.value = that.preselectStages === -1 ? 0 : that.preselectStages
       putTscControl(control).then(data => {
         that.unlockScreen()
