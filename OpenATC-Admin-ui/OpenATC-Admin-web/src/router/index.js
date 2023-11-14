@@ -177,6 +177,14 @@ export const constantRouterMapOfLogin = [{
   }]
 },
 {
+  path: '/bottleneckControl',
+  component: compose,
+  children: [{
+    path: '',
+    component: () => import('@/views/bottleneckControl/index')
+  }]
+},
+{
   path: '/404',
   component: () => import('@/views/404'),
   hidden: true

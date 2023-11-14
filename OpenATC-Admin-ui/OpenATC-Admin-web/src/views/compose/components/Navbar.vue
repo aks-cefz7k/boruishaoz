@@ -21,6 +21,7 @@
       <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item>
       <!-- <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item> -->
       <el-menu-item index="greenwave" style="display:inline">{{$t('openatc.main.greenwaveoptimize')}}</el-menu-item>
+      <el-menu-item index="bottleneckcontrol" style="display:inline">{{$t('openatc.main.bottleneckcontrol')}}</el-menu-item>
       <el-menu-item index="operate" style="display:inline">{{$t('openatc.main.operationrecord')}}</el-menu-item>
       <el-menu-item index="organization" style="display:inline">{{$t('openatc.main.organization')}}</el-menu-item>
       <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item>
@@ -126,7 +127,8 @@ export default {
         operate: '/operaterecord',
         organization: '/organization',
         dutyroute: '/dutyroute',
-        jupyter: '/jupyter'
+        jupyter: '/jupyter',
+        bottleneckcontrol: '/bottleneckControl'
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,

@@ -13,7 +13,7 @@
   <div class="gis-planchart" style="width: 100%; height: 600px;">
     <div class="title">{{routeName}}</div>
     <div class="planchart-name">{{$t('openatc.devicemanager.timeSpaceGraph')}}</div>
-    <div id="echarts" style="width: 450px; height: 540px;"></div>
+    <div id="echarts" style="width: 100%; height: 540px;"></div>
 </div>
 </template>
 
@@ -41,11 +41,21 @@ export default {
       routerData: {},
       isShowUpCard: false,
       isShowDownCard: false,
-      green: []
+      green: [],
+      newRouteOptions: {
+        color: '#409EFF'
+      },
+      routeOptions: {
+        color: '#909399'
+      },
+      chooseRouteId: 0,
+      oldPolyline: ''
     }
   },
   mounted () {
     const _this = this
+    var w = document.getElementsByClassName('showLayout')[0]
+    w.style.width = '700px'
     var dom = document.getElementById('echarts')
     _this.myChart = echarts.init(dom)
     _this.CDTModel = new CDTModel()
@@ -102,21 +112,53 @@ export default {
       let _this = this
       let polylines = []
       this.deviceMarks = []
+      let i = 0
       for (let data of dataList) {
         if (data.devs.length === 0) continue
+        i++
         let geometry = _this.getGeometry(data)
         // let routeId = data.id
         let status = data.enable
-        var polylineOptions = {
-          color: status ? '#67c23a' : '#007dc5',
-          weight: 8,
-          routeId: data.id,
-          status: status,
-          name: data.name,
-          keyintsid: data.keyintsid
+        var polylineOptions = {}
+        // var polylineOptions = {
+        //   // color: status ? '#67c23a' : '#007dc5',
+        //   color: '#909399',
+        //   weight: 8,
+        //   routeId: data.id,
+        //   status: status,
+        //   name: data.name,
+        //   keyintsid: data.keyintsid
+        //   // opacity: 0.9
+        // }
+        if (i === 1) {
+          polylineOptions = {
+          // color: status ? '#67c23a' : '#007dc5',
+            color: '#409EFF',
+            weight: 8,
+            routeId: data.id,
+            status: status,
+            name: data.name,
+            keyintsid: data.keyintsid
           // opacity: 0.9
+          }
+          this.chooseRouteId = data.id
+        } else {
+          polylineOptions = {
+          // color: status ? '#67c23a' : '#007dc5',
+            color: '#909399',
+            weight: 8,
+            routeId: data.id,
+            status: status,
+            name: data.name,
+            keyintsid: data.keyintsid
+          // opacity: 0.9
+          }
         }
         let polyline = L.polyline(geometry, polylineOptions).on('click', this.onPolylineClick)
+        if (i === 1) {
+          this.oldPolyline = polyline
+          this.showPlanchart(data.id)
+        }
         polylines.push(polyline)
         // _this.map.addLayer(polyline)
       }
@@ -128,6 +170,13 @@ export default {
     },
     onPolylineClick (e) {
       let routeId = e.target.options.routeId
+      if (this.chooseRouteId !== routeId) {
+        e.target.setStyle(this.newRouteOptions)
+        this.oldPolyline.setStyle(this.routeOptions)
+        this.oldPolyline = e.target
+        this.chooseRouteId = routeId
+      }
+      // e.target.setStyle(this.newRouteOptions)
       this.showPlanchart(routeId)
     },
     addRoutePopup () {
@@ -139,14 +188,17 @@ export default {
     },
     getPopupContent (data) {
       let routeName = data.name
-      let status = data.status
+      // let status = data.status
       let keyintsid = data.keyintsid === undefined ? '--' : data.keyintsid
       let html = ''
-      if (status) {
-        html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #ecf5ff; border-radius: 2px; border: solid 1px #d9ecff;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #409eff;">启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
-      } else {
-        html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #f4f4f5; border-radius: 2px; border: solid 1px #e9e9eb;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #909399;">未启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
-      }
+      // if (status) {
+      //   // html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #ecf5ff; border-radius: 2px; border: solid 1px #d9ecff;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #409eff;">启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
+      //   html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '</div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
+      // } else {
+      //   // html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '<div style="float: right; height: 22px; background-color: #f4f4f5; border-radius: 2px; border: solid 1px #e9e9eb;"><span style="margin: 5px; font-family: SourceHanSansCN; font-size: 12px; font-weight: normal; font-stretch: normal; letter-spacing: 0px; color: #909399;">未启用</span></div></div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
+      //   html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '</div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
+      // }
+      html = '<div><div style="font-family: SourceHanSansCN; font-size: 16px; font-weight: bold; font-stretch: normal; color: #303133;">' + routeName + '</div><div style="width: 150px; height: 1px; background-color: #004e61; border: solid 1px #e7e7e7; margin-top: 10px;"></div><div style="font-family: SourceHanSansCN; font-size: 14px; font-weight: normal; font-stretch: normal; color: #303133; margin-top: 10px;">' + this.$t('openatc.devicemanager.keyintersection') + keyintsid + '</div></div></div>'
       return html
     },
     getGeometry (data) {
@@ -273,6 +325,12 @@ export default {
         _this.map.removeLayer(_this.deviceGroupLayer)
         // _this.deviceGroupLayer.clearLayers()
         _this.deviceGroupLayer = ''
+      }
+      if (_this.chooseRouteId !== 0) {
+        _this.chooseRouteId = 0
+      }
+      if (_this.oldPolyline !== '') {
+        _this.oldPolyline = ''
       }
     }
   },

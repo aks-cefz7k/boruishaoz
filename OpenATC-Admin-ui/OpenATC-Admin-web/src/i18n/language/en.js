@@ -17,8 +17,8 @@ const en = {
       'edit': 'Edit',
       'detail': 'Detail',
       'searchplaceholder': 'Enter keyword search',
-      'addfailed': 'Add Success!',
-      'addsuccess': 'Add Failed!',
+      'addfailed': 'Add Failed!',
+      'addsuccess': 'Add Success!',
       'addcancel': 'Add Canceled!',
       'deletefailed': 'Delete Failed!',
       'deletesuccess': 'Delete Success!',
@@ -32,7 +32,9 @@ const en = {
       'operation': 'Operation',
       'operationsuccess': 'Operation Success !',
       'authtip': 'No access !',
-      'nodata': 'No Data !'
+      'nodata': 'No Data !',
+      'canceloperate': 'Operation cancelled！',
+      'submitsuccess': 'Submit Success!'
     },
     'button': {
       'OK': 'OK',
@@ -41,7 +43,9 @@ const en = {
       'collapseall': 'Collapse All',
       'search': 'Search',
       'location': 'Location',
-      'ignore': 'Ignore'
+      'ignore': 'Ignore',
+      'modify': 'Modify',
+      'submit': 'Submit'
     },
     'login': {
       'username': 'user_name',
@@ -60,6 +64,7 @@ const en = {
       'greenwaveoptimize': 'Greenwave Optimize',
       'operationrecord': 'Operation Record',
       'organization': 'Organization',
+      'bottleneckcontrol': 'Overflow Detector',
       'script': 'Script',
       'dutyroute': 'Duty Route',
       'realname': 'RealName',
@@ -339,6 +344,35 @@ const en = {
       'addconfig': 'Add Config',
       'updateconfig': 'Update Config',
       'deleteconfig': 'Do you want to delete this config?'
+    },
+    'bottleneckcontrol': {
+      'detector': 'Detector',
+      'switchsavereminder': 'Switching detector control list will not save the current configuration. Are you sure you want to switch?',
+      'bottlenecklist': 'Detector control list',
+      'detectorid': 'Scheme ID',
+      'desc': 'Describe',
+      'type': 'Type',
+      'status': 'Status',
+      'port': 'Port',
+      'name': 'Name',
+      'deviceid': 'Device ID',
+      'phaseid': 'Phase ID',
+      'controllevel': 'Control Level',
+      'controltype': 'Control Type',
+      'controltime': 'Controltime（s）',
+      'choosedev': 'Choose Device',
+      'phase': 'phase',
+      'one-level': 'one-level',
+      'two-level': 'two-level',
+      'three-level': 'three-level',
+      'queue': 'queue',
+      'overflow': 'overflow',
+      'triggering': 'triggering',
+      'nottriggered': 'not triggered',
+      'greenextension': 'Green Extension',
+      'greenreduction': 'Green Reduction',
+      'bottleneckinfo': ' detector control info',
+      'isdeletedetector': 'Are you sure delete the detector'
     }
   }
 }

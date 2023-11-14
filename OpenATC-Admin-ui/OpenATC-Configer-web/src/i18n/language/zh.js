@@ -182,7 +182,9 @@ const zh = {
       'canceled': '已取消',
       'nextcycleeffic': '执行成功，下周期生效！',
       'transitioneffic': '执行成功，过渡切换后生效！',
-      'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！'
+      'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！',
+      'delay': '延迟时间',
+      'duration': '持续时间'
     },
     'phase': {
       'desc': '车道方向',
@@ -679,6 +681,7 @@ const zh = {
       'relatecancel': '关联取消！',
       'upload': '上传',
       'select': '请选择',
+      'input': '请输入',
       'entercontent': '请输入内容',
       'commit': '提交',
       'commitandexecute': '提交并执行',
