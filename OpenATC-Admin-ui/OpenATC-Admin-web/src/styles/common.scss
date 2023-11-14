@@ -397,6 +397,61 @@
     transform: translateX(100%);
     opacity: 0;
   }
+  .route-info {
+    position: relative;
+    float: left;
+    margin-top: -10px;
+    margin-left: -220px;
+    width: 200px;
+    border-radius: 20px;
+  }
+  .route-length {
+    top: 70px;
+    right: 500px;
+    height: 80px;
+    background-color: $--color-white;
+    box-shadow: 0px 0px 7px 0px 
+      rgba(0, 32, 60, 0.12);
+    border: solid 1px $--border-color-base;
+  }
+  .route-length-name {
+    float: left;
+    margin-top: 5px;
+    margin-left: 12px;
+    height: 14px;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 35px;
+    letter-spacing: 0px;
+    color: $--color-text-secondary;
+  }
+  .route-length-value {
+    float: left;
+    margin-top: 10px;
+    margin-left: 10px;
+    height: 25px;
+    font-family: MicrosoftYaHei;
+    font-size: 30px;
+    font-weight: bold;
+    font-style: italic;
+    font-stretch: normal;
+    line-height: 35px;
+    letter-spacing: 0px;
+    color: $--color-primary;
+  }
+  .route-length-company {
+    float: left;
+    margin-top: 23px;
+    font-family: MicrosoftYaHei;
+    font-style: italic;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0px;
+    color: $--color-primary;
+  }
+  
   .showLayout {
     position: fixed;
     top: 70px;

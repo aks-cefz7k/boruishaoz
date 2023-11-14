@@ -15,9 +15,24 @@
     <transition name="slide">
       <div class="showLayout"  v-show="toggleShow">
         <div class="tabsconatiner">
+          <div class="route-info" v-if="bizType != 'deviceState'">
+            <div class="route-length" v-show="toggleshowisActive">
+              <el-row>
+                <div class="route-length-value">{{routLength }}</div>
+                <div class="route-length-company">m</div>
+              </el-row>
+              <el-row>
+                <div class="route-length-name">路线总长度</div>
+              </el-row>
+            </div>
+          </div>
           <device v-if="bizType === 'deviceState'" ref="device"> </device>
-          <dutyRoute v-if="bizType === 'dutyRoute'" ref="dutyRoute"> </dutyRoute>
-          <greenWaveCharts v-if="bizType === 'coordinateRoute'" ref="greenwavecharts"> </greenWaveCharts>
+          <dutyRoute v-if="bizType === 'dutyRoute'"
+                     ref="dutyRoute"
+                     @onRouteChange="onRouteChange"> </dutyRoute>
+          <greenWaveCharts v-if="bizType === 'coordinateRoute'"
+                           ref="greenwavecharts"
+                           @onRouteChange="onRouteChange"></greenWaveCharts>
         </div>
       </div>
     </transition>
@@ -82,6 +97,7 @@ export default {
       toggleshowisActive: true,
       gisBoundLeftTop: [31.36360615, 121.30622863],
       gisBoundRightBottom: [31.11040156, 121.95270538],
+      routLength: 0,
       tianDiTuKey: '3bfb2112c0920226f0592fd64cd2c70d'
     }
   },
@@ -294,6 +310,27 @@ export default {
         })
       })
     },
+    onRouteChange (pointArr) {
+      this.getRouteDistande(pointArr)
+    },
+    getRouteDistande (pointArr) {
+      if (!this.map) {
+        return 0
+      }
+      let res = 0
+      let curPoint = pointArr[0].slice().reverse()
+      let curLatlng = L.latLng(curPoint[0], curPoint[1])
+      for (let i = 1; i < pointArr.length; i++) {
+        let point = pointArr[i].slice().reverse()
+        let latlng = L.latLng(point[0], point[1])
+        let len = this.map.distance(curLatlng, latlng)
+        res = res + len
+        curLatlng = latlng
+      }
+      res = Math.round(res)
+      this.routLength = res
+      return res
+    },
     handleAnimation (anim) {
       this.anim = anim
       this.anim.addEventListener('loopComplete', () => {
@@ -324,6 +361,7 @@ export default {
   height: 94.5vh;
 }
 .tabsconatiner {
+  /* overflow: hidden; */
   margin: 10px;
   position: relative;
   width: 100% - 20px;

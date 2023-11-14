@@ -199,7 +199,9 @@ export default {
       await this.getViprouteStatus()
       await this.getDeviceByIds()
       await this.getRouteVideos()
+      let pointArr = []
       for (let item of this.routeData.devs) {
+        pointArr.push(item.geometry.coordinates)
         for (let state of this.stateList) {
           if (item.agentid === state.agentid) {
             item.state = state.state
@@ -227,6 +229,7 @@ export default {
         this.routeData.isShowVideo = this.isShowVideo
       }
       this.route = this.routeData
+      this.$emit('onRouteChange', pointArr)
     },
     getAllViproutes () {
       GetAllViproutes().then(res => {
