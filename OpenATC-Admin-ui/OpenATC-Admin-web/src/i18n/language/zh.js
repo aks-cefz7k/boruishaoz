@@ -332,7 +332,8 @@ const zh = {
       'gisStatellite': '影像',
       'deviceState': '设备状态',
       'dutyRoute': '特勤路线',
-      'coordinateRoute': '协调路线'
+      'coordinateRoute': '协调路线',
+      'routeLength': '路线总长度'
     },
     'systemsettings': {
       'id': 'ID',

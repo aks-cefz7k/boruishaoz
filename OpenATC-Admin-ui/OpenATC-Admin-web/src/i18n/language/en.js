@@ -332,7 +332,8 @@ const en = {
       'gisStatellite': 'Statellite',
       'deviceState': 'Device State',
       'dutyRoute': 'Duty Route',
-      'coordinateRoute': 'Coordinate Route'
+      'coordinateRoute': 'Coordinate Route',
+      'routeLength': 'Route Length'
     },
     'systemsettings': {
       'id': 'ID',

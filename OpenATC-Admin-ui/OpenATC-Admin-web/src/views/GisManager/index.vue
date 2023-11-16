@@ -22,7 +22,7 @@
                 <div class="route-length-company">m</div>
               </el-row>
               <el-row>
-                <div class="route-length-name">路线总长度</div>
+                <div class="route-length-name">{{this.$t('openatc.gis.routeLength') }}</div>
               </el-row>
             </div>
           </div>
