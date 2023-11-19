@@ -138,7 +138,8 @@ export default {
             routeId: data.id,
             status: status,
             name: data.name,
-            keyintsid: data.keyintsid
+            keyintsid: data.keyintsid,
+            geometry: geometry
           // opacity: 0.9
           }
           this.chooseRouteId = data.id
@@ -150,7 +151,8 @@ export default {
             routeId: data.id,
             status: status,
             name: data.name,
-            keyintsid: data.keyintsid
+            keyintsid: data.keyintsid,
+            geometry: geometry
           // opacity: 0.9
           }
         }
@@ -158,6 +160,7 @@ export default {
         if (i === 1) {
           this.oldPolyline = polyline
           this.showPlanchart(data.id)
+          this.$emit('onRouteChange', geometry)
         }
         polylines.push(polyline)
         // _this.map.addLayer(polyline)
@@ -175,6 +178,8 @@ export default {
         this.oldPolyline.setStyle(this.routeOptions)
         this.oldPolyline = e.target
         this.chooseRouteId = routeId
+        let geometry = e.target.options.geometry
+        this.$emit('onRouteChange', geometry)
       }
       // e.target.setStyle(this.newRouteOptions)
       this.showPlanchart(routeId)
