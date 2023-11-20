@@ -58,6 +58,17 @@
                 </el-switch>
               </div>
             </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.stepType')}}:</div>
+              <el-select v-model="customInfo.steptype" :placeholder="$t('edge.common.select')" size="small">
+                <el-option
+                  v-for="item in stepTypeOptions"
+                  :key="item"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
           </el-row>
         </div>
 
@@ -104,15 +115,15 @@
           <el-row class="demo-autocomplete" :gutter="30">
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenandredon')}}</div>
-              <el-input v-model="customInfo.faultdetect.detectgapgreenandredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input v-model.number="customInfo.faultdetect.detectgapgreenandredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapnoredon')}}</div>
-              <el-input v-model="customInfo.faultdetect.detectgapnoredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input v-model.number="customInfo.faultdetect.detectgapnoredon" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.detectgapgreenconflict')}}</div>
-              <el-input v-model="customInfo.faultdetect.detectgapgreenconflict" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
+              <el-input v-model.number="customInfo.faultdetect.detectgapgreenconflict" :placeholder="$t('edge.common.entercontent')" size="small"></el-input>
             </el-col>
           </el-row>
           <el-row class="demo-autocomplete" :gutter="30">
@@ -248,7 +259,8 @@ export default {
       startyellowflashOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       startallredOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       greenwavecycleOptions: [0, 1, 2, 3, 4, 5],
-      commutypeOptions: [{label: 'TCP', value: 1}, {label: 'UDP', value: 2}, {label: 'RS232', value: 3}]
+      commutypeOptions: [{label: 'TCP', value: 1}, {label: 'UDP', value: 2}, {label: 'RS232', value: 3}],
+      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}]
     }
   },
   computed: {

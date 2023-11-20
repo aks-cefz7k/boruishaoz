@@ -36,7 +36,7 @@
         </el-row>
         <el-row :gutter="0">
           <el-col :span="12">
-            {{this.$t('edge.pattern.stage')}}
+            {{this.$t('edge.pattern.phase')}}
           </el-col>
           <el-col :span="12">
             <el-input
@@ -166,5 +166,10 @@ export default {
   .stage-value {
     text-align: left;
     width: 100%;
+  }
+</style>
+<style lang="scss">
+.stage-value .el-input__inner {
+    text-align: center;
   }
 </style>

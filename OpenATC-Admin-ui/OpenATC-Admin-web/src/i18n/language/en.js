@@ -17,8 +17,8 @@ const en = {
       'edit': 'Edit',
       'detail': 'Detail',
       'searchplaceholder': 'Enter keyword search',
-      'addfailed': 'Add Success!',
-      'addsuccess': 'Add Failed!',
+      'addfailed': 'Add Failed!',
+      'addsuccess': 'Add Success!',
       'addcancel': 'Add Canceled!',
       'deletefailed': 'Delete Failed!',
       'deletesuccess': 'Delete Success!',
@@ -32,7 +32,9 @@ const en = {
       'operation': 'Operation',
       'operationsuccess': 'Operation Success !',
       'authtip': 'No access !',
-      'nodata': 'No Data !'
+      'nodata': 'No Data !',
+      'canceloperate': 'Operation cancelled！',
+      'submitsuccess': 'Submit Success!'
     },
     'button': {
       'OK': 'OK',
@@ -41,7 +43,9 @@ const en = {
       'collapseall': 'Collapse All',
       'search': 'Search',
       'location': 'Location',
-      'ignore': 'Ignore'
+      'ignore': 'Ignore',
+      'modify': 'Modify',
+      'submit': 'Submit'
     },
     'login': {
       'username': 'user_name',
@@ -60,15 +64,20 @@ const en = {
       'greenwaveoptimize': 'Greenwave Optimize',
       'operationrecord': 'Operation Record',
       'organization': 'Organization',
+      'bottleneckcontrol': 'Overflow Detector',
       'script': 'Script',
       'dutyroute': 'Duty Route',
       'realname': 'RealName',
       'telno': 'Telno',
       'email': 'Email',
       'changepass': 'Changepass',
+      'systemsettings': 'System Settings',
       'about': 'About',
       'signout': 'Sign Out',
-      'language': 'Language'
+      'language': 'Language',
+      'skin': 'Skin',
+      'dark': 'Dark',
+      'light': 'Light'
     },
     'home': {
       'devicestatus': 'Device Status',
@@ -102,7 +111,7 @@ const en = {
       'operation': 'Operation',
       'longitude': 'Longitude',
       'latitude': 'Latitude',
-      'layerLevel': '层级',
+      'layerLevel': 'Level',
       'adddevice': 'Add Device',
       'editdevice': 'Edit Device',
       'enterIp': 'Please enter IP',
@@ -127,7 +136,9 @@ const en = {
       'updateDeviceId': 'Modify ID',
       'deviceNotNull': 'Device ID cannot be empty!',
       'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
-      'thirdplatformid': 'Third party ID'
+      'thirdplatformid': 'Third party ID',
+      'timeSpaceGraph': 'Time space graph',
+      'keyintersection': 'Key Intersection：'
     },
     'usermanager': {
       'username': 'Username',
@@ -314,7 +325,55 @@ const en = {
       'notAllowedToEdit': 'Not allowed to edit processing data !'
     },
     'gis': {
-      'chooseLocationInfo': 'Click the map to choose a location !'
+      'chooseLocationInfo': 'Click the map to choose a location !',
+      'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!',
+      'crossRoad': 'Cross Road',
+      'gisNormal': 'Map',
+      'gisStatellite': 'Statellite',
+      'deviceState': 'Device State',
+      'dutyRoute': 'Duty Route',
+      'coordinateRoute': 'Coordinate Route',
+      'routeLength': 'Route Length'
+    },
+    'systemsettings': {
+      'id': 'ID',
+      'module': 'Module',
+      'name': 'Name',
+      'content': 'Content',
+      'desc': 'Desc',
+      'operate': 'Operate',
+      'addconfig': 'Add Config',
+      'updateconfig': 'Update Config',
+      'deleteconfig': 'Do you want to delete this config?'
+    },
+    'bottleneckcontrol': {
+      'detector': 'Detector',
+      'switchsavereminder': 'Switching detector control list will not save the current configuration. Are you sure you want to switch?',
+      'bottlenecklist': 'Detector control list',
+      'detectorid': 'Scheme ID',
+      'desc': 'Describe',
+      'type': 'Type',
+      'status': 'Status',
+      'port': 'Port',
+      'name': 'Name',
+      'deviceid': 'Device ID',
+      'phaseid': 'Phase ID',
+      'controllevel': 'Control Level',
+      'controltype': 'Control Type',
+      'controltime': 'Controltime（s）',
+      'choosedev': 'Choose Device',
+      'phase': 'phase',
+      'one-level': 'one-level',
+      'two-level': 'two-level',
+      'three-level': 'three-level',
+      'queue': 'queue',
+      'overflow': 'overflow',
+      'triggering': 'triggering',
+      'nottriggered': 'not triggered',
+      'greenextension': 'Green Extension',
+      'greenreduction': 'Green Reduction',
+      'bottleneckinfo': ' detector control info',
+      'isdeletedetector': 'Are you sure delete the detector'
     }
   }
 }

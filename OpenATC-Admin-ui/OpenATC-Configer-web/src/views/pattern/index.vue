@@ -16,6 +16,11 @@
       <el-table-column type="expand">
         <template slot-scope="scope">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
+              <div class="components-container board">
+                <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="$t('edge.pattern.ring')+n" :index="scope.$index" @handleSplit="handleSplit"/>
+              </div>
+            </el-tab-pane>
             <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="stage">
               <el-scrollbar :vertical="false">
                 <div class="stage-panel-contener">
@@ -33,11 +38,6 @@
                     />
                 </div>
               </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
-              <div class="components-container board">
-                <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="$t('edge.pattern.ring')+n" :index="scope.$index" @handleSplit="handleSplit"/>
-              </div>
             </el-tab-pane>
           </el-tabs>
         </template>
@@ -123,7 +123,7 @@ export default {
       isShowPatternStatus: false,
       currPatternName: '--',
       patternStatusIndex: -1,
-      activeName: 'stage',
+      activeName: 'ring',
       stagesList: []
     }
   },

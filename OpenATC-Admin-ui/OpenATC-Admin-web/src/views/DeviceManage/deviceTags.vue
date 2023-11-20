@@ -137,61 +137,53 @@ export default {
 </script>
 
 <style lang="scss">
- @import "../../styles/theme/element-variables.scss";
- .tagsList .highlightTag .el-icon-close{
-    color: $--color-white;
-  }
-  .tagsList .highlightTag .el-icon-close:hover {
-    background-color: $--border-color-extra-light;
-    color: $--color-primary;
-  }
- .tagsList .normalTag .el-icon-close{
-    color: $--color-primary;
-  }
-  .tagsList .normalTag .el-icon-close:hover {
-    background-color: $--color-primary;
-    color: $--color-white;
-  }
+//  .tagsList .highlightTag .el-icon-close{
+//     color: $--color-white;
+//   }
+//   .tagsList .highlightTag .el-icon-close:hover {
+//     background-color: $--border-color-extra-light;
+//     color: $--color-primary;
+//   }
+//  .tagsList .normalTag .el-icon-close{
+//     color: $--color-primary;
+//   }
+//   .tagsList .normalTag .el-icon-close:hover {
+//     background-color: $--color-primary;
+//     color: $--color-white;
+//   }
 </style>
 <style lang="scss" scoped>
- @import "../../styles/theme/element-variables.scss";
-.tagsList {
-  height: 84px;
-  padding: 24px 29px;
-  box-sizing: border-box;
-  .el-tag {
-    cursor: pointer;
-    margin-left: 2px;
-  }
-  .el-tag--mini {
-    min-width: 50px;
-    height: 26px;
-    padding: 0 5px;
-    line-height: 26px;
-    text-align: center;
-  }
-  .toListBtn {
-    width: 70px;
-    height: 26px;
-    line-height: 26px;
-    padding: 0;
-    font-family: MicrosoftYaHei;
-    font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    letter-spacing: 0px;
-    margin-bottom: 4px;
-  }
-  .highlightTag {
-    background-color: $--color-primary;
-    border-color: $--color-primary;
-    color: #FFFFFF;
-  }
-  // .normalTag {
-  //   background-color: $--border-color-extra-light;
-  //   // border-color: #d9ecff;
-  //   // border-color: $--color-primary;
-  //   color: $--color-primary;
-  // }
-}
+// .tagsList {
+//   height: 84px;
+//   padding: 24px 29px;
+//   box-sizing: border-box;
+//   .el-tag {
+//     cursor: pointer;
+//     margin-left: 2px;
+//   }
+//   .el-tag--mini {
+//     min-width: 50px;
+//     height: 26px;
+//     padding: 0 5px;
+//     line-height: 26px;
+//     text-align: center;
+//   }
+//   .toListBtn {
+//     width: 70px;
+//     height: 26px;
+//     line-height: 26px;
+//     padding: 0;
+//     font-family: MicrosoftYaHei;
+//     font-size: 12px;
+//     font-weight: normal;
+//     font-stretch: normal;
+//     letter-spacing: 0px;
+//     margin-bottom: 4px;
+//   }
+//   .highlightTag {
+//     background-color: $--color-primary;
+//     border-color: $--color-primary;
+//     color: #FFFFFF;
+//   }
+// }
 </style>

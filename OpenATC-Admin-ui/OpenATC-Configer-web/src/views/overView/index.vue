@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="container-main">
-    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!hideMenu">
+    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!hideMenu && !graphicMode">
       <div slot="icon" class="sloat-icon">
         <i class="iconfont icon-tuxingjiemian" style="color: #ffffff;" v-show="!isShowGui"></i>
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
@@ -109,6 +109,12 @@
                 <el-form-item :label="$t('edge.control.value')">
                     <el-input v-model="form.value" style="width: 70%"></el-input>
                 </el-form-item>
+                <el-form-item :label="$t('edge.overview.delay')">
+                    <el-input v-model="form.delay" style="width: 70%"></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('edge.overview.duration')">
+                    <el-input v-model="form.duration" style="width: 70%"></el-input>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" size="small">{{$t('edge.common.setup')}}</el-button>
                     <el-button type="primary" @click="onGet" size="small">{{$t('edge.common.query')}}</el-button>
@@ -118,16 +124,18 @@
         </div>
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
-        <div class="tuxing-left">
+        <div class="tuxing-left" :class="{'changeWidth': graphicMode}">
           <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
             'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
             'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
             'smallCrossImg': curBodyWidth <= 960 && curBodyWidth > 720,
             'miniCrossImg': curBodyWidth <= 720 && curBodyWidth > 650,
-            'superminiCrossImg': curBodyWidth <= 650 }">
+            'superminiCrossImg': curBodyWidth <= 650 && curBodyWidth > 350,
+            'minimumCrossImg': curBodyWidth <= 350,
+            'changePaddingBottom': graphicMode }">
             <CrossDiagram v-if="reset" :crossStatusData="crossStatusData" :agentId="agentId" :devStatus="devStatus"/>
           </div>
-          <div class="pattern-status">
+          <div class="pattern-status" v-if="!graphicMode">
             <div class="pattern-name cross-mess">{{$t('edge.overview.patternstate')}}</div>
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
@@ -140,11 +148,11 @@
                           :barrierList="barrierList"></PatternStatus>
           </div>
         </div>
-        <div class="tuxing-right">
+        <div class="tuxing-right" v-if="!graphicMode">
           <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
-          <div class="cross-module" style="height: 130px;">
-            <!-- <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">苏州科达路</div></div> -->
-            <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+          <div class="cross-module">
+            <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
+            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
               <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
               <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
               <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
@@ -153,8 +161,9 @@
             <!-- <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
             <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
             <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
+            <div style="margin-top: 5px; margin-left: 5px;" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
           </div>
-          <div style="margin-top: 140px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
+          <div style="margin-top: 170px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
             <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
             <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
           </div>
@@ -165,6 +174,17 @@
               <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
               <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
             </div>
+
+            <div style="margin-top: 7px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempDelay" size="mini" :placeholder="$t('edge.common.input')"></el-input></div>
+            </div>
+
+            <div style="margin-top: 7px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
+              <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempDuration" size="mini" :placeholder="$t('edge.common.input')"></el-input></div>
+            </div>
+
             <div style="margin-top: 15px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
             <div style="padding-left: 15px; width: 100%; overflow: hidden;">
               <div class="control-model" v-for="(item, index) in modelList" :key="index">
@@ -230,7 +250,9 @@ export default {
         control: '',
         terminal: '',
         mode: '',
-        value: ''
+        value: '',
+        delay: '',
+        duration: ''
       },
       controlNum: '',
       spanArr: [],
@@ -277,6 +299,8 @@ export default {
       mode: '2',
       loading: {},
       agentId: '0',
+      agentName: '--',
+      platform: undefined,
       isShowGui: true,
       modelList: [{
         id: 1,
@@ -365,12 +389,15 @@ export default {
       volumeData: null,
       curTable: 'phase',
       tempPatternid: 0, // 控制方式手动操作的情况下的控制编号的临时值。
+      tempDelay: 0, // 控制方式手动操作的情况下的延迟时间的临时值。
+      tempDuration: 0, // 控制方式手动操作的情况下的持续时间的临时值。
       phaseList: [], // 当前相位集合
       patternStatusList: [], // 显示方案状态的相关数据集合
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
       shrink: 1,
-      basicFuncControlId: [0, 1, 4, 5] // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
+      basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
+      isResend: true
     }
   },
   computed: {
@@ -378,7 +405,8 @@ export default {
       curBodyWidth: state => state.globalParam.curBodyWidth,
       curBodyHeight: state => state.globalParam.curBodyHeight,
       FuncSort: state => state.globalParam.FuncSort,
-      hideMenu: state => state.globalParam.hideMenu
+      hideMenu: state => state.globalParam.hideMenu,
+      graphicMode: state => state.globalParam.graphicMode
     })
   },
   watch: {
@@ -475,11 +503,15 @@ export default {
           this.devStatus = 2
           if (data.data.code === '4003') {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
-            this.reSend()
+            if (this.isResend) {
+              this.reSend()
+            }
             return
           }
           this.$message.error(this.$t('edge.errorTip.abnormalcommunication'))
-          this.reSend()
+          if (this.isResend) {
+            this.reSend()
+          }
           return
         }
         let res = data.data.data.data
@@ -543,13 +575,17 @@ export default {
             this.clearPatternInterval() // 清除其他定时器
             this.clearVolumeInterval()
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
-            this.reSend()
+            if (this.isResend) {
+              this.reSend()
+            }
             return
           }
           this.$message.error(data.data.message)
           this.clearPatternInterval() // 清除其他定时器
           this.clearVolumeInterval()
-          this.reSend()
+          if (this.isResend) {
+            this.reSend()
+          }
           return
         }
         // let param = JSON.parse(data.data.data)
@@ -603,6 +639,8 @@ export default {
       // control.pattern = Number(this.form.pattern)
       control.terminal = Number(this.form.terminal)
       control.value = Number(this.form.value)
+      control.delay = Number(this.form.delay)
+      control.duration = Number(this.form.duration)
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
@@ -644,6 +682,8 @@ export default {
         // this.form.mode = this.ParamsMode.get(patternData.mode)
         // this.form.mode = this.ParamsModeEn.get(patternData.mode)
         this.form.value = patternData.value
+        this.form.delay = patternData.delay
+        this.form.duration = patternData.duration
       }).catch(error => {
         this.unlockScreen()
         this.$message.error(error)
@@ -759,25 +799,29 @@ export default {
       this.loading.close()
     },
     reconnectionDev () {
-      registerMessage(this.agentId).then(data => {
-        if (!data.data.success) {
-          this.reSend()
-          return
-        }
-        this.devStatus = 3
-        this.clearPatternInterval() // 清除其他定时器
-        this.clearVolumeInterval()
-        this.phaseControlTimer = setInterval(() => {
-          if (this.intervalFlag) {
-            this.initData()
-          }
-          // this.initData()
-        }, 1000)
-        this.getVolume()
-        this.volumeControlTimer = setInterval(() => {
-          this.getVolume()
-        }, 300000)
-      })
+      this.registerMessage()
+      // registerMessage(this.agentId).then(data => {
+      //   if (!data.data.success) {
+      //     if (this.isResend) {
+      //       this.reSend()
+      //     }
+      //     return
+      //   }
+      //   this.devStatus = 3
+      //   this.clearPatternInterval() // 清除其他定时器
+      //   this.clearVolumeInterval()
+      //   this.phaseControlTimer = setInterval(() => {
+      //     if (this.intervalFlag) {
+      //       this.initData()
+      //     }
+      //     // this.initData()
+      //   }, 1000)
+      //   this.getVolume()
+      //   this.volumeControlTimer = setInterval(() => {
+      //     this.getVolume()
+      //   }, 300000)
+      //   this.getPhase()
+      // })
     },
     onFloatBtnClicked () {
       this.isShowGui = !this.isShowGui
@@ -815,6 +859,8 @@ export default {
         this.isOperation = !this.isOperation
         this.controlHeight = 480
         this.tempPatternid = this.controlData.patternid
+        this.tempDelay = this.controlData.delay
+        this.tempDuration = this.controlData.duration
         let autonomyControl = {
           id: 0,
           iconClass: 'zizhukongzhi',
@@ -833,6 +879,8 @@ export default {
           this.preselectModel = -1
           this.preselectStages = -1
           this.tempPatternid = 0
+          this.tempDelay = 0
+          this.tempDuration = 0
           this.modelList = this.modelList.filter((item) => {
             return item.id !== 0
           })
@@ -855,6 +903,8 @@ export default {
       })
       control.control = that.preselectModel === -1 ? that.currModel : that.preselectModel
       control.terminal = Number(that.tempPatternid)
+      control.delay = Number(that.tempDelay)
+      control.duration = Number(that.tempDuration)
       control.value = that.preselectStages === -1 ? 0 : that.preselectStages
       putTscControl(control).then(data => {
         that.unlockScreen()
@@ -909,7 +959,10 @@ export default {
         this.port = devParams.port
         this.protocol = res.data.data.protocol
         this.agentId = res.data.data.agentid
-
+        if (res.data.data.name) {
+          this.agentName = res.data.data.name
+        }
+        this.platform = res.data.data.platform
         // setIframdevid(this.agentId)
         this.resetCrossDiagram()
         this.registerMessage() // 注册消息
@@ -993,27 +1046,37 @@ export default {
           this.$message.error(res.data.message)
           return
         }
-        let platform = res.data.data.platform
+
+        let devParams = res.data.data.jsonparam
+        this.ip = devParams.ip
+        this.port = devParams.port
+        this.protocol = res.data.data.protocol
+        this.agentId = res.data.data.agentid
+        if (res.data.data.name) {
+          this.agentName = res.data.data.name
+        }
+        this.platform = res.data.data.platform
         let func = 'allFunc'
-        if (platform === 'OpenATC') {
+        if (this.platform === 'OpenATC') {
           func = 'allFunc'
         }
-        if (platform === 'SCATS' || platform === 'HUATONG') {
+        if (this.platform === 'SCATS' || this.platform === 'HUATONG') {
           func = 'basicFunc'
         }
         this.$store.dispatch('SaveFunctionLevel', func)
       })
     }
   },
-  beforeDestroy () {
+  // beforeDestroy () {
+  //   this.clearPatternInterval() // 清除定时器
+  //   this.clearVolumeInterval()
+  //   this.clearRegisterMessageTimer() // 清除定时器
+  // },
+  destroyed () {
+    this.isResend = false
     this.clearPatternInterval() // 清除定时器
     this.clearVolumeInterval()
     this.clearRegisterMessageTimer() // 清除定时器
-  },
-  destroyed () {
-    // this.clearPatternInterval() // 清除定时器
-    // this.clearVolumeInterval()
-    // this.clearRegisterMessageTimer() // 清除定时器
     this.getPlatform()
   }
 }

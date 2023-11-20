@@ -32,7 +32,9 @@ const zh = {
       'operation': '操作',
       'operationsuccess': '操作成功',
       'authtip': '没有权限访问 !',
-      'nodata': '没有数据 !'
+      'nodata': '没有数据 !',
+      'canceloperate': '操作已取消！',
+      'submitsuccess': '提交成功！'
     },
     'button': {
       'OK': '确定',
@@ -41,7 +43,9 @@ const zh = {
       'collapseall': '全部折叠',
       'search': '搜索',
       'location': '位置',
-      'ignore': '忽略'
+      'ignore': '忽略',
+      'modify': '修改',
+      'submit': '提交'
     },
     'login': {
       'username': '用户名',
@@ -60,15 +64,20 @@ const zh = {
       'greenwaveoptimize': '绿波协调',
       'operationrecord': '操作记录',
       'organization': '组织机构',
+      'bottleneckcontrol': '瓶颈控制',
       'script': '脚本',
       'dutyroute': '勤务路线',
       'realname': '真实姓名',
       'telno': '联系电话',
       'email': '电子邮箱',
       'changepass': '修改密码',
+      'systemsettings': '系统设置',
       'about': '关于',
       'signout': '退出',
-      'language': '语言'
+      'language': '语言',
+      'skin': '皮肤',
+      'dark': '暗色',
+      'light': '亮色'
     },
     'home': {
       'devicestatus': '设备状态',
@@ -127,7 +136,9 @@ const zh = {
       'updateDeviceId': '修改设备ID',
       'deviceNotNull': '设备ID不能为空！',
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
-      'thirdplatformid': '第三方ID'
+      'thirdplatformid': '第三方ID',
+      'timeSpaceGraph': '实时时距图',
+      'keyintersection': '关键路口：'
     },
     'usermanager': {
       'username': '用户名称',
@@ -314,7 +325,55 @@ const zh = {
       'notAllowedToEdit': '执勤中的路线，不允许编辑!'
     },
     'gis': {
-      'chooseLocationInfo': '请点击地图选择位置 !'
+      'chooseLocationInfo': '请点击地图选择位置 !',
+      'clickToChooseLocationInfo': '点击图标去地图上选择位置 !',
+      'crossRoad': '路口',
+      'gisNormal': '地图',
+      'gisStatellite': '影像',
+      'deviceState': '设备状态',
+      'dutyRoute': '特勤路线',
+      'coordinateRoute': '协调路线',
+      'routeLength': '路线总长度'
+    },
+    'systemsettings': {
+      'id': 'ID',
+      'module': '模块',
+      'name': '名称',
+      'content': '内容',
+      'desc': '描述',
+      'operate': '操作',
+      'addconfig': '配置新增',
+      'updateconfig': '配置编辑',
+      'deleteconfig': '是否删除此配置？'
+    },
+    'bottleneckcontrol': {
+      'detector': '检测器',
+      'switchsavereminder': '切换瓶颈控制列表，不会保存当前配置，确认切换么?',
+      'bottlenecklist': '瓶颈控制列表',
+      'detectorid': '方案ID',
+      'desc': '描述',
+      'type': '类型',
+      'status': '状态',
+      'port': '端口',
+      'name': '名称',
+      'deviceid': '设备ID',
+      'phaseid': '相位ID',
+      'controllevel': '控制等级',
+      'controltype': '控制类型',
+      'controltime': '相位时长（秒）',
+      'choosedev': '选择设备',
+      'phase': '相位',
+      'one-level': '一级',
+      'two-level': '二级',
+      'three-level': '三级',
+      'queue': '排队',
+      'overflow': '溢出',
+      'triggering': '触发中',
+      'nottriggered': '未触发',
+      'greenextension': '绿灯延长',
+      'greenreduction': '绿灯缩减',
+      'bottleneckinfo': '瓶颈控制信息',
+      'isdeletedetector': '确认删除检测器'
     }
   }
 }

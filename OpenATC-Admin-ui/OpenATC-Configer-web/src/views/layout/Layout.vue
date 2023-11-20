@@ -12,8 +12,8 @@
 <template>
   <div class="app-wrapper" :class="classObj">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-    <sidebar class="sidebar-container" v-if="!hideMenu"></sidebar>
-    <div class="main-container" :class="{'changeMainPosition': hideMenu}">
+    <sidebar class="sidebar-container" v-if="!hideMenu && !graphicMode"></sidebar>
+    <div class="main-container" :class="{'changeMainPosition': hideMenu || graphicMode}">
       <navbar></navbar>
       <app-main></app-main>
     </div>
@@ -56,7 +56,8 @@ export default {
       }
     },
     ...mapState({
-      hideMenu: state => state.globalParam.hideMenu
+      hideMenu: state => state.globalParam.hideMenu,
+      graphicMode: state => state.globalParam.graphicMode
     })
   },
   watch: {

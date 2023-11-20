@@ -484,34 +484,33 @@ export default {
 </style>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
- @import "../../../styles/theme/element-variables.scss";
 // $color-blue: #2196f3;
-$space-width: 18px;
-.ms-tree-space {
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-  width: $space-width;
-  height: 14px;
-  &::before {
-    content: "";
-  }
-}
-.processContainer {
-  width: 100%;
-  height: 100%;
-}
-table td {
-  line-height: 26px;
-}
+// $space-width: 18px;
+// .ms-tree-space {
+//   position: relative;
+//   top: 1px;
+//   display: inline-block;
+//   font-style: normal;
+//   font-weight: 400;
+//   line-height: 1;
+//   width: $space-width;
+//   height: 14px;
+//   &::before {
+//     content: "";
+//   }
+// }
+// .processContainer {
+//   width: 100%;
+//   height: 100%;
+// }
+// table td {
+//   line-height: 26px;
+// }
 
-.tree-ctrl {
-  position: relative;
-  cursor: pointer;
-  color: $--color-primary;
-  margin-left: -$space-width;
-}
+// .tree-ctrl {
+//   position: relative;
+//   cursor: pointer;
+//   color: $--color-primary;
+//   margin-left: -$space-width;
+// }
 </style>

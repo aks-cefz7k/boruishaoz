@@ -14,7 +14,7 @@
     <Messagebox :visible="readDiologVisible" :text="`${$t('edge.main.readDevice')}${copiedAgentid} ${$t('edge.main.readPattern')}`" @cancle="cancleRead" @ok="handleRead"/>
     <ImportTempDialog ref="importTemp" v-if="importVisible" :imortVisible="importVisible" @closeImportTemp="closeImportTemp"/>
     <el-menu
-      v-if="!hideMenu"
+      v-if="!hideMenu && !graphicMode"
       class="navbar"
       mode="horizontal"
     >
@@ -249,7 +249,8 @@ export default {
     ...mapState({
       copiedTscParam: state => state.globalParam.copiedTscParam,
       userInfo: state => state.user.userInfo,
-      hideMenu: state => state.globalParam.hideMenu
+      hideMenu: state => state.globalParam.hideMenu,
+      graphicMode: state => state.globalParam.graphicMode
     }),
     userInfo: {
       get: function () {
@@ -290,6 +291,12 @@ export default {
       this.$store.dispatch('SetMenuVisible', true)
     } else {
       this.$store.dispatch('SetMenuVisible', false)
+    }
+    if (this.$route.query.graphicMode === true || this.$route.query.graphicMode === 'true') {
+      // 如果传参hideMenu就隐藏菜单，其余情况均不隐藏
+      this.$store.dispatch('SetGraphicMode', true)
+    } else {
+      this.$store.dispatch('SetGraphicMode', false)
     }
     // this.extendErrorCodeMap() // 扩展错误码的map集合
   },
