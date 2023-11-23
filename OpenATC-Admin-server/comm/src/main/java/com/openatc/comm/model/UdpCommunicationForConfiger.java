@@ -19,11 +19,11 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 
-
+// 使用随机端口发送和监听UDP数据，适用于配置工具的直连网络，不含监听主动上报消息功能
 public class UdpCommunicationForConfiger implements Communication {
     private static final int TIMEOUT = 3000;
-    private static final int RECVBUFFER = 20 * 1024 * 1024;
-//    private static Logger logger = Logger.getLogger(UdpCommunication.class.toString());
+    private static final int RECVBUFFER = 64 * 1024;
+//    private static Logger logger = Logger.getLogger(UdpCommunicationForConfiger.class.toString());
 
     static DatagramSocket datagramSocket = null;
 
@@ -44,7 +44,7 @@ public class UdpCommunicationForConfiger implements Communication {
 
 
     @Override
-    public DatagramSocket sendData(String agentid,PackData packData, String ip, int port) throws IOException {
+    public int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) throws IOException {
 //        logger.info("communication start: " + System.currentTimeMillis());
 
 //        if (datagramSocket == null) {
@@ -64,18 +64,25 @@ public class UdpCommunicationForConfiger implements Communication {
         datagramSocket.send(sendPacket);
 //        logger.info("datagramSocket senddata end: " + System.currentTimeMillis());
 //        logger.info("============= From Local: " + datagramSocket.getLocalPort() + " send to " + ip + ":" + port + " successfully!");
-        return datagramSocket;
+        return 0;
     }
 
     @Override
-    public MessageData receiveData(DatagramSocket socket) throws IOException {
+    public MessageData receiveData() throws IOException {
+//        long starttime = System.currentTimeMillis();
+//        long endtime = 0L;
+
         byte[] dataRecv = new byte[RECVBUFFER];
         DatagramPacket recvPacket = new DatagramPacket(dataRecv, dataRecv.length);
-//        logger.info("datagramSocket receivedata start:" + System.currentTimeMillis());
-        socket.receive(recvPacket);
-//        logger.info("datagramSocket receivedata end: " + System.currentTimeMillis());
-//        logger.info("communication end: " + System.currentTimeMillis());
+        datagramSocket.receive(recvPacket);
+//        endtime = System.currentTimeMillis();
+//        logger.info("Receive UDP Data Time:"+ (endtime-starttime) );
 
-        return message.uppack(recvPacket);
+//        starttime = System.currentTimeMillis();
+        MessageData md = message.uppack(recvPacket.getData());
+//        endtime = System.currentTimeMillis();
+//        logger.info("Uppack UDP Data time:"+ (endtime-starttime) );
+
+        return md;
     }
 }

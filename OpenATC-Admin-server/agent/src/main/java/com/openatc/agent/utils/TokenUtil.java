@@ -128,6 +128,10 @@ public class TokenUtil {
      */
     public String getUsernameFromToken(String token) {
 
+        if(token == null){
+            return null;
+        }
+
         try {
             DecodedJWT jwt = getVerifier().verify(token);
             return jwt.getSubject();
@@ -235,6 +239,9 @@ public class TokenUtil {
      */
     public boolean checkip(String ip, String token) throws AuthenticationException {
         String username = getUsernameFromToken(token);
+        if(username == null){
+            return false;
+        }
         User user = userDao.getUserByUserName(username);
         String login_ip_limit = user.getLogin_ip_limit();
         Matcher matcher = pattern.matcher(ip);

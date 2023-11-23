@@ -11,27 +11,20 @@
  **/
 package com.openatc.configserver;
 
-
-import com.openatc.comm.udp.client.MyTimerTask;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.util.Timer;
 
 
 public class Application {
 //    private static Logger log = LoggerFactory.getLogger(Application.class);
-    public static void sendHbPacket() throws SocketException {
-        Timer timer = new Timer();
-        timer.schedule(new MyTimerTask(new DatagramSocket(), "localhost", 8880),5000,10000);
-    }
+//    public static void sendHbPacket() throws SocketException {
+//        Timer timer = new Timer();
+//        timer.schedule(new MyTimerTask(new DatagramSocket(), "localhost", 8880),5000,10000);
+//    }
     public static void main(String[] args) throws Exception {
 //        Log.setLog(new NoLogging());
         Server jettyServer = new Server();
@@ -72,7 +65,7 @@ public class Application {
         // Tells the Jersey Servlet which REST api/class to load.设置动态servlt加载的包
         jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "com.openatc.configserver.controller");
         //也可单独设置加载某个类，
-//        jerseyServlet.setInitParameter("jersey.config.server.provider.classnames","UploadFileService;org.glassfish.jersey.media.multipart.MultiPartFeature");
+        jerseyServlet.setInitParameter("jersey.config.server.provider.classnames","UploadFileService;org.glassfish.jersey.media.multipart.MultiPartFeature");
 
 
         /**
@@ -103,6 +96,7 @@ public class Application {
         handlers.setHandlers(new Handler[]{context});
         jettyServer.setHandler(handlers);
 
+
 //        /**
 //         * 添加过滤器
 //         */
@@ -110,7 +104,7 @@ public class Application {
 //        FilterHolder fh = handler.addFilterWithMapping((Class<? extends Filter>) OpenatcFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
 //        context.addFilter(fh, "/*", EnumSet.of(DispatcherType.REQUEST));
         try {
-            sendHbPacket();
+//            sendHbPacket();
             jettyServer.start();
 //            log.info("Started KDAgentApplication");
             jettyServer.join();

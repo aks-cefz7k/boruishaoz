@@ -42,12 +42,14 @@ public class DevController {
     AscsBaseModel ascsModel;
     @Autowired(required = false)
     private RouteDao routeDao;
+    @Autowired
+    private VipRouteDao vipRouteDao;
     @Autowired(required = false)
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
-    @Autowired
-    private TStatDao tStatDao;
+//    @Autowired
+//    private TStatDao tStatDao;
 
     private Logger log = Logger.getLogger(DevController.class.toString());
 
@@ -106,7 +108,8 @@ public class DevController {
      */
     @PutMapping(value = "/devs/discovery")
     public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel) throws ParseException {
-        mDao.updateAscs(ascsModel);
+        mDao.updateAscsByReport(ascsModel);
+//        mDao.updateAscs(ascsModel);
         return RESTRetUtils.successObj(ascsModel);
     }
 
@@ -188,7 +191,19 @@ public class DevController {
             routeDao.save(route);
         }
 
-
+        //删除勤务路线的设备
+        List<VipRoute> vipRoutes = vipRouteDao.findAll();
+        for (VipRoute vipRoute : vipRoutes) {
+            Set<VipRouteDevice> devs = vipRoute.getDevs();
+            Iterator<VipRouteDevice> vipRouteDeviceIterator = devs.iterator();
+            while(vipRouteDeviceIterator.hasNext()){
+                VipRouteDevice next = vipRouteDeviceIterator.next();
+                if (next.getAgentid().equals(id)){
+                    vipRouteDeviceIterator.remove();
+                }
+            }
+            vipRouteDao.save(vipRoute);
+        }
         return RESTRetUtils.successObj(as);
     }
 
@@ -216,35 +231,35 @@ public class DevController {
     }
 
     //获取设备优化状态参数
-    @GetMapping(value = "/devs/{agentid}/optstatparam")
-    public RESTRetBase getDevOptstatparam(@PathVariable String agentid) {
-        List<TStat> tStats = tStatDao.findByAgentid(agentid);
-        return RESTRetUtils.successObj(tStats);
-    }
-
-    //修改设备状态优化参数
-    @PostMapping(value = "/devs/{agentid}/optstatparam")
-    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
-
-        // 1 先删除之前的
-        int deleteResult = tStatDao.deleteByAgentid(agentid);
-        log.info(deleteResult + "");
-        // 2 保存到数据库
-        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
-        for (JsonElement tstatJson : tstats) {
-            TStat tStat = gson.fromJson(tstatJson, TStat.class);
-            tStat.setAgentid(agentid);
-            tStatDao.save(tStat);
-        }
-        return RESTRetUtils.successObj();
-    }
-
-    //查询数据库中饱和数据表
-    @GetMapping(value = "/devs/optstatparam")
-    public RESTRetBase getOptstatparam() {
-        List<TStat> tStats = tStatDao.findAll();
-        return RESTRetUtils.successObj(tStats);
-    }
+//    @GetMapping(value = "/devs/{agentid}/optstatparam")
+//    public RESTRetBase getDevOptstatparam(@PathVariable String agentid) {
+//        List<TStat> tStats = tStatDao.findByAgentid(agentid);
+//        return RESTRetUtils.successObj(tStats);
+//    }
+//
+//    //修改设备状态优化参数
+//    @PostMapping(value = "/devs/{agentid}/optstatparam")
+//    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
+//
+//        // 1 先删除之前的
+//        int deleteResult = tStatDao.deleteByAgentid(agentid);
+//        log.info(deleteResult + "");
+//        // 2 保存到数据库
+//        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
+//        for (JsonElement tstatJson : tstats) {
+//            TStat tStat = gson.fromJson(tstatJson, TStat.class);
+//            tStat.setAgentid(agentid);
+//            tStatDao.save(tStat);
+//        }
+//        return RESTRetUtils.successObj();
+//    }
+//
+//    //查询数据库中饱和数据表
+//    @GetMapping(value = "/devs/optstatparam")
+//    public RESTRetBase getOptstatparam() {
+//        List<TStat> tStats = tStatDao.findAll();
+//        return RESTRetUtils.successObj(tStats);
+//    }
 
 
 //    //获取设备优化状态参数

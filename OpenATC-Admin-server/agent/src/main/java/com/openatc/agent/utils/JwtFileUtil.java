@@ -11,6 +11,7 @@
  **/
 package com.openatc.agent.utils;
 
+import com.openatc.comm.common.PropertiesUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -23,26 +24,40 @@ import java.util.List;
 @Component
 public class JwtFileUtil {
 
-    private static String tokenFilePath;
+//    public void setTokenFilePath(String tokenFilePath){
+//        JwtFileUtil.tokenFilePath = tokenFilePath;
+//    }
 
-    @Value("${agent.tokenfile.path}")
-    public void setTokenFilePath(String tokenFilePath){
-        JwtFileUtil.tokenFilePath = tokenFilePath;
-    }
-
+    // 读取token文件的每一行数据
     public static List<String> initList() throws IOException {
+
+        String tokenFilePath = PropertiesUtil.getStringProperty("agent.tokenfile.path");
+        if(tokenFilePath == null)
+            return null;
+
         List<String> tokenlist = new ArrayList<>();
 
-        Resource resource = new ClassPathResource(tokenFilePath);
-        InputStream inputStream = resource.getInputStream();
-        InputStreamReader reader = new InputStreamReader(inputStream);
-        BufferedReader br = new BufferedReader(reader);
-        String line = ""; // 每一行的内容
-        while ((line = br.readLine()) != null) {
-            tokenlist.add(line.trim());
+//        InputStream resourceAsStream = JwtFileUtil.class.getResourceAsStream(tokenFilePath);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream));
+
+        String currentpath = System.getProperty("user.dir");
+
+
+
+        String resPath = currentpath + "/" + tokenFilePath;
+
+
+        FileReader fr = new FileReader(resPath);
+        BufferedReader br = new BufferedReader(fr);
+        String str;
+
+        while ((str = br.readLine()) != null) {
+            tokenlist.add(str);
         }
-        reader.close();
         br.close();
+        fr.close();
+
+
         return tokenlist;
     }
 }

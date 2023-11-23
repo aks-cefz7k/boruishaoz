@@ -13,19 +13,16 @@ package com.openatc.agent.controller;
 
 import com.openatc.agent.model.AscsBaseModel;
 import com.openatc.agent.model.THisParams;
-import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
-import com.openatc.comm.common.CommunicationType;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.packupack.CosntDataDefine;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,9 +60,6 @@ public class MessageController {
     @Autowired
     protected CommClient commClient;
 
-    @Value("${agent.server.shiro}")
-    private boolean shiroOpen;
-
     @Autowired(required = false)
     protected AscsDao mDao;
 
@@ -75,7 +69,7 @@ public class MessageController {
     @PostConstruct
     public void init(){
         // 设置通讯模式为UDP固定端口
-        commClient.setCommunicationType(CommunicationType.COMM_UDP_HOSTPORT);
+        commClient.setCommunicationServerType(COMM_SERVER_TYPE_CENTER);
     }
 
     /**
@@ -86,7 +80,6 @@ public class MessageController {
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
-        //System.out.println("测试");
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
         AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
 
@@ -151,9 +144,14 @@ public class MessageController {
         MessageData responceData = null;
         try {
             responceData = commClient
-                    .exange(ip, port, protocol, exangeType,requestData);
+                    .exange(ip, port, protocol, exangeType,requestData,ascsBaseModel.getSockettype());
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.warning( "message exange error:" + e.getCause());
+        }
+
+        if (responceData == null){
+            devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_200);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
 
         // 把设置请求的操作保存到历史记录中
@@ -166,18 +164,16 @@ public class MessageController {
             hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp, token));
         }
 
-        if (responceData == null){
-            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
-        }
 
         if (responceData.getOperation() == null){
+            devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_101);
             return RESTRetUtils.errorDetialObj(E_4006, devCommError);
         }
 
         //判断设备是否在线
         if (responceData.getOperation().equals("Communication Error!")) {
             devCommError = RESTRetUtils.errorObj(agentid, errorresponse, infotype, E_301);
-            return RESTRetUtils.errorDetialObj(E_4003, devCommError);
+            return RESTRetUtils.errorDetialObj(E_4003, devCommError, responceData.getDelay());
         }
 
         //判断应答是否成功
@@ -197,13 +193,18 @@ public class MessageController {
      * @Description: 生成一条操作记录
      */
     private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip, String token) {
+
+        logger.info( "Create History Param - requestData： " + requestData + " token：" + token);
+
         THisParams hisParams = new THisParams();
         String username = tokenUtil.getUsernameFromToken(token);
+
         //操作者
-        try {
+        if(username == null){
+            hisParams.setOperator("");
+        }
+        else{
             hisParams.setOperator(username);
-        } catch (Exception e) {
-            logger.info("get no user from subject");
         }
         //操作时间自动生成
         //操作源地址
@@ -212,16 +213,19 @@ public class MessageController {
         hisParams.setAgentid(requestData.getAgentid());
         //消息类型
         hisParams.setInfotype(requestData.getInfotype());
-        //消息描述
-        hisParams.setStatus(responceData.getOperation());
         //请求内容
         try {
             hisParams.setRequestbody(requestData.getData().toString());
         } catch (Exception e) {
             hisParams.setRequestbody("{}");
         }
-        //响应内容
-        hisParams.setResponsebody(responceData.getData().toString());
+        if(responceData != null){
+            //消息描述
+            hisParams.setStatus(responceData.getOperation());
+            //响应内容
+            hisParams.setResponsebody(responceData.getData().toString());
+        }
+
         return hisParams;
     }
 

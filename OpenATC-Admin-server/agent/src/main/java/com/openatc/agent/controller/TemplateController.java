@@ -47,8 +47,6 @@ public class TemplateController {
 
     Gson gson = new Gson();
 
-    Set<Integer> ewPed = new HashSet<>(Arrays.asList(15));
-    Set<Integer> snPed = new HashSet<>(Arrays.asList(16));
     /**
      * @return RESTRetBase
      * @Title: getTemplate
@@ -441,12 +439,20 @@ public class TemplateController {
         Set directionSet = new HashSet();
 
         //使用设备通讯接口获取相位
-        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.phase);
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
         RESTRet<MessageData> retBase = null;
         retBase = messageController.postDevsMessage(null, messageData);
-        if (retBase.getMessage().equals("Device not online!")) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_301);
+        if (retBase.getCode().equals(E_4002.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            return RESTRetUtils.errorDetialObj(E_4002, devCommError);
+        }
+        if (retBase.getCode().equals(E_4003.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_301);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
+        }
+        if (retBase.getCode().equals(E_4005.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
         if (retBase.getData() == null) {
             return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
@@ -455,47 +461,100 @@ public class TemplateController {
             return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
         }
         JsonArray phaseArray = retBase.getData().getData().getAsJsonObject().get("phaseList").getAsJsonArray();
+        JsonElement overlapElement = retBase.getData().getData().getAsJsonObject().get("overlaplList");
+        JsonArray overlapArray = new JsonArray();
+        if (overlapElement != null) {
+            overlapArray = overlapElement.getAsJsonArray();
+        }
+        JsonArray phaseAndOverlapArray = new JsonArray();
+        phaseAndOverlapArray.addAll(phaseArray);
+        phaseAndOverlapArray.addAll(overlapArray);
         int phaseCount = phaseArray.size();
         //相位用两位字符串表示，不足位数补0
         String phaseCountString = String.format("%2d", phaseCount).replace(" ", "0");
-        //判断是否是T型或十字型路口
-        type = calTenOrType(phaseArray, type, directionSet, phaseCountString);
+
+        if (!directionConflict(phaseArray) && !directionConflict(overlapArray)) {
+            //判断是否是T型或十字型路口
+            type = calTenOrType(phaseAndOverlapArray, type, directionSet, phaseCountString);
+            if (type.equals("999-000-00")){
+                //判断是不是人行横道
+                type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
+            }
+        }
+
         //判断是否是匝道类型的路开口
-        type = calRampType(phaseArray, type, phaseCountString);
-        //判断是不是人行横道
-        type = calPedCrossType(phaseArray, type, phaseCountString);
+        if (type.equals("999-000-00")) {
+            type = calRampType(phaseArray, type, phaseCountString);
+        }
+
 
         //返回的json对象
         JsonObject intersectionInfo = new JsonObject();
         intersectionInfo.addProperty("type", type);
         intersectionInfo.add("phaseList", phaseArray);
+        intersectionInfo.add("overlaplList", overlapArray);
         return RESTRetUtils.successObj(intersectionInfo);
+    }
+
+    /**
+     * 判断direction时候会有冲突
+     */
+    private boolean directionConflict(JsonArray jsonArray) {
+        Set set = new HashSet<>();
+        for (JsonElement jsonElement : jsonArray) {
+            int[] directions = gson.fromJson(jsonElement.getAsJsonObject().get("direction"), int[].class);
+            if (directions == null || directions.length == 0) continue;
+            for (double direction : directions) {
+                if (set.contains(direction)) {
+                    return true;
+                } else {
+                    set.add(direction);
+                }
+            }
+        }
+        return false;
     }
 
     private String calPedCrossType(JsonArray phaseArray, String type, String phaseCountString) {
         for (JsonElement phase : phaseArray) {
             if (phase.getAsJsonObject().get("controltype") == null || phase.getAsJsonObject().get("peddirection") == null)
                 continue;
-            int[] peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), int[].class);
 
             // 确定为人行横道
             if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
-                for (Integer direction : peddirection) {
-                    if (ewPed.contains(direction) && snPed.contains(direction)) return type = "999-000-00";
-                    if (ewPed.contains(direction)) return type = "104-005-" + phaseCountString;
-                    if (snPed.contains(direction)) return type = "104-006-" + phaseCountString;
+                Set<Integer> peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), Set.class);
+                if (peddirection.contains(15) && peddirection.contains(16)) {
+                    return type = "999-000-00";
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        for (JsonElement phase : phaseArray) {
+            if (phase.getAsJsonObject().get("controltype") == null || phase.getAsJsonObject().get("peddirection") == null)
+                continue;
+
+            // 确定为人行横道
+            if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
+                Set<Integer> peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), Set.class);
+                if (peddirection.contains(15)) {
+                    return type = "104-005-" + phaseCountString;
+                } else if (peddirection.contains(16)) {
+                    return type = "104-006-" + phaseCountString;
+                } else {
+                    return type = "999-000-00";
                 }
             }
         }
         return type;
     }
 
-    private String calTenOrType(JsonArray phaseArray, String type, Set directionSet, String phaseCountString) {
-        for (JsonElement phase : phaseArray) {
-            int[] directions = gson.fromJson(phase.getAsJsonObject().get("direction"), int[].class);
-//            int[] peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), int[].class);
+    private String calTenOrType(JsonArray phaseAndOverlapArray, String type, Set directionSet, String phaseCountString) {
+        for (JsonElement phaseAndOverlap : phaseAndOverlapArray) {
+            int[] directions = gson.fromJson(phaseAndOverlap.getAsJsonObject().get("direction"), int[].class);
+            if (directions == null || directions.length == 0) continue;
             for (double direction : directions) {
-//                alldirections.add(direction);
                 directionSet.add((int) Math.ceil(direction / 4));
             }
         }
@@ -517,14 +576,28 @@ public class TemplateController {
         return type;
     }
 
+    //判断方向是不是全空
+    public boolean allDirectionEmpty(Set<String> allStringDirections) {
+        Iterator<String> iterator = allStringDirections.iterator();
+        if (allStringDirections.size() == 1 && iterator.next().equals("")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     //判断匝道路口类型
     public String calRampType(JsonArray phaseArray, String type, String phaseCountString) {
         Map<Integer, String> map = new HashMap<>();
-        Set<Integer> controltypes = new HashSet();
+        //存放所有方向
+        Set<String> allStringDiretions = new HashSet<>();
+
         for (JsonElement phase : phaseArray) {
             // 没有方向,直接跳到下一个相位;
             if (phase.getAsJsonObject().get("direction") == null) continue;
             String stringDirections = arrayToString(gson.fromJson(phase.getAsJsonObject().get("direction"), int[].class));
+            allStringDiretions.add(stringDirections);
+
             int controltype = phase.getAsJsonObject().get("controltype") == null ? 0 : phase.getAsJsonObject().get("controltype").getAsInt();
             // map中没有控制类型, 添加到map中
             if (!map.containsKey(controltype)) {
@@ -539,8 +612,13 @@ public class TemplateController {
             }
         }
         // 检测map, 并查看是否是匝道类型，以及匝道的方向 (其实到这里基本上判断出就是匝道类型了，主要是判断匝道方向)
-        if (map.containsKey(2)) return type;
-        int direction = (int) Math.ceil(Double.parseDouble(map.get(1)) / 4);
+        if (allDirectionEmpty(allStringDiretions)) return type;
+        int direction = 1;
+        if (map.containsKey(0)) {
+            direction = (int) Math.ceil(Double.parseDouble(map.get(0)) / 4);
+        } else if (map.containsKey(1)) {
+            direction = (int) Math.ceil(Double.parseDouble(map.get(1)) / 4);
+        }
         switch (direction) {
             case 1:
                 type = "103-001-" + phaseCountString;

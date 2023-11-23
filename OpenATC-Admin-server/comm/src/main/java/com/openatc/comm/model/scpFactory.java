@@ -28,6 +28,8 @@ public class scpFactory implements ProtocolFactory {
             return new UdpCommunicationForConfiger(message);
         else if (commType == COMM_UDP_HOSTPORT)
             return new UdpCommunicationStaticPort(SCP_PROTYPE, exangeType);
+        if(commType == COMM_TCP)
+            return new TcpCommunication(message);
         else
             return null;
     }

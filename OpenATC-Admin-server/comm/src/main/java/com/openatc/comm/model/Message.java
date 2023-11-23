@@ -18,7 +18,7 @@ import java.net.DatagramPacket;
 
 public interface Message {
     PackData pack(MessageData sendMsg) throws UnsupportedEncodingException;
-    MessageData uppack(DatagramPacket recvPacket) throws UnsupportedEncodingException;
+    MessageData uppack(byte[] dataSource) throws UnsupportedEncodingException;
 
     int geyExangeType();
 

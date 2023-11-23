@@ -17,7 +17,7 @@ import java.util.Properties;
 public class SerializeUtil {
     public static String getUserFilePath(){
         Properties properties = new Properties();
-        InputStream in = SerializeUtil.class.getResourceAsStream("/config/application.properties");
+        InputStream in = SerializeUtil.class.getClassLoader().getResourceAsStream("application.properties");
         try {
             properties.load(in);
         } catch (IOException e) {
