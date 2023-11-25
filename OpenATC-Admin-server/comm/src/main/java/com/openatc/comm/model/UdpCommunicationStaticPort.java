@@ -49,19 +49,11 @@ public class UdpCommunicationStaticPort implements Communication {
     private int exangeType; // 当前设备的通讯平台
     private String sendmsgtype;
 
-<<<<<<< HEAD
 
-    private static int ocpSocketPort = 21003;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> dev-backend
-    private static int scpSocketPort = 21002;
-=======
     private static int ocpSocketPort = PropertiesUtil.getIntProperty("agent.comm.port.ocp");
     private static int scpSocketPort = PropertiesUtil.getIntProperty("agent.comm.port.scp");
->>>>>>> dev-backend
+
 
     public static ICommHandler hanlder;
 

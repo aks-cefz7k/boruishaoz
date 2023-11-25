@@ -11,10 +11,9 @@
  **/
 package com.openatc.comm.common;
 
-import com.google.gson.Gson;
+
 import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.data.ThirdPlatMessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
 import org.springframework.stereotype.Component;
@@ -139,17 +138,9 @@ public class CommClient {
         return responceData;
     }
 
-<<<<<<< HEAD
 
-
-
-
-
-
-    private static MessageData CreateErrorResponceData(String desc) {
-=======
     private static MessageData CreateErrorResponceData(String agentId,String desc) {
->>>>>>> dev-backend
+
         MessageData responceData = new MessageData();
         responceData.setAgentid(agentId);
         responceData.setOperation("error-response");

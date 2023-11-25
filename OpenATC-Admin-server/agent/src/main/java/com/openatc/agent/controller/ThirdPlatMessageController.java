@@ -45,10 +45,7 @@ public class ThirdPlatMessageController {
 
     private String protocolType = "scp";
 
-<<<<<<< HEAD
 
-=======
->>>>>>> dev-backend
     @PostMapping(value = "/centeradapter/custom")
     public RESTRet postDevsMessage(@RequestBody JsonObject jsonObject) throws SocketException, ParseException, UnsupportedEncodingException {
 
