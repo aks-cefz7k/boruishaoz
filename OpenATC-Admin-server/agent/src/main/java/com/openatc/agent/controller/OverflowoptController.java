@@ -83,7 +83,7 @@ public class OverflowoptController {
             }else{
                 overflowRepository.updateIsopenByIntersectionid(agentid,true);
             }
-            System.out.println(restRet);
+
         }
 
         List<DevCommError> errors = new ArrayList<>();
@@ -135,7 +135,7 @@ public class OverflowoptController {
             String agentid = String.valueOf(ov.getIntersectionid());
             OptDev<ControlMsg> controlMsgOptDev = optService.AutoControl(agentid);
             JSONObject jsonObject = (JSONObject) JSON.toJSON(controlMsgOptDev);
-            System.out.println(jsonObject);
+
             RESTRet restRet = optService.HttpPost(devUri, jsonObject);
             if(restRet.isSuccess() == false){
                 error_fails.add(agentid);
@@ -161,7 +161,6 @@ public class OverflowoptController {
 
             return RESTRetUtils.successObj();
         }
-
 
     }
 }

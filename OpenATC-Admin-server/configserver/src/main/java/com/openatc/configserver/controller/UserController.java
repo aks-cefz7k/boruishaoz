@@ -53,7 +53,6 @@ public class UserController {
             String secretPassword = Base64.getEncoder().encodeToString(DigestUtils.md5(user.getPassword() + timestamp));
             if (!password.equals(secretPassword))
                 return RESTRetUtils.errorObj(E_3011);
-            System.out.println("user is not null");
         }else{
             System.out.println("user is null");
         }

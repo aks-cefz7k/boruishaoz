@@ -30,7 +30,6 @@ public class OverflowdetectorController {
     //查询整个瓶颈检测器
     @GetMapping(value = "/overflowdetector")
     public RESTRetBase GetOverflowdetetor(){
-        System.out.println("/overflowdetector");
         List<OverflowDetector> all = overflowDetectorRepository.findAll();
         return RESTRetUtils.successObj(all);
     }

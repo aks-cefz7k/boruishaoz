@@ -15,7 +15,7 @@ import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
-//import org.springframework.stereotype.Component;
+
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

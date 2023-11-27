@@ -12,8 +12,7 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;

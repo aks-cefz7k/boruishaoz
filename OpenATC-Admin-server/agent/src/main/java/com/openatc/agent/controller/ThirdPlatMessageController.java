@@ -52,7 +52,7 @@ public class ThirdPlatMessageController {
         message.setData(jsonObject);
         MessageData responceData = null;
 
-        System.out.println("message = " + message);
+
 
         try {
             responceData = commClient
@@ -61,7 +61,7 @@ public class ThirdPlatMessageController {
             e.printStackTrace();
         }
 
-        System.out.println("responsdata = " + responceData);
+
         return RESTRetUtils.successObj(responceData);
     }
 

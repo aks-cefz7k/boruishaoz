@@ -43,6 +43,10 @@ public class ocpMessage implements Message {
         return packData;
     }
 
+
+
+
+
     @Override
     public MessageData uppack(byte[] dataSource) throws UnsupportedEncodingException {
 
@@ -66,4 +70,5 @@ public class ocpMessage implements Message {
     public int geyExangeType() {
         return EXANGE_TYPE_DEVICE;
     }
+
 }

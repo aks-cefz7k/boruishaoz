@@ -78,7 +78,6 @@ public class OptService {
         optProgram.setOffset(0);
         optProgram.setRings(ringlst);
         optDev.setData(optProgram);
-        System.out.println(optDev);
         return optDev;
     }
 

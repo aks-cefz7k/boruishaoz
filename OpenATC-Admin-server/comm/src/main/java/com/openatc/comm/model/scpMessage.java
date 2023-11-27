@@ -18,7 +18,7 @@ import com.openatc.comm.data.MessageDataMD5;
 import com.openatc.comm.packupack.DataParamMD5;
 
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
+
 
 import static com.openatc.comm.common.CommunicationType.*;
 

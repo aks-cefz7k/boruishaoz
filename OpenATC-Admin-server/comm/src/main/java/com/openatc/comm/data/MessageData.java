@@ -12,7 +12,6 @@
 package com.openatc.comm.data;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import lombok.Data;
 //import org.springframework.stereotype.Component;
 
