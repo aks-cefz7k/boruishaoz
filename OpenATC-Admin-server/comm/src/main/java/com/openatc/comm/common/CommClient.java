@@ -11,20 +11,22 @@
  **/
 package com.openatc.comm.common;
 
-import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4aefc9a9e6f47b0eaeeaeec1b0662a8e39a04f77
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
 import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
 
 
-//@Component
 public class CommClient {
 
     // 服务的类型，分为平台和配置软件
@@ -90,6 +92,8 @@ public class CommClient {
         else
             commType = COMM_UDP_HOSTPORT;
 
+//        commType = COMM_TCP;
+
         // 创建消息通讯对象
         Communication communication = factory.createCommunication(message,commType, platform);
 
@@ -99,12 +103,12 @@ public class CommClient {
         try {
             sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
         } catch (IOException e) {
-            log.warning("exange send error: " + e.getMessage());
+            log.warning("exange send error: " + e.getMessage() + " Message:" + sendMsg);
             return CreateErrorResponceData(agentId,e.getMessage());
         }
 
         if(sendrev != 0){
-            log.warning("exange send error: socket return null");
+            log.warning("exange send error: socket return null!" + " Message:" + sendMsg);
             return CreateErrorResponceData(agentId,"exange send error: socket return null");
         }
 
@@ -124,7 +128,7 @@ public class CommClient {
 
 //            log.info("receive responceData: " + responceData);
         } catch (IOException e) {
-            log.warning("exange receive error: " + e.getMessage());
+            log.warning("exange receive error: " + e.getMessage() + " Message:" + sendMsg);
             return CreateErrorResponceData(agentId,e.getMessage());
         }
 
@@ -137,13 +141,4 @@ public class CommClient {
         return responceData;
     }
 
-    private static MessageData CreateErrorResponceData(String agentId,String desc) {
-        MessageData responceData = new MessageData();
-        responceData.setAgentid(agentId);
-        responceData.setOperation("error-response");
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("desc", desc);
-        responceData.setData(jsonObject);
-        return responceData;
-    }
 }

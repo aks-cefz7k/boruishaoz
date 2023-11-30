@@ -13,9 +13,7 @@ package com.openatc.comm.model;
 
 import com.openatc.comm.data.MessageData;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.*;
 import java.util.logging.Logger;
 
@@ -43,6 +41,7 @@ public class TcpCommunication implements Communication {
         //生成发送包
         out = socket.getOutputStream();
         out.write(packData.getM_packData());
+        out.flush();
 
         return 0;
     }
@@ -50,8 +49,16 @@ public class TcpCommunication implements Communication {
     @Override
     public MessageData receiveData() throws IOException {
         byte[] dataRecv = new byte[RECVBUFFER];
+        byte[] dataRecvBuf = new byte[RECVBUFFER/10];
+        int bufLength = 0;
+        int totalLength = 0;
+
         InputStream in=socket.getInputStream();
-        int len=in.read(dataRecv);
+        while(bufLength != -1){
+            bufLength = in.read(dataRecvBuf);
+            System.arraycopy(dataRecvBuf, 0, dataRecv, totalLength, bufLength);
+            totalLength += bufLength;
+        };
 
         out.close();
         in.close();
