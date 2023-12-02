@@ -14,10 +14,7 @@ package com.openatc.comm.common;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
-<<<<<<< HEAD
 
-=======
->>>>>>> 4aefc9a9e6f47b0eaeeaeec1b0662a8e39a04f77
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

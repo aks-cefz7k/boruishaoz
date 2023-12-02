@@ -11,6 +11,7 @@
  **/
 package com.openatc.comm.model;
 
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.openatc.comm.data.MessageData;
@@ -54,7 +55,8 @@ public class scpMessage implements Message {
         Gson gson = new Gson();
         String str_receive = new String(dataSource, 0, dataSource.length,"UTF-8");
         MessageData responceData = gson.fromJson(str_receive, MessageData.class);
-//        logger.info("receive Kedacom responceData: " + responceData);
+
+        //        logger.info("receive Kedacom responceData: " + responceData);
         return responceData;
     }
 
