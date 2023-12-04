@@ -51,7 +51,7 @@ public class DataParamMD5Controller {
                 }
             }
             datastr = stringBuffer.toString();
-            System.out.println(datastr);
+//            System.out.println(datastr);
         }
         String datamd5value = dataMD5.getMD5(datastr);
         return RESTRetUtils.successObj(datamd5value);
