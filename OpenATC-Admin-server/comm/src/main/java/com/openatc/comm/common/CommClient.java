@@ -15,7 +15,6 @@ import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
 
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
