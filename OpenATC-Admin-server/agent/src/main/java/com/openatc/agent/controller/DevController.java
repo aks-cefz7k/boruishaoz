@@ -119,7 +119,7 @@ public class DevController {
 
     @GetMapping(value = "/devs")
     public RESTRetBase GetDevs() throws ParseException {
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
         mDao.alterStatus(ascsBaseModels);
         return RESTRetUtils.successObj(ascsBaseModels);
@@ -150,7 +150,7 @@ public class DevController {
     public RESTRetBase GetDevById(@PathVariable String id) throws ParseException {
         AscsBaseModel ascsBaseModel = null;
         String sql =
-                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime FROM dev WHERE agentid ='"
+                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid ='"
                         + id + "'";
         List<AscsBaseModel> listAscs = mDao.getDevByPara(sql);
         if (listAscs.size() > 0) {

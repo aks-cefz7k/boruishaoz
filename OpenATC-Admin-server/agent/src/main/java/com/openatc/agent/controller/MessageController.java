@@ -146,7 +146,7 @@ public class MessageController {
             responceData = commClient
                     .exange(ip, port, protocol, exangeType,requestData,ascsBaseModel.getSockettype());
         } catch (Exception e) {
-            logger.warning( "message exange error:" + e.getCause());
+            logger.warning( "message exange error:" + e.getMessage());
         }
 
         if (responceData == null){

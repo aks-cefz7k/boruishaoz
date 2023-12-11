@@ -14,8 +14,6 @@ package com.openatc.comm.common;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
-
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
@@ -78,17 +76,24 @@ public class CommClient {
 
 
 //        starttime = System.currentTimeMillis();
+
         // 设置通讯类型
         CommunicationType commType;
-        if(socketType == COMM_SOCKET_TYPE_UDP && commServerType == COMM_SERVER_TYPE_CONFIGER){
-            commType = COMM_UDP_CONFIGER;
-        }
-        else if(socketType == COMM_SOCKET_TYPE_TCP)
-            commType = COMM_TCP;
-        else
-            commType = COMM_UDP_HOSTPORT;
 
-//        commType = COMM_TCP;
+        // TCP通讯
+        if(socketType == COMM_SOCKET_TYPE_TCP){
+            commType = COMM_TCP;
+        }
+        // UDP通讯
+        else {
+            // 配置软件
+            if(commServerType == COMM_SERVER_TYPE_CONFIGER)
+                commType = COMM_UDP_CONFIGER;
+            // 平台
+            else{
+                commType = COMM_UDP_HOSTPORT;
+            }
+        }
 
         // 创建消息通讯对象
         Communication communication = factory.createCommunication(message,commType, platform);
@@ -96,16 +101,18 @@ public class CommClient {
         // 发送
         int sendrev = 0;
         String agentId = sendMsg.getAgentid();
-        try {
-            sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
-        } catch (IOException e) {
-            log.warning("exange send error: " + e.getMessage() + " Message:" + sendMsg);
-            return CreateErrorResponceData(agentId,e.getMessage());
-        }
+//        try {
+//            sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
+//        } catch (IOException e) {
+//            log.warning("exange send error: " + e.getMessage() + " Message:" + sendMsg);
+//            return CreateErrorResponceData(agentId,e.getMessage());
+//        }
+
+        sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
 
         if(sendrev != 0){
-            log.warning("exange send error: socket return null!" + " Message:" + sendMsg);
-            return CreateErrorResponceData(agentId,"exange send error: socket return null");
+            log.warning("exange send error!" + sendMsg);
+            return CreateErrorResponceData(agentId,"exange send error!");
         }
 
 //        endtime = System.currentTimeMillis();
@@ -114,19 +121,26 @@ public class CommClient {
 //        starttime = System.currentTimeMillis();
         // 接收-解析
         MessageData responceData = null;
-        try {
-            responceData = communication.receiveData();
+        responceData = communication.receiveData();
 
-            // 没有收到消息
-            if(responceData == null){
-                responceData = CreateErrorResponceData(agentId,"Responce Data is null");
-            }
-
-//            log.info("receive responceData: " + responceData);
-        } catch (IOException e) {
-            log.warning("exange receive error: " + e.getMessage() + " Message:" + sendMsg);
-            return CreateErrorResponceData(agentId,e.getMessage());
+        // 没有收到消息
+        if(responceData == null){
+            responceData = CreateErrorResponceData(agentId,"Responce Data is null");
         }
+//        log.info("receive responceData: " + responceData);
+
+//        try {
+//            responceData = communication.receiveData();
+//
+//            // 没有收到消息
+//            if(responceData == null){
+//                responceData = CreateErrorResponceData(agentId,"Responce Data is null");
+//            }
+//
+//        } catch (IOException e) {
+//            log.warning("exange receive error: " + e.getMessage() + " Message:" + sendMsg);
+//            return CreateErrorResponceData(agentId,e.getMessage());
+//        }
 
 
 //        endtime = System.currentTimeMillis();

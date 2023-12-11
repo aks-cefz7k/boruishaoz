@@ -100,7 +100,7 @@ public class UdpCommunicationStaticPort implements Communication {
     }
 
     @Override
-    public int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) throws IOException {
+    public int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype) {
 
         // 保存消息的KEY,如果是直连到设备，用IP+端口;如果是通过平台跳转，使用设备ID
         this.agentid = agentid;
@@ -132,12 +132,16 @@ public class UdpCommunicationStaticPort implements Communication {
 
         // UDP最大发送长度64K
         if(sendPacket.getLength() > 64000){
-            logger.warning("Send Packet too Long! Send Data Thread#" + thread.getId() +"AgentID:" + agentid +  "IP:" + ip +"Port:" + port);
+            logger.warning("Send Packet too Long! Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port);
             return -1;
         }
 
         //发送数据
-        datagramSocket.send(sendPacket);
+        try {
+            datagramSocket.send(sendPacket);
+        } catch (IOException e) {
+            logger.warning("Send Packet Error! Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Msg:" + e.getMessage());
+        }
         thread = Thread.currentThread();
         messageMap.put(messageKey, this);
         logger.warning("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
@@ -147,7 +151,7 @@ public class UdpCommunicationStaticPort implements Communication {
     }
 
     @Override
-    public MessageData receiveData() throws IOException {
+    public MessageData receiveData() {
         // 此处等待消息返回
         try {
             Thread.sleep(TIMEOUT);

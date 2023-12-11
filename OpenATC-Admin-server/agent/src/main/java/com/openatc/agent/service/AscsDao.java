@@ -528,6 +528,8 @@ public class AscsDao {
             tt.setName((String) map.get("name"));
             JsonObject jsonparam = new JsonParser().parse(map.get("jsonparam").toString()).getAsJsonObject();
             tt.setJsonparam(jsonparam);
+            Integer integer = (Integer)map.get("sockettype");
+            tt.setSockettype(integer == null ? 0 : integer.intValue());
             abm.add(tt);
         }
         return abm;
