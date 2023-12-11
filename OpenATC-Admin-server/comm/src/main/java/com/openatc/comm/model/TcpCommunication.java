@@ -68,6 +68,6 @@ public class TcpCommunication implements Communication {
 //        logger.info("datagramSocket receivedata end: " + System.currentTimeMillis());
 //        logger.info("communication end: " + System.currentTimeMillis());
 
-        return message.uppack(dataRecv);
+        return message.uppack(dataRecv,RECVBUFFER);
     }
 }

@@ -85,7 +85,8 @@ public class UdpCommunicationForConfiger implements Communication {
 //        logger.info("Receive UDP Data Time:"+ (endtime-starttime) );
 
 //        starttime = System.currentTimeMillis();
-        MessageData md = message.uppack(recvPacket.getData());
+
+        MessageData md = message.uppack(recvPacket.getData(),recvPacket.getLength());
 //        endtime = System.currentTimeMillis();
 //        logger.info("Uppack UDP Data time:"+ (endtime-starttime) );
 

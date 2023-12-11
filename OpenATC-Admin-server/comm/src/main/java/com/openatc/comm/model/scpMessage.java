@@ -51,14 +51,24 @@ public class scpMessage implements Message {
     }
 
     @Override
-    public MessageData uppack(byte[] dataSource) throws UnsupportedEncodingException {
+    public MessageData uppack(byte[] dataSource, int length) throws UnsupportedEncodingException {
         Gson gson = new Gson();
-        String str_receive = new String(dataSource, 0, dataSource.length,"UTF-8");
+//        int len = 0;
+//        for(int i = 0; i < dataSource.length; i++)
+//        {
+//            if(dataSource[i] == '\0'){
+//                len = i;
+//                break;
+//            }
+//        }
+        String str_receive = new String(dataSource, 0, length,"UTF-8");
         MessageData responceData = gson.fromJson(str_receive, MessageData.class);
 
         //        logger.info("receive Kedacom responceData: " + responceData);
         return responceData;
     }
+
+
 
     @Override
     public int geyExangeType() {

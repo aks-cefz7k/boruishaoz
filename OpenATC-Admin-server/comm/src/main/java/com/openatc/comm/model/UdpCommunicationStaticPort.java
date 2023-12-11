@@ -187,7 +187,8 @@ public class UdpCommunicationStaticPort implements Communication {
                     String addressStr = address.getHostAddress();
                     int port = recvPacket.getPort();
                     logger.warning("Udp Receive Packet" + addressStr+" : "+port + " Length: " + recvPacket.getLength());
-                    MessageData responceData = message.uppack(recvPacket.getData());
+                    int len = recvPacket.getLength();
+                    MessageData responceData = message.uppack(recvPacket.getData(),len);
 
                     // 收到不正确的消息
                     if(responceData.getOperation() == null){
