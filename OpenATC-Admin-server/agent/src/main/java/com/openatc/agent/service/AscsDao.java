@@ -544,7 +544,7 @@ public class AscsDao {
     public AscsBaseModel insertDev(AscsBaseModel ascs) {
 
         int id = ascs.getId();
-        String sql = "INSERT INTO dev(platform, gbid, firm, agentid,protocol,type,descs,status,geometry,jsonparam,name) VALUES (?, ?,?,?,?,?,?,?,?,to_json(?::json),?)";
+        String sql = "INSERT INTO dev(platform, gbid, firm, agentid,protocol,type,descs,status,geometry,jsonparam,name,sockettype) VALUES (?, ?,?,?,?,?,?,?,?,to_json(?::json),?,?)";
         if (id == 0) {
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -568,13 +568,14 @@ public class AscsDao {
                     }
                     ps.setObject(10, ascs.getJsonparam().toString());
                     ps.setObject(11, ascs.getName());
+                    ps.setObject(12, ascs.getSockettype());
                     return ps;
                 }
             }, keyHolder);
 
             ascs.setId(keyHolder.getKey().intValue());
         } else {
-            sql = "INSERT INTO dev(gbid,firm,name,id,agentid,protocol,type,descs,status,geometry,jsonparam) VALUES (?,?,?,?,?,?,?,?,?,?,to_json(?::json))";
+            sql = "INSERT INTO dev(gbid,firm,name,id,agentid,protocol,type,descs,status,geometry,jsonparam,sockettype) VALUES (?,?,?,?,?,?,?,?,?,?,to_json(?::json),?)";
             jdbcTemplate.update(sql,
                     ascs.getGbid(),
                     ascs.getFirm(),
@@ -586,7 +587,8 @@ public class AscsDao {
                     ascs.getDescs(),
                     ascs.getStatus(),
                     ascs.getGeometry().toString(),
-                    ascs.getJsonparam().toString());
+                    ascs.getJsonparam().toString(),
+                    ascs.getSockettype());
         }
 
         return ascs;
@@ -604,7 +606,7 @@ public class AscsDao {
         long count = jdbcTemplate.queryForObject(sql, Long.class, ascs.getAgentid());
         //ID已存在，更新注册信息,不存在，返回；
         if (count == 0) return 0;
-        sql = "update dev set thirdplatformid=?,platform=?, gbid=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,status=? ,geometry= ?,jsonparam=(to_json(?::json)),code=? where agentid=?";
+        sql = "update dev set thirdplatformid=?,platform=?, gbid=?, firm=?, name=?, type=? ,protocol=? ,descs=? ,status=? ,geometry= ?,jsonparam=(to_json(?::json)),code=?,sockettype=? where agentid=?";
         String geometry = null;
         if (ascs.getGeometry() != null) {
             geometry = ascs.getGeometry().toString();
@@ -622,6 +624,7 @@ public class AscsDao {
                 geometry,
                 ascs.getJsonparam().toString(),
                 ascs.getCode(),
+                ascs.getSockettype(),
                 ascs.getAgentid()
         );
 
