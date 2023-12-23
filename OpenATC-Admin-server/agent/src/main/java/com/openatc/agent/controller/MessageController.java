@@ -184,7 +184,6 @@ public class MessageController {
         return RESTRetUtils.successObj(responceData);
     }
 
-
     /**
      * @param requestData  请求消息
      * @param responceData 应答消息
@@ -225,7 +224,6 @@ public class MessageController {
             //响应内容
             hisParams.setResponsebody(responceData.getData().toString());
         }
-
         return hisParams;
     }
 

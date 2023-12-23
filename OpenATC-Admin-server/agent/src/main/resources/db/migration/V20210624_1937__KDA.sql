@@ -1,0 +1,1 @@
+ALTER TABlE "t_user" ADD COLUMN expiration_time timestamp with time zone default now() NULL;

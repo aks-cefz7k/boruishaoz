@@ -2,7 +2,7 @@ package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.AscsBaseModel;
+
 import com.openatc.agent.model.DeviceVedio;
 import com.openatc.agent.service.DeviceVedioDao;
 import com.openatc.core.model.RESTRetBase;
@@ -10,7 +10,7 @@ import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @RestController
@@ -47,6 +47,7 @@ public class DeviceVedioController {
         List<DeviceVedio> deviceVedios = deviceVedioDao.findByAgentidIn(videolist);
         return RESTRetUtils.successObj(deviceVedios);
     }
+
     /**
      * 删除单个视频
      * @return
@@ -69,7 +70,6 @@ public class DeviceVedioController {
         }else{
             return RESTRetUtils.successObj(false);
         }
-
     }
 
 

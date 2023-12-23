@@ -7,12 +7,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
-//import com.openatc.comm.data.ThirdPlatMessageData;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,15 +49,12 @@ public class ThirdPlatMessageController {
         message.setData(jsonObject);
         MessageData responceData = null;
 
-
-
         try {
             responceData = commClient
                     .exange(adapterIP, adapterPort, protocolType, 1, message,COMM_SOCKET_TYPE_UDP);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return RESTRetUtils.successObj(responceData);
     }
