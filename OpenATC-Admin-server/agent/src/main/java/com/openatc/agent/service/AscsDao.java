@@ -535,11 +535,13 @@ public class AscsDao {
         return abm;
     }
 
+
     public int deleteDevByID(String id) {
         String sql = "DELETE FROM dev WHERE agentid ='" + id + "'";
         int rows = jdbcTemplate.update(sql);
         return rows;
     }
+
 
     public AscsBaseModel insertDev(AscsBaseModel ascs) {
 
@@ -715,7 +717,8 @@ public class AscsDao {
             //找到对应ip + port
             if (jsonparamMap.get("ip").equals(devCover.getIp()) && port == devCover.getPort()) {
                 //坐标为空，更新坐标
-                if(idAndJson.get("geometry").equals("")){
+
+                if(idAndJson.get("geometry") == null){
                     String sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)), thirdplatformid=?, lastTime=LOCALTIMESTAMP where id = ?";
                     String strGeo = ascsModel.getGeometry().toString();
                     rows = jdbcTemplate.update(sql,
