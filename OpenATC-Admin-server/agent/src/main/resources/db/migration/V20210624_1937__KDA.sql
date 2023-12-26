@@ -1,1 +1,1 @@
-ALTER TABlE "t_user" ADD COLUMN expiration_time timestamp with time zone default now() NULL;
+ALTER TABlE "t_user" ALTER expiration_time DROP NOT NULL;
