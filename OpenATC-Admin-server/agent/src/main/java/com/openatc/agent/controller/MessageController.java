@@ -159,11 +159,14 @@ public class MessageController {
         if (httpServletRequest != null) {
             token = httpServletRequest.getHeader("Authorization");
         }
-        if (requestData.getOperation().equals("set-request") && token != null) {
+
+        if (requestData.getOperation().equals("set-request")) {
+            if(token == null){
+                logger.warning("token of set-request is null;");
+            }
             logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
             hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp, token));
         }
-
 
         if (responceData.getOperation() == null){
             devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_101);

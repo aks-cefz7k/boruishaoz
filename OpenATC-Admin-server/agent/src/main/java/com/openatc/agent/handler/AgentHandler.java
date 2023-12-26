@@ -75,6 +75,7 @@ public class AgentHandler extends ICommHandler {
             // 更新设备信息
             devController.DevAscsDiscovery(ascsModel);
         }
+
 //     收到其他消息
         else if (isRedisEnable) {
             String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
