@@ -1,10 +1,6 @@
 package com.openatc.agent.controller;
 
 
-
-
-
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
@@ -15,8 +11,6 @@ import com.openatc.core.util.RESTRetUtils;
 
 
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,8 +28,8 @@ import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_UDP;
 @CrossOrigin
 public class ThirdPlatMessageController {
 
-    @Autowired
-    private CommClient commClient;
+//    @Autowired
+    private CommClient commClient = new CommClient();
 
     @Value("${agent.thirdplat.ip}")
     private String adapterIP;
@@ -57,8 +51,6 @@ public class ThirdPlatMessageController {
         message.setData(jsonObject);
         MessageData responceData = null;
 
-        System.out.println("message = " + message);
-
         try {
             responceData = commClient
                     .exange(adapterIP, adapterPort, protocolType, 1, message,COMM_SOCKET_TYPE_UDP);
@@ -66,7 +58,6 @@ public class ThirdPlatMessageController {
             e.printStackTrace();
         }
 
-        System.out.println("responsdata = " + responceData);
         return RESTRetUtils.successObj(responceData);
     }
 

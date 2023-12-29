@@ -1,0 +1,1 @@
+ALTER TABlE "t_user" ALTER expiration_time DROP NOT NULL;

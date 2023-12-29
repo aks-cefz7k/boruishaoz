@@ -121,11 +121,11 @@ public class DeviceController {
 
 
         if (responceData == null) {
-            return RESTRetUtils.errorDetialObj(E_4004, devCommError);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
 
         if (responceData.getOperation() == null) {
-            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+            return RESTRetUtils.errorDetialObj(E_4006, devCommError);
         }
 
         //判断设备是否在线

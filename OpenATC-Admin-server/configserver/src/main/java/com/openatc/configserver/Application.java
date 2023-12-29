@@ -11,6 +11,7 @@
  **/
 package com.openatc.configserver;
 
+import com.openatc.configserver.utils.HeartbeatThread;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -26,7 +27,6 @@ public class Application {
 //        timer.schedule(new MyTimerTask(new DatagramSocket(), "localhost", 8880),5000,10000);
 //    }
     public static void main(String[] args) throws Exception {
-//        Log.setLog(new NoLogging());
         Server jettyServer = new Server();
         HttpConfiguration http_config = new HttpConfiguration();
         /**
@@ -106,7 +106,8 @@ public class Application {
         try {
 //            sendHbPacket();
             jettyServer.start();
-//            log.info("Started KDAgentApplication");
+            // 启动心跳线程
+            new HeartbeatThread().start();
             jettyServer.join();
 
         } catch (Exception e){

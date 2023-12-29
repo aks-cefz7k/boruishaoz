@@ -12,9 +12,8 @@
 package com.openatc.comm.data;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import lombok.Data;
-import org.springframework.stereotype.Component;
+//import org.springframework.stereotype.Component;
 
 /**
  * @ClassName MessageData.java
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Component;
  * @Description
  */
 @Data
-@Component
+//@Component
 public class MessageData {
 
   String agentid;

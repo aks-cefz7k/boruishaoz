@@ -1,5 +1,8 @@
 package com.openatc.comm.common;
 
+import com.google.gson.JsonObject;
+import com.openatc.comm.data.MessageData;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,5 +20,15 @@ public class LogUtil {
         else if(level.equals("warning")) {
             log.setLevel(Level.WARNING);
         }
+    }
+
+    public static MessageData CreateErrorResponceData(String agentId, String desc) {
+        MessageData responceData = new MessageData();
+        responceData.setAgentid(agentId);
+        responceData.setOperation("error-response");
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("desc", desc);
+        responceData.setData(jsonObject);
+        return responceData;
     }
 }

@@ -1,10 +1,9 @@
-#FROM 192.168.13.110:5080/openjdk:8-jre-alpine
 FROM openjdk:8-jre-alpine
+ENV TZ=Asia/Shanghai
+RUN ln -sf /usr/share/zoneinfo/{TZ} /etc/localtime && echo "{TZ}" > /etc/timezone
 
-ARG JAR_FILE
+ADD agent-1.16.2.jar /app.jar
 ENTRYPOINT ["java","-jar","./app.jar","--spring.profiles.active=docker"]
 
-COPY target/${JAR_FILE} ./app.jar
-#COPY token/token.txt ./token/token.txt
 
 

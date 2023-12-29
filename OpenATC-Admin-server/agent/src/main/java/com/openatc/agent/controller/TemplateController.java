@@ -381,6 +381,8 @@ public class TemplateController {
         return RESTRetUtils.successObj(template);
     }
 
+
+
     private TemPhase setTemPhase(TemPhase temPhase, int[] direction, int id, int flashgreen, int yellow, int redclear, int phaseCount) {
         temPhase.setDirection(direction);
         temPhase.setId(id + 1);
@@ -473,20 +475,20 @@ public class TemplateController {
         //相位用两位字符串表示，不足位数补0
         String phaseCountString = String.format("%2d", phaseCount).replace(" ", "0");
 
-        if (!directionConflict(phaseArray) && !directionConflict(overlapArray)) {
-            //判断是否是T型或十字型路口
-            type = calTenOrType(phaseAndOverlapArray, type, directionSet, phaseCountString);
-            if (type.equals("999-000-00")){
-                //判断是不是人行横道
-                type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
-            }
+        //if (!directionConflict(phaseArray) && !directionConflict(overlapArray))
+
+        //判断是否是T型或十字型路口
+        type = calTenOrType(phaseAndOverlapArray, type, directionSet, phaseCountString);
+        if (type.equals("999-000-00")){
+            //判断是不是人行横道
+            type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
         }
+
 
         //判断是否是匝道类型的路开口
         if (type.equals("999-000-00")) {
             type = calRampType(phaseArray, type, phaseCountString);
         }
-
 
         //返回的json对象
         JsonObject intersectionInfo = new JsonObject();

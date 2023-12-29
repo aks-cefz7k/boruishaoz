@@ -57,8 +57,8 @@ public class MessageController {
     @Autowired(required = false)
     protected DevController devController;
 
-    @Autowired
-    protected CommClient commClient;
+//    @Autowired
+    protected CommClient commClient = new CommClient();
 
     @Autowired(required = false)
     protected AscsDao mDao;
@@ -146,7 +146,7 @@ public class MessageController {
             responceData = commClient
                     .exange(ip, port, protocol, exangeType,requestData,ascsBaseModel.getSockettype());
         } catch (Exception e) {
-            logger.warning( "message exange error:" + e.getCause());
+            logger.warning( "message exange error:" + e.getMessage());
         }
 
         if (responceData == null){
@@ -159,11 +159,14 @@ public class MessageController {
         if (httpServletRequest != null) {
             token = httpServletRequest.getHeader("Authorization");
         }
-        if (requestData.getOperation().equals("set-request") && token != null) {
+
+        if (requestData.getOperation().equals("set-request")) {
+            if(token == null){
+                logger.warning("token of set-request is null;");
+            }
             logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
             hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp, token));
         }
-
 
         if (responceData.getOperation() == null){
             devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_101);
@@ -183,7 +186,6 @@ public class MessageController {
 
         return RESTRetUtils.successObj(responceData);
     }
-
 
     /**
      * @param requestData  请求消息
@@ -225,7 +227,6 @@ public class MessageController {
             //响应内容
             hisParams.setResponsebody(responceData.getData().toString());
         }
-
         return hisParams;
     }
 
