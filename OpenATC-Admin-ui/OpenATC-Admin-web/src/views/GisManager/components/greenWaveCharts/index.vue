@@ -49,12 +49,14 @@ export default {
         color: '#909399'
       },
       chooseRouteId: 0,
-      oldPolyline: ''
+      oldPolyline: '',
+      containerWidth: 0
     }
   },
   mounted () {
     const _this = this
     var w = document.getElementsByClassName('showLayout')[0]
+    this.containerWidth = w.style.width
     w.style.width = '700px'
     var dom = document.getElementById('echarts')
     _this.myChart = echarts.init(dom)
@@ -341,6 +343,8 @@ export default {
   },
   destroyed () {
     this.clearLayer()
+    var w = document.getElementsByClassName('showLayout')[0]
+    w.style.width = this.containerWidth
   }
 }
 </script>
