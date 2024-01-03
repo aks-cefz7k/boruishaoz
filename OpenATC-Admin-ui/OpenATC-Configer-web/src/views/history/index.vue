@@ -13,6 +13,8 @@
   <div class="app-container">
     <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">{{$t('edge.fault.refresh')}}</el-button>
     <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">{{$t('edge.fault.export')}}</el-button>
+    <el-input v-model="username" :placeholder="$t('edge.statistics.username')" style="width:150px;margin-left:10px;"></el-input>
+    <el-input v-model="password" :placeholder="$t('edge.statistics.pass')" type="password" style="width:150px;"></el-input>
     <el-button class="detail-fault" type="primary" size="small" @click="showLedDetailFault" style="" v-show="activeName === '2'">{{$t('edge.fault.faultofcurrentdetailedlightgroup')}}</el-button>
     <el-button class="detail-fault" type="primary" size="small" @click="showVehDetDetailFault" style="" v-show="activeName === '3'">{{$t('edge.fault.faultofcurrentdetailedvehicleinspectionversion')}}</el-button>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -26,7 +28,8 @@
 
 <script>
 import boardTable from './table/index'
-import { getFault } from '@/api/fault'
+import { getFault, getFaultHistoryByFtp } from '@/api/fault'
+import { getIframdevid } from '@/utils/auth'
 import detailFault from './dialog/index'
 export default {
   name: 'history',
@@ -34,6 +37,8 @@ export default {
   data () {
     return {
       activeName: '0',
+      username: '',
+      password: '',
       tabList: [{
         label: '总览',
         value: '0'
@@ -75,7 +80,13 @@ export default {
     getAllFault () {
       this.listLoading = true
       // let faultType = Number(this.activeName)
-      getFault(0).then(data => {
+      let agentid = getIframdevid()
+      let reqData = {
+        'username': this.username,
+        'password': this.password,
+        'agentid': agentid
+      }
+      getFaultHistoryByFtp(reqData).then(data => {
         if (data.data.success !== true) {
           this.listLoading = false
           this.$message.error(data.data.message)

@@ -287,5 +287,10 @@
   "key": "getHistoryFlow",
   "url": "/flow/history",
   "method": "post"
+},
+{
+  "key": "getFaultHistoryByFtp",
+  "url": "/fault/history/ftp",
+  "method": "post"
 }
 ]
