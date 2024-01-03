@@ -94,7 +94,7 @@ export default {
           return
         }
         this.listLoading = false
-        this.allFault = this.formateDateForAllFault(data.data.data.data.m_FaultDeque)
+        this.allFault = this.formateDateForAllFault(data.data.data.m_FaultDeque)
         this.handlerFaultData()
       })
     },
