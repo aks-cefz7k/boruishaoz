@@ -35,6 +35,16 @@
   "method": "post"
 },
 {
+  "key": "uploadDeviceInfo",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "downloadDeviceInfo",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
   "key": "downloadTscParam",
   "url": "/devs/message",
   "method": "post"

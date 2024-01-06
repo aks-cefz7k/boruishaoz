@@ -771,11 +771,11 @@ export default {
         )
         return false
       }
-      this.checkDeviceInfo()
-      if (!this.deviceinfo) {
-        this.$message.error(this.$t('edge.errorTip.deviceinformationnotnull'))
-        return false
-      }
+      // this.checkDeviceInfo()
+      // if (!this.deviceinfo) {
+      //   this.$message.error(this.$t('edge.errorTip.deviceinformationnotnull'))
+      //   return false
+      // }
       return true
     },
     checkDeviceInfo () {

@@ -20,11 +20,11 @@
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.areaid')}}</div>
-              <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+              <el-input v-model="customInfo.areaid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.crossid')}}</div>
-              <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+              <el-input v-model="customInfo.intersectionid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.overview.crossname')}}:</div>
@@ -243,11 +243,16 @@
             </el-col>
           </el-row>
         </div>
+        <div class="device-message">
+          <el-button type="primary" @click="upload" size="mini">{{$t('edge.main.upload')}}</el-button>
+          <el-button type="primary" @click="download" size="mini">{{$t('edge.main.download')}}</el-button>
+        </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
+import { uploadDeviceInfo, downloadDeviceInfo } from '@/api/param'
 export default {
   name: 'deviceinfo',
   components: {},
@@ -260,13 +265,56 @@ export default {
       startallredOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       greenwavecycleOptions: [0, 1, 2, 3, 4, 5],
       commutypeOptions: [{label: 'TCP', value: 1}, {label: 'UDP', value: 2}, {label: 'RS232', value: 3}],
-      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}]
+      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}],
+      customInfo: {
+        areaid: '',
+        intersectionid: '',
+        siteid: '',
+        selflearning: 0,
+        fixintersectioninfo: '',
+        commuport: 0,
+        commutype: '',
+        steptype: '',
+        netcard: [{
+          ip: '',
+          subnetmask: '',
+          gateway: ''
+        },
+        {
+          ip: '',
+          subnetmask: '',
+          gateway: ''
+        }],
+        centerip: {
+          ip: '',
+          port: ''
+        },
+        cascade: {
+          lampboards: 0,
+          detectorboards: 0,
+          ioboards: 0,
+          joinoffset: 0
+        },
+        startsequence: {
+          startyellowflash: 6,
+          startallred: 6,
+          greenwavecycle: 5
+        },
+        faultdetect: {
+          closegreenandredon: 0,
+          detectgapgreenandredon: 0,
+          closenoredon: 0,
+          detectgapnoredon: 0,
+          detectgapgreenconflict: 0
+        }
+      },
+      loading: {}
     }
   },
   computed: {
-    ...mapState({
-      customInfo: state => state.globalParam.tscParam.customInfo
-    })
+    // ...mapState({
+    //   customInfo: state => state.globalParam.tscParam.customInfo
+    // })
   },
   created () {
     // this.globalParamModel = this.$store.getters.globalParamModel
@@ -282,7 +330,7 @@ export default {
       let channelList = this.globalParamModel.getParamsByType('channelList')
       let detectorList = this.globalParamModel.getParamsByType('detectorList')
       let pedestrainDetectorList = this.globalParamModel.getParamsByType('pedestrainDetectorList')
-      let customInfo = this.globalParamModel.getParamsByType('customInfo')
+      let customInfo = this.customInfo
       customInfo.cascade.lampboards = Math.ceil(channelList.length / 4)
       customInfo.cascade.detectorboards = Math.ceil(detectorList.length / 16)
       customInfo.cascade.ioboards = Math.ceil(pedestrainDetectorList.length / 16)
@@ -303,6 +351,80 @@ export default {
       if (joinoffset > 255) {
         this.customInfo.cascade.joinoffset = 255
         this.$message.error('级联偏移量不能超过255！')
+      }
+    },
+    upload () {
+      debugger
+      this.lockScreen()
+      uploadDeviceInfo().then(data => {
+        debugger
+        this.unlockScreen()
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        this.$store.state.user.route = this.$route.path
+        if (Object.keys(data.data.data.data).length === 0) {
+          this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
+          return
+        }
+        let allTscParam = data.data.data.data
+        if (allTscParam.manualpanel === undefined) {
+          allTscParam.manualpanel = {}
+        }
+        if (allTscParam.channellock === undefined) {
+          allTscParam.channellock = []
+        }
+        if (allTscParam.singleoptim === undefined) {
+          allTscParam.singleoptim = []
+        }
+        this.globalParamModel.setGlobalParams(allTscParam)
+        this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
+      })
+    },
+    download () {
+      let customInfo = this.customInfo
+      if (customInfo.siteid === '' || customInfo.siteid === undefined) {
+        this.$message.error('地址码不能为空！')
+      }
+      this.lockScreen()
+      downloadDeviceInfo(customInfo).then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        // downloadTscParam(this.$store.state.user.name, tscParam)
+        this.$alert(this.$t('edge.common.download'), { type: 'success' })
+      }).catch(error => {
+        this.unlockScreen()
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    lockScreen () {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.5)'
+      })
+    },
+    unlockScreen () {
+      this.loading.close()
+    },
+    checkDeviceInfo () {
+      let customInfo = this.customInfo
+      if (customInfo.siteid === '' || customInfo.siteid === undefined) {
+        this.deviceinfo = false
       }
     }
   }

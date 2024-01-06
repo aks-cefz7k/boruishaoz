@@ -128,7 +128,7 @@ export default {
         label: '跟随相位'
       }, {
         value: 5,
-        label: '跟随行人相位'
+        label: '行人跟随相位'
       }, {
         value: 0,
         label: '不启用'

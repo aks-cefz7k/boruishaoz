@@ -210,6 +210,11 @@ export default {
           label: this.$t('openatc.devicemanager.offline'),
           type: 'info'
         }
+      } else if (row.state === 'FAULT') {
+        return {
+          label: this.$t('openatc.devicemanager.fault'),
+          type: 'danger'
+        }
       } else {
         if (row.status === 0) {
           // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障

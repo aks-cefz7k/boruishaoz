@@ -142,6 +142,9 @@
     <el-tab-pane :label="$t('edge.system.realTimeChannel')" name="realTimeChannel">
       <realTimeChannel ref="realTimeChannel"></realTimeChannel>
     </el-tab-pane>
+    <el-tab-pane :label="$t('edge.route.deviceInfo')" name="deviceinfo">
+      <deviceInfo ref="deviceinfo"></deviceInfo>
+    </el-tab-pane>
     <!-- <el-tab-pane label="手动控制" name="manual">
       <manualControl></manualControl>
     </el-tab-pane> -->
@@ -165,10 +168,11 @@ import updatefile from './systemDialog/updateFile'
 import manualControl from './manualControl'
 import channelControl from './channelControl'
 import realTimeChannel from './realTimeChannel'
+import deviceInfo from '../deviceInfo'
 import { getSignVersion, getSystemTime, getParamVersion, getCode, getSignIp, getSerialPort, setRemoteControl, getRemoteDebug, setRemoteDebug, udiskupdate } from '@/api/system'
 export default {
   name: 'system',
-  components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel },
+  components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel, deviceInfo },
   data () {
     return {
       activeName: 'information',
