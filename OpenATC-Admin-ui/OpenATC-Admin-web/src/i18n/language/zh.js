@@ -90,7 +90,8 @@ const zh = {
       'quantity': '数量',
       'devicemaneger': '设备管理',
       'usermanager': '用户管理',
-      'operationrecord': '操作记录'
+      'operationrecord': '操作记录',
+      'faultOrOffLine': '故障 / 在线'
     },
     'devicemanager': {
       'devicelist': '设备列表',

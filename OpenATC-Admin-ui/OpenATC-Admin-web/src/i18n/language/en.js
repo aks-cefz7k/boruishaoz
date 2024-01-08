@@ -90,7 +90,8 @@ const en = {
       'quantity': 'Quantity',
       'devicemaneger': 'Device Maneger',
       'usermanager': 'User Manager',
-      'operationrecord': 'Operation Record'
+      'operationrecord': 'Operation Record',
+      'faultOrOffLine': 'Fault / Online'
     },
     'devicemanager': {
       'devicelist': 'Device List',
