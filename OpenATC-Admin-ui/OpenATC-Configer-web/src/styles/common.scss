@@ -1383,3 +1383,8 @@ color: $--color-text-secondary;
   transition: border-color .3s, background-color .3s;
   vertical-align: middle;
 }
+// el-tooltip样式
+.el-tooltip__popper.is-light {
+  background: $--color-primary;
+  border: 1px solid #FFFFFF;
+}
