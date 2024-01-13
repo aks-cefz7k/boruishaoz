@@ -1080,6 +1080,11 @@ border: 1px solid $--border-color-base;
   font-size: 14px;
   line-height: 120%;
   margin: 15px 0 5px 0;
+  .see-cut  {
+    font-size: 14px;
+    padding: 0 0;
+    float: right;
+  }
 }
 
 .device-param {

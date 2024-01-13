@@ -439,6 +439,7 @@ export default {
       this.resetCrossDiagram()
       this.registerMessage() // 注册消息
     } else {
+      // setIframdevid('10602')
       this.queryDevParams() // 查询设备信息
     }
     // this.registerMessage() // 注册消息

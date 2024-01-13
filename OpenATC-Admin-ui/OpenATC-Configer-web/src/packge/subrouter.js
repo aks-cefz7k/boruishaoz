@@ -171,15 +171,15 @@ const subRouter = [{
       icon: 'peddetector'
     }
   },
-  // {
-  //   path: 'deviceInfo',
-  //   name: 'deviceInfo',
-  //   component: () => import('@/views/deviceInfo/index'),
-  //   meta: {
-  //     title: 'edge.route.deviceInfo',
-  //     icon: 'deviceinfo'
-  //   }
-  // },
+  {
+    path: 'deviceInfo',
+    name: 'deviceInfo',
+    component: () => import('@/views/deviceInfo/index'),
+    meta: {
+      title: 'edge.route.deviceInfo',
+      icon: 'deviceinfo'
+    }
+  },
   {
     path: 'adaptiveParameter',
     name: 'adaptiveParameter',

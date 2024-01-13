@@ -15,7 +15,12 @@
           <div class="device-info">{{$t('edge.deviceinfo.deviceinfo')}}</div>
           <el-row class="demo-autocomplete" :gutter="30">
             <el-col :span="4">
-              <div class="sub-title">{{$t('edge.deviceinfo.addresscode')}}</div>
+              <div class="sub-title">{{$t('edge.deviceinfo.addresscode')}}
+                <el-button type="text"
+                           class="see-cut"
+                           :disabled="isSeeCutDisabled"
+                           @click="onSeeCutClick">查看剪断效果</el-button>
+              </div>
               <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
@@ -247,15 +252,17 @@
           <el-button type="primary" @click="upload" size="mini">{{$t('edge.main.upload')}}</el-button>
           <el-button type="primary" @click="download" size="mini">{{$t('edge.main.download')}}</el-button>
         </div>
+        <seeCutEffect ref="seeCutEffect"></seeCutEffect>
   </div>
 </template>
 
 <script>
 // import { mapState } from 'vuex'
 import { uploadDeviceInfo, downloadDeviceInfo } from '@/api/param'
+import seeCutEffect from './components/seeCutEffect'
 export default {
   name: 'deviceinfo',
-  components: {},
+  components: {seeCutEffect},
   data () {
     return {
       lampboardsOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -308,7 +315,8 @@ export default {
           detectgapgreenconflict: 0
         }
       },
-      loading: {}
+      loading: {},
+      isSeeCutDisabled: false
     }
   },
   computed: {
@@ -426,6 +434,10 @@ export default {
       if (customInfo.siteid === '' || customInfo.siteid === undefined) {
         this.deviceinfo = false
       }
+    },
+    onSeeCutClick () {
+      // this.$refs.seeCutEffect.show()
+      this.$refs.seeCutEffect.dialogVisible = true
     }
   }
 }
