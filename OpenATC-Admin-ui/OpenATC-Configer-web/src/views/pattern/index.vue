@@ -412,7 +412,12 @@ export default {
       this.patternStatusIndex = val.id
       this.isShowPatternStatus = true
       if (val.desc === '') {
-        this.currPatternName = 'pattern' + val.id
+        if (this.$i18n.locale === 'en') {
+          this.currPatternName = 'pattern' + val.id
+        } else {
+          this.currPatternName = '方案' + val.id
+        }
+        // this.currPatternName = 'pattern' + val.id
       } else {
         this.currPatternName = val.desc
       }
@@ -473,7 +478,12 @@ export default {
     },
     expandChange (val1, val2) {
       if (val1.desc === '') {
-        this.currPatternName = 'pattern' + val1.id
+        if (this.$i18n.locale === 'en') {
+          this.currPatternName = 'pattern' + val1.id
+        } else {
+          this.currPatternName = '方案' + val1.id
+        }
+        // this.currPatternName = 'pattern' + val1.id
       } else {
         this.currPatternName = val1.desc
       }

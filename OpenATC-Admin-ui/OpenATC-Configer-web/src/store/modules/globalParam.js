@@ -19,48 +19,48 @@ const tscParam = {
   detectorList: [],
   pedestrainDetectorList: [],
   channellock: [],
-  customInfo: {
-    areaid: Number,
-    intersectionid: Number,
-    siteid: '',
-    selflearning: 0,
-    fixintersectioninfo: '',
-    commuport: 0,
-    commutype: '',
-    steptype: '',
-    netcard: [{
-      ip: '',
-      subnetmask: '',
-      gateway: ''
-    },
-    {
-      ip: '',
-      subnetmask: '',
-      gateway: ''
-    }],
-    centerip: {
-      ip: '',
-      port: Number
-    },
-    cascade: {
-      lampboards: 0,
-      detectorboards: 0,
-      ioboards: 0,
-      joinoffset: 0
-    },
-    startsequence: {
-      startyellowflash: 6,
-      startallred: 6,
-      greenwavecycle: 5
-    },
-    faultdetect: {
-      closegreenandredon: 0,
-      detectgapgreenandredon: 0,
-      closenoredon: 0,
-      detectgapnoredon: 0,
-      detectgapgreenconflict: 0
-    }
-  },
+  // customInfo: {
+  //   areaid: Number,
+  //   intersectionid: Number,
+  //   siteid: '',
+  //   selflearning: 0,
+  //   fixintersectioninfo: '',
+  //   commuport: 0,
+  //   commutype: '',
+  //   steptype: '',
+  //   netcard: [{
+  //     ip: '',
+  //     subnetmask: '',
+  //     gateway: ''
+  //   },
+  //   {
+  //     ip: '',
+  //     subnetmask: '',
+  //     gateway: ''
+  //   }],
+  //   centerip: {
+  //     ip: '',
+  //     port: Number
+  //   },
+  //   cascade: {
+  //     lampboards: 0,
+  //     detectorboards: 0,
+  //     ioboards: 0,
+  //     joinoffset: 0
+  //   },
+  //   startsequence: {
+  //     startyellowflash: 6,
+  //     startallred: 6,
+  //     greenwavecycle: 5
+  //   },
+  //   faultdetect: {
+  //     closegreenandredon: 0,
+  //     detectgapgreenandredon: 0,
+  //     closenoredon: 0,
+  //     detectgapnoredon: 0,
+  //     detectgapgreenconflict: 0
+  //   }
+  // },
   manualpanel: {
     mingreen: 15
   },
