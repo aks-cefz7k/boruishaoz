@@ -410,7 +410,8 @@ export default {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        let allTscParam = data.data.data.data
+        // let allTscParam = data.data.data.data
+        let {customInfo, ...allTscParam} = data.data.data.data
         if (allTscParam.manualpanel === undefined) {
           allTscParam.manualpanel = {}
         }

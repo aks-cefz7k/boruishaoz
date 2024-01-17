@@ -434,10 +434,10 @@ export default {
     chooseFile () {
       let username = this.userName
       let password = this.password
-      if (username === '' || password === '') {
-        this.$message.error(this.$t('edge.statistics.userpassnotnull'))
-        return
-      }
+      // if (username === '' || password === '') {
+      //   this.$message.error(this.$t('edge.statistics.userpassnotnull'))
+      //   return
+      // }
       let updateFile = this.$refs.updateFile
       updateFile.onUpdateFile(username, password)
     },

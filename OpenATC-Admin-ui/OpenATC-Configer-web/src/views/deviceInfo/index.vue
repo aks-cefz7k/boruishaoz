@@ -354,10 +354,8 @@ export default {
       }
     },
     upload () {
-      debugger
       this.lockScreen()
       uploadDeviceInfo().then(data => {
-        debugger
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {
