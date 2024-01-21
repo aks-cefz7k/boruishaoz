@@ -101,11 +101,11 @@ const Global = {
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
-      let customInfo = data.customInfo
-      data.customInfo = {
-        ...tscParam.customInfo,
-        ...customInfo
-      }
+      // let customInfo = data.customInfo
+      // data.customInfo = {
+      //   ...tscParam.customInfo,
+      //   ...customInfo
+      // }
       state.tscParam = data
     },
     SAVE_SINGLE_PARAM: (state, param) => {
