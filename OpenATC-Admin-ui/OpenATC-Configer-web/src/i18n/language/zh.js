@@ -452,7 +452,13 @@ const zh = {
       'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
       'startOrderParams': '启动时序参数 ',
       'netcardInfo': '网卡信息: ',
-      'stepType': '步进类型'
+      'stepType': '步进类型',
+      'seeCutEffect': '查看剪断效果',
+      'siteIdLimit': '地址码规定范围是 0 ~ 99999',
+      'siteIdCutEffect': '地址码剪断效果',
+      'cutData': '剪断数据：',
+      'cutEffect': '剪断效果：',
+      'longgerThan20': '二进制数据超过20位！'
     },
     'singleoptim': {
       'deletetip': '确认删除？',

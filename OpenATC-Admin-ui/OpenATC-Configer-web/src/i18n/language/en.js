@@ -454,7 +454,13 @@ const en = {
       'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
       'startOrderParams': 'Start Order Params ',
       'netcardInfo': 'Netcard Info: ',
-      'stepType': 'Step Type'
+      'stepType': 'Step Type',
+      'seeCutEffect': 'See Cut Detail',
+      'siteIdLimit': 'SiteId must be whithin 0 ~ 99999',
+      'siteIdCutEffect': 'SiteId Cut Detail',
+      'cutData': 'Cut Data',
+      'cutEffect': 'Cut Detail',
+      'longgerThan20': 'Data length is longger than 20 ！'
     },
     'singleoptim': {
       'deletetip': 'Sure to delete ？',

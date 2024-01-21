@@ -19,9 +19,9 @@
                 <el-button type="text"
                            class="see-cut"
                            :disabled="isSeeCutDisabled"
-                           @click="onSeeCutClick">查看剪断效果</el-button>
+                           @click="onSeeCutClick">{{$t('edge.deviceinfo.seeCutEffect')}}</el-button>
               </div>
-              <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+              <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small" @change="onSiteIdChange"></el-input>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.areaid')}}</div>
@@ -316,7 +316,7 @@ export default {
         }
       },
       loading: {},
-      isSeeCutDisabled: false
+      isSeeCutDisabled: true
     }
   },
   computed: {
@@ -433,9 +433,20 @@ export default {
         this.deviceinfo = false
       }
     },
+    onSiteIdChange () {
+      if (this.customInfo.siteid) {
+        this.isSeeCutDisabled = false
+      } else {
+        this.isSeeCutDisabled = true
+      }
+    },
     onSeeCutClick () {
-      // this.$refs.seeCutEffect.show()
-      this.$refs.seeCutEffect.dialogVisible = true
+      let num = Number(this.customInfo.siteid)
+      if (!num || num <= 0 || num >= 99999) {
+        this.$message.error(this.$t('edge.deviceinfo.siteIdLimit'))
+        return false
+      }
+      this.$refs.seeCutEffect.show(this.customInfo.siteid)
     }
   }
 }
