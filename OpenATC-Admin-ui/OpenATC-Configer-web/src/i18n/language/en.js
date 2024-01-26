@@ -114,7 +114,7 @@ const en = {
       'exitmanual': 'Exit Manual',
       'controlmodel': 'Control Pattern',
       'patternname': 'Pattern Name',
-      'controlnumber': 'Control Number',
+      'controlnumber': 'Control Num',
       'mode': 'Mode',
       'stage': 'Stage',
       'implement': 'Execute',
@@ -184,7 +184,9 @@ const en = {
       'transitioneffic': 'The execution is successful. It will take effect after the transition switch!',
       'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!',
       'delay': 'Delay time',
-      'duration': 'Duration'
+      'duration': 'Duration',
+      'curModel': 'Current Model',
+      'curStage': 'Current Stage'
     },
     'phase': {
       'desc': 'LaneDirection',

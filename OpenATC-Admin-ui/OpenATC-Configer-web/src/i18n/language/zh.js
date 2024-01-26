@@ -110,13 +110,13 @@ const zh = {
       'offline': '离线',
       'onlineing': '联机中...',
       'controlmode': '控制方式',
-      'manual': '手动',
+      'manual': '手动控制',
       'exitmanual': '退出手动',
       'controlmodel': '控制模式',
       'patternname': '方案名称',
       'controlnumber': '控制编号',
-      'mode': '方式',
-      'stage': '阶段（驻留）',
+      'mode': '控制方式',
+      'stage': '阶段(驻留)',
       'implement': '执行',
       'ipaddress': 'IP地址',
       'deviceport': '设备端口',
@@ -184,7 +184,9 @@ const zh = {
       'transitioneffic': '执行成功，过渡切换后生效！',
       'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！',
       'delay': '延迟时间',
-      'duration': '持续时间'
+      'duration': '持续时间',
+      'curModel': '当前方案',
+      'curStage': '当前阶段'
     },
     'phase': {
       'desc': '车道方向',
