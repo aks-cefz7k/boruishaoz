@@ -1454,5 +1454,12 @@ color: $--color-text-secondary;
 // el-tooltip样式
 .el-tooltip__popper.is-light {
   background: $--color-primary;
-  border: 1px solid #FFFFFF;
+  border: 1px solid $--color-primary;
+  color: $--color-text-primary;
+}
+.el-tooltip__popper.is-light[x-placement^="top"] .popper__arrow {
+  border-top-color: $--color-primary;
+}
+.el-tooltip__popper.is-light[x-placement^="top"] .popper__arrow::after {
+  border-top-color: $--color-primary;
 }

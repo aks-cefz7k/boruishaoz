@@ -285,6 +285,13 @@ export default {
       let id = date + '' + rund
       return id
     },
+    resetPhaseStatus () {
+      // 车道相位、行人相位恢复默认状态
+      this.resetflag = false
+      this.$nextTick(() => {
+        this.resetflag = true
+      })
+    },
     handleDefaultStatus () {
       // 恢复默认状态
       if (this.compLanePhaseData.length) {
@@ -300,13 +307,10 @@ export default {
         })
       }
       this.phaseCountdownList = []
-      // 车道相位、行人相位恢复默认状态
-      this.resetflag = false
-      this.$nextTick(() => {
-        this.resetflag = true
-      })
+      this.resetPhaseStatus()
     },
     handlePhaseStatus (Control) {
+      this.resetPhaseStatus()
       // 控制黄闪、全红、关灯、默认情况下的车道相位颜色和倒计时颜色
       if (Control === '默认') {
         // 倒计时恢复默认颜色

@@ -184,7 +184,21 @@ export default {
     //   })
     // }
   },
+  mounted () {
+    this.showLoginInfo()
+  },
   methods: {
+    showLoginInfo () {
+      // 从存储中获取登陆相关信息，并显示在表单
+      let info = this.loginInterface.getLoginInfo()
+      if (info) {
+        info = JSON.parse(info)
+        this.loginForm.user_name = info.user_name
+        this.loginForm.ip = info.ip
+        this.loginForm.port = info.port
+        this.loginForm.protocol = info.protocol
+      }
+    },
     showPwd () {
       if (this.pwdType === 'password') {
         this.pwdType = ''
@@ -215,6 +229,7 @@ export default {
               SetSimuUserKey(this.loginForm.user_name)
               this.loginInterface.loginSucess(data.data.data.token)
               this.addDevice() // 注册设备
+              this.loginInterface.setLoginInfo(this.loginForm) // 存储登陆信息
             })
             .catch(err => {
               this.loading = false
