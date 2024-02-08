@@ -710,7 +710,7 @@ const zh = {
       'dialogtitle': '应用授权',
       'username': '用户名',
       'password': '密码',
-      'locallogin': '本地登陆',
+      'networkparam': '通讯参数',
       'port': '端口',
       'protocol': '协议',
       'restoredefaultparameters': '恢复默认参数',

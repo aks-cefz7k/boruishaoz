@@ -712,7 +712,7 @@ const en = {
       'dialogtitle': 'Available authorizations',
       'username': 'User Name',
       'password': 'Password',
-      'locallogin': 'Local login',
+      'networkparam': 'Network parameters',
       'port': 'Port',
       'protocol': 'Protocol',
       'restoredefaultparameters': 'Restore default parameters',
