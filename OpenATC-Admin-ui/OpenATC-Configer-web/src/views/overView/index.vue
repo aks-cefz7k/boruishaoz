@@ -197,7 +197,7 @@
             </div>
 
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
-              <div style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.modelList' + currModel)}}</div>
+              <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
             </div>
 
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>

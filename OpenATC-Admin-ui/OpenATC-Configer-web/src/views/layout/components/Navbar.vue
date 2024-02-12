@@ -410,8 +410,8 @@ export default {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        // let allTscParam = data.data.data.data
-        let {customInfo, ...allTscParam} = data.data.data.data
+        let allTscParam = data.data.data.data
+        // let {customInfo, ...allTscParam} = data.data.data.data
         if (allTscParam.manualpanel === undefined) {
           allTscParam.manualpanel = {}
         }
@@ -483,8 +483,10 @@ export default {
                   errorMes = errorMes + '</br>' + 'Time period' + code[1] + 'channel lock state conflict'
                 } else if (code[0] === 1006) {
                   errorMes = errorMes + '</br>' + 'The control source of the locked channel in period' + code[1] + ' is not ignored'
-                } else {
+                } else if (this.errorCodeMap.get(code[0])) {
                   errorMes = errorMes + '</br>' + this.errorCodeMapEn.get(code[0])
+                } else {
+                  errorMes = errorMes + '</br>' + `错误码${code[0]}`
                 }
               } else {
                 if (code[0] === 305) {
@@ -493,8 +495,10 @@ export default {
                   errorMes = errorMes + '</br>' + '时段' + code[1] + '通道状态锁定冲突'
                 } else if (code[0] === 1006) {
                   errorMes = errorMes + '</br>' + '时段' + code[1] + '锁定通道的控制源未被忽略'
-                } else {
+                } else if (this.errorCodeMap.get(code[0])) {
                   errorMes = errorMes + '</br>' + this.errorCodeMap.get(code[0])
+                } else {
+                  errorMes = errorMes + '</br>' + `错误码${code[0]}`
                 }
               }
             }
@@ -552,6 +556,25 @@ export default {
               rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
             }
           }
+        }
+      }
+      if (newTscParam.customInfo) {
+        // 设备参数中包含以下字段需删除后再下发
+        let customInfo = newTscParam.customInfo
+        if (customInfo.netcard) {
+          delete customInfo.netcard
+        }
+        if (customInfo.centerip) {
+          delete customInfo.centerip
+        }
+        if (customInfo.cascade) {
+          delete customInfo.cascade
+        }
+        if (customInfo.startsequence) {
+          delete customInfo.startsequence
+        }
+        if (customInfo.faultdetect) {
+          delete customInfo.faultdetect
         }
       }
       return newTscParam

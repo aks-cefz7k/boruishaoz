@@ -168,7 +168,7 @@ import updatefile from './systemDialog/updateFile'
 import manualControl from './manualControl'
 import channelControl from './channelControl'
 import realTimeChannel from './realTimeChannel'
-import deviceInfo from '../deviceInfo'
+import deviceInfo from '../deviceInfo/systemInfo'
 import { getSignVersion, getSystemTime, getParamVersion, getCode, getSignIp, getSerialPort, setRemoteControl, getRemoteDebug, setRemoteDebug, udiskupdate } from '@/api/system'
 export default {
   name: 'system',
