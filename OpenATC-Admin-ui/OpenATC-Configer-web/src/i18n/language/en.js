@@ -105,6 +105,7 @@ const en = {
       'protocoltype': 'Protocol',
       'signalID': 'Signal ID',
       'signalIP': 'Signal IP',
+      'faultinfo': 'Fault Information',
       'platform': 'platform',
       'online': 'Online',
       'offline': 'Offline',

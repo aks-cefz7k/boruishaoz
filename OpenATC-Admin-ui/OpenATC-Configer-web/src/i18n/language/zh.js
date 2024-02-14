@@ -105,6 +105,7 @@ const zh = {
       'protocoltype': '协议类型',
       'signalID': '信号机ID',
       'signalIP': '信号机IP',
+      'faultinfo': '故障信息',
       'platform': '平台类型',
       'online': '在线',
       'offline': '离线',

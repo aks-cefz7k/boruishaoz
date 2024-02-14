@@ -353,7 +353,6 @@ export default {
     },
     download () {
       let customInfo = this.customInfo
-      debugger
       this.lockScreen()
       downloadDeviceInfo(customInfo).then(data => {
         this.unlockScreen()

@@ -793,6 +793,10 @@ border: 1px solid $--border-color-base;
     letter-spacing: 0px;
     color: $--color-text-primary;
   }
+  .el-tag {
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
   .control-model {
     float: left;
     margin-top: 10px;
