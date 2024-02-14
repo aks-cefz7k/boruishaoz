@@ -90,6 +90,7 @@
 
 <script>
 import { getPhaseDesc } from '@/utils/phasedesc.js'
+import { getPedPhaseDesc } from '@/utils/pedphasedesc.js'
 import { mapState } from 'vuex'
 const TypeOptions = [{
   value: 1,
@@ -241,10 +242,18 @@ export default {
         let pattern = {}
         var patternNum = phaseList[i].id
         var patternDescription
-        if (phaseList[i].direction.length > 0 && phaseList[i].direction !== undefined) {
-          patternDescription = patternNum + '-' + getPhaseDesc(phaseList[i].direction, this.$i18n.locale)
-        } else {
+        let phaseDesc = phaseList[i].direction ? getPhaseDesc(phaseList[i].direction, this.$i18n.locale) : ''
+        let pedphaseDesc = phaseList[i].peddirection ? getPedPhaseDesc(phaseList[i].peddirection, this.$i18n.locale) : ''
+        if (phaseDesc === '' && pedphaseDesc === '') {
           patternDescription = patternNum
+        } else {
+          if (phaseDesc !== '' && pedphaseDesc !== '') {
+            patternDescription = patternNum + '-' + phaseDesc + '--' + pedphaseDesc
+          } else if (phaseDesc === '') {
+            patternDescription = patternNum + '-' + pedphaseDesc
+          } else {
+            patternDescription = patternNum + '-' + phaseDesc
+          }
         }
         pattern.value = patternNum
         pattern.label = patternDescription
@@ -260,10 +269,18 @@ export default {
         let overlap = {}
         var overlapNum = overlaplList[i].id
         var overlapDescription
-        if (overlaplList[i].desc !== '' && overlaplList[i].desc !== undefined) {
-          overlapDescription = overlapNum + '-' + overlaplList[i].desc
-        } else {
+        let phaseDesc = overlaplList[i].direction ? getPhaseDesc(overlaplList[i].direction, this.$i18n.locale) : ''
+        let pedphaseDesc = overlaplList[i].peddirection ? getPedPhaseDesc(overlaplList[i].peddirection, this.$i18n.locale) : ''
+        if (phaseDesc === '' && pedphaseDesc === '') {
           overlapDescription = overlapNum
+        } else {
+          if (phaseDesc !== '' && pedphaseDesc !== '') {
+            overlapDescription = overlapNum + '-' + phaseDesc + '--' + pedphaseDesc
+          } else if (phaseDesc === '') {
+            overlapDescription = overlapNum + '-' + pedphaseDesc
+          } else {
+            overlapDescription = overlapNum + '-' + phaseDesc
+          }
         }
         overlap.value = overlapNum
         overlap.label = overlapDescription
