@@ -375,6 +375,13 @@ const zh = {
       'greenreduction': '绿灯缩减',
       'bottleneckinfo': '瓶颈控制信息',
       'isdeletedetector': '确认删除检测器'
+    },
+    'about': {
+      'version': '版本',
+      'copyright': '版权所有',
+      'company': '苏州科达科技股份有限公司',
+      'packedtime': '打包时间',
+      'opensourceagreement': '开源协议'
     }
   }
 }

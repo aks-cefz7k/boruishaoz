@@ -19,6 +19,7 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+const moment = require('moment')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -55,7 +56,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': require('../config/dev.env')
+      'process.env': require('../config/dev.env'),
+      PACKEDTIME: JSON.stringify(moment().format('YYYY-MM-DD HH:mm:ss')) // 打包时间，定义全局变量
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.

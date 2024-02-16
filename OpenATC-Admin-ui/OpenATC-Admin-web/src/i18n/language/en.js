@@ -375,6 +375,13 @@ const en = {
       'greenreduction': 'Green Reduction',
       'bottleneckinfo': ' detector control info',
       'isdeletedetector': 'Are you sure delete the detector'
+    },
+    'about': {
+      'version': 'Version',
+      'copyright': 'Copyright',
+      'company': 'KEDACOM',
+      'packedtime': 'Packed time',
+      'opensourceagreement': 'Opensource Agreement'
     }
   }
 }

@@ -18,14 +18,17 @@
       height="300px"
       @close='closeFormDialog'>
       <div class="banben">
-          <span>版本：</span><span>{{version}}</span>
+          <span>{{$t('openatc.about.version')}}：</span><span>{{version}}</span>
       </div>
       <div class="banben" style="margin-top: 10px;">
-          <span>版权所有©1995-2020苏州科达科技股份有限公司</span>
+          <span>{{$t('openatc.about.copyright')}}©1995-2020 {{$t('openatc.about.company')}}</span>
+      </div>
+      <div class="banben" style="margin-top: 10px;">
+          <span>{{$t('openatc.about.packedtime')}}：{{ packedtime }}</span>
       </div>
       <div class="divider"></div>
       <div class="open-source">
-          <span class="agreement" @click="handleAgreement">开源协议</span>
+          <span class="agreement" @click="handleAgreement">{{$t('openatc.about.opensourceagreement')}}</span>
     </div>
     </el-dialog>
     <licenseinfo ref="licenseinfoChild"></licenseinfo>
@@ -33,16 +36,13 @@
 </template>
 
 <script>
-/**
-  Auth: yangdongyang
-  Created: 2020/09/10
-*/
 import licenseinfo from './licenseInfo'
 export default {
   data () {
     return {
       dialogFormVisible: false,
-      version: ''
+      version: '',
+      packedtime: '' // 打包时间
     }
   },
   name: 'versioninfo',
@@ -54,6 +54,9 @@ export default {
   created () {
     let json = require('../../../../static/version.json')
     this.version = json.version
+    if (PACKEDTIME) {
+      this.packedtime = PACKEDTIME
+    }
   },
   methods: {
     showMessage () {

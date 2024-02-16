@@ -12,7 +12,7 @@
 <template>
   <div class="licenseInfo">
     <el-dialog
-      title="开源协议"
+      :title="$t('openatc.about.opensourceagreement')"
       :visible.sync="licenseInfoVisible"
       width="60%"
       height="914px"
