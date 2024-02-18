@@ -529,18 +529,18 @@ export default {
           let date = dates.date
           let day = dates.day
           let month = dates.month
-          if (date.includes('全选')) {
+          if (date && date.includes('全选')) {
             let index = date.indexOf('全选')
             date.splice(index, 1) // 排除全选选项
-          } else if (date.includes('All')) {
+          } else if (date && date.includes('All')) {
             let index = date.indexOf('All')
             date.splice(index, 1) // 排除全选选项
           }
-          if (day.includes(8)) {
+          if (day && day.includes(8)) {
             let index = day.indexOf(8)
             day.splice(index, 1) // 排除全选选项
           }
-          if (month.includes(0)) {
+          if (month && month.includes(0)) {
             let index = month.indexOf(0)
             month.splice(index, 1) // 排除全选选项
           }
