@@ -29,9 +29,12 @@ function resolve (dir) {
 }
 
 const getConfigJson = () => {
-    // return JSON.stringify(require('../static/apiconfig'))
-    return JSON.stringify(require('../servConfig.json'))
-  }
+  // return JSON.stringify(require('../static/apiconfig'))
+  return JSON.stringify(require('../servConfig.json'))
+}
+const getRoadConfigJson = () => {
+  return JSON.stringify(require('../LRRoadConfig.json'))
+}
 const env = require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
@@ -65,7 +68,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      filename: utils.assetsPath('css/[name].[contenthash].css')
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
@@ -131,7 +134,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       minChunks: 3
     }),
 
-       
+
 
     // copy custom static assets
     new CopyWebpackPlugin([
@@ -145,7 +148,14 @@ const webpackConfig = merge(baseWebpackConfig, {
       // filename: './static/apiconfig.json',
       filename: './servConfig.json',
       fn: (compilation, cb) => {
-        cb(null, getConfigJson(compilation));
+        cb(null, getConfigJson(compilation))
+      },
+      extraFiles: []
+    }),
+    new GenerateAssetPlugin({
+      filename: './LRRoadConfig.json',
+      fn: (compilation, cb) => {
+        cb(null, getRoadConfigJson(compilation))
       },
       extraFiles: []
     })

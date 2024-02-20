@@ -31,6 +31,9 @@ const getConfigJson = () => {
     // return JSON.stringify(require('../static/apiconfig'))
     return JSON.stringify(require('../servConfig.json'))
   }
+  const getRoadConfigJson = () => {
+    return JSON.stringify(require('../LRRoadConfig.json'))
+  }
 const env = require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
@@ -146,6 +149,13 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: './servConfig.json',
       fn: (compilation, cb) => {
         cb(null, getConfigJson(compilation));
+      },
+      extraFiles: []
+    }),
+    new GenerateAssetPlugin({
+      filename: './LRRoadConfig.json',
+      fn: (compilation, cb) => {
+        cb(null, getRoadConfigJson(compilation));
       },
       extraFiles: []
     })
