@@ -11,7 +11,9 @@
  **/
 <template>
   <div class="crossImg">
-    <div class="centerText" v-if="crossType !== 'Customroads'" :class="{'countdownBg': isLoaded}">
+    <!-- 右行道路 B-->
+    <div class="right-dir-road" v-if="roadDir === 'right'">
+      <div class="centerText" v-if="crossType !== 'Customroads'" :class="{'countdownBg': isLoaded}">
       <!-- 相位倒计时 -->
       <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
         <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
@@ -25,41 +27,84 @@
         <span class="text">{{$t('edge.overview.getintersectionmapagain')}}</span>
       </div>
     </div>
-    <!-- 路口底图 -->
-    <div class="baseImg">
-      <!-- 城市道路 -->
-      <CrossRoadsSvg v-if="crossType === 'Crossroads'"/>
-      <TShapeEastRoadsSvg v-if="crossType === 'TypeT-east'"/>
-      <TShapeWestRoadsSvg v-if="crossType === 'TypeT-west'"/>
-      <TShapeNorthRoadsSvg v-if="crossType === 'TypeT-north'"/>
-      <TShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'"/>
-      <!-- 其他路口 -->
-      <CustomRoadsSvg v-if="crossType === 'Customroads'"/>
-      <!-- 匝道 -->
-      <RampEastRoadsSvg v-if="crossType === 'ramp-east'" />
-      <RampWestRoadsSvg v-if="crossType === 'ramp-west'" />
-      <RampNorthRoadsSvg v-if="crossType === 'ramp-north'" />
-      <RampSouthRoadsSvg v-if="crossType === 'ramp-south'" />
-      <!-- 路段行人过街 -->
-      <PedSectionSNSvg v-if="crossType === 'ped-section-south-north'" />
-      <PedSectionEWSvg v-if="crossType === 'ped-section-east-west'" />
-    </div>
-    <!-- 城市道路状态-->
-    <div v-if="mainType === '100' || mainType === '101' || mainType === '104'">
-      <!-- 人行道 -->
-      <div class="sidewalk" v-if="resetflag && isLoaded">
-        <SidewalkSvg v-for="side in compSidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
+      <!-- 路口底图 -->
+      <div class="baseImg">
+        <!-- 城市道路 -->
+        <CrossRoadsSvg v-if="crossType === 'Crossroads'"/>
+        <TShapeEastRoadsSvg v-if="crossType === 'TypeT-east'"/>
+        <TShapeWestRoadsSvg v-if="crossType === 'TypeT-west'"/>
+        <TShapeNorthRoadsSvg v-if="crossType === 'TypeT-north'"/>
+        <TShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'"/>
+        <!-- 其他路口 -->
+        <CustomRoadsSvg v-if="crossType === 'Customroads'"/>
+        <!-- 匝道 -->
+        <RampEastRoadsSvg v-if="crossType === 'ramp-east'" />
+        <RampWestRoadsSvg v-if="crossType === 'ramp-west'" />
+        <RampNorthRoadsSvg v-if="crossType === 'ramp-north'" />
+        <RampSouthRoadsSvg v-if="crossType === 'ramp-south'" />
+        <!-- 路段行人过街 -->
+        <PedSectionSNSvg v-if="crossType === 'ped-section-south-north'" />
+        <PedSectionEWSvg v-if="crossType === 'ped-section-east-west'" />
       </div>
-      <!-- 车道相位 -->
-      <div v-if="resetflag">
-        <PhaseIconSvg v-for="item in compLanePhaseData" :key="item.key" :Data="item"/>
+      <!-- 城市道路状态-->
+      <div v-if="mainType === '100' || mainType === '101' || mainType === '104'">
+        <!-- 人行道 -->
+        <div class="sidewalk" v-if="resetflag && isLoaded">
+          <SidewalkSvg v-for="side in compSidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
+        </div>
+        <!-- 车道相位 -->
+        <div v-if="resetflag">
+          <PhaseIconSvg v-for="item in compLanePhaseData" :key="item.key" :Data="item"/>
+        </div>
+      </div>
+      <!-- 匝道状态 -->
+        <!-- 车道相位 -->
+      <div v-if="resetflag && mainType === '103'">
+        <RampPhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item" />
       </div>
     </div>
-    <!-- 匝道状态 -->
-      <!-- 车道相位 -->
-    <div v-if="resetflag && mainType === '103'">
-      <RampPhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item" />
+    <!-- 右行道路 E-->
+
+    <!-- 左行道路 B-->
+    <div class="left-dir-road" v-if="roadDir === 'left'">
+      <div class="centerText" v-if="mainType === '100' || mainType === '101'" :class="{'countdownBg': isLoaded}">
+        <!-- 相位倒计时 -->
+        <div class="phaseCountdown" v-if="devStatus === 3 && isLoaded && isHasPhase">
+          <div v-for="curPhase in phaseCountdownList" :key="curPhase.id" :style="{color: curPhase.phaseCountdownColor}">
+            <span style="float: left;font-size: 20px;color: #fff;width: 70px;">{{$t('edge.overview.phase')}}{{curPhase.id}}:</span>
+            <span style="float: left;">{{curPhase.phaseCountdown}}</span>
+          </div>
+        </div>
+        <!-- 手动刷新 -->
+        <div v-if="!isLoaded">
+          <RefreshSvg @click.native="refresh"/>
+          <span class="text">{{$t('edge.overview.getintersectionmapagain')}}</span>
+        </div>
+      </div>
+      <!-- 路口底图 -->
+      <div class="baseImg">
+        <!-- 城市道路 -->
+        <LCrossRoadsSvg v-if="crossType === 'Crossroads'"/>
+        <LTShapeEastRoadsSvg v-if="crossType === 'TypeT-east'"/>
+        <LTShapeWestRoadsSvg v-if="crossType === 'TypeT-west'"/>
+        <LTShapeNorthRoadsSvg v-if="crossType === 'TypeT-north'"/>
+        <LTShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'"/>
+        <!-- 其他路口 -->
+        <CustomRoadsSvg v-if="mainType !== '100' && mainType !== '101'"/>
+      </div>
+      <!-- 城市道路状态-->
+      <div v-if="mainType === '100' || mainType === '101'">
+        <!-- 人行道 -->
+        <div class="sidewalk" v-if="resetflag && isLoaded">
+          <SidewalkSvg v-for="side in compSidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
+        </div>
+        <!-- 车道相位 -->
+        <div v-if="resetflag">
+          <LPhaseIconSvg v-for="item in compLanePhaseData" :key="item.key" :Data="item"/>
+        </div>
+      </div>
     </div>
+    <!-- 左行道路 E-->
   </div>
 </template>
 <script>
@@ -81,6 +126,13 @@ import RampSouthRoadsSvg from './baseImg/RampSouthSvg'
 import RampPhaseIconSvg from './phaseIcon/rampPhaseIconSvg'
 import PedSectionEWSvg from './baseImg/PedSectionEWSvg'
 import PedSectionSNSvg from './baseImg/PedSectionSNSvg'
+import { mapState } from 'vuex'
+import LCrossRoadsSvg from './baseImg/leftroad/LCrossRoadsSvg'
+import LTShapeEastRoadsSvg from './baseImg/leftroad/LTShapeEastRoadsSvg'
+import LTShapeWestRoadsSvg from './baseImg/leftroad/LTShapeWestRoadsSvg.vue'
+import LTShapeNorthRoadsSvg from './baseImg/leftroad/LTShapeNorthRoadsSvg.vue'
+import LTShapeSouthRoadsSvg from './baseImg/leftroad/LTShapeSouthRoadsSvg.vue'
+import LPhaseIconSvg from './phaseIcon/LphaseIconSvg'
 export default {
   name: 'crossDiagram',
   components: {
@@ -99,7 +151,13 @@ export default {
     RampSouthRoadsSvg,
     RampPhaseIconSvg,
     PedSectionEWSvg,
-    PedSectionSNSvg
+    PedSectionSNSvg,
+    LCrossRoadsSvg,
+    LTShapeEastRoadsSvg,
+    LTShapeWestRoadsSvg,
+    LTShapeNorthRoadsSvg,
+    LTShapeSouthRoadsSvg,
+    LPhaseIconSvg
   },
   props: {
     crossStatusData: {
@@ -111,6 +169,11 @@ export default {
     devStatus: {
       type: Number
     }
+  },
+  computed: {
+    ...mapState({
+      roadDirection: state => state.globalParam.roadDirection
+    })
   },
   watch: {
     tempType: {
@@ -176,6 +239,7 @@ export default {
   },
   data () {
     return {
+      roadDir: 'right', // 道路行车方向，默认右行
       phaseCountdownList: [], // 相位倒计时列表
       statusData: null, // 信号机状态
       LanePhaseData: [], // 车道相位数据
@@ -674,9 +738,14 @@ export default {
         }
       }
       this.overlapsidewalkPhaseData = JSON.parse(JSON.stringify(curPedStatus))
+    },
+    getRoadDirection () {
+      // 获取行车方向（从平台或配置工具的配置文件中读取）
+      this.roadDir = this.roadDirection
     }
   },
   mounted () {
+    this.getRoadDirection()
     this.PhaseDataModel = new PhaseDataModel()
     this.getIntersectionInfo() // 获取路口信息
   }

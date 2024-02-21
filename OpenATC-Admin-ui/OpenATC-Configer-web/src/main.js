@@ -10,6 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 import Vue from 'vue'
+import axios from 'axios'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
@@ -39,6 +40,13 @@ Vue.use(ElementUI, {
 Vue.config.productionTip = false
 Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)
+
+axios.get('./LRRoadConfig.json').then(val => {
+  if (val.status === 200) {
+    let roadDir = val.data.roadDirection
+    store.dispatch('SetRoadDirection', roadDir)
+  }
+})
 
 // mian test hg
 /* eslint-disable no-new */

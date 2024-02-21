@@ -65,7 +65,8 @@ const Global = {
     curBodyHeight: 1080,
     FuncSort: 'allFunc',
     hideMenu: false,
-    graphicMode: false // 为true时，切换到图形界面模式，只显示路口图部分
+    graphicMode: false, // 为true时，切换到图形界面模式，只显示路口图部分
+    roadDirection: 'right' // 当前路口行车方向：默认右行
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -109,6 +110,9 @@ const Global = {
     },
     SET_GRAPHIC_MODE: (state, isSwitchGraphicMode) => {
       state.graphicMode = isSwitchGraphicMode
+    },
+    SET_ROAD_RIRECTION: (state, DIR) => {
+      state.roadDirection = DIR
     }
   },
   actions: {
@@ -156,6 +160,9 @@ const Global = {
     },
     SetGraphicMode ({ commit }, isSwitchGraphicMode) {
       commit('SET_GRAPHIC_MODE', isSwitchGraphicMode)
+    },
+    SetRoadDirection ({ commit }, DIR) {
+      commit('SET_ROAD_RIRECTION', DIR)
     }
   }
 }

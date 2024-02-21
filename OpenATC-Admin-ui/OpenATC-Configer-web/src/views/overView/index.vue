@@ -220,7 +220,6 @@ import FloatImgBtn from '@/components/FloatImgBtn'
 import CrossDiagram from './crossDirection/crossDiagram'
 import PatternStatus from '@/components/PatternStatus'
 import StageStatus from '@/components/StageStatus'
-import xdrdirselector from '@/components/XRDDirSelector'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
@@ -231,7 +230,6 @@ export default {
     CrossDiagram,
     PatternStatus,
     StageStatus,
-    xdrdirselector,
     CurVolume,
     CurPhase,
     ManualControlModal
