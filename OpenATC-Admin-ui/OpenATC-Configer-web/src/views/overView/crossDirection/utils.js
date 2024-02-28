@@ -20,7 +20,6 @@ export default class PhaseDataModel {
     this.Init()
   }
   Init () {
-    console.log(store.getters.roadDirection)
     let phaseJson = require('./posJson/phasePos.json')
     let sideJson = require('./posJson/sidePos.json')
     let rampJson = require('./posJson/rampPos.json')

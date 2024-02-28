@@ -42,6 +42,7 @@ Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)
 
 axios.get('./LRRoadConfig.json').then(val => {
+  // 读取左行 右行配置文件
   if (val.status === 200) {
     let roadDir = val.data.roadDirection
     store.dispatch('SetRoadDirection', roadDir)

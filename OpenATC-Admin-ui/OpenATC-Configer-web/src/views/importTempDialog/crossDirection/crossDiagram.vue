@@ -11,26 +11,47 @@
  **/
 <template>
 <div style="width: 100%;">
-  <div class="crossImg">
-    <!-- 路口底图 -->
-    <div class="baseImg">
-      <CrossRoadsSvg v-if="crossType === 'Crossroads'" Width="439px" Height="328px" :showPed="true" />
-      <TShapeEastRoadsSvg v-if="crossType === 'TypeT-east'" Width="439px" Height="328px" :showPed="true" />
-      <TShapeWestRoadsSvg v-if="crossType === 'TypeT-west'" Width="439px" Height="328px" :showPed="true" />
-      <TShapeNorthRoadsSvg v-if="crossType === 'TypeT-north'" Width="439px" Height="328px" :showPed="true" />
-      <TShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'" Width="439px" Height="328px" :showPed="true" />
-      <!-- 其他路口 -->
-      <CustomRoadsSvg v-if="crossType === 'Customroads'"/>
+  <div class="right-dir-road" v-if="roadDirection === 'right'">
+    <div class="crossImg">
+      <!-- 路口底图 -->
+      <div class="baseImg">
+        <CrossRoadsSvg v-if="crossType === 'Crossroads'" Width="439px" Height="328px" :showPed="true" />
+        <TShapeEastRoadsSvg v-if="crossType === 'TypeT-east'" Width="439px" Height="328px" :showPed="true" />
+        <TShapeWestRoadsSvg v-if="crossType === 'TypeT-west'" Width="439px" Height="328px" :showPed="true" />
+        <TShapeNorthRoadsSvg v-if="crossType === 'TypeT-north'" Width="439px" Height="328px" :showPed="true" />
+        <TShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'" Width="439px" Height="328px" :showPed="true" />
+        <!-- 其他路口 -->
+        <CustomRoadsSvg v-if="crossType === 'Customroads'"/>
+      </div>
+      <!-- 车道相位 -->
+      <div v-if="crossType !== 'Customroads'">
+        <PhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item" IconLengh="18px" IconWdith="13px"/>
+      </div>
     </div>
-    <!-- 车道相位 -->
-    <div v-if="crossType !== 'Customroads'">
-      <PhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item"/>
+  </div>
+
+  <div class="left-dir-road" v-if="roadDirection === 'left'">
+    <div class="crossImg">
+      <!-- 路口底图 -->
+      <div class="baseImg">
+        <LCrossRoadsSvg v-if="crossType === 'Crossroads'" Width="439px" Height="328px" :showPed="true" />
+        <LTShapeEastRoadsSvg v-if="crossType === 'TypeT-east'" Width="439px" Height="328px" :showPed="true" />
+        <LTShapeWestRoadsSvg v-if="crossType === 'TypeT-west'" Width="439px" Height="328px" :showPed="true" />
+        <LTShapeNorthRoadsSvg v-if="crossType === 'TypeT-north'" Width="439px" Height="328px" :showPed="true" />
+        <LTShapeSouthRoadsSvg v-if="crossType === 'TypeT-south'" Width="439px" Height="328px" :showPed="true" />
+        <!-- 其他路口 -->
+        <CustomRoadsSvg v-if="mainType !== '100' && mainType !== '101'"/>
+      </div>
+      <!-- 左行车道相位 -->
+      <div v-if="crossType !== 'Customroads'">
+        <LPhaseIconSvg v-for="item in LanePhaseData" :key="item.key" :Data="item" IconLengh="18px" IconWdith="13px"/>
+      </div>
     </div>
   </div>
 </div>
 </template>
 <script>
-import PhaseIconSvg from './phaseIconSvg'
+import PhaseIconSvg from '../../overView/crossDirection/phaseIcon/phaseIconSvg'
 import PhaseDataModel from './utils.js'
 import CrossRoadsSvg from '../../overView/crossDirection/baseImg/CrossRoadsSvg'
 import TShapeEastRoadsSvg from '../../overView/crossDirection/baseImg/TShapeEastRoadsSvg'
@@ -38,6 +59,14 @@ import TShapeWestRoadsSvg from '../../overView/crossDirection/baseImg/TShapeWest
 import TShapeNorthRoadsSvg from '../../overView/crossDirection/baseImg/TShapeNorthRoadsSvg.vue'
 import TShapeSouthRoadsSvg from '../../overView/crossDirection/baseImg/TShapeSouthRoadsSvg.vue'
 import CustomRoadsSvg from './baseImg/CustomRoadsSvg.vue'
+import LCrossRoadsSvg from '../../overView/crossDirection/baseImg/leftroad/LCrossRoadsSvg'
+import LTShapeEastRoadsSvg from '../../overView/crossDirection/baseImg/leftroad/LTShapeEastRoadsSvg'
+import LTShapeWestRoadsSvg from '../../overView/crossDirection/baseImg/leftroad/LTShapeWestRoadsSvg.vue'
+import LTShapeNorthRoadsSvg from '../../overView/crossDirection/baseImg/leftroad/LTShapeNorthRoadsSvg.vue'
+import LTShapeSouthRoadsSvg from '../../overView/crossDirection/baseImg/leftroad/LTShapeSouthRoadsSvg.vue'
+import LPhaseIconSvg from '../../overView/crossDirection/phaseIcon/LphaseIconSvg'
+import { mapState } from 'vuex'
+
 export default {
   name: 'crossDiagram',
   components: {
@@ -47,7 +76,13 @@ export default {
     TShapeWestRoadsSvg,
     TShapeNorthRoadsSvg,
     TShapeSouthRoadsSvg,
-    CustomRoadsSvg
+    CustomRoadsSvg,
+    LCrossRoadsSvg,
+    LTShapeEastRoadsSvg,
+    LTShapeWestRoadsSvg,
+    LTShapeNorthRoadsSvg,
+    LTShapeSouthRoadsSvg,
+    LPhaseIconSvg
   },
   props: {
     phaseList: { // 相位列表
@@ -60,9 +95,9 @@ export default {
   watch: {
     intersection: {
       handler: function (val) {
-        let crossType = val.split('-')[0]
+        this.mainType = val.split('-')[0]
         let crossintersection = val.split('-')[1]
-        this.getCrossType(crossType, crossintersection)
+        this.getCrossType(this.mainType, crossintersection)
       }
     },
     phaseList: {
@@ -74,9 +109,16 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      roadDirection: state => state.globalParam.roadDirection
+    })
+  },
+
   data () {
     return {
       LanePhaseData: [], // 车道相位数据
+      mainType: '101', // 路口形状编号
       crossType: '', // 路口底图类型
       phase: [] // 模版对应的相位列表
     }
