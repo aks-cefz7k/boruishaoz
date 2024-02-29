@@ -21,7 +21,7 @@
           <span>{{$t('openatc.about.version')}}：</span><span>{{version}}</span>
       </div>
       <div class="banben" style="margin-top: 10px;">
-          <span>{{$t('openatc.about.copyright')}}©1995-2020 {{$t('openatc.about.company')}}</span>
+          <span>{{$t('openatc.about.copyright')}}©1995-2021 {{$t('openatc.about.company')}}</span>
       </div>
       <div class="banben" style="margin-top: 10px;">
           <span>{{$t('openatc.about.packedtime')}}：{{ packedtime }}</span>
