@@ -9,19 +9,23 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-#app {
+// #app {
   // 主体区域
-  .main-container {
+  .edge-main-container {
     height: 92.7%;
     transition: margin-left .28s;
     margin-left: 180px;
+  }
+  //main-container全局样式
+ .edge-app-main{
+    height: calc(100% - 70px)
   }
   // 侧边栏
   .sidebar-container {
     transition: width 0.28s;
     width: 180px;
     height: 100%;
-    position: fixed;
+    position: absolute !important;
     font-size: 0px;
     border-right: 1px solid $--border-color-base;
     top: 0;
@@ -61,7 +65,7 @@
     .sidebar-container {
       width: 36px;
     }
-    .main-container {
+    .edge-main-container {
       margin-left: 36px;
       height: calc(100% - 50px);
     }
@@ -95,7 +99,7 @@
       }
     }
   }
-  .sidebar-container .nest-menu .el-submenu>.el-submenu__title,
+  // .sidebar-container .nest-menu .el-submenu>.el-submenu__title,
   // .sidebar-container .el-submenu .el-menu-item {
   //   min-width: 180px !important;
   //   background-color: $subMenuBg !important;
@@ -109,7 +113,7 @@
 
   //适配移动端
   .mobile {
-    .main-container {
+    .edge-main-container {
       margin-left: 0px;
     }
     .sidebar-container {
@@ -124,9 +128,9 @@
     }
   }
   .withoutAnimation {
-    .main-container,
+    .edge-main-container,
     .sidebar-container {
       transition: none;
     }
   }
-}
+// }

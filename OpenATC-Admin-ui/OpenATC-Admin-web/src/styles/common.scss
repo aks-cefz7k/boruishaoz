@@ -1410,6 +1410,7 @@
 }
 #app .adminEdge {
   border-top: 1px solid $--border-color-base;
+  height: calc(100% - 78px);
 }
 .tagsList .highlightTag .el-icon-close{
   color: $--color-white;

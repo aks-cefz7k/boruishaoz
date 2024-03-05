@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <section class="app-main">
+  <section class="edge-app-main">
     <transition name="fade" mode="out-in">
       <!-- <router-view :key="key"></router-view> -->
       <router-view></router-view>
