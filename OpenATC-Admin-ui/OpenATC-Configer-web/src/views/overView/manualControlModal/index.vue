@@ -117,6 +117,7 @@ export default {
   },
   data () {
     return {
+      basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
       visible: this.Visible,
       manualInfo: {
         tempPatternid: 0, // 控制方式手动操作的情况下的控制编号的临时值。
