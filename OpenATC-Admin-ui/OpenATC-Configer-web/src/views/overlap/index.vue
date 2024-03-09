@@ -65,7 +65,7 @@
 <script>
 import { getPhaseDesc } from '@/utils/phasedesc.js'
 import { mapState } from 'vuex'
-import { images, pedimages } from '../phase/utils.js'
+import { getPhase, pedimages } from '../phase/utils.js'
 import Tankuang from '@/components/Tankuang'
 import PedTankuang from '@/components/PedTankuang'
 export default {
@@ -102,6 +102,7 @@ export default {
   computed: {
     imgs () {
       let arrays = []
+      let images = getPhase()
       images.forEach(v => {
         let obj = Object.assign({}, v)
         obj.name = this.$t(obj.name)

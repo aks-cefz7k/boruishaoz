@@ -162,7 +162,7 @@
 import Tankuang from '@/components/Tankuang'
 import PedTankuang from '@/components/PedTankuang'
 import { mapState } from 'vuex'
-import { images, pedimages } from './utils.js'
+import { getPhase, pedimages } from './utils.js'
 
 const clickoutside = {
   // 初始化指令
@@ -235,6 +235,7 @@ export default {
   computed: {
     imgs () {
       let arrays = []
+      let images = getPhase()
       images.forEach(v => {
         let obj = Object.assign({}, v)
         obj.name = this.$t(obj.name)
