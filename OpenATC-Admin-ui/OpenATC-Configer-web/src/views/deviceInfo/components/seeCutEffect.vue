@@ -164,18 +164,34 @@ export default {
       }
       this.code = val
       this.dialogVisible = true
-      let res = this.toBinary(val)
-      this.setXlist(res)
-      console.log(res)
+      let isValid = false
+      let resStr = ''
+      for (let i = 0; i < val.length; i++) {
+        let char = val[i]
+        let num = Number(char)
+        if (num === 0 && !isValid) {
+          continue
+        } else {
+          isValid = true
+        }
+        let str = this.toBinary(num)
+        let diffLength = 4 - str.length
+        for (let j = 0; j < diffLength; j++) {
+          str = '0' + str
+        }
+        resStr = resStr + str
+      }
+      this.setXlist(resStr)
+      console.log(resStr)
     },
     setXlist (binaryStr) {
       if (binaryStr.length > 20) {
-        alert(this.$t('edge.deviceinfo.longgerThan20'))
+        this.$message.error(this.$t('edge.deviceinfo.longgerThan20'))
       }
       if (binaryStr.length < 20) {
         let len = 20 - binaryStr.length
         for (let i = 0; i < len; i++) {
-          binaryStr = binaryStr + '0'
+          binaryStr = '0' + binaryStr
         }
       }
       let list = binaryStr.split('')
@@ -209,7 +225,7 @@ export default {
         }
         detailMag = tempLabelList.join(', ')
         if (detailMag !== '') {
-          let msgStr = titleMsg + ': ' + detailMag
+          let msgStr = titleMsg + ': ' + detailMag + ' '
           msgList.push(msgStr)
         }
       }
