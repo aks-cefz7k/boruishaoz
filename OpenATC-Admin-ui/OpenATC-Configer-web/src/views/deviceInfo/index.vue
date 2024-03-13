@@ -21,7 +21,7 @@
                            :disabled="isSeeCutDisabled"
                            @click="onSeeCutClick">{{$t('edge.deviceinfo.seeCutEffect')}}</el-button>
               </div>
-              <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small" @change="onSiteIdChange"></el-input>
+              <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
               <div class="sub-title">{{$t('edge.deviceinfo.areaid')}}</div>
@@ -91,7 +91,7 @@ export default {
   data () {
     return {
       commutypeOptions: [{label: 'TCP', value: 1}, {label: 'UDP', value: 2}, {label: 'RS232', value: 3}],
-      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}],
+      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}]
       // customInfo: {
       //   areaid: '',
       //   intersectionid: '',
@@ -102,25 +102,26 @@ export default {
       //   commutype: '',
       //   steptype: ''
       // },
-      isSeeCutDisabled: true
     }
   },
   computed: {
     ...mapState({
       customInfo: state => state.globalParam.tscParam.customInfo
-    })
+    }),
+    isSeeCutDisabled () {
+      let res = false
+      if (this.customInfo.siteid) {
+        res = false
+      } else {
+        res = true
+      }
+      return res
+    }
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
   },
   methods: {
-    onSiteIdChange () {
-      if (this.customInfo.siteid) {
-        this.isSeeCutDisabled = false
-      } else {
-        this.isSeeCutDisabled = true
-      }
-    },
     onSeeCutClick () {
       let num = Number(this.customInfo.siteid)
       if (!num || num <= 0 || num >= 99999) {
