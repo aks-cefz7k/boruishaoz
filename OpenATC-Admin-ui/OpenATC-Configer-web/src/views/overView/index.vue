@@ -189,13 +189,13 @@
               <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
             </div>
 
-            <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
+            <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
               <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
             </div>
 
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
               <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
-            </div>
+            </div> -->
 
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
               <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
