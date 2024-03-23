@@ -248,7 +248,12 @@ const zh = {
       'pedestrianthresh': '行人等待阈值',
       'mainroad': '主路',
       'bypass': '支路',
-      'pedestrianonly': '仅行人'
+      'pedestrianonly': '仅行人',
+      'pulsetype': '脉冲屏蔽',
+      'offpulse': '关闭行人及机动车脉冲',
+      'sendvehiclepulse': '发送机动车脉冲',
+      'sendpedestrianpulse': '发送行人脉冲',
+      'sendpedestriansvehiclepulse': '发送行人及机动车脉冲'
     },
     'overlap': {
       'desc': '描述',

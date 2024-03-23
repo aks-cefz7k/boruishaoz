@@ -148,6 +148,19 @@
           <span v-text="getConcurrentstr(scope.row)"></span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.pulsetype')" min-width="100">
+        <template slot-scope="scope">
+            <el-select v-model="scope.row.pulsetype" :placeholder="$t('edge.common.select')" size="small">
+              <el-option
+                v-for="item in pulseTypeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <span>{{getPulsetypestr(scope.row.pulsetype)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.operation')" width="100">
         <template slot-scope="scope">
           <el-button type="text" @click="handleClone(scope.$index,scope.row)">{{$t('edge.common.clone')}}</el-button>
@@ -218,6 +231,19 @@ export default {
       }, {
         label: this.$t('edge.phase.pedestrianonly'),
         value: 2
+      }],
+      pulseTypeList: [{
+        label: this.$t('edge.phase.offpulse'),
+        value: 0
+      }, {
+        label: this.$t('edge.phase.sendvehiclepulse'),
+        value: 1
+      }, {
+        label: this.$t('edge.phase.sendpedestrianpulse'),
+        value: 2
+      }, {
+        label: this.$t('edge.phase.sendpedestriansvehiclepulse'),
+        value: 3
       }]
     }
   },
@@ -438,6 +464,15 @@ export default {
             str = str + ',' + con
           }
           return str.substr(1)
+        }
+      }
+      return ''
+    },
+    getPulsetypestr (val) {
+      if (val !== undefined) {
+        let choosed = this.pulseTypeList.filter(ele => ele.value === val)
+        if (choosed.length) {
+          return choosed[0].label
         }
       }
       return ''

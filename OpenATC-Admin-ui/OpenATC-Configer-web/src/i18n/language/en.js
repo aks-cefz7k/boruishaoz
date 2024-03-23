@@ -249,7 +249,12 @@ const en = {
       'pedestrianthresh': 'Pedestrian waiting Threshold',
       'mainroad': 'main road',
       'bypass': 'by-pass',
-      'pedestrianonly': 'pedestrian only'
+      'pedestrianonly': 'pedestrian only',
+      'pulsetype': 'PulseType',
+      'offpulse': 'Turn off pedestrian and vehicle pulses',
+      'sendvehiclepulse': 'Send vehicle pulse',
+      'sendpedestrianpulse': 'Send pedestrian pulse',
+      'sendpedestriansvehiclepulse': 'Send pedestrians and vehicles pulses'
     },
     'overlap': {
       'desc': 'Description',
