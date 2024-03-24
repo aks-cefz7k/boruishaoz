@@ -100,7 +100,7 @@ export default {
       rows: 4, // 弹框的列数
       showSpan: false,
       pulseTypeList: [{
-        label: this.$t('edge.phase.offpulse'),
+        label: this.$t('edge.phase.sendpedestriansvehiclepulse'),
         value: 0
       }, {
         label: this.$t('edge.phase.sendvehiclepulse'),
@@ -109,7 +109,7 @@ export default {
         label: this.$t('edge.phase.sendpedestrianpulse'),
         value: 2
       }, {
-        label: this.$t('edge.phase.sendpedestriansvehiclepulse'),
+        label: this.$t('edge.phase.offpulse'),
         value: 3
       }]
     }
