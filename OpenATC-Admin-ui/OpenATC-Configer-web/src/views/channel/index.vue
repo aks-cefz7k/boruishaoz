@@ -131,6 +131,9 @@ export default {
         value: 5,
         label: '行人跟随相位'
       }, {
+        value: 6,
+        label: '车道灯'
+      }, {
         value: 0,
         label: '不启用'
       }],
