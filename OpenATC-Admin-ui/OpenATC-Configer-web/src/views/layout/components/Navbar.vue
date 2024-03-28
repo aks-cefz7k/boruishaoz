@@ -474,7 +474,7 @@ export default {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return
             }
-            let errorMes = ''
+            let errorMes = this.$t('edge.common.downloaderror')
             for (let code of codeList) {
               if (this.$i18n.locale === 'en') {
                 if (code[0] === 305) {

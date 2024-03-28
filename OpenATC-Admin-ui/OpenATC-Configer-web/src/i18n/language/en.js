@@ -703,6 +703,7 @@ const en = {
       'commitandexecute': 'CommitAndExecute',
       'uploadsuccess': 'Upload Success!',
       'download': 'Download Success!',
+      'downloaderror': 'Download Error!',
       'downloadandrun': 'Submit and run successfully!',
       'editagentid': 'Edit AgentID',
       'querysucess': 'Query Success!',
