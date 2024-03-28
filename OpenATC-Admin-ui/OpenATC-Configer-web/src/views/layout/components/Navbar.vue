@@ -502,9 +502,8 @@ export default {
                 }
               }
             }
-            // this.$message.error(errorMes.substr(1))
             this.$message({
-              message: errorMes.substr(5),
+              message: errorMes,
               type: 'error',
               dangerouslyUseHTMLString: true
             })
