@@ -85,6 +85,7 @@ const en = {
       'phone': 'Telephone',
       'email': 'Email',
       'changepass': 'Change Password',
+      'about': 'About',
       'exit': 'Exit',
       'options': 'options',
       'options1': 'All',
@@ -801,6 +802,13 @@ const en = {
         'fifteenPhase': 'FifteenPhase',
         'sixteenPhase': 'SixteenPhase'
       }
+    },
+    'about': {
+      'version': 'Version',
+      'copyright': 'Copyright',
+      'company': 'KEDACOM',
+      'packedtime': 'Packed time',
+      'opensourceagreement': 'Opensource Agreement'
     }
   }
 }
