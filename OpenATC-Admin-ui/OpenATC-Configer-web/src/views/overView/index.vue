@@ -893,12 +893,14 @@ export default {
     },
     changeStatus () {
       this.isOperation = true
-      let autonomyControl = {
-        id: 0,
-        iconClass: 'zizhukongzhi',
-        iconName: '自主控制'
+      if (this.modelList.filter(ele => ele.id === 0).length === 0) {
+        let autonomyControl = {
+          id: 0,
+          iconClass: 'zizhukongzhi',
+          iconName: '自主控制'
+        }
+        this.modelList.push(autonomyControl)
       }
-      this.modelList.push(autonomyControl)
     },
     closeManualModal () {
       this.isOperation = false
@@ -931,6 +933,7 @@ export default {
           that.$message.error(data.data.message)
           return
         }
+        this.closeManualModal()
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
           that.$alert(this.$t('edge.overview.nextcycleeffic'), { type: 'success' })
           return
@@ -939,7 +942,6 @@ export default {
           that.$alert(this.$t('edge.overview.transitioneffic'), { type: 'success' })
           return
         }
-        this.isOperation = false
         that.$alert(that.$t('edge.common.download'), { type: 'success' })
       }).catch(error => {
         that.unlockScreen()
