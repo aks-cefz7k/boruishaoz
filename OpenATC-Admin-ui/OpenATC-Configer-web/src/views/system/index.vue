@@ -137,10 +137,10 @@
       </div>
     </el-tab-pane>
     <el-tab-pane :label="$t('edge.system.channeldetection')" name="channel">
-      <channelControl />
+      <channelControl :channelList="channelList" />
     </el-tab-pane>
     <el-tab-pane :label="$t('edge.system.realTimeChannel')" name="realTimeChannel">
-      <realTimeChannel ref="realTimeChannel"></realTimeChannel>
+      <realTimeChannel ref="realTimeChannel" :channelList="channelList"></realTimeChannel>
     </el-tab-pane>
     <el-tab-pane :label="$t('edge.route.deviceInfo')" name="deviceinfo">
       <deviceInfo ref="deviceinfo"></deviceInfo>
@@ -170,6 +170,7 @@ import channelControl from './channelControl'
 import realTimeChannel from './realTimeChannel'
 import deviceInfo from '../deviceInfo/systemInfo'
 import { getSignVersion, getSystemTime, getParamVersion, getCode, getSignIp, getSerialPort, setRemoteControl, getRemoteDebug, setRemoteDebug, udiskupdate } from '@/api/system'
+import { getChannel } from '@/api/manual'
 export default {
   name: 'system',
   components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel, deviceInfo },
@@ -220,7 +221,8 @@ export default {
         id: '3'
       }],
       userName: '',
-      password: ''
+      password: '',
+      channelList: [] // 上载获取的通道信息
     }
   },
   watch: {
@@ -250,6 +252,7 @@ export default {
     this.getSignIp() // 获取ip数据
     this.getSerialPort() // 获取串口数据
     // this.getRemoteDebug() // 获取远程调试信息
+    this.getChannelList() // 自动上载通道
   },
   methods: {
     handleClick (tab, event) {
@@ -477,6 +480,23 @@ export default {
           type: 'success',
           duration: 1 * 1000
         })
+      })
+    },
+    getChannelList () {
+      getChannel().then((data) => {
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        this.channelList = res.data.data.channelList
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
       })
     }
   }
