@@ -22,6 +22,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const GenerateAssetPlugin = require('generate-asset-webpack-plugin')
+const moment = require('moment')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -53,7 +54,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env': env
+      'process.env': env,
+      PACKEDTIME: JSON.stringify(moment().format('YYYY-MM-DD HH:mm:ss')) // 打包时间，定义全局变量
     }),
     new UglifyJsPlugin({
       uglifyOptions: {

@@ -85,6 +85,7 @@ const zh = {
       'phone': '联系电话',
       'email': '电子邮箱',
       'changepass': '修改密码',
+      'about': '关于',
       'exit': '退出',
       'options': 'options',
       'options1': '全部',
@@ -701,6 +702,7 @@ const zh = {
       'commitandexecute': '提交并执行',
       'uploadsuccess': '参数上传成功!',
       'download': '参数下发成功!',
+      'downloaderror': '下发失败！',
       'downloadandrun': '提交并运行成功！',
       'editagentid': '编辑设备ID',
       'querysucess': '查询成功！',
@@ -799,6 +801,13 @@ const zh = {
         'fifteenPhase': '十五相位',
         'sixteenPhase': '十六相位'
       }
+    },
+    'about': {
+      'version': '版本',
+      'copyright': '版权所有',
+      'company': '苏州科达科技股份有限公司',
+      'packedtime': '打包时间',
+      'opensourceagreement': '开源协议'
     }
   }
 }

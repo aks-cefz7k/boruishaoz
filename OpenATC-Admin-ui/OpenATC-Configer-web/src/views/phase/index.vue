@@ -659,9 +659,9 @@ body {
 .tb-edit .current-row .el-popover {
     display: block;
 }
-.tb-edit .current-row .el-popover + span {
+/* .tb-edit .current-row .el-popover + span {
     display: none;
-}
+} */
 .showSpan {
   display: block;
 }

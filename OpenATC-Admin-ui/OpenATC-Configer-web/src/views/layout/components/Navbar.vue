@@ -101,6 +101,7 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -140,6 +141,7 @@
     </el-dialog>
     <!--修改密码弹框-->
     <changePass ref="changepassChild"></changePass>
+    <versioninfo ref="versioninfoChild"></versioninfo>
   </div>
 </template>
 
@@ -154,6 +156,7 @@ import Messagebox from '@/components/MessageBox/index'
 import ImportTempDialog from '../../importTempDialog/index'
 import { getInfo } from '@/api/login'
 import changePass from './ChangePass'
+import versioninfo from './versionInfo'
 
 export default {
   components: {
@@ -161,7 +164,8 @@ export default {
     Hamburger,
     Messagebox,
     ImportTempDialog,
-    changePass
+    changePass,
+    versioninfo
   },
   data () {
     return {
@@ -474,7 +478,7 @@ export default {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return
             }
-            let errorMes = ''
+            let errorMes = this.$t('edge.common.downloaderror')
             for (let code of codeList) {
               if (this.$i18n.locale === 'en') {
                 if (code[0] === 305) {
@@ -502,9 +506,8 @@ export default {
                 }
               }
             }
-            // this.$message.error(errorMes.substr(1))
             this.$message({
-              message: errorMes.substr(5),
+              message: errorMes,
               type: 'error',
               dangerouslyUseHTMLString: true
             })
@@ -1056,8 +1059,14 @@ export default {
           break
         case 'b': this.logout()
           break
+        case 'about': this.showVersion()
+          break
         default: router.push({ path: '/' })
       }
+    },
+    showVersion () {
+      let versionInfoChild = this.$refs.versioninfoChild
+      versionInfoChild.showMessage()
     },
     showInfo (val) {
       if (!val) return
