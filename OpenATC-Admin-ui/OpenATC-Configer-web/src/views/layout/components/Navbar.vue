@@ -709,17 +709,17 @@ export default {
         return false
       }
       this.checkPhaseRing()
-      if (!this.phaseRing) {
-        this.$message.error(this.$t('edge.errorTip.ringErrorTip'))
-        return false
-      }
+      // if (!this.phaseRing) {
+      //   this.$message.error(this.$t('edge.errorTip.ringErrorTip'))
+      //   return false
+      // }
       this.checkConcurrentRules()
-      if (!this.concurrentRules) {
-        this.$message.error(
-          this.$t('edge.errorTip.concurrentRules')
-        )
-        return false
-      }
+      // if (!this.concurrentRules) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.concurrentRules')
+      //   )
+      //   return false
+      // }
       this.checkOverlapRules()
       if (!this.overlapRules) {
         this.$message.error(
@@ -781,13 +781,13 @@ export default {
         this.$message.error(this.planName + this.$t('edge.errorTip.planDate'))
         return false
       }
-      this.checkPatternRing()
-      if (!this.patternRing) {
-        this.$message.error(
-          this.$t('edge.errorTip.patternRing')
-        )
-        return false
-      }
+      // this.checkPatternRing()
+      // if (!this.patternRing) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.patternRing')
+      //   )
+      //   return false
+      // }
       this.checkManualpanelIsNull()
       if (!this.manualpanelIsNull) {
         this.$message.error(
