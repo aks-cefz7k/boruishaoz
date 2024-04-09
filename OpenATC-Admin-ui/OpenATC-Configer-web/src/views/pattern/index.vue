@@ -445,7 +445,11 @@ export default {
           obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
           obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          list.push(obj)
+          // 忽略相位不显示
+          let mode = ring.mode
+          if (mode !== 7) {
+            list.push(obj)
+          }
         }
         this.patternStatusList.push(list)
       }
