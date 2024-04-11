@@ -561,25 +561,25 @@ export default {
           }
         }
       }
-      if (newTscParam.customInfo) {
-        // 设备参数中包含以下字段需删除后再下发
-        let customInfo = newTscParam.customInfo
-        if (customInfo.netcard) {
-          delete customInfo.netcard
-        }
-        if (customInfo.centerip) {
-          delete customInfo.centerip
-        }
-        if (customInfo.cascade) {
-          delete customInfo.cascade
-        }
-        if (customInfo.startsequence) {
-          delete customInfo.startsequence
-        }
-        if (customInfo.faultdetect) {
-          delete customInfo.faultdetect
-        }
-      }
+      // if (newTscParam.customInfo) {
+      //   // 设备参数中包含以下字段需删除后再下发
+      //   let customInfo = newTscParam.customInfo
+      //   if (customInfo.netcard) {
+      //     delete customInfo.netcard
+      //   }
+      //   if (customInfo.centerip) {
+      //     delete customInfo.centerip
+      //   }
+      //   if (customInfo.cascade) {
+      //     delete customInfo.cascade
+      //   }
+      //   if (customInfo.startsequence) {
+      //     delete customInfo.startsequence
+      //   }
+      //   if (customInfo.faultdetect) {
+      //     delete customInfo.faultdetect
+      //   }
+      // }
       return newTscParam
     },
     cloneObjectFn (obj) {
