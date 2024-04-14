@@ -204,6 +204,10 @@
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
               <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
             </div>
+
+            <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
+              <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -341,6 +345,7 @@ export default {
       crossStatusData: null, // 路口状态数据
       reset: false,
       currentStage: 0,
+      responseTime: 0,
       stagesList: [],
       isOperation: false, // 是否为手动可操作状态
       showList: [{
@@ -440,7 +445,8 @@ export default {
       this.resetCrossDiagram()
       this.registerMessage() // 注册消息
     } else {
-      // setIframdevid('10602')
+      // setIframdevid('23080400311210000088')
+      // setIframdevid('0')
       this.queryDevParams() // 查询设备信息
     }
     // this.registerMessage() // 注册消息
@@ -527,7 +533,9 @@ export default {
         this.ip = newRes.ip
         this.port = newRes.port
         this.protocol = newRes.protocol
-        this.faultArr = this.getFaultMes(newRes.fault)
+        if (newRes.fault) {
+          this.faultArr = this.getFaultMes(newRes.fault)
+        }
         this.clearPatternInterval() // 清除其他定时器
         this.clearVolumeInterval()
         this.phaseControlTimer = setInterval(() => {
@@ -605,7 +613,11 @@ export default {
     },
     initData () {
       this.intervalFlag = false
+      let startTime = new Date().getTime()
       getTscControl(this.agentId).then((data) => {
+        let endTime = new Date().getTime()
+        let diffTime = endTime - startTime
+        this.responseTime = diffTime
         this.intervalFlag = true
         if (!data.data.success) {
           if (data.data.code === '4003') {

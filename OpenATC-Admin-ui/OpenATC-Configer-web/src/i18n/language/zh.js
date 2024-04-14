@@ -188,7 +188,8 @@ const zh = {
       'delay': '延迟时间',
       'duration': '持续时间',
       'curModel': '当前方案',
-      'curStage': '当前阶段'
+      'curStage': '当前阶段',
+      'responseTime': '请求耗时'
     },
     'phase': {
       'desc': '车道方向',

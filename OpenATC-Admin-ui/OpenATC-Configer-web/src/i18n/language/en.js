@@ -188,7 +188,8 @@ const en = {
       'delay': 'Delay time',
       'duration': 'Duration',
       'curModel': 'Current Model',
-      'curStage': 'Current Stage'
+      'curStage': 'Current Stage',
+      'responseTime': 'Response Time'
     },
     'phase': {
       'desc': 'LaneDirection',
