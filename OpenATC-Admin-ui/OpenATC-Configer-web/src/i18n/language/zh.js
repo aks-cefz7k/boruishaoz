@@ -189,7 +189,13 @@ const zh = {
       'duration': '持续时间',
       'curModel': '当前方案',
       'curStage': '当前阶段',
-      'responseTime': '请求耗时'
+      'responseTime': '请求耗时',
+      'putTscControlError1': '不支持的控制方式',
+      'putTscControlError2': '不存在的方案编号',
+      'putTscControlError3': '不支持的控制参数',
+      'putTscControlError4': '设备初始化中，无法执行',
+      'putTscControlError5': '优先级更高的方案控制中，无法执行',
+      'putTscControlError6': '优先级更高的用户控制中，无法执行'
     },
     'phase': {
       'desc': '车道方向',
