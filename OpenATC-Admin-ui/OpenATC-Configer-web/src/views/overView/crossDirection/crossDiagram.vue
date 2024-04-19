@@ -262,13 +262,23 @@ export default {
       overlapsidewalkPhaseData: [], // 行人跟随相位
       resetflag: true, // 离线后，控制行人相位、车道相位reset标识
       compLanePhaseData: [], // 对比车道相位和车道跟随相位后，显示的数据
-      compSidewalkPhaseData: [] // // 对比行人相位和车道跟随相位后，显示的数据
+      compSidewalkPhaseData: [], // // 对比行人相位和车道跟随相位后，显示的数据
+      comdirePhaseData: [], // 对比相同方向车道相位数据后，被删减的唯一direction的数组
+      comdireOverlapPhaseData: [] // 对比相同方向车道跟随相位数据后，被删减的唯一direction的数组
     }
   },
   methods: {
     comparePhaseStatus () {
-      // 对比车道： 跟随相位和相位的状态数据
-      this.compLanePhaseData = this.CrossDiagramMgr.compare(this.LanePhaseData, this.overlapLanePhaseData, 'type')
+      // 对比车道： 跟随相位和相位的状态数据（此处判断是为了保证被比较的数据direction都是唯一的）
+      if (!this.comdirePhaseData && !this.comdireOverlapPhaseData) {
+        this.compLanePhaseData = this.CrossDiagramMgr.compare(this.LanePhaseData, this.overlapLanePhaseData, 'type')
+      } else if (!this.comdireOverlapPhaseData) {
+        this.compLanePhaseData = this.CrossDiagramMgr.compare(this.comdirePhaseData, this.overlapLanePhaseData, 'type')
+      } else if (!this.comdirePhaseData) {
+        this.compLanePhaseData = this.CrossDiagramMgr.compare(this.LanePhaseData, this.comdireOverlapPhaseData, 'type')
+      } else {
+        this.compLanePhaseData = this.CrossDiagramMgr.compare(this.comdirePhaseData, this.comdireOverlapPhaseData, 'type')
+      }
     },
     comparePedStatus () {
       // 对比人行道： 跟随相位和相位的状态数据
@@ -333,6 +343,7 @@ export default {
     },
     getPhaseStatus () {
       // 得到车道相位状态（颜色）
+      this.comdirePhaseData = []
       this.phaseStatusList.map(phase => {
         let phaseId = phase.id
         let phaseInfo = {
@@ -357,10 +368,12 @@ export default {
       }
       this.LanePhaseData = JSON.parse(JSON.stringify(curLanePhaseData))
       // 处理相位数据中，方向direction重复的情况：相同direction下，按照状态的优先级显示该方向的灯色：绿灯(3) > 绿闪(4) > 黄灯(2) > 红灯(1)
-      this.LanePhaseData = JSON.parse(JSON.stringify(this.CrossDiagramMgr.compareRepeatDirection(this.LanePhaseData, 'type', 'phase')))
+      // 如果有相同direction，处理后会改变原数组长度，导致第二次无法正确比较状态，因此需要中间变量存储
+      this.comdirePhaseData = JSON.parse(JSON.stringify(this.CrossDiagramMgr.compareRepeatDirection(this.LanePhaseData, 'type', 'phase')))
     },
     getOverlapPhaseStatus () {
       // 得到车道跟随相位状态（颜色）
+      this.comdireOverlapPhaseData = []
       if (this.overlapStatusList) {
         this.overlapStatusList.map(phase => {
           let phaseId = phase.id
@@ -387,7 +400,8 @@ export default {
       }
       this.overlapLanePhaseData = JSON.parse(JSON.stringify(curLanePhaseData))
       // 处理跟随相位数据中，方向direction重复的情况：相同direction下，按照状态的优先级显示该方向的灯色：绿灯(3) > 绿闪(4) > 黄灯(2) > 红灯(1)
-      this.overlapLanePhaseData = JSON.parse(JSON.stringify(this.CrossDiagramMgr.compareRepeatDirection(this.overlapLanePhaseData, 'type', 'overlapphase')))
+      // 如果有相同direction，处理后会改变原数组长度，导致第二次无法正确比较状态，因此需要中间变量存储
+      this.comdireOverlapPhaseData = JSON.parse(JSON.stringify(this.CrossDiagramMgr.compareRepeatDirection(this.overlapLanePhaseData, 'type', 'overlapphase')))
     },
     getCurPhaseCountdown () {
       // 获取当前相位倒计时颜色
