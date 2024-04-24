@@ -582,7 +582,11 @@ export default {
           }
           strArr[0] = this.faultCodeMap.get(data[0])
         }
-        faultArr.push(`${strArr[0]}--${strArr[1]}`)
+        if (data[1] !== 0) {
+          faultArr.push(`${strArr[0]}--${strArr[1]}`)
+        } else {
+          faultArr.push(`${strArr[0]}`)
+        }
       }
       return faultArr
     },
