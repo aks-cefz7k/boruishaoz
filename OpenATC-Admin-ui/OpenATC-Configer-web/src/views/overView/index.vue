@@ -945,26 +945,28 @@ export default {
       control.value = that.preselectStages === -1 ? 0 : that.preselectStages
       putTscControl(control).then(data => {
         that.unlockScreen()
-        if (!data.data.success) {
-          // that.$message.error(data.data.message)
-          let success = data.data.data.data.success
-          if (success === 0) {
-            return
-          }
+        let success = data.data.data.data.success
+        if (success !== 0) {
           let errormsg = 'edge.overview.putTscControlError' + success
           that.$message.error(this.$t(errormsg))
-          return
+        } else {
+          if (!data.data.success) {
+            that.$message.error(data.data.message)
+            return
+          }
         }
         this.closeManualModal()
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
-          that.$alert(this.$t('edge.overview.nextcycleeffic'), { type: 'success' })
+          that.$message.success(this.$t('edge.overview.nextcycleeffic'))
           return
         }
         if (that.preselectModel === 4) {
-          that.$alert(this.$t('edge.overview.transitioneffic'), { type: 'success' })
+          that.$message.success(this.$t('edge.overview.transitioneffic'))
           return
         }
-        that.$alert(that.$t('edge.common.download'), { type: 'success' })
+        if (success === 0) {
+          that.$message.success(this.$t('edge.common.download'))
+        }
       }).catch(error => {
         that.unlockScreen()
         that.$message.error(error)
