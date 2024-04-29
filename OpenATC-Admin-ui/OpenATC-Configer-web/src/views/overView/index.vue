@@ -945,14 +945,15 @@ export default {
       control.value = that.preselectStages === -1 ? 0 : that.preselectStages
       putTscControl(control).then(data => {
         that.unlockScreen()
-        let success = data.data.data.data.success
-        if (success !== 0) {
-          let errormsg = 'edge.overview.putTscControlError' + success
-          that.$message.error(this.$t(errormsg))
+        let success = 0
+        if (!data.data.success) {
+          that.$message.error(data.data.message)
+          return
         } else {
-          if (!data.data.success) {
-            that.$message.error(data.data.message)
-            return
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            that.$message.error(this.$t(errormsg))
           }
         }
         this.closeManualModal()
