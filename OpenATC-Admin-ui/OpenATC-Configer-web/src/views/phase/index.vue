@@ -43,6 +43,21 @@
            <span v-text="getControlTypestr(scope.row)"></span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.ring')" min-width="100">
+        <template slot-scope="scope">
+          <el-input-number size="small" controls-position="right" :min="1" :max="4" :step="1" v-model.number="scope.row.ring" @change="handleRingEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.ring}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.concurrent')" min-width="100">
+        <template slot-scope="scope">
+          <el-select multiple v-model="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small">
+            <el-option v-for="item in ConcurrentList" :key="item" :label="item" :value="item">
+            </el-option>
+          </el-select>
+          <span v-text="getConcurrentstr(scope.row)"></span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.mingreen')" min-width="100">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.mingreen" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
@@ -129,23 +144,6 @@
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.pedestrianthresh" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
           <span>{{scope.row.pedestrianthresh}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" :label="$t('edge.phase.ring')" min-width="100">
-        <template slot-scope="scope">
-          <el-input-number size="small" controls-position="right" :min="1" :max="4" :step="1" v-model.number="scope.row.ring" @change="handleRingEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
-          <span>{{scope.row.ring}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" :label="$t('edge.phase.concurrent')" min-width="100">
-        <template slot-scope="scope">
-          <el-select multiple v-model="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small">
-            <el-option v-for="item in ConcurrentList" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-          <span v-text="getConcurrentstr(scope.row)"></span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.pulsetype')" min-width="100">
