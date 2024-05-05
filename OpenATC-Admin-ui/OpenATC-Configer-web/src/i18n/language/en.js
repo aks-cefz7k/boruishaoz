@@ -219,7 +219,7 @@ const en = {
       'add': 'Add Phase',
       'deletetip': 'Delete This Phase ?',
       'deleteAlltip': 'Are you sure to delete all phases and patterns ?',
-      'mostdata': 'There are at most 16 data !',
+      'mostdata': 'There are at most 40 data !',
       'es': 'East-Straight',
       'el': 'East-Left',
       'er': 'East-Right',

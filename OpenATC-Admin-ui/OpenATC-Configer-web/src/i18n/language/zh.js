@@ -218,7 +218,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此相位？',
       'deleteAlltip': '确认删除所有相位、方案？',
-      'mostdata': '最多只能创建16条数据！',
+      'mostdata': '最多只能创建40条数据！',
       'es': '东直行',
       'el': '东左转',
       'er': '东右转',
