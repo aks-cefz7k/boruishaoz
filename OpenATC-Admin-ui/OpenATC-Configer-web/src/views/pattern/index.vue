@@ -532,6 +532,44 @@ export default {
     handleStageData (data, rings) {
       let stagesList = []
       let stages = data.stages
+      // let phaseList = data.phase
+      // let ringsList = [...data.rings]
+      // let maxCycle = data.cycle
+      // for (let ring of ringsList) {
+      //   let sequence = ring.sequence
+      //   let ringCycle = 0
+      //   for (let phaseid of sequence) {
+      //     let phase = phaseList.filter(item => {
+      //       return item.id === phaseid
+      //     })[0]
+      //     let split = phase.split
+      //     ringCycle = ringCycle + split
+      //   }
+      //   if (ringCycle > maxCycle) {
+      //     maxCycle = ringCycle
+      //   }
+      // }
+      // // for (let ring of ringsList) {
+      // //     let minSplit = 0
+      // //     let sequence = ring.sequence
+      // //     let passSplit = 0 //当前加载的环相位总时间
+      // //     //如果累计走过的绿性比 < 当前时间i,则有阶段变化
+      // //     for (let phaseid of sequence) {
+      // //       let phase = phaseList.filter(item => {
+      // //         return item.id === phaseid
+      // //       })[0]
+      // //       let split = phase.split
+      // //       let id = phase.id
+      // //       passSplit= passSplit + split
+      // //       if () {
+      // //         minSplit = split
+      // //       }
+      // //     }
+      // //   }
+      // // let curPhaseStr = ''
+      // for (let i = 0; i < maxCycle; i++) {
+
+      // }
       for (let i = 0; i < stages.length; i++) {
         let stage = stages[i]
         let stageItem = this.getStageItem(stage, rings)

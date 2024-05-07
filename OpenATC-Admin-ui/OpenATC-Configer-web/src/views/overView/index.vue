@@ -153,7 +153,7 @@
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
-            <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
+            <StageStatus style="margin-top: 10px;" :patternStatusList="stageStatusList"></StageStatus>
             <PatternStatus style="margin-top: 30px;"
                           :cycle="crossStatusData ? crossStatusData.cycle : 0"
                           :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
@@ -389,6 +389,7 @@ export default {
       tempDuration: 0, // 控制方式手动操作的情况下的持续时间的临时值。
       phaseList: [], // 当前相位集合
       patternStatusList: [], // 显示方案状态的相关数据集合
+      stageStatusList: [], // 实时阶段状态的相关数据集合
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
       shrink: 1,
@@ -649,6 +650,7 @@ export default {
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
         this.handlePatternData() // 计算方案状态展示数据
+        this.getStageStatusData()
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
         // this.handlePatternData() // 计算方案状态展示数据
@@ -1062,6 +1064,41 @@ export default {
         this.patternStatusList.push(list)
       }
       this.handleBarrier(this.patternStatusList, this.phaseList)
+    },
+    getStageStatusData () {
+      this.stageStatusList = []
+      this.barrierList = []
+      if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
+      if (!this.controlData.phase) return
+      let cycle = this.controlData.cycle
+      console.log(this.controlData)
+      // debugger
+      for (let rings of this.controlData.rings) {
+        let list = []
+        let phase = this.controlData.phase
+        for (let sequ of rings.sequence) {
+          let obj = {}
+          obj.id = sequ
+          let split = phase.filter((item) => {
+            return item.id === sequ
+          })[0].split
+          let currPhase = this.phaseList.filter((item) => {
+            return item.id === sequ
+          })[0]
+          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
+          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
+          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
+          obj.split = split
+          obj.direction = currPhase.direction.map(item => {
+            return {
+              id: item,
+              color: '#454545'
+            }
+          })
+          list.push(obj)
+        }
+        this.stageStatusList.push(list)
+      }
     },
     handleBarrier (patternStatusList, phaseList) {
       if (patternStatusList.length < 2) return
