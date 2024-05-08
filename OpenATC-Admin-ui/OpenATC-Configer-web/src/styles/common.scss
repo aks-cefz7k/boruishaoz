@@ -922,6 +922,29 @@ border: 1px solid $--border-color-base;
 }
 // 手动控制弹框
 .manual-control-modal{
+  padding: 21px 0px 21px 28px;
+  .title {
+    margin-bottom: 24px;
+    font-size: 20px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 22px;
+    color: $--color-text-primary;
+  }
+  .model-label {
+    line-height: 14px;
+    margin-top: 4px;
+  }
+  .stage-label {
+    margin-top: 36px;
+  }
+  .footer {
+    float: right;
+    margin: 38px 24px 40px 0;
+  }
+  .el-form-item {
+    margin-bottom: 10px;
+  }
   .el-form-item__label {
     font-size: 14px;
     font-family: Source Han Sans CN;
@@ -934,15 +957,11 @@ border: 1px solid $--border-color-base;
   .el-dialog__header {
     padding: 19px 30px;
   }
-  .el-dialog__body {
-    line-height: 0px;
-    padding: 30px 43px 30px 52px;
-  }
   .el-select {
     width: 75px;
   }
   .el-input {
-    width: 32%;
+    width: 50%;
   }
   .footer {
     button {
