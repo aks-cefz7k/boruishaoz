@@ -139,7 +139,8 @@ const en = {
       'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
       'thirdplatformid': 'Third party ID',
       'timeSpaceGraph': 'Time space graph',
-      'keyintersection': 'Key Intersection：'
+      'keyintersection': 'Key Intersection：',
+      'sockettype': 'Socket Type'
     },
     'usermanager': {
       'username': 'Username',
