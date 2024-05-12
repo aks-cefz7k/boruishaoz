@@ -11,68 +11,59 @@
  **/
 <template>
   <div class="manual-control-modal">
-    <el-dialog
-        :title="$t('edge.overview.manual')"
-        :visible.sync="visible"
-        width="843px"
-        :modal-append-to-body="false"
-        :close-on-click-modal="false"
-        @close='handleClose'>
-        <el-row>
-          <el-col :span="24">
-             <el-form
-               ref="manual"
-               label-position="left"
-               :model="manualInfo"
-               label-width="100px">
-                <el-form-item
-                    :label="$t('edge.overview.controlnumber') + ':'"
-                    prop="shape">
-                    <el-input v-model="manualInfo.tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input>
-                </el-form-item>
-                <el-form-item
-                    :label="$t('edge.overview.delay') + ':'"
-                    prop="intersection">
-                   <el-input v-model="manualInfo.tempDelay" size="mini" :placeholder="$t('edge.common.input')"></el-input>
-                </el-form-item>
-                <el-form-item
-                    :label="$t('edge.overview.duration') + ':'"
-                    prop="count">
-                   <el-input v-model="manualInfo.tempDuration" size="mini" :placeholder="$t('edge.common.input')"></el-input>
-                </el-form-item>
-               </el-form>
-          </el-col>
-        </el-row>
-        <el-row>
-            <div class="model-label">{{$t('edge.overview.mode')}}:</div>
-            <div style="width: 100%; overflow: hidden;">
-              <div class="control-model" v-for="(item, index) in modelList" :key="index">
-                <div class="single-model"
-                @click="selectModel(item.id)"
-                :class="preselectModel == item.id ? 'single-model-select' : ''"
-                v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
-                  <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
-                  <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
-                </div>
-              </div>
+    <div class="title" style="margin-bottom: 18px;">{{$t('edge.overview.manual')}}</div>
+    <el-row>
+      <el-col :span="24">
+         <el-form
+           ref="manual"
+           label-position="left"
+           :model="manualInfo"
+           label-width="100px">
+            <el-form-item
+                :label="$t('edge.overview.controlnumber') + ':'"
+                prop="shape">
+                <el-input v-model="manualInfo.tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input>
+            </el-form-item>
+            <el-form-item
+                :label="$t('edge.overview.delay') + ':'"
+                prop="intersection">
+               <el-input v-model="manualInfo.tempDelay" size="mini" :placeholder="$t('edge.common.input')"></el-input>
+            </el-form-item>
+            <el-form-item
+                :label="$t('edge.overview.duration') + ':'"
+                prop="count">
+               <el-input v-model="manualInfo.tempDuration" size="mini" :placeholder="$t('edge.common.input')"></el-input>
+            </el-form-item>
+           </el-form>
+      </el-col>
+    </el-row>
+    <el-row>
+        <div class="model-label">{{$t('edge.overview.mode')}}:</div>
+        <div style="width: 100%; overflow: hidden;">
+          <div class="control-model" v-for="(item, index) in modelList" :key="index">
+            <div class="single-model"
+            @click="selectModel(item.id)"
+            :class="preselectModel == item.id ? 'single-model-select' : ''"
+            v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
+              <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
+              <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
             </div>
-            <div class="stage-label">{{$t('edge.overview.stage')}}:</div>
-            <div style="width: 100%; height: auto;">
-              <div class="control-model" v-for="(item, index) in stagesList" :key="index">
-                <div class="single-model" @click="selectStages(index + 1)" :class="preselectStages == index + 1 ? 'single-model-select' : ''">
-                  <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
-                  <div class="current-stage-num">{{index + 1}}</div>
-                </div>
-              </div>
-            </div>
-        </el-row>
-        <div
-        slot="footer"
-        class="footer">
-            <el-button @click="handleClose()">{{$t('edge.button.Cancel')}}</el-button>
-            <el-button type="primary" @click="handleManualControl()">{{$t('edge.button.OK')}}</el-button>
+          </div>
         </div>
-    </el-dialog>
+        <div class="stage-label">{{$t('edge.overview.stage')}}:</div>
+        <div style="width: 100%; height: auto;">
+          <div class="control-model" v-for="(item, index) in stagesList" :key="index">
+            <div class="single-model" @click="selectStages(index + 1)" :class="preselectStages == index + 1 ? 'single-model-select' : ''">
+              <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
+              <div class="current-stage-num">{{index + 1}}</div>
+            </div>
+          </div>
+        </div>
+    </el-row>
+    <div class="footer">
+        <el-button @click="handleClose()">{{$t('edge.button.Back')}}</el-button>
+        <el-button type="primary" @click="handleManualControl()">{{$t('edge.overview.implement')}}</el-button>
+    </div>
   </div>
 </template>
 
@@ -122,7 +113,7 @@ export default {
       manualInfo: {
         tempPatternid: 0, // 控制方式手动操作的情况下的控制编号的临时值。
         tempDelay: 0, // 控制方式手动操作的情况下的延迟时间的临时值。
-        tempDuration: 0 // 控制方式手动操作的情况下的持续时间的临时值。
+        tempDuration: 300 // 控制方式手动操作的情况下的持续时间的临时值。
       }
     }
   },
@@ -141,9 +132,15 @@ export default {
     }
   },
   mounted () {
-    this.manualInfo.tempPatternid = this.controlData.patternid
-    this.manualInfo.tempDelay = this.controlData.delay
-    this.manualInfo.tempDuration = this.controlData.duration
+    if (this.controlData.patternid) {
+      this.manualInfo.tempPatternid = this.controlData.patternid
+    }
+    if (this.controlData.tempDelay) {
+      this.manualInfo.tempDelay = this.controlData.delay
+    }
+    if (this.controlData.tempDuration) {
+      this.manualInfo.tempDuration = this.controlData.duration
+    }
   }
 }
 </script>

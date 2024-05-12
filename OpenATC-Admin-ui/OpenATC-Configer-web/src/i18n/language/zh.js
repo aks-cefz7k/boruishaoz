@@ -668,7 +668,8 @@ const zh = {
     },
     'button': {
       'OK': '确定',
-      'Cancel': '取消'
+      'Cancel': '取消',
+      'Back': '返回'
     },
     'common': {
       'confirm': '确认',

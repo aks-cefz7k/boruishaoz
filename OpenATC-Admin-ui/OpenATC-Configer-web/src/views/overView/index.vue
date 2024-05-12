@@ -17,19 +17,6 @@
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
       </div>
     </FloatImgBtn>
-    <ManualControlModal v-if="isOperation"
-      :Visible="isOperation"
-      :controlData="controlData"
-      :modelList="modelList"
-      :stagesList="stagesList"
-      :currModel="currModel"
-      :preselectModel="preselectModel"
-      :currentStage="currentStage"
-      :preselectStages="preselectStages"
-      @closeManualModal="closeManualModal"
-      @selectModel="selectModel"
-      @selectStages="selectStages"
-      @patternCommit="patternCommit" />
     <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
       <div class="wenzijiemian" v-show="!isShowGui">
         <div class="container-left">
@@ -161,7 +148,21 @@
                           :barrierList="barrierList"></PatternStatus>
           </div>
         </div>
-        <div class="tuxing-right" v-if="!graphicMode">
+        <div class="tuxing-right" v-if="!graphicMode && isOperation">
+          <ManualControlModal v-if="isOperation"
+              :controlData="controlData"
+              :modelList="modelList"
+              :stagesList="stagesList"
+              :currModel="currModel"
+              :preselectModel="preselectModel"
+              :currentStage="currentStage"
+              :preselectStages="preselectStages"
+              @closeManualModal="closeManualModal"
+              @selectModel="selectModel"
+              @selectStages="selectStages"
+              @patternCommit="patternCommit" />
+        </div>
+        <div class="tuxing-right" v-if="!graphicMode && !isOperation">
           <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
           <div class="cross-module">
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
@@ -177,7 +178,7 @@
             <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
           </div>
-          <div>
+          <div class="control-bottom">
             <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
             <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
             <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
@@ -958,7 +959,7 @@ export default {
             that.$message.error(this.$t(errormsg))
           }
         }
-        this.closeManualModal()
+        // this.closeManualModal()
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
           that.$message.success(this.$t('edge.overview.nextcycleeffic'))
           return

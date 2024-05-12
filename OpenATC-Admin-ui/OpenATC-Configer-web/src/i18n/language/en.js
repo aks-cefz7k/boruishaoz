@@ -670,7 +670,8 @@ const en = {
     },
     'button': {
       'OK': 'OK',
-      'Cancel': 'Cancel'
+      'Cancel': 'Cancel',
+      'Back': 'Back'
     },
     'common': {
       'confirm': 'Confirm',
