@@ -360,27 +360,31 @@ export default {
     importtemplate () {
       this.importVisible = true
     },
-    normalData () {
+    normalData (tscParam) {
+      let res = JSON.parse(JSON.stringify(tscParam))
       if (this.value === 'all' || this.value === 'pattern') {
         // 去除patternList里的description对象
-        let patternList = this.globalParamModel.getParamsByType('patternList')
+        let patternList = res.patternList
         for (let pattern of patternList) {
           for (let rings of pattern.rings) {
             for (let i = 0; i < rings.length; i++) {
-              rings[i] = (({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
-                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }))(rings[i])
+              rings[i] = (
+                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
+                  ({ name, id, value, mode, options, minSplit, delaystart, advanceend })
+              )(rings[i])
             }
           }
         }
       }
       if (this.value === 'all' || this.value === 'channel') {
         // 去除channelList里的typeAndSouce
-        let channelList = this.globalParamModel.getParamsByType('channelList')
+        let channelList = res.channelList
         for (let i = 0; i < channelList.length; i++) {
           let channel = channelList[i]
           this.$store.getters.tscParam.channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
         }
       }
+      return res
     },
     toggleSideBar () {
       this.$store.dispatch('ToggleSideBar')
@@ -459,9 +463,9 @@ export default {
       if (!this.baseCheck()) {
         return
       }
-      this.normalData() // 规范数据格式
       let tscParam = this.globalParamModel.getGlobalParams()
-      let newTscParam = this.handleTscParam(tscParam)
+      let targetTscParam = this.normalData(tscParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
       // if (typeStr !== 'all') {
       //   this.lockScreen()
       //   this.singleDownload(typeStr, newTscParam)
@@ -594,9 +598,9 @@ export default {
       return arr
     },
     singleDownload (typeStr) {
-      this.normalData() // 规范数据格式
       let tscParam = this.globalParamModel.getGlobalParams()
-      let newTscParam = this.handleTscParam(tscParam)
+      let targetTscParam = this.normalData(tscParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
       this.lockScreen()
       downloadSingleTscParam(typeStr, newTscParam).then(data => {
         this.unlockScreen()
@@ -620,17 +624,16 @@ export default {
       this.dialogVisible = true
     },
     async leadingOut () {
-      // this.normalData() // 规范数据格式
       // 下载数据前的基本校验
       if (!this.baseCheck()) {
         return
       }
-      this.normalData() // 规范数据格式
+      let edgeParam = this.globalParamModel.getGlobalParams()
+      let targetTscParam = this.normalData(edgeParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
       // 定义文件内容，类型必须为Blob 否则createObjectURL会报错
       // const tscParam = this.globalParamModel.getGlobalParams()
       const tscParam = {}
-      let edgeParam = this.globalParamModel.getGlobalParams()
-      let newTscParam = this.handleTscParam(edgeParam)
       let md5Param = await this.getMd5ByParams(newTscParam)
       tscParam.md5 = md5Param
       tscParam.data = newTscParam

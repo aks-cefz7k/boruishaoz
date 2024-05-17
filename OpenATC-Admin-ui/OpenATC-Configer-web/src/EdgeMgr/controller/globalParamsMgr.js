@@ -27,6 +27,10 @@ export default class GlobalParamsMgr extends EdgeModelBase {
     store.dispatch('SaveTscParam', globalData)
   }
 
+  setSingleParam (param) {
+    store.dispatch('SaveSingleParam', param)
+  }
+
   getGlobalParams () {
     return store.getters.tscParam
   }
