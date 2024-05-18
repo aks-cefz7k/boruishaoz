@@ -85,6 +85,7 @@ const zh = {
       'phone': '联系电话',
       'email': '电子邮箱',
       'changepass': '修改密码',
+      'about': '关于',
       'exit': '退出',
       'options': 'options',
       'options1': '全部',
@@ -187,7 +188,14 @@ const zh = {
       'delay': '延迟时间',
       'duration': '持续时间',
       'curModel': '当前方案',
-      'curStage': '当前阶段'
+      'curStage': '当前阶段',
+      'responseTime': '请求耗时',
+      'putTscControlError1': '不支持的控制方式',
+      'putTscControlError2': '不存在的方案编号',
+      'putTscControlError3': '不支持的控制参数',
+      'putTscControlError4': '设备初始化中，无法执行',
+      'putTscControlError5': '优先级更高的方案控制中，无法执行',
+      'putTscControlError6': '优先级更高的用户控制中，无法执行'
     },
     'phase': {
       'desc': '车道方向',
@@ -210,7 +218,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此相位？',
       'deleteAlltip': '确认删除所有相位、方案？',
-      'mostdata': '最多只能创建16条数据！',
+      'mostdata': '最多只能创建40条数据！',
       'es': '东直行',
       'el': '东左转',
       'er': '东右转',
@@ -248,7 +256,12 @@ const zh = {
       'pedestrianthresh': '行人等待阈值',
       'mainroad': '主路',
       'bypass': '支路',
-      'pedestrianonly': '仅行人'
+      'pedestrianonly': '仅行人',
+      'pulsetype': '脉冲屏蔽',
+      'offpulse': '关闭行人及机动车脉冲',
+      'sendvehiclepulse': '发送机动车脉冲',
+      'sendpedestrianpulse': '发送行人脉冲',
+      'sendpedestriansvehiclepulse': '发送行人及机动车脉冲'
     },
     'overlap': {
       'desc': '描述',
@@ -655,7 +668,8 @@ const zh = {
     },
     'button': {
       'OK': '确定',
-      'Cancel': '取消'
+      'Cancel': '取消',
+      'Back': '返回'
     },
     'common': {
       'confirm': '确认',
@@ -696,6 +710,7 @@ const zh = {
       'commitandexecute': '提交并执行',
       'uploadsuccess': '参数上传成功!',
       'download': '参数下发成功!',
+      'downloaderror': '下发失败！',
       'downloadandrun': '提交并运行成功！',
       'editagentid': '编辑设备ID',
       'querysucess': '查询成功！',
@@ -794,6 +809,13 @@ const zh = {
         'fifteenPhase': '十五相位',
         'sixteenPhase': '十六相位'
       }
+    },
+    'about': {
+      'version': '版本',
+      'copyright': '版权所有',
+      'company': '苏州科达科技股份有限公司',
+      'packedtime': '打包时间',
+      'opensourceagreement': '开源协议'
     }
   }
 }

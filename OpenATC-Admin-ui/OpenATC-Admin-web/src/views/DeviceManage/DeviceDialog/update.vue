@@ -104,6 +104,18 @@
             </el-input>
         </el-form-item>
         <el-form-item
+            :label="$t('openatc.devicemanager.sockettype')"
+            prop="sockettype">
+            <el-select v-model="deviceInfo.sockettype" style="width:100%">
+              <el-option
+                v-for="item in sockettypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item
             :label="$t('openatc.devicemanager.platform')"
             prop="platform">
             <el-select v-model="deviceInfo.platform" placeholder="" style="width:100%" :disabled="platformCheck">
@@ -226,6 +238,7 @@ export default {
         protocol: 'ocp',
         ip: '',
         port: '8880',
+        sockettype: 0,
         lng: 0,
         lat: 0,
         firm: '',
@@ -282,7 +295,16 @@ export default {
       }],
       platformCheck: false,
       innerForm: {},
-      showModifyIdButton: false
+      showModifyIdButton: false,
+      sockettypeOptions: [
+        {
+          label: 'UDP',
+          value: 0
+        }, {
+          label: 'TCP',
+          value: 1
+        }
+      ]
     }
   },
   methods: {

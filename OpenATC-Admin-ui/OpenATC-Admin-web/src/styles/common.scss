@@ -315,7 +315,7 @@
     text-indent: -5px;
     text-align: center;
   }
-  /deep/ .el-radio__input{
+  /deep/ .el-radio__input {
       display: none;
   }
   .footer-left {
@@ -368,7 +368,7 @@
     cursor: pointer;
     right: 17px;
     top: 70px;
-    z-index:100001;
+    z-index:904;
   }
   .active {
     position: absolute;
@@ -458,7 +458,7 @@
     right: 38px;
     width: 470px;
     height: auto;
-    z-index: 904;
+    z-index: 905;
     background-color: $--color-white;
   }
   .icon-choose {

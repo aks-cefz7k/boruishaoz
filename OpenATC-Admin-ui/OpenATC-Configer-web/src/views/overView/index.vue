@@ -17,19 +17,6 @@
         <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
       </div>
     </FloatImgBtn>
-    <ManualControlModal v-if="isOperation"
-      :Visible="isOperation"
-      :controlData="controlData"
-      :modelList="modelList"
-      :stagesList="stagesList"
-      :currModel="currModel"
-      :preselectModel="preselectModel"
-      :currentStage="currentStage"
-      :preselectStages="preselectStages"
-      @closeManualModal="closeManualModal"
-      @selectModel="selectModel"
-      @selectStages="selectStages"
-      @patternCommit="patternCommit" />
     <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
       <div class="wenzijiemian" v-show="!isShowGui">
         <div class="container-left">
@@ -153,7 +140,7 @@
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
-            <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
+            <StageStatus style="margin-top: 10px;" :patternStatusList="stageStatusList"></StageStatus>
             <PatternStatus style="margin-top: 30px;"
                           :cycle="crossStatusData ? crossStatusData.cycle : 0"
                           :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
@@ -161,7 +148,21 @@
                           :barrierList="barrierList"></PatternStatus>
           </div>
         </div>
-        <div class="tuxing-right" v-if="!graphicMode">
+        <div class="tuxing-right" v-if="!graphicMode && isOperation">
+          <ManualControlModal v-if="isOperation"
+              :controlData="controlData"
+              :modelList="modelList"
+              :stagesList="stagesList"
+              :currModel="currModel"
+              :preselectModel="preselectModel"
+              :currentStage="currentStage"
+              :preselectStages="preselectStages"
+              @closeManualModal="closeManualModal"
+              @selectModel="selectModel"
+              @selectStages="selectStages"
+              @patternCommit="patternCommit" />
+        </div>
+        <div class="tuxing-right" v-if="!graphicMode && !isOperation">
           <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
           <div class="cross-module">
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
@@ -177,7 +178,7 @@
             <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
           </div>
-          <div>
+          <div class="control-bottom">
             <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
             <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
             <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
@@ -189,13 +190,13 @@
               <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
             </div>
 
-            <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
+            <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
               <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
             </div>
 
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
               <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
-            </div>
+            </div> -->
 
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
               <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
@@ -203,6 +204,10 @@
 
             <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
               <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
+            </div>
+
+            <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
+              <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
             </div>
           </div>
         </div>
@@ -277,8 +282,8 @@ export default {
       registerMessageTimer: null, // 延时器
       volumeControlTimer: null, // 流量定时器
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
-      ParamsMode: new Map([[0, '系统控制'], [1, '平台控制'], [2, '配置工具控制'], [3, '手动面板控制']]),
-      ParamsModeEn: new Map([[0, 'System Control'], [1, 'Platform Control'], [2, 'Configuration Control'], [3, 'Manual Panel Control']]),
+      ParamsMode: new Map([[0, '自主控制'], [1, '本地手动'], [2, '系统控制'], [3, '配置软件控制'], [4, '遥控器控制'], [5, '黄闪器触发']]),
+      ParamsModeEn: new Map([[0, 'Autonomous Control'], [1, 'Local Manual'], [2, 'System Control'], [3, 'Configuration Software Control'], [4, 'Remote Control'], [5, 'Yellow Flasher Trigger']]),
       ParamsControl: new Map([[0, '自主控制'], [1, '黄闪'], [2, '全红'], [3, '关灯'], [4, '步进'], [5, '定周期控制'], [6, '单点感应控制'], [7, '协调感应控制'], [8, '方案选择控制'], [9, '自适应控制'], [10, '无电缆控制'], [11, '有电缆控制'], [12, '行人过街控制']]),
       ParamsControlEn: new Map([[0, 'Auto Control'], [1, 'Yellow Flash Control'], [2, 'Red Control'], [3, 'Dark Control'], [4, 'Step'], [5, 'Fixed_Cycle Control'], [6, 'Free Control'], [7, 'Coordinated Induction Control'], [8, 'Pattern Selection Control'], [9, 'Adaptive Control'], [10, '无电缆控制'], [11, 'Cable Control'], [12, 'Pedestrian Crossing Control']]),
       phaseType: new Map([[1, '红'], [2, '黄'], [3, '绿']]), // phaseType表示红，黄，绿
@@ -341,6 +346,7 @@ export default {
       crossStatusData: null, // 路口状态数据
       reset: false,
       currentStage: 0,
+      responseTime: 0,
       stagesList: [],
       isOperation: false, // 是否为手动可操作状态
       showList: [{
@@ -384,6 +390,7 @@ export default {
       tempDuration: 0, // 控制方式手动操作的情况下的持续时间的临时值。
       phaseList: [], // 当前相位集合
       patternStatusList: [], // 显示方案状态的相关数据集合
+      stageStatusList: [], // 实时阶段状态的相关数据集合
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
       shrink: 1,
@@ -440,7 +447,8 @@ export default {
       this.resetCrossDiagram()
       this.registerMessage() // 注册消息
     } else {
-      // setIframdevid('10602')
+      // setIframdevid('23080400311210000088')
+      // setIframdevid('8011')
       this.queryDevParams() // 查询设备信息
     }
     // this.registerMessage() // 注册消息
@@ -527,7 +535,9 @@ export default {
         this.ip = newRes.ip
         this.port = newRes.port
         this.protocol = newRes.protocol
-        this.faultArr = this.getFaultMes(newRes.fault)
+        if (newRes.fault) {
+          this.faultArr = this.getFaultMes(newRes.fault)
+        }
         this.clearPatternInterval() // 清除其他定时器
         this.clearVolumeInterval()
         this.phaseControlTimer = setInterval(() => {
@@ -574,7 +584,11 @@ export default {
           }
           strArr[0] = this.faultCodeMap.get(data[0])
         }
-        faultArr.push(`${strArr[0]}--${strArr[1]}`)
+        if (data[1] !== 0) {
+          faultArr.push(`${strArr[0]}--${strArr[1]}`)
+        } else {
+          faultArr.push(`${strArr[0]}`)
+        }
       }
       return faultArr
     },
@@ -605,7 +619,11 @@ export default {
     },
     initData () {
       this.intervalFlag = false
+      let startTime = new Date().getTime()
       getTscControl(this.agentId).then((data) => {
+        let endTime = new Date().getTime()
+        let diffTime = endTime - startTime
+        this.responseTime = diffTime
         this.intervalFlag = true
         if (!data.data.success) {
           if (data.data.code === '4003') {
@@ -633,6 +651,7 @@ export default {
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
         this.handlePatternData() // 计算方案状态展示数据
+        this.getStageStatusData()
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
         // this.handlePatternData() // 计算方案状态展示数据
@@ -893,12 +912,14 @@ export default {
     },
     changeStatus () {
       this.isOperation = true
-      let autonomyControl = {
-        id: 0,
-        iconClass: 'zizhukongzhi',
-        iconName: '自主控制'
+      if (this.modelList.filter(ele => ele.id === 0).length === 0) {
+        let autonomyControl = {
+          id: 0,
+          iconClass: 'zizhukongzhi',
+          iconName: '自主控制'
+        }
+        this.modelList.push(autonomyControl)
       }
-      this.modelList.push(autonomyControl)
     },
     closeManualModal () {
       this.isOperation = false
@@ -927,20 +948,29 @@ export default {
       control.value = that.preselectStages === -1 ? 0 : that.preselectStages
       putTscControl(control).then(data => {
         that.unlockScreen()
+        let success = 0
         if (!data.data.success) {
           that.$message.error(data.data.message)
           return
+        } else {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            that.$message.error(this.$t(errormsg))
+          }
         }
+        // this.closeManualModal()
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
-          that.$alert(this.$t('edge.overview.nextcycleeffic'), { type: 'success' })
+          that.$message.success(this.$t('edge.overview.nextcycleeffic'))
           return
         }
         if (that.preselectModel === 4) {
-          that.$alert(this.$t('edge.overview.transitioneffic'), { type: 'success' })
+          that.$message.success(this.$t('edge.overview.transitioneffic'))
           return
         }
-        this.isOperation = false
-        that.$alert(that.$t('edge.common.download'), { type: 'success' })
+        if (success === 0) {
+          that.$message.success(this.$t('edge.common.download'))
+        }
       }).catch(error => {
         that.unlockScreen()
         that.$message.error(error)
@@ -1035,6 +1065,41 @@ export default {
         this.patternStatusList.push(list)
       }
       this.handleBarrier(this.patternStatusList, this.phaseList)
+    },
+    getStageStatusData () {
+      this.stageStatusList = []
+      this.barrierList = []
+      if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
+      if (!this.controlData.phase) return
+      let cycle = this.controlData.cycle
+      console.log(this.controlData)
+      // debugger
+      for (let rings of this.controlData.rings) {
+        let list = []
+        let phase = this.controlData.phase
+        for (let sequ of rings.sequence) {
+          let obj = {}
+          obj.id = sequ
+          let split = phase.filter((item) => {
+            return item.id === sequ
+          })[0].split
+          let currPhase = this.phaseList.filter((item) => {
+            return item.id === sequ
+          })[0]
+          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
+          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
+          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
+          obj.split = split
+          obj.direction = currPhase.direction.map(item => {
+            return {
+              id: item,
+              color: '#454545'
+            }
+          })
+          list.push(obj)
+        }
+        this.stageStatusList.push(list)
+      }
     },
     handleBarrier (patternStatusList, phaseList) {
       if (patternStatusList.length < 2) return

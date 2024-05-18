@@ -83,4 +83,7 @@ export default {
 .edgeModal .el-dialog__body {
   padding: 10px;
 }
+.edgeModal {
+  z-index: 904;
+}
 </style>

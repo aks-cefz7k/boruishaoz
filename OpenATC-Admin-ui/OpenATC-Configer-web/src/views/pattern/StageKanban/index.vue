@@ -30,6 +30,7 @@
               size="small"
               v-model.number="stage.split"
               ref="type"
+              :disabled="true"
               @change="onSplitChange">
             </el-input-number>
           </el-col>
@@ -60,6 +61,7 @@
               size="small"
               v-model.number="stage.delaystart"
               ref="type"
+              :disabled="true"
               @change="onDelaystartChange">
             </el-input-number>
           </el-col>
@@ -75,6 +77,7 @@
               size="small"
               v-model.number="stage.advanceend"
               ref="type"
+              :disabled="true"
               @change="onAdvanceendChange">
             </el-input-number>
           </el-col>

@@ -85,6 +85,7 @@ const en = {
       'phone': 'Telephone',
       'email': 'Email',
       'changepass': 'Change Password',
+      'about': 'About',
       'exit': 'Exit',
       'options': 'options',
       'options1': 'All',
@@ -187,7 +188,14 @@ const en = {
       'delay': 'Delay time',
       'duration': 'Duration',
       'curModel': 'Current Model',
-      'curStage': 'Current Stage'
+      'curStage': 'Current Stage',
+      'responseTime': 'Response Time',
+      'putTscControlError1': 'Unsupported control pattern',
+      'putTscControlError2': 'Control number not exist',
+      'putTscControlError3': 'Unsupported control params',
+      'putTscControlError4': 'Unable to execute because device is in initialization',
+      'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
+      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -211,7 +219,7 @@ const en = {
       'add': 'Add Phase',
       'deletetip': 'Delete This Phase ?',
       'deleteAlltip': 'Are you sure to delete all phases and patterns ?',
-      'mostdata': 'There are at most 16 data !',
+      'mostdata': 'There are at most 40 data !',
       'es': 'East-Straight',
       'el': 'East-Left',
       'er': 'East-Right',
@@ -249,7 +257,12 @@ const en = {
       'pedestrianthresh': 'Pedestrian waiting Threshold',
       'mainroad': 'main road',
       'bypass': 'by-pass',
-      'pedestrianonly': 'pedestrian only'
+      'pedestrianonly': 'pedestrian only',
+      'pulsetype': 'PulseType',
+      'offpulse': 'Turn off pedestrian and vehicle pulses',
+      'sendvehiclepulse': 'Send vehicle pulse',
+      'sendpedestrianpulse': 'Send pedestrian pulse',
+      'sendpedestriansvehiclepulse': 'Send pedestrians and vehicles pulses'
     },
     'overlap': {
       'desc': 'Description',
@@ -657,7 +670,8 @@ const en = {
     },
     'button': {
       'OK': 'OK',
-      'Cancel': 'Cancel'
+      'Cancel': 'Cancel',
+      'Back': 'Back'
     },
     'common': {
       'confirm': 'Confirm',
@@ -698,6 +712,7 @@ const en = {
       'commitandexecute': 'CommitAndExecute',
       'uploadsuccess': 'Upload Success!',
       'download': 'Download Success!',
+      'downloaderror': 'Download Error!',
       'downloadandrun': 'Submit and run successfully!',
       'editagentid': 'Edit AgentID',
       'querysucess': 'Query Success!',
@@ -795,6 +810,13 @@ const en = {
         'fifteenPhase': 'FifteenPhase',
         'sixteenPhase': 'SixteenPhase'
       }
+    },
+    'about': {
+      'version': 'Version',
+      'copyright': 'Copyright',
+      'company': 'KEDACOM',
+      'packedtime': 'Packed time',
+      'opensourceagreement': 'Opensource Agreement'
     }
   }
 }

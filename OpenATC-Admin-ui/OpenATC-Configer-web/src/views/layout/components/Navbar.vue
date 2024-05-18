@@ -101,6 +101,7 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -140,6 +141,7 @@
     </el-dialog>
     <!--修改密码弹框-->
     <changePass ref="changepassChild"></changePass>
+    <versioninfo ref="versioninfoChild"></versioninfo>
   </div>
 </template>
 
@@ -154,6 +156,7 @@ import Messagebox from '@/components/MessageBox/index'
 import ImportTempDialog from '../../importTempDialog/index'
 import { getInfo } from '@/api/login'
 import changePass from './ChangePass'
+import versioninfo from './versionInfo'
 
 export default {
   components: {
@@ -161,7 +164,8 @@ export default {
     Hamburger,
     Messagebox,
     ImportTempDialog,
-    changePass
+    changePass,
+    versioninfo
   },
   data () {
     return {
@@ -356,27 +360,31 @@ export default {
     importtemplate () {
       this.importVisible = true
     },
-    normalData () {
+    normalData (tscParam) {
+      let res = JSON.parse(JSON.stringify(tscParam))
       if (this.value === 'all' || this.value === 'pattern') {
         // 去除patternList里的description对象
-        let patternList = this.globalParamModel.getParamsByType('patternList')
+        let patternList = res.patternList
         for (let pattern of patternList) {
           for (let rings of pattern.rings) {
             for (let i = 0; i < rings.length; i++) {
-              rings[i] = (({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
-                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }))(rings[i])
+              rings[i] = (
+                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
+                  ({ name, id, value, mode, options, minSplit, delaystart, advanceend })
+              )(rings[i])
             }
           }
         }
       }
       if (this.value === 'all' || this.value === 'channel') {
         // 去除channelList里的typeAndSouce
-        let channelList = this.globalParamModel.getParamsByType('channelList')
+        let channelList = res.channelList
         for (let i = 0; i < channelList.length; i++) {
           let channel = channelList[i]
           this.$store.getters.tscParam.channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
         }
       }
+      return res
     },
     toggleSideBar () {
       this.$store.dispatch('ToggleSideBar')
@@ -455,9 +463,9 @@ export default {
       if (!this.baseCheck()) {
         return
       }
-      this.normalData() // 规范数据格式
       let tscParam = this.globalParamModel.getGlobalParams()
-      let newTscParam = this.handleTscParam(tscParam)
+      let targetTscParam = this.normalData(tscParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
       // if (typeStr !== 'all') {
       //   this.lockScreen()
       //   this.singleDownload(typeStr, newTscParam)
@@ -474,7 +482,7 @@ export default {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return
             }
-            let errorMes = ''
+            let errorMes = this.$t('edge.common.downloaderror')
             for (let code of codeList) {
               if (this.$i18n.locale === 'en') {
                 if (code[0] === 305) {
@@ -502,9 +510,8 @@ export default {
                 }
               }
             }
-            // this.$message.error(errorMes.substr(1))
             this.$message({
-              message: errorMes.substr(5),
+              message: errorMes,
               type: 'error',
               dangerouslyUseHTMLString: true
             })
@@ -558,25 +565,25 @@ export default {
           }
         }
       }
-      if (newTscParam.customInfo) {
-        // 设备参数中包含以下字段需删除后再下发
-        let customInfo = newTscParam.customInfo
-        if (customInfo.netcard) {
-          delete customInfo.netcard
-        }
-        if (customInfo.centerip) {
-          delete customInfo.centerip
-        }
-        if (customInfo.cascade) {
-          delete customInfo.cascade
-        }
-        if (customInfo.startsequence) {
-          delete customInfo.startsequence
-        }
-        if (customInfo.faultdetect) {
-          delete customInfo.faultdetect
-        }
-      }
+      // if (newTscParam.customInfo) {
+      //   // 设备参数中包含以下字段需删除后再下发
+      //   let customInfo = newTscParam.customInfo
+      //   if (customInfo.netcard) {
+      //     delete customInfo.netcard
+      //   }
+      //   if (customInfo.centerip) {
+      //     delete customInfo.centerip
+      //   }
+      //   if (customInfo.cascade) {
+      //     delete customInfo.cascade
+      //   }
+      //   if (customInfo.startsequence) {
+      //     delete customInfo.startsequence
+      //   }
+      //   if (customInfo.faultdetect) {
+      //     delete customInfo.faultdetect
+      //   }
+      // }
       return newTscParam
     },
     cloneObjectFn (obj) {
@@ -591,9 +598,9 @@ export default {
       return arr
     },
     singleDownload (typeStr) {
-      this.normalData() // 规范数据格式
       let tscParam = this.globalParamModel.getGlobalParams()
-      let newTscParam = this.handleTscParam(tscParam)
+      let targetTscParam = this.normalData(tscParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
       this.lockScreen()
       downloadSingleTscParam(typeStr, newTscParam).then(data => {
         this.unlockScreen()
@@ -617,17 +624,16 @@ export default {
       this.dialogVisible = true
     },
     async leadingOut () {
-      // this.normalData() // 规范数据格式
       // 下载数据前的基本校验
       if (!this.baseCheck()) {
         return
       }
-      this.normalData() // 规范数据格式
+      let edgeParam = this.globalParamModel.getGlobalParams()
+      let targetTscParam = this.normalData(edgeParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
       // 定义文件内容，类型必须为Blob 否则createObjectURL会报错
       // const tscParam = this.globalParamModel.getGlobalParams()
       const tscParam = {}
-      let edgeParam = this.globalParamModel.getGlobalParams()
-      let newTscParam = this.handleTscParam(edgeParam)
       let md5Param = await this.getMd5ByParams(newTscParam)
       tscParam.md5 = md5Param
       tscParam.data = newTscParam
@@ -709,17 +715,17 @@ export default {
         return false
       }
       this.checkPhaseRing()
-      if (!this.phaseRing) {
-        this.$message.error(this.$t('edge.errorTip.ringErrorTip'))
-        return false
-      }
+      // if (!this.phaseRing) {
+      //   this.$message.error(this.$t('edge.errorTip.ringErrorTip'))
+      //   return false
+      // }
       this.checkConcurrentRules()
-      if (!this.concurrentRules) {
-        this.$message.error(
-          this.$t('edge.errorTip.concurrentRules')
-        )
-        return false
-      }
+      // if (!this.concurrentRules) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.concurrentRules')
+      //   )
+      //   return false
+      // }
       this.checkOverlapRules()
       if (!this.overlapRules) {
         this.$message.error(
@@ -781,13 +787,13 @@ export default {
         this.$message.error(this.planName + this.$t('edge.errorTip.planDate'))
         return false
       }
-      this.checkPatternRing()
-      if (!this.patternRing) {
-        this.$message.error(
-          this.$t('edge.errorTip.patternRing')
-        )
-        return false
-      }
+      // this.checkPatternRing()
+      // if (!this.patternRing) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.patternRing')
+      //   )
+      //   return false
+      // }
       this.checkManualpanelIsNull()
       if (!this.manualpanelIsNull) {
         this.$message.error(
@@ -1056,8 +1062,14 @@ export default {
           break
         case 'b': this.logout()
           break
+        case 'about': this.showVersion()
+          break
         default: router.push({ path: '/' })
       }
+    },
+    showVersion () {
+      let versionInfoChild = this.$refs.versioninfoChild
+      versionInfoChild.showMessage()
     },
     showInfo (val) {
       if (!val) return

@@ -211,6 +211,9 @@ export default {
         if (ring.length === 0) continue
         let cycle = 0
         for (let r of ring) {
+          if (r.mode === 7) { // 忽略相位不计周期
+            continue
+          }
           cycle = cycle + r.value
         }
         if (cycle > maxCycle) {

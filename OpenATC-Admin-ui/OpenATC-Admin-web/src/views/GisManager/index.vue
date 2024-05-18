@@ -361,11 +361,14 @@ export default {
   height: 94.5vh;
 }
 .tabsconatiner {
-  /* overflow: hidden; */
   margin: 10px;
   position: relative;
   width: 100% - 20px;
   height: 100% - 20px;
-  opacity: 0.95;
+  /* opacity: 0.95; */
+  /* background:  rgba(0, 32, 60, 0.1); */
+}
+.header >>> .el-radio__input {
+      display: none;
 }
 </style>

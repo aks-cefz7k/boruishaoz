@@ -43,6 +43,21 @@
            <span v-text="getControlTypestr(scope.row)"></span>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.ring')" min-width="100">
+        <template slot-scope="scope">
+          <el-input-number size="small" controls-position="right" :min="1" :max="4" :step="1" v-model.number="scope.row.ring" @change="handleRingEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.ring}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.concurrent')" min-width="100">
+        <template slot-scope="scope">
+          <el-select multiple v-model="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small">
+            <el-option v-for="item in ConcurrentList" :key="item" :label="item" :value="item">
+            </el-option>
+          </el-select>
+          <span v-text="getConcurrentstr(scope.row)"></span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.mingreen')" min-width="100">
         <template slot-scope="scope">
           <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.mingreen" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
@@ -131,21 +146,17 @@
           <span>{{scope.row.pedestrianthresh}}</span>
         </template>
       </el-table-column>
-
-      <el-table-column align="center" :label="$t('edge.phase.ring')" min-width="100">
+      <el-table-column align="center" :label="$t('edge.phase.pulsetype')" min-width="100">
         <template slot-scope="scope">
-          <el-input-number size="small" controls-position="right" :min="1" :max="4" :step="1" v-model.number="scope.row.ring" @change="handleRingEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
-          <span>{{scope.row.ring}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" :label="$t('edge.phase.concurrent')" min-width="100">
-        <template slot-scope="scope">
-          <el-select multiple v-model="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small">
-            <el-option v-for="item in ConcurrentList" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-          <span v-text="getConcurrentstr(scope.row)"></span>
+            <el-select v-model="scope.row.pulsetype" :placeholder="$t('edge.common.select')" size="small">
+              <el-option
+                v-for="item in pulseTypeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <span>{{getPulsetypestr(scope.row.pulsetype)}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.operation')" width="100">
@@ -162,7 +173,7 @@
 import Tankuang from '@/components/Tankuang'
 import PedTankuang from '@/components/PedTankuang'
 import { mapState } from 'vuex'
-import { images, pedimages } from './utils.js'
+import { getPhase, pedimages } from './utils.js'
 
 const clickoutside = {
   // 初始化指令
@@ -218,6 +229,19 @@ export default {
       }, {
         label: this.$t('edge.phase.pedestrianonly'),
         value: 2
+      }],
+      pulseTypeList: [{
+        label: this.$t('edge.phase.sendpedestriansvehiclepulse'),
+        value: 0
+      }, {
+        label: this.$t('edge.phase.sendvehiclepulse'),
+        value: 1
+      }, {
+        label: this.$t('edge.phase.sendpedestrianpulse'),
+        value: 2
+      }, {
+        label: this.$t('edge.phase.offpulse'),
+        value: 3
       }]
     }
   },
@@ -235,6 +259,7 @@ export default {
   computed: {
     imgs () {
       let arrays = []
+      let images = getPhase()
       images.forEach(v => {
         let obj = Object.assign({}, v)
         obj.name = this.$t(obj.name)
@@ -441,6 +466,15 @@ export default {
       }
       return ''
     },
+    getPulsetypestr (val) {
+      if (val !== undefined) {
+        let choosed = this.pulseTypeList.filter(ele => ele.value === val)
+        if (choosed.length) {
+          return choosed[0].label
+        }
+      }
+      return ''
+    },
     getControlTypestr (val) {
       if (val.controltype !== undefined) {
         return this.controlTypeList.filter(ele => ele.value === val.controltype)[0].label
@@ -623,9 +657,9 @@ body {
 .tb-edit .current-row .el-popover {
     display: block;
 }
-.tb-edit .current-row .el-popover + span {
+/* .tb-edit .current-row .el-popover + span {
     display: none;
-}
+} */
 .showSpan {
   display: block;
 }

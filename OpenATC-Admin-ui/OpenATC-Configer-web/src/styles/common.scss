@@ -920,6 +920,66 @@ border: 1px solid $--border-color-base;
    zoom: 0.25;
  }
 }
+// 手动控制弹框
+.manual-control-modal{
+  padding: 21px 0px 21px 28px;
+  .title {
+    margin-bottom: 24px;
+    font-size: 20px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    line-height: 22px;
+    color: $--color-text-primary;
+  }
+  .model-label {
+    line-height: 14px;
+    margin-top: 4px;
+  }
+  .stage-label {
+    margin-top: 36px;
+  }
+  .footer {
+    float: right;
+    margin: 38px 24px 40px 0;
+  }
+  .el-form-item {
+    margin-bottom: 10px;
+  }
+  .el-form-item__label {
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: $--color-text-secondary;
+  }
+  .el-dialog__footer {
+    padding: 10px 72px 38px 0;
+  }
+  .el-dialog__header {
+    padding: 19px 30px;
+  }
+  .el-select {
+    width: 75px;
+  }
+  .el-input {
+    width: 50%;
+  }
+  .footer {
+    button {
+      width: 56px;
+      height: 32px;
+      padding: 0;
+      text-align: center;
+      line-height: 30px;
+      font-family: MicrosoftYaHei;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+    }
+  }
+  .model-label, .stage-label {
+    color: $--color-text-secondary;
+  }
+} 
 .main-statgestatus {
   position: relative;
 }
@@ -1607,4 +1667,57 @@ color: $--color-text-secondary;
   color: $--color-primary;
   cursor: pointer;
 }
+}
+
+// 关于弹窗
+.versioninfo {
+  .el-dialog__headerbtn .el-dialog__close {
+      color: $--color-white;
+  }
+  .el-dialog__header {
+      padding: 50px 30px 10px;
+      height: 109px;
+      background-color: $--color-primary;
+      border-radius: 4px 4px 0px 0p
+  }
+  .el-dialog__title {
+      width: 291px;
+      height: 38px;
+      margin-top: 40px;
+      font-family: MicrosoftYaHei;
+      font-size: 36px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 14px;
+      letter-spacing: 0px;
+      color: $--color-white;
+  }
+  .banben {
+      font-family: MicrosoftYaHei;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 14px;
+      letter-spacing: 0px;
+      color: $--color-text-regular;
+  }
+  .divider {
+      // width: 483px;
+      height: 1px;
+      margin-top: 15px;
+      background-color: #eeeeee;
+  }
+  .open-source {
+      margin-top: 25px;
+      font-family: MicrosoftYaHei;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 14px;
+      letter-spacing: 0px;
+      color: $--color-primary;
+  }
+  .agreement {
+      cursor: pointer;
+  }
 }
