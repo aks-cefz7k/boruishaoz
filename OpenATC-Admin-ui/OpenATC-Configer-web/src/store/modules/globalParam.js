@@ -19,16 +19,16 @@ const tscParam = {
   detectorList: [],
   pedestrainDetectorList: [],
   channellock: [],
-  customInfo: {
-    areaid: Number,
-    intersectionid: Number,
-    siteid: '',
-    selflearning: 0,
-    fixintersectioninfo: '',
-    commuport: 0,
-    commutype: '',
-    steptype: ''
-  },
+  // customInfo: {
+  //   areaid: Number,
+  //   intersectionid: Number,
+  //   siteid: '',
+  //   selflearning: 0,
+  //   fixintersectioninfo: '',
+  //   commuport: 0,
+  //   commutype: '',
+  //   steptype: ''
+  // },
   manualpanel: {
     mingreen: 15
   },
@@ -70,11 +70,11 @@ const Global = {
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
-      let customInfo = data.customInfo
-      data.customInfo = {
-        ...tscParam.customInfo,
-        ...customInfo
-      }
+      // let customInfo = data.customInfo
+      // data.customInfo = {
+      //   ...tscParam.customInfo,
+      //   ...customInfo
+      // }
       state.tscParam = JSON.parse(JSON.stringify(data))
     },
     SAVE_SINGLE_PARAM: (state, param) => {

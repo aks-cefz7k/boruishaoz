@@ -178,6 +178,7 @@ const zh = {
       'modelList9': '自适应控制',
       'modelList10': '无电缆协调',
       'modelList12': '行人过街',
+      'modelList13': '方案恢复过渡',
       'modelList19': '感应式行人过街',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
@@ -187,7 +188,7 @@ const zh = {
       'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！',
       'delay': '延迟时间',
       'duration': '持续时间',
-      'curModel': '当前方案',
+      'curModel': '控制方式',
       'curStage': '当前阶段',
       'responseTime': '请求耗时',
       'putTscControlError1': '不支持的控制方式',
@@ -269,7 +270,7 @@ const zh = {
       'lane': '车道',
       'operation': '操作',
       'deletetip': '确认删除此跟随相位？',
-      'mostdata': '最多只能创建16条数据!'
+      'mostdata': '最多只能创建40条数据!'
     },
     'pattern': {
       'property': '属性',

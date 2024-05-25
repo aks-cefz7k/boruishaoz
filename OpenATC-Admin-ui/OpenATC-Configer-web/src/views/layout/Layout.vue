@@ -98,23 +98,6 @@ export default {
         setIframdevid(agentId)
       }
     }
-    //  else { // 单机设备情况下，需要先创建一个设备
-    //   let deviceInfo = {}
-    //   if (this.$route.query.agentid === undefined) {
-    //     deviceInfo.agentid = '0'
-    //     setIframdevid('0')
-    //   } else {
-    //     deviceInfo.agentid = this.$route.query.agentid
-    //     setIframdevid(this.$route.query.agentid)
-    //   }
-    //   // deviceInfo.agentid = '0'
-    //   deviceInfo.protocol = this.$route.query.protocol
-    //   deviceInfo.ip = this.$route.query.IP
-    //   deviceInfo.port = this.$route.query.port
-    //   deviceInfo.type = 'asc'
-    //   this.$store.dispatch('SaveDevParams', deviceInfo)
-    //   this.addDevice(deviceInfo)
-    // }
   },
   methods: {
     handleClickOutside () {
@@ -128,18 +111,6 @@ export default {
         this.isload = true
       })
     }
-    // addDevice (deviceInfo) {
-    //   AddDevice(deviceInfo).then(res => {
-    //     if (!res.data.success) {
-    //       console.log(new Error(res.data.message))
-    //       this.$message({
-    //         message: res.data.message,
-    //         type: 'error',
-    //         duration: 1 * 1000
-    //       })
-    //     }
-    //   })
-    // }
   }
 }
 </script>
