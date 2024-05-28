@@ -178,6 +178,7 @@ const en = {
       'modelList9': 'Self-Adaption',
       'modelList10': 'Nocable Control',
       'modelList12': 'phasewalk',
+      'modelList13': 'Pattern Recovery',
       'modelList19': 'Inductive Pedestrian Crossing Control',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
@@ -271,7 +272,7 @@ const en = {
       'operation': 'Operation',
       'add': 'Add overlap',
       'deletetip': 'Delete This Overlap?',
-      'mostdata': 'There are at most 16 data !'
+      'mostdata': 'There are at most 40 data !'
     },
     'pattern': {
       'property': 'Property',
