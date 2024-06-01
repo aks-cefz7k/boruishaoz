@@ -1670,7 +1670,7 @@ color: $--color-text-secondary;
 }
 
 // 关于弹窗
-.versioninfo {
+.edgeversioninfo {
   .el-dialog__headerbtn .el-dialog__close {
       color: $--color-white;
   }
@@ -1690,7 +1690,7 @@ color: $--color-text-secondary;
       font-stretch: normal;
       line-height: 14px;
       letter-spacing: 0px;
-      color: $--color-white;
+      color: #fff;
   }
   .banben {
       font-family: MicrosoftYaHei;
@@ -1705,7 +1705,7 @@ color: $--color-text-secondary;
       // width: 483px;
       height: 1px;
       margin-top: 15px;
-      background-color: #eeeeee;
+      background-color: $--border-color-light;
   }
   .open-source {
       margin-top: 25px;
