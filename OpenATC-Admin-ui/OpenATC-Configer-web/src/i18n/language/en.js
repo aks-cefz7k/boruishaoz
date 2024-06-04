@@ -303,7 +303,8 @@ const en = {
       'ringConfig': 'Ring Config',
       'stage': 'Stage',
       'phase': 'Phase',
-      'agentidError': '获取设备ID失败!'
+      'agentidError': 'Failed to get agentid!',
+      'splitCheckMsg': 'The green letter ratio must be greater than the phase transition time or the pedestrian crossing + pedestrian transition time!'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',

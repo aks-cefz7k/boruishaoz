@@ -301,7 +301,8 @@ const zh = {
       'ringConfig': '环配置',
       'stage': '阶段',
       'phase': '相位',
-      'agentidError': '获取设备ID失败!'
+      'agentidError': '获取设备ID失败!',
+      'splitCheckMsg': '绿信比需大于相位过渡时间或绿信比需大于行人过街+行人过渡时间!'
     },
     'plan': {
       'tipcontext': '请输入计划名！',

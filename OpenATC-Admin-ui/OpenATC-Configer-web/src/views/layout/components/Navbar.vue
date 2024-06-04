@@ -182,6 +182,7 @@ export default {
       overlapRules: false, // 判断跟随相位里的母相位是否为空
       manualpanelIsNull: false, // 判断手动面板数据是否为空
       deviceinfo: false, // 校验设备信息的规则
+      splitCheck: true,
       type: false,
       language: 'Language',
       loading: {},
@@ -707,6 +708,7 @@ export default {
       this.planPattern = false
       this.overlapRules = true
       this.deviceinfo = true
+      this.splitCheck = true
       this.checkPhaseRules()
       if (!this.phaseNotZero) {
         this.$message.error(
@@ -738,6 +740,10 @@ export default {
         this.$message.error(
           this.$t('edge.errorTip.patternNotZero')
         )
+        return false
+      }
+      if (!this.splitCheck) {
+        // this.$message.error(this.$t('edge.pattern.splitCheckMsg'))
         return false
       }
       this.checkDataRules()
@@ -873,9 +879,77 @@ export default {
     },
     checkPatternRules () {
       let patternList = this.globalParamModel.getParamsByType('patternList')
+      // let phaseList = this.globalParamModel.getParamsByType('phaseList')
       for (let i = 0; i < patternList.length; i++) {
         if (patternList[i].ring === 0) {
           break
+        // } else {
+        //   let ringsList = patternList[i].rings
+        //   for (let j = 0; j < ringsList.length; j++) {
+        //     let list = ringsList[j]
+        //     if (list && list.length > 0) {
+        //       for (let k = 0; k < list.length; k++) {
+        //         let ls = list[k]
+        //         let phase = phaseList.filter((item) => {
+        //           return item.id === ls.id
+        //         })[0]
+        //         if (!phase) {
+        //           continue
+        //         }
+        //         if (!phase.redyellow) {
+        //           phase.redyellow = 0
+        //         }
+        //         if (!phase.yellow) {
+        //           phase.yellow = 0
+        //         }
+        //         if (!phase.redclear) {
+        //           phase.redclear = 0
+        //         }
+        //         if (!phase.flashgreen) {
+        //           phase.flashgreen = 0
+        //         }
+        //         if (!phase.phasewalk) {
+        //           phase.phasewalk = 0
+        //         }
+        //         if (!phase.pedclear) {
+        //           phase.pedclear = 0
+        //         }
+        //         let temp1 = phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
+        //         let temp2 = phase.yellow + phase.redclear + phase.phasewalk + phase.pedclear
+        //         ls.minSplit = temp1 > temp2 ? temp1 : temp2
+        //         if (ls.mode !== 7 && ls.value < ls.minSplit) {
+        //           // ls.value = ls.minSplit
+        //           this.splitCheck = false
+        //           console.log('相位：', phase)
+        //           let phaseid = phase.id
+        //           let flashgreen = phase.flashgreen
+        //           let yellow = phase.yellow
+        //           let redclear = phase.redclear
+        //           let phasewalk = phase.phasewalk
+        //           let pedclear = phase.pedclear
+        //           let value = ls.value
+        //           let pattenid = i + 1
+        //           let msg1 = `相位[${phaseid}]的绿闪[${flashgreen}]+黄灯[${yellow}]+全红[${redclear}]时间之和大于方案[${pattenid}]中的相位配时[${value}]`
+        //           let msg2 = `相位[${phaseid}]的行人过街[${phasewalk}]+行人清空[${pedclear}]+黄灯[${yellow}]+全红[${redclear}]时间之和大于方案[${pattenid}]中的相位配时[${value}]`
+        //           if (this.$i18n.locale === 'en') {
+        //             msg1 = `In phase[${phaseid}], flashgreen[${flashgreen}]+ yellow[${yellow}]+ redclear[${redclear}] is longgger than pattern[${pattenid}]'s phase config time'[${value}]`
+        //             msg2 = `In phase[${phaseid}], phasewalk[${phasewalk}]+ pedclear[${pedclear}]+ yellow[${yellow}]+ redclear[${redclear}] is longgger than pattern[${pattenid}]'s phase config time[${value}]`
+        //           }
+        //           let msg = temp1 > temp2 ? msg1 : msg2
+        //           this.$message.error(msg)
+        //           break
+        //         }
+        //       }
+        //     }
+        //     if (!this.splitCheck) {
+        //       console.log('环：', list)
+        //       break
+        //     }
+        //   }
+        // }
+        // if (!this.splitCheck) {
+        //   console.log('方案', i)
+        //   break
         }
         this.patternNotZero = true
       }
