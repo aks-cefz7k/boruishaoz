@@ -260,6 +260,7 @@
 <script>
 import seeCutEffect from './components/seeCutEffect'
 import { uploadDeviceInfo, downloadDeviceInfo } from '@/api/param'
+import { getErrorMesZh, getErrorMesEn } from '../../utils/errorcode.js'
 export default {
   name: 'deviceinfo',
   components: {seeCutEffect},
@@ -403,10 +404,30 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
+          if (data.data.code === '4002') { // 信号机参数校验
+            let codeList = data.data.data.errorCode
+            if (codeList.length === 0) {
+              this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
+              return
+            }
+            let errorMes = this.$t('edge.common.downloaderror')
+            for (let code of codeList) {
+              if (this.$i18n.locale === 'en') {
+                errorMes = getErrorMesEn(errorMes, code)
+              } else {
+                errorMes = getErrorMesZh(errorMes, code)
+              }
+            }
+            this.$message({
+              message: errorMes,
+              type: 'error',
+              dangerouslyUseHTMLString: true
+            })
+            return
+          }
           this.$message.error(data.data.message)
           return
         }
-        // downloadTscParam(this.$store.state.user.name, tscParam)
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
       }).catch(error => {
         this.unlockScreen()
