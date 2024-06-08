@@ -28,6 +28,7 @@ import '@/permission' // permission control
 import './assets/icon/iconfont.css'
 // import '@/styles/common.scss'
 import './styles/index.scss'
+import animate from 'animate.css'
 
 import i18n from './i18n'
 
@@ -36,6 +37,9 @@ window.dev = process.env.NODE_ENV
 Vue.use(ElementUI, {
   locale
 })
+
+/* 使用动画库 */
+Vue.use(animate)
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = Echarts
