@@ -39,6 +39,7 @@ import i18n from './i18n'
 import VueKonva from 'vue-konva'
 import './mock'
 import { getTheme } from '@/utils/auth'
+import animate from 'animate.css'
 
 window.dev = process.env.NODE_ENV
 
@@ -52,6 +53,7 @@ Vue.use(Edgebase)
 Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)
 Vue.use(VueKonva)
+Vue.use(animate)
 Vue.config.productionTip = false
 
 if (getTheme() === 'dark') {
