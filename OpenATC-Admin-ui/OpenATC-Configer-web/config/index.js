@@ -24,6 +24,8 @@ module.exports = {
     proxyTable: {
       '/': {
         target:  'http://192.168.13.103:10003/openatc',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
+        // target:  'http://192.168.14.2:8012/openatc',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
+        // target:  'https://dolphin-test.kedacom.com/openatc',
         // target:  'http://192.168.13.103:9999',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
         // target:  'http://192.168.13.103:9999/kissapi',//'http://172.16.239.139:8080/',//设置你调用的接口域名和端口号
         changeOrigin: true,     //跨域

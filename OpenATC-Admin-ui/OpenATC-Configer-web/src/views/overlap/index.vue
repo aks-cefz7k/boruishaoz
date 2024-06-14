@@ -51,6 +51,18 @@
             </el-select>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.pulsetype')">
+        <template slot-scope="scope">
+            <el-select v-model="scope.row.pulsetype" :placeholder="$t('edge.common.select')" size="small">
+              <el-option
+                v-for="item in pulseTypeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+        </template>
+      </el-table-column>
 
       <el-table-column align="center" :label="$t('edge.overlap.operation')">
         <template slot-scope="scope">
@@ -65,7 +77,7 @@
 <script>
 import { getPhaseDesc } from '@/utils/phasedesc.js'
 import { mapState } from 'vuex'
-import { images, pedimages } from '../phase/utils.js'
+import { getPhase, pedimages } from '../phase/utils.js'
 import Tankuang from '@/components/Tankuang'
 import PedTankuang from '@/components/PedTankuang'
 export default {
@@ -86,7 +98,20 @@ export default {
       showBottomName: false, // 用于控制弹框里是否在底部显示文字描述。
       lines: 4, // 弹框的行数
       rows: 4, // 弹框的列数
-      showSpan: false
+      showSpan: false,
+      pulseTypeList: [{
+        label: this.$t('edge.phase.sendpedestriansvehiclepulse'),
+        value: 0
+      }, {
+        label: this.$t('edge.phase.sendvehiclepulse'),
+        value: 1
+      }, {
+        label: this.$t('edge.phase.sendpedestrianpulse'),
+        value: 2
+      }, {
+        label: this.$t('edge.phase.offpulse'),
+        value: 3
+      }]
     }
   },
   filters: {
@@ -102,6 +127,7 @@ export default {
   computed: {
     imgs () {
       let arrays = []
+      let images = getPhase()
       images.forEach(v => {
         let obj = Object.assign({}, v)
         obj.name = this.$t(obj.name)
@@ -231,7 +257,7 @@ export default {
         )
         return
       }
-      if (this.globalParamModel.getParamLength('overlaplList') >= 16) {
+      if (this.globalParamModel.getParamLength('overlaplList') >= 40) {
         this.$message.error(
           this.$t('edge.overlap.mostdata')
         )

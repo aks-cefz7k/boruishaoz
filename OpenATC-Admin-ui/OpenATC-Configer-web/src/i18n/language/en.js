@@ -85,6 +85,7 @@ const en = {
       'phone': 'Telephone',
       'email': 'Email',
       'changepass': 'Change Password',
+      'about': 'About',
       'exit': 'Exit',
       'options': 'options',
       'options1': 'All',
@@ -105,6 +106,7 @@ const en = {
       'protocoltype': 'Protocol',
       'signalID': 'Signal ID',
       'signalIP': 'Signal IP',
+      'faultinfo': 'Fault Information',
       'platform': 'platform',
       'online': 'Online',
       'offline': 'Offline',
@@ -114,7 +116,7 @@ const en = {
       'exitmanual': 'Exit Manual',
       'controlmodel': 'Control Pattern',
       'patternname': 'Pattern Name',
-      'controlnumber': 'Control Number',
+      'controlnumber': 'Control Num',
       'mode': 'Mode',
       'stage': 'Stage',
       'implement': 'Execute',
@@ -176,6 +178,7 @@ const en = {
       'modelList9': 'Self-Adaption',
       'modelList10': 'Nocable Control',
       'modelList12': 'phasewalk',
+      'modelList13': 'Pattern Recovery',
       'modelList19': 'Inductive Pedestrian Crossing Control',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
@@ -184,7 +187,16 @@ const en = {
       'transitioneffic': 'The execution is successful. It will take effect after the transition switch!',
       'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!',
       'delay': 'Delay time',
-      'duration': 'Duration'
+      'duration': 'Duration',
+      'curModel': 'Current Model',
+      'curStage': 'Current Stage',
+      'responseTime': 'Response Time',
+      'putTscControlError1': 'Unsupported control pattern',
+      'putTscControlError2': 'Control number not exist',
+      'putTscControlError3': 'Unsupported control params',
+      'putTscControlError4': 'Unable to execute because device is in initialization',
+      'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
+      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -208,7 +220,7 @@ const en = {
       'add': 'Add Phase',
       'deletetip': 'Delete This Phase ?',
       'deleteAlltip': 'Are you sure to delete all phases and patterns ?',
-      'mostdata': 'There are at most 16 data !',
+      'mostdata': 'There are at most 40 data !',
       'es': 'East-Straight',
       'el': 'East-Left',
       'er': 'East-Right',
@@ -246,7 +258,12 @@ const en = {
       'pedestrianthresh': 'Pedestrian waiting Threshold',
       'mainroad': 'main road',
       'bypass': 'by-pass',
-      'pedestrianonly': 'pedestrian only'
+      'pedestrianonly': 'pedestrian only',
+      'pulsetype': 'PulseType',
+      'offpulse': 'Turn off pedestrian and vehicle pulses',
+      'sendvehiclepulse': 'Send vehicle pulse',
+      'sendpedestrianpulse': 'Send pedestrian pulse',
+      'sendpedestriansvehiclepulse': 'Send pedestrians and vehicles pulses'
     },
     'overlap': {
       'desc': 'Description',
@@ -255,7 +272,7 @@ const en = {
       'operation': 'Operation',
       'add': 'Add overlap',
       'deletetip': 'Delete This Overlap?',
-      'mostdata': 'There are at most 16 data !'
+      'mostdata': 'There are at most 40 data !'
     },
     'pattern': {
       'property': 'Property',
@@ -286,7 +303,8 @@ const en = {
       'ringConfig': 'Ring Config',
       'stage': 'Stage',
       'phase': 'Phase',
-      'agentidError': '获取设备ID失败!'
+      'agentidError': 'Failed to get agentid!',
+      'splitCheckMsg': 'The green letter ratio must be greater than the phase transition time or the pedestrian crossing + pedestrian transition time!'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
@@ -454,7 +472,13 @@ const en = {
       'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
       'startOrderParams': 'Start Order Params ',
       'netcardInfo': 'Netcard Info: ',
-      'stepType': 'Step Type'
+      'stepType': 'Step Type',
+      'seeCutEffect': 'See Cut Detail',
+      'siteIdLimit': 'SiteId must be whithin 0 ~ 99999',
+      'siteIdCutEffect': 'SiteId Cut Detail',
+      'cutData': 'Cut Data',
+      'cutEffect': 'Cut Detail',
+      'longgerThan20': 'Data length is longger than 20 ！'
     },
     'singleoptim': {
       'deletetip': 'Sure to delete ？',
@@ -648,7 +672,8 @@ const en = {
     },
     'button': {
       'OK': 'OK',
-      'Cancel': 'Cancel'
+      'Cancel': 'Cancel',
+      'Back': 'Back'
     },
     'common': {
       'confirm': 'Confirm',
@@ -689,6 +714,7 @@ const en = {
       'commitandexecute': 'CommitAndExecute',
       'uploadsuccess': 'Upload Success!',
       'download': 'Download Success!',
+      'downloaderror': 'Download Error!',
       'downloadandrun': 'Submit and run successfully!',
       'editagentid': 'Edit AgentID',
       'querysucess': 'Query Success!',
@@ -704,7 +730,7 @@ const en = {
       'dialogtitle': 'Available authorizations',
       'username': 'User Name',
       'password': 'Password',
-      'locallogin': 'Local login',
+      'networkparam': 'Network parameters',
       'port': 'Port',
       'protocol': 'Protocol',
       'restoredefaultparameters': 'Restore default parameters',
@@ -786,6 +812,13 @@ const en = {
         'fifteenPhase': 'FifteenPhase',
         'sixteenPhase': 'SixteenPhase'
       }
+    },
+    'about': {
+      'version': 'Version',
+      'copyright': 'Copyright',
+      'company': 'KEDACOM',
+      'packedtime': 'Packed time',
+      'opensourceagreement': 'Opensource Agreement'
     }
   }
 }

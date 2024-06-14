@@ -27,3 +27,9 @@ export function getFault (broadid) {
   }
   return api.Send({}, data)
 }
+
+// 通过ftp的方式获取信号机上的历史故障数据
+export function getFaultHistoryByFtp (reqData) {
+  let api = new Authapi('getFaultHistoryByFtp')
+  return api.Send({}, reqData)
+}

@@ -18,6 +18,10 @@ import router from '@/router'
 import {
   setToken
 } from '@/utils/auth'
+import {
+  setStorage,
+  getStorage
+} from '../../lib/publicjs/localStorage.js'
 
 export function OnLoginSucess (token) {
   if (token !== undefined) {
@@ -39,7 +43,28 @@ export function OnLoginFailed (error) {
   }
 }
 
+// 存储登陆信息
+export const setLoginInfo = (info) => {
+  let logininfo = {
+    user_name: info.user_name,
+    ip: info.ip,
+    port: info.port,
+    protocol: info.protocol
+  }
+  return setStorage('logininfo', JSON.stringify(logininfo))
+}
+// 从缓存中获取登陆信息
+export const getLoginInfo = () => {
+  let info = getStorage('logininfo')
+  if (info === '' || info === null || info === undefined || info === 'undefined') {
+    return undefined
+  }
+  return info
+}
+
 export default {
   loginSucess: OnLoginSucess,
-  loginFailed: OnLoginFailed
+  loginFailed: OnLoginFailed,
+  setLoginInfo,
+  getLoginInfo
 }

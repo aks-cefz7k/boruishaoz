@@ -140,7 +140,7 @@
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
-            <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
+            <StageStatus style="margin-top: 10px;" :patternStatusList="stageStatusList"></StageStatus>
             <PatternStatus style="margin-top: 30px;"
                           :cycle="crossStatusData ? crossStatusData.cycle : 0"
                           :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
@@ -149,71 +149,74 @@
           </div>
         </div>
         <div class="tuxing-right" v-if="!graphicMode">
-          <div class="cross-mess">{{$t('edge.overview.crossinfo')}}</div>
-          <div class="cross-module">
-            <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
-            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
-              <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
-              <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
-              <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
-            </div>
-            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div>
-            <!-- <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
-            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
-            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
-            <div style="margin-top: 5px; margin-left: 5px;" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
-          </div>
-          <div style="margin-top: 170px;"><div class="cross-mess" style="float: left;margin-top: 5px;">{{$t('edge.overview.controlmode')}}</div>
-            <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="!isOperation">{{$t('edge.overview.manual')}}</el-button>
-            <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button>
-          </div>
-          <div class="cross-module">
-            <div style="margin-top: 10px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
-            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
-            <div style="margin-top: 5px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
-              <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
-              <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempPatternid" size="mini" :placeholder="$t('edge.common.select')"></el-input></div>
-            </div>
+          <transition mode="out-in" name="custom"
+          enter-active-class="animated fadeInRight"
+          leave-active-class="animated fadeOutRight">
+            <ManualControlModal v-show="isOperation"
+              :controlData="controlData"
+              :modelList="modelList"
+              :stagesList="stagesList"
+              :currModel="currModel"
+              :preselectModel="preselectModel"
+              :currentStage="currentStage"
+              :preselectStages="preselectStages"
+              @closeManualModal="closeManualModal"
+              @selectModel="selectModel"
+              @selectStages="selectStages"
+              @patternCommit="patternCommit" />
+          </transition>
 
-            <div style="margin-top: 7px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
-              <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
-              <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempDelay" size="mini" :placeholder="$t('edge.common.input')"></el-input></div>
+          <!-- <transition mode="out-in" name="custom"
+          enter-active-class="animated fadeIn"> -->
+          <div v-show="!isOperation && isdalayshow">
+            <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
+            <div class="cross-module">
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+                <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
+                <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
+                <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
+              </div>
+              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div> -->
+              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
+              <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
             </div>
-
-            <div style="margin-top: 7px; margin-left: 5px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
-              <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
-              <div style="margin-left: 85px;" class="cross-value" v-show="isOperation"><el-input v-model="tempDuration" size="mini" :placeholder="$t('edge.common.input')"></el-input></div>
+            <div class="control-bottom">
+              <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
+              <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
+              <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
             </div>
+            <div class="cross-module">
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
+                <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
+              </div>
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
+                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
+              </div>
 
-            <div style="margin-top: 15px; margin-left: 5px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.mode')}}:</div></div>
-            <div style="padding-left: 15px; width: 100%; overflow: hidden;">
-              <div class="control-model" v-for="(item, index) in modelList" :key="index">
-                <div :class="currModel===item.id ? 'single-model-select' : 'single-model'"
-                @click="selectModel(item.id)"
-                :style="preselectModel == item.id ? 'border: solid 1px #409eff;' : ''"
-                v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
-                <!-- <div :class="currModel===item.id ? 'single-model-select' : (preselectModel == item.id ? 'single-model-preselect' : 'single-model')" @click="selectModel(item.id)"> -->
-                  <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
-                  <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
-                </div>
+              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
+                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
+              </div>
+
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
+                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
+              </div> -->
+
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
+                <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
+              </div>
+
+              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
+                <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
               </div>
             </div>
-            <div style="margin-left: 5px; margin-top: 15px; width: 100%; height: 22px;"><div style="float: left;" class="cross-name">{{$t('edge.overview.stage')}}:</div></div>
-            <!-- <div style="margin-top: 150px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation"><div style="float: left;" class="cross-name">阶段（驻留）:</div></div> -->
-            <div style="padding-left: 15px; width: 100%; height: auto;">
-              <div class="control-model" v-for="(item, index) in stagesList" :key="index">
-                <div :class="currentStage===index + 1 ? 'single-model-select' : 'single-model'" @click="selectStages(index + 1)" :style="preselectStages == index + 1 ? 'border: solid 1px #409eff;' : ''">
-                  <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
-                  <div class="current-stage-num">{{index + 1}}</div>
-                </div>
-              </div>
-            </div>
-            <div style="margin-top: 100px; margin-left: 5px; width: 100%; height: 22px;" v-show="isOperation">
-              <div style="float: left;">
-                <el-button style="margin-left: 12px;" type="primary" size="mini" @click="patternCommit">{{$t('edge.overview.implement')}}</el-button>
-              </div>
-            </div>
           </div>
+        <!-- </transition> -->
         </div>
       </div>
     </div>
@@ -229,9 +232,9 @@ import FloatImgBtn from '@/components/FloatImgBtn'
 import CrossDiagram from './crossDirection/crossDiagram'
 import PatternStatus from '@/components/PatternStatus'
 import StageStatus from '@/components/StageStatus'
-import xdrdirselector from '@/components/XRDDirSelector'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
+import ManualControlModal from './manualControlModal'
 export default {
   name: 'overview',
   components: {
@@ -239,9 +242,9 @@ export default {
     CrossDiagram,
     PatternStatus,
     StageStatus,
-    xdrdirselector,
     CurVolume,
-    CurPhase
+    CurPhase,
+    ManualControlModal
   },
   data () {
     return {
@@ -286,15 +289,16 @@ export default {
       registerMessageTimer: null, // 延时器
       volumeControlTimer: null, // 流量定时器
       ParamsMap: new Map([['控制模式', 'mode'], ['周期', 'cycle'], ['控制方式', 'control'], ['相位差', 'offset'], ['当前时间', 'curTime'], ['剩余时间', 'syncTime']]),
-      ParamsMode: new Map([[0, '系统控制'], [1, '平台控制'], [2, '配置工具控制'], [3, '手动面板控制']]),
-      ParamsModeEn: new Map([[0, 'System Control'], [1, 'Platform Control'], [2, 'Configuration Control'], [3, 'Manual Panel Control']]),
-      ParamsControl: new Map([[0, '自主控制'], [1, '黄闪'], [2, '全红'], [3, '关灯'], [4, '步进'], [5, '定周期控制'], [6, '单点感应控制'], [7, '协调感应控制'], [8, '方案选择控制'], [9, '自适应控制'], [10, '无电缆控制'], [11, '有电缆控制'], [12, '行人过街控制']]),
-      ParamsControlEn: new Map([[0, 'Auto Control'], [1, 'Yellow Flash Control'], [2, 'Red Control'], [3, 'Dark Control'], [4, 'Step'], [5, 'Fixed_Cycle Control'], [6, 'Free Control'], [7, 'Coordinated Induction Control'], [8, 'Pattern Selection Control'], [9, 'Adaptive Control'], [10, '无电缆控制'], [11, 'Cable Control'], [12, 'Pedestrian Crossing Control']]),
+      ParamsMode: new Map([[0, '自主控制'], [1, '本地手动'], [2, '系统控制'], [3, '配置软件控制'], [4, '遥控器控制'], [5, '黄闪器触发']]),
+      ParamsModeEn: new Map([[0, 'Autonomous Control'], [1, 'Local Manual'], [2, 'System Control'], [3, 'Configuration Software Control'], [4, 'Remote Control'], [5, 'Yellow Flasher Trigger']]),
+      ParamsControl: new Map([[0, '自主控制'], [1, '黄闪'], [2, '全红'], [3, '关灯'], [4, '步进'], [5, '定周期控制'], [6, '单点感应控制'], [7, '协调感应控制'], [8, '方案选择控制'], [9, '自适应控制'], [10, '无电缆控制'], [11, '有电缆控制'], [12, '行人过街控制'], [13, '方案恢复过渡']]),
+      ParamsControlEn: new Map([[0, 'Auto Control'], [1, 'Yellow Flash Control'], [2, 'Red Control'], [3, 'Dark Control'], [4, 'Step'], [5, 'Fixed_Cycle Control'], [6, 'Free Control'], [7, 'Coordinated Induction Control'], [8, 'Pattern Selection Control'], [9, 'Adaptive Control'], [10, '无电缆控制'], [11, 'Cable Control'], [12, 'Pedestrian Crossing Control'], [13, 'Pattern recovery']]),
       phaseType: new Map([[1, '红'], [2, '黄'], [3, '绿']]), // phaseType表示红，黄，绿
       phaseTypeEn: new Map([[1, 'Red'], [2, 'Yellow'], [3, 'Green']]), // phaseType表示红，黄，绿
       ip: '--',
       port: '--',
       protocol: '--',
+      faultArr: [], // 故障信息
       devStatus: 1,
       mode: '2',
       loading: {},
@@ -349,9 +353,10 @@ export default {
       crossStatusData: null, // 路口状态数据
       reset: false,
       currentStage: 0,
+      responseTime: 0,
       stagesList: [],
       isOperation: false, // 是否为手动可操作状态
-      controlHeight: 430,
+      isdalayshow: true,
       showList: [{
         iconClass: 'model',
         name: '控制模式',
@@ -393,11 +398,22 @@ export default {
       tempDuration: 0, // 控制方式手动操作的情况下的持续时间的临时值。
       phaseList: [], // 当前相位集合
       patternStatusList: [], // 显示方案状态的相关数据集合
+      stageStatusList: [], // 实时阶段状态的相关数据集合
       barrierList: [], // 方案状态中屏障的数据集合
       intervalFlag: true,
       shrink: 1,
       basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
-      isResend: true
+      isResend: true,
+      faultCodeMap: new Map([[101, 'can总线通信故障'], [102, '黄闪器故障'], [103, '特征参数故障'], [104, '故障检测板不在线'], [105, '继电器未吸合'], [201, '灯控板ID故障'], [202, '灯控板脱机'], [203, '无红灯亮起'], [204, '红绿同亮'], [205, '绿冲突'], [206, '红灯灯电压故障'], [207, '黄灯灯电压故障'], [208, '绿灯灯电压故障'], [209, '红灯灯功率故障'], [210, '黄灯灯功率故障'], [211, '绿灯灯功率故障'], [212, '灯组故障'], [213, '车检器故障'], [214, '灯控板插槽编码错误'], [215, '灯控板插头编码错误'], [216, '本机灯控板数量未配置'], [301, '车检板未初始化'], [302, '车检板脱机'], [303, '车辆检测器短路'], [304, '车辆检测器断路'], [401, 'I/O板未初始化'], [402, 'I/O板脱机']]),
+      faultCodeMapEn: new Map([[101, 'CanBus Fault'], [102, 'Yellow Flasher Fault'], [103, 'TZParam Fault'], [104, 'FaultDet Offline'], [105, 'Relay Not Work'], [201, 'LampBoard ID Fault'], [202, 'LampBoard Offline'], [203, 'No Red Lamp Is On'], [204, 'Red And Green Conflict'], [205, 'Green Conflict'], [206, 'Red Lamp Voltage Fault'], [207, 'Yellow Lamp Voltage Fault'], [208, 'Green Lamp Voltage Fault'], [209, 'Red Lamp Lamp Power Fault'], [210, 'Yellow Lamp Lamp Power Fault'], [211, 'Green Lamp Lamp Power Fault'], [212, 'Lamp pack failure'], [213, 'Car detector failure'], [214, 'Lamp Control Board Slot Code Error'], [215, 'Code Error Of Lamp Control Board Plug'], [216, 'The Number Of Lamp Control Board Not be Configed for The Master'], [301, 'VehDetBoard Is Not Init'], [302, 'VehDetBoard Is Offline'], [303, 'VehDetector Short Circiut'], [304, 'VehDetector Open  Circiut'], [401, 'I/O Board Is Not Init'], [402, 'I/O Board Offline']]),
+      TZParamSubtypeMap: new Map([[0, ''], [1, '特征参数不存在'], [2, '特征参数文件不可读'], [3, '特征参数人为修改'], [4, '特征参数文件打开失败'], [5, '特征参数文件更新失败'], [6, '信号机地址码校验失败'], [7, '特征参数内容格式错误'], [8, 'USB挂载失败']]),
+      TZParamSubtypeMapEn: new Map([[0, ''], [1, 'Non-existent'], [2, 'File Is Unreadable'], [3, 'File Artificial Changes'], [4, 'File Open Fail'], [5, 'File Update Fail'], [6, 'File Check SiteID Fail'], [7, 'Format Error'], [8, 'USB Mount Fail']]),
+      greenLampSubtypeMap: new Map([[0, ''], [1, '未输出有效电压'], [2, '输出电压低于输入电压过多'], [3, '输出电压高于输入电压'], [4, '关闭输出但实际电压仍然输出'], [5, '关闭输出但实际电压部分输出'], [6, '线路残留电压过高']]),
+      greenLampSubtypeMapEn: new Map([[0, ''], [1, 'Output Volatage Is Fail'], [2, 'Output Volatage Is Low'], [3, 'Output Volatage Is High'], [4, 'Off Output Volatage Is high'], [5, 'Off Output Volatage Is low'], [6, 'Residual Voltage Is Over-High']]),
+      lampPowerSubtypeMap: new Map([[0, ''], [1, '功率异常增加'], [2, '功率异常减少'], [3, '功率无输出'], [4, '关闭状态有功率输出']]),
+      lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']]),
+      LampGroupSubtypeMap: new Map([[0, ''], [1, '红灯故障'], [2, '黄灯故障'], [3, '绿灯故障']]),
+      LampGroupSubtypeMapEn: new Map([[0, ''], [1, 'Red Lamp Fault'], [2, 'Yellow Lamp Fault'], [3, 'Green Lamp Fault']])
     }
   },
   computed: {
@@ -439,6 +455,8 @@ export default {
       this.resetCrossDiagram()
       this.registerMessage() // 注册消息
     } else {
+      // setIframdevid('23080400311210000088')
+      // setIframdevid('8011')
       this.queryDevParams() // 查询设备信息
     }
     // this.registerMessage() // 注册消息
@@ -525,6 +543,9 @@ export default {
         this.ip = newRes.ip
         this.port = newRes.port
         this.protocol = newRes.protocol
+        if (newRes.fault) {
+          this.faultArr = this.getFaultMes(newRes.fault)
+        }
         this.clearPatternInterval() // 清除其他定时器
         this.clearVolumeInterval()
         this.phaseControlTimer = setInterval(() => {
@@ -539,6 +560,45 @@ export default {
         }, 300000)
         this.getPhase()
       })
+    },
+    getFaultMes (codeList) {
+      let faultArr = []
+      for (let data of codeList) {
+        let strArr = []
+        if (this.$i18n.locale === 'en') {
+          if (data[0] === 103) {
+            strArr[1] = this.TZParamSubtypeMapEn.get(data[1])
+          } else if (data[0] === 208 || data[0] === 207 || data[0] === 206) {
+            strArr[1] = this.greenLampSubtypeMapEn.get(data[1])
+          } else if (data[0] === 211 || data[0] === 210 || data[0] === 209) {
+            strArr[1] = this.lampPowerSubtypeMapEn.get(data[1])
+          } else if (data[0] === 212) {
+            strArr[1] = this.LampGroupSubtypeMapEn.get(data[1])
+          } else {
+            strArr[1] = ''
+          }
+          strArr[0] = this.faultCodeMapEn.get(data[0])
+        } else {
+          if (data[0] === 103) {
+            strArr[1] = this.TZParamSubtypeMap.get(data[1])
+          } else if (data[0] === 208 || data[0] === 207 || data[0] === 206) {
+            strArr[1] = this.greenLampSubtypeMap.get(data[1])
+          } else if (data[0] === 211 || data[0] === 210 || data[0] === 209) {
+            strArr[1] = this.lampPowerSubtypeMap.get(data[1])
+          } else if (data[0] === 212) {
+            strArr[1] = this.LampGroupSubtypeMap.get(data[1])
+          } else {
+            strArr[1] = ''
+          }
+          strArr[0] = this.faultCodeMap.get(data[0])
+        }
+        if (data[1] !== 0) {
+          faultArr.push(`${strArr[0]}--${strArr[1]}`)
+        } else {
+          faultArr.push(`${strArr[0]}`)
+        }
+      }
+      return faultArr
     },
     reSend () { // 设备掉线重连机制
       this.devStatus = 1
@@ -567,7 +627,11 @@ export default {
     },
     initData () {
       this.intervalFlag = false
+      let startTime = new Date().getTime()
       getTscControl(this.agentId).then((data) => {
+        let endTime = new Date().getTime()
+        let diffTime = endTime - startTime
+        this.responseTime = diffTime
         this.intervalFlag = true
         if (!data.data.success) {
           if (data.data.code === '4003') {
@@ -595,6 +659,7 @@ export default {
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
         this.handlePatternData() // 计算方案状态展示数据
+        this.getStageStatusData()
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
         // this.handlePatternData() // 计算方案状态展示数据
@@ -854,45 +919,33 @@ export default {
       }
     },
     changeStatus () {
-      if (!this.isOperation) {
-        this.$route.params.flag = true
-        this.isOperation = !this.isOperation
-        this.controlHeight = 480
-        this.tempPatternid = this.controlData.patternid
-        this.tempDelay = this.controlData.delay
-        this.tempDuration = this.controlData.duration
+      this.isOperation = true
+      if (this.modelList.filter(ele => ele.id === 0).length === 0) {
         let autonomyControl = {
           id: 0,
           iconClass: 'zizhukongzhi',
           iconName: '自主控制'
         }
         this.modelList.push(autonomyControl)
-      } else {
-        this.$confirm(this.$t('edge.overview.exitmanul'), this.$t('edge.overview.tips'), {
-          confirmButtonText: this.$t('edge.button.OK'),
-          cancelButtonText: this.$t('edge.button.Cancel'),
-          type: 'warning'
-        }).then(() => {
-          this.$route.params.flag = false
-          this.isOperation = !this.isOperation
-          this.controlHeight = 380
-          this.preselectModel = -1
-          this.preselectStages = -1
-          this.tempPatternid = 0
-          this.tempDelay = 0
-          this.tempDuration = 0
-          this.modelList = this.modelList.filter((item) => {
-            return item.id !== 0
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: this.$t('edge.overview.canceled')
-          })
-        })
       }
     },
-    patternCommit () {
+    closeManualModal () {
+      this.isOperation = false
+      this.preselectModel = -1
+      this.preselectStages = -1
+      this.tempPatternid = 0
+      this.tempDelay = 0
+      this.tempDuration = 0
+      this.modelList = this.modelList.filter((item) => {
+        return item.id !== 0
+      })
+      // 让前一个面板在当前面板动画播放完成后，延迟1.1s显示，否则会样式乱掉
+      this.isdalayshow = false
+      setTimeout(() => {
+        this.isdalayshow = true
+      }, 1100)
+    },
+    patternCommit (manualInfo) {
       let that = this
       this.lockScreen()
       let control = {}
@@ -902,25 +955,35 @@ export default {
         }
       })
       control.control = that.preselectModel === -1 ? that.currModel : that.preselectModel
-      control.terminal = Number(that.tempPatternid)
-      control.delay = Number(that.tempDelay)
-      control.duration = Number(that.tempDuration)
+      control.terminal = Number(manualInfo.tempPatternid)
+      control.delay = Number(manualInfo.tempDelay)
+      control.duration = Number(manualInfo.tempDuration)
       control.value = that.preselectStages === -1 ? 0 : that.preselectStages
       putTscControl(control).then(data => {
         that.unlockScreen()
+        let success = 0
         if (!data.data.success) {
           that.$message.error(data.data.message)
           return
+        } else {
+          success = data.data.data.data.success
+          if (success !== 0) {
+            let errormsg = 'edge.overview.putTscControlError' + success
+            that.$message.error(this.$t(errormsg))
+          }
         }
+        // this.closeManualModal()
         if ((that.currModel === 5 || that.currModel === 6 || that.currModel === 10 || that.currModel === 12) && (that.preselectModel === 6 || that.preselectModel === 10 || that.preselectModel === 12)) {
-          that.$alert(this.$t('edge.overview.nextcycleeffic'), { type: 'success' })
+          that.$message.success(this.$t('edge.overview.nextcycleeffic'))
           return
         }
         if (that.preselectModel === 4) {
-          that.$alert(this.$t('edge.overview.transitioneffic'), { type: 'success' })
+          that.$message.success(this.$t('edge.overview.transitioneffic'))
           return
         }
-        that.$alert(that.$t('edge.common.download'), { type: 'success' })
+        if (success === 0) {
+          that.$message.success(this.$t('edge.common.download'))
+        }
       }).catch(error => {
         that.unlockScreen()
         that.$message.error(error)
@@ -1015,6 +1078,41 @@ export default {
         this.patternStatusList.push(list)
       }
       this.handleBarrier(this.patternStatusList, this.phaseList)
+    },
+    getStageStatusData () {
+      this.stageStatusList = []
+      this.barrierList = []
+      if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
+      if (!this.controlData.phase) return
+      let cycle = this.controlData.cycle
+      console.log(this.controlData)
+      // debugger
+      for (let rings of this.controlData.rings) {
+        let list = []
+        let phase = this.controlData.phase
+        for (let sequ of rings.sequence) {
+          let obj = {}
+          obj.id = sequ
+          let split = phase.filter((item) => {
+            return item.id === sequ
+          })[0].split
+          let currPhase = this.phaseList.filter((item) => {
+            return item.id === sequ
+          })[0]
+          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
+          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
+          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
+          obj.split = split
+          obj.direction = currPhase.direction.map(item => {
+            return {
+              id: item,
+              color: '#454545'
+            }
+          })
+          list.push(obj)
+        }
+        this.stageStatusList.push(list)
+      }
     },
     handleBarrier (patternStatusList, phaseList) {
       if (patternStatusList.length < 2) return
