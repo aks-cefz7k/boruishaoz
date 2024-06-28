@@ -223,10 +223,6 @@ export default {
         value: 'peddetecter',
         // label: '行人检测器'
         label: '9'
-      }, {
-        value: 'devinfo',
-        // label: '设备信息'
-        label: '10'
       }],
       value: 'all',
       notify: undefined, // 用于判断关闭多个显示的提示框

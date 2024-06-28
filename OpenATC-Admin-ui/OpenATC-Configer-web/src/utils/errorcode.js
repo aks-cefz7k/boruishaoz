@@ -17,7 +17,7 @@ let errorCodeMap = new Map([
   [301, '方案数量超出限值'],
   [302, '相位差应小于周期时间'],
   [303, '环内配置未知相位'],
-  [304, '绿信比应大于相位的最小绿+黄灯+全红'],
+  [304, '绿信比应大于相位的最小绿+绿闪+黄灯+全红'],
   [401, '计划数量超出限值'],
   [402, '控制方式不存在'],
   [403, '时段数量超出限值'],
@@ -26,6 +26,7 @@ let errorCodeMap = new Map([
   [406, '时间顺序配置错误'],
   [407, '计划中配置未知方案'],
   [408, '计划中方案未配置'],
+  [409, '存在未配置的计划'],
   [501, '调度计划数量超出限值'],
   [502, '月份超出限值'],
   [503, '星期超出限值'],
@@ -63,6 +64,7 @@ let errorCodeMap = new Map([
   [913, '手动面板Y3自定义按键通道绿冲突'],
   [914, '手动面板Y4自定义按键通道绿冲突'],
   [915, '手动面板参数持续时间应不小于最小绿时间'],
+  [1003, '通道锁定时段数量超出限值'],
   [1101, 'MD5码值校验失败'],
   [1102, '特征参数同步失败'],
   [1103, '参数JSON格式解析错误'],
@@ -71,6 +73,7 @@ let errorCodeMap = new Map([
   [2003, '信号机地址码配置错误'],
   [2004, '参数JSON格式解析错误'],
   [2005, '设备参数同步失败'],
+  [2006, '设备参数同步失败'],
   [3001, 'U盘挂载失败'],
   [3002, '未找到U盘']
 ])
@@ -94,7 +97,7 @@ let errorCodeMapEn = new Map([
   [301, 'The number of schemes exceeds the limit'],
   [302, 'The phase difference should be less than the cycle time'],
   [303, 'Unknown phase configuration in the ring'],
-  [304, 'The green time ratio should be longer than the minimum phase green + yellow light + all red'],
+  [304, 'The green time ratio should be longer than the minimum phase green + green clear + yellow light + all red'],
   [401, 'The number of plans exceeds the limit'],
   [402, 'Control mode does not exist'],
   [403, 'The periods number exceeds the limit'],
@@ -103,6 +106,7 @@ let errorCodeMapEn = new Map([
   [406, 'Time sequence configuration error'],
   [407, 'Unknown scheme is configured in the plan'],
   [408, 'The plan is not configured'],
+  [409, 'Exist an unconfigured plan'],
   [501, 'The number of scheduling plans exceeds the limit'],
   [502, 'The month exceeds the limit'],
   [503, 'The week exceeds the limit'],
@@ -140,6 +144,7 @@ let errorCodeMapEn = new Map([
   [913, 'Manual panel Y3 custom button channel green conflict'],
   [914, 'Manual panel Y4 custom button channel green conflic'],
   [915, 'Duration of Manual panel parameters duration shall not be less than the minimum green'],
+  [1003, 'The number of channel lock periods exceeds the limit'],
   [1101, 'MD5 code value verification failed'],
   [1102, 'Feature parameters synchronization failed'],
   [1103, 'Parsing error of parameters JSON format'],
@@ -148,6 +153,7 @@ let errorCodeMapEn = new Map([
   [2003, 'Address code configuration error of signal machine'],
   [2004, 'Parsing error of parameters JSON format'],
   [2005, 'Device parameters synchronization failed'],
+  [2006, 'Signal configuration illegal network card information'],
   [3001, 'USB disk mount failed'],
   [3002, 'USB disk not found']
 ])
@@ -156,10 +162,12 @@ function getErrorMesEn (errorMes, code) {
   let errorstr = errorMes
   if (code[0] === 305) {
     errorstr = errorstr + '</br>' + 'There is an intra-ring phase concurrency conflict in scheme' + code[1]
-  } else if (code[0] === 1005) {
+  } else if (code[0] === 1001) {
     errorstr = errorstr + '</br>' + 'Time period' + code[1] + 'channel lock state conflict'
-  } else if (code[0] === 1006) {
+  } else if (code[0] === 1002) {
     errorstr = errorstr + '</br>' + 'The control source of the locked channel in period' + code[1] + ' is not ignored'
+  } else if (code[0] === 1004) {
+    errorstr = errorstr + '</br>' + 'Time period' + code[1] + 'Channels other than Lane lights are configured with channel lock status'
   } else if (errorCodeMapEn.get(code[0])) {
     errorstr = errorstr + '</br>' + errorCodeMapEn.get(code[0])
   } else {
@@ -172,10 +180,12 @@ function getErrorMesZh (errorMes, code) {
   let errorstr = errorMes
   if (code[0] === 305) {
     errorstr = errorstr + '</br>' + '方案' + code[1] + '中存在环内相位并发冲突'
-  } else if (code[0] === 1005) {
+  } else if (code[0] === 1001) {
     errorstr = errorstr + '</br>' + '时段' + code[1] + '通道状态锁定冲突'
-  } else if (code[0] === 1006) {
+  } else if (code[0] === 1002) {
     errorstr = errorstr + '</br>' + '时段' + code[1] + '锁定通道的控制源未被忽略'
+  } else if (code[0] === 1004) {
+    errorstr = errorstr + '</br>' + '时段' + code[1] + '车道灯以外的通道配置了通道锁定状态'
   } else if (errorCodeMap.get(code[0])) {
     errorstr = errorstr + '</br>' + errorCodeMap.get(code[0])
   } else {

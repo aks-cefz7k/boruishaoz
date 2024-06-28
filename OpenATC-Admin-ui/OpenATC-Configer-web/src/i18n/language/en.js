@@ -96,8 +96,7 @@ const en = {
       'options6': 'Date',
       'options7': 'Channel',
       'options8': 'Detector',
-      'options9': 'PedestrianDetector',
-      'options10': 'Deviceinfo'
+      'options9': 'PedestrianDetector'
     },
     'overview': {
       'crossinfo': 'Cross Information',
@@ -282,7 +281,7 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Pattern?',
       'firstphase': 'Please create phase first !',
-      'mostdata': 'There are at most 108 data !',
+      'mostdata': 'There are at most 32 data !',
       'ring': 'Ring',
       'modeOption1': 'Other',
       'modeOption2': 'None',
@@ -338,7 +337,7 @@ const en = {
       'plan': 'Plan',
       'operation': 'Operation',
       'deletetip': 'Delete This Date?',
-      'mostdata': 'There are at most 255 data !'
+      'mostdata': 'There are at most 40 data !'
     },
     'channel': {
       'desc': 'Description',

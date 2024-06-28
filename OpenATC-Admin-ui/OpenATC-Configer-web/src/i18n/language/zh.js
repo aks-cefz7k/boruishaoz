@@ -96,8 +96,7 @@ const zh = {
       'options6': '日期',
       'options7': '通道',
       'options8': '检测器',
-      'options9': '行人检测器',
-      'options10': '设备信息'
+      'options9': '行人检测器'
     },
     'overview': {
       'crossinfo': '路口信息',
@@ -280,7 +279,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此方案？',
       'firstphase': '请先创建相位!',
-      'mostdata': '最多只能创建108条数据!',
+      'mostdata': '最多只能创建32条数据!',
       'ring': '环',
       'modeOption1': '其他',
       'modeOption2': '无',
@@ -336,7 +335,7 @@ const zh = {
       'plan': '计划',
       'operation': '操作',
       'deletetip': '确认删除此日期？',
-      'mostdata': '最多只能创建255条数据！'
+      'mostdata': '最多只能创建40条数据！'
     },
     'channel': {
       'desc': '信号灯位置',

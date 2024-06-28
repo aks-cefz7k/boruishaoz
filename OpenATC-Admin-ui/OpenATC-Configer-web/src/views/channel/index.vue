@@ -228,14 +228,19 @@ export default {
       for (let obj of channel) {
         let list = []
         list.push(obj.controltype)
-        list.push(obj.controlsource)
+        // 车道灯和不启用，没有下一级菜单
+        if (obj.controltype !== 6 && obj.controltype !== 0) {
+          list.push(obj.controlsource)
+        }
         obj.typeAndSouce = list
       }
     },
     handleChange (value, index) {
       let channel = this.globalParamModel.getParamsByType('channelList')
       channel[index].controltype = value[0]
-      channel[index].controlsource = value[1]
+      if (value[1]) {
+        channel[index].controlsource = value[1]
+      }
     },
     getControSource () {
       let controlSources = []

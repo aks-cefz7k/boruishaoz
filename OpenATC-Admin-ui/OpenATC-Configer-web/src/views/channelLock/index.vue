@@ -425,7 +425,7 @@ export default {
         value: 59,
         label: '59'
       }],
-      typeOptions: new Map([[0, '不启用'], [2, '机动车相位'], [3, '行人相位'], [4, '跟随相位'], [5, '行人跟随相位']])
+      typeOptions: new Map([[0, '不启用'], [2, '机动车相位'], [3, '行人相位'], [4, '跟随相位'], [5, '行人跟随相位'], [6, '车道灯']])
     }
   },
   computed: {
@@ -507,8 +507,7 @@ export default {
         })
       })
     },
-    onAdd () {
-      this.increaseId()
+    getChannelInfo () {
       let channel = this.globalParamModel.getParamsByType('channelList')
       let channellocKinfoList = []
       for (let chan of channel) {
@@ -519,6 +518,10 @@ export default {
         obj.lockstatus = 0
         channellocKinfoList.push(obj)
       }
+      return channellocKinfoList
+    },
+    onAdd () {
+      this.increaseId()
       var channellockInitData = {
         id: this.id,
         starthour: 0,
@@ -529,7 +532,7 @@ export default {
         endsec: 0,
         greenflash: 3,
         yellowlamp: 2,
-        channellocKinfo: channellocKinfoList
+        channellocKinfo: this.getChannelInfo()
       }
       this.globalParamModel.addParamsByType('channellock', channellockInitData)
       // this.id++
