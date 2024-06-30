@@ -140,6 +140,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { refreshChannelLockDescData } from '@/utils/channeldesc.js'
 export default {
   name: 'manualcontrol',
   components: {},
@@ -150,7 +151,7 @@ export default {
       channelList: [],
       id: 1,
       channelstatusList: [{
-        label: '通道状态不指定状态',
+        label: '默认',
         value: 0
       }, {
         label: '红灯',
@@ -430,15 +431,14 @@ export default {
   },
   computed: {
     ...mapState({
-      channellock: state => state.globalParam.tscParam.channellock
+      channellock: state => state.globalParam.tscParam.channellock,
+      channelDescMap: state => state.globalParam.channelDescMap
     })
   },
   mounted: function () {
+    refreshChannelLockDescData()
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
       _this.tableHeight =
                 window.innerHeight -
                 document.querySelector('#footerBtn').offsetTop -
@@ -456,6 +456,9 @@ export default {
                 window.innerHeight -
                 document.querySelector('#footerBtn').offsetTop -
                 150
+    },
+    channelDescMap: function () {
+      refreshChannelLockDescData()
     }
   },
   created () {
@@ -512,9 +515,8 @@ export default {
       let channellocKinfoList = []
       for (let chan of channel) {
         let obj = {}
-        let type = chan.controltype
         obj.channelid = chan.id
-        obj.desc = chan.desc + this.typeOptions.get(type)
+        obj.desc = this.channelDescMap.get(chan.id)
         obj.lockstatus = 0
         channellocKinfoList.push(obj)
       }

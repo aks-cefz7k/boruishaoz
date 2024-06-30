@@ -38,6 +38,7 @@
       </div>
       <div class="manual-control-button">
         <el-button type="primary" @click="resetDefaultManualpanel">{{$t('edge.controlpanel.defaultsettings')}}</el-button>
+        <el-button type="primary" @click="allclear">{{$t('edge.controlpanel.allclear')}}</el-button>
       </div>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -183,7 +184,8 @@ export default {
   },
   computed: {
     ...mapState({
-      manualpanel: state => state.globalParam.tscParam.manualpanel
+      manualpanel: state => state.globalParam.tscParam.manualpanel,
+      channelDescMap: state => state.globalParam.channelDescMap
     })
   },
   watch: {
@@ -260,9 +262,7 @@ export default {
         }
         this.manualList = currKeyconfig[0].channel
         for (let manual of this.manualList) {
-          manual.desc = this.channelList.filter((item) => {
-            return item.id === manual.channelid
-          })[0].desc
+          manual.desc = this.channelDescMap.get(manual.channelid)
         }
       }
     },
@@ -364,6 +364,9 @@ export default {
       } else {
         return name.substring(0, 10) + '...'
       }
+    },
+    allclear () {
+      this.$store.dispatch('ClearManualPanel')
     }
   }
 }

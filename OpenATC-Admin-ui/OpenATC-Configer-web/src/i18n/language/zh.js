@@ -504,6 +504,7 @@ const zh = {
       'allred': '全红',
       'yellowflash': '黄闪',
       'defaultsettings': '生成默认设置',
+      'allclear': '全部清除',
       'clear': '清空',
       'resetstatus': '状态重置',
       'manualbtn': 'manualbtn',

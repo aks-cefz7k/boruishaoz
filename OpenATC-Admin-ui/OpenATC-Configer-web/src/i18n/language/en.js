@@ -506,6 +506,7 @@ const en = {
       'allred': 'All Red',
       'yellowflash': 'Yellow Flash',
       'defaultsettings': 'Default Settings',
+      'allclear': 'All Clear',
       'clear': 'Clear',
       'resetstatus': 'Reset State',
       'manualbtn': 'manualbtn',

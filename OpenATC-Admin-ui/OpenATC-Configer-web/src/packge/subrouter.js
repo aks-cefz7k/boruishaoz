@@ -145,15 +145,6 @@ const subRouter = [{
     }
   },
   {
-    path: 'channelLock',
-    name: 'ChannelLock',
-    component: () => import('@/views/channelLock/index'),
-    meta: {
-      title: 'edge.route.channelLock',
-      icon: 'channellock'
-    }
-  },
-  {
     path: 'detector',
     name: 'Detector',
     component: () => import('@/views/detector/index'),
@@ -187,6 +178,15 @@ const subRouter = [{
     meta: {
       title: 'edge.route.adaptiveParameter',
       icon: 'adaptiveParameter'
+    }
+  },
+  {
+    path: 'channelLock',
+    name: 'ChannelLock',
+    component: () => import('@/views/channelLock/index'),
+    meta: {
+      title: 'edge.route.channelLock',
+      icon: 'channellock'
     }
   },
   {
