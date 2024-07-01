@@ -279,7 +279,6 @@ export default {
 //   margin-top: 8px;
 //   margin-left: 10px;
 //   height: 14px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;

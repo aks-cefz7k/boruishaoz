@@ -594,7 +594,6 @@ export default {
 //   margin-top: 10px;
 // }
 // .channel-status {
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;

@@ -1188,7 +1188,6 @@ export default {
 //   background: #ffffff;
 // }
 // .container-main .iconfont {
-//     font-family: "iconfont" !important;
 //     font-size: 34px;
 //     text-align: center;
 //     font-weight: 500;
@@ -1303,7 +1302,6 @@ export default {
 //   margin-top: 20px;
 //   margin-right: 30px;
 //   text-align: right;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1314,7 +1312,6 @@ export default {
 //   margin-top: 10px;
 //   margin-right: 30px;
 //   text-align: right;
-//   font-family: ArialMT;
 //   font-size: 16px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1325,7 +1322,6 @@ export default {
 //   margin-top: 20px;
 //   margin-right: 30px;
 //   text-align: right;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1336,7 +1332,6 @@ export default {
 //   margin-top: 10px;
 //   margin-right: 30px;
 //   text-align: right;
-//   font-family: ArialMT;
 //   font-size: 16px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1346,7 +1341,6 @@ export default {
 // .model-name {
 //   float: left;
 //   margin-top: 32px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1381,7 +1375,6 @@ export default {
 //   // float: left;
 //   text-align: center;
 //   margin-top: 40px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 30px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1391,7 +1384,6 @@ export default {
 // }
 // .curr-grade {
 //   margin-top: 30px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 24px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1401,7 +1393,6 @@ export default {
 // }
 // .curr-num {
 //   margin-top: 20px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1435,7 +1426,6 @@ export default {
 //   // left: 30px;
 //   top: 150px;
 //   height: 21px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 22px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1488,7 +1478,6 @@ export default {
 // }
 // .pattern-name {
 //   display: inline;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 20px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1499,7 +1488,6 @@ export default {
 // .pattern-message {
 //   display: inline;
 //   margin-left: 10px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1516,7 +1504,6 @@ export default {
 // .cross-mess {
 //   margin-left: 5px;
 //   height: 20px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 20px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1534,7 +1521,6 @@ export default {
 // }
 // .cross-name {
 //   // height: 13px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;font-weight: normal;
 //   font-stretch: normal;
 //   line-height: 22px;
@@ -1544,7 +1530,6 @@ export default {
 // .cross-value {
 //   width: 180px;
 //   height: 22px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1578,7 +1563,6 @@ export default {
 // }
 // .single-model-name {
 //   margin-top: 3px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 12px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1588,7 +1572,6 @@ export default {
 // }
 // .current-stage-num {
 //   margin-top: 3px;
-//   font-family: MicrosoftYaHei;
 //   font-size: 12px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1601,7 +1584,6 @@ export default {
 // }
 // .control-time {
 //   margin-top: 40px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 30px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1630,7 +1612,6 @@ export default {
 //     padding: 0 12px 0 0;
 //     -webkit-box-sizing: border-box;
 //     box-sizing: border-box;
-//     font-family: SourceHanSansCN-Regular;
 //     font-weight: normal;
 //     font-stretch: normal;
 //     letter-spacing: 0px;

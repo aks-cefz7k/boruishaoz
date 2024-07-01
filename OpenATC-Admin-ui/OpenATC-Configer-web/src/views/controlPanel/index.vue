@@ -398,7 +398,6 @@ export default {
 //   float: left;
 //   margin-left: 30px;
 //   margin-top: 30px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -410,7 +409,6 @@ export default {
 //   float: left;
 //   margin-left: 5px;
 //   margin-top: 30px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -487,7 +485,6 @@ export default {
   position: absolute;
   top: 24px;
   left: 32px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -501,7 +498,6 @@ export default {
   left: 24px;
   width: 32px;
   height: 36px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -515,7 +511,6 @@ export default {
   left: 20px;
   width: 32px;
   height: 36px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -529,7 +524,6 @@ export default {
   left: 35px;
   width: 18px;
   height: 12px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -543,7 +537,6 @@ export default {
   left: 31px;
   width: 18px;
   height: 12px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -568,7 +561,6 @@ export default {
 //   float: left;
 //   margin-left: 10px;
 //   margin-top: 22px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -595,7 +587,6 @@ export default {
 }
 .manual-tables-qingkong {
   margin-left: 5px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

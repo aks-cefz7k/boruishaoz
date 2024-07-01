@@ -721,7 +721,6 @@ export default {
 }
 .phaseCountdown {
   line-height: 40px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 30px;
   font-weight: normal;
   font-stretch: normal;

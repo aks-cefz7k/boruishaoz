@@ -1336,7 +1336,6 @@ export default {
   width: 58px;
   height: 21px;
   margin-top: 10px;
-  font-family: MicrosoftYaHei;
   font-size: 20px;
   font-weight: normal;
   font-stretch: normal;
@@ -1354,7 +1353,6 @@ export default {
 .laber-name {
   width: 48px;
   height: 13px;
-  font-family: MicrosoftYaHei;
   font-size: 12px;
   font-weight: normal;
   font-stretch: normal;
@@ -1364,7 +1362,6 @@ export default {
 }
 .laber-value {
   margin-top: 5px;
-  font-family: MicrosoftYaHei;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1374,7 +1371,6 @@ export default {
 }
 .pass-expire {
   margin-top: 5px;
-  font-family: MicrosoftYaHei;
   font-size: 12px;
   font-weight: normal;
   font-stretch: normal;

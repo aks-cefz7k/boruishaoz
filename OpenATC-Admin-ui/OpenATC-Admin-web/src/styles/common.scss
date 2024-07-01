@@ -61,7 +61,6 @@
         text-align: center;
         margin: 0 auto;
         color: $--color-text-regular;
-        font-family: MicrosoftYaHei;
         .iconfont {
           cursor: pointer;
         }
@@ -109,7 +108,6 @@
         }
         .text {
             float: left;
-            font-family: MicrosoftYaHei;
             font-size: 14px;
             letter-spacing: 0px;
             color: $--color-text-regular;
@@ -118,7 +116,6 @@
             // float: right;
             position: absolute;
             right: 36px;
-            font-family: SourceHanSansCN-Regular;
             font-size: 32px;
             letter-spacing: 0px;
             color: $--color-text-primary;
@@ -131,7 +128,6 @@
       > div {
         float: left;
         text-align: center;
-        font-family: MicrosoftYaHei;
         font-size: 14px;
         letter-spacing: 0px;
         color: $--color-text-secondary;
@@ -148,7 +144,6 @@
         float: left;
         // width: 116px;
         text-align: center;
-        font-family: MicrosoftYaHei;
         font-size: 14px;
         letter-spacing: 0px;
         color: $--color-text-regular;
@@ -278,7 +273,6 @@
         border-bottom: 1px solid $--border-color-base;
         font-size: 18px;
         color: $--color-text-regular;
-        font-family: MicrosoftYaHei;
       }
   }
 // GIS页面样式
@@ -419,7 +413,6 @@
     margin-top: 5px;
     margin-left: 12px;
     height: 14px;
-    font-family: MicrosoftYaHei;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -432,7 +425,6 @@
     margin-top: 10px;
     margin-left: 10px;
     height: 25px;
-    font-family: MicrosoftYaHei;
     font-size: 30px;
     font-weight: bold;
     font-style: italic;
@@ -444,7 +436,6 @@
   .route-length-company {
     float: left;
     margin-top: 23px;
-    font-family: MicrosoftYaHei;
     font-style: italic;
     font-size: 14px;
     font-weight: bold;
@@ -561,7 +552,6 @@
   }
   .planchart-name {
     float: right;
-    font-family: SourceHanSansCN-Regular;
     font-size: 16px;
     font-weight: bold;
     font-stretch: normal;
@@ -695,7 +685,6 @@
         font-size: 30px;
       }
       .tipContent .text {
-          font-family: SourceHanSansCN-Regular;
           font-size: 14px;
           font-weight: normal;
           font-stretch: normal;
@@ -783,7 +772,6 @@
         font-size: 30px;
       }
       .tipContent .text {
-          font-family: SourceHanSansCN-Regular;
           font-size: 14px;
           font-weight: normal;
           font-stretch: normal;
@@ -823,7 +811,6 @@
         margin-top: 8px;
         margin-left: 10px;
         height: 14px;
-        font-family: SourceHanSansCN-Regular;
         font-size: 14px;
         font-weight: normal;
         font-stretch: normal;
@@ -1036,7 +1023,6 @@
         font-size: 30px;
       }
       .tipContent .text {
-        font-family: SourceHanSansCN-Regular;
         font-size: 14px;
         font-weight: normal;
         font-stretch: normal;
@@ -1116,7 +1102,6 @@
         font-size: 30px;
       }
       .tipContent .text {
-        font-family: SourceHanSansCN-Regular;
         font-size: 14px;
         font-weight: normal;
         font-stretch: normal;
@@ -1136,7 +1121,6 @@
       }
       .pattern-status {
         display: inline;
-        font-family: SourceHanSansCN-Regular;
         font-size: 20px;
         font-weight: normal;
         font-stretch: normal;
@@ -1225,7 +1209,6 @@
         width: 291px;
         height: 38px;
         margin-top: 40px;
-        font-family: MicrosoftYaHei;
         font-size: 36px;
         font-weight: normal;
         font-stretch: normal;
@@ -1234,7 +1217,6 @@
         color: #fff;
     }
     .banben {
-        font-family: MicrosoftYaHei;
         font-size: 14px;
         font-weight: normal;
         font-stretch: normal;
@@ -1250,7 +1232,6 @@
     }
     .open-source {
         margin-top: 25px;
-        font-family: MicrosoftYaHei;
         font-size: 14px;
         font-weight: normal;
         font-stretch: normal;
@@ -1353,7 +1334,6 @@
         margin: 0px auto 40px auto;
         text-align: center;
         font-weight: bold;
-        font-family: SourceHanSansCN-Bold;
         font-stretch: normal;
       }
       .show-pwd {
@@ -1390,7 +1370,6 @@
       }
   }
   .el-dialog__title {
-    font-family: MicrosoftYaHei;
     font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
@@ -1446,7 +1425,6 @@
     height: 26px;
     line-height: 26px;
     padding: 0;
-    font-family: MicrosoftYaHei;
     font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
@@ -1514,7 +1492,6 @@ table td {
   float:left;
   height: 50px;
   line-height: 50px;
-  font-family: MicrosoftYaHei;
   font-size: 22px;
   font-weight: bold;
   font-stretch: normal;
@@ -1531,7 +1508,6 @@ table td {
 }
 .openatc-menu {
   float:left;
-  font-family: MicrosoftYaHei;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1555,7 +1531,6 @@ table td {
       color: $--color-text-primary;
     }
     .user {
-      font-family: MicrosoftYaHei;
       padding: 0 24px;
       .name {
         font-size: 20px;
@@ -1565,7 +1540,6 @@ table td {
       }
     }
     .message {
-      font-family: MicrosoftYaHei;
       padding: 16px 24px 0 24px;
       margin-bottom: 10px;
       .email {
@@ -1581,7 +1555,6 @@ table td {
     width: 58px;
     height: 21px;
     margin-top: 10px;
-    font-family: MicrosoftYaHei;
     font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
@@ -1599,7 +1572,6 @@ table td {
   .laber-name {
     width: 48px;
     height: 13px;
-    font-family: MicrosoftYaHei;
     font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
@@ -1609,7 +1581,6 @@ table td {
   }
   .laber-value {
     margin-top: 5px;
-    font-family: MicrosoftYaHei;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -1636,7 +1607,6 @@ table td {
   box-sizing: border-box;
   .title {
     line-height: 60px;
-    font-family: MicrosoftYaHei;
     font-size: 18px !important;
     font-weight: bold;
     font-stretch: normal;

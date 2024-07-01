@@ -94,7 +94,6 @@ export default {
     margin-left: 20px;
     margin-top: 8px;
     height: 14px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
