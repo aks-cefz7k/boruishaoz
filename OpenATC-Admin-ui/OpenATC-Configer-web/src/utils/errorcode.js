@@ -162,6 +162,8 @@ function getErrorMesEn (errorMes, code) {
   let errorstr = errorMes
   if (code[0] === 305) {
     errorstr = errorstr + '</br>' + 'There is an intra-ring phase concurrency conflict in scheme' + code[1]
+  } else if (code[0] === 306) {
+    errorstr = errorstr + '</br>' + 'The cycle time of each ring is inconsistent in scheme' + code[1]
   } else if (code[0] === 1001) {
     errorstr = errorstr + '</br>' + 'Time period' + code[1] + 'channel lock state conflict'
   } else if (code[0] === 1002) {
@@ -180,6 +182,8 @@ function getErrorMesZh (errorMes, code) {
   let errorstr = errorMes
   if (code[0] === 305) {
     errorstr = errorstr + '</br>' + '方案' + code[1] + '中存在环内相位并发冲突'
+  } else if (code[0] === 306) {
+    errorstr = errorstr + '</br>' + '方案' + code[1] + '中存在各个环周期时长不一致'
   } else if (code[0] === 1001) {
     errorstr = errorstr + '</br>' + '时段' + code[1] + '通道状态锁定冲突'
   } else if (code[0] === 1002) {
