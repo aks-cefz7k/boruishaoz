@@ -149,74 +149,77 @@
           </div>
         </div>
         <div class="tuxing-right" v-if="!graphicMode">
-          <transition mode="out-in" name="custom"
+          <transition name="fade-right" mode="out-in"
           enter-active-class="animated fadeInRight"
           leave-active-class="animated fadeOutRight">
-            <ManualControlModal v-show="isOperation"
-              :controlData="controlData"
-              :modelList="modelList"
-              :stagesList="stagesList"
-              :currModel="currModel"
-              :preselectModel="preselectModel"
-              :currentStage="currentStage"
-              :preselectStages="preselectStages"
-              @closeManualModal="closeManualModal"
-              @selectModel="selectModel"
-              @selectStages="selectStages"
-              @patternCommit="patternCommit" />
+            <div style="position: absolute;width: 100%;"  v-show="isOperation">
+             <ManualControlModal
+               :controlData="controlData"
+               :modelList="modelList"
+               :stagesList="stagesList"
+               :currModel="currModel"
+               :preselectModel="preselectModel"
+               :currentStage="currentStage"
+               :preselectStages="preselectStages"
+               @closeManualModal="closeManualModal"
+               @selectModel="selectModel"
+               @selectStages="selectStages"
+               @patternCommit="patternCommit" />
+            </div>
           </transition>
 
-          <!-- <transition mode="out-in" name="custom"
-          enter-active-class="animated fadeIn"> -->
-          <div v-show="!isOperation && isdalayshow">
-            <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
-            <div class="cross-module">
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
-                <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
-                <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
-                <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
+          <transition name="fade-left" mode="out-in"
+          enter-active-class="animated fadeInLeft"
+          leave-active-class="animated fadeOutLeft">
+            <div style="position: absolute;width: 100%;" v-show="!isOperation">
+              <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
+              <div class="cross-module">
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+                  <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
+                  <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
+                  <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
+                </div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div> -->
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
+                <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
               </div>
-              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div> -->
-              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
-              <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
+              <div class="control-bottom">
+                <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
+                <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
+                <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
+              </div>
+              <div class="cross-module">
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
+                </div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
+                </div>
+
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
+                </div>
+
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
+                </div> -->
+
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
+                </div>
+
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
+                </div>
+              </div>
             </div>
-            <div class="control-bottom">
-              <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
-              <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
-              <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
-            </div>
-            <div class="cross-module">
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
-              </div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
-              </div>
-
-              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
-              </div>
-
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
-              </div> -->
-
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
-              </div>
-
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
-              </div>
-            </div>
-          </div>
-        <!-- </transition> -->
+          </transition>
         </div>
       </div>
     </div>
@@ -939,11 +942,6 @@ export default {
       this.modelList = this.modelList.filter((item) => {
         return item.id !== 0
       })
-      // 让前一个面板在当前面板动画播放完成后，延迟1.1s显示，否则会样式乱掉
-      this.isdalayshow = false
-      setTimeout(() => {
-        this.isdalayshow = true
-      }, 1100)
     },
     patternCommit (manualInfo) {
       let that = this
@@ -966,7 +964,7 @@ export default {
           that.$message.error(data.data.message)
           return
         } else {
-          success = data.data.data.data.success
+          success = data.data.data.data.sucess
           if (success !== 0) {
             let errormsg = 'edge.overview.putTscControlError' + success
             that.$message.error(this.$t(errormsg))
