@@ -580,7 +580,9 @@ const zh = {
       'isReboot': '系统文件下载成功,是否重启设备？',
       'rebootSuccess': '重启成功！',
       'rebootFaile': '重启失败！',
-      'resetSuccess': '设置成功！'
+      'resetSuccess': '设置成功！',
+      'filesuccess': '升级文件传输完成!',
+      'filefailed': '升级接口调用失败!'
     },
     'optimize': {
       'strategy': '优化策略',
