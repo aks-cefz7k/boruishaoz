@@ -49,6 +49,5 @@ export default {
 //   border-bottom: 1px solid #eee;
 //   font-size: 18px;
 //   color: $--color-text-regular;
-//   font-family: MicrosoftYaHei;
 // }
 </style>

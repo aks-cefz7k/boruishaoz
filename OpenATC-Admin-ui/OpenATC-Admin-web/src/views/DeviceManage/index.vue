@@ -73,7 +73,13 @@
           :label="$t('openatc.devicemanager.port')"
           align="center">
           </el-table-column>
-           <el-table-column
+          <el-table-column
+            prop="sockettype"
+            :label="$t('openatc.devicemanager.sockettype')"
+            align="center"
+            :formatter="formatterSockettype">
+          </el-table-column>
+          <el-table-column
           prop="platform"
           :label="$t('openatc.devicemanager.platform')"
           sortable
@@ -191,6 +197,11 @@ export default {
           label: this.$t('openatc.devicemanager.offline'),
           type: 'info'
         }
+      } else if (row.state === 'FAULT') {
+        return {
+          label: this.$t('openatc.devicemanager.fault'),
+          type: 'danger'
+        }
       } else {
         if (row.status === 0) {
           // 数据从设备端来，暂时写死，0代表正常状态，其余数字均代表一种类型的故障
@@ -303,6 +314,16 @@ export default {
       let val1 = obj1.agentid
       let val2 = obj2.agentid
       return val1 - val2
+    },
+    formatterSockettype (row, column) {
+      let sockettype = row.sockettype
+      let res = ''
+      if (sockettype === 0) {
+        res = 'UDP'
+      } else if (sockettype === 1) {
+        res = 'TCP'
+      }
+      return res
     }
   }
 }

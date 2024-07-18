@@ -27,6 +27,10 @@ export default class GlobalParamsMgr extends EdgeModelBase {
     store.dispatch('SaveTscParam', globalData)
   }
 
+  setSingleParam (param) {
+    store.dispatch('SaveSingleParam', param)
+  }
+
   getGlobalParams () {
     return store.getters.tscParam
   }
@@ -51,5 +55,21 @@ export default class GlobalParamsMgr extends EdgeModelBase {
 
   reset () {
     store.dispatch('ResetTscParam')
+  }
+
+  deleteChildrenParamsById (key, id, fieldchild) {
+    store.getters.tscParam[key].forEach(ele => {
+      ele[fieldchild].forEach((child, index) => {
+        if (child.channelid === id) {
+          ele[fieldchild].splice(index, 1)
+        }
+      })
+    })
+  }
+
+  deleteAllChildrenParams (key, fieldchild) {
+    store.getters.tscParam[key].forEach(ele => {
+      ele[fieldchild] = []
+    })
   }
 }

@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div style="height: 100%;">
     <DeviceTags v-if="show" />
     <div class="adminEdge">
       <router-view></router-view>
@@ -45,15 +45,16 @@ export default {
 // #app .adminEdge {
 //   border-top: 1px solid $--border-color-base;
 // }
-#app .sidebar-container {
-    -webkit-transition: width 0.28s;
-    transition: width 0.28s;
-    width: 180px;
-    height: 940px;;
-    position:absolute;
-    // border-right: 1px solid $--border-color-base;
-    bottom: 0;
-    left: 0;
-    z-index: 1001;
-}
+// #app .sidebar-container {
+//     -webkit-transition: width 0.28s;
+//     transition: width 0.28s;
+//     width: 180px;
+//     // height: 940px;
+//     height: 100%;
+//     position:absolute;
+//     // border-right: 1px solid $--border-color-base;
+//     bottom: 0;
+//     left: 0;
+//     z-index: 1001;
+// }
 </style>

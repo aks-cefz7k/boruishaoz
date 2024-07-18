@@ -66,8 +66,8 @@ const zh = {
       'logout': '登出',
       'upload': '上载',
       'download': '下载',
-      'import': '导入文件',
-      'export': '导出文件',
+      'import': '从文件导入',
+      'export': '从文件导出',
       'importtemplate': '从模板导入',
       'copy': '复制参数',
       'copyDevice': '设备',
@@ -85,6 +85,7 @@ const zh = {
       'phone': '联系电话',
       'email': '电子邮箱',
       'changepass': '修改密码',
+      'about': '关于',
       'exit': '退出',
       'options': 'options',
       'options1': '全部',
@@ -95,8 +96,7 @@ const zh = {
       'options6': '日期',
       'options7': '通道',
       'options8': '检测器',
-      'options9': '行人检测器',
-      'options10': '设备信息'
+      'options9': '行人检测器'
     },
     'overview': {
       'crossinfo': '路口信息',
@@ -105,18 +105,19 @@ const zh = {
       'protocoltype': '协议类型',
       'signalID': '信号机ID',
       'signalIP': '信号机IP',
+      'faultinfo': '故障信息',
       'platform': '平台类型',
       'online': '在线',
       'offline': '离线',
       'onlineing': '联机中...',
       'controlmode': '控制方式',
-      'manual': '手动',
+      'manual': '手动控制',
       'exitmanual': '退出手动',
       'controlmodel': '控制模式',
       'patternname': '方案名称',
       'controlnumber': '控制编号',
-      'mode': '方式',
-      'stage': '阶段（驻留）',
+      'mode': '控制方式',
+      'stage': '阶段(驻留)',
       'implement': '执行',
       'ipaddress': 'IP地址',
       'deviceport': '设备端口',
@@ -176,6 +177,7 @@ const zh = {
       'modelList9': '自适应控制',
       'modelList10': '无电缆协调',
       'modelList12': '行人过街',
+      'modelList13': '方案恢复过渡',
       'modelList19': '感应式行人过街',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
@@ -184,7 +186,16 @@ const zh = {
       'transitioneffic': '执行成功，过渡切换后生效！',
       'controlnumerrormess': '控制方式为自定义时，控制方式编号不能为空！',
       'delay': '延迟时间',
-      'duration': '持续时间'
+      'duration': '持续时间',
+      'curModel': '控制方式',
+      'curStage': '当前阶段',
+      'responseTime': '请求耗时',
+      'putTscControlError1': '不支持的控制方式',
+      'putTscControlError2': '不存在的方案编号',
+      'putTscControlError3': '不支持的控制参数',
+      'putTscControlError4': '设备初始化中，无法执行',
+      'putTscControlError5': '优先级更高的方案控制中，无法执行',
+      'putTscControlError6': '优先级更高的用户控制中，无法执行'
     },
     'phase': {
       'desc': '车道方向',
@@ -207,7 +218,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此相位？',
       'deleteAlltip': '确认删除所有相位、方案？',
-      'mostdata': '最多只能创建16条数据！',
+      'mostdata': '最多只能创建40条数据！',
       'es': '东直行',
       'el': '东左转',
       'er': '东右转',
@@ -245,7 +256,12 @@ const zh = {
       'pedestrianthresh': '行人等待阈值',
       'mainroad': '主路',
       'bypass': '支路',
-      'pedestrianonly': '仅行人'
+      'pedestrianonly': '仅行人',
+      'pulsetype': '脉冲屏蔽',
+      'offpulse': '关闭行人及机动车脉冲',
+      'sendvehiclepulse': '发送机动车脉冲',
+      'sendpedestrianpulse': '发送行人脉冲',
+      'sendpedestriansvehiclepulse': '发送行人及机动车脉冲'
     },
     'overlap': {
       'desc': '描述',
@@ -253,7 +269,7 @@ const zh = {
       'lane': '车道',
       'operation': '操作',
       'deletetip': '确认删除此跟随相位？',
-      'mostdata': '最多只能创建16条数据!'
+      'mostdata': '最多只能创建40条数据!'
     },
     'pattern': {
       'property': '属性',
@@ -263,7 +279,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此方案？',
       'firstphase': '请先创建相位!',
-      'mostdata': '最多只能创建108条数据!',
+      'mostdata': '最多只能创建32条数据!',
       'ring': '环',
       'modeOption1': '其他',
       'modeOption2': '无',
@@ -284,7 +300,8 @@ const zh = {
       'ringConfig': '环配置',
       'stage': '阶段',
       'phase': '相位',
-      'agentidError': '获取设备ID失败!'
+      'agentidError': '获取设备ID失败!',
+      'splitCheckMsg': '绿信比需大于相位过渡时间或绿信比需大于行人过街+行人过渡时间!'
     },
     'plan': {
       'tipcontext': '请输入计划名！',
@@ -318,7 +335,7 @@ const zh = {
       'plan': '计划',
       'operation': '操作',
       'deletetip': '确认删除此日期？',
-      'mostdata': '最多只能创建255条数据！'
+      'mostdata': '最多只能创建40条数据！'
     },
     'channel': {
       'desc': '信号灯位置',
@@ -452,7 +469,13 @@ const zh = {
       'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
       'startOrderParams': '启动时序参数 ',
       'netcardInfo': '网卡信息: ',
-      'stepType': '步进类型'
+      'stepType': '步进类型',
+      'seeCutEffect': '查看剪断效果',
+      'siteIdLimit': '地址码规定范围是 0 ~ 99999',
+      'siteIdCutEffect': '地址码剪断效果',
+      'cutData': '剪断数据：',
+      'cutEffect': '剪断效果：',
+      'longgerThan20': '二进制数据超过20位！'
     },
     'singleoptim': {
       'deletetip': '确认删除？',
@@ -481,6 +504,7 @@ const zh = {
       'allred': '全红',
       'yellowflash': '黄闪',
       'defaultsettings': '生成默认设置',
+      'allclear': '全部清除',
       'clear': '清空',
       'resetstatus': '状态重置',
       'manualbtn': 'manualbtn',
@@ -556,7 +580,9 @@ const zh = {
       'isReboot': '系统文件下载成功,是否重启设备？',
       'rebootSuccess': '重启成功！',
       'rebootFaile': '重启失败！',
-      'resetSuccess': '设置成功！'
+      'resetSuccess': '设置成功！',
+      'filesuccess': '升级文件传输完成!',
+      'filefailed': '升级接口调用失败!'
     },
     'optimize': {
       'strategy': '优化策略',
@@ -646,7 +672,8 @@ const zh = {
     },
     'button': {
       'OK': '确定',
-      'Cancel': '取消'
+      'Cancel': '取消',
+      'Back': '返回'
     },
     'common': {
       'confirm': '确认',
@@ -687,6 +714,7 @@ const zh = {
       'commitandexecute': '提交并执行',
       'uploadsuccess': '参数上传成功!',
       'download': '参数下发成功!',
+      'downloaderror': '下发失败！',
       'downloadandrun': '提交并运行成功！',
       'editagentid': '编辑设备ID',
       'querysucess': '查询成功！',
@@ -702,7 +730,7 @@ const zh = {
       'dialogtitle': '应用授权',
       'username': '用户名',
       'password': '密码',
-      'locallogin': '本地登陆',
+      'networkparam': '通讯参数',
       'port': '端口',
       'protocol': '协议',
       'restoredefaultparameters': '恢复默认参数',
@@ -785,6 +813,13 @@ const zh = {
         'fifteenPhase': '十五相位',
         'sixteenPhase': '十六相位'
       }
+    },
+    'about': {
+      'version': '版本',
+      'copyright': '版权所有',
+      'company': '苏州科达科技股份有限公司',
+      'packedtime': '打包时间',
+      'opensourceagreement': '开源协议'
     }
   }
 }

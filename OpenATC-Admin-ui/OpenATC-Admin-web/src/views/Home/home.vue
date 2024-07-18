@@ -101,6 +101,9 @@ export default {
       {
         name: '离线',
         value: 0
+      }, {
+        name: '故障',
+        value: 0
       }]
     }
   },
@@ -139,6 +142,9 @@ export default {
       {
         name: '离线',
         value: 0
+      }, {
+        name: '故障',
+        value: 0
       }]
     },
     getdata () {
@@ -154,6 +160,10 @@ export default {
           }
           if (ele.state === 'DOWN') {
             this.chartData[1].value++
+          }
+          if (ele.state === 'FAULT') {
+            this.chartData[0].value++
+            this.chartData[2].value++
           }
         })
       })

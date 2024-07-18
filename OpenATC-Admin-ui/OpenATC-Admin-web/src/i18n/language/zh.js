@@ -90,7 +90,8 @@ const zh = {
       'quantity': '数量',
       'devicemaneger': '设备管理',
       'usermanager': '用户管理',
-      'operationrecord': '操作记录'
+      'operationrecord': '操作记录',
+      'faultOrOffLine': '故障 / 在线'
     },
     'devicemanager': {
       'devicelist': '设备列表',
@@ -138,7 +139,8 @@ const zh = {
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
       'thirdplatformid': '第三方ID',
       'timeSpaceGraph': '实时时距图',
-      'keyintersection': '关键路口：'
+      'keyintersection': '关键路口：',
+      'sockettype': '通讯类型'
     },
     'usermanager': {
       'username': '用户名称',
@@ -380,6 +382,13 @@ const zh = {
       'greenreduction': '绿灯缩减',
       'bottleneckinfo': '瓶颈控制信息',
       'isdeletedetector': '确认删除检测器'
+    },
+    'about': {
+      'version': '版本',
+      'copyright': '版权所有',
+      'company': '苏州科达科技股份有限公司',
+      'packedtime': '打包时间',
+      'opensourceagreement': '开源协议'
     }
   }
 }

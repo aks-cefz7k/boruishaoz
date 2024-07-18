@@ -174,6 +174,24 @@ export default {
         let phase = phaseList.filter((item) => {
           return item.id === ls.id
         })[0]
+        if (!phase.redyellow) {
+          phase.redyellow = 0
+        }
+        if (!phase.yellow) {
+          phase.yellow = 0
+        }
+        if (!phase.redclear) {
+          phase.redclear = 0
+        }
+        if (!phase.flashgreen) {
+          phase.flashgreen = 0
+        }
+        if (!phase.phasewalk) {
+          phase.phasewalk = 0
+        }
+        if (!phase.pedclear) {
+          phase.pedclear = 0
+        }
         let temp1 = phase.redyellow + phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
         let temp2 = phase.phasewalk + phase.pedclear
         if (temp1 > temp2) {
@@ -184,6 +202,13 @@ export default {
         if (ls.mode !== 7 && ls.value < ls.minSplit) {
           ls.value = ls.minSplit
         }
+        // let temp1 = phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
+        // let temp2 = phase.yellow + phase.redclear + phase.phasewalk + phase.pedclear
+        // ls.minSplit = temp1 > temp2 ? temp1 : temp2
+        // if (ls.mode !== 7 && ls.value < ls.minSplit) {
+        //   ls.value = ls.minSplit
+        //   this.$message.error(this.$t('edge.pattern.splitCheckMsg'))
+        // }
       }
     },
     getMaxCycle (pattern) {
@@ -193,6 +218,9 @@ export default {
         if (ring.length === 0) continue
         let cycle = 0
         for (let r of ring) {
+          if (r.mode === 7) { // 忽略相位不计周期
+            continue
+          }
           cycle = cycle + r.value
         }
         if (cycle > maxCycle) {

@@ -40,14 +40,14 @@
           <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
       </el-form-item>
       <div>
-        <el-checkbox class="expand-text" v-model="isExpand">{{$t('edge.login.locallogin')}}</el-checkbox>
+        <el-checkbox class="expand-text" v-model="isExpand">{{$t('edge.login.networkparam')}}</el-checkbox>
         <!-- <div style="display: inline;">本地登陆</div> -->
         <!-- <div style="display: inline;">
           <svg-icon icon-class="xiala" v-show="!isExpand"></svg-icon>
           <svg-icon icon-class="shanghe" v-show="isExpand"></svg-icon>
         </div> -->
       </div>
-      <div v-show="!isExpand">
+      <div v-show="isExpand">
         <el-form-item prop="ip">
           <span class="text-container">IP</span>
           <el-input class="login-input" name="IP" type="text" v-model="loginForm.ip" auto-complete="on" placeholder="" />
@@ -72,11 +72,9 @@
             {{$t('edge.login.restoredefaultparameters')}}
         </div>
       </div>
-      <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
           {{$t('edge.login.login')}}
         </el-button>
-      </el-form-item>
     </el-form>
   </div>
   <!--修改密码弹框-->
@@ -170,7 +168,7 @@ export default {
       loading: false,
       pwdType: 'password',
       language: 'Language',
-      isExpand: true
+      isExpand: false
     }
   },
   created () {
@@ -184,7 +182,21 @@ export default {
     //   })
     // }
   },
+  mounted () {
+    this.showLoginInfo()
+  },
   methods: {
+    showLoginInfo () {
+      // 从存储中获取登陆相关信息，并显示在表单
+      let info = this.loginInterface.getLoginInfo()
+      if (info) {
+        info = JSON.parse(info)
+        this.loginForm.user_name = info.user_name
+        this.loginForm.ip = info.ip
+        this.loginForm.port = info.port
+        this.loginForm.protocol = info.protocol
+      }
+    },
     showPwd () {
       if (this.pwdType === 'password') {
         this.pwdType = ''
@@ -215,6 +227,7 @@ export default {
               SetSimuUserKey(this.loginForm.user_name)
               this.loginInterface.loginSucess(data.data.data.token)
               this.addDevice() // 注册设备
+              this.loginInterface.setLoginInfo(this.loginForm) // 存储登陆信息
             })
             .catch(err => {
               this.loading = false
@@ -285,131 +298,4 @@ export default {
 </script>
 
 <style lang="scss">
-.switch-language {
-  cursor:pointer;
-  margin-top: 20px;
-  margin-right: 20px;
-  float: right;
-}
-.login-container {
-    .el-input {
-      display: inline-block;
-      height: 47px;
-      width: 85%;
-      input {
-        background: #ffffff;
-        border: 0px;
-        -webkit-appearance: none;
-        border-radius: 0px;
-        padding: 12px 5px 12px 15px;
-        color: #333333;
-        height: 47px;
-        &:-webkit-autofill {
-          -webkit-text-fill-color: rgb(0, 0, 0) !important;
-        }
-        .el-input__inner {
-          -webkit-appearance: none;
-          background-color: #fff;
-          background-image: none;
-          border-radius: 4px;
-          border: 0px solid #dcdfe6;
-          -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-          color: #606266;
-          display: inline-block;
-          font-size: inherit;
-          height: 40px;
-          line-height: 40px;
-          outline: 0;
-          padding: 0 15px;
-          -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-          transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-          width: 100%;
-        }
-      }
-    }
-    .el-form-item {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: #ffffff;
-      border-radius: 5px;
-      color: #1890ff;
-    }
-  }
-
-  .login-container {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    background-color: #f2f9ff;
-    .login-form {
-      position: absolute;
-      left: 0;
-      right: 0;
-      //width: 33%;
-      width: 20%;
-      min-width: 400px;
-      padding: 35px 35px 15px 35px;
-      margin: 120px auto;
-    }
-    .tips {
-      font-size: 14px;
-      color: #999999;
-      margin-bottom: 10px;
-      span {
-        &:first-of-type {
-          margin-right: 16px;
-        }
-      }
-    }
-    .svg-container {
-      padding: 6px 5px 6px 15px;
-      color: #1890ff;
-      vertical-align: middle;
-      width: 30px;
-      display: inline-block;
-      &_login {
-        font-size: 20px;
-      }
-    }
-    .text-container {
-      padding: 6px 0px 0px 15px;
-      font-family: SourceHanSansCN-Regular;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      letter-spacing: 0px;
-      color: #1890ff;
-    }
-    .title {
-      font-size: 26px;
-      font-weight: 400;
-      color: #1890ff;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-      font-family: SourceHanSansCN-Bold;
-      font-stretch: normal;
-    }
-    .show-pwd {
-      position: absolute;
-      right: 10px;
-      top: 7px;
-      font-size: 16px;
-      color: #889aa4;
-      cursor: pointer;
-      user-select: none;
-    }
-  }
-  .expand-text {
-    position: relative;
-    top: -10px;
-    // margin-left: 280px;
-    font-family: SourceHanSansCN-Regular;
-    font-size: 13px;
-    font-weight: normal;
-    font-stretch: normal;
-    letter-spacing: 0px;
-    color: #1890ff;
-    cursor: pointer;
-  }
 </style>

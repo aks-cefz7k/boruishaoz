@@ -217,7 +217,6 @@ export default {
     padding: 0 12px 0 0;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    font-family: SourceHanSansCN-Regular;
     font-weight: normal;
     font-stretch: normal;
     line-height: 40px;

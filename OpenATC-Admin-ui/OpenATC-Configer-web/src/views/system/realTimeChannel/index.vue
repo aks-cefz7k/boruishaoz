@@ -38,6 +38,11 @@ import { getRealTimeChannel } from '@/api/system'
 export default {
   name: 'realtimechannel',
   components: {},
+  props: {
+    channelList: {
+      type: Array
+    }
+  },
   data () {
     return {
       lamps: [{
@@ -59,6 +64,14 @@ export default {
       realTimeChannelTimer: null // 定时器
     }
   },
+  watch: {
+    channelList: {
+      handler: function () {
+        this.handleCreateLampCtrboard()
+      },
+      deep: true
+    }
+  },
   mounted () {
     this.globalParamModel = this.$store.getters.globalParamModel
     this.handleCreateLampCtrboard()
@@ -68,7 +81,8 @@ export default {
   //   },
   methods: {
     handleCreateLampCtrboard () {
-      let channel = this.globalParamModel.getParamsByType('channelList')
+      // let channel = this.globalParamModel.getParamsByType('channelList')
+      let channel = this.channelList
       let channelIdList = channel.map(ele => ele.id)
       this.data = []
       if (channel.length === 0) return
@@ -182,7 +196,6 @@ export default {
   //   background: #f8fbff;
   //   line-height: 40px;
   //   text-align: center;
-  //   font-family: SourceHanSansCN-Regular;
   //   font-size: 14px;
   //   font-weight: normal;
   //   font-stretch: normal;

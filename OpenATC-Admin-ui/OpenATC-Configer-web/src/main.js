@@ -10,6 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 import Vue from 'vue'
+import axios from 'axios'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
@@ -27,6 +28,7 @@ import '@/permission' // permission control
 import './assets/icon/iconfont.css'
 // import '@/styles/common.scss'
 import './styles/index.scss'
+import animate from 'animate.css'
 
 import i18n from './i18n'
 
@@ -36,9 +38,21 @@ Vue.use(ElementUI, {
   locale
 })
 
+/* 使用动画库 */
+Vue.use(animate)
+
 Vue.config.productionTip = false
 Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)
+
+axios.get('./LRRoadConfig.json').then(val => {
+  // 只有配置工具项目单独项目会加载main.js，当作为包被加载时，不会走到这里
+  // 读取左行 右行配置文件
+  if (val.status === 200) {
+    let roadDir = val.data.roadDirection
+    store.dispatch('SetRoadDirection', roadDir)
+  }
+})
 
 // mian test hg
 /* eslint-disable no-new */

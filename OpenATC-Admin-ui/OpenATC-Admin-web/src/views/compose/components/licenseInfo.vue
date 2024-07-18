@@ -12,7 +12,7 @@
 <template>
   <div class="licenseInfo">
     <el-dialog
-      title="开源协议"
+      :title="$t('openatc.about.opensourceagreement')"
       :visible.sync="licenseInfoVisible"
       width="60%"
       height="914px"
@@ -183,7 +183,6 @@ export default {
 //     border-radius: 4px 4px 0px 0p
 // }
 // .licenseInfo .el-dialog__title {
-//     font-family: MicrosoftYaHei;
 //     font-size: 20px;
 //     font-weight: normal;
 //     font-stretch: normal;

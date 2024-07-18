@@ -66,6 +66,7 @@ export default {
     }
     var _this = this
     _this.$nextTick(function () {
+      if (!document.getElementById('app')) return
       this.bodyDomSize.width = document.getElementById('app').clientWidth
       this.bodyDomSize.height = document.getElementById('app').clientHeight
       this.$store.dispatch('SaveBodyDomSize', this.bodyDomSize)

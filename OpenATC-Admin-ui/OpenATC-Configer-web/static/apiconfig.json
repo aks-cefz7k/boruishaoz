@@ -35,6 +35,16 @@
   "method": "post"
 },
 {
+  "key": "uploadDeviceInfo",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
+  "key": "downloadDeviceInfo",
+  "url": "/devs/message",
+  "method": "post"
+},
+{
   "key": "downloadTscParam",
   "url": "/devs/message",
   "method": "post"
@@ -286,6 +296,11 @@
 {
   "key": "getHistoryFlow",
   "url": "/flow/history",
+  "method": "post"
+},
+{
+  "key": "getFaultHistoryByFtp",
+  "url": "/fault/history/ftp",
   "method": "post"
 }
 ]

@@ -272,7 +272,7 @@ export default {
         )
         return
       }
-      if (this.globalParamModel.getParamLength('patternList') >= 108) {
+      if (this.globalParamModel.getParamLength('patternList') >= 32) {
         this.$message.error(
           // 'There are at most 100 data !'
           this.$t('edge.pattern.mostdata')
@@ -412,7 +412,12 @@ export default {
       this.patternStatusIndex = val.id
       this.isShowPatternStatus = true
       if (val.desc === '') {
-        this.currPatternName = 'pattern' + val.id
+        if (this.$i18n.locale === 'en') {
+          this.currPatternName = 'pattern' + val.id
+        } else {
+          this.currPatternName = '方案' + val.id
+        }
+        // this.currPatternName = 'pattern' + val.id
       } else {
         this.currPatternName = val.desc
       }
@@ -440,7 +445,11 @@ export default {
           obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
           obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          list.push(obj)
+          // 忽略相位不显示
+          let mode = ring.mode
+          if (mode !== 7) {
+            list.push(obj)
+          }
         }
         this.patternStatusList.push(list)
       }
@@ -473,7 +482,12 @@ export default {
     },
     expandChange (val1, val2) {
       if (val1.desc === '') {
-        this.currPatternName = 'pattern' + val1.id
+        if (this.$i18n.locale === 'en') {
+          this.currPatternName = 'pattern' + val1.id
+        } else {
+          this.currPatternName = '方案' + val1.id
+        }
+        // this.currPatternName = 'pattern' + val1.id
       } else {
         this.currPatternName = val1.desc
       }
@@ -518,6 +532,44 @@ export default {
     handleStageData (data, rings) {
       let stagesList = []
       let stages = data.stages
+      // let phaseList = data.phase
+      // let ringsList = [...data.rings]
+      // let maxCycle = data.cycle
+      // for (let ring of ringsList) {
+      //   let sequence = ring.sequence
+      //   let ringCycle = 0
+      //   for (let phaseid of sequence) {
+      //     let phase = phaseList.filter(item => {
+      //       return item.id === phaseid
+      //     })[0]
+      //     let split = phase.split
+      //     ringCycle = ringCycle + split
+      //   }
+      //   if (ringCycle > maxCycle) {
+      //     maxCycle = ringCycle
+      //   }
+      // }
+      // // for (let ring of ringsList) {
+      // //     let minSplit = 0
+      // //     let sequence = ring.sequence
+      // //     let passSplit = 0 //当前加载的环相位总时间
+      // //     //如果累计走过的绿性比 < 当前时间i,则有阶段变化
+      // //     for (let phaseid of sequence) {
+      // //       let phase = phaseList.filter(item => {
+      // //         return item.id === phaseid
+      // //       })[0]
+      // //       let split = phase.split
+      // //       let id = phase.id
+      // //       passSplit= passSplit + split
+      // //       if () {
+      // //         minSplit = split
+      // //       }
+      // //     }
+      // //   }
+      // // let curPhaseStr = ''
+      // for (let i = 0; i < maxCycle; i++) {
+
+      // }
       for (let i = 0; i < stages.length; i++) {
         let stage = stages[i]
         let stageItem = this.getStageItem(stage, rings)

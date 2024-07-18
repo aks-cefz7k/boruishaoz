@@ -9,7 +9,8 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-export const images = [{
+import store from '../../store'
+let images = [{
   id: 1,
   // name: 'East-Straight',
   name: 'edge.phase.es',
@@ -122,7 +123,7 @@ export const images = [{
   class: 'iconfont icon-icon-test1'
 }]
 
-export const pedimages = [
+const pedimages = [
   {
     id: 1,
     name: 'edge.phase.eped',
@@ -216,3 +217,26 @@ export const pedimages = [
     img: require('../../assets/sidewalk_type/south-north-ped.svg')
   // class: 'iconfont icon-nanhangren'
   }]
+
+const getPhase = () => {
+  if (store.getters.roadDirection === 'left') {
+    // 左行下，掉头图标替换
+    images.forEach((img) => {
+      if (img.id === 4) {
+        img.class = 'iconfont icon-dongtiaotou-yinni'
+      }
+      if (img.id === 8) {
+        img.class = 'iconfont icon-xitiaotou-yinni'
+      }
+      if (img.id === 12) {
+        img.class = 'iconfont icon-beitiaotou-yinni'
+      }
+      if (img.id === 16) {
+        img.class = 'iconfont icon-nantiaotou-yinni'
+      }
+    })
+  }
+  return images
+}
+
+export {pedimages, getPhase}

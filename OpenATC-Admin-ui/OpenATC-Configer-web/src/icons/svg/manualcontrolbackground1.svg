@@ -37,7 +37,6 @@
       .cls-6 {
         font-size: 14px;
         text-anchor: end;
-        font-family: "Source Han Sans CN";
       }
 
       .cls-6, .cls-7 {

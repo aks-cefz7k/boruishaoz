@@ -140,6 +140,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { refreshChannelLockDescData } from '@/utils/channeldesc.js'
 export default {
   name: 'manualcontrol',
   components: {},
@@ -150,7 +151,7 @@ export default {
       channelList: [],
       id: 1,
       channelstatusList: [{
-        label: '通道状态不指定状态',
+        label: '默认',
         value: 0
       }, {
         label: '红灯',
@@ -425,20 +426,19 @@ export default {
         value: 59,
         label: '59'
       }],
-      typeOptions: new Map([[0, '不启用'], [2, '机动车相位'], [3, '行人相位'], [4, '跟随相位'], [5, '跟随行人相位']])
+      typeOptions: new Map([[0, '不启用'], [2, '机动车相位'], [3, '行人相位'], [4, '跟随相位'], [5, '行人跟随相位'], [6, '车道灯']])
     }
   },
   computed: {
     ...mapState({
-      channellock: state => state.globalParam.tscParam.channellock
+      channellock: state => state.globalParam.tscParam.channellock,
+      channelDescMap: state => state.globalParam.channelDescMap
     })
   },
   mounted: function () {
+    refreshChannelLockDescData()
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
       _this.tableHeight =
                 window.innerHeight -
                 document.querySelector('#footerBtn').offsetTop -
@@ -456,6 +456,9 @@ export default {
                 window.innerHeight -
                 document.querySelector('#footerBtn').offsetTop -
                 150
+    },
+    channelDescMap: function () {
+      refreshChannelLockDescData()
     }
   },
   created () {
@@ -507,18 +510,20 @@ export default {
         })
       })
     },
-    onAdd () {
-      this.increaseId()
+    getChannelInfo () {
       let channel = this.globalParamModel.getParamsByType('channelList')
       let channellocKinfoList = []
       for (let chan of channel) {
         let obj = {}
-        let type = chan.controltype
         obj.channelid = chan.id
-        obj.desc = chan.desc + this.typeOptions.get(type)
+        obj.desc = this.channelDescMap.get(chan.id)
         obj.lockstatus = 0
         channellocKinfoList.push(obj)
       }
+      return channellocKinfoList
+    },
+    onAdd () {
+      this.increaseId()
       var channellockInitData = {
         id: this.id,
         starthour: 0,
@@ -529,7 +534,7 @@ export default {
         endsec: 0,
         greenflash: 3,
         yellowlamp: 2,
-        channellocKinfo: channellocKinfoList
+        channellocKinfo: this.getChannelInfo()
       }
       this.globalParamModel.addParamsByType('channellock', channellockInitData)
       // this.id++
@@ -589,7 +594,6 @@ export default {
 //   margin-top: 10px;
 // }
 // .channel-status {
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;

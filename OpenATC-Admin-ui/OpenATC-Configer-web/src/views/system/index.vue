@@ -137,10 +137,13 @@
       </div>
     </el-tab-pane>
     <el-tab-pane :label="$t('edge.system.channeldetection')" name="channel">
-      <channelControl />
+      <channelControl :channelList="channelList" />
     </el-tab-pane>
     <el-tab-pane :label="$t('edge.system.realTimeChannel')" name="realTimeChannel">
-      <realTimeChannel ref="realTimeChannel"></realTimeChannel>
+      <realTimeChannel ref="realTimeChannel" :channelList="channelList"></realTimeChannel>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('edge.route.deviceInfo')" name="deviceinfo">
+      <deviceInfo ref="deviceinfo"></deviceInfo>
     </el-tab-pane>
     <!-- <el-tab-pane label="手动控制" name="manual">
       <manualControl></manualControl>
@@ -165,10 +168,12 @@ import updatefile from './systemDialog/updateFile'
 import manualControl from './manualControl'
 import channelControl from './channelControl'
 import realTimeChannel from './realTimeChannel'
+import deviceInfo from '../deviceInfo/systemInfo'
 import { getSignVersion, getSystemTime, getParamVersion, getCode, getSignIp, getSerialPort, setRemoteControl, getRemoteDebug, setRemoteDebug, udiskupdate } from '@/api/system'
+import { getChannel } from '@/api/manual'
 export default {
   name: 'system',
-  components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel },
+  components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel, deviceInfo },
   data () {
     return {
       activeName: 'information',
@@ -216,7 +221,8 @@ export default {
         id: '3'
       }],
       userName: '',
-      password: ''
+      password: '',
+      channelList: [] // 上载获取的通道信息
     }
   },
   watch: {
@@ -246,6 +252,7 @@ export default {
     this.getSignIp() // 获取ip数据
     this.getSerialPort() // 获取串口数据
     // this.getRemoteDebug() // 获取远程调试信息
+    this.getChannelList() // 自动上载通道
   },
   methods: {
     handleClick (tab, event) {
@@ -430,10 +437,10 @@ export default {
     chooseFile () {
       let username = this.userName
       let password = this.password
-      if (username === '' || password === '') {
-        this.$message.error(this.$t('edge.statistics.userpassnotnull'))
-        return
-      }
+      // if (username === '' || password === '') {
+      //   this.$message.error(this.$t('edge.statistics.userpassnotnull'))
+      //   return
+      // }
       let updateFile = this.$refs.updateFile
       updateFile.onUpdateFile(username, password)
     },
@@ -474,6 +481,23 @@ export default {
           duration: 1 * 1000
         })
       })
+    },
+    getChannelList () {
+      getChannel().then((data) => {
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        this.channelList = res.data.data.channelList
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
     }
   }
 }
@@ -487,7 +511,6 @@ export default {
 //   margin-top: 20px;
 //   margin-left: 30px;
 //   height: 18px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -507,7 +530,6 @@ export default {
 // .software {
 //   position: relative;
 //   left: 20px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;

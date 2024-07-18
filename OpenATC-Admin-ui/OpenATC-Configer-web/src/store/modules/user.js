@@ -91,7 +91,9 @@ const user = {
             return
           }
           commit('SET_USER', data.data.data)
-          commit('SET_ROLES', data.data.data.roleNames)
+          if (data.data.data.roleNames) {
+            commit('SET_ROLES', data.data.data.roleNames)
+          }
           resolve(data.data.data)
         }).catch(error => {
           reject(error)

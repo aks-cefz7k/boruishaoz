@@ -496,7 +496,6 @@ border: 1px solid $--border-color-base;
     margin-top: 20px;
     margin-right: 30px;
     text-align: right;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -507,7 +506,6 @@ border: 1px solid $--border-color-base;
     margin-top: 10px;
     margin-right: 30px;
     text-align: right;
-    font-family: ArialMT;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -518,7 +516,6 @@ border: 1px solid $--border-color-base;
     margin-top: 20px;
     margin-right: 30px;
     text-align: right;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -529,7 +526,6 @@ border: 1px solid $--border-color-base;
     margin-top: 10px;
     margin-right: 30px;
     text-align: right;
-    font-family: ArialMT;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -539,7 +535,6 @@ border: 1px solid $--border-color-base;
   .model-name {
     float: left;
     margin-top: 32px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -574,7 +569,6 @@ border: 1px solid $--border-color-base;
     // float: left;
     text-align: center;
     margin-top: 40px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 30px;
     font-weight: normal;
     font-stretch: normal;
@@ -584,7 +578,6 @@ border: 1px solid $--border-color-base;
   }
   .curr-grade {
     margin-top: 30px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 24px;
     font-weight: normal;
     font-stretch: normal;
@@ -594,7 +587,6 @@ border: 1px solid $--border-color-base;
   }
   .curr-num {
     margin-top: 20px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -628,7 +620,6 @@ border: 1px solid $--border-color-base;
     // left: 30px;
     top: 150px;
     height: 21px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 22px;
     font-weight: normal;
     font-stretch: normal;
@@ -716,7 +707,6 @@ border: 1px solid $--border-color-base;
   }
   .pattern-name {
     display: inline;
-    font-family: SourceHanSansCN-Regular;
     font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
@@ -727,7 +717,6 @@ border: 1px solid $--border-color-base;
   .pattern-message {
     display: inline;
     margin-left: 10px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -745,12 +734,14 @@ border: 1px solid $--border-color-base;
     // padding-left: 10px;
     background-color: $--color-white;
     border: solid 1px $--border-color-lighter;
+    position: relative;
+    overflow-x: auto;
+    min-height: 700px;
   }
   .cross-mess {
     margin-left: 15px;
     margin-top: 15px;
     height: 20px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
@@ -768,9 +759,13 @@ border: 1px solid $--border-color-base;
     // height: 180px;
     background-color: $--color-white;
   }
+  .cross-content {
+    margin-top: 19px;
+    // margin-left: 7px;
+    overflow: hidden;
+  }
   .cross-name {
     // height: 13px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;font-weight: normal;
     font-stretch: normal;
     line-height: 22px;
@@ -780,7 +775,6 @@ border: 1px solid $--border-color-base;
   .cross-value {
     width: 180px;
     height: 22px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -788,10 +782,22 @@ border: 1px solid $--border-color-base;
     letter-spacing: 0px;
     color: $--color-text-primary;
   }
+  .el-tag {
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
   .control-model {
     float: left;
     margin-top: 10px;
     // margin-left: 15px;
+  }
+  .model-label, .stage-label {
+    width: 100px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #606266;
+    line-height: 40px;
+    padding-right: 12px;
   }
   .single-model {
     margin-right: 10px;
@@ -801,6 +807,7 @@ border: 1px solid $--border-color-base;
     height: 65px;
     background-color: #edf6ff;
     border-radius: 6px;
+    line-height: 1.15;
   }
   .single-model-select {
     margin-right: 10px;
@@ -814,7 +821,6 @@ border: 1px solid $--border-color-base;
   }
   .single-model-name {
     margin-top: 3px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
@@ -824,7 +830,6 @@ border: 1px solid $--border-color-base;
   }
   .current-stage-num {
     margin-top: 3px;
-    font-family: MicrosoftYaHei;
     font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
@@ -837,7 +842,6 @@ border: 1px solid $--border-color-base;
   }
   .control-time {
     margin-top: 40px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 30px;
     font-weight: normal;
     font-stretch: normal;
@@ -901,6 +905,63 @@ border: 1px solid $--border-color-base;
    zoom: 0.25;
  }
 }
+// 手动控制弹框
+.manual-control-modal{
+  padding: 21px 0px 21px 28px;
+  .title {
+    margin-bottom: 24px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 22px;
+    color: $--color-text-primary;
+  }
+  .model-label {
+    line-height: 14px;
+    margin-top: 4px;
+  }
+  .stage-label {
+    margin-top: 36px;
+  }
+  .footer {
+    float: right;
+    margin: 38px 24px 40px 0;
+  }
+  .el-form-item {
+    margin-bottom: 10px;
+  }
+  .el-form-item__label {
+    font-size: 14px;
+    font-weight: 400;
+    color: $--color-text-secondary;
+  }
+  .el-dialog__footer {
+    padding: 10px 72px 38px 0;
+  }
+  .el-dialog__header {
+    padding: 19px 30px;
+  }
+  .el-select {
+    width: 75px;
+  }
+  .el-input {
+    width: 50%;
+  }
+  .footer {
+    button {
+      width: 56px;
+      height: 32px;
+      padding: 0;
+      text-align: center;
+      line-height: 30px;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+    }
+  }
+  .model-label, .stage-label {
+    color: $--color-text-secondary;
+  }
+} 
 .main-statgestatus {
   position: relative;
 }
@@ -933,7 +994,6 @@ border: 1px solid $--border-color-base;
   left: 5px;
   width: 15px;
   height: 14px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -950,7 +1010,6 @@ border: 1px solid $--border-color-base;
   padding: 0 12px 0 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: SourceHanSansCN-Regular;
   font-weight: normal;
   font-stretch: normal;
   letter-spacing: 0px;
@@ -990,7 +1049,6 @@ border: 1px solid $--border-color-base;
     align-items: center;
     justify-content: flex-start;
     width: 96%;
-    font-family: SourceHanSansCN-Regular;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -1043,7 +1101,6 @@ border: 1px solid $--border-color-base;
     margin-top: 10px;
   }
   .channel-status {
-    font-family: SourceHanSansCN-Regular;
     font-size: 18px;
     font-weight: normal;
     font-stretch: normal;
@@ -1055,7 +1112,6 @@ border: 1px solid $--border-color-base;
 // 设备信息
 .device-info {
   height: 18px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 18px;
   font-weight: normal;
   font-stretch: normal;
@@ -1065,7 +1121,6 @@ border: 1px solid $--border-color-base;
 }
 .device-second-title {
   margin: 15px 0 5px 0;
-  font-family: SourceHanSansCN-Regular;
   font-size: 15px;
   letter-spacing: 0px;
   color: $--color-text-regular;
@@ -1080,6 +1135,11 @@ border: 1px solid $--border-color-base;
   font-size: 14px;
   line-height: 120%;
   margin: 15px 0 5px 0;
+  .see-cut  {
+    font-size: 14px;
+    padding: 0 0;
+    float: right;
+  }
 }
 
 .device-param {
@@ -1101,7 +1161,6 @@ border: 1px solid $--border-color-base;
   // position: relative;
   margin-top: 10px;
   left: 20px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1113,7 +1172,6 @@ border: 1px solid $--border-color-base;
   position: relative;
 }
 .device-header {
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1121,13 +1179,75 @@ border: 1px solid $--border-color-base;
   letter-spacing: 0px;
   color: $--color-text-primary;
 }
+
+//剪断效果
+.deviceinfo-seeCutDetail {
+  .edit-button {
+    float: left;
+    margin-top: 10px;
+  }
+  .effect-pic {
+    height: 200px;
+    background: $--background-color-base;
+    display: flex;
+    flex-direction: row;
+  }
+  .x-container {
+    width: 13%;
+    height: 100%;
+  }
+  .x-title {
+    height: 20%;
+    text-align:center;
+    padding-top: 10px;
+  }
+  .x-item-container {
+    height: 80%;
+    border: 1px solid $--color-text-secondary;
+  }
+  .r-container {
+    width: 34%;
+    height: 100%;
+    margin-left: 20px;
+  }
+  .r-title {
+    height: 20%;
+    text-align:center;
+    padding-top: 10px;
+  }
+  .r-item-container {
+    height: 80%;
+    border: 1px solid $--color-text-secondary;
+  }
+  .icon-container {
+    float: left;
+    height: 60%;
+  }
+  .content {
+    height: 100%;
+    text-align: center;
+    padding: 10px;
+  }
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .icon-content {
+    width: 100%;
+    height: 100%;
+  }
+  .svg-icon[data-v-5d4549d3] {
+      height: 7em;
+  }
+}
 // 手动面板
 .manual-record {
   .control-model-name {
     float: left;
     margin-left: 30px;
     margin-top: 30px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -1139,7 +1259,6 @@ border: 1px solid $--border-color-base;
     float: left;
     margin-left: 5px;
     margin-top: 30px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -1151,7 +1270,6 @@ border: 1px solid $--border-color-base;
     float: left;
     margin-left: 10px;
     margin-top: 22px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 18px;
     font-weight: normal;
     font-stretch: normal;
@@ -1165,7 +1283,6 @@ border: 1px solid $--border-color-base;
   margin-top: 20px;
   margin-left: 30px;
   height: 18px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 18px;
   font-weight: normal;
   font-stretch: normal;
@@ -1185,7 +1302,6 @@ border: 1px solid $--border-color-base;
 .software {
   position: relative;
   left: 20px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1215,7 +1331,6 @@ border: 1px solid $--border-color-base;
       background: $--color-black;
       line-height: 40px;
       text-align: center;
-      font-family: SourceHanSansCN-Regular;
       font-size: 14px;
       font-weight: normal;
       font-stretch: normal;
@@ -1269,7 +1384,6 @@ float: left;
 margin-top: 8px;
 margin-left: 10px;
 height: 14px;
-font-family: SourceHanSansCN-Regular;
 font-size: 14px;
 font-weight: normal;
 font-stretch: normal;
@@ -1284,7 +1398,6 @@ color: $--color-text-secondary;
   bottom: 30px;
   .pattern-status {
     display: inline;
-    font-family: SourceHanSansCN-Regular;
     font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
@@ -1315,7 +1428,6 @@ color: $--color-text-secondary;
     float: left;
     margin-top:7px;
     margin-left: 5px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -1364,4 +1476,207 @@ color: $--color-text-secondary;
   right: 20px;
   border: solid 1px $--border-color-base;
   overflow: auto;
+}
+// el-switch样式
+.el-switch__core {
+  margin: 0;
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 20px;
+  border: 1px solid $--border-color-light;
+  outline: none;
+  border-radius: 10px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background: $--border-color-light;
+  cursor: pointer;
+  -webkit-transition: border-color .3s, background-color .3s;
+  transition: border-color .3s, background-color .3s;
+  vertical-align: middle;
+}
+// el-tooltip样式
+.el-tooltip__popper.is-light {
+  background: $--color-primary;
+  border: 1px solid $--color-primary;
+  color: $--color-text-primary;
+}
+.el-tooltip__popper.is-light[x-placement^="top"] .popper__arrow {
+  border-top-color: $--color-primary;
+}
+.el-tooltip__popper.is-light[x-placement^="top"] .popper__arrow::after {
+  border-top-color: $--color-primary;
+}
+
+// 登陆页面
+.login-container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: $--background-color-base;
+  .switch-language {
+    cursor:pointer;
+    margin-top: 20px;
+    margin-right: 20px;
+    float: right;
+  }
+  .el-input {
+    display: inline-block;
+    height: 47px;
+    width: 85%;
+    input {
+      background: $--color-white;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 0px;
+      padding: 12px 5px 12px 15px;
+      color:  $--color-text-primary;
+      height: 47px;
+      &:-webkit-autofill {
+        -webkit-text-fill-color: rgb(0, 0, 0) !important;
+      }
+      .el-input__inner {
+        -webkit-appearance: none;
+        background-color: $--color-white;
+        background-image: none;
+        border-radius: 4px;
+        border: 0px solid #dcdfe6;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: $--color-text-regular;
+        display: inline-block;
+        font-size: inherit;
+        height: 40px;
+        line-height: 40px;
+        outline: 0;
+        padding: 0 15px;
+        -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+        transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+        width: 100%;
+      }
+    }
+  }
+  .el-form-item {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: $--color-white;
+    border-radius: 5px;
+    color: $--color-primary;
+  }
+  .login-form {
+    position: absolute;
+    left: 0;
+    right: 0;
+    //width: 33%;
+    width: 20%;
+    min-width: 400px;
+    padding: 35px 35px 15px 35px;
+    margin: 120px auto;
+  }
+  .tips {
+    font-size: 14px;
+    color: $--color-text-secondary;
+    margin-bottom: 10px;
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: $--color-primary;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+    &_login {
+      font-size: 20px;
+    }
+  }
+  .text-container {
+    padding: 6px 0px 0px 15px;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: $--color-primary;
+  }
+  .title {
+    font-size: 26px;
+    font-weight: 400;
+    color: $--color-primary;
+    margin: 0px auto 40px auto;
+    text-align: center;
+    font-weight: bold;
+    font-stretch: normal;
+  }
+  .show-pwd {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    font-size: 16px;
+    color: $--color-info;
+    cursor: pointer;
+    user-select: none;
+  }
+  .expand-text {
+  position: relative;
+  top: -10px;
+  // margin-left: 280px;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  letter-spacing: 0px;
+  color: $--color-primary;
+  cursor: pointer;
+}
+}
+
+// 关于弹窗
+.edgeversioninfo {
+  .el-dialog__headerbtn .el-dialog__close {
+      color: $--color-white;
+  }
+  .el-dialog__header {
+      padding: 50px 30px 10px;
+      height: 109px;
+      background-color: $--color-primary;
+      border-radius: 4px 4px 0px 0p
+  }
+  .el-dialog__title {
+      width: 291px;
+      height: 38px;
+      margin-top: 40px;
+      font-size: 36px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 14px;
+      letter-spacing: 0px;
+      color: #fff;
+  }
+  .banben {
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 14px;
+      letter-spacing: 0px;
+      color: $--color-text-regular;
+  }
+  .divider {
+      // width: 483px;
+      height: 1px;
+      margin-top: 15px;
+      background-color: $--border-color-light;
+  }
+  .open-source {
+      margin-top: 25px;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 14px;
+      letter-spacing: 0px;
+      color: $--color-primary;
+  }
+  .agreement {
+      cursor: pointer;
+  }
 }
