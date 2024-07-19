@@ -582,7 +582,9 @@ const en = {
       'isReboot': 'The system file is downloaded successfully. Do you want to restart the device?',
       'rebootSuccess': 'Restart successfully!',
       'rebootFaile': 'Restart failed!',
-      'resetSuccess': 'Set successfully!'
+      'resetSuccess': 'Set successfully!',
+      'filesuccess': 'Upgrade file transfer complete!',
+      'filefailed': 'Upgrade interface call failed!'
     },
     'optimize': {
       'strategy': 'Optimization strategy',

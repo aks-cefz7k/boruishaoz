@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="device-list">
-      <div class="title">{{$t('openatc.bottleneckcontrol.detector') + curChoosedId}}</div>
+      <div class="title">{{curChoosedId}}</div>
       <el-button type="primary" class="modify-btn" @click="handleModify">{{!isModify ? $t('openatc.button.modify') : $t('openatc.button.Cancel')}}</el-button>
       <DeviceList
         v-if="resetflag"

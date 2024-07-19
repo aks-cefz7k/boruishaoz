@@ -175,6 +175,7 @@ export default {
       phaseNotZero: false, // 判断必须有一个非零相位
       planNotZero: false, // 判断必须有一个plan
       patternNotZero: false, // 判断必须有一个pattern
+      patternCycleEqual: true, // 校验环周期时长是否相等
       dataNotZero: false, // 判断必须有一个data
       dateIsAll: false, // 判断日期必须为全年
       planDate: false, // 校验plan里的时刻是否合法
@@ -647,7 +648,6 @@ export default {
           lock.channellocKinfo.forEach(el => delete el.desc)
         }
       }
-      debugger
       return newTscParam
     },
     cloneObjectFn (obj) {
@@ -803,6 +803,18 @@ export default {
         this.$message.error(
           this.$t('edge.errorTip.patternNotZero')
         )
+        return false
+      }
+      if (!this.patternCycleEqual) {
+        let mess = `方案${this.patternmsg.toString()}中存在环周期时长不一致`
+        if (this.$i18n.locale === 'en') {
+          mess = `The cycle of each ring is inconsistent in scheme${this.patternmsg.toString()}`
+        }
+        this.$message({
+          message: mess,
+          type: 'error',
+          dangerouslyUseHTMLString: true
+        })
         return false
       }
       if (!this.splitCheck) {
@@ -1016,6 +1028,35 @@ export default {
         }
         this.patternNotZero = true
       }
+      if (!this.isRingCycleEqual(patternList)) {
+        this.patternCycleEqual = false
+      }
+    },
+    isRingCycleEqual (patternlist) {
+      let isequal = true
+      this.patternmsg = []
+      for (let pattern of patternlist) {
+        let rings = pattern.rings
+        let maxCycle = 0
+        for (let ring of rings) {
+          if (ring.length === 0) continue
+          let cycle = 0
+          for (let r of ring) {
+            if (r.mode === 7) { // 忽略相位不计周期
+              continue
+            }
+            cycle = cycle + r.value
+          }
+          if (cycle > maxCycle && maxCycle === 0) {
+            maxCycle = cycle
+          }
+          if (cycle !== maxCycle) {
+            this.patternmsg.push(pattern.id)
+            isequal = false
+          }
+        }
+      }
+      return isequal
     },
     checkDataRules () {
       let dateList = this.globalParamModel.getParamsByType('dateList')
