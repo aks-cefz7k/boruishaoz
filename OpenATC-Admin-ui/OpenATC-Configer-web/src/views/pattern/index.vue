@@ -272,7 +272,7 @@ export default {
         )
         return
       }
-      if (this.globalParamModel.getParamLength('patternList') >= 108) {
+      if (this.globalParamModel.getParamLength('patternList') >= 32) {
         this.$message.error(
           // 'There are at most 100 data !'
           this.$t('edge.pattern.mostdata')

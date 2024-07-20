@@ -350,6 +350,12 @@ const en = {
     },
     'bottleneckcontrol': {
       'detector': 'Detector',
+      'open': 'Open',
+      'off': 'Off',
+      'isoffcontrol': 'Is cancel overflows control',
+      'isopencontrol': 'Is open overflows control',
+      'opensuccess': 'Open overflows control success!',
+      'offsuccess': 'Cancel overflows control success!',
       'switchsavereminder': 'Switching detector control list will not save the current configuration. Are you sure you want to switch?',
       'bottlenecklist': 'Detector control list',
       'detectorid': 'Scheme ID',

@@ -17,46 +17,37 @@ export default class PhaseDataModel {
     this.SidePosMap = new Map()
     this.RampMainPosMap = new Map() // 匝道主路坐标
     this.RampSidePosMap = new Map() // 匝道支路坐标
+    this.BusMapMap = new Map() // 公交相位底图坐标
+    this.BusPhaseMap = new Map() // 公交相位坐标
     this.Init()
   }
   Init () {
-    let phaseJson = require('./posJson/phasePos.json')
-    let sideJson = require('./posJson/sidePos.json')
+    let phaseJson = require('./posJson/phasePos.json').phaseList
+    let sideJson = require('./posJson/sidePos.json').sideList
     let rampJson = require('./posJson/rampPos.json')
+    let busMapJson = require('./posJson/busPos.json').busMap
+    let busPhaseJson = require('./posJson/busPos.json').busphases
     if (store.getters.roadDirection === 'left') {
-      phaseJson = require('./posJson/phasePos.left.json')
+      phaseJson = require('./posJson/phasePos.left.json').phaseList
+      busMapJson = require('./posJson/busPos.left.json').busMap
+      busPhaseJson = require('./posJson/busPos.left.json').busphases
     }
-    phaseJson.phaseList.forEach(phase => {
+    this.handlePos(phaseJson, this.PhasePosMap)
+    this.handlePos(sideJson, this.SidePosMap)
+    this.handlePos(rampJson.rampMainPhaseList, this.RampMainPosMap)
+    this.handlePos(rampJson.rampSidePhaseList, this.RampSidePosMap)
+    this.handlePos(busMapJson, this.BusMapMap)
+    this.handlePos(busPhaseJson, this.BusPhaseMap)
+  }
+
+  handlePos (phaseJson, phaseMap) {
+    phaseJson.forEach(phase => {
       let value = {
         name: phase.name,
         x: phase.x,
         y: phase.y
       }
-      this.PhasePosMap.set(phase.id, value)
-    })
-    sideJson.sideList.forEach(side => {
-      let value = {
-        name: side.name,
-        x: side.x,
-        y: side.y
-      }
-      this.SidePosMap.set(side.id, value)
-    })
-    rampJson.rampMainPhaseList.forEach(phase => {
-      let value = {
-        name: phase.name,
-        x: phase.x,
-        y: phase.y
-      }
-      this.RampMainPosMap.set(phase.id, value)
-    })
-    rampJson.rampSidePhaseList.forEach(phase => {
-      let value = {
-        name: phase.name,
-        x: phase.x,
-        y: phase.y
-      }
-      this.RampSidePosMap.set(phase.id, value)
+      phaseMap.set(phase.id, value)
     })
   }
 
@@ -74,5 +65,13 @@ export default class PhaseDataModel {
 
   getSidePhasePos (id) {
     return this.RampSidePosMap.get(id)
+  }
+
+  getBusMapPos (id) {
+    return this.BusMapMap.get(id)
+  }
+
+  getBusPhasePos (id) {
+    return this.BusPhaseMap.get(id)
   }
 }

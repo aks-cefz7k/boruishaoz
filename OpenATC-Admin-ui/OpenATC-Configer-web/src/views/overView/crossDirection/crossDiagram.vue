@@ -53,8 +53,13 @@
           <SidewalkSvg v-for="(side, index) in compSidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :crossType="crossType" />
         </div>
         <!-- 车道相位 -->
-        <div v-if="resetflag">
+        <div v-if="resetflag" class="phaseIcon">
           <PhaseIconSvg v-for="(item, index) in compLanePhaseData" :key="item.key + '-' + index" :Data="item"/>
+        </div>
+         <!-- 公交相位 -->
+        <div v-if="resetflag" class="busIcon">
+          <BusMapSvg v-for="(item, index) in busPhaseData" :key="item.key + '-' + index" :Data="item" />
+          <PhaseIconSvg v-for="(item, index) in busPhaseData" :key="item.key + '-' + index" :Data="item"/>
         </div>
       </div>
       <!-- 匝道状态 -->
@@ -99,8 +104,13 @@
           <SidewalkSvg v-for="side in compSidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
         </div>
         <!-- 车道相位 -->
-        <div v-if="resetflag">
+        <div v-if="resetflag" class="phaseIcon">
           <LPhaseIconSvg v-for="item in compLanePhaseData" :key="item.key" :Data="item"/>
+        </div>
+         <!-- 公交相位 -->
+        <div v-if="resetflag" class="busIcon">
+          <BusMapSvg v-for="(item, index) in busPhaseData" :key="'Busmap-' + item.key + '-' + index" :Data="item" />
+          <LPhaseIconSvg v-for="(item, index) in busPhaseData" :key="item.key + '-' + index" :Data="item"/>
         </div>
       </div>
     </div>
@@ -134,6 +144,7 @@ import LTShapeNorthRoadsSvg from './baseImg/leftroad/LTShapeNorthRoadsSvg.vue'
 import LTShapeSouthRoadsSvg from './baseImg/leftroad/LTShapeSouthRoadsSvg.vue'
 import LPhaseIconSvg from './phaseIcon/LphaseIconSvg'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
+import BusMapSvg from './busIcon/busMapSvg'
 export default {
   name: 'crossDiagram',
   components: {
@@ -158,7 +169,8 @@ export default {
     LTShapeWestRoadsSvg,
     LTShapeNorthRoadsSvg,
     LTShapeSouthRoadsSvg,
-    LPhaseIconSvg
+    LPhaseIconSvg,
+    BusMapSvg
   },
   props: {
     crossStatusData: {
@@ -264,7 +276,8 @@ export default {
       compLanePhaseData: [], // 对比车道相位和车道跟随相位后，显示的数据
       compSidewalkPhaseData: [], // // 对比行人相位和车道跟随相位后，显示的数据
       comdirePhaseData: [], // 对比相同方向车道相位数据后，被删减的唯一direction的数组
-      comdireOverlapPhaseData: [] // 对比相同方向车道跟随相位数据后，被删减的唯一direction的数组
+      comdireOverlapPhaseData: [], // 对比相同方向车道跟随相位数据后，被删减的唯一direction的数组
+      busPhaseData: [] // 公交相位数据
     }
   },
   methods: {
@@ -443,12 +456,39 @@ export default {
           this.getOverlapPhasePos()
           this.getPedPhasePos()
           this.getOverlapPedPhasePos()
+          // this.getBusPos()
         }
         if (this.mainType === '103') {
           // 获取匝道道路的主路和支路的相位坐标
           this.getRampPhasePos()
         }
       })
+    },
+    getBusPos () {
+      // 公交相位信息
+      this.busPhaseData = []
+      this.crossInfo.phaseList.forEach((ele, i) => {
+        ele.direction.forEach((dir, index) => {
+          // 车道相位
+          this.busPhaseData.push({
+            key: this.CrossDiagramMgr.getUniqueKey('busphase'),
+            phaseid: ele.id, // 相位id，用于对应相位状态
+            id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
+            name: this.PhaseDataModel.getBusPhasePos(dir).name,
+            left: this.PhaseDataModel.getBusPhasePos(dir).x,
+            top: this.PhaseDataModel.getBusPhasePos(dir).y,
+            busleft: this.PhaseDataModel.getBusMapPos(dir).x,
+            bustop: this.PhaseDataModel.getBusMapPos(dir).y,
+            controltype: this.createRandomType() // mock
+          })
+        })
+      })
+      console.log(this.busPhaseData)
+    },
+    createRandomType () {
+      for (var i = 3; i <= 5; i++) {
+        return Math.floor(Math.random() * (5 - 3)) + 3
+      }
     },
     getPhasePos () {
       // 车道相位信息
@@ -721,7 +761,6 @@ export default {
 }
 .phaseCountdown {
   line-height: 40px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 30px;
   font-weight: normal;
   font-stretch: normal;

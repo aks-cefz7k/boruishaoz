@@ -154,8 +154,8 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss">
 .tabs-style .el-icon-plus {
-    font-family: element-icons!important;
-    speak: none;
+    // font-family: element-icons!important;
+    // speak: none;
     font-style: normal;
     font-weight: 400;
     font-size: 28px;

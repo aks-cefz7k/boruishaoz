@@ -297,7 +297,6 @@ export default {
 //   float:left;
 //   height: 50px;
 //   line-height: 50px;
-//   font-family: MicrosoftYaHei;
 //   font-size: 22px;
 //   font-weight: bold;
 //   font-stretch: normal;
@@ -314,7 +313,6 @@ export default {
 // }
 // .openatc-menu {
 //   float:left;
-//   font-family: MicrosoftYaHei;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -347,7 +345,6 @@ export default {
 //     color: $--color-text-primary;
 //   }
 //   .user {
-//     font-family: MicrosoftYaHei;
 //     padding: 0 24px;
 //     .name {
 //       font-size: 20px;
@@ -357,7 +354,6 @@ export default {
 //     }
 //   }
 //   .message {
-//     font-family: MicrosoftYaHei;
 //     padding: 16px 24px 0 24px;
 //     margin-bottom: 10px;
 //     .email {
@@ -373,7 +369,6 @@ export default {
 //   width: 58px;
 //   height: 21px;
 //   margin-top: 10px;
-//   font-family: MicrosoftYaHei;
 //   font-size: 20px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -391,7 +386,6 @@ export default {
 // .laber-name {
 //   width: 48px;
 //   height: 13px;
-//   font-family: MicrosoftYaHei;
 //   font-size: 12px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -401,7 +395,6 @@ export default {
 // }
 // .laber-value {
 //   margin-top: 5px;
-//   font-family: MicrosoftYaHei;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;

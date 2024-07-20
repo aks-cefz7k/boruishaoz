@@ -81,37 +81,38 @@ export default {
       updateFile(formData).then((data) => {
         let res = data.data
         if (!res.success) {
+          let errormsg = this.$t('edge.system.filefailed')
           if (res.code === '4003') {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(errormsg)
           return
         }
-        let msg = this.$t('edge.common.updatesucess')
+        let msg = this.$t('edge.system.filesuccess')
         this.closeFormDialog()
         this.$message({
           message: msg,
           type: 'success',
           duration: 1 * 1000
         })
-        this.$confirm(this.$t('edge.system.isReboot'),
-          this.$t('edge.common.alarm'), {
-            confirmButtonText: this.$t('edge.common.confirm'),
-            cancelButtonText: this.$t('edge.common.cancel'),
-            type: 'warning'
-          }).then(() => {
-          this.setRemoteControl()
-          // this.$message({
-          //   type: 'success',
-          //   message: this.$t('edge.system.rebootSuccess')
-          // })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: this.$t('edge.system.rebootFaile')
-          })
-        })
+        // this.$confirm(this.$t('edge.system.isReboot'),
+        //   this.$t('edge.common.alarm'), {
+        //     confirmButtonText: this.$t('edge.common.confirm'),
+        //     cancelButtonText: this.$t('edge.common.cancel'),
+        //     type: 'warning'
+        //   }).then(() => {
+        //   this.setRemoteControl()
+        //   // this.$message({
+        //   //   type: 'success',
+        //   //   message: this.$t('edge.system.rebootSuccess')
+        //   // })
+        // }).catch(() => {
+        //   this.$message({
+        //     type: 'info',
+        //     message: this.$t('edge.system.rebootFaile')
+        //   })
+        // })
       }).catch(error => {
         this.$message.error(error)
         console.log(error)

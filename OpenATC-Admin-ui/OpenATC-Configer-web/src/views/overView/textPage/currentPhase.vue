@@ -151,7 +151,6 @@ export default {
 //   align-items: center;
 //   justify-content: flex-start;
 //   width: 96%;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 16px;
 //   font-weight: normal;
 //   font-stretch: normal;

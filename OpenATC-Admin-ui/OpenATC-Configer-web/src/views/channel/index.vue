@@ -81,7 +81,7 @@
       <el-table-column align="center" :label="$t('edge.channel.operation')">
         <template slot-scope="scope">
           <el-button type="text" @click="handleClone(scope.$index,scope.row)">{{$t('edge.common.clone')}}</el-button>
-          <el-button type="text"  @click="handleDelete(scope.$index)">{{$t('edge.common.delete')}}</el-button>
+          <el-button type="text"  @click="handleDelete(scope.$index,scope.row)">{{$t('edge.common.delete')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -89,9 +89,8 @@
 </template>
 
 <script>
-import { getPhaseDesc } from '@/utils/phasedesc.js'
-import { getPedPhaseDesc } from '@/utils/pedphasedesc.js'
 import { mapState } from 'vuex'
+import { getControSource, getOverLap, refreshChannelLockDescData, refreshControlPanelDescData, getTypeOptions, getEtypeOptions } from '@/utils/channeldesc.js'
 const TypeOptions = [{
   value: 1,
   // label: 'other'
@@ -118,39 +117,9 @@ export default {
       screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false,
       id: 1,
-      typeOptions: [{
-        value: 2,
-        label: '机动车相位'
-      }, {
-        value: 3,
-        label: '行人相位'
-      }, {
-        value: 4,
-        label: '跟随相位'
-      }, {
-        value: 5,
-        label: '行人跟随相位'
-      }, {
-        value: 6,
-        label: '车道灯'
-      }, {
-        value: 0,
-        label: '不启用'
-      }],
-      etypeOptions: [{
-        value: 2,
-        label: 'phaseVehicle'
-        // label: '机动车相位'
-      }, {
-        value: 3,
-        label: 'phasePedestrian'
-        // label: '行人相位'
-      }, {
-        value: 4,
-        label: 'overlap'
-        // label: '跟随相位'
-      }],
-      signLocationList: ['东', '南', '西', '北', '东北', '东南', '西南', '西北']
+      typeOptions: [],
+      signLocationList: ['东', '南', '西', '北', '东北', '东南', '西南', '西北'],
+      desclist: [] // 当前控制类型描述map
     }
   },
   filters: {
@@ -174,7 +143,8 @@ export default {
       return arrays
     },
     ...mapState({
-      channelList: state => state.globalParam.tscParam.channelList
+      channelList: state => state.globalParam.tscParam.channelList,
+      channelDescMap: state => state.globalParam.channelDescMap
     })
   },
   created () {
@@ -207,6 +177,11 @@ export default {
     },
     channelList: function () {
       this.init()
+      this.createCurrentDescMap()
+    },
+    channelDescMap: function () {
+      refreshChannelLockDescData()
+      refreshControlPanelDescData()
     }
   },
   methods: {
@@ -215,10 +190,11 @@ export default {
       this.increaseId()
     },
     initData () {
-      let phasetype = this.getControSource()
-      let patterntype = this.getOverLap()
+      let phasetype = getControSource(this.$i18n.locale)
+      let patterntype = getOverLap(this.$i18n.locale)
+      this.typeOptions = getTypeOptions()
       if (this.$i18n.locale === 'en') {
-        this.typeOptions = this.etypeOptions
+        this.typeOptions = getEtypeOptions()
       }
       this.typeOptions[0].children = phasetype
       this.typeOptions[1].children = phasetype
@@ -228,76 +204,48 @@ export default {
       for (let obj of channel) {
         let list = []
         list.push(obj.controltype)
-        list.push(obj.controlsource)
+        // 车道灯和不启用，没有下一级菜单
+        if (obj.controltype !== 6 && obj.controltype !== 0) {
+          list.push(obj.controlsource)
+        }
         obj.typeAndSouce = list
       }
     },
     handleChange (value, index) {
       let channel = this.globalParamModel.getParamsByType('channelList')
       channel[index].controltype = value[0]
-      channel[index].controlsource = value[1]
-    },
-    getControSource () {
-      let controlSources = []
-      const phaseList = this.globalParamModel.getParamsByType('phaseList')
-      for (let i = 0; i < phaseList.length; i++) {
-      // var patternNum = i + 1
-        let pattern = {}
-        var patternNum = phaseList[i].id
-        var patternDescription
-        let phaseDesc = phaseList[i].direction ? getPhaseDesc(phaseList[i].direction, this.$i18n.locale) : ''
-        let pedphaseDesc = phaseList[i].peddirection ? getPedPhaseDesc(phaseList[i].peddirection, this.$i18n.locale) : ''
-        if (phaseDesc === '' && pedphaseDesc === '') {
-          patternDescription = patternNum
-        } else {
-          if (phaseDesc !== '' && pedphaseDesc !== '') {
-            patternDescription = patternNum + '-' + phaseDesc + '--' + pedphaseDesc
-          } else if (phaseDesc === '') {
-            patternDescription = patternNum + '-' + pedphaseDesc
-          } else {
-            patternDescription = patternNum + '-' + phaseDesc
-          }
-        }
-        pattern.value = patternNum
-        pattern.label = patternDescription
-        controlSources.push(pattern)
+      if (value[1]) {
+        channel[index].controlsource = value[1]
       }
-      return controlSources
+      this.createCurrentDescMap()
     },
-    getOverLap () {
-      let controlTypes = []
-      const overlaplList = this.globalParamModel.getParamsByType('overlaplList')
-      for (let i = 0; i < overlaplList.length; i++) {
-        // var patternNum = i + 1
-        let overlap = {}
-        var overlapNum = overlaplList[i].id
-        var overlapDescription
-        let phaseDesc = overlaplList[i].direction ? getPhaseDesc(overlaplList[i].direction, this.$i18n.locale) : ''
-        let pedphaseDesc = overlaplList[i].peddirection ? getPedPhaseDesc(overlaplList[i].peddirection, this.$i18n.locale) : ''
-        if (phaseDesc === '' && pedphaseDesc === '') {
-          overlapDescription = overlapNum
-        } else {
-          if (phaseDesc !== '' && pedphaseDesc !== '') {
-            overlapDescription = overlapNum + '-' + phaseDesc + '--' + pedphaseDesc
-          } else if (phaseDesc === '') {
-            overlapDescription = overlapNum + '-' + pedphaseDesc
-          } else {
-            overlapDescription = overlapNum + '-' + phaseDesc
-          }
+    createCurrentDescMap () {
+      // 生成当前的控制类型描述，与通道id一一对应
+      let channels = this.globalParamModel.getParamsByType('channelList')
+      let desclist = new Map()
+      for (let ele of channels) {
+        if (!ele.typeAndSouce || ele.typeAndSouce.length === 0) continue
+        let source
+        let dire
+        let desc = []
+        if (ele.typeAndSouce[0] !== undefined) {
+          source = this.typeOptions.filter(type => type.value === ele.typeAndSouce[0])[0].label
+          desc[0] = source
         }
-        overlap.value = overlapNum
-        overlap.label = overlapDescription
-        controlTypes.push(overlap)
+        if (ele.typeAndSouce[1] !== undefined) {
+          this.typeOptions.forEach(type => {
+            if (type.value === ele.typeAndSouce[0] && type.children && type.children.length) {
+              dire = type.children.filter(child => child.value === ele.typeAndSouce[1])[0].label
+            }
+          })
+          desc[1] = dire
+        }
+        desclist.set(ele.id, desc)
       }
-      return controlTypes
+      console.log(desclist)
+      this.desclist = desclist
+      this.$store.dispatch('SetChannelDesc', desclist)
     },
-    // increaseId () { // 实现id在之前的基础上加1
-    //   let channelList = this.globalParamModel.getParamsByType('channelList')
-    //   let i = channelList.length - 1
-    //   if (i >= 0) {
-    //     this.id = channelList[i].id + 1
-    //   }
-    // },
     increaseId () { // 实现id在之前的基础上寻找最小的
       let channelList = this.globalParamModel.getParamsByType('channelList')
       let channelIdList = channelList.map(ele => ele.id)
@@ -314,7 +262,7 @@ export default {
     handleEdit (index, row) {
 
     },
-    handleDelete (index) {
+    handleDelete (index, row) {
       this.$confirm(this.$t('edge.channel.deletetip'),
         this.$t('edge.common.alarm'), {
           confirmButtonText: this.$t('edge.common.confirm'),
@@ -322,6 +270,9 @@ export default {
           type: 'warning'
         }).then(() => {
         this.globalParamModel.deleteParamsByType('channelList', index, 1)
+        // 删除对应的通道描述，以供通道锁定和手动面板更新
+        delete this.desclist[row.id]
+        this.$store.dispatch('SetChannelDesc', this.desclist)
         this.$message({
           type: 'success',
           message: this.$t('edge.common.deletesucess')

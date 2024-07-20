@@ -343,5 +343,15 @@
     "key": "update_overflows",
     "url": "/overflow",
     "method": "put"
+  },
+  {
+    "key": "open_overflow_control",
+    "url": "/overflow/control",
+    "method": "post"
+  },
+  {
+    "key": "off_overflow_control",
+    "url": "/overflow/control",
+    "method": "post"
   }
 ]

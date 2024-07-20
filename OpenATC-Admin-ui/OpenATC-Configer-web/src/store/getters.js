@@ -18,6 +18,7 @@ const getters = {
   roles: state => state.user.roles,
   Agent: state => state.Agent.agentid,
   controlmode: state => state.Agent.controlmode,
+  globalParam: state => state.globalParam,
   tscParam: state => state.globalParam.tscParam,
   curPath: state => state.globalParam.curPath,
   globalParamModel: state => state.globalParamModel.GlobalParamModeObject,
