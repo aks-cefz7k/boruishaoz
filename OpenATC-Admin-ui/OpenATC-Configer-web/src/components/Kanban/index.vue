@@ -145,7 +145,7 @@ export default {
     }
   },
   created () {
-    this.addMinSplit()
+    // this.addMinSplit()
   },
   watch: {
     list: {
