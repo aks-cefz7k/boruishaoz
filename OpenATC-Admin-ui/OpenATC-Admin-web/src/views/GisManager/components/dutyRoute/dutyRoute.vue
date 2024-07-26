@@ -103,8 +103,6 @@ export default {
   },
   mounted () {
     let _this = this
-    // var w = document.getElementsByClassName('showLayout')[0]
-    // w.style.width = '470px'
     this.getAllAdevice()
     this.$nextTick(() => {
       _this.map = window.map

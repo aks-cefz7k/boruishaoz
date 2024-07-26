@@ -13,7 +13,7 @@
   <div class="openatc-gis">
     <div id="map"></div>
     <transition name="slide">
-      <div class="showLayout"  v-show="toggleShow">
+      <div class="showLayout" :style="layoutStyle"  v-show="toggleShow">
         <div class="tabsconatiner">
           <div class="route-info" v-if="bizType != 'deviceState'">
             <div class="route-length" v-show="toggleshowisActive">
@@ -79,6 +79,10 @@ export default {
   },
   data () {
     return {
+      layoutStyle: {
+        width: screen.width * 0.3 + 'px',
+        height: screen.height * 0.7 + 'px'
+      },
       bizType: 'deviceState',
       mapType: '2D',
       devList: [],
@@ -103,6 +107,10 @@ export default {
   },
   mounted () {
     this.init()
+    this.layoutStyle = {
+      width: screen.width * 0.3 + 'px',
+      height: screen.height * 0.7 + 'px'
+    }
   },
   computed: {
     defaultOptions () {
@@ -349,6 +357,12 @@ export default {
       } else {
         this.onSpeedChange(0.2)
         this.anim.playSegments([17, 25], true)
+      }
+    },
+    changeLayoutStyle (height, width) {
+      this.layoutStyle = {
+        width: width,
+        height: height
       }
     }
   }
