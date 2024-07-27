@@ -229,6 +229,15 @@ export default {
       }, {
         label: this.$t('edge.phase.pedestrianonly'),
         value: 2
+      }, {
+        label: this.$t('edge.phase.busonly'),
+        value: 3
+      }, {
+        label: this.$t('edge.phase.BRTonly'),
+        value: 4
+      }, {
+        label: this.$t('edge.phase.tramonly'),
+        value: 5
       }],
       pulseTypeList: [{
         label: this.$t('edge.phase.sendpedestriansvehiclepulse'),
