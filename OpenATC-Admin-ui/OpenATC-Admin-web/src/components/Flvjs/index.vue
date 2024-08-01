@@ -11,7 +11,13 @@
  **/
 <template>
   <div class="flvlist">
-    <FlvPlayer v-if="!resetVedioDom" :Width="Width" :Height="Height" :Title="Title" :curVideoInfo="curVideoInfo" @resetComponent="reset">
+    <FlvPlayer  v-if="!resetVedioDom"
+                :Width="Width"
+                :Height="Height"
+                :Title="Title"
+                :curVideoInfo="curVideoInfo"
+                :autoPlay="autoPlay"
+                @resetComponent="reset">
       <!-- 多视频切换控制 -->
       <el-dropdown slot="vediolist" trigger="click" @command="switchVideo">
           <span class="el-dropdown-link"><i class="iconfont icon-shipincaidan"></i></span>
@@ -51,6 +57,10 @@ export default {
     },
     Title: {
       type: String
+    },
+    autoPlay: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
