@@ -109,7 +109,7 @@ export default {
     this.init()
     this.layoutStyle = {
       width: screen.width * 0.3 + 'px',
-      height: screen.height * 0.7 + 'px'
+      height: screen.height < 1080 ? screen.height * 0.7 + 'px' : screen.height * 0.75 + 'px'
     }
   },
   computed: {

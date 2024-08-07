@@ -98,7 +98,7 @@ export default {
   },
   data () {
     return {
-      maxHeight: screen.height * 0.6,
+      maxHeight: screen.height < 1080 ? screen.height * 0.6 : screen.height * 0.7,
       map: null,
       lngLat: {
         lng: '0.00000000',
