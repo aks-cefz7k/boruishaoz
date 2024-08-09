@@ -1030,6 +1030,8 @@ export default {
       }
       if (!this.isRingCycleEqual(patternList)) {
         this.patternCycleEqual = false
+      } else {
+        this.patternCycleEqual = true
       }
     },
     isRingCycleEqual (patternlist) {
