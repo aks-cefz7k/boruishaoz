@@ -124,7 +124,7 @@
         </div>
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
-        <div class="tuxing-left" :class="{'changeWidth': graphicMode}">
+        <div class="tuxing-left" :class="{'changeWidth': graphicMode}" ref="tuxingLeft">
           <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
             'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
             'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
@@ -148,7 +148,7 @@
                           :barrierList="barrierList"></PatternStatus>
           </div>
         </div>
-        <div class="tuxing-right" v-if="!graphicMode">
+        <div class="tuxing-right" v-if="!graphicMode" ref="tuxingRight">
           <transition name="fade-right" mode="out-in"
           enter-active-class="animated fadeInRight"
           leave-active-class="animated fadeOutRight">
@@ -416,7 +416,8 @@ export default {
       lampPowerSubtypeMap: new Map([[0, ''], [1, '功率异常增加'], [2, '功率异常减少'], [3, '功率无输出'], [4, '关闭状态有功率输出']]),
       lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']]),
       LampGroupSubtypeMap: new Map([[0, ''], [1, '红灯故障'], [2, '黄灯故障'], [3, '绿灯故障']]),
-      LampGroupSubtypeMapEn: new Map([[0, ''], [1, 'Red Lamp Fault'], [2, 'Yellow Lamp Fault'], [3, 'Green Lamp Fault']])
+      LampGroupSubtypeMapEn: new Map([[0, ''], [1, 'Red Lamp Fault'], [2, 'Yellow Lamp Fault'], [3, 'Green Lamp Fault']]),
+      commonHeight: undefined // 左右侧面板的高度值
     }
   },
   computed: {
@@ -468,6 +469,13 @@ export default {
     this.getPlatform()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
+    }
+  },
+  updated () {
+    if (this.$refs.tuxingLeft.offsetHeight !== this.commonHeight) {
+      // 根据左侧面板动态变化的高度，同步更新右侧面板高度
+      this.commonHeight = this.$refs.tuxingLeft.offsetHeight
+      this.$refs.tuxingRight.style.height = this.commonHeight + 'px'
     }
   },
   methods: {
