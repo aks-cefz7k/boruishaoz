@@ -489,7 +489,7 @@ export default {
           this.getOverlapPhasePos()
           this.getPedPhasePos()
           this.getOverlapPedPhasePos()
-          // this.getBusPos()
+          this.getBusPos()
         }
         if (this.mainType === '103') {
           // 获取匝道道路的主路和支路的相位坐标
