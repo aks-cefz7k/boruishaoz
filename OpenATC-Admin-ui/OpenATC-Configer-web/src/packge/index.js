@@ -223,15 +223,6 @@ const subrouter = [
       }
     },
     {
-      path: 'channelLock',
-      name: 'ChannelLock',
-      component: channelLock,
-      meta: {
-        title: 'edge.route.channelLock',
-        icon: 'channellock'
-      }
-    },
-    {
       path: 'detector',
       name: 'Detector',
       component: detector,
@@ -265,6 +256,15 @@ const subrouter = [
       meta: {
         title: 'edge.route.adaptiveParameter',
         icon: 'adaptiveParameter'
+      }
+    },
+    {
+      path: 'channelLock',
+      name: 'ChannelLock',
+      component: channelLock,
+      meta: {
+        title: 'edge.route.channelLock',
+        icon: 'channellock'
       }
     },
     {

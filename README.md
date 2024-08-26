@@ -310,6 +310,27 @@ PROJECT_FOLDER
     Cookies without SameSite must be secure
     找到上面这两两项设置成 Disable即可
 
+
+#### 系统配置参数
+
+##### 可用参数说明
+
+| 模块 | 名称 | 举例 | 说明 |
+| -------- | -------- | -------- | -------- |
+| theme | theme | dark | 系统默认加载的主题，dark代表深色系主题，不填默认加载浅色主题 |
+| language  | language | zh | 默认加载的语言，有两个可选值：zh代表中文，en代表英文 |
+| media  | mediaWebsocketUrl | wss://192.168.7.183/ | 视频ws流媒体地址 |
+| jupyter  | url | http://192.168.14.168:8888/tree | jupyter跳转地址 |
+| gis  | zoom | 12 | 地图默认缩放等级 |
+| gis  | maxZoom | 18 | 地图最大缩放等级 |
+| gis  | minZoom | 12 | 地图最小缩放等级 |
+| gis  | center | [31.22784056, 121.68148040] | 地图默认中心点 |
+| gis  | gisNormal | http://192.168.14.168:7080/PBS/rest/services/ | 2D地图本地服务资源地址 |
+| gis  | gisStatellite | http://192.168.14.168:7081/PBS/rest/services/ | 卫星图本地服务资源地址 |
+| gis  | gisBoundLeftTop | [31.36360615, 121.30622863] | 地图边界的左上角纬度经度 |
+| gis  | gisBoundRightBottom | [31.11040156, 121.95270538] | 地图边界的右下角纬度经度 |
+| gis  | isShowVideo | true | gis勤务路线是否显示视频 |
+
 ---
 
 ### 后端部分

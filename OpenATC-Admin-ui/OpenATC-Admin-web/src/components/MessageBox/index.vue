@@ -82,12 +82,10 @@ export default {
   font-size: 16px;
 }
 .MessageBox .text {
-  font-family: MicrosoftYaHei;
   font-size: 14px;
 }
 .MessageBox .boxFooter .btn {
   font-size: 14px;
-  font-family: MicrosoftYaHei;
   width: 64px;
   height: 34px;
   padding: 2px 10px;

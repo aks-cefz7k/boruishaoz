@@ -319,7 +319,6 @@ export default {
 //       margin: 0px auto 40px auto;
 //       text-align: center;
 //       font-weight: bold;
-//       font-family: SourceHanSansCN-Bold;
 //       font-stretch: normal;
 //     }
 //     .show-pwd {

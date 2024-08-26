@@ -126,7 +126,6 @@ export default {
   float: left;
   margin-top: 7px;
   margin-left: 5px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

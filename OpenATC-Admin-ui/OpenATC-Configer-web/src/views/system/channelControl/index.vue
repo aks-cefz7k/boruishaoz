@@ -325,7 +325,6 @@ export default {
   //   background: #f8fbff;
   //   line-height: 40px;
   //   text-align: center;
-  //   font-family: SourceHanSansCN-Regular;
   //   font-size: 14px;
   //   font-weight: normal;
   //   font-stretch: normal;

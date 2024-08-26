@@ -109,7 +109,6 @@ export default {
 //   left: 5px;
 //   width: 15px;
 //   height: 14px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;

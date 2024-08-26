@@ -53,8 +53,13 @@
           <SidewalkSvg v-for="(side, index) in compSidewalkPhaseData" :key="side.key + '-' + index" :Data="side" :crossType="crossType" />
         </div>
         <!-- 车道相位 -->
-        <div v-if="resetflag">
+        <div v-if="resetflag" class="phaseIcon">
           <PhaseIconSvg v-for="(item, index) in compLanePhaseData" :key="item.key + '-' + index" :Data="item"/>
+        </div>
+         <!-- 公交相位 -->
+        <div v-if="resetflag" class="busIcon">
+          <BusMapSvg v-for="(item, index) in comdireBusPhaseData" :key="'Busmap-' + item.key + '-' + index" :Data="item" />
+          <PhaseIconSvg v-for="(item, index) in comdireBusPhaseData" :key="item.key + '-' + index" :Data="item"/>
         </div>
       </div>
       <!-- 匝道状态 -->
@@ -99,8 +104,13 @@
           <SidewalkSvg v-for="side in compSidewalkPhaseData" :key="side.key" :Data="side" :crossType="crossType" />
         </div>
         <!-- 车道相位 -->
-        <div v-if="resetflag">
+        <div v-if="resetflag" class="phaseIcon">
           <LPhaseIconSvg v-for="item in compLanePhaseData" :key="item.key" :Data="item"/>
+        </div>
+         <!-- 公交相位 -->
+        <div v-if="resetflag" class="busIcon">
+          <BusMapSvg v-for="(item, index) in comdireBusPhaseData" :key="'Busmap-' + item.key + '-' + index" :Data="item" />
+          <LPhaseIconSvg v-for="(item, index) in comdireBusPhaseData" :key="item.key + '-' + index" :Data="item"/>
         </div>
       </div>
     </div>
@@ -134,6 +144,7 @@ import LTShapeNorthRoadsSvg from './baseImg/leftroad/LTShapeNorthRoadsSvg.vue'
 import LTShapeSouthRoadsSvg from './baseImg/leftroad/LTShapeSouthRoadsSvg.vue'
 import LPhaseIconSvg from './phaseIcon/LphaseIconSvg'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
+import BusMapSvg from './busIcon/busMapSvg'
 export default {
   name: 'crossDiagram',
   components: {
@@ -158,7 +169,8 @@ export default {
     LTShapeWestRoadsSvg,
     LTShapeNorthRoadsSvg,
     LTShapeSouthRoadsSvg,
-    LPhaseIconSvg
+    LPhaseIconSvg,
+    BusMapSvg
   },
   props: {
     crossStatusData: {
@@ -191,16 +203,17 @@ export default {
         // 默认显示相位数据（包括黄闪、全红、关灯状态下，或者匝道，均不做比对跟随相位的处理）
         this.compLanePhaseData = JSON.parse(JSON.stringify(this.LanePhaseData))
         this.compSidewalkPhaseData = JSON.parse(JSON.stringify(this.sidewalkPhaseData))
+        this.comdireBusPhaseData = JSON.parse(JSON.stringify(this.busPhaseData))
         if (!val.phase && !this.overlapStatusList) {
           // 黄闪、全红、关灯状态下，相位字段(跟随相位字段)不存在，此处根据control字段控制车道相位颜色
           switch (val.control) {
-            case 1: this.handlePhaseStatus('黄闪')
+            case 1: this.handleSpecialControlStatus('黄闪')
               break
-            case 2: this.handlePhaseStatus('全红')
+            case 2: this.handleSpecialControlStatus('全红')
               break
-            case 3: this.handlePhaseStatus('关灯')
+            case 3: this.handleSpecialControlStatus('关灯')
               break
-            default: this.handlePhaseStatus('默认')
+            default: this.handleSpecialControlStatus('默认')
           }
           this.isHasPhase = false
           return
@@ -208,10 +221,12 @@ export default {
 
         this.curPhase = val.current_phase
         this.isHasPhase = true
+        this.createPhaseStatusMap()
         // 正常情况下，获取车道相位、车道跟随相位、相位倒计时、行人相位、行人跟随相位 的状态
         this.getPhaseStatus()
         this.getOverlapPhaseStatus()
         this.getCurPhaseCountdown()
+        this.getBusPhaseStatus()
         if (this.mainType === '100' || this.mainType === '101' || this.mainType === '104') {
           // 城市道路和路段行人过街才显示人行道状态
           this.getpedStatus()
@@ -264,7 +279,9 @@ export default {
       compLanePhaseData: [], // 对比车道相位和车道跟随相位后，显示的数据
       compSidewalkPhaseData: [], // // 对比行人相位和车道跟随相位后，显示的数据
       comdirePhaseData: [], // 对比相同方向车道相位数据后，被删减的唯一direction的数组
-      comdireOverlapPhaseData: [] // 对比相同方向车道跟随相位数据后，被删减的唯一direction的数组
+      comdireOverlapPhaseData: [], // 对比相同方向车道跟随相位数据后，被删减的唯一direction的数组
+      busPhaseData: [], // 公交相位数据
+      comdireBusPhaseData: [] //  对比相同方向公交车道数据后，被删减的唯一direction的数组
     }
   },
   methods: {
@@ -305,10 +322,15 @@ export default {
           data.color = '#fff'
         })
       }
+      if (this.comdireBusPhaseData.length) {
+        this.comdireBusPhaseData.forEach(data => {
+          data.color = '#fff'
+        })
+      }
       this.phaseCountdownList = []
       this.resetPhaseStatus()
     },
-    handlePhaseStatus (Control) {
+    handleSpecialControlStatus (Control) {
       this.resetPhaseStatus()
       // 控制黄闪、全红、关灯、默认情况下的车道相位颜色和倒计时颜色
       if (Control === '默认') {
@@ -320,13 +342,6 @@ export default {
         })
       }
       if (this.compLanePhaseData.length) {
-        // if (this.mainType === '100' || this.mainType === '101') {
-        //   // 车道相位设置对应颜色
-        //   this.getPhasePos()
-        // }
-        // if (this.mainType === '103') {
-        //   this.getRampPhasePos()
-        // }
         const compLanePhaseData = this.compLanePhaseData.map(data => ({
           ...data,
           color: this.phaseControlColorMap.get(Control)
@@ -340,10 +355,16 @@ export default {
         }))
         this.compSidewalkPhaseData = JSON.parse(JSON.stringify(compSidewalkPhaseData))
       }
+      if (this.comdireBusPhaseData.length) {
+        const comdireBusPhaseData = this.comdireBusPhaseData.map(data => ({
+          ...data,
+          color: this.phaseControlColorMap.get(Control)
+        }))
+        this.comdireBusPhaseData = JSON.parse(JSON.stringify(comdireBusPhaseData))
+      }
     },
-    getPhaseStatus () {
-      // 得到车道相位状态（颜色）
-      this.comdirePhaseData = []
+    createPhaseStatusMap () {
+      // 生成相位id和相位状态对应数据结构
       this.phaseStatusList.map(phase => {
         let phaseId = phase.id
         let phaseInfo = {
@@ -353,6 +374,10 @@ export default {
         }
         this.phaseStatusMap.set(phaseId, phaseInfo)
       })
+    },
+    getPhaseStatus () {
+      // 得到车道相位状态（颜色）
+      this.comdirePhaseData = []
       let curLanePhaseData = []
       for (let i = 0; i < this.LanePhaseData.length; i++) {
         let curPhaseStatus = this.phaseStatusMap.get(this.LanePhaseData[i].phaseid)
@@ -403,6 +428,27 @@ export default {
       // 如果有相同direction，处理后会改变原数组长度，导致第二次无法正确比较状态，因此需要中间变量存储
       this.comdireOverlapPhaseData = JSON.parse(JSON.stringify(this.CrossDiagramMgr.compareRepeatDirection(this.overlapLanePhaseData, 'type', 'overlapphase')))
     },
+    getBusPhaseStatus () {
+      // 得到公交车道相位状态（颜色）
+      this.comdireBusPhaseData = []
+      let curLanePhaseData = []
+      for (let i = 0; i < this.busPhaseData.length; i++) {
+        let curPhaseStatus = this.phaseStatusMap.get(this.busPhaseData[i].phaseid)
+        if (!curPhaseStatus) continue
+        const data = {
+          ...this.busPhaseData[i],
+          type: curPhaseStatus.type,
+          color: this.ColorMap.get(curPhaseStatus.type),
+          phaseCountdown: curPhaseStatus.phaseCountdown,
+          flag: 'busphase' // 车道相位数据标识
+        }
+        curLanePhaseData.push(data)
+      }
+      this.busPhaseData = JSON.parse(JSON.stringify(curLanePhaseData))
+      // 处理相位数据中，方向direction重复的情况：相同direction下，按照状态的优先级显示该方向的灯色：绿灯(3) > 绿闪(4) > 黄灯(2) > 红灯(1)
+      // 如果有相同direction，处理后会改变原数组长度，导致第二次无法正确比较状态，因此需要中间变量存储
+      this.comdireBusPhaseData = JSON.parse(JSON.stringify(this.CrossDiagramMgr.compareRepeatDirection(this.busPhaseData, 'type', 'busphase')))
+    },
     getCurPhaseCountdown () {
       // 获取当前相位倒计时颜色
       this.phaseCountdownList = []
@@ -443,6 +489,7 @@ export default {
           this.getOverlapPhasePos()
           this.getPedPhasePos()
           this.getOverlapPedPhasePos()
+          this.getBusPos()
         }
         if (this.mainType === '103') {
           // 获取匝道道路的主路和支路的相位坐标
@@ -450,21 +497,50 @@ export default {
         }
       })
     },
+    getBusPos () {
+      // 公交相位信息
+      this.busPhaseData = []
+      this.crossInfo.phaseList.forEach((ele, i) => {
+        if (ele.controltype >= 3 && ele.controltype <= 5) {
+          ele.direction.forEach((dir, index) => {
+          // 车道相位
+            this.busPhaseData.push({
+              key: this.CrossDiagramMgr.getUniqueKey('busphase'),
+              phaseid: ele.id, // 相位id，用于对应相位状态
+              id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
+              name: this.PhaseDataModel.getBusPhasePos(dir).name,
+              left: this.PhaseDataModel.getBusPhasePos(dir).x,
+              top: this.PhaseDataModel.getBusPhasePos(dir).y,
+              busleft: this.PhaseDataModel.getBusMapPos(dir).x,
+              bustop: this.PhaseDataModel.getBusMapPos(dir).y,
+              controltype: ele.controltype
+            })
+          })
+        }
+      })
+    },
+    createRandomType () {
+      for (var i = 3; i <= 5; i++) {
+        return Math.floor(Math.random() * (5 - 3)) + 3
+      }
+    },
     getPhasePos () {
       // 车道相位信息
       this.LanePhaseData = []
       this.crossInfo.phaseList.forEach((ele, i) => {
-        ele.direction.forEach((dir, index) => {
+        if (ele.controltype === undefined || ele.controltype <= 2) {
+          ele.direction.forEach((dir, index) => {
           // 车道相位
-          this.LanePhaseData.push({
-            key: this.CrossDiagramMgr.getUniqueKey('phase'),
-            phaseid: ele.id, // 相位id，用于对应相位状态
-            id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
-            name: this.PhaseDataModel.getPhase(dir).name,
-            left: this.PhaseDataModel.getPhase(dir).x,
-            top: this.PhaseDataModel.getPhase(dir).y
+            this.LanePhaseData.push({
+              key: this.CrossDiagramMgr.getUniqueKey('phase'),
+              phaseid: ele.id, // 相位id，用于对应相位状态
+              id: dir, // 接口返回的dir字段，对应前端定义的相位方向id，唯一标识
+              name: this.PhaseDataModel.getPhase(dir).name,
+              left: this.PhaseDataModel.getPhase(dir).x,
+              top: this.PhaseDataModel.getPhase(dir).y
+            })
           })
-        })
+        }
       })
     },
     getOverlapPhasePos () {
@@ -492,15 +568,15 @@ export default {
       this.crossInfo.phaseList.forEach((ele, i) => {
         ele.direction.forEach((dir, index) => {
           if (ele.controltype === 0) {
-            this.handlePhasePosData(`${i}-${index}`, ele, dir, this.PhaseDataModel.getMainPhasePos)
+            this.handleRampPhasePosData(`${i}-${index}`, ele, dir, this.PhaseDataModel.getMainPhasePos)
           }
           if (ele.controltype === 1) {
-            this.handlePhasePosData(`${i}-${index}`, ele, dir, this.PhaseDataModel.getSidePhasePos)
+            this.handleRampPhasePosData(`${i}-${index}`, ele, dir, this.PhaseDataModel.getSidePhasePos)
           }
         })
       })
     },
-    handlePhasePosData (key, phase, dir) {
+    handleRampPhasePosData (key, phase, dir) {
       let posInfo = phase.controltype === 0 ? this.PhaseDataModel.getMainPhasePos(dir) : this.PhaseDataModel.getSidePhasePos(dir)
       this.LanePhaseData.push({
         key,
@@ -721,7 +797,6 @@ export default {
 }
 .phaseCountdown {
   line-height: 40px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 30px;
   font-weight: normal;
   font-stretch: normal;

@@ -511,7 +511,6 @@ export default {
 //   margin-top: 20px;
 //   margin-left: 30px;
 //   height: 18px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -531,7 +530,6 @@ export default {
 // .software {
 //   position: relative;
 //   left: 20px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;

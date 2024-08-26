@@ -496,7 +496,6 @@ border: 1px solid $--border-color-base;
     margin-top: 20px;
     margin-right: 30px;
     text-align: right;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -507,7 +506,6 @@ border: 1px solid $--border-color-base;
     margin-top: 10px;
     margin-right: 30px;
     text-align: right;
-    font-family: ArialMT;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -518,7 +516,6 @@ border: 1px solid $--border-color-base;
     margin-top: 20px;
     margin-right: 30px;
     text-align: right;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -529,7 +526,6 @@ border: 1px solid $--border-color-base;
     margin-top: 10px;
     margin-right: 30px;
     text-align: right;
-    font-family: ArialMT;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -539,7 +535,6 @@ border: 1px solid $--border-color-base;
   .model-name {
     float: left;
     margin-top: 32px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -574,7 +569,6 @@ border: 1px solid $--border-color-base;
     // float: left;
     text-align: center;
     margin-top: 40px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 30px;
     font-weight: normal;
     font-stretch: normal;
@@ -584,7 +578,6 @@ border: 1px solid $--border-color-base;
   }
   .curr-grade {
     margin-top: 30px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 24px;
     font-weight: normal;
     font-stretch: normal;
@@ -594,7 +587,6 @@ border: 1px solid $--border-color-base;
   }
   .curr-num {
     margin-top: 20px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -628,7 +620,6 @@ border: 1px solid $--border-color-base;
     // left: 30px;
     top: 150px;
     height: 21px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 22px;
     font-weight: normal;
     font-stretch: normal;
@@ -716,7 +707,6 @@ border: 1px solid $--border-color-base;
   }
   .pattern-name {
     display: inline;
-    font-family: SourceHanSansCN-Regular;
     font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
@@ -727,7 +717,6 @@ border: 1px solid $--border-color-base;
   .pattern-message {
     display: inline;
     margin-left: 10px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -745,12 +734,14 @@ border: 1px solid $--border-color-base;
     // padding-left: 10px;
     background-color: $--color-white;
     border: solid 1px $--border-color-lighter;
+    position: relative;
+    overflow-x: auto;
+    // min-height: 700px;
   }
   .cross-mess {
     margin-left: 15px;
     margin-top: 15px;
     height: 20px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
@@ -775,7 +766,6 @@ border: 1px solid $--border-color-base;
   }
   .cross-name {
     // height: 13px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;font-weight: normal;
     font-stretch: normal;
     line-height: 22px;
@@ -785,7 +775,6 @@ border: 1px solid $--border-color-base;
   .cross-value {
     width: 180px;
     height: 22px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -805,7 +794,6 @@ border: 1px solid $--border-color-base;
   .model-label, .stage-label {
     width: 100px;
     font-size: 14px;
-    font-family: Source Han Sans CN;
     font-weight: 400;
     color: #606266;
     line-height: 40px;
@@ -833,7 +821,6 @@ border: 1px solid $--border-color-base;
   }
   .single-model-name {
     margin-top: 3px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
@@ -843,7 +830,6 @@ border: 1px solid $--border-color-base;
   }
   .current-stage-num {
     margin-top: 3px;
-    font-family: MicrosoftYaHei;
     font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
@@ -856,7 +842,6 @@ border: 1px solid $--border-color-base;
   }
   .control-time {
     margin-top: 40px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 30px;
     font-weight: normal;
     font-stretch: normal;
@@ -926,7 +911,6 @@ border: 1px solid $--border-color-base;
   .title {
     margin-bottom: 24px;
     font-size: 20px;
-    font-family: Source Han Sans CN;
     font-weight: 400;
     line-height: 22px;
     color: $--color-text-primary;
@@ -947,7 +931,6 @@ border: 1px solid $--border-color-base;
   }
   .el-form-item__label {
     font-size: 14px;
-    font-family: Source Han Sans CN;
     font-weight: 400;
     color: $--color-text-secondary;
   }
@@ -970,7 +953,6 @@ border: 1px solid $--border-color-base;
       padding: 0;
       text-align: center;
       line-height: 30px;
-      font-family: MicrosoftYaHei;
       font-size: 12px;
       font-weight: normal;
       font-stretch: normal;
@@ -1012,7 +994,6 @@ border: 1px solid $--border-color-base;
   left: 5px;
   width: 15px;
   height: 14px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1029,7 +1010,6 @@ border: 1px solid $--border-color-base;
   padding: 0 12px 0 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: SourceHanSansCN-Regular;
   font-weight: normal;
   font-stretch: normal;
   letter-spacing: 0px;
@@ -1069,7 +1049,6 @@ border: 1px solid $--border-color-base;
     align-items: center;
     justify-content: flex-start;
     width: 96%;
-    font-family: SourceHanSansCN-Regular;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
@@ -1097,6 +1076,37 @@ border: 1px solid $--border-color-base;
     margin-left: 20px;
   }
 }
+.volume-part {
+  padding: 33px 30px;
+  box-sizing: border-box;
+  .current-volume {
+    display: flex; /*所有子元素block或inline都变成行内块元素的样式*/
+    align-items: center;
+    justify-content: flex-start;
+    width: 96%;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+  }
+  .color-block {
+    width: 14px;
+    height: 14px;
+    background-color: $--color-primary;
+  }
+  .curr-volume {
+    margin-left: 5px;
+  }
+  .curr-time {
+    margin-left: 20px;
+  }
+  .current-volumetable {
+    width: 96%;
+    /* height: 380px; */
+    margin-top: 40px;
+  }
+}
 // 通道锁定
 .manual-record {
   position: relative;
@@ -1122,7 +1132,6 @@ border: 1px solid $--border-color-base;
     margin-top: 10px;
   }
   .channel-status {
-    font-family: SourceHanSansCN-Regular;
     font-size: 18px;
     font-weight: normal;
     font-stretch: normal;
@@ -1134,7 +1143,6 @@ border: 1px solid $--border-color-base;
 // 设备信息
 .device-info {
   height: 18px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 18px;
   font-weight: normal;
   font-stretch: normal;
@@ -1144,7 +1152,6 @@ border: 1px solid $--border-color-base;
 }
 .device-second-title {
   margin: 15px 0 5px 0;
-  font-family: SourceHanSansCN-Regular;
   font-size: 15px;
   letter-spacing: 0px;
   color: $--color-text-regular;
@@ -1185,7 +1192,6 @@ border: 1px solid $--border-color-base;
   // position: relative;
   margin-top: 10px;
   left: 20px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1197,7 +1203,6 @@ border: 1px solid $--border-color-base;
   position: relative;
 }
 .device-header {
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1274,7 +1279,6 @@ border: 1px solid $--border-color-base;
     float: left;
     margin-left: 30px;
     margin-top: 30px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -1286,7 +1290,6 @@ border: 1px solid $--border-color-base;
     float: left;
     margin-left: 5px;
     margin-top: 30px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -1298,7 +1301,6 @@ border: 1px solid $--border-color-base;
     float: left;
     margin-left: 10px;
     margin-top: 22px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 18px;
     font-weight: normal;
     font-stretch: normal;
@@ -1312,7 +1314,6 @@ border: 1px solid $--border-color-base;
   margin-top: 20px;
   margin-left: 30px;
   height: 18px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 18px;
   font-weight: normal;
   font-stretch: normal;
@@ -1332,7 +1333,6 @@ border: 1px solid $--border-color-base;
 .software {
   position: relative;
   left: 20px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1362,7 +1362,6 @@ border: 1px solid $--border-color-base;
       background: $--color-black;
       line-height: 40px;
       text-align: center;
-      font-family: SourceHanSansCN-Regular;
       font-size: 14px;
       font-weight: normal;
       font-stretch: normal;
@@ -1416,7 +1415,6 @@ float: left;
 margin-top: 8px;
 margin-left: 10px;
 height: 14px;
-font-family: SourceHanSansCN-Regular;
 font-size: 14px;
 font-weight: normal;
 font-stretch: normal;
@@ -1431,7 +1429,6 @@ color: $--color-text-secondary;
   bottom: 30px;
   .pattern-status {
     display: inline;
-    font-family: SourceHanSansCN-Regular;
     font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
@@ -1462,7 +1459,6 @@ color: $--color-text-secondary;
     float: left;
     margin-top:7px;
     margin-left: 5px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -1629,7 +1625,6 @@ color: $--color-text-secondary;
   }
   .text-container {
     padding: 6px 0px 0px 15px;
-    font-family: SourceHanSansCN-Regular;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
@@ -1643,7 +1638,6 @@ color: $--color-text-secondary;
     margin: 0px auto 40px auto;
     text-align: center;
     font-weight: bold;
-    font-family: SourceHanSansCN-Bold;
     font-stretch: normal;
   }
   .show-pwd {
@@ -1659,7 +1653,6 @@ color: $--color-text-secondary;
   position: relative;
   top: -10px;
   // margin-left: 280px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 13px;
   font-weight: normal;
   font-stretch: normal;
@@ -1684,7 +1677,6 @@ color: $--color-text-secondary;
       width: 291px;
       height: 38px;
       margin-top: 40px;
-      font-family: MicrosoftYaHei;
       font-size: 36px;
       font-weight: normal;
       font-stretch: normal;
@@ -1693,7 +1685,6 @@ color: $--color-text-secondary;
       color: #fff;
   }
   .banben {
-      font-family: MicrosoftYaHei;
       font-size: 14px;
       font-weight: normal;
       font-stretch: normal;
@@ -1709,7 +1700,6 @@ color: $--color-text-secondary;
   }
   .open-source {
       margin-top: 25px;
-      font-family: MicrosoftYaHei;
       font-size: 14px;
       font-weight: normal;
       font-stretch: normal;

@@ -124,7 +124,7 @@
         </div>
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
-        <div class="tuxing-left" :class="{'changeWidth': graphicMode}">
+        <div class="tuxing-left" :class="{'changeWidth': graphicMode}" ref="tuxingLeft">
           <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
             'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
             'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
@@ -148,75 +148,78 @@
                           :barrierList="barrierList"></PatternStatus>
           </div>
         </div>
-        <div class="tuxing-right" v-if="!graphicMode">
-          <transition mode="out-in" name="custom"
+        <div class="tuxing-right" v-if="!graphicMode" ref="tuxingRight">
+          <transition name="fade-right" mode="out-in"
           enter-active-class="animated fadeInRight"
           leave-active-class="animated fadeOutRight">
-            <ManualControlModal v-show="isOperation"
-              :controlData="controlData"
-              :modelList="modelList"
-              :stagesList="stagesList"
-              :currModel="currModel"
-              :preselectModel="preselectModel"
-              :currentStage="currentStage"
-              :preselectStages="preselectStages"
-              @closeManualModal="closeManualModal"
-              @selectModel="selectModel"
-              @selectStages="selectStages"
-              @patternCommit="patternCommit" />
+            <div style="position: absolute;width: 100%;"  v-show="isOperation">
+             <ManualControlModal
+               :controlData="controlData"
+               :modelList="modelList"
+               :stagesList="stagesList"
+               :currModel="currModel"
+               :preselectModel="preselectModel"
+               :currentStage="currentStage"
+               :preselectStages="preselectStages"
+               @closeManualModal="closeManualModal"
+               @selectModel="selectModel"
+               @selectStages="selectStages"
+               @patternCommit="patternCommit" />
+            </div>
           </transition>
 
-          <!-- <transition mode="out-in" name="custom"
-          enter-active-class="animated fadeIn"> -->
-          <div v-show="!isOperation && isdalayshow">
-            <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
-            <div class="cross-module">
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
-                <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
-                <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
-                <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
+          <transition name="fade-left" mode="out-in"
+          enter-active-class="animated fadeInLeft"
+          leave-active-class="animated fadeOutLeft">
+            <div style="position: absolute;width: 100%;" v-show="!isOperation">
+              <div class="cross-mess" style="margin-bottom: 18px;">{{$t('edge.overview.crossinfo')}}</div>
+              <div class="cross-module">
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.crossname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentName}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.divicestate')}}:</div>
+                  <div v-show="devStatus===3" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.online')}}</div>
+                  <div v-show="devStatus===2" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.offline')}}</div>
+                  <div v-show="devStatus===1" style="margin-left: 85px;" class="cross-value">{{$t('edge.overview.onlineing')}}</div>
+                </div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div> -->
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
+                <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
               </div>
-              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.protocoltype')}}:</div><div style="margin-left: 85px;" class="cross-value">{{protocol}}</div></div> -->
-              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">信号机型号:</div><div style="margin-left: 85px;" class="cross-value">XHJ-CW-GA-KSS100</div></div> -->
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
-              <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
+              <div class="control-bottom">
+                <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
+                <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
+                <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
+              </div>
+              <div class="cross-module">
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
+                </div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
+                </div>
+
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
+                </div>
+
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
+                </div> -->
+
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
+                </div>
+
+                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
+                  <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
+                </div>
+              </div>
             </div>
-            <div class="control-bottom">
-              <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
-              <el-button type="primary" style="float: right; margin-right: 40px;margin-top: 40px;" size="mini" @click="changeStatus">{{$t('edge.overview.manual')}}</el-button>
-              <!-- <el-button type="primary" style="float: right; margin-right: 40px;" size="mini" @click="changeStatus" v-show="isOperation">{{$t('edge.overview.exitmanual')}}</el-button> -->
-            </div>
-            <div class="cross-module">
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlmodel')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.mode}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
-              </div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
-              </div>
-
-              <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.delay')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.delay}}</div>
-              </div>
-
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.duration')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.duration}}</div>
-              </div> -->
-
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curStage')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value">{{currentStage}}</div>
-              </div>
-
-              <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
-                <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
-              </div>
-            </div>
-          </div>
-        <!-- </transition> -->
+          </transition>
         </div>
       </div>
     </div>
@@ -235,6 +238,7 @@ import StageStatus from '@/components/StageStatus'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
+import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 export default {
   name: 'overview',
   components: {
@@ -404,16 +408,7 @@ export default {
       shrink: 1,
       basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
       isResend: true,
-      faultCodeMap: new Map([[101, 'can总线通信故障'], [102, '黄闪器故障'], [103, '特征参数故障'], [104, '故障检测板不在线'], [105, '继电器未吸合'], [201, '灯控板ID故障'], [202, '灯控板脱机'], [203, '无红灯亮起'], [204, '红绿同亮'], [205, '绿冲突'], [206, '红灯灯电压故障'], [207, '黄灯灯电压故障'], [208, '绿灯灯电压故障'], [209, '红灯灯功率故障'], [210, '黄灯灯功率故障'], [211, '绿灯灯功率故障'], [212, '灯组故障'], [213, '车检器故障'], [214, '灯控板插槽编码错误'], [215, '灯控板插头编码错误'], [216, '本机灯控板数量未配置'], [301, '车检板未初始化'], [302, '车检板脱机'], [303, '车辆检测器短路'], [304, '车辆检测器断路'], [401, 'I/O板未初始化'], [402, 'I/O板脱机']]),
-      faultCodeMapEn: new Map([[101, 'CanBus Fault'], [102, 'Yellow Flasher Fault'], [103, 'TZParam Fault'], [104, 'FaultDet Offline'], [105, 'Relay Not Work'], [201, 'LampBoard ID Fault'], [202, 'LampBoard Offline'], [203, 'No Red Lamp Is On'], [204, 'Red And Green Conflict'], [205, 'Green Conflict'], [206, 'Red Lamp Voltage Fault'], [207, 'Yellow Lamp Voltage Fault'], [208, 'Green Lamp Voltage Fault'], [209, 'Red Lamp Lamp Power Fault'], [210, 'Yellow Lamp Lamp Power Fault'], [211, 'Green Lamp Lamp Power Fault'], [212, 'Lamp pack failure'], [213, 'Car detector failure'], [214, 'Lamp Control Board Slot Code Error'], [215, 'Code Error Of Lamp Control Board Plug'], [216, 'The Number Of Lamp Control Board Not be Configed for The Master'], [301, 'VehDetBoard Is Not Init'], [302, 'VehDetBoard Is Offline'], [303, 'VehDetector Short Circiut'], [304, 'VehDetector Open  Circiut'], [401, 'I/O Board Is Not Init'], [402, 'I/O Board Offline']]),
-      TZParamSubtypeMap: new Map([[0, ''], [1, '特征参数不存在'], [2, '特征参数文件不可读'], [3, '特征参数人为修改'], [4, '特征参数文件打开失败'], [5, '特征参数文件更新失败'], [6, '信号机地址码校验失败'], [7, '特征参数内容格式错误'], [8, 'USB挂载失败']]),
-      TZParamSubtypeMapEn: new Map([[0, ''], [1, 'Non-existent'], [2, 'File Is Unreadable'], [3, 'File Artificial Changes'], [4, 'File Open Fail'], [5, 'File Update Fail'], [6, 'File Check SiteID Fail'], [7, 'Format Error'], [8, 'USB Mount Fail']]),
-      greenLampSubtypeMap: new Map([[0, ''], [1, '未输出有效电压'], [2, '输出电压低于输入电压过多'], [3, '输出电压高于输入电压'], [4, '关闭输出但实际电压仍然输出'], [5, '关闭输出但实际电压部分输出'], [6, '线路残留电压过高']]),
-      greenLampSubtypeMapEn: new Map([[0, ''], [1, 'Output Volatage Is Fail'], [2, 'Output Volatage Is Low'], [3, 'Output Volatage Is High'], [4, 'Off Output Volatage Is high'], [5, 'Off Output Volatage Is low'], [6, 'Residual Voltage Is Over-High']]),
-      lampPowerSubtypeMap: new Map([[0, ''], [1, '功率异常增加'], [2, '功率异常减少'], [3, '功率无输出'], [4, '关闭状态有功率输出']]),
-      lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']]),
-      LampGroupSubtypeMap: new Map([[0, ''], [1, '红灯故障'], [2, '黄灯故障'], [3, '绿灯故障']]),
-      LampGroupSubtypeMapEn: new Map([[0, ''], [1, 'Red Lamp Fault'], [2, 'Yellow Lamp Fault'], [3, 'Green Lamp Fault']])
+      commonHeight: undefined // 左右侧面板的高度值
     }
   },
   computed: {
@@ -465,6 +460,13 @@ export default {
     this.getPlatform()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
+    }
+  },
+  updated () {
+    if (this.$refs.tuxingLeft.offsetHeight !== this.commonHeight) {
+      // 根据左侧面板动态变化的高度，同步更新右侧面板高度
+      this.commonHeight = this.$refs.tuxingLeft.offsetHeight
+      this.$refs.tuxingRight.style.height = this.commonHeight + 'px'
     }
   },
   methods: {
@@ -562,43 +564,11 @@ export default {
       })
     },
     getFaultMes (codeList) {
-      let faultArr = []
-      for (let data of codeList) {
-        let strArr = []
-        if (this.$i18n.locale === 'en') {
-          if (data[0] === 103) {
-            strArr[1] = this.TZParamSubtypeMapEn.get(data[1])
-          } else if (data[0] === 208 || data[0] === 207 || data[0] === 206) {
-            strArr[1] = this.greenLampSubtypeMapEn.get(data[1])
-          } else if (data[0] === 211 || data[0] === 210 || data[0] === 209) {
-            strArr[1] = this.lampPowerSubtypeMapEn.get(data[1])
-          } else if (data[0] === 212) {
-            strArr[1] = this.LampGroupSubtypeMapEn.get(data[1])
-          } else {
-            strArr[1] = ''
-          }
-          strArr[0] = this.faultCodeMapEn.get(data[0])
-        } else {
-          if (data[0] === 103) {
-            strArr[1] = this.TZParamSubtypeMap.get(data[1])
-          } else if (data[0] === 208 || data[0] === 207 || data[0] === 206) {
-            strArr[1] = this.greenLampSubtypeMap.get(data[1])
-          } else if (data[0] === 211 || data[0] === 210 || data[0] === 209) {
-            strArr[1] = this.lampPowerSubtypeMap.get(data[1])
-          } else if (data[0] === 212) {
-            strArr[1] = this.LampGroupSubtypeMap.get(data[1])
-          } else {
-            strArr[1] = ''
-          }
-          strArr[0] = this.faultCodeMap.get(data[0])
-        }
-        if (data[1] !== 0) {
-          faultArr.push(`${strArr[0]}--${strArr[1]}`)
-        } else {
-          faultArr.push(`${strArr[0]}`)
-        }
+      if (this.$i18n.locale === 'en') {
+        return getFaultMesEn(codeList)
+      } else {
+        return getFaultMesZh(codeList)
       }
-      return faultArr
     },
     reSend () { // 设备掉线重连机制
       this.devStatus = 1
@@ -939,11 +909,6 @@ export default {
       this.modelList = this.modelList.filter((item) => {
         return item.id !== 0
       })
-      // 让前一个面板在当前面板动画播放完成后，延迟1.1s显示，否则会样式乱掉
-      this.isdalayshow = false
-      setTimeout(() => {
-        this.isdalayshow = true
-      }, 1100)
     },
     patternCommit (manualInfo) {
       let that = this
@@ -966,7 +931,7 @@ export default {
           that.$message.error(data.data.message)
           return
         } else {
-          success = data.data.data.data.success
+          success = data.data.data.data.sucess
           if (success !== 0) {
             let errormsg = 'edge.overview.putTscControlError' + success
             that.$message.error(this.$t(errormsg))
@@ -1188,7 +1153,6 @@ export default {
 //   background: #ffffff;
 // }
 // .container-main .iconfont {
-//     font-family: "iconfont" !important;
 //     font-size: 34px;
 //     text-align: center;
 //     font-weight: 500;
@@ -1303,7 +1267,6 @@ export default {
 //   margin-top: 20px;
 //   margin-right: 30px;
 //   text-align: right;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1314,7 +1277,6 @@ export default {
 //   margin-top: 10px;
 //   margin-right: 30px;
 //   text-align: right;
-//   font-family: ArialMT;
 //   font-size: 16px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1325,7 +1287,6 @@ export default {
 //   margin-top: 20px;
 //   margin-right: 30px;
 //   text-align: right;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1336,7 +1297,6 @@ export default {
 //   margin-top: 10px;
 //   margin-right: 30px;
 //   text-align: right;
-//   font-family: ArialMT;
 //   font-size: 16px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1346,7 +1306,6 @@ export default {
 // .model-name {
 //   float: left;
 //   margin-top: 32px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1381,7 +1340,6 @@ export default {
 //   // float: left;
 //   text-align: center;
 //   margin-top: 40px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 30px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1391,7 +1349,6 @@ export default {
 // }
 // .curr-grade {
 //   margin-top: 30px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 24px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1401,7 +1358,6 @@ export default {
 // }
 // .curr-num {
 //   margin-top: 20px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1435,7 +1391,6 @@ export default {
 //   // left: 30px;
 //   top: 150px;
 //   height: 21px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 22px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1488,7 +1443,6 @@ export default {
 // }
 // .pattern-name {
 //   display: inline;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 20px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1499,7 +1453,6 @@ export default {
 // .pattern-message {
 //   display: inline;
 //   margin-left: 10px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1516,7 +1469,6 @@ export default {
 // .cross-mess {
 //   margin-left: 5px;
 //   height: 20px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 20px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1534,7 +1486,6 @@ export default {
 // }
 // .cross-name {
 //   // height: 13px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;font-weight: normal;
 //   font-stretch: normal;
 //   line-height: 22px;
@@ -1544,7 +1495,6 @@ export default {
 // .cross-value {
 //   width: 180px;
 //   height: 22px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1578,7 +1528,6 @@ export default {
 // }
 // .single-model-name {
 //   margin-top: 3px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 12px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1588,7 +1537,6 @@ export default {
 // }
 // .current-stage-num {
 //   margin-top: 3px;
-//   font-family: MicrosoftYaHei;
 //   font-size: 12px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1601,7 +1549,6 @@ export default {
 // }
 // .control-time {
 //   margin-top: 40px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 30px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -1630,7 +1577,6 @@ export default {
 //     padding: 0 12px 0 0;
 //     -webkit-box-sizing: border-box;
 //     box-sizing: border-box;
-//     font-family: SourceHanSansCN-Regular;
 //     font-weight: normal;
 //     font-stretch: normal;
 //     letter-spacing: 0px;

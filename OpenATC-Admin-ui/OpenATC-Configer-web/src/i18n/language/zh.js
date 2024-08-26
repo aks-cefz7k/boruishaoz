@@ -96,8 +96,7 @@ const zh = {
       'options6': '日期',
       'options7': '通道',
       'options8': '检测器',
-      'options9': '行人检测器',
-      'options10': '设备信息'
+      'options9': '行人检测器'
     },
     'overview': {
       'crossinfo': '路口信息',
@@ -258,6 +257,9 @@ const zh = {
       'mainroad': '主路',
       'bypass': '支路',
       'pedestrianonly': '仅行人',
+      'busonly': '公交专用',
+      'BRTonly': 'BRT专用',
+      'tramonly': '有轨电车专用',
       'pulsetype': '脉冲屏蔽',
       'offpulse': '关闭行人及机动车脉冲',
       'sendvehiclepulse': '发送机动车脉冲',
@@ -280,7 +282,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此方案？',
       'firstphase': '请先创建相位!',
-      'mostdata': '最多只能创建108条数据!',
+      'mostdata': '最多只能创建32条数据!',
       'ring': '环',
       'modeOption1': '其他',
       'modeOption2': '无',
@@ -336,7 +338,7 @@ const zh = {
       'plan': '计划',
       'operation': '操作',
       'deletetip': '确认删除此日期？',
-      'mostdata': '最多只能创建255条数据！'
+      'mostdata': '最多只能创建40条数据！'
     },
     'channel': {
       'desc': '信号灯位置',
@@ -505,6 +507,7 @@ const zh = {
       'allred': '全红',
       'yellowflash': '黄闪',
       'defaultsettings': '生成默认设置',
+      'allclear': '全部清除',
       'clear': '清空',
       'resetstatus': '状态重置',
       'manualbtn': 'manualbtn',
@@ -580,7 +583,9 @@ const zh = {
       'isReboot': '系统文件下载成功,是否重启设备？',
       'rebootSuccess': '重启成功！',
       'rebootFaile': '重启失败！',
-      'resetSuccess': '设置成功！'
+      'resetSuccess': '设置成功！',
+      'filesuccess': '升级文件传输完成!',
+      'filefailed': '升级接口调用失败!'
     },
     'optimize': {
       'strategy': '优化策略',

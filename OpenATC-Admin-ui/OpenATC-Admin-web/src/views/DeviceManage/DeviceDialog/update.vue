@@ -180,7 +180,6 @@ export default {
   // watch: {
   //   deviceInfo: {
   //     handler: function (val, oldVal) {
-  //       debugger
   //     },
   //     // 深度观察监听
   //     deep: true
