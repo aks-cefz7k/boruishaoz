@@ -123,7 +123,7 @@ public class UdpCommunicationStaticPort implements Communication {
 
         lock.lock();
         lockMap.put(messageKey,lock);
-        logger.warning("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
+        logger.info("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
 
         //socket的发送地址和端口
         InetSocketAddress address = new InetSocketAddress(ip, port);
@@ -144,7 +144,7 @@ public class UdpCommunicationStaticPort implements Communication {
         }
         thread = Thread.currentThread();
         messageMap.put(messageKey, this);
-        logger.warning("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
+        logger.info("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
 
 
         return 0;
@@ -164,7 +164,7 @@ public class UdpCommunicationStaticPort implements Communication {
         messageMap.remove(messageKey);
         lockMap.remove(messageKey);
         lock.unlock();
-        logger.warning("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
+        logger.info("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
         return responceData;
     }
 
