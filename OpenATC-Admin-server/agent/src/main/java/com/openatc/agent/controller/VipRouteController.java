@@ -73,6 +73,9 @@ public class VipRouteController {
 
     private void addGeometryToVipRoute(VipRoute vipRoute) throws ParseException {
         Set<VipRouteDevice> vipRouteDevs = vipRoute.getDevs();
+        if(vipRouteDevs == null){
+            return;
+        }
         for (VipRouteDevice vipRouteDev : vipRouteDevs) {
             String agentid = vipRouteDev.getAgentid();
             RESTRet restRet = (RESTRet) devController.GetDevById(agentid);

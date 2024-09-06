@@ -23,6 +23,7 @@ public class DevCover {
     private double lat;
     private double lng;
     private String agentid;
+    private String thirdpartyid;    //第三方id
     private String model;
     protected String protocol; //协议
 }

@@ -81,15 +81,12 @@ public class OverflowdetectorController {
 
 
 
-
     //添加瓶颈检测器id的路口相位信息
 //    @PostMapping(value = "/overflowdetectorinfo")
 //    public RESTRetBase AddOverflow(@RequestBody Overflow ofdEntity) {
 //        Overflow rr = overflowRepository.save(ofdEntity);
 //        return RESTRetUtils.successObj(rr);
 //    }
-
-
 
     //更新某瓶颈检测器下所有的路口相位信息
     @PutMapping(value = "/overflow/{detectionid}")
@@ -106,6 +103,4 @@ public class OverflowdetectorController {
         //System.out.println("11");
         return RESTRetUtils.successObj(overflowRepository.saveAll(rg));
     }
-
-
 }
