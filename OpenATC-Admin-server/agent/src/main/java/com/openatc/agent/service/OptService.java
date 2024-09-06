@@ -134,7 +134,6 @@ public class OptService {
             }
         }
         return tempPattern;
-
     }
 
 
@@ -178,7 +177,7 @@ public class OptService {
         //封装请求行和请求体
         HttpEntity<String> entity = new HttpEntity<>(js.toString(), headers);
         //发送请求
-        String url = "http://localhost:" + uri + "/openatc/devs/message";
+        String url = "http://localhost:" + uri + "/ openatc/devs/message";
         RESTRet res =  restTemplate.postForObject(url, entity, RESTRet.class);
         return res;
     }

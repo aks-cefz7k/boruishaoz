@@ -20,6 +20,8 @@ import static com.openatc.comm.packupack.CosntDataDefine.*;
 
 public class DataSchedulePackUpPack { //数据表内容宏定义
 
+
+
     private static final int MAX_DATA_SCHEDULE = 14;         //数据表大小
     private static final int ReadDataScheduleSuccess = 1;
     private static final int ReadDataScheduleFault = 3;
@@ -1707,6 +1709,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_REQUEST) && (chInfoType == INFO_TYPE_ONLINE)) {
                 recvData.setOperation(StringOperatorType(OPERATE_TYPE_REPORT));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
+                //查找thirdparty与agentid映射表
                 recvData.setAgentid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {

@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.openatc.agent.controller.DevController;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.service.DevIdMapService;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.comm.data.MessageData;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -41,6 +43,9 @@ public class AgentHandler extends ICommHandler {
 
     @Autowired(required = false)
     DevController devController;
+    @Autowired(required = false)
+    DevIdMapService devIdMapService;
+
     @Value("${spring.redis.enable}")
     private boolean isRedisEnable;
     @Autowired
@@ -50,13 +55,39 @@ public class AgentHandler extends ICommHandler {
 
     private String agenttype = "asc";
 
+
+    //id转换，将ocp上报的id设置为thirdpartyid，查询映射表设置agentid
+    private void setThirdid(MessageData msg, DevCover ascsModel){
+
+        String thirdId = msg.getAgentid();   //实际为第三方id
+        ascsModel.setThirdpartyid(thirdId);  //将信号机上报id设置为第三方id
+        //设置agentid，查映射表
+        Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
+        String key = ascsModel.getIp() + Integer.toString(ascsModel.getPort());
+        String agentidthirdid = ocpidmap.get(key);
+
+        String agentid = null;
+        if(agentidthirdid != null){
+            String[] values = agentidthirdid.split("\\:");
+            agentid = values[0];
+        }
+
+        msg.setAgentid(agentid);
+        ascsModel.setAgentid(agentid);
+    }
+
+
     @Override
     public synchronized void process(MessageData msg) throws ParseException {
         if (msg.getCreatetime() == null) {
             msg.setCreatetime(DateUtil.date2esstr(new Date()));
         }
-//        logger.info(msg.toString());
+
         Gson gson = new Gson();
+        JsonElement data = msg.getData();
+        DevCover ascsModel = gson.fromJson(data, DevCover.class);
+
+
         if (msg == null) {
             logger.warning("AgentHandler/process: MessageData is null");
             return;
@@ -67,11 +98,10 @@ public class AgentHandler extends ICommHandler {
             return;
         }
 
+        setThirdid(msg, ascsModel);
+
         // 收到注册消息
         if (msg.getInfotype().equals("login") && msg.getOperation().equals("report")) {
-            JsonElement data = msg.getData();
-            DevCover ascsModel = gson.fromJson(data, DevCover.class);
-            ascsModel.setAgentid(msg.getAgentid());
             // 更新设备信息
             devController.DevAscsDiscovery(ascsModel);
         }

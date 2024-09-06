@@ -33,6 +33,7 @@ public class UdpCommunicationStaticPort implements Communication {
     private static int RECVBUFFER = 64 * 1024;
     private static Logger logger = Logger.getLogger(UdpCommunicationStaticPort.class.toString());
 
+
     // 发送和接收消息的固定端口ocp-UDP对象
     private static DatagramSocket ocpSocket = null;
     // 发送和接收消息的固定端口scp-UDP对象
@@ -167,6 +168,8 @@ public class UdpCommunicationStaticPort implements Communication {
         logger.info("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
         return responceData;
     }
+
+
 
     // 消息接收线程
     private static class UdpReceiveThread extends Thread{

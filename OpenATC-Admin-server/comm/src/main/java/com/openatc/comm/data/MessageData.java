@@ -26,6 +26,7 @@ import lombok.Data;
 public class MessageData {
 
   String agentid;
+  String thirdpartyid;   //这是信号机上报的id
   String operation;
   String infotype;
   String createtime;
