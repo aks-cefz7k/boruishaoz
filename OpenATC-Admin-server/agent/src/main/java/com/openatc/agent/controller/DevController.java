@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
+import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -145,7 +146,6 @@ public class DevController {
     }
 
     //得到某一Id设备
-    //todo 和GetAscsInfo有什么区别
     @GetMapping(value = "/devs/{id}")
     public RESTRetBase GetDevById(@PathVariable String id) throws ParseException {
         AscsBaseModel ascsBaseModel = null;

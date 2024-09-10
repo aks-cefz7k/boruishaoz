@@ -9,21 +9,17 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.agent.model;
+package com.openatc.comm.data;
 
 import com.google.gson.JsonObject;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Component
 public class AscsBaseModel {
 
     private int id;
-    @Temporal(TemporalType.DATE)
     private Date lastTime;
     private String descs;
     private String type;

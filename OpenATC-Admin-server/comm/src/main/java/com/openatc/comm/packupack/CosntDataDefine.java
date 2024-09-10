@@ -63,7 +63,8 @@ public final class CosntDataDefine {
     public static final byte                INFO_TYPE_PATTERN_INTERRUPT = -86;            //方案干预 0xAA
     public static final byte                INFO_TYPE_CHANNEL_STATUS    = -85;            //通道状态 0xAB
     public static final byte                INFO_TYPE_CHANNEL_LAMP_STATUS = -84;          //通道灯色状态 0xAC
-	public static final byte                INFO_TYPE_SYSTEM_CUSTOM = -83;          	  //设备通信 0xAD
+	public static final byte                INFO_TYPE_SYSTEM_CUSTOM = -83;          	  //设备信息 0xAD
+    public static final byte                INFO_TYPE_SYSTEM_UPDATE = -84;          	  //设备升级 0xAF
 
     public static final byte                CFG_ACK_ASKSEND             = 0x18;           //主机回应配置软件请求发送数据
     public static final byte                CFG_ASK_ASKREAD             = 0x19;           //配置软件请求读数据
@@ -115,4 +116,6 @@ public final class CosntDataDefine {
     public static final         String      channelstatus   = "status/channeltest";     //通道状态
     public static final         String      channellampstatus   ="status/channellamp";  //通道灯色lamp
 	public static final         String      systemcustom   ="system/custom";      		//设备参数
+    public static final         String      systemupdate   ="system/update";      		//设备升级
+
 }

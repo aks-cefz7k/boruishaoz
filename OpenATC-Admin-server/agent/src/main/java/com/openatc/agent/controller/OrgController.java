@@ -11,12 +11,12 @@
  **/
 package com.openatc.agent.controller;
 
-import com.openatc.agent.model.AscsBaseModel;
 import com.openatc.agent.model.SysOrg;
 import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.OrgService;
 import com.openatc.agent.service.UserDao;
+import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -11,14 +11,24 @@
  **/
 package com.openatc.comm.common;
 
+import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
+import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.RESTRet;
+import com.openatc.core.util.RESTRetUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
 import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.LogUtil.CreateErrorRequestData;
 import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
+import static com.openatc.core.common.IErrorEnumImplInner.*;
+import static com.openatc.core.common.IErrorEnumImplInner.E_301;
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_4002;
 
 
 public class CommClient {
@@ -39,10 +49,93 @@ public class CommClient {
         commServerType = type;
     }
 
-    public MessageData exange(String ip, int port, String protype, int platform, MessageData sendMsg,int socketType) throws UnsupportedEncodingException {
+    // 设备通讯封装接口，根据OpenATC设备结构，发送和接收OpenATC通讯消息
+    public RESTRet devMessage(MessageData requestData, AscsBaseModel ascsBaseModel){
+
+        DevCommError devCommError = null;
+        String agentid = requestData.getAgentid();
+        String infotype = requestData.getInfotype();
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
+        String protocal = ascsBaseModel.getProtocol();
+        int socketType = ascsBaseModel.getSockettype();
+
+        //判断操作类型是否为空
+        if (requestData.getOperation() == null) {
+            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_101);
+            return RESTRetUtils.errorDetialObj(E_4001, devCommError);
+        }
+
+        //判断消息类型是否为空
+        if (requestData.getInfotype() == null) {
+            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_102);
+            return RESTRetUtils.errorDetialObj(E_4001, devCommError);
+        }
+
+        //判断协议是否为空
+        if (protocal == null) {
+            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_108);
+            return RESTRetUtils.errorDetialObj(E_4001, devCommError);
+        }
+
+        // 判断通讯类型是设备直连还是平台转发
+        int exangeType = EXANGE_TYPE_DEVICE;
+        if(protocal.equals(SCP_PROTYPE) )
+            exangeType = EXANGE_TYPE_CENTER;
+
+        //增加mode字段
+//        if (requestData.getOperation().equals("set-request") && requestData.getInfotype().equals("control/pattern")) {
+//            requestData.getData().getAsJsonObject().addProperty("mode", 1);
+//        }
+
+        // 获取responceData
+        MessageData responceData = null;
+        try {
+            responceData = exange(ip, port, protocal, exangeType,requestData,socketType);
+        } catch (Exception e) {
+            log.warning( "message exange error:" + e.getMessage());
+        }
+
+        if (responceData == null){
+            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_200);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+        }
+
+        if (responceData == null) {
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+        }
+
+        if (responceData.getOperation() == null){
+            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_101);
+            return RESTRetUtils.errorDetialObj(E_4006, devCommError);
+        }
+
+        //判断设备是否在线
+        if (responceData.getOperation().equals("Communication Error!")) {
+            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_RESPONSE, infotype, E_301);
+            return RESTRetUtils.errorDetialObj(E_4003, devCommError, responceData.getDelay());
+        }
+
+        //判断请求消息是否正确
+        if (responceData.getOperation().equals(OPERATOER_TYPE_ERROR_REQUEST)) {
+            return RESTRetUtils.errorDetialObj(E_4001, responceData.getData());
+        }
+
+        //判断应答是否成功
+        if (responceData.getOperation().equals(OPERATOER_TYPE_ERROR_RESPONSE)) {
+            return RESTRetUtils.errorDetialObj(E_4002, responceData.getData());
+        }
+
+        return RESTRetUtils.successObj(responceData);
+    }
+
+
+    // 原始通讯接口，通过设备IP和端口，发送和接收消息
+    public MessageData exange(String ip, int port, String protype, int platform, MessageData sendMsg, int socketType) throws UnsupportedEncodingException {
 
 //        long starttime = System.currentTimeMillis();
 //        long endtime = 0L;
+        String agentId = sendMsg.getAgentid();
 
         // 产品工厂类
         ProtocolFactory factory = new scpFactory();
@@ -60,15 +153,9 @@ public class CommClient {
 
         // 打包
         PackData packData = message.pack(sendMsg);
-        // packData为空，则返回数据为空
+        // packData为空，则返回消息不支持
         if (packData == null) {
-            if (sendMsg.getOperation().equals(CosntDataDefine.getrequest)) {
-                sendMsg.setOperation(CosntDataDefine.getresponse);
-            }
-            if (sendMsg.getOperation().equals(CosntDataDefine.setrequest)) {
-                sendMsg.setOperation(CosntDataDefine.setresponse);
-            }
-            return sendMsg;
+            return CreateErrorRequestData(agentId,"sendMsg not support");
         }
 //        endtime = System.currentTimeMillis();
 //        log.info("Send Msg:" + sendMsg );
@@ -100,7 +187,6 @@ public class CommClient {
 
         // 发送
         int sendrev = 0;
-        String agentId = sendMsg.getAgentid();
 //        try {
 //            sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
 //        } catch (IOException e) {

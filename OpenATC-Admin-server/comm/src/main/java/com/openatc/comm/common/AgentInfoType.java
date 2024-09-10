@@ -29,7 +29,8 @@ public enum AgentInfoType {
 	heartbeat("heartbeat"),
 	Status_Plan("status/plan"),
 	Agent_Split("optplan/pattern"),
-	Agent_RealTimePlan("status/realtimeplan");
+	Agent_RealTimePlan("status/realtimeplan"),
+	System_Update("system/update");
 	
 	
 	

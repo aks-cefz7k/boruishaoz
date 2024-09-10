@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
+import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.packupack.CosntDataDefine;
 import com.openatc.core.model.DevCommError;
@@ -21,7 +22,6 @@ import java.net.SocketException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
