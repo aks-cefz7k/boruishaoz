@@ -1,4 +1,4 @@
-package com.openatc.comm.packupack;
+package com.openatc.comm.ocp;
 /**
  * @ClassName: DataSchedulePackUpPack
  * @Description: TODO
@@ -16,7 +16,7 @@ import com.openatc.comm.data.MessageDataMD5;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import static com.openatc.comm.packupack.CosntDataDefine.*;
+import static com.openatc.comm.ocp.CosntDataDefine.*;
 
 public class DataSchedulePackUpPack { //数据表内容宏定义
 

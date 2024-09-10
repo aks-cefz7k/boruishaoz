@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.data.MessageDataMD5;
-import com.openatc.comm.packupack.DataParamMD5;
+import com.openatc.comm.ocp.DataParamMD5;
 
 import java.io.UnsupportedEncodingException;
 

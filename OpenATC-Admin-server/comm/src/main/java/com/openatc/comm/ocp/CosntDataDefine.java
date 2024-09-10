@@ -1,4 +1,4 @@
-package com.openatc.comm.packupack;
+package com.openatc.comm.ocp;
 
 public final class CosntDataDefine {
 

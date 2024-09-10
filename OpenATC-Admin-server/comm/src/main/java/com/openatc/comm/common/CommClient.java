@@ -14,7 +14,6 @@ package com.openatc.comm.common;
 import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
-import com.openatc.comm.packupack.CosntDataDefine;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;

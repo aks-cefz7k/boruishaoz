@@ -14,19 +14,13 @@ package com.openatc.configserver.controller;
 import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.packupack.CosntDataDefine;
 import com.openatc.comm.data.AscsBaseModel;
-import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-
-import static com.openatc.comm.common.CommunicationType.*;
-import static com.openatc.core.common.IErrorEnumImplInner.*;
-import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 
 @Path("/")

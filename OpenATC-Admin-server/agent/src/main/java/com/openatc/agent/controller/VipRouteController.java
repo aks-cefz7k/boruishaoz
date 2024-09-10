@@ -7,7 +7,7 @@ import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
 import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.packupack.CosntDataDefine;
+import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;

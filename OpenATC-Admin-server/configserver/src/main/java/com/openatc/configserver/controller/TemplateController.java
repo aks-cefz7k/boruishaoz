@@ -16,7 +16,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.packupack.CosntDataDefine;
+import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.configserver.model.*;
 import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.model.DevCommError;

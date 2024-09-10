@@ -11,19 +11,13 @@
  **/
 package com.openatc.comm.model;
 
-import com.google.gson.JsonElement;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.data.MessageDataMD5;
-import com.openatc.comm.packupack.DataPackUpPack;
-import com.openatc.comm.packupack.DataParamMD5;
-import com.openatc.comm.packupack.DataSchedulePackUpPack;
-import lombok.extern.slf4j.Slf4j;
+import com.openatc.comm.ocp.DataPackUpPack;
+import com.openatc.comm.ocp.DataSchedulePackUpPack;
 
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
 
 import static com.openatc.comm.common.CommunicationType.EXANGE_TYPE_DEVICE;
-import static com.openatc.comm.common.CommunicationType.OCP_PROTYPE;
 
 public class ocpMessage implements Message {
     private static final int RECVBUFFER = 64 * 1024;
