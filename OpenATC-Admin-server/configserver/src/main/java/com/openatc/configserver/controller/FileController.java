@@ -36,8 +36,8 @@ public class FileController {
         String fileName = fileMetaData.getFileName();
         int index;
         byte[] bytes = new byte[1024];
-//        FileOutputStream downloadFile = new FileOutputStream("/usr/"+fileName);
-        FileOutputStream downloadFile = new FileOutputStream("./"+fileName);
+        FileOutputStream downloadFile = new FileOutputStream("/usr/"+fileName);
+//        FileOutputStream downloadFile = new FileOutputStream("./"+fileName);
 
         while ((index = inputStream.read(bytes)) != -1) {
             downloadFile.write(bytes, 0, index);

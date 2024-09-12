@@ -521,31 +521,14 @@ public class TemplateController {
         for (JsonElement phase : phaseArray) {
             if (phase.getAsJsonObject().get("controltype") == null || phase.getAsJsonObject().get("peddirection") == null)
                 continue;
+            int[] peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), int[].class);
 
             // 确定为人行横道
             if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
-                Set<Integer> peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), Set.class);
-                if (peddirection.contains(15) && peddirection.contains(16)) {
-                    return type = "999-000-00";
-                } else {
-                    continue;
-                }
-            }
-        }
-
-        for (JsonElement phase : phaseArray) {
-            if (phase.getAsJsonObject().get("controltype") == null || phase.getAsJsonObject().get("peddirection") == null)
-                continue;
-
-            // 确定为人行横道
-            if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
-                Set<Integer> peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), Set.class);
-                if (peddirection.contains(15)) {
-                    return type = "104-005-" + phaseCountString;
-                } else if (peddirection.contains(16)) {
-                    return type = "104-006-" + phaseCountString;
-                } else {
-                    return type = "999-000-00";
+                for (Integer direction : peddirection) {
+                    if (direction == 15) return type = "104-005-" + phaseCountString;
+                    else if (direction == 16) return type = "104-006-" + phaseCountString;
+                    else return type = "999-000-00" ;
                 }
             }
         }

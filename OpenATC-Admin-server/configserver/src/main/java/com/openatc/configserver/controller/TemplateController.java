@@ -47,8 +47,8 @@ public class TemplateController {
     Logger logger = Logger.getLogger(DeviceController.class.getName());
 
 
-    Set<Integer> ewPed = new HashSet<>(Arrays.asList(1, 2, 5, 6, 7, 8, 15));
-    Set<Integer> snPed = new HashSet<>(Arrays.asList(3, 4, 9, 10, 11, 12, 16));
+//    Set<Integer> ewPed = new HashSet<>(Arrays.asList(1, 2, 5, 6, 7, 8, 15));
+//    Set<Integer> snPed = new HashSet<>(Arrays.asList(3, 4, 9, 10, 11, 12, 16));
     /**
      * @return RESTRetBase
      * @Title: getTemplate
@@ -450,40 +450,60 @@ public class TemplateController {
         Set directionSet = new HashSet();
 
         //使用设备通讯接口获取相位
-        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.phase);
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
         RESTRet<MessageData> retBase = null;
         retBase = deviceController.postDevsMessage(messageData);
-        if (!retBase.isSuccess()) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_301);
+        if (retBase.getCode().equals(E_4002.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            return RESTRetUtils.errorDetialObj(E_4002, devCommError);
+        }
+        if (retBase.getCode().equals(E_4003.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_301);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
-        MessageData md = retBase.getData();
-        if (md == null) {
-            logger.warning("Template MessageData Error:" + retBase);
+        if (retBase.getCode().equals(E_4005.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+        }
+        if (retBase.getData() == null) {
             return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
         }
-        JsonElement element = md.getData().getAsJsonObject().get("phaseList");
-        JsonArray phaseArray = null;
-        if(element != null)
-            phaseArray = element.getAsJsonArray();
-        else {
-            logger.warning("Template feature/phase Error:" + retBase);
-            return RESTRetUtils.errorObj(E_4002);
+        if (retBase.getData().getData() == null) {
+            return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
         }
+        JsonArray phaseArray = retBase.getData().getData().getAsJsonObject().get("phaseList").getAsJsonArray();
+        JsonElement overlapElement = retBase.getData().getData().getAsJsonObject().get("overlaplList");
+        JsonArray overlapArray = new JsonArray();
+        if (overlapElement != null) {
+            overlapArray = overlapElement.getAsJsonArray();
+        }
+        JsonArray phaseAndOverlapArray = new JsonArray();
+        phaseAndOverlapArray.addAll(phaseArray);
+        phaseAndOverlapArray.addAll(overlapArray);
         int phaseCount = phaseArray.size();
         //相位用两位字符串表示，不足位数补0
         String phaseCountString = String.format("%2d", phaseCount).replace(" ", "0");
+
+        //if (!directionConflict(phaseArray) && !directionConflict(overlapArray))
+
         //判断是否是T型或十字型路口
-        type = calTenOrType(phaseArray, type, directionSet, phaseCountString);
+        type = calTenOrType(phaseAndOverlapArray, type, directionSet, phaseCountString);
+        if (type.equals("999-000-00")){
+            //判断是不是人行横道
+            type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
+        }
+
+
         //判断是否是匝道类型的路开口
-        type = calRampType(phaseArray, type, phaseCountString);
-        //判断是不是人行横道
-        type = calPedCrossType(phaseArray, type, phaseCountString);
+        if (type.equals("999-000-00")) {
+            type = calRampType(phaseArray, type, phaseCountString);
+        }
 
         //返回的json对象
         JsonObject intersectionInfo = new JsonObject();
         intersectionInfo.addProperty("type", type);
         intersectionInfo.add("phaseList", phaseArray);
+        intersectionInfo.add("overlaplList", overlapArray);
         return RESTRetUtils.successObj(intersectionInfo);
     }
 
@@ -496,9 +516,9 @@ public class TemplateController {
             // 确定为人行横道
             if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
                 for (Integer direction : peddirection) {
-                    if (ewPed.contains(direction) && snPed.contains(direction)) return type = "999-000-00";
-                    if (ewPed.contains(direction)) return type = "104-05-" + phaseCountString;
-                    if (snPed.contains(direction)) return type = "104-06-" + phaseCountString;
+                    if (direction == 15) return type = "104-005-" + phaseCountString;
+                    else if (direction == 16) return type = "104-006-" + phaseCountString;
+                    else return type = "999-000-00" ;
                 }
             }
         }
