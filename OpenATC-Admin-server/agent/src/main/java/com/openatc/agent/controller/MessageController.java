@@ -14,6 +14,7 @@ package com.openatc.agent.controller;
 import com.openatc.agent.model.AscsBaseModel;
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.service.DevIdMapService;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
@@ -56,6 +57,9 @@ public class MessageController {
 
     @Autowired(required = false)
     protected DevController devController;
+
+    @Autowired(required = false)
+    DevIdMapService devIdMapService;
 
 //    @Autowired
     protected CommClient commClient = new CommClient();
@@ -149,10 +153,14 @@ public class MessageController {
             logger.warning( "message exange error:" + e.getMessage());
         }
 
+
+
         if (responceData == null){
             devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_200);
             return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
+
+
 
         // 把设置请求的操作保存到历史记录中
         String token = null;
@@ -183,6 +191,10 @@ public class MessageController {
         if (responceData.getOperation().equals("error-response")) {
             return RESTRetUtils.errorDetialObj(E_4002, responceData.getData());
         }
+
+        //更改
+        responceData.setThirdpartyid(responceData.getAgentid());
+        responceData.setAgentid(agentid);
 
         return RESTRetUtils.successObj(responceData);
     }

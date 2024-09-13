@@ -16,16 +16,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +35,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+
+
 
 @Repository
 public class AscsDao {
@@ -50,6 +50,8 @@ public class AscsDao {
 
     @Autowired
     private ChannelTopic topic;
+
+
 
     public List<AscsBaseModel> getAscsByCode(String code) {
         String sql = "SELECT id, agentid,protocol, geometry, lastTime, descs,type,status,jsonparam, code FROM dev where code  = '" + code + "'";
@@ -136,7 +138,8 @@ public class AscsDao {
         try {
             if (isTableExist("dev")) {
                 String devSql = "update dev set agentid=? where agentid=?";
-                jdbcTemplate.update(devSql, newAgentid, oldAgentid);
+                int update = jdbcTemplate.update(devSql, newAgentid, oldAgentid);
+
                 redisTemplate.convertAndSend(topic.getTopic(),"updateIdMap");
 
             }
@@ -200,9 +203,6 @@ public class AscsDao {
                 String devs_video = "update devs_video set agentid=? where agentid=?";
                 jdbcTemplate.update(devs_video, newAgentid, oldAgentid);
             }
-
-
-
         } catch (Exception e) {
             return false;
         }
@@ -729,10 +729,12 @@ public class AscsDao {
             //scp协议的ip和port均相同，用agentid来判断
             if(protocol.equals("scp") || protocol.equals("SCP")){
                 String agentid = (String)idAndJson.get("agentid");
-                if(login_agentid.equals(agentid)){
+                //对于scp协议上传的id的是agentid，scp协议需事先配置agentid
+                if(login_thirpartyid.equals(agentid)){
                     //只需要更新一下时间
                     String sql = "update dev set lastTime=LOCALTIMESTAMP where agentid = ?";
                     rows = jdbcTemplate.update(sql,agentid);
+                    return rows;
                 }
             }else{
                 int id = (int) idAndJson.get("id");
@@ -745,7 +747,7 @@ public class AscsDao {
                 if (jsonparamMap.get("ip").equals(devCover.getIp()) && port == devCover.getPort()) {
                     //坐标为空，更新坐标
                     if(idAndJson.get("geometry") == null){
-                        String sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)), agentid, thirdplatformid=?, lastTime=LOCALTIMESTAMP where id = ?";
+                        String sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)), thirdplatformid=?, lastTime=LOCALTIMESTAMP where id = ?";
                         String strGeo = ascsModel.getGeometry().toString();
                         rows = jdbcTemplate.update(sql,
                                 ascsModel.getType(),
@@ -753,15 +755,13 @@ public class AscsDao {
                                 ascsModel.getProtocol(),
                                 strGeo,
                                 ascsModel.getJsonparam().toString(),
-                                ascsModel.getAgentid(),
                                 ascsModel.getThirdplatformid(),
                                 id);
                         updateCount++;
                     }else{
                         //坐标非空，不更新坐标
-                        String sql = "update dev set agentid=?, thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
+                        String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
                         rows = jdbcTemplate.update(sql,
-                                ascsModel.getAgentid(),
                                 ascsModel.getThirdplatformid(),
                                 ascsModel.getType(),
                                 ascsModel.getStatus(),
@@ -776,7 +776,10 @@ public class AscsDao {
             }//id (protocol.equals("ocp") || protocol.equals("OCP"))
 
         }//for (Map<String, Object> idAndJson : idAndJsonparamList)
-
+        //scp直接返回
+        if(protocol.equals("scp") || protocol.equals("SCP")){
+            return rows;
+        }
         //未找到,说明未新注册，插入，将agentid为自增
         if(updateCount == 0){
             String sql = "INSERT INTO dev(agentid, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
