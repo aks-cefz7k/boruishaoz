@@ -22,6 +22,8 @@ import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -47,6 +49,14 @@ public class DevController {
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private DevIdMapService devIdMapService;
+    @Autowired
+    private ChannelTopic topic;
 //    @Autowired
 //    private TStatDao tStatDao;
 
@@ -172,8 +182,13 @@ public class DevController {
     //删除
     @DeleteMapping(value = "/devs/{id}")
     public RESTRetBase DeleteDev(@PathVariable String id) {
+
+        devIdMapService.setOcpLock(1);
+
         AscsBaseModel as = mDao.getAscsByID(id);
         mDao.deleteDevByID(id);
+        //删除设备时，应通知所有服务更新映射
+        redisTemplate.convertAndSend(topic.getTopic(),"updateIdMap");
 
         //删除协调路线的id设备
         List<Route> routes = routeDao.findAll();

@@ -29,9 +29,10 @@ public class DevIdMapService implements CommandLineRunner {
     private Map<String, String> agentidToThirdidScp = new HashMap<>();
     private Map<String, String> thirdidToAgentidScp = new HashMap<>();
     private Map<String, String> OCPIDMAP = new HashMap<>();
+    //ocpLock为1时，表明OCPIDMAP不允许被访问
 
 
-
+    private int ocpLock;
     //构造函数、依赖注入后执行
     @Override
     public void run(String... args) throws Exception {
@@ -48,6 +49,7 @@ public class DevIdMapService implements CommandLineRunner {
      * scp : key=ipport:agentid, value=thirdpartyid
      */
     public void initMap(){
+
         String sql = "SELECT agentid, thirdplatformid, protocol, jsonparam  FROM dev;";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         Gson gson = new Gson();
@@ -63,6 +65,8 @@ public class DevIdMapService implements CommandLineRunner {
                     port = (String)jsonparamMap.get("port");
                 }else if(jsonparamMap.get("port") instanceof Double){
                     port = Integer.toString(((Double)jsonparamMap.get("port")).intValue());
+                }else if(jsonparamMap.get("port") instanceof Integer){
+                    port = Integer.toString(((Integer) jsonparamMap.get("port")).intValue());
                 }
 
                 String agentid = (String)m.get("agentid");
@@ -70,13 +74,10 @@ public class DevIdMapService implements CommandLineRunner {
                 String key = ip + port;
                 String value = agentid + ":" + thirdpartyid;
                 OCPIDMAP.put(key, value);
-
             }
-
         }
         System.out.println(OCPIDMAP.toString());
-
-
-
+        ocpLock = 0;
     }
+
 }

@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Null;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.*;
@@ -71,18 +72,24 @@ public class VipRouteController {
         return RESTRetUtils.successObj(vipRouteDao.findById(id));
     }
 
+
     private void addGeometryToVipRoute(VipRoute vipRoute) throws ParseException {
         Set<VipRouteDevice> vipRouteDevs = vipRoute.getDevs();
         if(vipRouteDevs == null){
             return;
         }
         for (VipRouteDevice vipRouteDev : vipRouteDevs) {
+            if(vipRouteDev == null){
+                return;
+            }
             String agentid = vipRouteDev.getAgentid();
             RESTRet restRet = (RESTRet) devController.GetDevById(agentid);
             AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
+            if(ascsBaseModel == null) return;
             vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
         }
     }
+
 
     // 查询所有勤务路线的简略信息
     @GetMapping(value = "/viproute/simple")
