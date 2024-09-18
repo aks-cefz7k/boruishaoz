@@ -79,5 +79,4 @@ public class DevIdMapService implements CommandLineRunner {
         System.out.println(OCPIDMAP.toString());
         ocpLock = 0;
     }
-
 }
