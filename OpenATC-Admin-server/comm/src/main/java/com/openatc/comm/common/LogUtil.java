@@ -6,6 +6,9 @@ import com.openatc.comm.data.MessageData;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.openatc.comm.common.CommunicationType.OPERATOER_TYPE_ERROR_REQUEST;
+import static com.openatc.comm.common.CommunicationType.OPERATOER_TYPE_ERROR_RESPONSE;
+
 // 日志处理类
 public class LogUtil {
 
@@ -25,7 +28,17 @@ public class LogUtil {
     public static MessageData CreateErrorResponceData(String agentId, String desc) {
         MessageData responceData = new MessageData();
         responceData.setAgentid(agentId);
-        responceData.setOperation("error-response");
+        responceData.setOperation(OPERATOER_TYPE_ERROR_RESPONSE);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("desc", desc);
+        responceData.setData(jsonObject);
+        return responceData;
+    }
+
+    public static MessageData CreateErrorRequestData(String agentId, String desc) {
+        MessageData responceData = new MessageData();
+        responceData.setAgentid(agentId);
+        responceData.setOperation(OPERATOER_TYPE_ERROR_REQUEST);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("desc", desc);
         responceData.setData(jsonObject);

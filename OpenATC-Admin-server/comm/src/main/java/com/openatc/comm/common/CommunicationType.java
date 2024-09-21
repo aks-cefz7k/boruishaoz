@@ -19,6 +19,12 @@ public enum CommunicationType {
     public static String OCP_PROTYPE  = "ocp";
     public static String SCP_PROTYPE  = "scp";
 
+    public static String OPERATOER_TYPE_GET_REQUEST = "get-request";
+    public static String OPERATOER_TYPE_GET_RESPONSE = "get-response";
+    public static String OPERATOER_TYPE_SET_REQUEST = "set-request";
+    public static String OPERATOER_TYPE_SET_RESPONSE = "set-response";
+    public static String OPERATOER_TYPE_ERROR_REQUEST = "error-request";
+    public static String OPERATOER_TYPE_ERROR_RESPONSE = "error-response";
     public static String OPERATOER_TYPE_REPORT = "report";
 
     public static String PLATFORM_TYPE_OPENATC = "OpenATC";

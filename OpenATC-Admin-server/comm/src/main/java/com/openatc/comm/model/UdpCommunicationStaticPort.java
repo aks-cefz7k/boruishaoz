@@ -15,8 +15,8 @@ import com.openatc.comm.common.LogUtil;
 import com.openatc.comm.common.PropertiesUtil;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
-import com.openatc.comm.packupack.DataPackUpPack;
-import com.openatc.comm.packupack.DataSchedulePackUpPack;
+import com.openatc.comm.ocp.DataPackUpPack;
+import com.openatc.comm.ocp.DataSchedulePackUpPack;
 import java.io.IOException;
 import java.net.*;
 import java.util.Arrays;
@@ -32,6 +32,7 @@ public class UdpCommunicationStaticPort implements Communication {
     private static int TIMEOUT = PropertiesUtil.getIntProperty("agent.comm.timeout");
     private static int RECVBUFFER = 64 * 1024;
     private static Logger logger = Logger.getLogger(UdpCommunicationStaticPort.class.toString());
+
 
     // 发送和接收消息的固定端口ocp-UDP对象
     private static DatagramSocket ocpSocket = null;
@@ -126,7 +127,7 @@ public class UdpCommunicationStaticPort implements Communication {
 
         lock.lock();
         lockMap.put(messageKey,lock);
-        logger.warning("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
+        logger.info("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
 
         //socket的发送地址和端口
         InetSocketAddress address = new InetSocketAddress(ip, port);
@@ -147,7 +148,7 @@ public class UdpCommunicationStaticPort implements Communication {
         }
         thread = Thread.currentThread();
         messageMap.put(messageKey, this);
-        logger.warning("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
+        logger.info("Udp Send Data Thread#" + thread.getId() +" AgentID:" + agentid +  " IP:" + ip +" Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
 
 
         return 0;
@@ -167,9 +168,11 @@ public class UdpCommunicationStaticPort implements Communication {
         messageMap.remove(messageKey);
         lockMap.remove(messageKey);
         lock.unlock();
-        logger.warning("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
+        logger.info("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
         return responceData;
     }
+
+
 
     // 消息接收线程
     private static class UdpReceiveThread extends Thread{

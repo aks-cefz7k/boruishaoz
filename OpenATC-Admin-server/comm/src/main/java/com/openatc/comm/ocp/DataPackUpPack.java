@@ -1,5 +1,5 @@
-package com.openatc.comm.packupack;
-import static com.openatc.comm.packupack.CosntDataDefine.*;
+package com.openatc.comm.ocp;
+import static com.openatc.comm.ocp.CosntDataDefine.*;
 /**
  * @ClassName: DataPackUpPack
  * @Description: TODO

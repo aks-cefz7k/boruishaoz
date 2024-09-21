@@ -12,7 +12,7 @@
 package com.openatc.configserver.utils;
 
 import com.openatc.comm.common.PropertiesUtil;
-import com.openatc.comm.packupack.CosntDataDefine;
+import com.openatc.comm.ocp.CosntDataDefine;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

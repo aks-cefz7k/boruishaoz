@@ -13,7 +13,7 @@ package com.openatc.agent.controller;
 
 import com.google.gson.JsonElement;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.packupack.DataParamMD5;
+import com.openatc.comm.ocp.DataParamMD5;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;

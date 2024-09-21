@@ -5,8 +5,9 @@ import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
+import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.packupack.CosntDataDefine;
+import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
@@ -17,11 +18,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Null;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
@@ -71,15 +72,24 @@ public class VipRouteController {
         return RESTRetUtils.successObj(vipRouteDao.findById(id));
     }
 
+
     private void addGeometryToVipRoute(VipRoute vipRoute) throws ParseException {
         Set<VipRouteDevice> vipRouteDevs = vipRoute.getDevs();
+        if(vipRouteDevs == null){
+            return;
+        }
         for (VipRouteDevice vipRouteDev : vipRouteDevs) {
+            if(vipRouteDev == null){
+                return;
+            }
             String agentid = vipRouteDev.getAgentid();
             RESTRet restRet = (RESTRet) devController.GetDevById(agentid);
             AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
+            if(ascsBaseModel == null) return;
             vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
         }
     }
+
 
     // 查询所有勤务路线的简略信息
     @GetMapping(value = "/viproute/simple")

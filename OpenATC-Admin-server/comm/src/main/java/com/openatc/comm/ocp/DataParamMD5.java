@@ -1,4 +1,4 @@
-package com.openatc.comm.packupack;
+package com.openatc.comm.ocp;
 //import org.springframework.util.DigestUtils;
 
 import java.io.UnsupportedEncodingException;

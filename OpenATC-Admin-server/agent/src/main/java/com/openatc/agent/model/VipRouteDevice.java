@@ -1,14 +1,11 @@
 package com.openatc.agent.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.openatc.agent.utils.JsonbType;
+import com.openatc.comm.data.MyGeometry;
 import lombok.Data;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import org.springframework.boot.jackson.JsonObjectSerializer;
 
 import javax.persistence.*;
-import java.util.Map;
 
 @Data
 @Table(name = "vip_route_device", schema = "public")

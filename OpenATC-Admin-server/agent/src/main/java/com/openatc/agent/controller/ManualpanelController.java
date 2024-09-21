@@ -19,24 +19,13 @@ import com.openatc.agent.model.Channel;
 import com.openatc.agent.model.Keyconfig;
 import com.openatc.agent.model.LSCheck;
 import com.openatc.agent.model.Manualpanel;
-import com.openatc.comm.data.MessageData;
-import com.openatc.comm.packupack.CosntDataDefine;
-import com.openatc.core.common.IErrorEnumImplInner;
-import com.openatc.core.model.DevCommError;
-import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.SocketException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
 
 @RestController
 public class ManualpanelController {

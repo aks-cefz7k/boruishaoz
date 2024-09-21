@@ -1,4 +1,4 @@
-package com.openatc.comm.packupack;
+package com.openatc.comm.ocp;
 /**
  * @ClassName: DataSchedulePackUpPack
  * @Description: TODO
@@ -16,9 +16,11 @@ import com.openatc.comm.data.MessageDataMD5;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import static com.openatc.comm.packupack.CosntDataDefine.*;
+import static com.openatc.comm.ocp.CosntDataDefine.*;
 
 public class DataSchedulePackUpPack { //数据表内容宏定义
+
+
 
     private static final int MAX_DATA_SCHEDULE = 14;         //数据表大小
     private static final int ReadDataScheduleSuccess = 1;
@@ -163,6 +165,9 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         }
 		if (operatorObj.equals(systemcustom)) {
             return 30;
+        }
+        if (operatorObj.equals(systemupdate)) {
+            return 31;
         }
         return 0;
     }
@@ -1255,6 +1260,38 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             }
                         }
                         break;
+                    case 31://设备更新
+                        Arrays.fill(dataSchdule, (byte) 0);
+                        dataSchdule[0] = CB_VERSION_FLAG;
+                        dataSchdule[1] = CB_RECEIVE_FLAG;
+                        dataSchdule[2] = CB_SEND_FLAG;
+                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
+                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
+                        dataSchdule[8] = INFO_TYPE_SYSTEM_UPDATE;
+                        dataSchdule[9] = RESERVE_FLAG;
+                        dataSchdule[10] = 0x00;
+                        dataSchdule[11] = 0x00;
+                        dataSchdule[12] = 0x00;
+                        dataSchdule[13] = 0x00;
+                        //数据内容
+                        String systemupdateStr = null;
+                        dataSizeFlag = new byte[4];
+                        dataSendCount = 0;
+                        JsonElement systemupdateJson = sendData.getData();
+                        if(systemupdateJson != null){
+                            systemupdateStr = systemupdateJson.toString();
+                            if (systemupdateStr != null) {
+                                byte[] dataSend = systemupdateStr.getBytes("UTF-8");
+                                dataSendCount = dataSend.length;
+                                dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
+                                System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
+                            }
+                            for (int i = 0; i < 4; i++) {
+                                dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
+                                dataSchdule[i + 10] = dataSizeFlag[i];
+                            }
+                        }
+                        break;
                     default:
                         Arrays.fill(dataSchdule, (byte) 0);
                 }
@@ -1707,6 +1744,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_REQUEST) && (chInfoType == INFO_TYPE_ONLINE)) {
                 recvData.setOperation(StringOperatorType(OPERATE_TYPE_REPORT));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
+                //查找thirdparty与agentid映射表
                 recvData.setAgentid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
@@ -1979,6 +2017,25 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             }
             //设备参数设置应答
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
+                recvData.setOperation(StringOperatorType(chOperateType));
+                recvData.setInfotype(StringOperatorObj(chInfoType));
+                recvData.setAgentid(roadID);
+                Gson recvDataJson = new Gson();
+                if (tempData != null) {
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                if (tempData == null) {
+                    tempData = "{\n" +
+                            "\t\"sucess\": 1\n" +
+                            "}";
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+            //设备参数设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_UPDATE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 recvData.setAgentid(roadID);

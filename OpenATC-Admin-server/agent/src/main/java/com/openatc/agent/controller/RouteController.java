@@ -18,7 +18,7 @@ import com.openatc.agent.resmodel.DevList;
 import com.openatc.agent.service.RouteDao;
 import com.openatc.agent.service.RouteIntersectionDao;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.packupack.CosntDataDefine;
+import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
