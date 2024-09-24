@@ -6,12 +6,9 @@
 
     <groupId>com.openatc</groupId>
     <artifactId>agent</artifactId>
-<<<<<<< HEAD
 
-    <version>1.17.0</version>
-=======
     <version>1.18.0</version>
->>>>>>> dev-backend
+
     <packaging>jar</packaging>
     <name>agent</name>
 

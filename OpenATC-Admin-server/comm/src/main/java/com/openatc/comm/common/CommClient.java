@@ -11,13 +11,7 @@
  **/
 package com.openatc.comm.common;
 
-<<<<<<< HEAD
-
-
-import com.google.gson.JsonObject;
-=======
 import com.openatc.comm.data.AscsBaseModel;
->>>>>>> dev-backend
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.core.model.DevCommError;
