@@ -189,7 +189,13 @@ const en = {
       'duration': 'Duration',
       'curModel': 'Current Model',
       'curStage': 'Current Stage',
-      'responseTime': 'Response Time'
+      'responseTime': 'Response Time',
+      'putTscControlError1': 'Unsupported control pattern',
+      'putTscControlError2': 'Control number not exist',
+      'putTscControlError3': 'Unsupported control params',
+      'putTscControlError4': 'Unable to execute because device is in initialization',
+      'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
+      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control'
     },
     'phase': {
       'desc': 'LaneDirection',

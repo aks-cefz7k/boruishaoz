@@ -446,7 +446,7 @@ export default {
       this.registerMessage() // 注册消息
     } else {
       // setIframdevid('23080400311210000088')
-      // setIframdevid('0')
+      // setIframdevid('8011')
       this.queryDevParams() // 查询设备信息
     }
     // this.registerMessage() // 注册消息
@@ -582,7 +582,11 @@ export default {
           }
           strArr[0] = this.faultCodeMap.get(data[0])
         }
-        faultArr.push(`${strArr[0]}--${strArr[1]}`)
+        if (data[1] !== 0) {
+          faultArr.push(`${strArr[0]}--${strArr[1]}`)
+        } else {
+          faultArr.push(`${strArr[0]}`)
+        }
       }
       return faultArr
     },
@@ -942,7 +946,13 @@ export default {
       putTscControl(control).then(data => {
         that.unlockScreen()
         if (!data.data.success) {
-          that.$message.error(data.data.message)
+          // that.$message.error(data.data.message)
+          let success = data.data.data.data.success
+          if (success === 0) {
+            return
+          }
+          let errormsg = 'edge.overview.putTscControlError' + success
+          that.$message.error(this.$t(errormsg))
           return
         }
         this.closeManualModal()
