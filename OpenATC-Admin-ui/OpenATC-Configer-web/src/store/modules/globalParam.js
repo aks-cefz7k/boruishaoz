@@ -27,39 +27,7 @@ const tscParam = {
     fixintersectioninfo: '',
     commuport: 0,
     commutype: '',
-    steptype: '',
-    netcard: [{
-      ip: '',
-      subnetmask: '',
-      gateway: ''
-    },
-    {
-      ip: '',
-      subnetmask: '',
-      gateway: ''
-    }],
-    centerip: {
-      ip: '',
-      port: Number
-    },
-    cascade: {
-      lampboards: 0,
-      detectorboards: 0,
-      ioboards: 0,
-      joinoffset: 0
-    },
-    startsequence: {
-      startyellowflash: 6,
-      startallred: 6,
-      greenwavecycle: 5
-    },
-    faultdetect: {
-      closegreenandredon: 0,
-      detectgapgreenandredon: 0,
-      closenoredon: 0,
-      detectgapnoredon: 0,
-      detectgapgreenconflict: 0
-    }
+    steptype: ''
   },
   manualpanel: {
     mingreen: 15
@@ -97,7 +65,8 @@ const Global = {
     curBodyHeight: 1080,
     FuncSort: 'allFunc',
     hideMenu: false,
-    graphicMode: false // 为true时，切换到图形界面模式，只显示路口图部分
+    graphicMode: false, // 为true时，切换到图形界面模式，只显示路口图部分
+    roadDirection: 'right' // 当前路口行车方向：默认右行
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -106,7 +75,7 @@ const Global = {
         ...tscParam.customInfo,
         ...customInfo
       }
-      state.tscParam = data
+      state.tscParam = JSON.parse(JSON.stringify(data))
     },
     SAVE_SINGLE_PARAM: (state, param) => {
       state.tscParam[param.type] = param.data
@@ -141,6 +110,9 @@ const Global = {
     },
     SET_GRAPHIC_MODE: (state, isSwitchGraphicMode) => {
       state.graphicMode = isSwitchGraphicMode
+    },
+    SET_ROAD_RIRECTION: (state, DIR) => {
+      state.roadDirection = DIR
     }
   },
   actions: {
@@ -188,6 +160,9 @@ const Global = {
     },
     SetGraphicMode ({ commit }, isSwitchGraphicMode) {
       commit('SET_GRAPHIC_MODE', isSwitchGraphicMode)
+    },
+    SetRoadDirection ({ commit }, DIR) {
+      commit('SET_ROAD_RIRECTION', DIR)
     }
   }
 }

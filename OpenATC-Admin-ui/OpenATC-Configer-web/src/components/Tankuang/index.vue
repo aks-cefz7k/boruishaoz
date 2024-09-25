@@ -129,7 +129,7 @@ export default {
   width: 100%;
   // padding-bottom: 100%;
   padding-left: 0.5%;
-  padding-top: 0.5%;
+  // padding-top: 0.5%;
 }
 
 // .main>div{

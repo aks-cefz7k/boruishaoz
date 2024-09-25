@@ -412,7 +412,12 @@ export default {
       this.patternStatusIndex = val.id
       this.isShowPatternStatus = true
       if (val.desc === '') {
-        this.currPatternName = 'pattern' + val.id
+        if (this.$i18n.locale === 'en') {
+          this.currPatternName = 'pattern' + val.id
+        } else {
+          this.currPatternName = '方案' + val.id
+        }
+        // this.currPatternName = 'pattern' + val.id
       } else {
         this.currPatternName = val.desc
       }
@@ -440,7 +445,11 @@ export default {
           obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
           obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          list.push(obj)
+          // 忽略相位不显示
+          let mode = ring.mode
+          if (mode !== 7) {
+            list.push(obj)
+          }
         }
         this.patternStatusList.push(list)
       }
@@ -473,7 +482,12 @@ export default {
     },
     expandChange (val1, val2) {
       if (val1.desc === '') {
-        this.currPatternName = 'pattern' + val1.id
+        if (this.$i18n.locale === 'en') {
+          this.currPatternName = 'pattern' + val1.id
+        } else {
+          this.currPatternName = '方案' + val1.id
+        }
+        // this.currPatternName = 'pattern' + val1.id
       } else {
         this.currPatternName = val1.desc
       }

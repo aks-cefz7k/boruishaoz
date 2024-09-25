@@ -22,6 +22,7 @@ const getters = {
   curPath: state => state.globalParam.curPath,
   globalParamModel: state => state.globalParamModel.GlobalParamModeObject,
   devParams: state => state.globalParamModel.devParams,
-  permissionRoutes: state => state.permissionRoutes.routers
+  permissionRoutes: state => state.permissionRoutes.routers,
+  roadDirection: state => state.globalParam.roadDirection
 }
 export default getters

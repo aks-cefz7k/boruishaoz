@@ -15,7 +15,7 @@
     <sidebar class="sidebar-container" v-if="!hideMenu && !graphicMode"></sidebar>
     <div class="main-container" :class="{'changeMainPosition': hideMenu || graphicMode}">
       <navbar></navbar>
-      <app-main></app-main>
+      <app-main v-if="isload"></app-main>
     </div>
   </div>
 </template>
@@ -28,6 +28,7 @@ import { setIframdevid } from '@/utils/auth'
 // import { AddDevice } from '@/api/control'
 import router from '@/router'
 import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'Layout',
@@ -38,6 +39,7 @@ export default {
   },
   data () {
     return {
+      isload: false // 读取到左右行配置后再加载页面，保证时序性，不然各个页面图标更改时序有快有慢，显示就出错了！
     }
   },
   mixins: [ResizeMixin],
@@ -63,6 +65,7 @@ export default {
   watch: {
     $route: {
       handler: function (val, oldVal) {
+        this.getRoadConfig()
         this.$store.dispatch('SaveCurPath', val.path)
         if (this.$route.query !== undefined && this.$route.query.agentid !== undefined) {
           let agentId = this.$route.query.agentid
@@ -86,6 +89,7 @@ export default {
     }
   },
   created () {
+    this.getRoadConfig()
     let globalParamsModel = new GlobalParamsModel()
     globalParamsModel.Init()
     if (this.$route.query.createdev === undefined) {
@@ -115,6 +119,14 @@ export default {
   methods: {
     handleClickOutside () {
       this.$store.dispatch('CloseSideBar', { withoutAnimation: false })
+    },
+    getRoadConfig () {
+      axios.get('./LRRoadConfig.json').then(val => {
+        // 读取左行 右行配置文件
+        let roadDir = val.data.roadDirection
+        this.$store.dispatch('SetRoadDirection', roadDir)
+        this.isload = true
+      })
     }
     // addDevice (deviceInfo) {
     //   AddDevice(deviceInfo).then(res => {

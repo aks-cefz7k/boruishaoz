@@ -90,7 +90,8 @@ const en = {
       'quantity': 'Quantity',
       'devicemaneger': 'Device Maneger',
       'usermanager': 'User Manager',
-      'operationrecord': 'Operation Record'
+      'operationrecord': 'Operation Record',
+      'faultOrOffLine': 'Fault / Online'
     },
     'devicemanager': {
       'devicelist': 'Device List',
@@ -374,6 +375,13 @@ const en = {
       'greenreduction': 'Green Reduction',
       'bottleneckinfo': ' detector control info',
       'isdeletedetector': 'Are you sure delete the detector'
+    },
+    'about': {
+      'version': 'Version',
+      'copyright': 'Copyright',
+      'company': 'KEDACOM',
+      'packedtime': 'Packed time',
+      'opensourceagreement': 'Opensource Agreement'
     }
   }
 }

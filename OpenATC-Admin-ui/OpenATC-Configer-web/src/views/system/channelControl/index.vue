@@ -133,6 +133,19 @@ import { channelcheck, channeltest } from '@/api/system'
 export default {
   name: 'channelcontrol',
   components: {},
+  props: {
+    channelList: {
+      type: Array
+    }
+  },
+  watch: {
+    channelList: {
+      handler: function () {
+        this.handleCreateLampCtrboard()
+      },
+      deep: true
+    }
+  },
   data () {
     return {
       lampctrboardNum: 10,
@@ -165,7 +178,8 @@ export default {
   },
   methods: {
     handleCreateLampCtrboard () {
-      let channel = this.globalParamModel.getParamsByType('channelList')
+      // let channel = this.globalParamModel.getParamsByType('channelList')
+      let channel = this.channelList
       let channelIdList = channel.map(ele => ele.id)
       this.data = []
       if (channel.length === 0) return

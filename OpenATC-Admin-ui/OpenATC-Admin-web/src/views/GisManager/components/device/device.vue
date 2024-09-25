@@ -118,8 +118,8 @@ export default {
   },
   mounted () {
     let _this = this
-    var w = document.getElementsByClassName('showLayout')[0]
-    w.style.width = '470px'
+    // var w = document.getElementsByClassName('showLayout')[0]
+    // w.style.width = '470px'
     this.$nextTick(() => {
       _this.getAllAdevice()
     })
@@ -209,6 +209,11 @@ export default {
         return {
           label: this.$t('openatc.devicemanager.offline'),
           type: 'info'
+        }
+      } else if (row.state === 'FAULT') {
+        return {
+          label: this.$t('openatc.devicemanager.fault'),
+          type: 'danger'
         }
       } else {
         if (row.status === 0) {

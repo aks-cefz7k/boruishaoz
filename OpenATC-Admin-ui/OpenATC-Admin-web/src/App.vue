@@ -25,7 +25,6 @@ export default {
   },
   mounted: function () {
     let language = getLanguage()
-    console.log(this.$store)
     if (language === 'zh') {
       this.$i18n.locale = 'zh'
     } else if (language === 'en') {

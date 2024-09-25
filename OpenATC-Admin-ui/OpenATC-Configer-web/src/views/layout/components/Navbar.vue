@@ -101,6 +101,7 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -140,6 +141,7 @@
     </el-dialog>
     <!--修改密码弹框-->
     <changePass ref="changepassChild"></changePass>
+    <versioninfo ref="versioninfoChild"></versioninfo>
   </div>
 </template>
 
@@ -154,6 +156,7 @@ import Messagebox from '@/components/MessageBox/index'
 import ImportTempDialog from '../../importTempDialog/index'
 import { getInfo } from '@/api/login'
 import changePass from './ChangePass'
+import versioninfo from './versionInfo'
 
 export default {
   components: {
@@ -161,7 +164,8 @@ export default {
     Hamburger,
     Messagebox,
     ImportTempDialog,
-    changePass
+    changePass,
+    versioninfo
   },
   data () {
     return {
@@ -411,6 +415,7 @@ export default {
           return
         }
         let allTscParam = data.data.data.data
+        // let {customInfo, ...allTscParam} = data.data.data.data
         if (allTscParam.manualpanel === undefined) {
           allTscParam.manualpanel = {}
         }
@@ -473,7 +478,7 @@ export default {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return
             }
-            let errorMes = ''
+            let errorMes = this.$t('edge.common.downloaderror')
             for (let code of codeList) {
               if (this.$i18n.locale === 'en') {
                 if (code[0] === 305) {
@@ -482,8 +487,10 @@ export default {
                   errorMes = errorMes + '</br>' + 'Time period' + code[1] + 'channel lock state conflict'
                 } else if (code[0] === 1006) {
                   errorMes = errorMes + '</br>' + 'The control source of the locked channel in period' + code[1] + ' is not ignored'
-                } else {
+                } else if (this.errorCodeMap.get(code[0])) {
                   errorMes = errorMes + '</br>' + this.errorCodeMapEn.get(code[0])
+                } else {
+                  errorMes = errorMes + '</br>' + `错误码${code[0]}`
                 }
               } else {
                 if (code[0] === 305) {
@@ -492,14 +499,15 @@ export default {
                   errorMes = errorMes + '</br>' + '时段' + code[1] + '通道状态锁定冲突'
                 } else if (code[0] === 1006) {
                   errorMes = errorMes + '</br>' + '时段' + code[1] + '锁定通道的控制源未被忽略'
-                } else {
+                } else if (this.errorCodeMap.get(code[0])) {
                   errorMes = errorMes + '</br>' + this.errorCodeMap.get(code[0])
+                } else {
+                  errorMes = errorMes + '</br>' + `错误码${code[0]}`
                 }
               }
             }
-            // this.$message.error(errorMes.substr(1))
             this.$message({
-              message: errorMes.substr(5),
+              message: errorMes,
               type: 'error',
               dangerouslyUseHTMLString: true
             })
@@ -524,18 +532,18 @@ export default {
           let date = dates.date
           let day = dates.day
           let month = dates.month
-          if (date.includes('全选')) {
+          if (date && date.includes('全选')) {
             let index = date.indexOf('全选')
             date.splice(index, 1) // 排除全选选项
-          } else if (date.includes('All')) {
+          } else if (date && date.includes('All')) {
             let index = date.indexOf('All')
             date.splice(index, 1) // 排除全选选项
           }
-          if (day.includes(8)) {
+          if (day && day.includes(8)) {
             let index = day.indexOf(8)
             day.splice(index, 1) // 排除全选选项
           }
-          if (month.includes(0)) {
+          if (month && month.includes(0)) {
             let index = month.indexOf(0)
             month.splice(index, 1) // 排除全选选项
           }
@@ -553,6 +561,25 @@ export default {
           }
         }
       }
+      // if (newTscParam.customInfo) {
+      //   // 设备参数中包含以下字段需删除后再下发
+      //   let customInfo = newTscParam.customInfo
+      //   if (customInfo.netcard) {
+      //     delete customInfo.netcard
+      //   }
+      //   if (customInfo.centerip) {
+      //     delete customInfo.centerip
+      //   }
+      //   if (customInfo.cascade) {
+      //     delete customInfo.cascade
+      //   }
+      //   if (customInfo.startsequence) {
+      //     delete customInfo.startsequence
+      //   }
+      //   if (customInfo.faultdetect) {
+      //     delete customInfo.faultdetect
+      //   }
+      // }
       return newTscParam
     },
     cloneObjectFn (obj) {
@@ -685,17 +712,17 @@ export default {
         return false
       }
       this.checkPhaseRing()
-      if (!this.phaseRing) {
-        this.$message.error(this.$t('edge.errorTip.ringErrorTip'))
-        return false
-      }
+      // if (!this.phaseRing) {
+      //   this.$message.error(this.$t('edge.errorTip.ringErrorTip'))
+      //   return false
+      // }
       this.checkConcurrentRules()
-      if (!this.concurrentRules) {
-        this.$message.error(
-          this.$t('edge.errorTip.concurrentRules')
-        )
-        return false
-      }
+      // if (!this.concurrentRules) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.concurrentRules')
+      //   )
+      //   return false
+      // }
       this.checkOverlapRules()
       if (!this.overlapRules) {
         this.$message.error(
@@ -757,13 +784,13 @@ export default {
         this.$message.error(this.planName + this.$t('edge.errorTip.planDate'))
         return false
       }
-      this.checkPatternRing()
-      if (!this.patternRing) {
-        this.$message.error(
-          this.$t('edge.errorTip.patternRing')
-        )
-        return false
-      }
+      // this.checkPatternRing()
+      // if (!this.patternRing) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.patternRing')
+      //   )
+      //   return false
+      // }
       this.checkManualpanelIsNull()
       if (!this.manualpanelIsNull) {
         this.$message.error(
@@ -771,11 +798,11 @@ export default {
         )
         return false
       }
-      this.checkDeviceInfo()
-      if (!this.deviceinfo) {
-        this.$message.error(this.$t('edge.errorTip.deviceinformationnotnull'))
-        return false
-      }
+      // this.checkDeviceInfo()
+      // if (!this.deviceinfo) {
+      //   this.$message.error(this.$t('edge.errorTip.deviceinformationnotnull'))
+      //   return false
+      // }
       return true
     },
     checkDeviceInfo () {
@@ -1032,8 +1059,14 @@ export default {
           break
         case 'b': this.logout()
           break
+        case 'about': this.showVersion()
+          break
         default: router.push({ path: '/' })
       }
+    },
+    showVersion () {
+      let versionInfoChild = this.$refs.versioninfoChild
+      versionInfoChild.showMessage()
     },
     showInfo (val) {
       if (!val) return

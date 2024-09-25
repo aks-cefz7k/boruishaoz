@@ -30,8 +30,13 @@
           <div class="devsUp" :style="{ height: rightPartHeight }">
               <div class="Img upImg"></div>
               <div class="desc">
-                  <div class="num">{{chartData[0].value}}</div>
-                  <div class="state">{{$t('openatc.home.online')}}</div>
+                  <div class="num">
+                    <span style="color: red;">{{chartData[2].value}}</span>
+                    <span>/</span>
+                    <span>{{chartData[0].value}}</span>
+                  </div>
+                  <!-- <div class="state">{{$t('openatc.home.online')}}</div> -->
+                  <div class="state">{{$t('openatc.home.faultOrOffLine')}}</div>
               </div>
           </div>
           <div class="devsDown" :style="{ height: rightPartHeight }">

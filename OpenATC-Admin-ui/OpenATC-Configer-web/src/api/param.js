@@ -56,6 +56,36 @@ export function uploadSelectedTscParam (uuid) {
   let paramList = [iframdevid, 'param', 'upload', uuid]
   return api.Send({}, {}, paramList)
 }
+
+export function uploadDeviceInfo () {
+  var iframdevid = getIframdevid()
+  let api = new Authapi('uploadDeviceInfo')
+  let data = {}
+  data.agentid = iframdevid
+  data.operation = 'get-request'
+  data.infotype = 'system/custom'
+  // let paramList = [iframdevid, 'param', 'upload']
+  return api.Send({}, data)
+}
+
+export const downloadDeviceInfo = (tscParams) => {
+  var iframdevid = getIframdevid()
+  let api = new Authapi('downloadDeviceInfo')
+  let param = JSON.stringify(tscParams)
+  let params = JSON.parse(param)
+  let data = {}
+  data.agentid = iframdevid
+  data.operation = 'set-request'
+  data.infotype = 'system/custom'
+  data.data = params
+  // let data = {
+  //   operator,
+  //   params
+  // }
+  // let paramList = [iframdevid, 'param', 'download']
+  return api.Send({}, data)
+}
+
 export const downloadTscParam = (operator, tscParams) => {
   var iframdevid = getIframdevid()
   let api = new Authapi('downloadTscParam')

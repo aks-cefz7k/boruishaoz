@@ -85,6 +85,7 @@ const en = {
       'phone': 'Telephone',
       'email': 'Email',
       'changepass': 'Change Password',
+      'about': 'About',
       'exit': 'Exit',
       'options': 'options',
       'options1': 'All',
@@ -105,6 +106,7 @@ const en = {
       'protocoltype': 'Protocol',
       'signalID': 'Signal ID',
       'signalIP': 'Signal IP',
+      'faultinfo': 'Fault Information',
       'platform': 'platform',
       'online': 'Online',
       'offline': 'Offline',
@@ -114,7 +116,7 @@ const en = {
       'exitmanual': 'Exit Manual',
       'controlmodel': 'Control Pattern',
       'patternname': 'Pattern Name',
-      'controlnumber': 'Control Number',
+      'controlnumber': 'Control Num',
       'mode': 'Mode',
       'stage': 'Stage',
       'implement': 'Execute',
@@ -184,7 +186,10 @@ const en = {
       'transitioneffic': 'The execution is successful. It will take effect after the transition switch!',
       'controlnumerrormess': 'When the control mode is user-defined, the control mode number cannot be empty!',
       'delay': 'Delay time',
-      'duration': 'Duration'
+      'duration': 'Duration',
+      'curModel': 'Current Model',
+      'curStage': 'Current Stage',
+      'responseTime': 'Response Time'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -246,7 +251,12 @@ const en = {
       'pedestrianthresh': 'Pedestrian waiting Threshold',
       'mainroad': 'main road',
       'bypass': 'by-pass',
-      'pedestrianonly': 'pedestrian only'
+      'pedestrianonly': 'pedestrian only',
+      'pulsetype': 'PulseType',
+      'offpulse': 'Turn off pedestrian and vehicle pulses',
+      'sendvehiclepulse': 'Send vehicle pulse',
+      'sendpedestrianpulse': 'Send pedestrian pulse',
+      'sendpedestriansvehiclepulse': 'Send pedestrians and vehicles pulses'
     },
     'overlap': {
       'desc': 'Description',
@@ -454,7 +464,13 @@ const en = {
       'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
       'startOrderParams': 'Start Order Params ',
       'netcardInfo': 'Netcard Info: ',
-      'stepType': 'Step Type'
+      'stepType': 'Step Type',
+      'seeCutEffect': 'See Cut Detail',
+      'siteIdLimit': 'SiteId must be whithin 0 ~ 99999',
+      'siteIdCutEffect': 'SiteId Cut Detail',
+      'cutData': 'Cut Data',
+      'cutEffect': 'Cut Detail',
+      'longgerThan20': 'Data length is longger than 20 ！'
     },
     'singleoptim': {
       'deletetip': 'Sure to delete ？',
@@ -689,6 +705,7 @@ const en = {
       'commitandexecute': 'CommitAndExecute',
       'uploadsuccess': 'Upload Success!',
       'download': 'Download Success!',
+      'downloaderror': 'Download Error!',
       'downloadandrun': 'Submit and run successfully!',
       'editagentid': 'Edit AgentID',
       'querysucess': 'Query Success!',
@@ -704,7 +721,7 @@ const en = {
       'dialogtitle': 'Available authorizations',
       'username': 'User Name',
       'password': 'Password',
-      'locallogin': 'Local login',
+      'networkparam': 'Network parameters',
       'port': 'Port',
       'protocol': 'Protocol',
       'restoredefaultparameters': 'Restore default parameters',
@@ -786,6 +803,13 @@ const en = {
         'fifteenPhase': 'FifteenPhase',
         'sixteenPhase': 'SixteenPhase'
       }
+    },
+    'about': {
+      'version': 'Version',
+      'copyright': 'Copyright',
+      'company': 'KEDACOM',
+      'packedtime': 'Packed time',
+      'opensourceagreement': 'Opensource Agreement'
     }
   }
 }
