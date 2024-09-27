@@ -153,12 +153,18 @@
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
-            <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
+            <!-- <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
             <PatternStatus style="margin-top: 30px;"
                           :cycle="crossStatusData ? crossStatusData.cycle : 0"
                           :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
                           :patternStatusList="patternStatusList"
-                          :barrierList="barrierList"></PatternStatus>
+                          :barrierList="barrierList"></PatternStatus> -->
+            <BoardCard
+            :cycle="crossStatusData ? crossStatusData.cycle : 0"
+            :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
+            :patternStatusList="patternStatusList"
+              >
+            </BoardCard>
           </div>
         </div>
         <div class="tuxing-right" v-if="!graphicMode">
@@ -222,8 +228,9 @@ import { registerMessage, uploadSingleTscParam } from '@/api/param'
 import { setIframdevid } from '@/utils/auth'
 import FloatImgBtn from '@/components/FloatImgBtn'
 import CrossDiagram from './crossDirection/crossDiagram'
-import PatternStatus from '@/components/PatternStatus'
-import StageStatus from '@/components/StageStatus'
+// import PatternStatus from '@/components/PatternStatus'
+// import StageStatus from '@/components/StageStatus'
+import BoardCard from '@/components/BoardCard'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
@@ -232,8 +239,9 @@ export default {
   components: {
     FloatImgBtn,
     CrossDiagram,
-    PatternStatus,
-    StageStatus,
+    // PatternStatus,
+    // StageStatus,
+    BoardCard,
     CurVolume,
     CurPhase,
     ManualControlModal

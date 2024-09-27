@@ -299,6 +299,8 @@ const en = {
       'delaystart': 'Delay Start ',
       'advanceend': 'Advance End',
       'stageConfig': 'Stage Config',
+      'parameters': 'Pparameters',
+      'plan': 'Plan',
       'ringConfig': 'Ring Config',
       'stage': 'Stage',
       'phase': 'Phase',

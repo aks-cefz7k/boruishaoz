@@ -988,7 +988,7 @@ border: 1px solid $--border-color-base;
   z-index:3;
 }
 .stage-span {
-  position: relative;
+  // position: relative;
   bottom: 3px;
   left: 5px;
   width: 15px;
@@ -1407,9 +1407,9 @@ color: $--color-text-secondary;
 }
 // 方案
 .pattern-figure {
-  position: fixed;
-  width: 88%;
-  bottom: 30px;
+  // position: fixed;
+  // width: 88%;
+  // bottom: 30px;
   .pattern-status {
     display: inline;
     font-family: SourceHanSansCN-Regular;
