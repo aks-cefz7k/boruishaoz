@@ -377,8 +377,6 @@ export default {
       }, {
         value: 3
       }, {
-        value: 4
-      }, {
         value: 5
       }, {
         value: 6
