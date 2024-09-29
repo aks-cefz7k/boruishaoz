@@ -385,7 +385,7 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Detector?',
       'deleteAlltip': 'Delete All Detector?',
-      'mostdata': 'There are at most 72 data !'
+      'mostdata': 'There are at most 64 data !'
     },
     'channellock': {
       'deleteAlltip': 'Delete All channellock',

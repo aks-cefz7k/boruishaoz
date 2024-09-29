@@ -390,7 +390,7 @@ export default {
       //   )
       //   return
       // }
-      if (this.globalParamModel.getParamLength('detectorList') >= 72) {
+      if (this.globalParamModel.getParamLength('detectorList') >= 64) {
         this.$message.error(
           this.$t('edge.detector.mostdata')
         )

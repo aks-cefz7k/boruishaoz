@@ -383,7 +383,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此检测器？',
       'deleteAlltip': '确认删除所有检测器？',
-      'mostdata': '最多只能创建72条数据！'
+      'mostdata': '最多只能创建64条数据！'
     },
     'channellock': {
       'deleteAlltip': '确认删除所有通道锁定？',
