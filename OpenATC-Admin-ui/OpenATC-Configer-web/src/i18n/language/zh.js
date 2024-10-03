@@ -749,6 +749,7 @@ const zh = {
     },
     'errorTip': {
       'phaseNotZero': '必须含有至少一个相位!',
+      'phaseExceed': '一个环最大不能超过16相位!',
       'planNotZero': '必须含有至少一个计划!',
       'patternNotZero': '必须含有至少一个方案!',
       'dataNotZero': '必须含有至少一个日期!',

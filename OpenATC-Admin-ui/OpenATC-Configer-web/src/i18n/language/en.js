@@ -751,6 +751,7 @@ const en = {
     },
     'errorTip': {
       'phaseNotZero': 'Must contain at least phase !',
+      'phaseExceed': 'One ring can not exceed 16 phases at most!',
       'planNotZero': 'Must contain at least plan !',
       'patternNotZero': 'Must contain at least pattern',
       'dataNotZero': 'Must contain at least data!',
