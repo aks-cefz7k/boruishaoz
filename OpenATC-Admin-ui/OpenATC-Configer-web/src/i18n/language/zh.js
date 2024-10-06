@@ -717,7 +717,7 @@ const zh = {
       'commitandexecute': '提交并执行',
       'uploadsuccess': '参数上传成功!',
       'download': '参数下发成功!',
-      'downloaderror': '下发失败！',
+      'downloaderror': '信号机校验失败！',
       'downloadandrun': '提交并运行成功！',
       'editagentid': '编辑设备ID',
       'querysucess': '查询成功！',

@@ -378,14 +378,6 @@ export default {
           }
         }
       }
-      if (this.value === 'all' || this.value === 'channel') {
-        // 去除channelList里的typeAndSouce
-        let channelList = res.channelList
-        for (let i = 0; i < channelList.length; i++) {
-          let channel = channelList[i]
-          this.$store.getters.tscParam.channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
-        }
-      }
       return res
     },
     toggleSideBar () {
@@ -647,6 +639,14 @@ export default {
         let channellock = newTscParam.channellock
         for (let lock of channellock) {
           lock.channellocKinfo.forEach(el => delete el.desc)
+        }
+      }
+      if (newTscParam.channelList) {
+        // 去除typeAndSouce
+        let channelList = newTscParam.channelList
+        for (let i = 0; i < channelList.length; i++) {
+          let channel = channelList[i]
+          channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
         }
       }
       return newTscParam
