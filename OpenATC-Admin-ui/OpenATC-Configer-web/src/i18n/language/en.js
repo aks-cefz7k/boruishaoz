@@ -310,6 +310,10 @@ const en = {
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
+      'editcontext': 'Please edit plan name',
+      'plannamerequired': 'Plan name is required!',
+      'plannamerepeated': 'Plan name cannot be repeated!',
+      'mostplandata': 'There are at most 16 data !!',
       'tip': 'Tips',
       'ok': 'OK',
       'cancel': 'Cancel',
@@ -320,6 +324,7 @@ const en = {
       'deletetip': 'Delete This Plan?',
       'tabtip': 'Delete This Tab?',
       'mostdata': 'There are at most 48 data !',
+      'editname': 'Edit name',
       'controltype': 'Control Type',
       'ControlOption1': 'Yellow Clear',
       'ControlOption2': 'Red Control',

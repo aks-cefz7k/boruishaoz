@@ -308,6 +308,10 @@ const zh = {
     },
     'plan': {
       'tipcontext': '请输入计划名！',
+      'editcontext': '请编辑计划名！',
+      'plannamerequired': '必须填写计划名！',
+      'plannamerepeated': '计划名不能重复！',
+      'mostplandata': '最多只能创建16条数据!',
       'tip': '提示',
       'ok': '确定',
       'cancel': '取消',
@@ -318,6 +322,7 @@ const zh = {
       'deletetip': '确认删除此计划？',
       'tabtip': '确认删除此标签？',
       'mostdata': '最多只能创建48条数据!',
+      'editname': '编辑计划名',
       'controltype': '控制方式',
       'ControlOption1': '黄闪',
       'ControlOption2': '全红',
