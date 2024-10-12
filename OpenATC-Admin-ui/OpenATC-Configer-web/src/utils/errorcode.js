@@ -19,7 +19,6 @@ let errorCodeMap = new Map([
   [301, '方案数量超出限值'],
   [302, '相位差应小于周期时间'],
   [303, '环内配置未知相位'],
-  [304, '绿信比应大于相位的最小绿+黄灯+全红'],
   [401, '计划数量超出限值'],
   [402, '控制方式不存在'],
   [403, '时段数量超出限值'],
@@ -102,7 +101,6 @@ let errorCodeMapEn = new Map([
   [301, 'The number of schemes exceeds the limit'],
   [302, 'The phase difference should be less than the cycle time'],
   [303, 'Unknown phase configuration in the ring'],
-  [304, 'The green splits should be longer than the minimum phase green + yellow light + all red'],
   [401, 'The number of plans exceeds the limit'],
   [402, 'Control mode does not exist'],
   [403, 'The periods number exceeds the limit'],
@@ -168,6 +166,8 @@ function getErrorMesEn (errorMes, code) {
   let errorstr = errorMes
   if (code[0] === 305) {
     errorstr = errorstr + '</br>' + 'There is an intra-ring phase concurrency conflict in scheme' + code[1]
+  } else if (code[0] === 304) {
+    errorstr = errorstr + '</br>' + 'The green splits should be longer than the minimum phase green + yellow light + all red, And less than the maximum green 1 + yellow light + all red in scheme' + code[1]
   } else if (code[0] === 306) {
     errorstr = errorstr + '</br>' + 'The cycle time of each ring is inconsistent in scheme' + code[1]
   } else if (code[0] === 1001) {
@@ -188,6 +188,8 @@ function getErrorMesZh (errorMes, code) {
   let errorstr = errorMes
   if (code[0] === 305) {
     errorstr = errorstr + '</br>' + '方案' + code[1] + '中存在环内相位并发冲突'
+  } else if (code[0] === 304) {
+    errorstr = errorstr + '</br>' + '方案' + code[1] + '中绿信比应大于相位的最小绿+黄灯+全红，并小于最大绿1+黄灯+全红'
   } else if (code[0] === 306) {
     errorstr = errorstr + '</br>' + '方案' + code[1] + '中存在各个环周期时长不一致'
   } else if (code[0] === 1001) {
