@@ -195,7 +195,12 @@ const en = {
       'putTscControlError3': 'Unsupported control params',
       'putTscControlError4': 'Unable to execute because device is in initialization',
       'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
-      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control'
+      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control',
+      'nofault': 'None',
+      'extendedContent': 'Extended Content',
+      'JSONFormatError': 'JSON format error!',
+      'showFault': 'Display fault details',
+      'hideFault': 'Hide fault details'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -564,6 +569,7 @@ const en = {
       'sure': 'Sure',
       'oper': 'Operation',
       'selectfile': 'Select File',
+      'noselectfile': 'No update file selected!',
       'updateUSB': 'Update USB',
       'recovery': 'Recovery',
       'lampcontrolpanel': 'Lamp Control Panel',
@@ -592,7 +598,8 @@ const en = {
       'rebootFaile': 'Restart failed!',
       'resetSuccess': 'Set successfully!',
       'filesuccess': 'Upgrade file transfer complete!',
-      'filefailed': 'Upgrade interface call failed!'
+      'filefailed': 'Upgrade interface call failed!',
+      'updateovertime': 'Update file overtime!'
     },
     'optimize': {
       'strategy': 'Optimization strategy',

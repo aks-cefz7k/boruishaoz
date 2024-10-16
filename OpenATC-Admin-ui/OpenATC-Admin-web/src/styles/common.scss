@@ -20,6 +20,9 @@
   height: 100%;
   width: 100%;
   background: $--background-color-base;
+  .el-menu--horizontal .el-menu-item:not(.is-disabled):focus{
+    color: $--color-primary;
+  }
 }
 .appMain {
   height: calc(100% - 57px);

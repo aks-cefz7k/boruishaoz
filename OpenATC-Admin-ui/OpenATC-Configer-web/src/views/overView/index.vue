@@ -115,6 +115,9 @@
                 <el-form-item :label="$t('edge.overview.duration')">
                     <el-input v-model="form.duration" style="width: 70%"></el-input>
                 </el-form-item>
+                <el-form-item :label="$t('edge.overview.extendedContent')">
+                    <el-input class="jsontextarea" type="textarea" v-model="form.data" style="width: 70%"></el-input>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" size="small">{{$t('edge.common.setup')}}</el-button>
                     <el-button type="primary" @click="onGet" size="small">{{$t('edge.common.query')}}</el-button>
@@ -185,7 +188,16 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
                 <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
+                <div class="cross-content">
+                  <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
+                  <div style="margin-left: 85px;" v-if="faultArr.length">
+                    <div style="margin-bottom: 10px;"><el-button type="primary" size="mini" class="faultbtn" @click="handleFaultsVisible">{{ faultvisible ? $t('edge.overview.hideFault') : $t('edge.overview.showFault')}}</el-button></div>
+                    <div v-if="faultvisible">
+                      <el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag>
+                    </div>
+                  </div>
+                  <div style="margin-left: 85px;" class="cross-value" v-if="!faultArr.length">{{$t('edge.overview.nofault')}}</div>
+                </div>
               </div>
               <div class="control-bottom">
                 <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
@@ -408,7 +420,8 @@ export default {
       shrink: 1,
       basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
       isResend: true,
-      commonHeight: undefined // 左右侧面板的高度值
+      commonHeight: undefined, // 左右侧面板的高度值
+      faultvisible: false
     }
   },
   computed: {
@@ -663,6 +676,10 @@ export default {
       }
     },
     onSubmit () {
+      if (!this.isJsonString(this.form.data)) {
+        this.$message.error(this.$t('edge.overview.JSONFormatError'))
+        return
+      }
       if (this.form.control === '999' && this.controlNum === '') {
         this.$message.error(this.$t('edge.overview.controlnumerrormess'))
         return
@@ -676,6 +693,8 @@ export default {
       control.value = Number(this.form.value)
       control.delay = Number(this.form.delay)
       control.duration = Number(this.form.duration)
+      // eslint-disable-next-line no-useless-escape
+      control.data = this.form.data.replace(/\ +/g, '').replace(/[\r\n]/g, '')
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
@@ -719,6 +738,7 @@ export default {
         this.form.value = patternData.value
         this.form.delay = patternData.delay
         this.form.duration = patternData.duration
+        this.form.data = patternData.data
       }).catch(error => {
         this.unlockScreen()
         this.$message.error(error)
@@ -1128,6 +1148,17 @@ export default {
         }
         this.$store.dispatch('SaveFunctionLevel', func)
       })
+    },
+    isJsonString (str) {
+      try {
+        JSON.parse(str)
+        return true
+      } catch (err) {
+        return false
+      }
+    },
+    handleFaultsVisible () {
+      this.faultvisible = !this.faultvisible
     }
   },
   // beforeDestroy () {

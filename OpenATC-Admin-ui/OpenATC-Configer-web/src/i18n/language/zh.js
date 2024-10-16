@@ -195,7 +195,12 @@ const zh = {
       'putTscControlError3': '不支持的控制参数',
       'putTscControlError4': '设备初始化中，无法执行',
       'putTscControlError5': '优先级更高的方案控制中，无法执行',
-      'putTscControlError6': '优先级更高的用户控制中，无法执行'
+      'putTscControlError6': '优先级更高的用户控制中，无法执行',
+      'nofault': '无',
+      'extendedContent': '扩展内容',
+      'JSONFormatError': 'JSON格式错误!',
+      'showFault': '显示故障详情',
+      'hideFault': '隐藏故障详情'
     },
     'phase': {
       'desc': '车道方向',
@@ -562,6 +567,7 @@ const zh = {
       'sure': '确定',
       'oper': '操作',
       'selectfile': '选择文件',
+      'noselectfile': '未选择更新文件！',
       'updateUSB': '更新U盘数据',
       'recovery': '恢复',
       'lampcontrolpanel': '灯控板',
@@ -590,7 +596,8 @@ const zh = {
       'rebootFaile': '重启失败！',
       'resetSuccess': '设置成功！',
       'filesuccess': '升级文件传输完成!',
-      'filefailed': '升级接口调用失败!'
+      'filefailed': '升级接口调用失败!',
+      'updateovertime': '更新超时！'
     },
     'optimize': {
       'strategy': '优化策略',
