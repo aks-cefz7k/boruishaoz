@@ -92,7 +92,7 @@ export default {
     },
     IconWdith: { // 相位图标宽度
       type: String,
-      default: '18px'
+      default: '22px'
     },
     Data: {
       type: Object
