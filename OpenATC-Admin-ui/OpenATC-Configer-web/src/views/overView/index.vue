@@ -951,7 +951,7 @@ export default {
           that.$message.error(data.data.message)
           return
         } else {
-          success = data.data.data.data.sucess
+          success = data.data.data.data.success
           if (success !== 0) {
             let errormsg = 'edge.overview.putTscControlError' + success
             that.$message.error(this.$t(errormsg))
