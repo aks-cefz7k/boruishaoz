@@ -200,7 +200,8 @@ const zh = {
       'extendedContent': '扩展内容',
       'JSONFormatError': 'JSON格式错误!',
       'showFault': '显示故障详情',
-      'hideFault': '隐藏故障详情'
+      'hideFault': '隐藏故障详情',
+      'close': '关闭'
     },
     'phase': {
       'desc': '车道方向',
@@ -481,7 +482,7 @@ const zh = {
       'detectgapnoredon': '无红灯亮起检测时间间隔(0.1秒):',
       'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
       'startOrderParams': '启动时序参数 ',
-      'netcardInfo': '网卡信息: ',
+      'netcardInfo': '网络信息: ',
       'stepType': '步进类型',
       'seeCutEffect': '查看剪断效果',
       'siteIdLimit': '地址码规定范围是 0 ~ 99999',
@@ -591,7 +592,7 @@ const zh = {
       'remote3': '自定义',
       'test': '检测',
       'realTimeChannel': '实时通道',
-      'isReboot': '系统文件下载成功,是否重启设备？',
+      'isReboot': '系统文件下载成功,更新重启后生效,是否重启设备？',
       'rebootSuccess': '重启成功！',
       'rebootFaile': '重启失败！',
       'resetSuccess': '设置成功！',

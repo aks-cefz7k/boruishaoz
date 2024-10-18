@@ -200,7 +200,8 @@ const en = {
       'extendedContent': 'Extended Content',
       'JSONFormatError': 'JSON format error!',
       'showFault': 'Display fault details',
-      'hideFault': 'Hide fault details'
+      'hideFault': 'Hide fault details',
+      'close': 'close'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -483,7 +484,7 @@ const en = {
       'detectgapnoredon': 'Detect Gap No Red On（0.1s）: ',
       'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
       'startOrderParams': 'Start Order Params ',
-      'netcardInfo': 'Netcard Info: ',
+      'netcardInfo': 'Network Info: ',
       'stepType': 'Step Type',
       'seeCutEffect': 'See Cut Detail',
       'siteIdLimit': 'SiteId must be whithin 0 ~ 99999',
@@ -593,7 +594,7 @@ const en = {
       'remote3': 'Custom',
       'test': 'Test',
       'realTimeChannel': 'Real time channel',
-      'isReboot': 'The system file is downloaded successfully. Do you want to restart the device?',
+      'isReboot': 'The system file is downloaded successfully. The update takes effect after restarting. Do you want to restart the device?',
       'rebootSuccess': 'Restart successfully!',
       'rebootFaile': 'Restart failed!',
       'resetSuccess': 'Set successfully!',

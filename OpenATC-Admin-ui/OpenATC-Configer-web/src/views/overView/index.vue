@@ -193,7 +193,7 @@
                   <div style="margin-left: 85px;" v-if="faultArr.length">
                     <div style="margin-bottom: 10px;"><el-button type="primary" size="mini" class="faultbtn" @click="handleFaultsVisible">{{ faultvisible ? $t('edge.overview.hideFault') : $t('edge.overview.showFault')}}</el-button></div>
                     <div v-if="faultvisible">
-                      <el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag>
+                      <el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index" size="small" >{{faultMsg}}</el-tag>
                     </div>
                   </div>
                   <div style="margin-left: 85px;" class="cross-value" v-if="!faultArr.length">{{$t('edge.overview.nofault')}}</div>
@@ -228,6 +228,9 @@
 
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
+                </div>
+                <div class="cross-content">
+                  <el-tag type="danger" size="small" v-for="(phaseid, index) in closePhase" :key="index">{{$t('edge.overview.phase') + phaseid + $t('edge.overview.close')}}</el-tag>
                 </div>
               </div>
             </div>
@@ -370,6 +373,7 @@ export default {
       reset: false,
       currentStage: 0,
       responseTime: 0,
+      closePhase: [],
       stagesList: [],
       isOperation: false, // 是否为手动可操作状态
       isdalayshow: true,
@@ -637,6 +641,9 @@ export default {
         }
         // let param = JSON.parse(data.data.data)
         this.crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
+        if (data.data.data.data.close_phase) {
+          this.closePhase = data.data.data.data.close_phase
+        }
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
         this.currModel = TscData.control
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
