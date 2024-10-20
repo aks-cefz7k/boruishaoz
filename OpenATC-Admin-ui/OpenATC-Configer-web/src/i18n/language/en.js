@@ -280,7 +280,7 @@ const en = {
       'operation': 'Operation',
       'add': 'Add overlap',
       'deletetip': 'Delete This Overlap?',
-      'mostdata': 'There are at most 40 data !'
+      'mostdata': 'There are at most 16 data !'
     },
     'pattern': {
       'property': 'Property',

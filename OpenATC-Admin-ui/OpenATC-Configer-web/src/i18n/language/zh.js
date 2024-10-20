@@ -278,7 +278,7 @@ const zh = {
       'lane': '车道',
       'operation': '操作',
       'deletetip': '确认删除此跟随相位？',
-      'mostdata': '最多只能创建40条数据!'
+      'mostdata': '最多只能创建16条数据!'
     },
     'pattern': {
       'property': '属性',

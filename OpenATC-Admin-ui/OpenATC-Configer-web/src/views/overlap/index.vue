@@ -257,7 +257,7 @@ export default {
         )
         return
       }
-      if (this.globalParamModel.getParamLength('overlaplList') >= 40) {
+      if (this.globalParamModel.getParamLength('overlaplList') >= 16) {
         this.$message.error(
           this.$t('edge.overlap.mostdata')
         )
