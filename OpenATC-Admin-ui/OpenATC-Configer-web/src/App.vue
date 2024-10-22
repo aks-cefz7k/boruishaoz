@@ -66,9 +66,9 @@ export default {
     }
     var _this = this
     _this.$nextTick(function () {
+      if (!document.getElementById('app')) return
       this.bodyDomSize.width = document.getElementById('app').clientWidth
       this.bodyDomSize.height = document.getElementById('app').clientHeight
-      this.$store.dispatch('SaveBodyDomSize', this.bodyDomSize)
       window.addEventListener('resize', () => {
         // 定义窗口大小变更通知事件
         this.bodyDomSize.width = document.getElementById('app').clientWidth

@@ -173,7 +173,6 @@ export default {
 //     height: 26px;
 //     line-height: 26px;
 //     padding: 0;
-//     font-family: MicrosoftYaHei;
 //     font-size: 12px;
 //     font-weight: normal;
 //     font-stretch: normal;

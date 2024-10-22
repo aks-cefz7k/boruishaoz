@@ -10,10 +10,10 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-wrapper" :class="classObj">
+  <div class="app-wrapper" :class="classObj" id="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
     <sidebar class="sidebar-container" v-if="!hideMenu && !graphicMode"></sidebar>
-    <div class="main-container" :class="{'changeMainPosition': hideMenu || graphicMode}">
+    <div class="edge-main-container" :class="{'changeMainPosition': hideMenu || graphicMode}">
       <navbar></navbar>
       <app-main v-if="isload"></app-main>
     </div>
@@ -39,7 +39,11 @@ export default {
   },
   data () {
     return {
-      isload: false // 读取到左右行配置后再加载页面，保证时序性，不然各个页面图标更改时序有快有慢，显示就出错了！
+      bodyDomSize: {
+        width: 1920,
+        height: 1080
+      },
+      isload: false
     }
   },
   mixins: [ResizeMixin],
@@ -86,6 +90,15 @@ export default {
       },
       // 深度观察监听
       deep: true
+    },
+    bodyDomSize: {
+      handler: function (val) {
+        if (!document.getElementById('app')) {
+          this.$store.dispatch('SaveBodyDomSize', val)
+        }
+      },
+      // 深度观察监听
+      deep: true
     }
   },
   created () {
@@ -98,23 +111,21 @@ export default {
         setIframdevid(agentId)
       }
     }
-    //  else { // 单机设备情况下，需要先创建一个设备
-    //   let deviceInfo = {}
-    //   if (this.$route.query.agentid === undefined) {
-    //     deviceInfo.agentid = '0'
-    //     setIframdevid('0')
-    //   } else {
-    //     deviceInfo.agentid = this.$route.query.agentid
-    //     setIframdevid(this.$route.query.agentid)
-    //   }
-    //   // deviceInfo.agentid = '0'
-    //   deviceInfo.protocol = this.$route.query.protocol
-    //   deviceInfo.ip = this.$route.query.IP
-    //   deviceInfo.port = this.$route.query.port
-    //   deviceInfo.type = 'asc'
-    //   this.$store.dispatch('SaveDevParams', deviceInfo)
-    //   this.addDevice(deviceInfo)
-    // }
+  },
+  mounted () {
+    var _this = this
+    _this.$nextTick(function () {
+      if (!document.getElementById('app-wrapper')) {
+        this.bodyDomSize.width = document.getElementById('app-wrapper').clientWidth
+        this.bodyDomSize.height = document.getElementById('app-wrapper').clientHeight
+        this.$store.dispatch('SaveBodyDomSize', this.bodyDomSize)
+        window.addEventListener('resize', () => {
+        // 定义窗口大小变更通知事件
+          this.bodyDomSize.width = document.getElementById('app-wrapper').clientWidth
+          this.bodyDomSize.height = document.getElementById('app-wrapper').clientHeight
+        }, false)
+      }
+    })
   },
   methods: {
     handleClickOutside () {
@@ -124,22 +135,11 @@ export default {
       axios.get('./LRRoadConfig.json').then(val => {
         // 读取左行 右行配置文件
         let roadDir = val.data.roadDirection
+        // let roadDir = 'left'
         this.$store.dispatch('SetRoadDirection', roadDir)
         this.isload = true
       })
     }
-    // addDevice (deviceInfo) {
-    //   AddDevice(deviceInfo).then(res => {
-    //     if (!res.data.success) {
-    //       console.log(new Error(res.data.message))
-    //       this.$message({
-    //         message: res.data.message,
-    //         type: 'error',
-    //         duration: 1 * 1000
-    //       })
-    //     }
-    //   })
-    // }
   }
 }
 </script>

@@ -493,7 +493,6 @@ export default {
   height: 10px;
   margin-top: 1%;
   margin-left: 2%;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -607,7 +606,6 @@ export default {
   margin-top: 20px;
   margin-right: 30px;
   text-align: right;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -618,7 +616,6 @@ export default {
   margin-top: 10px;
   margin-right: 30px;
   text-align: right;
-  font-family: ArialMT;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -629,7 +626,6 @@ export default {
   margin-top: 20px;
   margin-right: 30px;
   text-align: right;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -640,7 +636,6 @@ export default {
   margin-top: 10px;
   margin-right: 30px;
   text-align: right;
-  font-family: ArialMT;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -650,7 +645,6 @@ export default {
 .model-name {
   float: left;
   margin-top: 32px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -670,7 +664,6 @@ export default {
   // float: left;
   text-align: center;
   margin-top: 40px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 30px;
   font-weight: normal;
   font-stretch: normal;
@@ -680,7 +673,6 @@ export default {
 }
 .curr-grade {
   margin-top: 30px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 24px;
   font-weight: normal;
   font-stretch: normal;
@@ -690,7 +682,6 @@ export default {
 }
 .curr-num {
   margin-top: 20px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -724,7 +715,6 @@ export default {
   // left: 30px;
   top: 150px;
   height: 21px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 22px;
   font-weight: normal;
   font-stretch: normal;
@@ -742,7 +732,6 @@ export default {
     padding: 0 12px 0 0;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    font-family: SourceHanSansCN-Regular;
     font-weight: normal;
     font-stretch: normal;
     letter-spacing: 0px;

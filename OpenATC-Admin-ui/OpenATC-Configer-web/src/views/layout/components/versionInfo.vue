@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="versioninfo">
+  <div class="edgeversioninfo">
     <el-dialog
       title="OpenATC-Configer"
       :visible.sync="dialogFormVisible"
@@ -40,7 +40,7 @@ export default {
       packedtime: '' // 打包时间
     }
   },
-  name: 'versioninfo',
+  name: 'edgeversioninfo',
   components: { },
   props: {},
   watch: {
@@ -65,53 +65,4 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-// .versioninfo .el-dialog__headerbtn .el-dialog__close {
-//     color: $--color-white;
-// }
-// .versioninfo .el-dialog__header {
-//     padding: 50px 30px 10px;
-//     height: 109px;
-//     background-color: $--color-primary;
-//     border-radius: 4px 4px 0px 0p
-// }
-// .versioninfo .el-dialog__title {
-//     width: 291px;
-//     height: 38px;
-//     margin-top: 40px;
-//     font-family: MicrosoftYaHei;
-//     font-size: 36px;
-//     font-weight: normal;
-//     font-stretch: normal;
-//     line-height: 14px;
-//     letter-spacing: 0px;
-//     color: $--color-white;
-// }
-// .banben {
-//     font-family: MicrosoftYaHei;
-//     font-size: 14px;
-//     font-weight: normal;
-//     font-stretch: normal;
-//     line-height: 14px;
-//     letter-spacing: 0px;
-//     color: $--color-text-regular;
-// }
-// .divider {
-//     // width: 483px;
-//     height: 1px;
-//     margin-top: 15px;
-//     background-color: #eeeeee;
-// }
-// .open-source {
-//     margin-top: 25px;
-//     font-family: MicrosoftYaHei;
-//     font-size: 14px;
-//     font-weight: normal;
-//     font-stretch: normal;
-//     line-height: 14px;
-//     letter-spacing: 0px;
-//     color: $--color-primary;
-// }
-// .agreement {
-//     cursor: pointer;
-// }
 </style>

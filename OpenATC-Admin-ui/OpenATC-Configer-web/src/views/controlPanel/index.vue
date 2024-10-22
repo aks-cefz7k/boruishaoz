@@ -38,6 +38,7 @@
       </div>
       <div class="manual-control-button">
         <el-button type="primary" @click="resetDefaultManualpanel">{{$t('edge.controlpanel.defaultsettings')}}</el-button>
+        <el-button type="primary" @click="allclear">{{$t('edge.controlpanel.allclear')}}</el-button>
       </div>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -183,7 +184,8 @@ export default {
   },
   computed: {
     ...mapState({
-      manualpanel: state => state.globalParam.tscParam.manualpanel
+      manualpanel: state => state.globalParam.tscParam.manualpanel,
+      channelDescMap: state => state.globalParam.channelDescMap
     })
   },
   watch: {
@@ -260,9 +262,7 @@ export default {
         }
         this.manualList = currKeyconfig[0].channel
         for (let manual of this.manualList) {
-          manual.desc = this.channelList.filter((item) => {
-            return item.id === manual.channelid
-          })[0].desc
+          manual.desc = this.channelDescMap.get(manual.channelid)
         }
       }
     },
@@ -364,6 +364,9 @@ export default {
       } else {
         return name.substring(0, 10) + '...'
       }
+    },
+    allclear () {
+      this.$store.dispatch('ClearManualPanel')
     }
   }
 }
@@ -395,7 +398,6 @@ export default {
 //   float: left;
 //   margin-left: 30px;
 //   margin-top: 30px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -407,7 +409,6 @@ export default {
 //   float: left;
 //   margin-left: 5px;
 //   margin-top: 30px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -484,7 +485,6 @@ export default {
   position: absolute;
   top: 24px;
   left: 32px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -498,7 +498,6 @@ export default {
   left: 24px;
   width: 32px;
   height: 36px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -512,7 +511,6 @@ export default {
   left: 20px;
   width: 32px;
   height: 36px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -526,7 +524,6 @@ export default {
   left: 35px;
   width: 18px;
   height: 12px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -540,7 +537,6 @@ export default {
   left: 31px;
   width: 18px;
   height: 12px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -565,7 +561,6 @@ export default {
 //   float: left;
 //   margin-left: 10px;
 //   margin-top: 22px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -592,7 +587,6 @@ export default {
 }
 .manual-tables-qingkong {
   margin-left: 5px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

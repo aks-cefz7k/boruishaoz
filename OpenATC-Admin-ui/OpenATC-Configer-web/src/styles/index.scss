@@ -22,7 +22,7 @@
    -moz-osx-font-smoothing: grayscale;
    -webkit-font-smoothing: antialiased;
    text-rendering: optimizeLegibility;
-   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  //  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
    overflow-x: hidden;
    background-color: $--background-color-base;
  }
@@ -81,11 +81,6 @@
      clear: both;
      height: 0;
    }
- }
- 
- //main-container全局样式
- .app-main{
-   height: 100%
  }
  
  .app-container {

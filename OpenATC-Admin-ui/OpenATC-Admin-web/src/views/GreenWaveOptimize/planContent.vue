@@ -372,7 +372,6 @@ export default {
 //   font-size: 30px;
 // }
 // .tipContent .text {
-//     font-family: SourceHanSansCN-Regular;
 //     font-size: 14px;
 //     font-weight: normal;
 //     font-stretch: normal;
@@ -450,7 +449,6 @@ export default {
 //   font-size: 30px;
 // }
 // .tipContent .text {
-//     font-family: SourceHanSansCN-Regular;
 //     font-size: 14px;
 //     font-weight: normal;
 //     font-stretch: normal;

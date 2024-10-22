@@ -56,62 +56,62 @@
               <el-button type="primary" @click="editSignCode" size="mini">设置</el-button>
             </div> -->
         </div>
-        <div class="identification-code" style="margin-top: 50px;">
-            <div class="signal-version-name">{{$t('edge.system.remotedebugging')}}：</div>
-            <div class="signal-version-value" style="height: 95px;">
-              <el-form
-                ref="template"
-                :model="remoteDebugInfo"
-                label-width="80px">
-                    <el-form-item
-                        :label="$t('edge.system.openornot')"
-                        prop="status"
-                        style="margin-bottom: 5px;">
-                      <el-switch
-                        v-model="remoteDebugInfo.status"
-                        active-color="#409EFF"
-                        :active-value="1"
-                        :inactive-value="0">
-                      </el-switch>
-                    </el-form-item>
-                    <el-form-item
-                        :label="$t('edge.system.automaticshutdown')"
-                        prop=".duration">
-                        <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
-                            <el-option v-for="item in durationList" :key="item.value" :label="$t('edge.system.duration' + item.id)" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-            </div>
-            <div class="signal-version-bottom">
-              <el-button type="primary" @click="editRemoteDebug" size="mini">{{$t('edge.system.sure')}}</el-button>
-            </div>
-        </div>
       </div>
     </el-tab-pane>
     <el-tab-pane :label="$t('edge.system.remotecontrol')" name="remote">
-        <div class="system-information">
+          <div class="system-information">
             <div class="currsystemtime">
-                <div class="signal-version-name">{{$t('edge.system.remotecontrol')}}：</div>
-                <div class="signal-version-value" style="height: 70px;">
-                    <div>
-                        <div class="software"><div style="float: left; margin-top: 30px;">{{$t('edge.system.oper')}}</div>
-                          <div class="remote-select">
-                            <el-select v-model="remoteControl" placeholder="请选择" size="small">
-                              <el-option
-                                v-for="item in remoteOptions"
-                                :key="item.value"
-                                :label="$t('edge.system.remote' + item.id)"
-                                :value="item.value">
-                              </el-option>
-                            </el-select>
-                          </div>
-                        </div>
+              <div class="signal-version-name">{{$t('edge.system.remotecontrol')}}：</div>
+              <div class="signal-version-value" style="height: 70px;">
+                <div>
+                    <div class="software"><div style="float: left; margin-top: 30px;">{{$t('edge.system.oper')}}</div>
+                      <div class="remote-select">
+                        <el-select v-model="remoteControl" placeholder="请选择" size="small">
+                          <el-option
+                            v-for="item in remoteOptions"
+                            :key="item.value"
+                            :label="$t('edge.system.remote' + item.id)"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
+                      </div>
                     </div>
                 </div>
-                <div class="signal-version-bottom">
-                    <el-button type="primary" @click="editRemoteControl" size="mini">{{$t('edge.system.sure')}}</el-button>
-                </div>
+              </div>
+              <div class="signal-version-bottom">
+                  <el-button type="primary" @click="editRemoteControl" size="mini">{{$t('edge.system.sure')}}</el-button>
+              </div>
+            </div>
+            <div class="identification-code" style="margin-top: 50px;">
+              <div class="signal-version-name">{{$t('edge.system.remotedebugging')}}：</div>
+              <div class="signal-version-value" style="height: 95px;">
+                <el-form
+                  ref="template"
+                  :model="remoteDebugInfo"
+                  label-width="80px">
+                      <el-form-item
+                          :label="$t('edge.system.openornot')"
+                          prop="status"
+                          style="margin-bottom: 5px;">
+                        <el-switch
+                          v-model="remoteDebugInfo.status"
+                          active-color="#409EFF"
+                          :active-value="1"
+                          :inactive-value="0">
+                        </el-switch>
+                      </el-form-item>
+                      <el-form-item
+                          :label="$t('edge.system.automaticshutdown')"
+                          prop=".duration">
+                          <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
+                              <el-option v-for="item in durationList" :key="item.value" :label="$t('edge.system.duration' + item.id)" :value="item.value"></el-option>
+                          </el-select>
+                      </el-form-item>
+                  </el-form>
+              </div>
+              <div class="signal-version-bottom">
+                <el-button type="primary" @click="editRemoteDebug" size="mini">{{$t('edge.system.sure')}}</el-button>
+              </div>
             </div>
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
                 <div class="signal-version-name">{{$t('edge.system.systemupdate')}}：</div>
@@ -235,8 +235,8 @@ export default {
           this.getSystemTime() // 获取当前时间
           this.getParamVersion() // 获取特征参数版本
           this.getCode() // 获取识别码
-          this.getSignIp() // 获取ip数据
-          this.getSerialPort() // 获取串口数据
+          // this.getSignIp() // 获取ip数据
+          // this.getSerialPort() // 获取串口数据
           // this.getRemoteDebug() // 获取远程调试信息
         }
       },
@@ -249,8 +249,8 @@ export default {
     this.getSystemTime() // 获取当前时间
     this.getParamVersion() // 获取特征参数版本
     this.getCode() // 获取识别码
-    this.getSignIp() // 获取ip数据
-    this.getSerialPort() // 获取串口数据
+    // this.getSignIp() // 获取ip数据
+    // this.getSerialPort() // 获取串口数据
     // this.getRemoteDebug() // 获取远程调试信息
     this.getChannelList() // 自动上载通道
   },
@@ -511,7 +511,6 @@ export default {
 //   margin-top: 20px;
 //   margin-left: 30px;
 //   height: 18px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -531,7 +530,6 @@ export default {
 // .software {
 //   position: relative;
 //   left: 20px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;

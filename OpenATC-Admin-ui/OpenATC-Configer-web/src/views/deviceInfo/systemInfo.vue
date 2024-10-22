@@ -11,6 +11,74 @@
  **/
 <template>
   <div class="app-container">
+    <div class="device-message">
+          <div class="device-info">{{$t('edge.deviceinfo.deviceinfo')}}</div>
+          <el-row class="demo-autocomplete" :gutter="30">
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.addresscode')}}
+                <el-button type="text"
+                           class="see-cut"
+                           :disabled="isSeeCutDisabled"
+                           @click="onSeeCutClick">{{$t('edge.deviceinfo.seeCutEffect')}}</el-button>
+              </div>
+              <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.areaid')}}</div>
+              <el-input v-model="customInfo.areaid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.crossid')}}</div>
+              <el-input v-model="customInfo.intersectionid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.overview.crossname')}}:</div>
+              <el-input v-model="customInfo.fixintersectioninfo" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.port')}}</div>
+              <el-input v-model="customInfo.commuport" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.overview.type')}}:</div>
+              <el-select v-model="customInfo.commutype" :placeholder="$t('edge.common.select')" size="small">
+                <el-option
+                  v-for="item in commutypeOptions"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row class="demo-autocomplete" :gutter="30">
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.stepType')}}:</div>
+              <el-select v-model="customInfo.steptype" :placeholder="$t('edge.common.select')" size="small">
+                <el-option
+                  v-for="item in stepTypeOptions"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row class="demo-autocomplete" :gutter="30">
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.selflearning')}}
+                <el-switch
+                  style="padding-left: 5px;"
+                  v-model="customInfo.selflearning"
+                  active-color="#409EFF"
+                  :active-value="1"
+                  :inactive-value="0">
+                </el-switch>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <seeCutEffect ref="seeCutEffect"></seeCutEffect>
         <div class="device-param">
           <div class="device-info">{{$t('edge.deviceinfo.deviceparam')}}</div>
           <div class="device-second-title">{{$t('edge.deviceinfo.startOrderParams')}}</div>
@@ -190,10 +258,12 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex'
+import seeCutEffect from './components/seeCutEffect'
 import { uploadDeviceInfo, downloadDeviceInfo } from '@/api/param'
+import { getErrorMesZh, getErrorMesEn } from '../../utils/errorcode.js'
 export default {
   name: 'deviceinfo',
+  components: {seeCutEffect},
   data () {
     return {
       lampboardsOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -203,6 +273,14 @@ export default {
       startallredOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       greenwavecycleOptions: [0, 1, 2, 3, 4, 5],
       customInfo: {
+        areaid: '',
+        intersectionid: '',
+        siteid: '',
+        selflearning: 0,
+        fixintersectioninfo: '',
+        commuport: 0,
+        commutype: 2,
+        steptype: 0,
         netcard: [{
           ip: '',
           subnetmask: '',
@@ -236,23 +314,26 @@ export default {
           detectgapgreenconflict: 0
         }
       },
-      loading: {}
+      loading: {},
+      commutypeOptions: [{label: 'TCP', value: 1}, {label: 'UDP', value: 2}, {label: 'RS232', value: 3}],
+      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}]
     }
   },
   computed: {
-    // ...mapState({
-    //   customInfo: state => state.globalParam.tscParam.customInfo
-    // })
+    isSeeCutDisabled () {
+      let res = false
+      if (this.customInfo.siteid) {
+        res = false
+      } else {
+        res = true
+      }
+      return res
+    }
   },
   created () {
     // this.globalParamModel = this.$store.getters.globalParamModel
     // this.init()
   },
-  //   watch: {
-  //     customInfo: function () {
-  //       this.init()
-  //     }
-  //   },
   methods: {
     init () {
       let channelList = this.globalParamModel.getParamsByType('channelList')
@@ -298,44 +379,6 @@ export default {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        // this.customInfo = {
-        //   'netcard': [
-        //     {
-        //       'ip': '10001',
-        //       'subnetmask': '8888',
-        //       'gateway': '9999'
-        //     },
-        //     {
-        //       'ip': '192.168.14.168',
-        //       'subnetmask': '255.255.255.0',
-        //       'gateway': '192.168.14.254'
-        //     }
-        //   ],
-        //   'centerip': {
-        //     'ip': '10.65.3.63',
-        //     'port': 31003
-        //   },
-        //   'cascade': {
-        //     'lampboards': 10,
-        //     'detectorboards': 11,
-        //     'ioboards': 12,
-        //     'joinoffset': 13
-        //   },
-        //   'startsequence': {
-        //     'startyellowflash': 9,
-        //     'startallred': 8,
-        //     'greenwavecycle': 7
-        //   },
-        //   'faultdetect': {
-        //     'closegreenandredon': 1,
-        //     'detectgapgreenandredon': 2,
-        //     'closenoredon': 3,
-        //     'detectgapnoredon': 4,
-        //     'detectgapgreenconflict': 5
-        //   }
-
-        // }
-        // debugger
         this.customInfo = data.data.data.data
         // let allTscParam = data.data.data.data
         // if (allTscParam.manualpanel === undefined) {
@@ -353,6 +396,7 @@ export default {
     },
     download () {
       let customInfo = this.customInfo
+      this.handleIpPortValue()
       this.lockScreen()
       downloadDeviceInfo(customInfo).then(data => {
         this.unlockScreen()
@@ -361,10 +405,30 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
+          if (data.data.code === '4002') { // 信号机参数校验
+            let codeList = data.data.data.errorCode
+            if (codeList.length === 0) {
+              this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
+              return
+            }
+            let errorMes = this.$t('edge.common.downloaderror')
+            for (let code of codeList) {
+              if (this.$i18n.locale === 'en') {
+                errorMes = getErrorMesEn(errorMes, code)
+              } else {
+                errorMes = getErrorMesZh(errorMes, code)
+              }
+            }
+            this.$message({
+              message: errorMes,
+              type: 'error',
+              dangerouslyUseHTMLString: true
+            })
+            return
+          }
           this.$message.error(data.data.message)
           return
         }
-        // downloadTscParam(this.$store.state.user.name, tscParam)
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
       }).catch(error => {
         this.unlockScreen()
@@ -382,6 +446,45 @@ export default {
     },
     unlockScreen () {
       this.loading.close()
+    },
+    onSeeCutClick () {
+      let num = Number(this.customInfo.siteid)
+      if (!num || num <= 0 || num >= 99999) {
+        this.$message.error(this.$t('edge.deviceinfo.siteIdLimit'))
+        return false
+      }
+      this.$refs.seeCutEffect.show(this.customInfo.siteid)
+    },
+    handleIpPortValue () {
+      // IP，子网掩码，网关为空时，默认设为0.0.0.0
+      // 端口为空时默认改为0
+      let customInfo = this.customInfo
+      if (!customInfo.centerip) {
+        customInfo.centerip = {
+          ip: '0.0.0.0',
+          port: 0
+        }
+      }
+      if (customInfo.centerip.ip === '') {
+        customInfo.centerip.ip = '0.0.0.0'
+      }
+      if (customInfo.centerip.port === '') {
+        customInfo.centerip.port = 0
+      }
+      customInfo.netcard.forEach(netcard => {
+        if (!netcard.ip || netcard.ip === '') {
+          netcard.ip = '0.0.0.0'
+        }
+        if (!netcard.gateway || netcard.gateway === '') {
+          netcard.gateway = '0.0.0.0'
+        }
+        if (!netcard.subnetmask || netcard.subnetmask === '') {
+          netcard.subnetmask = '0.0.0.0'
+        }
+      })
+      if (!customInfo.commuport || customInfo.commuport === '') {
+        customInfo.commuport = 0
+      }
     }
   }
 }

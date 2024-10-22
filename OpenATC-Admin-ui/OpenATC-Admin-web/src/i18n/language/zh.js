@@ -139,7 +139,8 @@ const zh = {
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
       'thirdplatformid': '第三方ID',
       'timeSpaceGraph': '实时时距图',
-      'keyintersection': '关键路口：'
+      'keyintersection': '关键路口：',
+      'sockettype': '通讯类型'
     },
     'usermanager': {
       'username': '用户名称',
@@ -349,6 +350,12 @@ const zh = {
     },
     'bottleneckcontrol': {
       'detector': '检测器',
+      'open': '开启',
+      'off': '取消',
+      'isoffcontrol': '是否取消控制',
+      'isopencontrol': '是否开启控制',
+      'opensuccess': '开启瓶颈控制成功！',
+      'offsuccess': '取消瓶颈控制成功！',
       'switchsavereminder': '切换瓶颈控制列表，不会保存当前配置，确认切换么?',
       'bottlenecklist': '瓶颈控制列表',
       'detectorid': '方案ID',

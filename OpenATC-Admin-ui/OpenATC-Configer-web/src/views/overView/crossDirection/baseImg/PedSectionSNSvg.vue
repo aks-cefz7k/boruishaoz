@@ -140,22 +140,8 @@ export default {
 }
 </script>
 <style scoped>
-.st0 {
-  fill: #3d3939;
-}
-.st1 {
-  fill: #ffffff;
-}
-.st2 {
-  fill: #e5e5d8;
-}
-.st3 {
-  fill: #ccb63a;
-}
-.st4 {
-  fill: #dddddd;
-}
-.st5 {
-  fill: #ededed;
-}
+.st0{fill:#3D3939;}
+.st1{fill:#E5E5D8;}
+.st2{fill:#CCB63A;}
+.st3{fill:#DDDDDD;}
 </style>

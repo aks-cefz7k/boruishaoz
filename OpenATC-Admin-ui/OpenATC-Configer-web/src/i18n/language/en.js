@@ -96,8 +96,7 @@ const en = {
       'options6': 'Date',
       'options7': 'Channel',
       'options8': 'Detector',
-      'options9': 'PedestrianDetector',
-      'options10': 'Deviceinfo'
+      'options9': 'PedestrianDetector'
     },
     'overview': {
       'crossinfo': 'Cross Information',
@@ -178,6 +177,7 @@ const en = {
       'modelList9': 'Self-Adaption',
       'modelList10': 'Nocable Control',
       'modelList12': 'phasewalk',
+      'modelList13': 'Pattern Recovery',
       'modelList19': 'Inductive Pedestrian Crossing Control',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
@@ -195,7 +195,13 @@ const en = {
       'putTscControlError3': 'Unsupported control params',
       'putTscControlError4': 'Unable to execute because device is in initialization',
       'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
-      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control'
+      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control',
+      'nofault': 'None',
+      'extendedContent': 'Extended Content',
+      'JSONFormatError': 'JSON format error!',
+      'showFault': 'Display fault details',
+      'hideFault': 'Hide fault details',
+      'close': 'close'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -219,7 +225,7 @@ const en = {
       'add': 'Add Phase',
       'deletetip': 'Delete This Phase ?',
       'deleteAlltip': 'Are you sure to delete all phases and patterns ?',
-      'mostdata': 'There are at most 16 data !',
+      'mostdata': 'There are at most 40 data !',
       'es': 'East-Straight',
       'el': 'East-Left',
       'er': 'East-Right',
@@ -258,6 +264,9 @@ const en = {
       'mainroad': 'main road',
       'bypass': 'by-pass',
       'pedestrianonly': 'pedestrian only',
+      'busonly': 'bus only',
+      'BRTonly': 'BRT only',
+      'tramonly': 'Tram only',
       'pulsetype': 'PulseType',
       'offpulse': 'Turn off pedestrian and vehicle pulses',
       'sendvehiclepulse': 'Send vehicle pulse',
@@ -281,7 +290,7 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Pattern?',
       'firstphase': 'Please create phase first !',
-      'mostdata': 'There are at most 108 data !',
+      'mostdata': 'There are at most 32 data !',
       'ring': 'Ring',
       'modeOption1': 'Other',
       'modeOption2': 'None',
@@ -304,10 +313,15 @@ const en = {
       'ringConfig': 'Ring Config',
       'stage': 'Stage',
       'phase': 'Phase',
-      'agentidError': '获取设备ID失败!'
+      'agentidError': 'Failed to get agentid!',
+      'splitCheckMsg': 'The green letter ratio must be greater than the phase transition time or the pedestrian crossing + pedestrian transition time!'
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
+      'editcontext': 'Please edit plan name',
+      'plannamerequired': 'Plan name is required!',
+      'plannamerepeated': 'Plan name cannot be repeated!',
+      'mostplandata': 'There are at most 16 data !!',
       'tip': 'Tips',
       'ok': 'OK',
       'cancel': 'Cancel',
@@ -318,6 +332,7 @@ const en = {
       'deletetip': 'Delete This Plan?',
       'tabtip': 'Delete This Tab?',
       'mostdata': 'There are at most 48 data !',
+      'editname': 'Edit name',
       'controltype': 'Control Type',
       'ControlOption1': 'Yellow Clear',
       'ControlOption2': 'Red Control',
@@ -338,7 +353,7 @@ const en = {
       'plan': 'Plan',
       'operation': 'Operation',
       'deletetip': 'Delete This Date?',
-      'mostdata': 'There are at most 255 data !'
+      'mostdata': 'There are at most 40 data !'
     },
     'channel': {
       'desc': 'Description',
@@ -383,7 +398,7 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Detector?',
       'deleteAlltip': 'Delete All Detector?',
-      'mostdata': 'There are at most 72 data !'
+      'mostdata': 'There are at most 64 data !'
     },
     'channellock': {
       'deleteAlltip': 'Delete All channellock',
@@ -471,7 +486,7 @@ const en = {
       'detectgapnoredon': 'Detect Gap No Red On（0.1s）: ',
       'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
       'startOrderParams': 'Start Order Params ',
-      'netcardInfo': 'Netcard Info: ',
+      'netcardInfo': 'Network Info: ',
       'stepType': 'Step Type',
       'seeCutEffect': 'See Cut Detail',
       'siteIdLimit': 'SiteId must be whithin 0 ~ 99999',
@@ -507,6 +522,7 @@ const en = {
       'allred': 'All Red',
       'yellowflash': 'Yellow Flash',
       'defaultsettings': 'Default Settings',
+      'allclear': 'All Clear',
       'clear': 'Clear',
       'resetstatus': 'Reset State',
       'manualbtn': 'manualbtn',
@@ -556,6 +572,7 @@ const en = {
       'sure': 'Sure',
       'oper': 'Operation',
       'selectfile': 'Select File',
+      'noselectfile': 'No update file selected!',
       'updateUSB': 'Update USB',
       'recovery': 'Recovery',
       'lampcontrolpanel': 'Lamp Control Panel',
@@ -579,10 +596,13 @@ const en = {
       'remote3': 'Custom',
       'test': 'Test',
       'realTimeChannel': 'Real time channel',
-      'isReboot': 'The system file is downloaded successfully. Do you want to restart the device?',
+      'isReboot': 'The system file is downloaded successfully. The update takes effect after restarting. Do you want to restart the device?',
       'rebootSuccess': 'Restart successfully!',
       'rebootFaile': 'Restart failed!',
-      'resetSuccess': 'Set successfully!'
+      'resetSuccess': 'Set successfully!',
+      'filesuccess': 'Upgrade file transfer complete!',
+      'filefailed': 'Upgrade interface call failed!',
+      'updateovertime': 'Update file overtime!'
     },
     'optimize': {
       'strategy': 'Optimization strategy',
@@ -672,7 +692,8 @@ const en = {
     },
     'button': {
       'OK': 'OK',
-      'Cancel': 'Cancel'
+      'Cancel': 'Cancel',
+      'Back': 'Back'
     },
     'common': {
       'confirm': 'Confirm',
@@ -713,7 +734,7 @@ const en = {
       'commitandexecute': 'CommitAndExecute',
       'uploadsuccess': 'Upload Success!',
       'download': 'Download Success!',
-      'downloaderror': 'Download Error!',
+      'downloaderror': 'Signal Check Error!',
       'downloadandrun': 'Submit and run successfully!',
       'editagentid': 'Edit AgentID',
       'querysucess': 'Query Success!',
@@ -745,6 +766,7 @@ const en = {
     },
     'errorTip': {
       'phaseNotZero': 'Must contain at least phase !',
+      'phaseExceed': 'One ring can not exceed 16 phases at most!',
       'planNotZero': 'Must contain at least plan !',
       'patternNotZero': 'Must contain at least pattern',
       'dataNotZero': 'Must contain at least data!',

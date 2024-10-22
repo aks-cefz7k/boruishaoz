@@ -440,7 +440,6 @@ export default {
       padding: 0;
       text-align: center;
       line-height: 30px;
-      font-family: MicrosoftYaHei;
       font-size: 12px;
       font-weight: normal;
       font-stretch: normal;
@@ -448,7 +447,6 @@ export default {
   }
 }
 .sort-name {
-    font-family: MicrosoftYaHei;
     font-size: 15px;
     font-weight: normal;
     font-stretch: normal;

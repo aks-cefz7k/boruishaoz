@@ -26,7 +26,7 @@
         <el-table-column prop="description" :label="$t('openatc.bottleneckcontrol.desc')" align="center"></el-table-column>
         <el-table-column prop="type" :label="$t('openatc.bottleneckcontrol.type')" align="center"></el-table-column>
         <el-table-column prop="status" :label="$t('openatc.bottleneckcontrol.status')" align="center"></el-table-column>
-        <el-table-column :label="$t('openatc.common.operation')" header-align="left" width="150" align="left">
+        <el-table-column :label="$t('openatc.common.operation')" header-align="left" width="200" align="left">
           <template slot-scope="scope">
             <el-button
               @click.native.prevent="handleEditDetector(scope.row)"
@@ -38,6 +38,16 @@
               type="text"
               size="small"
             >{{$t('openatc.common.delete')}}</el-button>
+            <el-button
+              @click.native.prevent="handleOpenControl(scope.row)"
+              type="text"
+              size="small"
+            >{{$t('openatc.bottleneckcontrol.open')}}</el-button>
+            <el-button
+              @click.native.prevent="handleOffControl(scope.row)"
+              type="text"
+              size="small"
+            >{{$t('openatc.bottleneckcontrol.off')}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -138,6 +148,70 @@ export default {
               this.$message({
                 type: 'success',
                 message: this.$t('openatc.common.deletesuccess')
+              })
+              // this.getData();
+              this.$emit('refresh')
+            })
+            .catch(error => {
+              this.$message.error(error)
+              console.log(error)
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: this.$t('openatc.common.canceloperate')
+          })
+        })
+    },
+    handleOpenControl (row) {
+      this.$confirm(this.$t('openatc.bottleneckcontrol.isopencontrol') + ' ' + row.overflowDetectorId, this.$t('openatc.common.tipsmodaltitle'), {
+        confirmButtonText: this.$t('openatc.button.OK'),
+        cancelButtonText: this.$t('openatc.button.Cancel'),
+        type: 'warning'
+      })
+        .then(() => {
+          OverflowDecApi.openOverflowsControl(row.id)
+            .then(data => {
+              if (!data.data.success) {
+                this.$message.error(data.data.message)
+                return
+              }
+              this.$message({
+                type: 'success',
+                message: this.$t('openatc.bottleneckcontrol.opensuccess')
+              })
+              // this.getData();
+              this.$emit('refresh')
+            })
+            .catch(error => {
+              this.$message.error(error)
+              console.log(error)
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: this.$t('openatc.common.canceloperate')
+          })
+        })
+    },
+    handleOffControl (row) {
+      this.$confirm(this.$t('openatc.bottleneckcontrol.isoffcontrol') + ' ' + row.overflowDetectorId, this.$t('openatc.common.tipsmodaltitle'), {
+        confirmButtonText: this.$t('openatc.button.OK'),
+        cancelButtonText: this.$t('openatc.button.Cancel'),
+        type: 'warning'
+      })
+        .then(() => {
+          OverflowDecApi.offOverflowsControl(row.id)
+            .then(data => {
+              if (!data.data.success) {
+                this.$message.error(data.data.message)
+                return
+              }
+              this.$message({
+                type: 'success',
+                message: this.$t('openatc.bottleneckcontrol.offsuccess')
               })
               // this.getData();
               this.$emit('refresh')

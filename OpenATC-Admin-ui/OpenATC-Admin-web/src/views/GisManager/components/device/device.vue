@@ -19,7 +19,7 @@
           class="deviceTable"
           :data="devicesTableData"
           row-key="id"
-          max-height="600"
+          :max-height="maxHeight"
           highlight-current-row
           @current-change="handleCurrentChange"
           @row-click="onRowClick"
@@ -98,6 +98,7 @@ export default {
   },
   data () {
     return {
+      maxHeight: screen.height < 1080 ? screen.height * 0.6 : screen.height * 0.7,
       map: null,
       lngLat: {
         lng: '0.00000000',
@@ -118,8 +119,6 @@ export default {
   },
   mounted () {
     let _this = this
-    // var w = document.getElementsByClassName('showLayout')[0]
-    // w.style.width = '470px'
     this.$nextTick(() => {
       _this.getAllAdevice()
     })

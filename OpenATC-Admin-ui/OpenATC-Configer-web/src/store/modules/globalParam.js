@@ -19,16 +19,16 @@ const tscParam = {
   detectorList: [],
   pedestrainDetectorList: [],
   channellock: [],
-  customInfo: {
-    areaid: Number,
-    intersectionid: Number,
-    siteid: '',
-    selflearning: 0,
-    fixintersectioninfo: '',
-    commuport: 0,
-    commutype: '',
-    steptype: ''
-  },
+  // customInfo: {
+  //   areaid: Number,
+  //   intersectionid: Number,
+  //   siteid: '',
+  //   selflearning: 0,
+  //   fixintersectioninfo: '',
+  //   commuport: 0,
+  //   commutype: '',
+  //   steptype: ''
+  // },
   manualpanel: {
     mingreen: 15
   },
@@ -66,15 +66,16 @@ const Global = {
     FuncSort: 'allFunc',
     hideMenu: false,
     graphicMode: false, // 为true时，切换到图形界面模式，只显示路口图部分
-    roadDirection: 'right' // 当前路口行车方向：默认右行
+    roadDirection: 'right', // 当前路口行车方向：默认右行
+    channelDescMap: new Map() // 管理实时通道描述数据
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
-      let customInfo = data.customInfo
-      data.customInfo = {
-        ...tscParam.customInfo,
-        ...customInfo
-      }
+      // let customInfo = data.customInfo
+      // data.customInfo = {
+      //   ...tscParam.customInfo,
+      //   ...customInfo
+      // }
       state.tscParam = JSON.parse(JSON.stringify(data))
     },
     SAVE_SINGLE_PARAM: (state, param) => {
@@ -113,6 +114,12 @@ const Global = {
     },
     SET_ROAD_RIRECTION: (state, DIR) => {
       state.roadDirection = DIR
+    },
+    SET_CHANNEL_DESC: (state, descmap) => {
+      state.channelDescMap = descmap
+    },
+    CLEAR_MANUAL_PANEL: (state) => {
+      state.tscParam.manualpanel = tscParam.manualpanel
     }
   },
   actions: {
@@ -163,6 +170,12 @@ const Global = {
     },
     SetRoadDirection ({ commit }, DIR) {
       commit('SET_ROAD_RIRECTION', DIR)
+    },
+    SetChannelDesc ({ commit }, descmap) {
+      commit('SET_CHANNEL_DESC', descmap)
+    },
+    ClearManualPanel ({ commit }) {
+      commit('CLEAR_MANUAL_PANEL')
     }
   }
 }

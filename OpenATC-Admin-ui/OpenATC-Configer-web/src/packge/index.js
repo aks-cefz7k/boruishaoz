@@ -29,7 +29,7 @@ import channel from '../views/channel/index'
 import channelLock from '../views/channelLock/index'
 import detector from '../views/detector/index'
 import pedDetector from '../views/pedestrianDetector/index'
-import deviceInfo from '../views/deviceInfo/index'
+// import deviceInfo from '../views/deviceInfo/index'
 import adaptiveParameter from '../views/adaptiveParameter/index'
 import controlPanel from '../views/controlPanel/index'
 import en from '../i18n/language/en'
@@ -61,7 +61,7 @@ const components = {
   detector,
   channelLock,
   pedDetector,
-  deviceInfo,
+  // deviceInfo,
   adaptiveParameter,
   controlPanel,
   Layout,
@@ -223,15 +223,6 @@ const subrouter = [
       }
     },
     {
-      path: 'channelLock',
-      name: 'ChannelLock',
-      component: channelLock,
-      meta: {
-        title: 'edge.route.channelLock',
-        icon: 'channellock'
-      }
-    },
-    {
       path: 'detector',
       name: 'Detector',
       component: detector,
@@ -249,15 +240,15 @@ const subrouter = [
         icon: 'peddetector'
       }
     },
-    {
-      path: 'deviceInfo',
-      name: 'deviceInfo',
-      component: deviceInfo,
-      meta: {
-        title: 'edge.route.deviceInfo',
-        icon: 'deviceinfo'
-      }
-    },
+    // {
+    //   path: 'deviceInfo',
+    //   name: 'deviceInfo',
+    //   component: deviceInfo,
+    //   meta: {
+    //     title: 'edge.route.deviceInfo',
+    //     icon: 'deviceinfo'
+    //   }
+    // },
     {
       path: 'adaptiveParameter',
       name: 'adaptiveParameter',
@@ -265,6 +256,15 @@ const subrouter = [
       meta: {
         title: 'edge.route.adaptiveParameter',
         icon: 'adaptiveParameter'
+      }
+    },
+    {
+      path: 'channelLock',
+      name: 'ChannelLock',
+      component: channelLock,
+      meta: {
+        title: 'edge.route.channelLock',
+        icon: 'channellock'
       }
     },
     {

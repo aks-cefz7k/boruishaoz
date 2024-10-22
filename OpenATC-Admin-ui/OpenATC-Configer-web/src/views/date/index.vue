@@ -248,7 +248,7 @@ export default {
     },
     onAdd () {
       this.increaseId()
-      if (this.globalParamModel.getParamLength('dateList') >= 255) {
+      if (this.globalParamModel.getParamLength('dateList') >= 40) {
         this.$message.error(
           this.$t('edge.date.mostdata')
         )
