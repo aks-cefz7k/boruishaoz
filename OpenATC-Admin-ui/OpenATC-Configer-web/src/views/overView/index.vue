@@ -115,6 +115,9 @@
                 <el-form-item :label="$t('edge.overview.duration')">
                     <el-input v-model="form.duration" style="width: 70%"></el-input>
                 </el-form-item>
+                <el-form-item :label="$t('edge.overview.extendedContent')">
+                    <el-input class="jsontextarea" type="textarea" v-model="form.data" style="width: 70%"></el-input>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" size="small">{{$t('edge.common.setup')}}</el-button>
                     <el-button type="primary" @click="onGet" size="small">{{$t('edge.common.query')}}</el-button>
@@ -140,12 +143,18 @@
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
-            <StageStatus style="margin-top: 10px;" :patternStatusList="stageStatusList"></StageStatus>
+            <!-- <StageStatus style="margin-top: 10px;" :patternStatusList="patternStatusList"></StageStatus>
             <PatternStatus style="margin-top: 30px;"
                           :cycle="crossStatusData ? crossStatusData.cycle : 0"
                           :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
                           :patternStatusList="patternStatusList"
-                          :barrierList="barrierList"></PatternStatus>
+                          :barrierList="barrierList"></PatternStatus> -->
+            <BoardCard
+            :cycle="crossStatusData ? crossStatusData.cycle : 0"
+            :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
+            :patternStatusList="patternStatusList"
+              >
+            </BoardCard>
           </div>
         </div>
         <div class="tuxing-right" v-if="!graphicMode" ref="tuxingRight">
@@ -185,7 +194,16 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
                 <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
+                <div class="cross-content">
+                  <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
+                  <div style="margin-left: 85px;" v-if="faultArr.length">
+                    <div style="margin-bottom: 10px;"><el-button type="primary" size="mini" class="faultbtn" @click="handleFaultsVisible">{{ faultvisible ? $t('edge.overview.hideFault') : $t('edge.overview.showFault')}}</el-button></div>
+                    <div v-if="faultvisible">
+                      <el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index" size="small" >{{faultMsg}}</el-tag>
+                    </div>
+                  </div>
+                  <div style="margin-left: 85px;" class="cross-value" v-if="!faultArr.length">{{$t('edge.overview.nofault')}}</div>
+                </div>
               </div>
               <div class="control-bottom">
                 <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
@@ -217,6 +235,9 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
                 </div>
+                <div class="cross-content">
+                  <el-tag type="danger" size="small" v-for="(phaseid, index) in closePhase" :key="index">{{$t('edge.overview.phase') + phaseid + $t('edge.overview.close')}}</el-tag>
+                </div>
               </div>
             </div>
           </transition>
@@ -233,8 +254,9 @@ import { registerMessage, uploadSingleTscParam } from '@/api/param'
 import { setIframdevid } from '@/utils/auth'
 import FloatImgBtn from '@/components/FloatImgBtn'
 import CrossDiagram from './crossDirection/crossDiagram'
-import PatternStatus from '@/components/PatternStatus'
-import StageStatus from '@/components/StageStatus'
+// import PatternStatus from '@/components/PatternStatus'
+// import StageStatus from '@/components/StageStatus'
+import BoardCard from '@/components/BoardCard'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
@@ -244,8 +266,9 @@ export default {
   components: {
     FloatImgBtn,
     CrossDiagram,
-    PatternStatus,
-    StageStatus,
+    // PatternStatus,
+    // StageStatus,
+    BoardCard,
     CurVolume,
     CurPhase,
     ManualControlModal
@@ -358,6 +381,7 @@ export default {
       reset: false,
       currentStage: 0,
       responseTime: 0,
+      closePhase: [],
       stagesList: [],
       isOperation: false, // 是否为手动可操作状态
       isdalayshow: true,
@@ -408,7 +432,8 @@ export default {
       shrink: 1,
       basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
       isResend: true,
-      commonHeight: undefined // 左右侧面板的高度值
+      commonHeight: undefined, // 左右侧面板的高度值
+      faultvisible: false
     }
   },
   computed: {
@@ -624,6 +649,9 @@ export default {
         }
         // let param = JSON.parse(data.data.data)
         this.crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
+        if (data.data.data.data.close_phase) {
+          this.closePhase = data.data.data.data.close_phase
+        }
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
         this.currModel = TscData.control
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
@@ -663,6 +691,10 @@ export default {
       }
     },
     onSubmit () {
+      if (!this.isJsonString(this.form.data)) {
+        this.$message.error(this.$t('edge.overview.JSONFormatError'))
+        return
+      }
       if (this.form.control === '999' && this.controlNum === '') {
         this.$message.error(this.$t('edge.overview.controlnumerrormess'))
         return
@@ -676,6 +708,8 @@ export default {
       control.value = Number(this.form.value)
       control.delay = Number(this.form.delay)
       control.duration = Number(this.form.duration)
+      // eslint-disable-next-line no-useless-escape
+      control.data = this.form.data.replace(/\ +/g, '').replace(/[\r\n]/g, '')
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
@@ -719,6 +753,7 @@ export default {
         this.form.value = patternData.value
         this.form.delay = patternData.delay
         this.form.duration = patternData.duration
+        this.form.data = patternData.data
       }).catch(error => {
         this.unlockScreen()
         this.$message.error(error)
@@ -931,7 +966,7 @@ export default {
           that.$message.error(data.data.message)
           return
         } else {
-          success = data.data.data.data.sucess
+          success = data.data.data.data.success
           if (success !== 0) {
             let errormsg = 'edge.overview.putTscControlError' + success
             that.$message.error(this.$t(errormsg))
@@ -1128,6 +1163,17 @@ export default {
         }
         this.$store.dispatch('SaveFunctionLevel', func)
       })
+    },
+    isJsonString (str) {
+      try {
+        JSON.parse(str)
+        return true
+      } catch (err) {
+        return false
+      }
+    },
+    handleFaultsVisible () {
+      this.faultvisible = !this.faultvisible
     }
   },
   // beforeDestroy () {

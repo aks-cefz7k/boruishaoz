@@ -173,6 +173,7 @@ export default {
     return {
       dialogVisible: false,
       phaseNotZero: false, // 判断必须有一个非零相位
+      phaseExceed: false, // 判断一个环最多16个相位
       planNotZero: false, // 判断必须有一个plan
       patternNotZero: false, // 判断必须有一个pattern
       patternCycleEqual: true, // 校验环周期时长是否相等
@@ -375,14 +376,6 @@ export default {
               )(rings[i])
             }
           }
-        }
-      }
-      if (this.value === 'all' || this.value === 'channel') {
-        // 去除channelList里的typeAndSouce
-        let channelList = res.channelList
-        for (let i = 0; i < channelList.length; i++) {
-          let channel = channelList[i]
-          this.$store.getters.tscParam.channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
         }
       }
       return res
@@ -648,6 +641,14 @@ export default {
           lock.channellocKinfo.forEach(el => delete el.desc)
         }
       }
+      if (newTscParam.channelList) {
+        // 去除typeAndSouce
+        let channelList = newTscParam.channelList
+        for (let i = 0; i < channelList.length; i++) {
+          let channel = channelList[i]
+          channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
+        }
+      }
       return newTscParam
     },
     cloneObjectFn (obj) {
@@ -791,6 +792,13 @@ export default {
       //   )
       //   return false
       // }
+      this.cheackPhaseRingNum()
+      if (this.phaseExceed) {
+        this.$message.error(
+          `${this.$t(`edge.errorTip.phaseExceed`)}`
+        )
+        return false
+      }
       this.checkOverlapRules()
       if (!this.overlapRules) {
         this.$message.error(
@@ -925,6 +933,30 @@ export default {
         }
       }
       this.phaseRing = true
+    },
+    cheackPhaseRingNum () {
+      // 校验单个环最大16个相位
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      let ringNumMap = new Map()
+      this.exceedRing = []
+      for (let i = 0; i < phaseList.length; i++) {
+        let curring = phaseList[i].ring
+        if (ringNumMap.get(curring) === undefined) {
+          ringNumMap.set(curring, 1)
+        } else {
+          let curnum = ringNumMap.get(curring) + 1
+          ringNumMap.set(curring, curnum)
+        }
+      }
+      for (let [ring, ringNum] of ringNumMap) {
+        if (ringNum > 16) {
+          // 环相位数超过限制的16个
+          this.phaseExceed = true
+          this.exceedRing.push(ring)
+        } else {
+          this.phaseExceed = false
+        }
+      }
     },
     checkConcurrentRules () {
       let phaseList = this.globalParamModel.getParamsByType('phaseList')

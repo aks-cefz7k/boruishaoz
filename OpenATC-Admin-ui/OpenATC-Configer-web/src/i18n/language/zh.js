@@ -195,7 +195,13 @@ const zh = {
       'putTscControlError3': '不支持的控制参数',
       'putTscControlError4': '设备初始化中，无法执行',
       'putTscControlError5': '优先级更高的方案控制中，无法执行',
-      'putTscControlError6': '优先级更高的用户控制中，无法执行'
+      'putTscControlError6': '优先级更高的用户控制中，无法执行',
+      'nofault': '无',
+      'extendedContent': '扩展内容',
+      'JSONFormatError': 'JSON格式错误!',
+      'showFault': '显示故障详情',
+      'hideFault': '隐藏故障详情',
+      'close': '关闭'
     },
     'phase': {
       'desc': '车道方向',
@@ -272,7 +278,7 @@ const zh = {
       'lane': '车道',
       'operation': '操作',
       'deletetip': '确认删除此跟随相位？',
-      'mostdata': '最多只能创建40条数据!'
+      'mostdata': '最多只能创建16条数据!'
     },
     'pattern': {
       'property': '属性',
@@ -300,6 +306,8 @@ const zh = {
       'delaystart': '晚启动时间 ',
       'advanceend': '早结束时间',
       'stageConfig': '阶段配置',
+      'parameters': '扩展参数配置',
+      'plan': '方案',
       'ringConfig': '环配置',
       'stage': '阶段',
       'phase': '相位',
@@ -308,6 +316,10 @@ const zh = {
     },
     'plan': {
       'tipcontext': '请输入计划名！',
+      'editcontext': '请编辑计划名！',
+      'plannamerequired': '必须填写计划名！',
+      'plannamerepeated': '计划名不能重复！',
+      'mostplandata': '最多只能创建16条数据!',
       'tip': '提示',
       'ok': '确定',
       'cancel': '取消',
@@ -318,6 +330,7 @@ const zh = {
       'deletetip': '确认删除此计划？',
       'tabtip': '确认删除此标签？',
       'mostdata': '最多只能创建48条数据!',
+      'editname': '编辑计划名',
       'controltype': '控制方式',
       'ControlOption1': '黄闪',
       'ControlOption2': '全红',
@@ -383,7 +396,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此检测器？',
       'deleteAlltip': '确认删除所有检测器？',
-      'mostdata': '最多只能创建72条数据！'
+      'mostdata': '最多只能创建64条数据！'
     },
     'channellock': {
       'deleteAlltip': '确认删除所有通道锁定？',
@@ -471,7 +484,7 @@ const zh = {
       'detectgapnoredon': '无红灯亮起检测时间间隔(0.1秒):',
       'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
       'startOrderParams': '启动时序参数 ',
-      'netcardInfo': '网卡信息: ',
+      'netcardInfo': '网络信息: ',
       'stepType': '步进类型',
       'seeCutEffect': '查看剪断效果',
       'siteIdLimit': '地址码规定范围是 0 ~ 99999',
@@ -557,6 +570,7 @@ const zh = {
       'sure': '确定',
       'oper': '操作',
       'selectfile': '选择文件',
+      'noselectfile': '未选择更新文件！',
       'updateUSB': '更新U盘数据',
       'recovery': '恢复',
       'lampcontrolpanel': '灯控板',
@@ -580,12 +594,13 @@ const zh = {
       'remote3': '自定义',
       'test': '检测',
       'realTimeChannel': '实时通道',
-      'isReboot': '系统文件下载成功,是否重启设备？',
+      'isReboot': '系统文件下载成功,更新重启后生效,是否重启设备？',
       'rebootSuccess': '重启成功！',
       'rebootFaile': '重启失败！',
       'resetSuccess': '设置成功！',
       'filesuccess': '升级文件传输完成!',
-      'filefailed': '升级接口调用失败!'
+      'filefailed': '升级接口调用失败!',
+      'updateovertime': '更新超时！'
     },
     'optimize': {
       'strategy': '优化策略',
@@ -717,7 +732,7 @@ const zh = {
       'commitandexecute': '提交并执行',
       'uploadsuccess': '参数上传成功!',
       'download': '参数下发成功!',
-      'downloaderror': '下发失败！',
+      'downloaderror': '信号机校验失败！',
       'downloadandrun': '提交并运行成功！',
       'editagentid': '编辑设备ID',
       'querysucess': '查询成功！',
@@ -749,6 +764,7 @@ const zh = {
     },
     'errorTip': {
       'phaseNotZero': '必须含有至少一个相位!',
+      'phaseExceed': '一个环最大不能超过16相位!',
       'planNotZero': '必须含有至少一个计划!',
       'patternNotZero': '必须含有至少一个方案!',
       'dataNotZero': '必须含有至少一个日期!',

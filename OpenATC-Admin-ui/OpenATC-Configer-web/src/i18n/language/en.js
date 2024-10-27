@@ -195,7 +195,13 @@ const en = {
       'putTscControlError3': 'Unsupported control params',
       'putTscControlError4': 'Unable to execute because device is in initialization',
       'putTscControlError5': 'Cannot be executed, beacuse the pattern with higher priority is under control',
-      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control'
+      'putTscControlError6': 'Cannot be executed, beacuse the user with higher priority is under control',
+      'nofault': 'None',
+      'extendedContent': 'Extended Content',
+      'JSONFormatError': 'JSON format error!',
+      'showFault': 'Display fault details',
+      'hideFault': 'Hide fault details',
+      'close': 'close'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -274,7 +280,7 @@ const en = {
       'operation': 'Operation',
       'add': 'Add overlap',
       'deletetip': 'Delete This Overlap?',
-      'mostdata': 'There are at most 40 data !'
+      'mostdata': 'There are at most 16 data !'
     },
     'pattern': {
       'property': 'Property',
@@ -302,6 +308,8 @@ const en = {
       'delaystart': 'Delay Start ',
       'advanceend': 'Advance End',
       'stageConfig': 'Stage Config',
+      'parameters': 'Pparameters',
+      'plan': 'Plan',
       'ringConfig': 'Ring Config',
       'stage': 'Stage',
       'phase': 'Phase',
@@ -310,6 +318,10 @@ const en = {
     },
     'plan': {
       'tipcontext': 'Please input your plan_name',
+      'editcontext': 'Please edit plan name',
+      'plannamerequired': 'Plan name is required!',
+      'plannamerepeated': 'Plan name cannot be repeated!',
+      'mostplandata': 'There are at most 16 data !!',
       'tip': 'Tips',
       'ok': 'OK',
       'cancel': 'Cancel',
@@ -320,6 +332,7 @@ const en = {
       'deletetip': 'Delete This Plan?',
       'tabtip': 'Delete This Tab?',
       'mostdata': 'There are at most 48 data !',
+      'editname': 'Edit name',
       'controltype': 'Control Type',
       'ControlOption1': 'Yellow Clear',
       'ControlOption2': 'Red Control',
@@ -385,7 +398,7 @@ const en = {
       'operation': 'Operation',
       'deletetip': 'Delete This Detector?',
       'deleteAlltip': 'Delete All Detector?',
-      'mostdata': 'There are at most 72 data !'
+      'mostdata': 'There are at most 64 data !'
     },
     'channellock': {
       'deleteAlltip': 'Delete All channellock',
@@ -473,7 +486,7 @@ const en = {
       'detectgapnoredon': 'Detect Gap No Red On（0.1s）: ',
       'detectgapgreenconflict': 'Detect Gap Green Conflict（0.1s）: ',
       'startOrderParams': 'Start Order Params ',
-      'netcardInfo': 'Netcard Info: ',
+      'netcardInfo': 'Network Info: ',
       'stepType': 'Step Type',
       'seeCutEffect': 'See Cut Detail',
       'siteIdLimit': 'SiteId must be whithin 0 ~ 99999',
@@ -559,6 +572,7 @@ const en = {
       'sure': 'Sure',
       'oper': 'Operation',
       'selectfile': 'Select File',
+      'noselectfile': 'No update file selected!',
       'updateUSB': 'Update USB',
       'recovery': 'Recovery',
       'lampcontrolpanel': 'Lamp Control Panel',
@@ -582,12 +596,13 @@ const en = {
       'remote3': 'Custom',
       'test': 'Test',
       'realTimeChannel': 'Real time channel',
-      'isReboot': 'The system file is downloaded successfully. Do you want to restart the device?',
+      'isReboot': 'The system file is downloaded successfully. The update takes effect after restarting. Do you want to restart the device?',
       'rebootSuccess': 'Restart successfully!',
       'rebootFaile': 'Restart failed!',
       'resetSuccess': 'Set successfully!',
       'filesuccess': 'Upgrade file transfer complete!',
-      'filefailed': 'Upgrade interface call failed!'
+      'filefailed': 'Upgrade interface call failed!',
+      'updateovertime': 'Update file overtime!'
     },
     'optimize': {
       'strategy': 'Optimization strategy',
@@ -719,7 +734,7 @@ const en = {
       'commitandexecute': 'CommitAndExecute',
       'uploadsuccess': 'Upload Success!',
       'download': 'Download Success!',
-      'downloaderror': 'Download Error!',
+      'downloaderror': 'Signal Check Error!',
       'downloadandrun': 'Submit and run successfully!',
       'editagentid': 'Edit AgentID',
       'querysucess': 'Query Success!',
@@ -751,6 +766,7 @@ const en = {
     },
     'errorTip': {
       'phaseNotZero': 'Must contain at least phase !',
+      'phaseExceed': 'One ring can not exceed 16 phases at most!',
       'planNotZero': 'Must contain at least plan !',
       'patternNotZero': 'Must contain at least pattern',
       'dataNotZero': 'Must contain at least data!',
