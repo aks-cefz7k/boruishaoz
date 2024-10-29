@@ -42,7 +42,6 @@ public class ocpMessage implements Message {
 
     @Override
     public MessageData uppack(byte[] dataSource,int length) throws UnsupportedEncodingException {
-
         if (dataSource == null) {
             return null;
         }

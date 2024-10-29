@@ -57,22 +57,24 @@ public class AgentHandler extends ICommHandler {
 
 
     //id转换，将ocp上报的id设置为thirdpartyid，查询映射表设置agentid
-    private void setThirdid(MessageData msg, DevCover ascsModel){
-
+    private void setThirdid(MessageData msg, DevCover ascsModel) {
+        //过滤掉没有携带ip信息的数
+        if (ascsModel.getIp() == null) {
+            return;
+        }
         String thirdId = msg.getAgentid();   //实际为第三方id
         ascsModel.setThirdpartyid(thirdId);  //将信号机上报id设置为第三方id
         //设置agentid，查映射表
-
         Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
         String key = null;
         String agentidthirdid = null;
         String agentid = null;
-        if(devIdMapService.getOcpLock() == 1){
+        if (devIdMapService.getOcpLock() == 1) {
             agentid = null;
-        }else{
+        } else {
             key = ascsModel.getIp() + Integer.toString(ascsModel.getPort());
             agentidthirdid = ocpidmap.get(key);
-            if(agentidthirdid != null){
+            if (agentidthirdid != null) {
                 String[] values = agentidthirdid.split("\\:");
                 agentid = values[0];
             }
@@ -91,7 +93,6 @@ public class AgentHandler extends ICommHandler {
         Gson gson = new Gson();
         JsonElement data = msg.getData();
         DevCover ascsModel = gson.fromJson(data, DevCover.class);
-
 
         if (msg == null) {
             logger.warning("AgentHandler/process: MessageData is null");
@@ -114,7 +115,6 @@ public class AgentHandler extends ICommHandler {
 //     收到其他消息
         else if (isRedisEnable) {
             String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
-
             //收到方案消息
             if (msg.getInfotype().equals("status/pattern")) {
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
@@ -124,6 +124,7 @@ public class AgentHandler extends ICommHandler {
             }
             //收到其他消息
             else {
+                System.out.println("redis key:" + key);
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
 //                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
             }

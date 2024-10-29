@@ -4,7 +4,6 @@ package com.openatc.agent.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -24,10 +23,11 @@ public class RedisConfig {
 
     /**
      * redis消息监听器
+     *
      * @return
      */
     @Bean
-    public SubscribeListener listener(){
+    public SubscribeListener listener() {
         return new SubscribeListener();
     }
 
@@ -35,7 +35,7 @@ public class RedisConfig {
      * 配置发布/订阅的Topic
      */
     @Bean
-    public ChannelTopic channelTopic(){
+    public ChannelTopic channelTopic() {
         return new ChannelTopic("updateIdMap");
     }
 
@@ -43,11 +43,11 @@ public class RedisConfig {
      * 消息监听器绑定到消息容器
      */
     @Bean
-    public RedisMessageListenerContainer messageListenerContainer(){
+    public RedisMessageListenerContainer messageListenerContainer() {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
 
-        container.addMessageListener(listener(),channelTopic());
+        container.addMessageListener(listener(), channelTopic());
         return container;
     }
 }
