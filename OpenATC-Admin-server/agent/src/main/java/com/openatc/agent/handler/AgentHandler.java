@@ -58,7 +58,7 @@ public class AgentHandler extends ICommHandler {
 
     //id转换，将ocp上报的id设置为thirdpartyid，查询映射表设置agentid
     private void setThirdid(MessageData msg, DevCover ascsModel) {
-        //过滤掉没有携带ip信息的数
+        //过滤掉没有携带ip的数据
         if (ascsModel.getIp() == null) {
             return;
         }
