@@ -96,8 +96,6 @@ public class MessageController {
         String protocol = ascsBaseModel.getProtocol();
 
 
-
-
         RESTRet responceData = commClient.devMessage(requestData,ascsBaseModel);
 
         // 把设置请求的操作保存到历史记录中

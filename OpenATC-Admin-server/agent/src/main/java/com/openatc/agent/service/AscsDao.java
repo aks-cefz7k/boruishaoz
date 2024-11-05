@@ -133,7 +133,7 @@ public class AscsDao {
         try {
             if (isTableExist("dev")) {
                 String devSql = "update dev set agentid=? where agentid=?";
-                jdbcTemplate.update(devSql, newAgentid, oldAgentid);
+                int update = jdbcTemplate.update(devSql, newAgentid, oldAgentid);
                 redisTemplate.convertAndSend(topic.getTopic(),"updateIdMap");
 
             }
@@ -730,6 +730,7 @@ public class AscsDao {
                     //只需要更新一下时间
                     String sql = "update dev set lastTime=LOCALTIMESTAMP where agentid = ?";
                     rows = jdbcTemplate.update(sql,agentid);
+                    return rows;
                 }
             }else{
                 int id = (int) idAndJson.get("id");
@@ -742,7 +743,7 @@ public class AscsDao {
                 if (jsonparamMap.get("ip").equals(devCover.getIp()) && port == devCover.getPort()) {
                     //坐标为空，更新坐标
                     if(idAndJson.get("geometry") == null){
-                        String sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)), agentid, thirdplatformid=?, lastTime=LOCALTIMESTAMP where id = ?";
+                        String sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)), thirdplatformid=?, lastTime=LOCALTIMESTAMP where id = ?";
                         String strGeo = ascsModel.getGeometry().toString();
                         rows = jdbcTemplate.update(sql,
                                 ascsModel.getType(),
@@ -750,15 +751,13 @@ public class AscsDao {
                                 ascsModel.getProtocol(),
                                 strGeo,
                                 ascsModel.getJsonparam().toString(),
-                                ascsModel.getAgentid(),
                                 ascsModel.getThirdplatformid(),
                                 id);
                         updateCount++;
                     }else{
                         //坐标非空，不更新坐标
-                        String sql = "update dev set agentid=?, thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
+                        String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
                         rows = jdbcTemplate.update(sql,
-                                ascsModel.getAgentid(),
                                 ascsModel.getThirdplatformid(),
                                 ascsModel.getType(),
                                 ascsModel.getStatus(),
@@ -773,6 +772,10 @@ public class AscsDao {
             }//id (protocol.equals("ocp") || protocol.equals("OCP"))
 
         }//for (Map<String, Object> idAndJson : idAndJsonparamList)
+        //scp直接返回
+        if(protocol.equals("scp") || protocol.equals("SCP")){
+            return rows;
+        }
 
         //未找到,说明未新注册，插入，将agentid为自增
         if(updateCount == 0){
