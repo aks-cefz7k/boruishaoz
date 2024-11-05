@@ -133,9 +133,7 @@ public class AscsDao {
         try {
             if (isTableExist("dev")) {
                 String devSql = "update dev set agentid=? where agentid=?";
-                int update = jdbcTemplate.update(devSql, newAgentid, oldAgentid);
-                redisTemplate.convertAndSend(topic.getTopic(),"updateIdMap");
-
+                jdbcTemplate.update(devSql, newAgentid, oldAgentid);
             }
 
             if (isTableExist("fault")) {
@@ -143,8 +141,9 @@ public class AscsDao {
                 jdbcTemplate.update(faultSql, newAgentid, oldAgentid);
             }
 
-            if (isTableExist("ht_device")) {
-                String ht_deviceSql = "update ht_device set agentid=? where agentid=?";
+
+            if (isTableExist("third_dev")) {
+                String ht_deviceSql = "update third_dev set agentid=? where agentid=?";
                 jdbcTemplate.update(ht_deviceSql, newAgentid, oldAgentid);
             }
 
@@ -158,10 +157,7 @@ public class AscsDao {
                 jdbcTemplate.update(operation_record, newAgentid, oldAgentid);
             }
 
-            if (isTableExist("scats_device")) {
-                String scats_device = "update scats_device set agentid=? where agentid=?";
-                jdbcTemplate.update(scats_device, newAgentid, oldAgentid);
-            }
+
 
             if (isTableExist("t_control")) {
                 String t_control = "update t_control set agentid=? where agentid=?";
@@ -198,7 +194,7 @@ public class AscsDao {
                 jdbcTemplate.update(devs_video, newAgentid, oldAgentid);
             }
 
-
+            redisTemplate.convertAndSend(topic.getTopic(),"updateIdMap");
 
         } catch (Exception e) {
             return false;
@@ -726,7 +722,7 @@ public class AscsDao {
             //scp协议的ip和port均相同，用agentid来判断
             if(protocol.equals("scp") || protocol.equals("SCP")){
                 String agentid = (String)idAndJson.get("agentid");
-                if(login_agentid.equals(agentid)){
+                if(login_thirpartyid.equals(agentid)){
                     //只需要更新一下时间
                     String sql = "update dev set lastTime=LOCALTIMESTAMP where agentid = ?";
                     rows = jdbcTemplate.update(sql,agentid);
