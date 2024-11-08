@@ -109,7 +109,13 @@ public class MessageController {
                 logger.warning("token of set-request is null;");
             }
             logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
+            try{
+                hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
+            }catch (Exception e){
+                logger.warning(e.toString());
+                return responceData;
+            }
+
         }
 
         return responceData;
