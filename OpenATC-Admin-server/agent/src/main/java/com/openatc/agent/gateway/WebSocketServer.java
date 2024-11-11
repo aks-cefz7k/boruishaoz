@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @Date 2021/7/28 10:20
  * @Describetion
  */
-@ServerEndpoint(value = "/ws/{username}")
+@ServerEndpoint(value = "/ws")
 @Component
 @Data
 public class WebSocketServer {
@@ -106,7 +106,6 @@ public class WebSocketServer {
         log.info("onMessage sessionId:{},receive:{}", session.getId(), message);
         Gson gs = new Gson();
         WebSocketSub wss;
-        //TODO::判断字符串是否符合Json格式
         wss = gs.fromJson(message, WebSocketSub.class);
         String messageType = wss.getMessagetype().trim(); //订阅类型
         String subscribe = wss.getSubscribe(); //开始or结束标

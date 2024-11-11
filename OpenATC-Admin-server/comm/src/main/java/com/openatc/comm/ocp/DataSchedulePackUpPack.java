@@ -1421,6 +1421,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         int int4 = (pRoadID[3] & 0xff) << 24;
         int roadValue = int1 | int2 | int3 | int4;
         roadID = String.valueOf(roadValue);
+        System.out.println("roadID:"+roadID);
         byte chDataLink = dataSchedule[3];
         byte chOperateType = dataSchedule[7];
         byte chInfoType = dataSchedule[8];

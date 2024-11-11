@@ -125,6 +125,9 @@ public class CommClient {
             return RESTRetUtils.errorDetialObj(E_4002, responceData.getData());
         }
 
+        responceData.setThirdpartyid(responceData.getAgentid());
+        responceData.setAgentid(requestData.getAgentid());
+
         return RESTRetUtils.successObj(responceData);
     }
 
