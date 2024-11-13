@@ -1430,7 +1430,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机应答联机kedacom
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_LOGIN_REQUEST)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
@@ -1449,7 +1449,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机应答操作日志
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_LOG)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
@@ -1469,7 +1469,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机应答通道状态(电压、电流)
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_CHANNEL_STATUS)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
@@ -1488,7 +1488,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机应答通道灯色
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_CHANNEL_LAMP_STATUS)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
@@ -1507,7 +1507,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机应答通道可检测
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CHANNEL_CHECK)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
@@ -1527,7 +1527,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机应答方案干预
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PATTERN_INTERRUPT)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
@@ -1547,7 +1547,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机应答流量日志获取环境状态
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_VOLUMELOG)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
@@ -1563,11 +1563,12 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 }
                 return ReadDataScheduleSuccess;
             }
+
             //信号机应答当前交通流量查询
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_TRAFFIC_FLOW)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1582,11 +1583,12 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 }
                 return ReadDataScheduleSuccess;
             }
+
             //信号机应答手动面板参数设置
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_MANUALPANEL)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1601,11 +1603,12 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 }
                 return ReadDataScheduleSuccess;
             }
+
             //信号机应答手动面板参数设置
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_MANUALPANEL)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1624,7 +1627,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_UPDATEUDISK)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1645,7 +1648,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_REMOTE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1664,7 +1667,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_REMOTE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1680,13 +1683,14 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 return ReadDataScheduleSuccess;
             }
         }
+
         if (chDataLink == DATA_LINK_CONFIG)      //配置软件和信号机的参数链路
         {
             //信号机应答整体参数查询
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == CFG_ACK_ASKSEND)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1705,7 +1709,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == CFG_ACK_SENDDATA_OK)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1724,7 +1728,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == CFG_ACK_SENDDATA_FAILED)) {
                 recvData.setOperation(StringOperatorType(OPERATE_TYPE_ERROR_ANSWER));
                 recvData.setInfotype(StringOperatorObj(CFG_ACK_SENDDATA_FAILED));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1746,7 +1750,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 recvData.setOperation(StringOperatorType(OPERATE_TYPE_REPORT));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
                 //查找thirdparty与agentid映射表
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1765,7 +1769,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_REQUEST) && (chInfoType == INFO_TYPE_ONLINE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1786,7 +1790,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_TRAFFIC_FLOW)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1798,7 +1802,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_WORK_STATE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1810,7 +1814,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_LAMP_COLOR)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1822,7 +1826,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_WORK_STATE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1841,7 +1845,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_LAMP_COLOR)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1860,7 +1864,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == 0x05)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj((byte) 0x05));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1879,7 +1883,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == 0x05)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj((byte) 0x05));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1898,7 +1902,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_ERROR)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1917,7 +1921,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_SIGNAL_ERROR)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1929,7 +1933,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_ATC_VERSION)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1948,7 +1952,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_ATC_VERSION)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1962,7 +1966,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_GROUP)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -1981,7 +1985,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_GROUP)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2001,7 +2005,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2020,7 +2024,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2039,7 +2043,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_UPDATE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2058,7 +2062,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_PHASE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2077,7 +2081,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PHASE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2096,7 +2100,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SCHEME_PARTTERN)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2115,7 +2119,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SCHEME_PARTTERN)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2134,7 +2138,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SCHEDUL_PLAN)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2153,7 +2157,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SCHEDUL_PLAN)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2174,7 +2178,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_WORK_MODE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2193,7 +2197,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_WORK_MODE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2212,7 +2216,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_PARAM_VERSION)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2231,7 +2235,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PARAM_VERSION)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2250,7 +2254,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_IDENTIFY_CODE)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2269,7 +2273,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_REMOTE_CONTROL)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2288,7 +2292,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_REMOTE_CONTROL)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2307,7 +2311,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_DETECTOR)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
@@ -2326,7 +2330,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_DETECTOR)) {
                 recvData.setOperation(StringOperatorType(chOperateType));
                 recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setAgentid(roadID);
+                recvData.setThirdpartyid(roadID);
                 Gson recvDataJson = new Gson();
                 if (tempData != null) {
                     JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
