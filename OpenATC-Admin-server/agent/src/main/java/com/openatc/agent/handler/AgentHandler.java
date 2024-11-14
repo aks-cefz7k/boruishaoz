@@ -64,71 +64,68 @@ public class AgentHandler extends ICommHandler {
         }
         String thirdId = msg.getAgentid();   //实际为第三方id
         ascsModel.setThirdpartyid(thirdId);  //将信号机上报id设置为第三方id
-        private void setThirdid (MessageData msg, DevCover ascsModel){
-
-            //设置agentid，查映射表
-            Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
-            String key = null;
-            String agentidthirdid = null;
-            String agentid = null;
-            if (devIdMapService.getOcpLock() == 1) {
-                agentid = null;
-            } else {
-                key = ascsModel.getIp() + Integer.toString(ascsModel.getPort());
-                agentidthirdid = ocpidmap.get(key);
-                if (agentidthirdid != null) {
-                    String[] values = agentidthirdid.split("\\:");
-                    agentid = values[0];
-                }
+        //设置agentid，查映射表
+        Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
+        String key = null;
+        String agentidthirdid = null;
+        String agentid = null;
+        if (devIdMapService.getOcpLock() == 1) {
+            agentid = null;
+        } else {
+            key = ascsModel.getIp() + Integer.toString(ascsModel.getPort());
+            agentidthirdid = ocpidmap.get(key);
+            if (agentidthirdid != null) {
+                String[] values = agentidthirdid.split("\\:");
+                agentid = values[0];
             }
-            msg.setAgentid(agentid);
-            ascsModel.setAgentid(agentid);
+        }
+        msg.setAgentid(agentid);
+        ascsModel.setAgentid(agentid);
+    }
+
+
+    @Override
+    public synchronized void process(MessageData msg) throws ParseException {
+        if (msg.getCreatetime() == null) {
+            msg.setCreatetime(DateUtil.date2esstr(new Date()));
         }
 
+        Gson gson = new Gson();
+        JsonElement data = msg.getData();
+        DevCover ascsModel = gson.fromJson(data, DevCover.class);
 
-        @Override
-        public synchronized void process (MessageData msg) throws ParseException {
-            if (msg.getCreatetime() == null) {
-                msg.setCreatetime(DateUtil.date2esstr(new Date()));
-            }
+        if (msg == null) {
+            logger.warning("AgentHandler/process: MessageData is null");
+            return;
+        }
 
-            Gson gson = new Gson();
-            JsonElement data = msg.getData();
-            DevCover ascsModel = gson.fromJson(data, DevCover.class);
+        if (msg.getInfotype() == null) {
+            logger.warning("AgentHandler/process: MessageData.operation()/.infotype is null");
+            return;
+        }
 
-            if (msg == null) {
-                logger.warning("AgentHandler/process: MessageData is null");
-                return;
-            }
+        setThirdid(msg, ascsModel);
 
-            if (msg.getInfotype() == null) {
-                logger.warning("AgentHandler/process: MessageData.operation()/.infotype is null");
-                return;
-            }
-
-            setThirdid(msg, ascsModel);
-
-            // 收到注册消息
-            if (msg.getInfotype().equals("login") && msg.getOperation().equals("report")) {
-                // 更新设备信息
-                devController.DevAscsDiscovery(ascsModel);
-            }
+        // 收到注册消息
+        if (msg.getInfotype().equals("login") && msg.getOperation().equals("report")) {
+            // 更新设备信息
+            devController.DevAscsDiscovery(ascsModel);
+        }
 
 //     收到其他消息
-            else if (isRedisEnable) {
-                String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
-                //收到方案消息
-                if (msg.getInfotype().equals("status/pattern")) {
-                    stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
-                    stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
-                } else if (msg.getInfotype().equals("status/fault")) {
-                    faultService.processFaultMessage(msg);
-                }
-                //收到其他消息
-                else {
-                    stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
+        else if (isRedisEnable) {
+            String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
+            //收到方案消息
+            if (msg.getInfotype().equals("status/pattern")) {
+                stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
+                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
+            } else if (msg.getInfotype().equals("status/fault")) {
+                faultService.processFaultMessage(msg);
+            }
+            //收到其他消息
+            else {
+                stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
 //                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
-                }
             }
         }
     }
