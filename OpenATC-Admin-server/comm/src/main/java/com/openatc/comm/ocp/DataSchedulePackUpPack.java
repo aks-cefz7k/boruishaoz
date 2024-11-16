@@ -1406,7 +1406,6 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         String roadID = null;
         String tempData = null;
         if (dataScheduleSize > 14) {
-
             pDest = new byte[dataScheduleSize - 14];
             for (int i = 14; i < dataScheduleSize; i++) {
                 pDest[i - 14] = dataSchedule[i];  //取出有效数据data
@@ -1421,7 +1420,6 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         int int4 = (pRoadID[3] & 0xff) << 24;
         int roadValue = int1 | int2 | int3 | int4;
         roadID = String.valueOf(roadValue);
-        System.out.println("roadID:"+roadID);
         byte chDataLink = dataSchedule[3];
         byte chOperateType = dataSchedule[7];
         byte chInfoType = dataSchedule[8];
