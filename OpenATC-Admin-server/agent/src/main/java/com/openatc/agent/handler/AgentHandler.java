@@ -56,15 +56,21 @@ public class AgentHandler extends ICommHandler {
     private String agenttype = "asc";
 
 
+
+
+
     //id转换，将ocp上报的id设置为thirdpartyid，查询映射表设置agentid
     private void setThirdid(MessageData msg, DevCover ascsModel) {
-        String thirdId = msg.getAgentid();   //实际为第三方id
-        ascsModel.setThirdpartyid(thirdId);  //将信号机上报id设置为第三方id
-        //设置agentid，查映射表
+
+        String agentid = null;
+        if (ascsModel.getIp() == null) {
+            Map<String, String> thirdidToAgentidOcp = devIdMapService.getThirdidToAgentidOcp();
+            agentid = thirdidToAgentidOcp.get(msg.getThirdpartyid());
+        }
         Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
+        //设置agentid，查映射表
         String key = null;
         String agentidthirdid = null;
-        String agentid = null;
         if (devIdMapService.getOcpLock() == 1) {
             agentid = null;
         } else {

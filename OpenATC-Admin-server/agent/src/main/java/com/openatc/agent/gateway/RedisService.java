@@ -41,7 +41,7 @@ public class RedisService {
     // 接受Redis订阅的消息
     public void receiveSubsMessage(String message, String type) {
         JSONObject pattern = JSONObject.parseObject(message);
-        String agentId = pattern.getString("agentid");
+        String agentId = pattern.getString("thirdpartyid");
         //如果不是asc:status/pattern，则退出
         if (!type.contains("asc:status/pattern")) return;
         log.info("receive pattern message: " + message);

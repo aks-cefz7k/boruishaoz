@@ -124,7 +124,7 @@ public class WebSocketServer {
                     frameSendRare = Integer.parseInt(str);
                     if (frameSendRare < 0)
                         frameSendRare = 0;
-                    log.info("Control, sessionId:{},Set frameSendRare:", session.getId(), frameSendRare);
+                    log.info("Control, sessionId:{},Set frameSendRare:{}", session.getId(), frameSendRare);
                 }
             }
         } else if ("up".equals(subscribe)) {//开启订阅消息
