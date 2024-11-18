@@ -28,6 +28,7 @@ public class DevIdMapService implements CommandLineRunner {
     //thirdpartyid时ocp协议中主动上报的id，agentid为平台用户设置的id
     private Map<String, String> agentidToThirdidScp = new HashMap<>();
     private Map<String, String> thirdidToAgentidScp = new HashMap<>();
+    private Map<String, String> thirdidToAgentidOcp = new HashMap<>();
     private Map<String, String> OCPIDMAP = new HashMap<>();
     //ocpLock为1时，表明OCPIDMAP不允许被访问
 
@@ -74,6 +75,7 @@ public class DevIdMapService implements CommandLineRunner {
                 String key = ip + port;
                 String value = agentid + ":" + thirdpartyid;
                 OCPIDMAP.put(key, value);
+                thirdidToAgentidOcp.put(thirdpartyid,agentid);
             }
         }
         System.out.println(OCPIDMAP.toString());
