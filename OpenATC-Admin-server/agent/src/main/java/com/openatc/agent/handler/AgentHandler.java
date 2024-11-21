@@ -56,12 +56,8 @@ public class AgentHandler extends ICommHandler {
     private String agenttype = "asc";
 
 
-
-
-
     //id转换，将ocp上报的id设置为thirdpartyid，查询映射表设置agentid
     private void setThirdid(MessageData msg, DevCover ascsModel) {
-
         String agentid = null;
         if (ascsModel.getIp() == null) {
             Map<String, String> thirdidToAgentidOcp = devIdMapService.getThirdidToAgentidOcp();
@@ -102,21 +98,20 @@ public class AgentHandler extends ICommHandler {
         }
 
         if (msg.getInfotype() == null) {
-            logger.warning("AgentHandler/process: MessageData.operation()/.infotype is null");
+            logger.warning("AgentHandler/process: MessageData.operation()/.infoType is null");
             return;
         }
 
         setThirdid(msg, ascsModel);
-
+        String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
         // 收到注册消息
         if (msg.getInfotype().equals("login") && msg.getOperation().equals("report")) {
-            // 更新设备信息
+            //更新设备信息
+            ascsModel.setThirdpartyid(msg.getThirdpartyid());
             devController.DevAscsDiscovery(ascsModel);
         }
-
-//     收到其他消息
-        else if (isRedisEnable) {
-            String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
+        //收到其他消息
+        else if (key != null && isRedisEnable) {
             //收到方案消息
             if (msg.getInfotype().equals("status/pattern")) {
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
@@ -127,7 +122,7 @@ public class AgentHandler extends ICommHandler {
             //收到其他消息
             else {
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
-//                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
+                //stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
             }
         }
     }

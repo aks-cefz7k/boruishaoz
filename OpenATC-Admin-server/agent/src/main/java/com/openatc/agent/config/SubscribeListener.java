@@ -21,7 +21,6 @@ public class SubscribeListener implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] bytes) {
 
-        logger.info("触发更新ip");
         devIdMapService.initMap();
     }
 

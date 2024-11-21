@@ -94,8 +94,8 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        this.session.setMaxIdleTimeout(5 * 60 * 1000); //5min
-        this.session.setMaxTextMessageBufferSize(5 * 1024 * 1024); //5MB
+        this.session.setMaxIdleTimeout(5 * 60 * 1000);
+        this.session.setMaxTextMessageBufferSize(5 * 1024 * 1024);
         patternWebSocketSet.put(session, new MyWebSocketServer(username, this));
         setOnlineCount(onlineCount + 1);
         log.info("onOpen URL:{},Session ID:{},OnlineCount:{}", session.getRequestURI(), session.getId(), onlineCount);
@@ -271,7 +271,7 @@ public class WebSocketServer {
             return true;
     }
 
-    // todo: 按ID给客户端分发pattern消息
+
     String ChannelSubsCheck(String channelName) {
         String str = channelName;
         // 查找最后一个":",获取订阅的ID
@@ -302,6 +302,9 @@ public class WebSocketServer {
         return patternWebSocketSet;
     }
 
+    public static Map<Session, MyWebSocketServer> getTrafficIncidentWebSocketSet() {
+        return trafficIncidentWebSocketSet;
+    }
 
     public static Map<Session, MyWebSocketServer> getFaultIncidentWebSocketSet() {
         return faultIncidentWebSocketSet;

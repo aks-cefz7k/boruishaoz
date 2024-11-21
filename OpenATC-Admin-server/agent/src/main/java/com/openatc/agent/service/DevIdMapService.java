@@ -78,7 +78,6 @@ public class DevIdMapService implements CommandLineRunner {
                 thirdidToAgentidOcp.put(thirdpartyid,agentid);
             }
         }
-        System.out.println(OCPIDMAP.toString());
         ocpLock = 0;
     }
 }

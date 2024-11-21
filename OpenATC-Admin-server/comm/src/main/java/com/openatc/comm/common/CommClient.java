@@ -159,12 +159,6 @@ public class CommClient {
         if (packData == null) {
             return CreateErrorRequestData(agentId,"sendMsg not support");
         }
-//        endtime = System.currentTimeMillis();
-//        log.info("Send Msg:" + sendMsg );
-//        log.info("Pack Data time:"+ (endtime-starttime) );
-
-
-//        starttime = System.currentTimeMillis();
 
         // 设置通讯类型
         CommunicationType commType;
@@ -203,10 +197,6 @@ public class CommClient {
             return CreateErrorResponceData(agentId,"exange send error!");
         }
 
-//        endtime = System.currentTimeMillis();
-//        log.info("Send Data time:"+ (endtime-starttime) );
-
-//        starttime = System.currentTimeMillis();
         // 接收-解析
         MessageData responceData = null;
         responceData = communication.receiveData();

@@ -37,18 +37,21 @@ public class RedisService {
 
 
     Map<Session, MyWebSocketServer> patternWebSocketSet = WebSocketServer.getPatternWebSocketSet();
+    Map<Session, MyWebSocketServer> faultIncidentWebSocketSet = WebSocketServer.getFaultIncidentWebSocketSet();
+    Map<Session, MyWebSocketServer> trafficIncidentWebSocketSet = WebSocketServer.getTrafficIncidentWebSocketSet();
 
     // 接受Redis订阅的消息
     public void receiveSubsMessage(String message, String type) {
-        JSONObject pattern = JSONObject.parseObject(message);
-        String agentId = pattern.getString("thirdpartyid");
-        //如果不是asc:status/pattern，则退出
-        if (!type.contains("asc:status/pattern")) return;
-        log.info("receive pattern message: " + message);
-        // 如果没有客户端订阅，取消Redis监听
+        //如果没有客户端订阅，取消Redis监听
         if (patternWebSocketSet.size() == 0) {
             unSubsMessage(null);
-        } else {
+            return;
+        }
+        JSONObject pattern = JSONObject.parseObject(message);
+        String agentId = pattern.getString("agentid");
+
+        log.info("receive " + type + " message: " + message);
+        if ("asc:status/pattern".equals(type)) {
             for (Session session : patternWebSocketSet.keySet()) {
                 WebSocketServer webSocketServer = patternWebSocketSet.get(session).getWebSocketServer();
                 Set<String> agentIds = webSocketServer.getInfoAndAgentIds().get("status/pattern");
@@ -56,6 +59,41 @@ public class RedisService {
                     webSocketServer.sendMessage(message);
                 }
             }
+        }
+
+        if ("asc:event/faultdata".equals(type)) {
+            for (Session session : faultIncidentWebSocketSet.keySet()) {
+                faultIncidentWebSocketSet.get(session).getWebSocketServer().sendMessage(message);
+            }
+        }
+
+        if ("asc:event/trafficdata".equals(type)) {
+            for (Session session : trafficIncidentWebSocketSet.keySet()) {
+                trafficIncidentWebSocketSet.get(session).getWebSocketServer().sendMessage(message);
+            }
+        }
+    }
+
+
+    // 定时读取设备统计数据
+    @Scheduled(fixedRate = 60000)
+    private void getStatisticsDataFromRedis() {
+        for (Session session : patternWebSocketSet.keySet()) {
+            WebSocketServer webSocketServer = patternWebSocketSet.get(session).getWebSocketServer();
+            // 发送路口交通强度
+            sendValuesMessage("status/intensity", webSocketServer.getInfoAndAgentIds().get("status/intensity"), webSocketServer);
+
+            // 发送设备统计信息
+            sendValuesMessage("status/fso", webSocketServer.getInfoAndAgentIds().get("status/fso"), webSocketServer);
+
+            // 发送路网交通数据
+            sendValuesMessage("status/netdata", webSocketServer);
+
+            // 发送设备总体统计数据
+            sendValuesMessage("status/snapshot", webSocketServer.getInfoAndAgentIds().get("status/snapshot"), webSocketServer);
+
+            // 发送总体方案数据
+            sendValuesMessage("status/keypattern", webSocketServer.getInfoAndAgentIds().get("status/keypattern"), webSocketServer);
         }
     }
 
@@ -91,15 +129,26 @@ public class RedisService {
         }
     }
 
+    public boolean sendValuesMessage(String type, Set deviceIds, WebSocketServer webSock) {
+        Collection<String> set = webSock.pollingTypeMap.get(type);
+        return sendMessageToClient(set, type, deviceIds, webSock);
+    }
+
+
     private boolean sendValuesMessage(String type, WebSocketServer webSock) {
         Collection<String> set = webSock.pollingTypeMap.get(type);
         return sendMessageToClient(set, type, webSock);
     }
 
 
+    /**
+     * @return 发送消息给socket
+     * @throws
+     * @Author laoxia
+     * @Date 2021/8/19 17:32
+     */
     private boolean sendMessageToClient(Collection<String> keySet, String type, WebSocketServer webSock) {
         if (keySet != null && keySet.size() != 0) {
-            //获取redis数据
             StringBuffer sendBuffer = appendAllValueFromRedis(keySet);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("infotype", type);
@@ -109,6 +158,26 @@ public class RedisService {
                 log.info("send message: " + jsonObject.toString());
                 webSock.sendMessage(jsonObject.toString());
             }
+            return true;
+        } else
+            return false;
+    }
+
+    /**
+     * @return 发送消息给指定socket
+     * @throws
+     * @Author laoxia
+     * @Date 2021/8/19 17:32
+     */
+    private boolean sendMessageToClient(Collection<String> keySet, String type, Set deviceIds, WebSocketServer webSock) {
+        if (keySet != null && keySet.size() != 0) {
+            StringBuffer sendBuffer = appendAllValueFromRedis(keySet, deviceIds);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("infotype", type);
+            jsonObject.addProperty("data", sendBuffer.toString());
+            // 数据获取完，发送给客户端
+            if (sendBuffer != null && sendBuffer.length() > 2)
+                webSock.sendMessage(jsonObject.toString());
             return true;
         } else
             return false;
@@ -127,8 +196,9 @@ public class RedisService {
     /**
      * 定时任务
      * 定时轮询获取消息
+     * 目前不用
      */
-    @Scheduled(fixedRate = 100)
+//    @Scheduled(fixedRate = 100)
     protected void getAllPollingFrameData() throws InterruptedException {
         Map<Session, MyWebSocketServer> fwss = WebSocketServer.getPatternWebSocketSet();
         if (pollingFrameSleepIndex == 0) {
@@ -219,4 +289,40 @@ public class RedisService {
         sendBuffer.append("]");
         return sendBuffer;
     }
+
+    private StringBuffer appendAllValueFromRedis(Collection<String> keySet, Set deviceIds) {
+        int i = 0;// 当前计数器
+        keySet.size();
+        StringBuffer sendBuffer = new StringBuffer("[");
+        for (String value : keySet) {
+            // 并不是所有设备的消息都要拼接，这里需要过滤
+            String[] params = value.split(":");
+            String agentid = params[params.length - 1].trim();
+            if (deviceIds == null || !deviceIds.contains(agentid)) continue;
+            String strFrame;
+            try {
+                if (value.equals("asc:agentframe:network")) {
+                    strFrame = cMap.get(value);
+                } else {
+                    strFrame = redisTemplate.opsForValue().get(value.replace(" ", ""));
+                }
+                log.info("value: " + value);
+                log.info(strFrame);
+            } catch (Exception e) {
+                log.info("RedisConnectionException: Unable to connect to redis:6379");
+                sendBuffer = new StringBuffer();
+                return sendBuffer;
+            }
+            if (strFrame == null || strFrame.isEmpty() || strFrame.length() < 3)
+                continue;
+            // 第一个不用加逗号
+            if (i != 0)
+                sendBuffer.append(",");
+            sendBuffer.append(strFrame);
+            i++;
+        }
+        sendBuffer.append("]");
+        return sendBuffer;
+    }
+
 }

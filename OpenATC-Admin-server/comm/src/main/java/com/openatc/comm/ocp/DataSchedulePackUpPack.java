@@ -9,7 +9,6 @@ package com.openatc.comm.ocp;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.data.MessageDataMD5;
 
@@ -21,37 +20,15 @@ import static com.openatc.comm.ocp.CosntDataDefine.*;
 public class DataSchedulePackUpPack { //数据表内容宏定义
 
 
-
     private static final int MAX_DATA_SCHEDULE = 14;         //数据表大小
     private static final int ReadDataScheduleSuccess = 1;
     private static final int ReadDataScheduleFault = 3;
     private static final int SCHEDULEBUFFER = 10 * 1024;
 
-
     byte[] dataSchdule = new byte[MAX_DATA_SCHEDULE];
 
     public void DataSchedulePackUpPack() {
 
-    }
-
-    //操作类型值
-    public int NumberOperatorType(String operatortype) {
-        if (operatortype.equals(getrequest)) {
-            return 1;
-        }
-        if (operatortype.equals(setrequest)) {
-            return 2;
-        }
-        if (operatortype.equals(getresponse)) {
-            return 3;
-        }
-        if (operatortype.equals(setresponse)) {
-            return 4;
-        }
-        if (operatortype.equals(report)) {
-            return 5;
-        }
-        return 0;
     }
 
     //操作类型字符串
@@ -75,101 +52,6 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             return erroresponse;
         }
         return null;
-    }
-
-    //操作对象值
-    public int NuberOperatorObj(String operatorObj) {
-        if (operatorObj.equals(login)) {
-            return 1;
-        }
-        if (operatorObj.equals(volume)) {
-            return 2;
-        }
-        if (operatorObj.equals(workstatus)) {
-            return 3;
-        }
-        if (operatorObj.equals(lampcolor)) {
-            return 4;
-        }
-        if (operatorObj.equals(time)) {
-            return 5;
-        }
-        if (operatorObj.equals(signalgroup)) {
-            return 6;
-        }
-        if (operatorObj.equals(phase)) {
-            return 7;
-        }
-        if (operatorObj.equals(timepattern)) {
-            return 8;
-        }
-        if (operatorObj.equals(scheduleplan)) {
-            return 9;
-        }
-        if (operatorObj.equals(workmode)) {
-            return 10;
-        }
-        if (operatorObj.equals(falut)) {
-            return 11;
-        }
-        if (operatorObj.equals(atcversion)) {
-            return 12;
-        }
-        if (operatorObj.equals(paramversion)) {
-            return 13;
-        }
-        if (operatorObj.equals(code)) {
-            return 14;
-        }
-        if (operatorObj.equals(remote)) {
-            return 15;
-        }
-        if (operatorObj.equals(detector)) {
-            return 16;
-        }
-        if (operatorObj.equals(allfeature)) {
-            return 17;
-        }
-        if (operatorObj.equals(paramip)) {
-            return 19;
-        }
-        if (operatorObj.equals(serialport)) {
-            return 20;
-        }
-        if (operatorObj.equals(manualpanel)) {
-            return 21;
-        }
-        if (operatorObj.equals(updatedisk)) {
-            return 22;
-        }
-        if (operatorObj.equals(systemremote)) {
-            return 23;
-        }
-        if (operatorObj.equals(systemlog)) {
-            return 24;
-        }
-        if (operatorObj.equals(channelcheck)) {
-            return 25;
-        }
-        if (operatorObj.equals(volumelog)) {
-            return 26;
-        }
-        if (operatorObj.equals(interrupt)) {
-            return 27;
-        }
-        if (operatorObj.equals(channelstatus)) {
-            return 28;
-        }
-        if (operatorObj.equals(channellampstatus)) {
-            return 29;
-        }
-		if (operatorObj.equals(systemcustom)) {
-            return 30;
-        }
-        if (operatorObj.equals(systemupdate)) {
-            return 31;
-        }
-        return 0;
     }
 
     public String StringOperatorObj(byte operatorObj) {
@@ -221,7 +103,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         if (operatorObj == 0x10) {
             return detector;
         }
-        if (operatorObj == 0x24 || operatorObj == 0x23||operatorObj == 0x18) {
+        if (operatorObj == 0x24 || operatorObj == 0x23 || operatorObj == 0x18) {
             return allfeature;
         }
         if (operatorObj == -94) {
@@ -257,787 +139,391 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         if (operatorObj == -84) {
             return channellampstatus;
         }
-		if (operatorObj == -83) {
+        if (operatorObj == -83) {
             return systemcustom;
         }
         return null;
     }
 
+
     /**
-     * @param  sendData 发给信号机的数据
-     * @return byte[] 转换为数据表的结果
-     * @Title: PackDataSchedule
-     * @Description: 根据国标对发送数据进行协议转化（转换为数据表的结构）
+     * @return
+     * @throws
+     * @author laoxia
+     * description 设置第八个字节位数据
+     * create time 2021/8/23 13:51
      */
-    public byte[] PackDataSchedule(MessageData sendData) throws UnsupportedEncodingException {
-        String operationtype = sendData.getOperation();
-        String infotype = sendData.getInfotype();
-        switch (NumberOperatorType(operationtype)) {
-            case 1://查询请求
-                switch (NuberOperatorObj(infotype)) {
-                    case 1: //上位机发login请求
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_LOGIN;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
+    private byte dataScheduleEight(String operationType, String infoType) {
+        byte eight = (byte) 0x00;
+        switch (operationType) {
+            case getrequest:
+                switch (infoType) {
+                    case login: //上位机发login请求
+                        eight = INFO_TYPE_LOGIN;
                         //数据内容:上位机联机请求
-                        String dataLogin = null;
-                        JsonElement dataLoginObject = sendData.getData();
-                        if (dataLoginObject != null) {
-                            dataLogin = dataLoginObject.toString();
-                            byte[] dataSend = dataLogin.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
                         break;
-                    case 2: //上位机查询交通流请求
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;//链路5
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_TRAFFIC_FLOW;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
+                    case volume: //上位机查询交通流请求
+                        eight = INFO_TYPE_TRAFFIC_FLOW;
                         //数据内容:上位机查询交通流
-                        String dataVolume = null;
-                        JsonElement dataVolumeObject = sendData.getData();
-                        if (dataVolumeObject != null) {
-                            dataVolume = dataVolumeObject.toString();
-                            byte[] dataSend = dataVolume.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
                         break;
-                    case 3://工作状态查询
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_BASIC_INFO;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_WORK_STATE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataWorkStatus = null;
-                        JsonElement dataWorkStatusObject = sendData.getData();
-                        if (dataWorkStatusObject != null) {
-                            dataWorkStatus = dataWorkStatusObject.toString();
-                            byte[] dataSend = dataWorkStatus.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case workstatus://工作状态查询
+                        eight = INFO_TYPE_WORK_STATE;
                         break;
-                    case 4://灯色状态查询
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_BASIC_INFO;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_LAMP_COLOR;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataLampColor = null;
-                        JsonElement dataLampColorObject = sendData.getData();
-                        if (dataLampColorObject != null) {
-                            dataLampColor = dataLampColorObject.toString();
-                            byte[] dataSend = dataLampColor.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case lampcolor://灯色状态查询
+                        eight = INFO_TYPE_LAMP_COLOR;
                         break;
-                    case 5://查询信号机时间
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_BASIC_INFO;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_CURRENT_TIME;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataAscTime = null;
-                        JsonElement dataAscTimeObject = sendData.getData();
-                        if (dataAscTimeObject != null) {
-                            dataAscTime = dataAscTimeObject.toString();
-                            byte[] dataSend = dataAscTime.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case time://查询信号机时间
+                        eight = INFO_TYPE_CURRENT_TIME;
                         break;
-                    case 6://查询信号灯组信息
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SIGNAL_GROUP;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataSignalGroup = null;
-                        JsonElement dataSignalGroupObject = sendData.getData();
-                        if (dataSignalGroupObject != null) {
-                            dataSignalGroup = dataSignalGroupObject.toString();
-                            byte[] dataSend = dataSignalGroup.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case signalgroup://查询信号灯组信息
+                        eight = INFO_TYPE_SIGNAL_GROUP;
                         break;
-                    case 7://查询相位信息
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_PHASE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataPhase = null;
-                        JsonElement dataPhaseObject = sendData.getData();
-                        if (dataPhaseObject != null) {
-                            dataPhase = dataPhaseObject.toString();
-                            byte[] dataSend = dataPhase.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case phase://查询相位信息
+                        eight = INFO_TYPE_PHASE;
                         break;
-                    case 8://查询信号配时方案
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SCHEME_PARTTERN;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataPattern = null;
-                        JsonElement dataPatternObject = sendData.getData();
-                        if (dataPatternObject != null) {
-                            dataPattern = dataPatternObject.toString();
-                            byte[] dataSend = dataPattern.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case timepattern://查询信号配时方案
+                        eight = INFO_TYPE_SCHEME_PARTTERN;
                         break;
-                    case 9://查询方案调度计划
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SCHEDUL_PLAN;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataPlan = null;
-                        JsonElement dataPlanObject = sendData.getData();
-                        if (dataPlanObject != null) {
-                            dataPlan = dataPlanObject.toString();
-                            byte[] dataSend = dataPlan.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case scheduleplan://查询方案调度计划
+                        eight = INFO_TYPE_SCHEDUL_PLAN;
                         break;
-                    case 10://查询工作方式
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_INTER_ORDER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_WORK_MODE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataWorkMode = null;
-                        JsonElement dataWorkModeObject = sendData.getData();
-                        if (dataWorkModeObject != null) {
-                            dataWorkMode = dataWorkModeObject.toString();
-                            byte[] dataSend = dataWorkMode.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case workmode://查询工作方式
+                        eight = INFO_TYPE_WORK_MODE;
                         break;
-                    case 11://查询信号机故障
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_BASIC_INFO;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SIGNAL_ERROR;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataAscError = null;
-                        JsonElement dataAscErrorObject = sendData.getData();
-                        if (dataAscErrorObject != null) {
-                            dataAscError = dataAscErrorObject.toString();
-                            byte[] dataSend = dataAscError.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case falut://查询信号机故障
+                        eight = INFO_TYPE_SIGNAL_ERROR;
                         break;
-                    case 12://查询信号机版本
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_BASIC_INFO;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_ATC_VERSION;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataAscVersion = null;
-                        JsonElement dataAscVersionObject = sendData.getData();
-                        if (dataAscVersionObject != null) {
-                            dataAscVersion = dataAscVersionObject.toString();
-                            byte[] dataSend = dataAscVersion.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case atcversion://查询信号机版本
+                        eight = INFO_TYPE_ATC_VERSION;
                         break;
-                    case 13://查询特征参数版本
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_INTER_ORDER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_PARAM_VERSION;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataParamVersion = null;
-                        JsonElement dataParamVersionObject = sendData.getData();
-                        if (dataParamVersionObject != null) {
-                            dataParamVersion = dataParamVersionObject.toString();
-                            byte[] dataSend = dataParamVersion.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case paramversion://查询特征参数版本
+                        eight = INFO_TYPE_PARAM_VERSION;
                         break;
-                    case 14://信号机识别码
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_INTER_ORDER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_IDENTIFY_CODE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataIdentifyCode = null;
-                        JsonElement dataIdentifyCodeObject = sendData.getData();
-                        if (dataIdentifyCodeObject != null) {
-                            dataIdentifyCode = dataIdentifyCodeObject.toString();
-                            byte[] dataSend = dataIdentifyCode.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case code://信号机识别码
+                        eight = INFO_TYPE_IDENTIFY_CODE;
                         break;
-                    case 16://检测器
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_INTER_ORDER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_DETECTOR;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataDetector = null;
-                        JsonElement dataDetectorObject = sendData.getData();
-                        if (dataDetectorObject != null) {
-                            dataDetector = dataDetectorObject.toString();
-                            byte[] dataSend = dataDetector.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case detector://检测器
+                        eight = INFO_TYPE_DETECTOR;
                         break;
-                    case 17://查询整体参数feature/all
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONFIG;//配置软件和信号机的参数命令
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = CFG_ASK_ASKREAD;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataAllFeature = null;
-                        JsonElement dataAllFeatureObject = sendData.getData();
-                        if (dataAllFeatureObject != null) {
-                            dataAllFeature = dataAllFeatureObject.toString();
-                            byte[] dataSend = dataAllFeature.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case allfeature://查询整体参数feature/all
+                        eight = CFG_ASK_ASKREAD;
                         break;
-                    case 18:// 查询方案状态
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONFIG;// 配置软件和信号机的参数命令
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_FEATURE_STATUS;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataPatternStatus = null;
-                        JsonElement dataPatternStatusObject = sendData.getData();
-                        if (dataPatternStatusObject != null) {
-                            dataPatternStatus = dataPatternStatusObject.toString();
-                            byte[] dataSend = dataPatternStatus.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case manualpanel:// 查询手动面板
+                        eight = INFO_TYPE_MANUALPANEL;
                         break;
-                    case 21:// 查询手动面板
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_MANUALPANEL;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataMannelPanel = null;
-                        JsonElement dataMannelPanelObject = sendData.getData();
-                        if (dataMannelPanelObject != null) {
-                            dataMannelPanel = dataMannelPanelObject.toString();
-                            byte[] dataSend = dataMannelPanel.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case systemremote:// 查询远程调试
+                        eight = INFO_TYPE_SYSTEM_REMOTE;
                         break;
-                    case 23:// 查询远程调试
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SYSTEM_REMOTE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataSystemRemote = null;
-                        JsonElement dataSystemRemoteObject = sendData.getData();
-                        if (dataSystemRemoteObject != null) {
-                            dataSystemRemote = dataSystemRemoteObject.toString();
-                            byte[] dataSend = dataSystemRemote.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case systemlog:// 查询操作日志
+                        eight = INFO_TYPE_SYSTEM_LOG;
                         break;
-                    case 24:// 查询操作日志
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SYSTEM_LOG;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataSystemLog = null;
-                        JsonElement dataSystemLogObject = sendData.getData();
-                        if (dataSystemLogObject != null) {
-                            dataSystemLog = dataSystemLogObject.toString();
-                            byte[] dataSend = dataSystemLog.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case channelstatus:// 查询通道状态（电压电流）
+                        eight = INFO_TYPE_CHANNEL_STATUS;
                         break;
-                    case 28:// 查询通道状态（电压电流）
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_CHANNEL_STATUS;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataChannelStatus = null;
-                        JsonElement dataChannelStatusObject = sendData.getData();
-                        if (dataChannelStatusObject != null) {
-                            dataChannelStatus = dataChannelStatusObject.toString();
-                            byte[] dataSend = dataChannelStatus.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case channellampstatus:// 查询通道灯色状态
+                        eight = INFO_TYPE_CHANNEL_LAMP_STATUS;
                         break;
-                    case 29:// 查询通道灯色状态
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_CHANNEL_LAMP_STATUS;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataChannelLampStatus = null;
-                        JsonElement dataChannelLampStatusObject = sendData.getData();
-                        if (dataChannelLampStatusObject != null) {
-                            dataChannelLampStatus = dataChannelLampStatusObject.toString();
-                            byte[] dataSend = dataChannelLampStatus.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
-                        break;
-					case 30:// 查询设备参数
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_QUERY_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SYSTEM_CUSTOM;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataSystemCustom = null;
-                        JsonElement dataSystemCustomObject = sendData.getData();
-                        if (dataSystemCustomObject != null) {
-                            dataSystemCustom = dataSystemCustomObject.toString();
-                            byte[] dataSend = dataSystemCustom.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case systemcustom:// 查询设备参数
+                        eight = INFO_TYPE_SYSTEM_CUSTOM;
                         break;
                     default:
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        //异常处理
                 }
                 break;
-            case 2://设置请求
-                switch (NuberOperatorObj(infotype)) {
-                    case 5://设置时间
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_BASIC_INFO;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_CURRENT_TIME;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
+            case setrequest:
+                switch (infoType) {
+                    case time://设置时间
+                        eight = INFO_TYPE_CURRENT_TIME;
+                        break;
+                    case signalgroup://设置信号灯组
+                        eight = INFO_TYPE_SIGNAL_GROUP;
+                        break;
+                    case phase://相位设置
+                        eight = INFO_TYPE_PHASE;
+                        break;
+                    case timepattern://配时方案设置
+                        eight = INFO_TYPE_SCHEME_PARTTERN;
+                        break;
+                    case scheduleplan://方案调度计划
+                        eight = INFO_TYPE_SCHEDUL_PLAN;
+                        break;
+                    case workmode://工作方式设置
+                        eight = INFO_TYPE_WORK_MODE;
+                        break;
+                    case paramversion://特征参数版本设置
+                        eight = INFO_TYPE_PARAM_VERSION;
+                        break;
+                    case remote://远程控制设置
+                        eight = INFO_TYPE_REMOTE_CONTROL;
+                        break;
+                    case detector://检测器设置
+                        eight = INFO_TYPE_DETECTOR;
+                        break;
+                    case allfeature://下载整体参数
+                        eight = CFG_ASK_SENDDATA;
+                        break;
+                    case manualpanel://手动面板设置
+                        eight = INFO_TYPE_MANUALPANEL;
+                        break;
+                    case updatedisk://U盘更新
+                        eight = INFO_TYPE_UPDATEUDISK;
+                        break;
+                    case systemremote://远程调试
+                        eight = INFO_TYPE_SYSTEM_REMOTE;
+                        break;
+                    case channelcheck://通道检测
+                        eight = INFO_TYPE_SYSTEM_CHANNEL_CHECK;
+                        break;
+                    case volumelog://流量日志获取
+                        eight = INFO_TYPE_VOLUMELOG;
+                        break;
+                    case interrupt://方案干预
+                        eight = INFO_TYPE_PATTERN_INTERRUPT;
+                        break;
+                    case systemcustom://下载设备参数
+                        eight = INFO_TYPE_SYSTEM_CUSTOM;
+                        break;
+                    case systemupdate://设备更新
+                        eight = INFO_TYPE_SYSTEM_UPDATE;
+                        break;
+                    default:
+                }
+                break;
+            case getresponse://设置应答
+                eight = INFO_TYPE_ONLINE;
+                break;
+            case setresponse://查询应答
+                eight = INFO_TYPE_ONLINE;
+                break;
+            default:
+        }
+        return eight;
+    }
+
+    /**
+     * @return
+     * @throws
+     * @author laoxia
+     * description 设置第七个字节位数据
+     * create time 2021/8/23 13:51
+     */
+    private byte dataScheduleSeven(String operationType, String infoType) {
+        byte seven = (byte) 0x00;
+        switch (operationType) {
+            case getrequest:
+                switch (infoType) {
+                    case login:
+                        seven = OPERATE_TYPE_SET_REQUEST;
+                        break;
+                    default:
+                        seven = OPERATE_TYPE_QUERY_REQUEST;
+                }
+                break;
+            case setrequest:
+                seven = OPERATE_TYPE_SET_REQUEST;
+                break;
+            case getresponse:
+                seven = OPERATE_TYPE_SET_ANSWER;
+                break;
+            case setresponse:
+                seven = OPERATE_TYPE_SET_REQUEST;
+                break;
+            default:
+        }
+        return seven;
+    }
+
+    /**
+     * @return
+     * @throws
+     * @author laoxia
+     * description 设置第三个字节位数据
+     * create time 2021/8/23 13:51
+     */
+    private byte dataScheduleThree(String operationType, String infoType) {
+        byte three = (byte) 0x00;
+        switch (operationType) {
+            case getrequest:
+                switch (infoType) {
+                    case login: //上位机发login请求
+                        three = DATA_LINK_CONTROL;
+                        //数据内容:上位机联机请求
+                        break;
+                    case volume: //上位机查询交通流请求
+                        three = DATA_LINK_CONTROL;//链路5
+                        //数据内容:上位机查询交通流
+                        break;
+                    case workstatus://工作状态查询
+                        three = DATA_LINK_BASIC_INFO;
+                        break;
+                    case lampcolor://灯色状态查询
+                        three = DATA_LINK_BASIC_INFO;
+                        break;
+                    case time://查询信号机时间
+                        three = DATA_LINK_BASIC_INFO;
+                        break;
+                    case signalgroup://查询信号灯组信息
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case phase://查询相位信息
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case timepattern://查询信号配时方案
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case scheduleplan://查询方案调度计划
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case workmode://查询工作方式
+                        three = DATA_LINK_INTER_ORDER;
+                        break;
+                    case falut://查询信号机故障
+                        three = DATA_LINK_BASIC_INFO;
+                        break;
+                    case atcversion://查询信号机版本
+                        three = DATA_LINK_BASIC_INFO;
+                        break;
+                    case paramversion://查询特征参数版本
+                        three = DATA_LINK_INTER_ORDER;
+                        break;
+                    case code://信号机识别码
+                        three = DATA_LINK_INTER_ORDER;
+                        break;
+                    case detector://检测器
+                        three = DATA_LINK_INTER_ORDER;
+                        break;
+                    case allfeature://查询整体参数feature/all
+                        three = DATA_LINK_CONFIG;//配置软件和信号机的参数命令
+                        break;
+                    case manualpanel:// 查询手动面板
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case systemremote:// 查询远程调试
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case systemlog:// 查询操作日志
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case channelstatus:// 查询通道状态（电压电流）
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case channellampstatus:// 查询通道灯色状态
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case systemcustom:// 查询设备参数
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    default:
+                }
+                break;
+            case setrequest:
+                switch (infoType) {
+                    case time://设置时间
+                        three = DATA_LINK_BASIC_INFO;
+                        break;
+                    case signalgroup://设置信号灯组
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case phase://相位设置
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case timepattern://配时方案设置
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case scheduleplan://方案调度计划
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case workmode://工作方式设置
+                        three = DATA_LINK_INTER_ORDER;
+                        break;
+                    case paramversion://特征参数版本设置
+                        three = DATA_LINK_INTER_ORDER;
+                        break;
+                    case remote://远程控制设置
+                        three = DATA_LINK_INTER_ORDER;
+                        break;
+                    case detector://检测器设置
+                        three = DATA_LINK_INTER_ORDER;
+                        break;
+                    case allfeature://下载整体参数
+                        three = DATA_LINK_CONFIG;
+                        break;
+                    case manualpanel://手动面板设置
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case updatedisk://U盘更新
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case systemremote://远程调试
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case channelcheck://通道检测
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case volumelog://流量日志获取
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case interrupt://方案干预
+                        three = DATA_LINK_CONTROL;
+                        break;
+                    case systemcustom://下载设备参数
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    case systemupdate://设备更新
+                        three = DATA_LINK_PARAM_TRAMFER;
+                        break;
+                    default:
+                }
+                break;
+            case getresponse://设置应答
+                three = DATA_LINK_COMMU_SPE;
+                break;
+            case setresponse://查询应答
+                three = DATA_LINK_COMMU_SPE;
+                break;
+            default:
+        }
+        return three;
+    }
+
+
+    private void operationType(MessageData sendData) throws UnsupportedEncodingException {
+        String operationType = sendData.getOperation();
+        String infoType = sendData.getInfotype();
+        switch (operationType) {
+            case getrequest:
+                AddMsgToData(sendData);
+                break;
+            case setrequest://设置请求
+                switch (infoType) {
+                    case time://设置时间
                         //数据内容:据格林尼治时间
-                        String dataTime = null;
-                        JsonElement dataTimeObject = sendData.getData();
-                        if (dataTimeObject != null) {
-                            dataTime = dataTimeObject.toString();
-                            byte[] dataSend = dataTime.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                        AddMsgToData(sendData);
                         break;
-                    case 6://设置信号灯组
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SIGNAL_GROUP;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataChannel = null;
-                        JsonElement dataChannelObject = sendData.getData();
-                        if (dataChannelObject != null) {
-                            dataChannel = dataChannelObject.toString();
-                            byte[] dataSend = dataChannel.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case signalgroup://设置信号灯组
+                        AddMsgToData(sendData);
                         break;
-                    case 7://相位设置
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_PHASE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataPhase = null;
-                        JsonElement dataPhaseObject = sendData.getData();
-                        if (dataPhaseObject != null) {
-                            dataPhase = dataPhaseObject.toString();
-                            byte[] dataSend = dataPhase.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case phase://相位设置
+                        AddMsgToData(sendData);
                         break;
-                    case 8://配时方案设置
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SCHEME_PARTTERN;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataPattern = null;
-                        JsonElement dataPatternObject = sendData.getData();
-                        if (dataPatternObject != null) {
-                            dataPattern = dataPatternObject.toString();
-                            byte[] dataSend = dataPattern.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case timepattern://配时方案设置
+                        AddMsgToData(sendData);
                         break;
-                    case 9://方案调度计划
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SCHEDUL_PLAN;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //
-                        String dataPlan = null;
-                        JsonElement dataPlanObject = sendData.getData();
-                        if (dataPlanObject != null) {
-                            dataPlan = dataPlanObject.toString();
-                            byte[] dataSend = dataPlan.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case scheduleplan://方案调度计划
+                        AddMsgToData(sendData);
                         break;
-                    case 10://工作方式设置
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_INTER_ORDER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_WORK_MODE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        String dataMode = null;
-                        JsonElement dataModeObject = sendData.getData();
-                        if (dataModeObject != null) {
-                            dataMode = dataModeObject.toString();
-                            byte[] dataSend = dataMode.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case workmode://工作方式设置
+                        AddMsgToData(sendData);
                         break;
-                    case 13://特征参数版本设置
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_INTER_ORDER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_PARAM_VERSION;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String dataParamVersion = null;
-                        JsonElement dataParamVersionObject = sendData.getData();
-                        if (dataParamVersionObject != null) {
-                            dataParamVersion = dataParamVersionObject.toString();
-                            byte[] dataSend = dataParamVersion.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case paramversion://特征参数版本设置
+                        AddMsgToData(sendData);
                         break;
-                    case 15://远程控制设置
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_INTER_ORDER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_REMOTE_CONTROL;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String dataRemote = null;
-                        JsonElement dataRemotenObject = sendData.getData();
-                        if (dataRemotenObject != null) {
-                            dataRemote = dataRemotenObject.toString();
-                            byte[] dataSend = dataRemote.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case remote://远程控制设置
+                        AddMsgToData(sendData);
                         break;
-                    case 16://检测器设置
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_INTER_ORDER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_DETECTOR;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String dataDetector = null;
-                        JsonElement dataDetectorObject = sendData.getData();
-                        if (dataDetectorObject != null) {
-                            dataDetector = dataDetectorObject.toString();
-                            byte[] dataSend = dataDetector.getBytes("UTF-8");
-                            int dataSendCount = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                        }
+                    case detector://检测器设置
+                        AddMsgToData(sendData);
                         break;
-                    case 17://下载整体参数
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONFIG;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = CFG_ASK_SENDDATA;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
+                    case allfeature://下载整体参数
                         //数据内容
                         byte[] dataSizeFlag = new byte[4];
                         int dataSendCount = 0;
@@ -1055,7 +541,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             char stchar4 = '\r';
                             char stchar5 = '\n';
                             char stchar6 = '\b';
-                            StringBuffer stringBuffer = new StringBuffer("");
+                            StringBuffer stringBuffer = new StringBuffer();
                             for (int i = 0; i < datastr1.length(); i++) {
                                 if (datastr1.charAt(i) != stchar && datastr1.charAt(i) != stchar1 && datastr1.charAt(i) != stchar2 && datastr1.charAt(i) != stchar3 && datastr1.charAt(i) != stchar4 && datastr1.charAt(i) != stchar5 && datastr1.charAt(i) != stchar6) {
                                     stringBuffer.append(datastr1.charAt(i));
@@ -1064,15 +550,10 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             datastr = stringBuffer.toString();
                         }
                         DataParamMD5 dataMD5 = new DataParamMD5();
-
                         String datamd5value = dataMD5.getMD5(datastr);
                         MessageDataMD5 md5data = new MessageDataMD5(messageData);
                         md5data.setMd5(datamd5value);
                         dataSetAllParam = gson.toJson(md5data);
-
-                        //String s = JSON.toJSONString(sendData);
-//                        String AllParamJson= toFormat(dataSetAllParam,true,true);
-
                         if (dataSetAllParam != null) {
                             byte[] dataSend = dataSetAllParam.getBytes("UTF-8");
                             dataSendCount = dataSend.length;
@@ -1084,169 +565,30 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             dataSchdule[i + 10] = dataSizeFlag[i];
                         }
                         break;
-                    case 21://手动面板设置
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_MANUALPANEL;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String manualPanel = null;
-                        JsonElement manualPanelObject = sendData.getData();
-                        if (manualPanelObject != null) {
-                            manualPanel = manualPanelObject.toString();
-                            byte[] dataSend = manualPanel.getBytes("UTF-8");
-                            int dataSendSize = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendSize + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendSize);
-                        }
+                    case manualpanel://手动面板设置
+                        AddMsgToData(sendData);
                         break;
-                    case 22://U盘更新
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_UPDATEUDISK;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String udiskupdate = null;
-                        JsonElement udiskupdateObject = sendData.getData();
-                        if (udiskupdateObject != null) {
-                            udiskupdate = udiskupdateObject.toString();
-                            byte[] dataSend = udiskupdate.getBytes("UTF-8");
-                            int dataSendSize = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendSize + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendSize);
-                        }
+                    case updatedisk://U盘更新
+                        AddMsgToData(sendData);
                         break;
-                    case 23://远程调试
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SYSTEM_REMOTE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String systemRemote = null;
-                        JsonElement systemRemoteObject = sendData.getData();
-                        if (systemRemoteObject != null) {
-                            systemRemote = systemRemoteObject.toString();
-                            byte[] dataSend = systemRemote.getBytes("UTF-8");
-                            int dataSendSize = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendSize + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendSize);
-                        }
+                    case systemremote://远程调试
+                        AddMsgToData(sendData);
                         break;
-                    case 25://通道检测
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SYSTEM_CHANNEL_CHECK;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String strChannelCheck = null;
-                        JsonElement strChannelCheckObject = sendData.getData();
-                        if (strChannelCheckObject != null) {
-                            strChannelCheck = strChannelCheckObject.toString();
-                            byte[] dataSend = strChannelCheck.getBytes("UTF-8");
-                            int dataSendSize = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendSize + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendSize);
-                        }
+                    case channelcheck://通道检测
+                        AddMsgToData(sendData);
                         break;
-                    case 26://流量日志获取
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_VOLUMELOG;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String strVolumeLog = null;
-                        JsonElement strVolumeLogObject = sendData.getData();
-                        if (strVolumeLogObject != null) {
-                            strVolumeLog = strVolumeLogObject.toString();
-                            byte[] dataSend = strVolumeLog.getBytes("UTF-8");
-                            int dataSendSize = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendSize + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendSize);
-                        }
+                    case volumelog://流量日志获取
+                        AddMsgToData(sendData);
                         break;
-                    case 27://方案干预
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_CONTROL;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_PATTERN_INTERRUPT;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
-                        String strInterrupt = null;
-                        JsonElement strInterruptObject = sendData.getData();
-                        if (strInterruptObject != null) {
-                            strInterrupt = strInterruptObject.toString();
-                            byte[] dataSend = strInterrupt.getBytes("UTF-8");
-                            int dataSendSize = dataSend.length;
-                            dataSchdule = Arrays.copyOf(dataSchdule, dataSendSize + 14);
-                            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendSize);
-                        }
+                    case interrupt://方案干预
+                        AddMsgToData(sendData);
                         break;
-                    case 30://下载设备参数
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SYSTEM_CUSTOM;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
-                        //数据内容
+                    case systemcustom://下载设备参数
                         String dataSetSystemCustomParam = null;
                         dataSizeFlag = new byte[4];
                         dataSendCount = 0;
                         JsonElement strSetSystemCustomParam = sendData.getData();
-                        if(strSetSystemCustomParam != null){
+                        if (strSetSystemCustomParam != null) {
                             dataSetSystemCustomParam = strSetSystemCustomParam.toString();
                             if (dataSetSystemCustomParam != null) {
                                 byte[] dataSend = dataSetSystemCustomParam.getBytes("UTF-8");
@@ -1260,25 +602,13 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                             }
                         }
                         break;
-                    case 31://设备更新
-                        Arrays.fill(dataSchdule, (byte) 0);
-                        dataSchdule[0] = CB_VERSION_FLAG;
-                        dataSchdule[1] = CB_RECEIVE_FLAG;
-                        dataSchdule[2] = CB_SEND_FLAG;
-                        dataSchdule[3] = DATA_LINK_PARAM_TRAMFER;
-                        dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                        dataSchdule[8] = INFO_TYPE_SYSTEM_UPDATE;
-                        dataSchdule[9] = RESERVE_FLAG;
-                        dataSchdule[10] = 0x00;
-                        dataSchdule[11] = 0x00;
-                        dataSchdule[12] = 0x00;
-                        dataSchdule[13] = 0x00;
+                    case systemupdate://设备更新
                         //数据内容
                         String systemupdateStr = null;
                         dataSizeFlag = new byte[4];
                         dataSendCount = 0;
                         JsonElement systemupdateJson = sendData.getData();
-                        if(systemupdateJson != null){
+                        if (systemupdateJson != null) {
                             systemupdateStr = systemupdateJson.toString();
                             if (systemupdateStr != null) {
                                 byte[] dataSend = systemupdateStr.getBytes("UTF-8");
@@ -1293,23 +623,10 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                         }
                         break;
                     default:
-                        Arrays.fill(dataSchdule, (byte) 0);
                 }
                 break;
-            case 3://设置应答
-                if (infotype.equals(login)) {
-                    Arrays.fill(dataSchdule, (byte) 0);
-                    dataSchdule[0] = CB_VERSION_FLAG;
-                    dataSchdule[1] = CB_RECEIVE_FLAG;
-                    dataSchdule[2] = CB_SEND_FLAG;
-                    dataSchdule[3] = DATA_LINK_COMMU_SPE;
-                    dataSchdule[7] = OPERATE_TYPE_SET_ANSWER;
-                    dataSchdule[8] = INFO_TYPE_ONLINE;
-                    dataSchdule[9] = RESERVE_FLAG;
-                    dataSchdule[10] = 0x00;
-                    dataSchdule[11] = 0x00;
-                    dataSchdule[12] = 0x00;
-                    dataSchdule[13] = 0x00;
+            case getresponse://设置应答
+                if (infoType.equals(login)) {
                     //无数据统一留一个字节
                     byte[] nodata14 = new byte[1];
                     nodata14[0] = 0x00;
@@ -1317,20 +634,8 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     System.arraycopy(nodata14, 0, dataSchdule, 14, 1);
                 }
                 break;
-            case 4://查询应答
-                if (infotype.equals(login)) {
-                    Arrays.fill(dataSchdule, (byte) 0);
-                    dataSchdule[0] = CB_VERSION_FLAG;
-                    dataSchdule[1] = CB_RECEIVE_FLAG;
-                    dataSchdule[2] = CB_SEND_FLAG;
-                    dataSchdule[3] = DATA_LINK_COMMU_SPE;
-                    dataSchdule[7] = OPERATE_TYPE_SET_REQUEST;
-                    dataSchdule[8] = INFO_TYPE_ONLINE;
-                    dataSchdule[9] = RESERVE_FLAG;
-                    dataSchdule[10] = 0x00;
-                    dataSchdule[11] = 0x00;
-                    dataSchdule[12] = 0x00;
-                    dataSchdule[13] = 0x00;
+            case setresponse://查询应答
+                if (infoType.equals(login)) {
                     //无数据统一留一个字节
                     byte[] nodata15 = new byte[1];
                     nodata15[0] = 0x00;
@@ -1339,48 +644,78 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 }
                 break;
             default:
-                Arrays.fill(dataSchdule, (byte) 0);
         }
-        return dataSchdule.clone();//待思考
+    }
+
+    /**
+     * 重复代码提取
+     * 将数据填充到dataSchdule
+     *
+     * @param sendData
+     */
+    public void AddMsgToData(MessageData sendData) throws UnsupportedEncodingException {
+        String data;
+        JsonElement dataLoginObject = sendData.getData();
+        if (dataLoginObject != null) {
+            data = dataLoginObject.toString();
+            byte[] dataSend = data.getBytes("UTF-8");
+            int dataSendCount = dataSend.length;
+            dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
+            System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
+        }
+    }
+
+    /**
+     * @param sendData 发给信号机的数据
+     * @return byte[] 转换为数据表的结果
+     * @Title: PackDataSchedule
+     * @Description: 根据国标对发送数据进行协议转化（转换为数据表的结构）
+     */
+    public byte[] PackDataSchedule(MessageData sendData) throws UnsupportedEncodingException {
+        String operationType = sendData.getOperation();
+        String infoType = sendData.getInfotype();
+        Arrays.fill(dataSchdule, (byte) 0);
+        dataSchdule[0] = CB_VERSION_FLAG;
+        dataSchdule[1] = CB_RECEIVE_FLAG;
+        dataSchdule[2] = CB_SEND_FLAG;
+        dataSchdule[3] = dataScheduleThree(operationType, infoType);
+        dataSchdule[7] = dataScheduleSeven(operationType, infoType);
+        dataSchdule[8] = dataScheduleEight(operationType, infoType);
+        dataSchdule[9] = RESERVE_FLAG;
+        dataSchdule[10] = 0x00;
+        dataSchdule[11] = 0x00;
+        dataSchdule[12] = 0x00;
+        dataSchdule[13] = 0x00;
+        operationType(sendData);
+        return dataSchdule.clone();
     }
 
     //应答信号的数据表
     public byte[] AskPackDataSchedule(MessageData sendData) {
         String operationtype = sendData.getOperation();
         String infotype = sendData.getInfotype();
-        switch (NumberOperatorType(operationtype)) {
-
-            case 2://设置应答
+        dataSchdule[0] = CB_VERSION_FLAG;
+        dataSchdule[1] = CB_RECEIVE_FLAG;
+        dataSchdule[2] = CB_SEND_FLAG;
+        dataSchdule[9] = RESERVE_FLAG;
+        dataSchdule[10] = 0x00;
+        dataSchdule[11] = 0x00;
+        dataSchdule[12] = 0x00;
+        dataSchdule[13] = 0x00;
+        switch (operationtype) {
+            case setrequest://设置应答
                 if (infotype.equals(login)) {
-                    Arrays.fill(dataSchdule, (byte) 0);
-                    dataSchdule[0] = CB_VERSION_FLAG;
-                    dataSchdule[1] = CB_RECEIVE_FLAG;
-                    dataSchdule[2] = CB_SEND_FLAG;
                     dataSchdule[3] = DATA_LINK_COMMU_SPE;
                     dataSchdule[7] = OPERATE_TYPE_SET_ANSWER;
                     dataSchdule[8] = INFO_TYPE_ONLINE;
-                    dataSchdule[9] = RESERVE_FLAG;
-                    dataSchdule[10] = 0x00;
-                    dataSchdule[11] = 0x00;
-                    dataSchdule[12] = 0x00;
-                    dataSchdule[13] = 0x00;
                 }
                 break;
-            case 5:
+            case report:
                 //查询应答
                 if (infotype.equals(login)) {
-                    Arrays.fill(dataSchdule, (byte) 0);
-                    dataSchdule[0] = CB_VERSION_FLAG;
-                    dataSchdule[1] = CB_RECEIVE_FLAG;
-                    dataSchdule[2] = CB_SEND_FLAG;
                     dataSchdule[3] = DATA_LINK_COMMU_SPE;
                     dataSchdule[7] = OPERATE_TYPE_SET_ANSWER;
                     dataSchdule[8] = INFO_TYPE_ONLINE;
-                    dataSchdule[9] = RESERVE_FLAG;
-                    dataSchdule[10] = 0x00;
-                    dataSchdule[11] = 0x00;
-                    dataSchdule[12] = 0x00;
-                    dataSchdule[13] = 0x00;
 //                    //无数据统一留一个字节
 //                    byte[] nodata15=new byte[1];
 //                    nodata15[0]=0x00;
@@ -1389,21 +724,290 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 }
                 break;
             default:
-                Arrays.fill(dataSchdule, (byte) 0);
+
         }
         return dataSchdule.clone();//待思考
     }
 
     /**
-     * @param  recvData 返还上位机参数，pSource 待解析数据表数据， SourceLength 数据表有效长度
+     * @param recvData 还上位机参数
+     * @param tempData
+     */
+    public void SetDataTorecvData(MessageData recvData, String tempData, Gson recvDataJson) {
+        if (tempData != null) {
+            JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+            recvData.setData(obj);
+        }
+        if (tempData == null) {
+            tempData = "{\n" +
+                    "\t\"sucess\": 1\n" +
+                    "}";
+            JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+            recvData.setData(obj);
+        }
+    }
+
+
+    /**
+     * @return 1->成功  3->失败
+     * @Description 数据检查
+     * @Date 2021/8/23 15:27
+     */
+    private int checkDataLink(byte chDataLink, byte chOperateType, byte chInfoType, Gson recvDataJson, String tempData, MessageData recvData) {
+        if (chDataLink == DATA_LINK_CONTROL)//配置软件和信号的命令链路
+        {
+            //信号机应答联机kedacom
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_LOGIN_REQUEST)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机应答操作日志
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_LOG)) {
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答通道状态(电压、电流)
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_CHANNEL_STATUS)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机应答通道灯色
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_CHANNEL_LAMP_STATUS)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机应答通道可检测
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CHANNEL_CHECK)) {
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答方案干预
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PATTERN_INTERRUPT)) {
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答流量日志获取环境状态
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_VOLUMELOG)) {
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答当前交通流量查询
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_TRAFFIC_FLOW)) {
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答手动面板参数设置
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_MANUALPANEL)) {
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答手动面板参数设置
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_MANUALPANEL)) {
+                return ReadDataScheduleSuccess;
+            }
+            //配工具应答U盘更新
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_UPDATEUDISK)) {
+                return ReadDataScheduleSuccess;
+            }
+
+            //信号机应答远程调试设置
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_REMOTE)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机应答远程调试查询
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_REMOTE)) {
+                return ReadDataScheduleSuccess;
+            }
+        }
+
+        if (chDataLink == DATA_LINK_CONFIG)//配置软件和信号机的参数链路
+        {
+            //信号机应答整体参数查询
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == CFG_ACK_ASKSEND)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机应答整体参数设置成功
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == CFG_ACK_SENDDATA_OK)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机应答整体参数设置
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == CFG_ACK_SENDDATA_FAILED)) {
+                recvData.setOperation(StringOperatorType(OPERATE_TYPE_ERROR_ANSWER));
+                return ReadDataScheduleSuccess;
+            }
+        }
+        if (chDataLink == DATA_LINK_COMMU_SPE) {
+            //联机请求
+            if ((chOperateType == OPERATE_TYPE_SET_REQUEST) && (chInfoType == INFO_TYPE_ONLINE)) {
+                recvData.setOperation(StringOperatorType(OPERATE_TYPE_REPORT));
+                return ReadDataScheduleSuccess;
+            }
+            //联机查询
+            if ((chOperateType == OPERATE_TYPE_QUERY_REQUEST) && (chInfoType == INFO_TYPE_ONLINE)) {
+                return ReadDataScheduleSuccess;
+            }
+        }
+        if (chDataLink == DATA_LINK_BASIC_INFO) {///////链路2 主动上传
+            //交通流信息主动上传
+            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_TRAFFIC_FLOW)) {
+                if (tempData != null) {
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+            //信号机工作状态主动上传
+            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_WORK_STATE)) {
+                if (tempData != null) {
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+            //灯色状态主动上传
+            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_LAMP_COLOR)) {
+                if (tempData != null) {
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+            //信号机工作状态查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_WORK_STATE)) {
+                return ReadDataScheduleSuccess;
+            }
+            //灯色状态查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_LAMP_COLOR)) {
+                return ReadDataScheduleSuccess;
+            }
+            //时间查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == 0x05)) {
+                return ReadDataScheduleSuccess;
+            }
+            //时间设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == 0x05)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机故障查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_ERROR)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机故障主动上传
+            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_SIGNAL_ERROR)) {
+                if (tempData != null) {
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+            //信号机版本查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_ATC_VERSION)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机版本主动上传
+            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_ATC_VERSION)) {
+                if (tempData != null) {
+                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    recvData.setData(obj);
+                }
+                return ReadDataScheduleSuccess;
+            }
+        }
+        if (chDataLink == DATA_LINK_PARAM_TRAMFER) {
+            //信号灯组查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_GROUP)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号灯组设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_GROUP)) {
+                return ReadDataScheduleSuccess;
+            }
+
+            //设备参数查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
+                return ReadDataScheduleSuccess;
+            }
+            //设备参数设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
+                return ReadDataScheduleSuccess;
+            }
+            //设备参数设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_UPDATE)) {
+                return ReadDataScheduleSuccess;
+            }
+            //相位查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_PHASE)) {
+                return ReadDataScheduleSuccess;
+            }
+            //相位设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PHASE)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号配时方案查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SCHEME_PARTTERN)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号配时方案设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SCHEME_PARTTERN)) {
+                return ReadDataScheduleSuccess;
+            }
+            //方案调度计划查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SCHEDUL_PLAN)) {
+                return ReadDataScheduleSuccess;
+            }
+            //方案调度计划设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SCHEDUL_PLAN)) {
+                return ReadDataScheduleSuccess;
+            }
+        }
+        if (chDataLink == DATA_LINK_INTER_ORDER) {
+            //工作方式查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_WORK_MODE)) {
+                return ReadDataScheduleSuccess;
+            }
+            //工作方式设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_WORK_MODE)) {
+                return ReadDataScheduleSuccess;
+            }
+            //特征参数版本查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_PARAM_VERSION)) {
+                return ReadDataScheduleSuccess;
+            }
+            //特征参数版本设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PARAM_VERSION)) {
+                return ReadDataScheduleSuccess;
+            }
+            //信号机识别码查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_IDENTIFY_CODE)) {
+                return ReadDataScheduleSuccess;
+            }
+            //远程控制查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_REMOTE_CONTROL)) {
+                return ReadDataScheduleSuccess;
+            }
+            //远程控制设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_REMOTE_CONTROL)) {
+                return ReadDataScheduleSuccess;
+            }
+            //检测器查询应答
+            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_DETECTOR)) {
+                return ReadDataScheduleSuccess;
+            }
+            //检测器设置应答
+            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_DETECTOR)) {
+                return ReadDataScheduleSuccess;
+            }
+        }
+        return ReadDataScheduleFault;
+    }
+
+    /**
+     * @param recvData 返还上位机参数,pSource 待解析数据表数据, SourceLength 数据表有效长度
      * @return int  数据表解析状态
      * @Title: ReadDataSchedule
      * @Description: 对数据表进行解析，并将解析内容转发配置软件
      */
     public int ReadDataSchedule(MessageData recvData, byte[] dataSchedule, int dataScheduleSize) throws UnsupportedEncodingException {
-        byte[] pDest = null;
+        byte[] pDest;
         byte[] pRoadID = new byte[4];
-        String roadID = null;
+        String roadID;
         String tempData = null;
         if (dataScheduleSize > 14) {
             pDest = new byte[dataScheduleSize - 14];
@@ -1423,933 +1027,19 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         byte chDataLink = dataSchedule[3];
         byte chOperateType = dataSchedule[7];
         byte chInfoType = dataSchedule[8];
-        if (chDataLink == DATA_LINK_CONTROL)//配置软件和信号的命令链路
-        {
-            //信号机应答联机kedacom
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_LOGIN_REQUEST)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setThirdpartyid(roadID);
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机应答操作日志
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_LOG)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setThirdpartyid(roadID);
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
 
-            //信号机应答通道状态(电压、电流)
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_CHANNEL_STATUS)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setThirdpartyid(roadID);
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机应答通道灯色
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_CHANNEL_LAMP_STATUS)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setThirdpartyid(roadID);
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机应答通道可检测
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CHANNEL_CHECK)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setThirdpartyid(roadID);
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
+        recvData.setOperation(StringOperatorType(chOperateType));
+        recvData.setThirdpartyid(roadID);
+        recvData.setInfotype(StringOperatorObj(chInfoType));
+        Gson recvDataJson = new Gson();
+        SetDataTorecvData(recvData, tempData, recvDataJson);
 
-            //信号机应答方案干预
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PATTERN_INTERRUPT)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setThirdpartyid(roadID);
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-
-            //信号机应答流量日志获取环境状态
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_VOLUMELOG)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setThirdpartyid(roadID);
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-
-            //信号机应答当前交通流量查询
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_TRAFFIC_FLOW)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-
-            //信号机应答手动面板参数设置
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_MANUALPANEL)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-
-            //信号机应答手动面板参数设置
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_MANUALPANEL)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //配工具应答U盘更新
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_UPDATEUDISK)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-
-                return ReadDataScheduleSuccess;
-            }
-
-            //信号机应答远程调试设置
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_REMOTE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机应答远程调试查询
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_REMOTE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-        }
-
-        if (chDataLink == DATA_LINK_CONFIG)      //配置软件和信号机的参数链路
-        {
-            //信号机应答整体参数查询
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == CFG_ACK_ASKSEND)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机应答整体参数设置成功
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == CFG_ACK_SENDDATA_OK)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机应答整体参数设置
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == CFG_ACK_SENDDATA_FAILED)) {
-                recvData.setOperation(StringOperatorType(OPERATE_TYPE_ERROR_ANSWER));
-                recvData.setInfotype(StringOperatorObj(CFG_ACK_SENDDATA_FAILED));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-        }
-        if (chDataLink == DATA_LINK_COMMU_SPE) {
-            //联机请求
-            if ((chOperateType == OPERATE_TYPE_SET_REQUEST) && (chInfoType == INFO_TYPE_ONLINE)) {
-                recvData.setOperation(StringOperatorType(OPERATE_TYPE_REPORT));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                //查找thirdparty与agentid映射表
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //联机查询
-            if ((chOperateType == OPERATE_TYPE_QUERY_REQUEST) && (chInfoType == INFO_TYPE_ONLINE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-        }
-        if (chDataLink == DATA_LINK_BASIC_INFO) {///////链路2 主动上传
-            //交通流信息主动上传
-            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_TRAFFIC_FLOW)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机工作状态主动上传
-            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_WORK_STATE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //灯色状态主动上传
-            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_LAMP_COLOR)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机工作状态查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_WORK_STATE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //灯色状态查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_LAMP_COLOR)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //时间查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == 0x05)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj((byte) 0x05));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //时间设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == 0x05)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj((byte) 0x05));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机故障查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_ERROR)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机故障主动上传
-            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_SIGNAL_ERROR)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机版本查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_ATC_VERSION)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机版本主动上传
-            if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_ATC_VERSION)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-        }
-        if (chDataLink == DATA_LINK_PARAM_TRAMFER) {
-            //信号灯组查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_GROUP)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号灯组设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SIGNAL_GROUP)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-
-            //设备参数查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //设备参数设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_CUSTOM)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //设备参数设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SYSTEM_UPDATE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //相位查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_PHASE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //相位设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PHASE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号配时方案查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SCHEME_PARTTERN)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号配时方案设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SCHEME_PARTTERN)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //方案调度计划查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_SCHEDUL_PLAN)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //方案调度计划设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_SCHEDUL_PLAN)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-        }
-        if (chDataLink == DATA_LINK_INTER_ORDER) {
-            //工作方式查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_WORK_MODE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //工作方式设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_WORK_MODE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //特征参数版本查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_PARAM_VERSION)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //特征参数版本设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_PARAM_VERSION)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //信号机识别码查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_IDENTIFY_CODE)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //远程控制查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_REMOTE_CONTROL)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //远程控制设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_REMOTE_CONTROL)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //检测器查询应答
-            if ((chOperateType == OPERATE_TYPE_QUERY_ANSWER) && (chInfoType == INFO_TYPE_DETECTOR)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-            //检测器设置应答
-            if ((chOperateType == OPERATE_TYPE_SET_ANSWER) && (chInfoType == INFO_TYPE_DETECTOR)) {
-                recvData.setOperation(StringOperatorType(chOperateType));
-                recvData.setInfotype(StringOperatorObj(chInfoType));
-                recvData.setThirdpartyid(roadID);
-                Gson recvDataJson = new Gson();
-                if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                if (tempData == null) {
-                    tempData = "{\n" +
-                            "\t\"sucess\": 1\n" +
-                            "}";
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
-                    recvData.setData(obj);
-                }
-                return ReadDataScheduleSuccess;
-            }
-        }
-        return ReadDataScheduleFault;
+        return checkDataLink(chDataLink, chOperateType, chInfoType, recvDataJson, tempData, recvData);
     }
 
-    public boolean isZero(byte[] dataschdule) {
-        for (int i = 0; i < dataSchdule.length; i++) {
-            if (dataSchdule[i] != 0) {
+    public boolean isZero(byte[] dataSchedule) {
+        for (int i = 0; i < dataSchedule.length; i++) {
+            if (dataSchedule[i] != 0) {
                 return false;
             }
         }
@@ -2421,7 +1111,6 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                                 sb.append(tab);
                             }
                         }
-
                     }
                     break;
                 case '\uFEFF': //非法字符
@@ -2437,7 +1126,6 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                                 sb.append(tab);
                             }
                         }
-
                         sb.append(ch);
                     } else {
                         sb.append(ch);
