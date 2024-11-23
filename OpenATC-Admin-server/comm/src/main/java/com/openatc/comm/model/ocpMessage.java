@@ -52,7 +52,6 @@ public class ocpMessage implements Message {
         int m_dataScheduleSize = m_readDataPackUpPack.upPackBuff(dataSource, m_dataSchedule);
         if (m_dataScheduleSize != 0) {
             DataSchedulePackUpPack m_readDataReceive = new DataSchedulePackUpPack();
-
             m_readDataReceive.ReadDataSchedule(responceData, m_dataSchedule, m_dataScheduleSize);
         }
         return responceData;
