@@ -242,7 +242,6 @@ public class DevController {
         if (temp == 0) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
         } else {
-            //删除设备时，应通知所有服务更新映射
             redisTemplate.convertAndSend(topic.getTopic(), "UpdateDev:" + ascs.getAgentid());
             return RESTRetUtils.successObj(ascs);
         }
