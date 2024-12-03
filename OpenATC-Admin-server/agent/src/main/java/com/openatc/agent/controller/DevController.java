@@ -188,7 +188,7 @@ public class DevController {
         AscsBaseModel as = mDao.getAscsByID(id);
         mDao.deleteDevByID(id);
         //删除设备时，应通知所有服务更新映射
-        redisTemplate.convertAndSend(topic.getTopic(),"updateIdMap");
+        redisTemplate.convertAndSend(topic.getTopic(), "DeleteDev:" + id);
 
         //删除协调路线的id设备
         List<Route> routes = routeDao.findAll();
@@ -209,9 +209,9 @@ public class DevController {
         for (VipRoute vipRoute : vipRoutes) {
             Set<VipRouteDevice> devs = vipRoute.getDevs();
             Iterator<VipRouteDevice> vipRouteDeviceIterator = devs.iterator();
-            while(vipRouteDeviceIterator.hasNext()){
+            while (vipRouteDeviceIterator.hasNext()) {
                 VipRouteDevice next = vipRouteDeviceIterator.next();
-                if (next.getAgentid().equals(id)){
+                if (next.getAgentid().equals(id)) {
                     vipRouteDeviceIterator.remove();
                 }
             }
@@ -229,6 +229,8 @@ public class DevController {
             mDao.updateDev(ascs);
             return RESTRetUtils.successObj(ascs);
         }
+        //删除设备时，应通知所有服务更新映射
+        redisTemplate.convertAndSend(topic.getTopic(), "InsertDev:" + ascs.getAgentid());
         return RESTRetUtils.successObj(mDao.insertDev(ascs));
     }
 
@@ -236,9 +238,11 @@ public class DevController {
     @PutMapping(value = "/devs")
     public RESTRetBase UpdateDev(@RequestBody AscsBaseModel ascs) {
         int temp = mDao.updateDev(ascs);
+
         if (temp == 0) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
         } else {
+            redisTemplate.convertAndSend(topic.getTopic(), "UpdateDev:" + ascs.getAgentid());
             return RESTRetUtils.successObj(ascs);
         }
     }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 
+
+
 public class SubscribeListener implements MessageListener {
 
     private static Logger logger = LoggerFactory.getLogger(SubscribeListener.class.toString());
@@ -20,10 +22,12 @@ public class SubscribeListener implements MessageListener {
      */
     @Override
     public void onMessage(Message message, byte[] bytes) {
-
-        logger.info("触发更新ip");
+        System.out.println("initmap");
+        try{
+            Thread.sleep(1000*3);
+        }catch (Exception e){
+            logger.error("Thread sleep exception");
+        }
         devIdMapService.initMap();
     }
-
-
 }

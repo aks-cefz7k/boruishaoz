@@ -42,21 +42,18 @@ public class ocpMessage implements Message {
 
     @Override
     public MessageData uppack(byte[] dataSource,int length) throws UnsupportedEncodingException {
-
         if (dataSource == null) {
             return null;
         }
-
-        MessageData responceData = new MessageData();
+        MessageData responseData = new MessageData();
         byte[] m_dataSchedule = new byte[RECVBUFFER];
         DataPackUpPack m_readDataPackUpPack = new DataPackUpPack();
         int m_dataScheduleSize = m_readDataPackUpPack.upPackBuff(dataSource, m_dataSchedule);
         if (m_dataScheduleSize != 0) {
             DataSchedulePackUpPack m_readDataReceive = new DataSchedulePackUpPack();
-
-            m_readDataReceive.ReadDataSchedule(responceData, m_dataSchedule, m_dataScheduleSize);
+            m_readDataReceive.ReadDataSchedule(responseData, m_dataSchedule, m_dataScheduleSize);
         }
-        return responceData;
+        return responseData;
     }
 
     @Override

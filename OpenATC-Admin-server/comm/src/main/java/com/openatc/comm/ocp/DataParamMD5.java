@@ -1,5 +1,4 @@
 package com.openatc.comm.ocp;
-//import org.springframework.util.DigestUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;

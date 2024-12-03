@@ -525,12 +525,11 @@ public class TemplateController {
         return type;
     }
 
-    private String calTenOrType(JsonArray phaseArray, String type, Set directionSet, String phaseCountString) {
-        for (JsonElement phase : phaseArray) {
-            int[] directions = gson.fromJson(phase.getAsJsonObject().get("direction"), int[].class);
-//            int[] peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), int[].class);
+    private String calTenOrType(JsonArray phaseAndOverlapArray, String type, Set directionSet, String phaseCountString) {
+        for (JsonElement phaseAndOverlap : phaseAndOverlapArray) {
+            int[] directions = gson.fromJson(phaseAndOverlap.getAsJsonObject().get("direction"), int[].class);
+            if (directions == null || directions.length == 0) continue;
             for (double direction : directions) {
-//                alldirections.add(direction);
                 directionSet.add((int) Math.ceil(direction / 4));
             }
         }

@@ -13,6 +13,7 @@ package com.openatc.agent.controller;
 
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.service.DevIdMapService;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
@@ -52,6 +53,9 @@ public class MessageController {
     @Autowired(required = false)
     protected DevController devController;
 
+    @Autowired(required = false)
+    DevIdMapService devIdMapService;
+
 //    @Autowired
     protected CommClient commClient = new CommClient();
 
@@ -78,6 +82,7 @@ public class MessageController {
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
         AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
 
+
         //获取主机ip，如果没有传入httpServletRequest，则设置ip为localhost
         String OperatorIp = null;
         if (httpServletRequest == null) {
@@ -86,10 +91,16 @@ public class MessageController {
             OperatorIp = getIpAddress(httpServletRequest);
         }
 
-        // 发送请求，并把应答返回
+        // 发送请求，并把应答返
+        if( ascsBaseModel == null){
+            logger.info("GetDevById is null, request = " + requestData.toString());
+            return new RESTRet();
+        }
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
         String protocol = ascsBaseModel.getProtocol();
+
+
         RESTRet responceData = commClient.devMessage(requestData,ascsBaseModel);
 
         // 把设置请求的操作保存到历史记录中
@@ -103,12 +114,20 @@ public class MessageController {
                 logger.warning("token of set-request is null;");
             }
             logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
+            try{
+                hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
+            }catch (Exception e){
+                logger.warning(e.toString());
+                return responceData;
+            }
+
         }
 
         return responceData;
-
     }
+
+
+
 
     /**
      * @param requestData  请求消息
@@ -136,6 +155,7 @@ public class MessageController {
         hisParams.setSource(ip);
         //设备id
         hisParams.setAgentid(requestData.getAgentid());
+
         //消息类型
         hisParams.setInfotype(requestData.getInfotype());
         //请求内容

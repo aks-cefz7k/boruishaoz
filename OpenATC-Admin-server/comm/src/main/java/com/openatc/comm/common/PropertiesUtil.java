@@ -1,5 +1,4 @@
 package com.openatc.comm.common;
-import com.openatc.comm.model.UdpCommunicationStaticPort;
 
 import java.io.*;
 import java.util.Properties;

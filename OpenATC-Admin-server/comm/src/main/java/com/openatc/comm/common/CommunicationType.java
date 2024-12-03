@@ -16,8 +16,8 @@ public enum CommunicationType {
     COMM_UDP_HOSTPORT("udp-hp"),
     COMM_TCP("tcp");
 
-    public static String OCP_PROTYPE  = "ocp";
-    public static String SCP_PROTYPE  = "scp";
+    public static String OCP_PROTYPE = "ocp";
+    public static String SCP_PROTYPE = "scp";
 
     public static String OPERATOER_TYPE_GET_REQUEST = "get-request";
     public static String OPERATOER_TYPE_GET_RESPONSE = "get-response";
@@ -39,9 +39,11 @@ public enum CommunicationType {
     public static int COMM_SOCKET_TYPE_TCP = 1;
 
     private String type;
+
     CommunicationType(String type) {
         this.type = type;
     }
+
     public String toString() {
         return type;
     }

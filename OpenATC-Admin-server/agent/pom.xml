@@ -7,7 +7,7 @@
     <groupId>com.openatc</groupId>
     <artifactId>agent</artifactId>
 
-    <version>1.18.0</version>
+    <version>1.19.0</version>
 
     <packaging>jar</packaging>
     <name>agent</name>
@@ -100,7 +100,7 @@
         <dependency>
             <groupId>com.openatc</groupId>
             <artifactId>comm</artifactId>
-            <version>1.1.8</version>
+            <version>1.1.9</version>
         </dependency>
         <dependency>
             <groupId>com.openatc</groupId>
@@ -132,6 +132,12 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
 
     </dependencies>
 
