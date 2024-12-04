@@ -253,7 +253,6 @@ public class UdpCommunicationStaticPort implements Communication {
                                 comm.responceData = CreateErrorResponceData(comm.agentid, "Udp Receive InfoType error:" + responceInfoType);
                                 logger.warning("Udp Receive InfoType error:" + responceInfoType);
                             }
-
                         } else {
                             comm.responceData = CreateErrorResponceData(comm.agentid, "Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
                             logger.warning("Can not find UdpCommunication for Receive Msg : Key:" + messageKey);

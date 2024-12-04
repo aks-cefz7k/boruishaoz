@@ -30,10 +30,8 @@ public class FileController {
 
         //通过agentid获取ip
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentid);
-        AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
+        AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-
-
         InputStream inputStream = file.getInputStream();
         // 登录信号机
         FTPClient ftpClient = FtpFileSystemUtil.login(ip, 21, name, password);

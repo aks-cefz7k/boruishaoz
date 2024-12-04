@@ -3,7 +3,6 @@ package com.openatc.agent.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -22,7 +21,7 @@ public class FtpFileSystemUtil {
     private static Gson gson = new Gson();
 
     public static FTPClient login(String host, int port, String userName, String password) {
-        FTPClient ftpClient = null;
+        FTPClient ftpClient;
         try {
             ftpClient = new FTPClient();
             ftpClient.setConnectTimeout(1000 * 15);//设置连接超时时间
@@ -79,20 +78,20 @@ public class FtpFileSystemUtil {
         return arFiles;
     }
 
-    public static JsonObject getFault(FTPClient ftpClient, String fileName){
+    public static JsonObject getFault(FTPClient ftpClient, String fileName) {
         InputStream is = null;
         String result = null;
         try {
             ftpClient.enterLocalPassiveMode();
             is = ftpClient.retrieveFileStream(fileName);// 获取ftp上的文件
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();//捕获内存
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();//捕获内存
             // 文件读取方式一
-            int i = -1;
             byte[] bytes = new byte[1024];
+            int i;
             while ((i = is.read(bytes)) != -1) {
-                baos.write(bytes, 0, i);
+                bos.write(bytes, 0, i);
             }
-            result = new String(baos.toByteArray());
+            result = new String(bos.toByteArray());
             ftpClient.completePendingCommand();
             log.info("FTP文件下载成功！");
         } catch (Exception e) {
@@ -110,7 +109,7 @@ public class FtpFileSystemUtil {
             jsonFile = gson.fromJson(result, JsonObject.class);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return jsonFile;
         }
         return jsonFile;
     }
@@ -121,14 +120,14 @@ public class FtpFileSystemUtil {
         try {
             ftpClient.enterLocalPassiveMode();
             is = ftpClient.retrieveFileStream(fileName);// 获取ftp上的文件
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();//捕获内存
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();//捕获内存
             // 文件读取方式一
-            int i = -1;
+            int i;
             byte[] bytes = new byte[1024];
             while ((i = is.read(bytes)) != -1) {
-                baos.write(bytes, 0, i);
+                bos.write(bytes, 0, i);
             }
-            result = new String(baos.toByteArray());
+            result = new String(bos.toByteArray());
             ftpClient.completePendingCommand();
             log.info("FTP文件下载成功！");
         } catch (Exception e) {
@@ -141,15 +140,8 @@ public class FtpFileSystemUtil {
                 return null;
             }
         }
-        JsonObject jsonFile = null;
-        JsonArray flowInfo = null;
-        try {
-            jsonFile = gson.fromJson(result, JsonObject.class);
-            flowInfo = jsonFile.get("flowInfo").getAsJsonArray();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        JsonObject jsonFile = gson.fromJson(result, JsonObject.class);
+        JsonArray flowInfo = jsonFile == null ? null : jsonFile.get("flowInfo").getAsJsonArray();
         return flowInfo;
     }
 }

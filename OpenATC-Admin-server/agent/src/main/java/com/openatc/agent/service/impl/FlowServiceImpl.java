@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -47,13 +46,14 @@ public class FlowServiceImpl implements FlowService {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_7001);
         }
 
-        List<String> fileNames = FtpFileSystemUtil.getFileNames(ftpClient, flowFilePath);
-        for (String fileName : fileNames) {
-            JsonArray jsonFile = FtpFileSystemUtil.getJsonFile(ftpClient, fileName);
-            if (jsonFile == null) continue;
-            jsonArray.addAll(jsonFile);
-        }
+        JsonArray jsonFile = FtpFileSystemUtil.getJsonFile(ftpClient, flowFilePath);
+//        List<String> fileNames = FtpFileSystemUtil.getFileNames(ftpClient, flowFilePath);
+//        for (String fileName : fileNames) {
+//            JsonArray jsonFile = FtpFileSystemUtil.getJsonFile(ftpClient, fileName);
+//            if (jsonFile == null) continue;
+//            jsonArray.addAll(jsonFile);
+//        }
 
-        return RESTRetUtils.successObj(jsonArray);
+        return RESTRetUtils.successObj(jsonFile);
     }
 }

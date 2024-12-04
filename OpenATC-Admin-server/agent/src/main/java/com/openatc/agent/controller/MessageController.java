@@ -115,7 +115,6 @@ public class MessageController {
                 logger.warning(e.toString());
                 return responceData;
             }
-
         }
 
         return responceData;

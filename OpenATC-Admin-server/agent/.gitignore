@@ -3,5 +3,4 @@
 /target
 /*.iml
 /release
-/src/main/resources/application.properties
 

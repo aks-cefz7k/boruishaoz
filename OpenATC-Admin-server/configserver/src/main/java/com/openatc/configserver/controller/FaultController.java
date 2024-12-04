@@ -20,8 +20,8 @@ public class FaultController {
 //    @Consumes(MediaType.APPLICATION_JSON) // 声明传入参数是json格式
     @Produces(MediaType.APPLICATION_JSON)
     public RESTRetBase getFault() {
-//        File file = new File("/usr/log/FAULT.json");
-        File file = new File("C:\\Users\\jinjunlin\\Desktop\\FAULT.json");
+        File file = new File("/usr/log/FAULT.json");
+//        File file = new File("C:\\Users\\jinjunlin\\Desktop\\FAULT.json");
 
         FileInputStream fs = null;
         try {

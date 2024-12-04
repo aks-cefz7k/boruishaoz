@@ -777,7 +777,7 @@ public class AscsDao {
             String sql = "INSERT INTO dev(agentid, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
             rows = jdbcTemplate.update(sql,
                     ascsModel.getAgentid(),
-                    ascsModel.getThirdplatformid(),   //thirdplatformid设置为agentid
+                    ascsModel.getThirdplatformid(),
                     ascsModel.getType(),
                     ascsModel.getStatus(),
                     ascsModel.getProtocol(),
