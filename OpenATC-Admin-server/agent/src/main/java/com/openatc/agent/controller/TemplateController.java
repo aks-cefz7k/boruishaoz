@@ -433,7 +433,6 @@ public class TemplateController {
     @GetMapping(value = "/intersection/info/{agentid}")
     public RESTRetBase getTemplate(@PathVariable String agentid) throws SocketException, ParseException {
 
-
         //返回的路口类型
         String type = "999-000-00";
 
