@@ -66,9 +66,13 @@ public class DevController {
 
     @PostMapping(value = "/devs/agentid")
     public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
+
         String oldAgentid = jsonObject.get("oldAgentid").getAsString();
         String newAgentid = jsonObject.get("newAgentid").getAsString();
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
+        if(result) {
+            redisTemplate.convertAndSend(topic.getTopic(), "modifyAgentid:" + newAgentid);
+        }
         return RESTRetUtils.successObj(result);
     }
 
@@ -99,7 +103,6 @@ public class DevController {
     }
 
     /*
-     *
      * @param id
      * @param i1
      * @return
@@ -110,7 +113,6 @@ public class DevController {
     }
 
     /*
-     *
      * @param id
      * @param i1
      * @return
@@ -242,7 +244,6 @@ public class DevController {
         if (temp == 0) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
         } else {
-            //删除设备时，应通知所有服务更新映射
             redisTemplate.convertAndSend(topic.getTopic(), "UpdateDev:" + ascs.getAgentid());
             return RESTRetUtils.successObj(ascs);
         }

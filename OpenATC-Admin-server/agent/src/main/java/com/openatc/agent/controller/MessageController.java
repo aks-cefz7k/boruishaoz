@@ -82,6 +82,7 @@ public class MessageController {
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
         AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
 
+
         //获取主机ip，如果没有传入httpServletRequest，则设置ip为localhost
         String OperatorIp = null;
         if (httpServletRequest == null) {
@@ -90,7 +91,11 @@ public class MessageController {
             OperatorIp = getIpAddress(httpServletRequest);
         }
 
-        // 发送请求，并把应答返回
+        // 发送请求，并把应答返
+        if( ascsBaseModel == null){
+            logger.info("GetDevById is null, request = " + requestData.toString());
+            return new RESTRet();
+        }
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
         String protocol = ascsBaseModel.getProtocol();
@@ -149,6 +154,7 @@ public class MessageController {
         hisParams.setSource(ip);
         //设备id
         hisParams.setAgentid(requestData.getAgentid());
+
         //消息类型
         hisParams.setInfotype(requestData.getInfotype());
         //请求内容

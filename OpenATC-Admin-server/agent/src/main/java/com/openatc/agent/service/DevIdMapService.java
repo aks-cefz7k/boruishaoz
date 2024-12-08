@@ -50,7 +50,6 @@ public class DevIdMapService implements CommandLineRunner {
      * scp : key=ipport:agentid, value=thirdpartyid
      */
     public void initMap(){
-
         String sql = "SELECT agentid, thirdplatformid, protocol, jsonparam  FROM dev;";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         Gson gson = new Gson();
@@ -69,7 +68,6 @@ public class DevIdMapService implements CommandLineRunner {
                 }else if(jsonparamMap.get("port") instanceof Integer){
                     port = Integer.toString(((Integer) jsonparamMap.get("port")).intValue());
                 }
-
                 String agentid = (String)m.get("agentid");
                 String thirdpartyid = (String)m.get("thirdplatformid");
                 String key = ip + port;

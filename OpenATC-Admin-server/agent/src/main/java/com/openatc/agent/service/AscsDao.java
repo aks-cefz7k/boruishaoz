@@ -193,13 +193,14 @@ public class AscsDao {
                 jdbcTemplate.update(devs_video, newAgentid, oldAgentid);
             }
 
-            redisTemplate.convertAndSend(topic.getTopic(), "modifyAgentid:" + newAgentid);
-
         } catch (Exception e) {
+
             return false;
         }
+
         return true;
     }
+
 
     public AscsBaseModel getAscsByID(String id) throws EnumConstantNotPresentException {
         String sql = "SELECT id, thirdplatformid, platform, gbid, firm, name,agentid,protocol descs, geometry,type,status,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state FROM dev WHERE agentid ='" + id + "'";
@@ -604,6 +605,7 @@ public class AscsDao {
         int count = jdbcTemplate.queryForObject(sql, int.class, agentid);
         return count;
     }
+
 
     public int updateDev(AscsBaseModel ascs) {
         //判断是否存在
