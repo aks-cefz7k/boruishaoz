@@ -12,7 +12,6 @@
 package com.openatc.agent.resmodel;
 
 
-import com.openatc.agent.model.THisParams;
 import lombok.Data;
 
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
  */
 
 @Data
-public class PageOR {
+public class PageOR<T> {
     private Long total;
-    private List<THisParams> content;
+    private List<T> content;
 }

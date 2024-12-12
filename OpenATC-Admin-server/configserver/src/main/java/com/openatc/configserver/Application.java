@@ -62,7 +62,7 @@ public class Application {
         ServletHolder jerseyServlet = context.addServlet(
                 org.glassfish.jersey.servlet.ServletContainer.class, "/openatc/*");
         jerseyServlet.setInitOrder(1);
-        // Tells the Jersey Servlet which REST api/class to load.设置动态servlt加载的包
+        // Tells the Jersey Servlet which REST api/class to load.设置动态servlet加载的包
         jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "com.openatc.configserver.controller");
         //也可单独设置加载某个类，
         jerseyServlet.setInitParameter("jersey.config.server.provider.classnames","UploadFileService;org.glassfish.jersey.media.multipart.MultiPartFeature");
