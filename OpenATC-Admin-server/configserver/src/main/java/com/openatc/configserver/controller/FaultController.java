@@ -2,7 +2,6 @@ package com.openatc.configserver.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.openatc.comm.common.PropertiesUtil;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -19,21 +18,60 @@ public class FaultController {
     Gson gson = new Gson();
     Logger log = Logger.getLogger(FaultController.class.toString());
 
-
-    @Path("fault/history/ftp")
+    /**
+     * @return
+     * @throws
+     * @Date 2021/9/3 11:27
+     * @deprecated 获取历史流量文件
+     */
+    @Path("flow/history")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public RESTRetBase getFault() {
-        //获取配置文件中的文件路径
-        File file = new File(PropertiesUtil.getStringProperty("flow.filepath"));
+    public RESTRetBase getFlowHistory(JsonObject jsonObject) {
+        return readFile("/usr/log/TRAFFICFLOW.json");
+    }
+
+    /**
+     * @return
+     * @throws
+     * @Date 2021/9/3 11:27
+     * @deprecated 获取历史故障文件
+     */
+    @Path("fault/history")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public RESTRetBase getFaultHistory(JsonObject jsonObject) {
+        return readFile("/usr/log/FAULT.json");
+    }
+
+
+    /**
+     * @return
+     * @throws
+     * @Date 2021/9/3 11:27
+     * @deprecated 获取历史操作记录文件
+     */
+    @Path("operation/history")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public RESTRetBase getOperationHistory(JsonObject jsonObject) {
+        return readFile("/usr/log/OPERATIONRECORD.json");
+    }
+
+    /**
+     * @return
+     * @Date 2021/9/3 16:21
+     * @deprecated 读取指定文件
+     */
+    public RESTRetBase readFile(String filename) {
+        File file = new File(filename);
         FileInputStream fs;
         try {
             fs = new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            log.info("file not found..");
-            return RESTRetUtils.successObj(IErrorEnumImplOuter.E_1000);
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2009);
         }
-        String result = null;
+        String result;
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();//捕获内存
             //文件读取
@@ -44,21 +82,19 @@ public class FaultController {
             }
             result = new String(bos.toByteArray());
         } catch (Exception e) {
-            log.warning(e.getMessage());
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2008);
         } finally {
             try {
                 if (fs != null) fs.close();
             } catch (IOException e) {
-                log.warning(e.getMessage());
-                return null;
+                return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2006);
             }
         }
         JsonObject jsonFile;
         try {
             jsonFile = gson.fromJson(result, JsonObject.class);
         } catch (Exception e) {
-            log.warning("文件读取结果转换Json失败:" + e.getMessage());
-            return null;
+            return RESTRetUtils.successObj(IErrorEnumImplOuter.E_2007);
         }
         return RESTRetUtils.successObj(jsonFile);
     }

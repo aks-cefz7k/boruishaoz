@@ -110,7 +110,4 @@ public class UserController {
         SerializeUtil.writeObject(user);
         return RESTRetUtils.successObj(user);
     }
-
-
-
 }
