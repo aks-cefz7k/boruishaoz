@@ -774,7 +774,7 @@ public class AscsDao {
             return rows;
         }
 
-        //未找到,说明未新注册，插入，将agentid为自增
+        //未找到,说明未新注册，插入
         if (updateCount == 0) {
             String sql = "INSERT INTO dev(agentid, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
             rows = jdbcTemplate.update(sql,
