@@ -33,10 +33,9 @@ public class HeartbeatThread extends Thread {
     private InetSocketAddress address;
     private static Logger logger = Logger.getLogger(HeartbeatThread.class.toString());
 
-
     public HeartbeatThread() {
         String ip = PropertiesUtil.getStringProperty("heartbeat.asc.ip");
-        int port = PropertiesUtil.getIntProperty("heartbeat.asc.prot");
+        int port = PropertiesUtil.getIntProperty("heartbeat.asc.port");
 
         try {
             socket = new DatagramSocket();
@@ -48,26 +47,26 @@ public class HeartbeatThread extends Thread {
     }
 
     @Override
-    public void run(){
-        byte[] myDataSchdule=new byte[17];
-        Arrays.fill(myDataSchdule,(byte)0);
-        myDataSchdule[0]= CosntDataDefine.CB_HEADTAIL;
-        myDataSchdule[1]= CosntDataDefine.CB_VERSION_FLAG;
-        myDataSchdule[2]= CosntDataDefine.CB_RECEIVE_FLAG;
-        myDataSchdule[3]= CosntDataDefine.CB_SEND_FLAG;
-        myDataSchdule[4]= CosntDataDefine.DATA_LINK_CONTROL;
-        myDataSchdule[8]= CosntDataDefine.OPERATE_TYPE_SET_REQUEST;
-        myDataSchdule[9]= CosntDataDefine.INFO_TYPE_HEART_BERAT;
-        myDataSchdule[10]= CosntDataDefine.RESERVE_FLAG;
-        myDataSchdule[11]=0x00;
-        myDataSchdule[12]=0x00;
-        myDataSchdule[13]=0x00;
-        myDataSchdule[14]=0x00;
-        myDataSchdule[15]=0x00;
-        myDataSchdule[16]= CosntDataDefine.CB_HEADTAIL;
-        DatagramPacket sendPacket = new DatagramPacket(myDataSchdule, 17, address);
+    public void run() {
+        byte[] myDataSchedule = new byte[17];
+        Arrays.fill(myDataSchedule, (byte) 0);
+        myDataSchedule[0] = CosntDataDefine.CB_HEADTAIL;
+        myDataSchedule[1] = CosntDataDefine.CB_VERSION_FLAG;
+        myDataSchedule[2] = CosntDataDefine.CB_RECEIVE_FLAG;
+        myDataSchedule[3] = CosntDataDefine.CB_SEND_FLAG;
+        myDataSchedule[4] = CosntDataDefine.DATA_LINK_CONTROL;
+        myDataSchedule[8] = CosntDataDefine.OPERATE_TYPE_SET_REQUEST;
+        myDataSchedule[9] = CosntDataDefine.INFO_TYPE_HEART_BERAT;
+        myDataSchedule[10] = CosntDataDefine.RESERVE_FLAG;
+        myDataSchedule[11] = 0x00;
+        myDataSchedule[12] = 0x00;
+        myDataSchedule[13] = 0x00;
+        myDataSchedule[14] = 0x00;
+        myDataSchedule[15] = 0x00;
+        myDataSchedule[16] = CosntDataDefine.CB_HEADTAIL;
+        DatagramPacket sendPacket = new DatagramPacket(myDataSchedule, 17, address);
 
-        while(socket != null){
+        while (socket != null) {
             try {
                 socket.send(sendPacket);
                 Thread.sleep(20000);
@@ -76,8 +75,6 @@ public class HeartbeatThread extends Thread {
             } catch (InterruptedException e) {
                 logger.warning("Heartbeat thread error:" + e.getMessage());
             }
-
         }
-
     }
 }

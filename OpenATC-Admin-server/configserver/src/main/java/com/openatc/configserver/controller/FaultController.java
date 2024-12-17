@@ -2,10 +2,14 @@ package com.openatc.configserver.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.openatc.comm.common.PropertiesUtil;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 
-import javax.ws.rs.*;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.*;
 import java.util.logging.Logger;
@@ -15,47 +19,45 @@ public class FaultController {
     Gson gson = new Gson();
     Logger log = Logger.getLogger(FaultController.class.toString());
 
+
     @Path("fault/history/ftp")
     @POST
-//    @Consumes(MediaType.APPLICATION_JSON) // 声明传入参数是json格式
     @Produces(MediaType.APPLICATION_JSON)
     public RESTRetBase getFault() {
-        File file = new File("/usr/log/FAULT.json");
-//        File file = new File("C:\\Users\\jinjunlin\\Desktop\\FAULT.json");
-
-        FileInputStream fs = null;
+        //获取配置文件中的文件路径
+        File file = new File(PropertiesUtil.getStringProperty("flow.filepath"));
+        FileInputStream fs;
         try {
             fs = new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            // 找不到文件
             log.info("file not found..");
-            return null;
+            return RESTRetUtils.successObj(IErrorEnumImplOuter.E_1000);
         }
         String result = null;
         try {
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();//捕获内存
-            // 文件读取方式一
-            int i = -1;
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();//捕获内存
+            //文件读取
+            int i;
             byte[] bytes = new byte[1024];
             while ((i = fs.read(bytes)) != -1) {
-                baos.write(bytes, 0, i);
+                bos.write(bytes, 0, i);
             }
-            result = new String(baos.toByteArray());
+            result = new String(bos.toByteArray());
         } catch (Exception e) {
-            log.info(e.toString());
+            log.warning(e.getMessage());
         } finally {
             try {
                 if (fs != null) fs.close();
             } catch (IOException e) {
+                log.warning(e.getMessage());
                 return null;
             }
         }
-        JsonObject jsonFile = null;
+        JsonObject jsonFile;
         try {
             jsonFile = gson.fromJson(result, JsonObject.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warning("文件读取结果转换Json失败:" + e.getMessage());
             return null;
         }
         return RESTRetUtils.successObj(jsonFile);
