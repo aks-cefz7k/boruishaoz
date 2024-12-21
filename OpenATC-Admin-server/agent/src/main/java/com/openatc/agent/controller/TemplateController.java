@@ -594,6 +594,9 @@ public class TemplateController {
             if (map.containsKey(1)) {
                 if (!map.get(1).equals(stringDirections)) return type;
             }
+            if(map.containsKey(99)){
+                if(!map.get(99).equals(stringDirections)) return type;
+            }
         }
         // 检测map, 并查看是否是匝道类型，以及匝道的方向 (其实到这里基本上判断出就是匝道类型了，主要是判断匝道方向)
         if (allDirectionEmpty(allStringDiretions)) return type;
@@ -602,6 +605,8 @@ public class TemplateController {
             direction = (int) Math.ceil(Double.parseDouble(map.get(0)) / 4);
         } else if (map.containsKey(1)) {
             direction = (int) Math.ceil(Double.parseDouble(map.get(1)) / 4);
+        }else if(map.containsKey(99)){
+            return type;
         }
         switch (direction) {
             case 1:
