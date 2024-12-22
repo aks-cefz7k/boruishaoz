@@ -6,17 +6,14 @@ import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 
-import javax.ws.rs.POST;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.*;
-import java.util.logging.Logger;
 
 @Path("/")
 public class FaultController {
-    Gson gson = new Gson();
-    Logger log = Logger.getLogger(FaultController.class.toString());
 
     /**
      * @return
@@ -25,8 +22,7 @@ public class FaultController {
      * @deprecated 获取历史流量文件
      */
     @Path("flow/history")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET
     public RESTRetBase getFlowHistory(JsonObject jsonObject) {
         return readFile("/usr/log/TRAFFICFLOW.json");
     }
@@ -38,8 +34,7 @@ public class FaultController {
      * @deprecated 获取历史故障文件
      */
     @Path("fault/history")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET
     public RESTRetBase getFaultHistory(JsonObject jsonObject) {
         return readFile("/usr/log/FAULT.json");
     }
@@ -52,8 +47,7 @@ public class FaultController {
      * @deprecated 获取历史操作记录文件
      */
     @Path("operation/history")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET
     public RESTRetBase getOperationHistory(JsonObject jsonObject) {
         return readFile("/usr/log/OPERATIONRECORD.json");
     }
@@ -92,6 +86,7 @@ public class FaultController {
         }
         JsonObject jsonFile;
         try {
+            Gson gson = new Gson();
             jsonFile = gson.fromJson(result, JsonObject.class);
         } catch (Exception e) {
             return RESTRetUtils.successObj(IErrorEnumImplOuter.E_2007);

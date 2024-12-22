@@ -49,7 +49,8 @@ public class FaultController {
      * @deprecated 查询所有当前故障故障
      */
     @GetMapping(value = "/fault/current")
-    public RESTRetBase getCurrentFaults(Integer pageNum, Integer pageRow) {
+    public RESTRetBase getCurrentFaults(@RequestParam(required = false) Integer pageNum,
+                                        @RequestParam(required = false) Integer pageRow) {
         PageInit pageInit = new PageInit(pageNum, pageRow);
         Pageable pageRequest = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
