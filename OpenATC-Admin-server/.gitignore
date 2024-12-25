@@ -2,6 +2,10 @@
 /log
 /target
 /KDComm/target
+/core/target
+/agent/target
+/configserver/target
+/comm/target
 /static
 /dist
 *.iml

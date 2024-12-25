@@ -46,13 +46,13 @@ public class FtpFileSystemUtil {
 
     public static boolean store(FTPClient ftpClient, MultipartFile file) {
         try {
-
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileTransferMode(FTP.STREAM_TRANSFER_MODE);
             InputStream inputStream = file.getInputStream();
             String fileName = file.getOriginalFilename();
             boolean b = ftpClient.changeWorkingDirectory("/usr/config");
             if (b) log.info("check success");
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             return ftpClient.storeFile(new String(fileName.getBytes("utf-8"), "iso-8859-1"), inputStream);
         } catch (IOException e) {
             e.printStackTrace();

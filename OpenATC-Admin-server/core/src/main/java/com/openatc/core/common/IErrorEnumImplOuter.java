@@ -32,7 +32,8 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_2006("20006", "Data stream close failed!"),
     E_2007("20007", "Json Type conversion failed!"),
     E_2008("20008", "File read failed!"),
-    E_2009("20008", "File does not exist!"),
+    E_2009("20009", "File does not exist!"),
+    E_2010("20010", "I/O close mistake!"),
 
 
     //用户管理相关

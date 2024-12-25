@@ -8,7 +8,9 @@ import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.HttpUtil;
 import com.openatc.agent.utils.PageInit;
+import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.slf4j.Logger;
@@ -21,7 +23,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.Predicate;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +39,9 @@ public class FaultController {
 
     @Autowired
     FaultServiceImpl faultService;
+
+    @Autowired
+    private DevController devController;
 
     Gson gson = new Gson();
 
@@ -114,19 +118,56 @@ public class FaultController {
         return jsonObject;
     }
 
-    @PostMapping(value = "/fault/history/ftp")
-    public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) throws IOException, ParseException {
-        // 1 获取信号机的用户名和密码
-        String username = jsonObject.get("username").getAsString();
-        String password = jsonObject.get("password").getAsString();
-        String ip = "192.168.14.176";
-        String port = "8012";
-        HttpUtil.doPost("http://" + ip + ":" + port + "/openatc/fault/history/ftp", null);
-        // 2 包装信号机的messageData
-        String agentid = jsonObject.get("agentid").getAsString();
-        RESTRetBase historyFlow = faultService.getHistoryFault(agentid, username, password);
-        return historyFlow;
+    @PostMapping(value = "/fault/history")
+    public RESTRetBase getHistoryFault(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentId").getAsString();
+        RESTRet<AscsBaseModel> restRet = null;
+        try {
+            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
+        } catch (ParseException e) {
+            logger.warn(e.getMessage());
+        }
+        AscsBaseModel ascsBaseModel = restRet.getData();
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
+        String json = HttpUtil.doGet(url);
+        return gson.fromJson(json, RESTRet.class);
     }
+
+
+    @PostMapping(value = "/flow/history")
+    public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentId").getAsString();
+        RESTRet<AscsBaseModel> restRet = null;
+        try {
+            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
+        } catch (ParseException e) {
+            logger.warn(e.getMessage());
+        }
+        AscsBaseModel ascsBaseModel = restRet.getData();
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/flow/history"; //读取流量文件
+        String json = HttpUtil.doGet(url);
+        return gson.fromJson(json, RESTRet.class);
+    }
+
+
+    @PostMapping(value = "/operation/history")
+    public RESTRetBase getHistoryOperation(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentId").getAsString();
+        RESTRet<AscsBaseModel> restRet = null;
+        try {
+            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
+        } catch (ParseException e) {
+            logger.warn(e.getMessage());
+        }
+        AscsBaseModel ascsBaseModel = restRet.getData();
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
+        String json = HttpUtil.doGet(url);
+        return gson.fromJson(json, RESTRet.class);
+    }
+
 
     /**
      * @return

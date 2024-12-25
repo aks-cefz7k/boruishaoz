@@ -45,7 +45,6 @@ public class HttpUtil {
                 String line;
                 while ((line = in.readLine()) != null) {
                     result.append(line);
-                    System.out.println(line);
                 }
             } else {
                 System.out.println("ResponseCode is an error code:" + conn.getResponseCode());
@@ -98,7 +97,6 @@ public class HttpUtil {
                 String line;
                 while ((line = br.readLine()) != null) {
                     result.append(line);
-                    System.out.println(line);
                 }
             } else {
                 System.out.println("ResponseCode is an error code:" + conn.getResponseCode());
