@@ -1,42 +1,42 @@
 package com.openatc.agent.controller;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.openatc.agent.service.impl.FlowServiceImpl;
-import com.openatc.comm.data.MessageData;
-import com.openatc.core.model.DevCommError;
+import com.openatc.agent.utils.MyHttpUtil;
+import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.text.ParseException;
 
 @RestController
 public class FlowController {
-    @Autowired
-    private FlowServiceImpl flowService;
+
+    private Logger logger = LoggerFactory.getLogger(FlowController.class);
 
     @Autowired
-    private MessageController messageController;
+    private DevController devController;
 
     @PostMapping(value = "/flow/history")
-    public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) throws IOException, ParseException {
-        // 1 获取信号机的用户名和密码
-        String username = jsonObject.get("username").getAsString();
-        String password = jsonObject.get("password").getAsString();
-
-        // 2 包装信号机的messageData
-        String agentid = jsonObject.get("agentid").getAsString();
-        JsonObject data = new JsonObject();
-        data.addProperty("udiskset",1);
-        data.addProperty("gainstatus",1);
-        MessageData messageData = new MessageData(agentid,"set-request","status/volumelog",data);
-        RESTRet restRet = messageController.postDevsMessage(null, messageData);
-        if (restRet.getData() instanceof DevCommError) return restRet;
-        RESTRetBase historyFlow = flowService.getHistoryFlow(agentid, username, password);
-        return historyFlow;
+    public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentId").getAsString();
+        RESTRet<AscsBaseModel> restRet = null;
+        try {
+            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
+        } catch (ParseException e) {
+            logger.warn(e.getMessage());
+        }
+        AscsBaseModel ascsBaseModel = restRet.getData();
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/flow/history"; //读取流量文件
+        String json = MyHttpUtil.doGet(url);
+        Gson gson = new Gson();
+        return gson.fromJson(json, RESTRet.class);
     }
 }
