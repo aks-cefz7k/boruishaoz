@@ -56,27 +56,25 @@ public class AgentHandler extends ICommHandler {
     private String agenttype = "asc";
 
 
-    //id转换，将ocp上报的id设置为thirdpartyid，查询映射表设置agentid
-    private void setThirdid(MessageData msg, DevCover ascsModel) {
+    //id转换，根据上报的thirdpartyid查找映射表，进而设置agentid
+    private void setAgentid(MessageData msg, DevCover ascsModel) {
         String agentid = null;
-        if (ascsModel.getIp() == null) {
-            Map<String, String> thirdidToAgentidOcp = devIdMapService.getThirdidToAgentidOcp();
-            agentid = thirdidToAgentidOcp.get(msg.getThirdpartyid());
-        }
-        Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
-        //设置agentid，查映射表
-        String key = null;
-        String agentidthirdid = null;
-        if (devIdMapService.getOcpLock() == 1) {
-            agentid = null;
-        } else {
-            key = ascsModel.getIp() + Integer.toString(ascsModel.getPort());
-            agentidthirdid = ocpidmap.get(key);
-            if (agentidthirdid != null) {
-                String[] values = agentidthirdid.split("\\:");
-                agentid = values[0];
-            }
-        }
+        Map<String, String> thirdidToAgentidOcp = devIdMapService.getThirdidToAgentidOcp();
+        agentid = thirdidToAgentidOcp.get(msg.getThirdpartyid());
+//        Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
+//        //设置agentid，查映射表
+//        String key = null;
+//        String agentidthirdid = null;
+//        if (devIdMapService.getOcpLock() == 1) {
+//            agentid = null;
+//        } else {
+//            key = ascsModel.getIp() + Integer.toString(ascsModel.getPort());
+//            agentidthirdid = ocpidmap.get(key);
+//            if (agentidthirdid != null) {
+//                String[] values = agentidthirdid.split("\\:");
+//                agentid = values[0];
+//            }
+//        }
         msg.setAgentid(agentid);
         ascsModel.setAgentid(agentid);
     }
@@ -102,7 +100,7 @@ public class AgentHandler extends ICommHandler {
             return;
         }
 
-        setThirdid(msg, ascsModel);
+        setAgentid(msg, ascsModel);
         String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
         // 收到注册消息
         if (msg.getInfotype().equals("login") && msg.getOperation().equals("report")) {
