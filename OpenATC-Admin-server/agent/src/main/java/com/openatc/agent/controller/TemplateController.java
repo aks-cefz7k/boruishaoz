@@ -65,10 +65,13 @@ public class TemplateController {
         typeList.add("101-000-04");
         typeList.add("101-000-08");
         //两相位匝道路口
-//        typeList.add("103-001-02");
-//        typeList.add("103-002-02");
-//        typeList.add("103-003-02");
-//        typeList.add("103-004-02");
+        typeList.add("103-001-02");  //东
+        typeList.add("103-002-02");  //南
+        typeList.add("103-003-02");  //西
+        typeList.add("103-004-02");  //北
+        //行人过街
+        typeList.add("104-005-02");  //东西向两相位
+        typeList.add("104-006-02");  //南北向两相位
         //自定义路口
         typeList.add("999-000-00");
 
@@ -167,23 +170,44 @@ public class TemplateController {
                         break;
                 }
             }
-//            if (intersectionShape.equals("103")) {
-//                switch (intersectionDirection) {
-//                    case "001":
-//                        direction[0] = new int[]{17};
-//                        break;
-//                    case "002":
-//                        direction[0] = new int[]{18};
-//                        break;
-//                    case "003":
-//                        direction[0] = new int[]{19};
-//                        break;
-//                    case "004":
-//                        direction[0] = new int[]{20};
-//                        break;
-//                }
-//                direction[1] = new int[]{};
-//            }
+
+            //表示匝道
+            if (intersectionShape.equals("103")) {
+                switch (intersectionDirection) {
+                    case "001":
+                        direction[0] = new int[]{1};
+                        break;
+                    case "002":
+                        direction[0] = new int[]{13};
+                        break;
+                    case "003":
+                        direction[0] = new int[]{5};
+                        break;
+                    case "004":
+                        direction[0] = new int[]{9};
+                        break;
+                }
+                direction[1] = new int[]{};
+            }
+
+            //表示行人过街
+            if(intersectionShape.equals("104")){
+                switch (intersectionDirection){
+                    case "005":  //东西方向
+                        direction[0] = new int[]{1,5};
+                        direction[1] = new int[]{};
+                        peddirection[0] = new int[]{};
+                        peddirection[1] = new int[]{16};
+                        break;
+                    case "006":
+                        direction[0] = new int[]{9,13};
+                        direction[1] = new int[]{};
+                        peddirection[0] = new int[]{};
+                        peddirection[1] = new int[]{15};
+                        break;
+                }
+
+            }
 
             //到此方向已经设定好了
             List<SimTemPhase> simTemPhases = new ArrayList<>();
@@ -246,7 +270,7 @@ public class TemplateController {
                     peddirection[0] = new int[]{1, 3};
                     peddirection[1] = new int[]{4};
                     peddirection[2] = new int[]{2};
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
+                    setAllTemPhase("100", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection, 0);
                     break;
                 case "002":
                     direction[0] = new int[]{1, 5};
@@ -255,7 +279,7 @@ public class TemplateController {
                     peddirection[0] = new int[]{2, 4};
                     peddirection[1] = new int[]{3};
                     peddirection[2] = new int[]{1};
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
+                    setAllTemPhase("100", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
                     break;
                 case "003":
                     direction[0] = new int[]{9, 13};
@@ -264,7 +288,7 @@ public class TemplateController {
                     peddirection[0] = new int[]{1, 3};
                     peddirection[1] = new int[]{4};
                     peddirection[2] = new int[]{2};
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
+                    setAllTemPhase("100", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
                     break;
                 case "004":
                     direction[0] = new int[]{1, 5};
@@ -273,7 +297,7 @@ public class TemplateController {
                     peddirection[0] = new int[]{2, 4};
                     peddirection[1] = new int[]{1};
                     peddirection[1] = new int[]{3};
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
+                    setAllTemPhase("100", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
                 default:
                     break;
             }
@@ -291,7 +315,7 @@ public class TemplateController {
                     peddirection[2] = new int[]{2, 4};
                     peddirection[3] = new int[]{};
                     phaseCount = 4;
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
+                    setAllTemPhase("101", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
                     break;
                 case 8:
                     direction[0] = new int[]{1};
@@ -311,7 +335,48 @@ public class TemplateController {
                     peddirection[6] = new int[]{3};
                     peddirection[7] = new int[]{};
                     phaseCount = 8;
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
+                    setAllTemPhase("101",phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
+            }
+        }
+        // 4 匝道
+        if(intersectionShape.equals("103")){
+            switch (intersectionDirection) {
+                case "001":
+                    direction[0] = new int[]{1};
+                    direction[1] = new int[]{1};
+                    setAllTemPhase("103", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
+                    break;
+                case "002":
+                    direction[0] = new int[]{13};
+                    direction[1] = new int[]{13};
+                    setAllTemPhase("103", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
+                    break;
+                case "003":
+                    direction[0] = new int[]{5};
+                    direction[1] = new int[]{5};
+                    setAllTemPhase("103", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
+                    break;
+                case "004":
+                    direction[0] = new int[]{9};
+                    direction[1] = new int[]{9};
+                    setAllTemPhase("103", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
+                    break;
+            }
+        }
+        //行人过街路口
+        if(intersectionShape.equals("104")){
+            switch (intersectionDirection){
+                case "005":  //东西方向
+                    direction[0] = new int[]{1,5};
+                    peddirection[1] = new int[]{16};
+                    setAllTemPhase("104", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
+                    break;
+                case "006":  //南北方向
+                    direction[0] = new int[]{9,13};
+                    peddirection[1] = new int[]{15};
+                    setAllTemPhase("104", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
+                    break;
+
             }
         }
 
@@ -320,7 +385,7 @@ public class TemplateController {
             for (int i = 0; i < phaseCount; i++) {
                 direction[i] = new int[]{};
             }
-            setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
+            setAllTemPhase("999", phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection,0);
         }
 
         //确定每一个模板方案
@@ -332,12 +397,19 @@ public class TemplateController {
         }
         int j = 0;
         while (0 < phaseCount) {
-            for (int i = 0; i < phaseCount; i++) {
-                rings.get(j).add(new Ring(i + 1, "", (int) split, 15, 2));
-                if (i == 3) break;
+            if(j == 0){
+                for (int i = 0; i < phaseCount; i++) {
+                    rings.get(j).add(new Ring(i + 1, "", (int) split, 15, 2));
+                    if (i == 3) break;
+                }
+            }else if(j == 1){
+                for(int i = 4; i < phaseCount; i++){
+                    rings.get(j).add(new Ring(i + 1, "", (int) split, 15, 2));
+                }
+                break;
             }
             j += 1;
-            phaseCount -= 4;
+            //phaseCount -= 4;
         }
         for (int i = 0; i < patternCount; i++) {
             temPatternArray[i] = new TemPattern();
@@ -369,7 +441,7 @@ public class TemplateController {
             temDateArray[i].setPlan(1);
             if (allyear) {
                 temDateArray[i].setMonth(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
-                temDateArray[i].setDay(new int[]{1, 2, 3, 4, 5, 6, 7});
+                temDateArray[i].setDay(new int[]{1, 2, 3, 4, 5, 6, 0});
             }
         }
 
@@ -383,12 +455,13 @@ public class TemplateController {
 
 
 
-    private TemPhase setTemPhase(TemPhase temPhase, int[] direction, int id, int flashgreen, int yellow, int redclear, int phaseCount) {
+    private TemPhase setTemPhase(TemPhase temPhase, int[] direction, int id, int flashgreen, int yellow, int redclear, int phaseCount, int controltype) {
         temPhase.setDirection(direction);
         temPhase.setId(id + 1);
         temPhase.setFlashgreen(flashgreen);
         temPhase.setYellow(yellow);
         temPhase.setRedclear(redclear);
+        temPhase.setControltype(controltype);
         //双环从第5个开始要设为2
         if (id > 3) {
             temPhase.setRing(2);
@@ -417,13 +490,29 @@ public class TemplateController {
         return temPhase;
     }
 
-    private void setAllTemPhase(int phaseCount, TemPhase[] temPhaseArray, int[][] direction, int flashgreen, int yellow, int redclear, int[][] peddirection) {
+
+    private void setAllTemPhase(String type, int phaseCount, TemPhase[] temPhaseArray, int[][] direction, int flashgreen, int yellow, int redclear, int[][] peddirection, int controltype) {
         for (int i = 0; i < phaseCount; i++) {
             temPhaseArray[i] = new TemPhase();
-            TemPhase temPhase = setTemPhase(temPhaseArray[i], direction[i], i, flashgreen, yellow, redclear, phaseCount);
+            TemPhase temPhase =  temPhaseArray[i];
+            if(type.equals("103")){
+                if(i == 0){
+                    controltype = 0;
+                }else{
+                    controltype = 1;
+                }
+            }else if(type.equals("104")){
+                if(i == 0){
+                    controltype = 0;
+                }else{
+                    controltype = 2;
+                }
+            }
+            temPhase = setTemPhase(temPhaseArray[i], direction[i], i, flashgreen, yellow, redclear, phaseCount, controltype);
             temPhase.setPeddirection(peddirection[i]);
         }
     }
+
 
     /**
      * @return RESTRetBase
@@ -438,7 +527,6 @@ public class TemplateController {
 
         //directionSet存放相位方向
         Set directionSet = new HashSet();
-
         //使用设备通讯接口获取相位
         MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
         RESTRet<MessageData> retBase = null;
@@ -482,13 +570,10 @@ public class TemplateController {
             //判断是不是人行横道
             type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
         }
-
-
         //判断是否是匝道类型的路开口
         if (type.equals("999-000-00")) {
             type = calRampType(phaseArray, type, phaseCountString);
         }
-
         //返回的json对象
         JsonObject intersectionInfo = new JsonObject();
         intersectionInfo.addProperty("type", type);
@@ -534,6 +619,8 @@ public class TemplateController {
         return type;
     }
 
+
+
     private String calTenOrType(JsonArray phaseAndOverlapArray, String type, Set directionSet, String phaseCountString) {
         for (JsonElement phaseAndOverlap : phaseAndOverlapArray) {
             int[] directions = gson.fromJson(phaseAndOverlap.getAsJsonObject().get("direction"), int[].class);
@@ -560,6 +647,7 @@ public class TemplateController {
         return type;
     }
 
+
     //判断方向是不是全空
     public boolean allDirectionEmpty(Set<String> allStringDirections) {
         Iterator<String> iterator = allStringDirections.iterator();
@@ -569,6 +657,7 @@ public class TemplateController {
             return false;
         }
     }
+
 
     //判断匝道路口类型
     public String calRampType(JsonArray phaseArray, String type, String phaseCountString) {
@@ -598,6 +687,7 @@ public class TemplateController {
                 if(!map.get(99).equals(stringDirections)) return type;
             }
         }
+
         // 检测map, 并查看是否是匝道类型，以及匝道的方向 (其实到这里基本上判断出就是匝道类型了，主要是判断匝道方向)
         if (allDirectionEmpty(allStringDiretions)) return type;
         int direction = 1;
@@ -632,6 +722,7 @@ public class TemplateController {
         }
         return stringDirection.toString();
     }
+
 
     public boolean isSetEqual(Set set1, Set set2) {
 
