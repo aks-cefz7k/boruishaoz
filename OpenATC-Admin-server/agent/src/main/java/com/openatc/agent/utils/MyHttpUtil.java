@@ -68,10 +68,11 @@ public class MyHttpUtil {
 
 
     /**
+     * @param
      * @return
      * @throws
-     * @Date 2021/9/1 13:28
-     * @deprecated get请求
+     * @descripation 子定义Get请求
+     * @Date 2021/9/10 14:33
      */
     public static String doGet(String URL) {
         HttpURLConnection conn = null;

@@ -130,7 +130,7 @@ public class FaultController {
         AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
-        String json = MyHttpUtil.doGet(url);
+        String json = MyHttpUtil.doPost(url,new JsonObject().toString());
         return gson.fromJson(json, RESTRet.class);
     }
 
@@ -150,7 +150,7 @@ public class FaultController {
         AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
-        String json = MyHttpUtil.doGet(url);
+        String json = MyHttpUtil.doPost(url,new JsonObject().toString());
         return gson.fromJson(json, RESTRet.class);
     }
 

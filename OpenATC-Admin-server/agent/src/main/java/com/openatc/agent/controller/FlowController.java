@@ -20,6 +20,7 @@ public class FlowController {
 
     private Logger logger = LoggerFactory.getLogger(FlowController.class);
 
+
     @Autowired
     private DevController devController;
 
@@ -35,7 +36,7 @@ public class FlowController {
         AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/flow/history"; //读取流量文件
-        String json = MyHttpUtil.doGet(url);
+        String json = MyHttpUtil.doPost(url,new JsonObject().toString());
         Gson gson = new Gson();
         return gson.fromJson(json, RESTRet.class);
     }
