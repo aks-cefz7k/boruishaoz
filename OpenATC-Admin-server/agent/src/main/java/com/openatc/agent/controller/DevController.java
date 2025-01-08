@@ -66,9 +66,13 @@ public class DevController {
 
     @PostMapping(value = "/devs/agentid")
     public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
+
         String oldAgentid = jsonObject.get("oldAgentid").getAsString();
         String newAgentid = jsonObject.get("newAgentid").getAsString();
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
+        if(result) {
+            redisTemplate.convertAndSend(topic.getTopic(), "modifyAgentid:" + newAgentid);
+        }
         return RESTRetUtils.successObj(result);
     }
 
@@ -99,7 +103,6 @@ public class DevController {
     }
 
     /*
-     *
      * @param id
      * @param i1
      * @return
@@ -110,7 +113,6 @@ public class DevController {
     }
 
     /*
-     *
      * @param id
      * @param i1
      * @return
@@ -187,9 +189,7 @@ public class DevController {
 
         AscsBaseModel as = mDao.getAscsByID(id);
         mDao.deleteDevByID(id);
-        //删除设备时，应通知所有服务更新映射
-        redisTemplate.convertAndSend(topic.getTopic(), "DeleteDev:" + id);
-
+        //删除设备时，应通知所有服务更新映
         //删除协调路线的id设备
         List<Route> routes = routeDao.findAll();
         for (Route route : routes) {
@@ -217,6 +217,7 @@ public class DevController {
             }
             vipRouteDao.save(vipRoute);
         }
+        redisTemplate.convertAndSend(topic.getTopic(), "DeleteDev:" + id);
         return RESTRetUtils.successObj(as);
     }
 

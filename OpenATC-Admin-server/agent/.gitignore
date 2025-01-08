@@ -3,5 +3,6 @@
 /target
 /*.iml
 /release
-/src/main/resources/application.properties
 
+/src/test/
+/src/main/java/com/openatc/agent/test.java

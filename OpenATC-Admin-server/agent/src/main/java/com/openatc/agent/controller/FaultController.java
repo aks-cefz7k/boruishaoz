@@ -6,16 +6,25 @@ import com.openatc.agent.model.Fault;
 import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
-import com.openatc.comm.data.MessageData;
-import com.openatc.core.model.DevCommError;
+import com.openatc.agent.utils.MyHttpUtil;
+import com.openatc.agent.utils.PageInit;
+import com.openatc.comm.data.AscsBaseModel;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import javax.persistence.criteria.Predicate;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,36 +32,56 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 public class FaultController {
+    private Logger logger = LoggerFactory.getLogger(FaultController.class);
+
     @Autowired
     FaultDao faultDao;
 
     @Autowired
     FaultServiceImpl faultService;
 
+    @Autowired
+    private DevController devController;
+
     Gson gson = new Gson();
 
-    // 查询所有当前故障故障
+    /**
+     * @param pageNum 页码
+     * @param pageRow 每页数目
+     * @return RESTRetBase
+     * @throws
+     * @deprecated 查询所有当前故障故障
+     */
     @GetMapping(value = "/fault/current")
-    public RESTRetBase getCurrentFaults() {
-        return RESTRetUtils.successObj(transformFaultlist(faultDao.selectCurrentFaults()));
+    public RESTRetBase getCurrentFaults(@RequestParam(required = false) Integer pageNum,
+                                        @RequestParam(required = false) Integer pageRow) {
+        PageInit pageInit = new PageInit(pageNum, pageRow);
+        Pageable pageRequest = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
+        Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            predicateList.add(criteriaBuilder.equal(root.get("m_unFaultOccurTime"), 0));
+            return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+        };
+        Page<Fault> faults = faultDao.findAll(queryCondition, pageRequest);
+        return RESTRetUtils.successObj(faults);
     }
 
     // 查询单个当前故障故障
     @GetMapping(value = "/fault/{agentid}/current")
     public RESTRetBase getCurrentFaults(@PathVariable String agentid) {
-        return RESTRetUtils.successObj(transformFaultlist(faultDao.selectCurrentFaults(agentid)));
+        return RESTRetUtils.successObj(transformFaultList(faultDao.selectCurrentFaults(agentid)));
     }
 
     // 查询所有历史故障
     @GetMapping(value = "/fault/history")
     public RESTRetBase getHistoryFaults() {
-        return RESTRetUtils.successObj(transformFaultlist(faultDao.selectHistoryFaults()));
+        return RESTRetUtils.successObj(transformFaultList(faultDao.selectHistoryFaults()));
     }
 
     // 查询所有历史故障
     @GetMapping(value = "/fault/{agentid}/history")
     public RESTRetBase getHistoryFaults(@PathVariable String agentid) {
-        return RESTRetUtils.successObj(transformFaultlist(faultDao.selectHistoryFaults(agentid)));
+        return RESTRetUtils.successObj(transformFaultList(faultDao.selectHistoryFaults(agentid)));
     }
 
     // 删除故障
@@ -65,7 +94,7 @@ public class FaultController {
         return RESTRetUtils.successObj();
     }
 
-    public List<JsonObject> transformFaultlist(List<Fault> faults) {
+    public List<JsonObject> transformFaultList(List<Fault> faults) {
         List<JsonObject> jsonObjects = new ArrayList<>();
         for (Fault fault : faults) {
             JsonObject jsonObject = transformFault(fault);
@@ -89,15 +118,89 @@ public class FaultController {
         return jsonObject;
     }
 
-    @PostMapping(value = "/fault/history/ftp")
-    public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) throws IOException, ParseException {
-        // 1 获取信号机的用户名和密码
-        String username = jsonObject.get("username").getAsString();
-        String password = jsonObject.get("password").getAsString();
+    @PostMapping(value = "/fault/history")
+    public RESTRetBase getHistoryFault(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentId").getAsString();
+        RESTRet<AscsBaseModel> restRet = null;
+        try {
+            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
+        } catch (ParseException e) {
+            logger.warn(e.getMessage());
+        }
+        AscsBaseModel ascsBaseModel = restRet.getData();
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
+        String json = MyHttpUtil.doGet(url);
+        return gson.fromJson(json, RESTRet.class);
+    }
 
-        // 2 包装信号机的messageData
-        String agentid = jsonObject.get("agentid").getAsString();
-        RESTRetBase historyFlow = faultService.getHistoryFault(agentid, username, password);
-        return historyFlow;
+
+
+
+
+    @PostMapping(value = "/operation/history")
+    public RESTRetBase getHistoryOperation(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentId").getAsString();
+        RESTRet<AscsBaseModel> restRet = null;
+        try {
+            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
+        } catch (ParseException e) {
+            logger.warn(e.getMessage());
+        }
+        AscsBaseModel ascsBaseModel = restRet.getData();
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
+        String json = MyHttpUtil.doGet(url);
+        return gson.fromJson(json, RESTRet.class);
+    }
+
+
+    /**
+     * @return
+     * @throws
+     * @Date 2021/9/1 9:49
+     * @Descripation 查询指定agentId范围内的故障记录
+     * 没有上传时间范围则查询所有范围内的故障记录
+     */
+    @PostMapping(value = "/fault/range")
+    public RESTRetBase getRangeFault(@RequestBody JsonObject jsonObject) {
+        if (jsonObject == null) {
+            return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
+        }
+        if (jsonObject.get("agentId") == null) {
+            return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
+        }
+        String agentId = jsonObject.get("agentId").getAsString();
+        Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
+        Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
+        String beginTime = jsonObject.get("beginTime") == null ? null : jsonObject.get("beginTime").getAsString();
+        String endTime = jsonObject.get("endTime") == null ? null : jsonObject.get("endTime").getAsString();
+        long bTime;
+        long eTime;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            bTime = format.parse(beginTime).getTime() / 1000;
+            eTime = format.parse(endTime).getTime() / 1000;
+        } catch (ParseException e) {
+            bTime = 0;
+            eTime = System.currentTimeMillis();
+            logger.warn("日期格式不正确：" + e.getMessage());
+            logger.warn("默认查询所有范围内的故障记录");
+        }
+        //将bTime和eTime加入到数组中是因为在lambda表达式中变量应该是final类型
+        long[] l = new long[2];
+        l[0] = bTime;
+        l[1] = eTime;
+        PageInit pageInit = new PageInit(pageNum, pageRow); //分页初始化
+        Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
+        Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            //添加查询条件
+            predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
+            predicateList.add(criteriaBuilder.between(root.get("m_unFaultOccurTime"), l[0], l[1]));
+            return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+        };
+        Page<Fault> faultList = faultDao.findAll(queryCondition, pageable);
+        return RESTRetUtils.successObj(faultList);
     }
 }

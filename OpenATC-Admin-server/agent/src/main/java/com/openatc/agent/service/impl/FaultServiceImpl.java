@@ -84,11 +84,9 @@ public class FaultServiceImpl {
     }
 
     public RESTRetBase getHistoryFault(String agentid, String username, String password) throws ParseException, IOException {
-        Map<String, JsonObject> result = new HashMap<>(32);
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentid);
-        AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
+        AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        JsonArray jsonArray = new JsonArray();
         // 登录信号机
         FTPClient ftpClient = FtpFileSystemUtil.login(ip, port, username, password);
         if (ftpClient == null) {

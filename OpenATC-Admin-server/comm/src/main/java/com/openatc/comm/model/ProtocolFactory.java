@@ -14,7 +14,8 @@ package com.openatc.comm.model;
 import com.openatc.comm.common.CommunicationType;
 
 public interface ProtocolFactory {
-//    public CommunicationProxy createCommunication(CommunicationType communicationType);
-    public Communication createCommunication(Message message, CommunicationType commType, int exangeType);
-    public Message createMessage();
+    //    public CommunicationProxy createCommunication(CommunicationType communicationType);
+    Communication createCommunication(Message message, CommunicationType commType, int exangeType);
+
+    Message createMessage();
 }

@@ -29,4 +29,5 @@ public class TemPhase extends Phase {
     private int flashgreen;
     private int redyellow = 3;
     private int ring = 1;
+    private int controltype;
 }
