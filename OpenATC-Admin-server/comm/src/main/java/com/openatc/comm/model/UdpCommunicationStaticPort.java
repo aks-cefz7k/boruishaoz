@@ -125,10 +125,9 @@ public class UdpCommunicationStaticPort implements Communication {
         }
         globalLock.unlock();
 
-
+        logger.info("Message Lock : Lock id:" + lock.hashCode() + " KEY:" + messageKey);
         lock.lock();
         lockMap.put(messageKey, lock);
-        logger.info("Message Lock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
 
         //socket的发送地址和端口
         InetSocketAddress address = new InetSocketAddress(ip, port);
@@ -137,7 +136,7 @@ public class UdpCommunicationStaticPort implements Communication {
 
         // UDP最大发送长度64K
         if (sendPacket.getLength() > 64000) {
-            logger.warning("Send Packet too Long! Send Data Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port);
+            logger.warning("Send Packet too Long! Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " KEY:" + messageKey);
             return -1;
         }
 
@@ -145,11 +144,11 @@ public class UdpCommunicationStaticPort implements Communication {
         try {
             datagramSocket.send(sendPacket);
         } catch (IOException e) {
-            logger.warning("Send Packet Error! Send Data Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Msg:" + e.getMessage());
+            logger.warning("Send Packet Error! Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Msg:" + e.getMessage() + " KEY:" + messageKey);
         }
         thread = Thread.currentThread();
         messageMap.put(messageKey, this);
-        logger.info("Udp Send Data Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
+        logger.info("Udp Send Data Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype + " KEY:" + messageKey);
 
 
         return 0;
@@ -161,15 +160,15 @@ public class UdpCommunicationStaticPort implements Communication {
         try {
             Thread.sleep(TIMEOUT);
             responceData = CreateErrorResponceData(agentid, "Receive Time Out or Receive Incorrect Data!");
-            logger.warning("Receive Time Out ! Thread#" + thread.getId());
+            logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
         } catch (InterruptedException e) {
-            logger.info("Send & Receive Data Correct! Thread#" + thread.getId());
+            logger.info("Send & Receive Data Correct! Thread#" + thread.getId() + " KEY:" + messageKey);
         }
 
         messageMap.remove(messageKey);
         lockMap.remove(messageKey);
         lock.unlock();
-        logger.info("Message unLock : KEY:" + messageKey + "Lock id:" + lock.hashCode());
+        logger.info("Message unLock : Lock id:" + lock.hashCode() + " KEY:" + messageKey);
         return responceData;
     }
 
@@ -259,7 +258,7 @@ public class UdpCommunicationStaticPort implements Communication {
                         }
                     }
                 } catch (Exception e) {
-                    logger.warning("Udp Receive Thread Exception:" + e.getMessage());
+                    logger.warning("Udp Receive Thread Exception:" + e.getMessage() + "Receive Data:" + recvPacket.getData());
                 }
             }
         }
