@@ -9,7 +9,7 @@ import java.net.URL;
  * @Date 2021/9/1 13:15
  * @Describetion http请求方法
  */
-public class HttpUtil {
+public class MyHttpUtil {
     /**
      * @param URL     访问的地址
      * @param jsonStr 提交的参数，必须是json格式
@@ -68,10 +68,11 @@ public class HttpUtil {
 
 
     /**
+     * @param
      * @return
      * @throws
-     * @Date 2021/9/1 13:28
-     * @deprecated get请求
+     * @descripation 子定义Get请求
+     * @Date 2021/9/10 14:33
      */
     public static String doGet(String URL) {
         HttpURLConnection conn = null;

@@ -6,7 +6,7 @@ import com.openatc.agent.model.Fault;
 import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
-import com.openatc.agent.utils.HttpUtil;
+import com.openatc.agent.utils.MyHttpUtil;
 import com.openatc.agent.utils.PageInit;
 import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
@@ -130,26 +130,12 @@ public class FaultController {
         AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
-        String json = HttpUtil.doGet(url);
+        String json = MyHttpUtil.doGet(url);
         return gson.fromJson(json, RESTRet.class);
     }
 
 
-    @PostMapping(value = "/flow/history")
-    public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) {
-        String agentId = jsonObject.get("agentId").getAsString();
-        RESTRet<AscsBaseModel> restRet = null;
-        try {
-            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
-        } catch (ParseException e) {
-            logger.warn(e.getMessage());
-        }
-        AscsBaseModel ascsBaseModel = restRet.getData();
-        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        String url = "http://" + ip + ":8012/openatc/flow/history"; //读取流量文件
-        String json = HttpUtil.doGet(url);
-        return gson.fromJson(json, RESTRet.class);
-    }
+
 
 
     @PostMapping(value = "/operation/history")
@@ -164,7 +150,7 @@ public class FaultController {
         AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
-        String json = HttpUtil.doGet(url);
+        String json = MyHttpUtil.doGet(url);
         return gson.fromJson(json, RESTRet.class);
     }
 

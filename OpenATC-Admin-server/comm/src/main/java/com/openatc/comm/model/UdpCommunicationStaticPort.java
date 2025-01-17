@@ -17,6 +17,7 @@ import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import com.openatc.comm.ocp.DataPackUpPack;
 import com.openatc.comm.ocp.DataSchedulePackUpPack;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.*;
@@ -184,9 +185,11 @@ public class UdpCommunicationStaticPort implements Communication {
             message = m;
         }
 
+        @SneakyThrows
         @Override
         public void run() {
             logger.warning("New Udp Receive Thread Started:" + datagramSocket.getLocalPort());
+            Thread.sleep(1000 * 3);
             while (datagramSocket != null) {
                 byte[] dataRecv = new byte[RECVBUFFER];
                 DatagramPacket recvPacket = new DatagramPacket(dataRecv, dataRecv.length);
