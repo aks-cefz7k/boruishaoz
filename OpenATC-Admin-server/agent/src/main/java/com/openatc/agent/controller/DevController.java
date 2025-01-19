@@ -62,7 +62,7 @@ public class DevController {
 
     private Logger log = Logger.getLogger(DevController.class.toString());
 
-    private Gson gson = new Gson();
+//    private Gson gson = new Gson();
 
     @PostMapping(value = "/devs/agentid")
     public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {

@@ -18,6 +18,7 @@ import com.openatc.agent.model.DevCover;
 import com.openatc.agent.service.DevIdMapService;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
+import com.openatc.agent.utils.InfluxDbUtils;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,12 +49,18 @@ public class AgentHandler extends ICommHandler {
 
     @Value("${spring.redis.enable}")
     private boolean isRedisEnable;
+    @Value("${spring.influx.enable}")
+    private boolean isInfluxDBEnable;
     @Autowired
     public StringRedisTemplate stringRedisTemplate;
     @Autowired
     private FaultServiceImpl faultService;
+    @Autowired
+    private InfluxDbUtils influxDbUtils;
 
     private String agenttype = "asc";
+
+    private Gson gson = new Gson();
 
 
     //id转换，根据上报的thirdpartyid查找映射表，进而设置agentid
@@ -80,21 +87,23 @@ public class AgentHandler extends ICommHandler {
     }
 
 
+    // todo: 此处删除同步锁，观察是否有影响
     @Override
-    public synchronized void process(MessageData msg) throws ParseException {
+    public /*synchronized*/ void process(MessageData msg) throws ParseException {
         if (msg.getCreatetime() == null) {
             msg.setCreatetime(DateUtil.date2esstr(new Date()));
         }
 
-        Gson gson = new Gson();
         JsonElement data = msg.getData();
         DevCover ascsModel = gson.fromJson(data, DevCover.class);
 
+        // 如果消息为空，则返回
         if (msg == null) {
             logger.warning("AgentHandler/process: MessageData is null");
             return;
         }
 
+        // 如果
         if (msg.getInfotype() == null) {
             logger.warning("AgentHandler/process: MessageData.operation()/.infoType is null");
             return;
@@ -102,26 +111,43 @@ public class AgentHandler extends ICommHandler {
 
         setAgentid(msg, ascsModel);
         String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
-        // 收到注册消息
+
+        // 如果开启Redis，则将消息存入Redis
+        if (isRedisEnable) {
+            stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
+        }
+
+        // 消息的特殊处理
+        // 收到注册消息，更新设备信息
         if (msg.getInfotype().equals("login") && msg.getOperation().equals("report")) {
             //更新设备信息
             ascsModel.setThirdpartyid(msg.getThirdpartyid());
             devController.DevAscsDiscovery(ascsModel);
         }
-        //收到其他消息
-        else if (key != null && isRedisEnable) {
-            //收到方案消息
-            if (msg.getInfotype().equals("status/pattern")) {
-                stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
+        // 收到方案消息，往Redis通道里发布消息
+        else if (msg.getInfotype().equals("status/pattern")) {
+            if(isRedisEnable)
                 stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
-            } else if (msg.getInfotype().equals("status/fault")) {
-                faultService.processFaultMessage(msg);
-            }
-            //收到其他消息
-            else {
-                stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
-                //stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
-            }
+            // 将方案信息保存到InfluxDB中
+            if(isInfluxDBEnable)
+                influxDbUtils.insertPattern(msg);
+
+
+        }
+        // 收到故障消息，保存到数据库中
+        else if (msg.getInfotype().equals("status/fault")) {
+            faultService.processFaultMessage(msg);
+        }
+        // 收到流量消息，保存到InfluxDB中
+        else if (msg.getInfotype().equals("status/currentvolume")) {
+            if(isInfluxDBEnable)
+                influxDbUtils.insertVolume(msg);
+        }
+        // 收到灯色消息，保存到InfluxDB中
+        else if (msg.getInfotype().equals("status/channel")) {
+            if(isInfluxDBEnable)
+                influxDbUtils.insertChannelLamp(msg);
         }
     }
+
 }
