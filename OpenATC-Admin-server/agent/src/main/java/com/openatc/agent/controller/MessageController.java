@@ -32,6 +32,7 @@ import java.net.SocketException;
 import java.text.ParseException;
 import java.util.logging.Logger;
 
+import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
 import static com.openatc.comm.common.CommunicationType.*;
 
 
@@ -70,6 +71,9 @@ public class MessageController {
         // 设置通讯模式为UDP固定端口
         commClient.setCommunicationServerType(COMM_SERVER_TYPE_CENTER);
     }
+
+
+
 
     /**
      * @param requestData 发送给设备的请求消息
@@ -172,24 +176,4 @@ public class MessageController {
         return hisParams;
     }
 
-    public static String getIpAddress(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        String unknown = "unknown";
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
 }
