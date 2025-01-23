@@ -88,9 +88,8 @@ public class FaultController {
     @DeleteMapping(value = "/fault/{id}")
     public RESTRetBase deleteFault(@PathVariable Long id) {
         Optional<Fault> optFault = faultDao.findById(id);
-        Fault fault = optFault.get();
-        if (fault != null) fault.setM_unFaultRenewTime(System.currentTimeMillis() / 1000);
-        faultDao.save(fault);
+        if (optFault.isPresent())
+            faultDao.delete(optFault.get());
         return RESTRetUtils.successObj();
     }
 
@@ -130,12 +129,9 @@ public class FaultController {
         AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
-        String json = MyHttpUtil.doPost(url,new JsonObject().toString());
+        String json = MyHttpUtil.doPost(url, new JsonObject().toString());
         return gson.fromJson(json, RESTRet.class);
     }
-
-
-
 
 
     @PostMapping(value = "/operation/history")
@@ -150,7 +146,7 @@ public class FaultController {
         AscsBaseModel ascsBaseModel = restRet.getData();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
-        String json = MyHttpUtil.doPost(url,new JsonObject().toString());
+        String json = MyHttpUtil.doPost(url, new JsonObject().toString());
         return gson.fromJson(json, RESTRet.class);
     }
 
