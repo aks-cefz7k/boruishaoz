@@ -198,7 +198,6 @@ public class UdpCommunicationStaticPort implements Communication {
                     InetAddress address = recvPacket.getAddress();
                     String addressStr = address.getHostAddress();
                     int port = recvPacket.getPort();
-                    logger.warning("Udp Receive Packet" + addressStr + " : " + port + " Length: " + recvPacket.getLength());
                     int len = recvPacket.getLength();
                     MessageData responceData = message.uppack(recvPacket.getData(), len);
 

@@ -9,6 +9,4 @@ public class AscPhase {
     private int split;
     private int type;
     private int countdown;
-    private String conphase;
-
 }

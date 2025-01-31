@@ -14,6 +14,7 @@ package com.openatc.agent;
 
 import com.openatc.agent.handler.AgentHandler;
 import com.openatc.agent.model.FileProperties;
+import com.openatc.agent.utils.InfluxDbUtils;
 import com.openatc.agent.utils.JwtFileUtil;
 import com.openatc.comm.model.UdpCommunicationStaticPort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,6 @@ public class AgentApplication implements CommandLineRunner {
 
     @Value("${agent.buildtime}")
     private String buildtime;
-       
 
 //    private void setShiroOpen(Boolean shiroOpen){
 //        AgentApplication.shiroOpen = shiroOpen;
