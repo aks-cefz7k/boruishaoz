@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 @RestController
 @CrossOrigin
 public class DevController {
-
+    private static Logger logger = Logger.getLogger(DevController.class.toString());
     @Autowired(required = false)
     AscsDao mDao;
     @Autowired(required = false)
@@ -232,6 +232,7 @@ public class DevController {
         }
         //删除设备时，应通知所有服务更新映射
         redisTemplate.convertAndSend(topic.getTopic(), "InsertDev:" + ascs.getAgentid());
+        logger.info("Add a dev, info = " + ascs.toString());
         return RESTRetUtils.successObj(mDao.insertDev(ascs));
     }
 
@@ -247,6 +248,9 @@ public class DevController {
             return RESTRetUtils.successObj(ascs);
         }
     }
+
+
+
 
     //获取设备优化状态参数
 //    @GetMapping(value = "/devs/{agentid}/optstatparam")
