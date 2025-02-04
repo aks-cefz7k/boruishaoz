@@ -34,10 +34,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+import java.util.logging.Logger;
 
 @Repository
 public class AscsDao {
 
+    private static Logger logger = Logger.getLogger(AscsDao.class.toString());
 
     @Autowired(required = false)
     private JdbcTemplate jdbcTemplate;
@@ -550,7 +552,7 @@ public class AscsDao {
     public AscsBaseModel insertDev(AscsBaseModel ascs) {
 
         int id = ascs.getId();
-        String sql = "INSERT INTO dev(platform, gbid, firm, agentid,protocol,type,descs,status,geometry,jsonparam,name,sockettype) VALUES (?, ?,?,?,?,?,?,?,?,to_json(?::json),?,?)";
+        String sql = "INSERT INTO dev(platform, gbid, firm, agentid,protocol,type,descs,status,geometry,jsonparam,name,sockettype,lasttime) VALUES (?, ?,?,?,?,?,?,?,?,to_json(?::json),?,?,LOCALTIMESTAMP)";
         if (id == 0) {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             String finalSql = sql;
@@ -580,7 +582,7 @@ public class AscsDao {
 
             ascs.setId(keyHolder.getKey().intValue());
         } else {
-            sql = "INSERT INTO dev(gbid,firm,name,id,agentid,protocol,type,descs,status,geometry,jsonparam,sockettype) VALUES (?,?,?,?,?,?,?,?,?,?,to_json(?::json),?)";
+            sql = "INSERT INTO dev(gbid,firm,name,id,agentid,protocol,type,descs,status,geometry,jsonparam,sockettype,lasttime) VALUES (?,?,?,?,?,?,?,?,?,?,to_json(?::json),?,LOCALTIMESTAMP)";
             jdbcTemplate.update(sql,
                     ascs.getGbid(),
                     ascs.getFirm(),
@@ -634,14 +636,15 @@ public class AscsDao {
                 ascs.getSockettype(),
                 ascs.getAgentid()
         );
-
         return res;
     }
+
 
     public void updateDevByCode(String code, String agentid) {
         String sql = "update dev set code=? where agentid=? ";
         jdbcTemplate.update(sql, code, agentid);
     }
+
 
     public List<String> getAllAgentids() {
 
@@ -828,6 +831,11 @@ public class AscsDao {
             isUpdate = 1;
         }
 
+        if(login_thirpartyid == null){
+            logger.warning("Report thirpartyid = null, devCover = " + devCover.toString());
+            return 0;
+        }
+
         ascsModel.setAgentid(login_agentid);
         ascsModel.setThirdplatformid(login_thirpartyid);
         ascsModel.setProtocol(devCover.getProtocol());
@@ -855,6 +863,7 @@ public class AscsDao {
                     ascsModel.getProtocol(),
                     ascsModel.getGeometry().toString(),
                     ascsModel.getJsonparam().toString());
+
         }else{
             //之前存在，则更新时间
             String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
@@ -873,7 +882,6 @@ public class AscsDao {
             //发送redis通道消息，更新映射表
             redisTemplate.convertAndSend(topic.getTopic(), "updateAscsByReport:" + devCover.getAgentid());
         }
-
         return rows;
     }
 
