@@ -20,6 +20,7 @@ import com.openatc.agent.service.RouteIntersectionDao;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnumImplInner;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.model.DevCommError;
@@ -27,6 +28,7 @@ import com.openatc.core.util.RESTRetUtils;
 import com.openatc.agent.model.*;
 import algorithm.Greenwave;
 import algorithm.Kdalgorithm;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import static com.openatc.core.common.IErrorEnumImplOuter.E_4002;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
 
@@ -268,7 +271,7 @@ public class RouteController {
      */
     @GetMapping(value = "/route/{feature}/upload/{id}")
     public RESTRetBase uploadConfigure(@PathVariable String feature, @PathVariable Long id) throws SocketException, ParseException {
-//        定义该接口的返回对象
+//      定义该接口的返回对象
         DevList devList = new DevList();
         //定义该对象的值为list列表
         List<RouteIntersectionBase> devs = new ArrayList<>();
@@ -291,6 +294,10 @@ public class RouteController {
                 DevCommError devCommError = RESTRetUtils.errorObj(r.getAgentid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
                 return RESTRetUtils.errorDetialObj(E_4003, devCommError);
             }
+            if(retBase.getMessage().equals("error response!")){
+                DevCommError devCommError = RESTRetUtils.errorObj(r.getAgentid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_200);
+                return RESTRetUtils.errorDetialObj(E_4002,devCommError);
+            }
             if (retBase.getMessage().equals("error request!")) {
                 return retBase;
             }
@@ -308,6 +315,7 @@ public class RouteController {
         devList.setDevs(devs);
         return RESTRetUtils.successObj(devList);
     }
+
 
     /**
      * @return RESTRetBase
