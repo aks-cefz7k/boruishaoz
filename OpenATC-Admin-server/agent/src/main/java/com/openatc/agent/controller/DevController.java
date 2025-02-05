@@ -39,8 +39,7 @@ public class DevController {
     private static Logger logger = Logger.getLogger(DevController.class.toString());
     @Autowired(required = false)
     AscsDao mDao;
-    @Autowired(required = false)
-    AscsBaseModel ascsModel;
+
     @Autowired(required = false)
     private RouteDao routeDao;
     @Autowired
@@ -49,33 +48,14 @@ public class DevController {
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
-
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     @Autowired
-    private DevIdMapService devIdMapService;
-    @Autowired
     private ChannelTopic topic;
-//    @Autowired
-//    private TStatDao tStatDao;
+
 
     private Logger log = Logger.getLogger(DevController.class.toString());
-
-//    private Gson gson = new Gson();
-
-    @PostMapping(value = "/devs/agentid")
-    public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
-
-        String oldAgentid = jsonObject.get("oldAgentid").getAsString();
-        String newAgentid = jsonObject.get("newAgentid").getAsString();
-        boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
-        if(result) {
-            redisTemplate.convertAndSend(topic.getTopic(), "modifyAgentid:" + newAgentid);
-        }
-        return RESTRetUtils.successObj(result);
-    }
-
 
     @GetMapping(value = "/devs/user/{username}")
     public RESTRetBase GetAllAscsByUsername(@PathVariable String username) {
@@ -112,17 +92,6 @@ public class DevController {
         return RESTRetUtils.successObj(mDao.getAscsByID(id));
     }
 
-    /*
-     * @param id
-     * @param i1
-     * @return
-     */
-    @PutMapping(value = "/devs/discovery")
-    public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel) throws ParseException {
-        mDao.updateAscsByReport(ascsModel);
-//        mDao.updateAscs(ascsModel);
-        return RESTRetUtils.successObj(ascsModel);
-    }
 
     //得到所有设备
     @GetMapping(value = "/devs/all")
@@ -184,9 +153,6 @@ public class DevController {
     //删除
     @DeleteMapping(value = "/devs/{id}")
     public RESTRetBase DeleteDev(@PathVariable String id) {
-
-        devIdMapService.setOcpLock(1);
-
         AscsBaseModel as = mDao.getAscsByID(id);
         mDao.deleteDevByID(id);
         //删除设备时，应通知所有服务更新映
@@ -249,8 +215,26 @@ public class DevController {
         }
     }
 
+    // 注册设备消息处理
+    @PutMapping(value = "/devs/discovery")
+    public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel) throws ParseException {
+        mDao.updateAscsByReport(ascsModel);
+//        mDao.updateAscs(ascsModel);
+        return RESTRetUtils.successObj(ascsModel);
+    }
 
+    // 修改设备ID
+    @PostMapping(value = "/devs/agentid")
+    public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
 
+        String oldAgentid = jsonObject.get("oldAgentid").getAsString();
+        String newAgentid = jsonObject.get("newAgentid").getAsString();
+        boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
+        if(result) {
+            redisTemplate.convertAndSend(topic.getTopic(), "modifyAgentid:" + newAgentid);
+        }
+        return RESTRetUtils.successObj(result);
+    }
 
     //获取设备优化状态参数
 //    @GetMapping(value = "/devs/{agentid}/optstatparam")

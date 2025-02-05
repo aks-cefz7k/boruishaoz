@@ -800,33 +800,26 @@ public class AscsDao {
         ascsModel.setType(devCover.getType());
         ascsModel.setStatus(devCover.getStatus());
 
-        String login_ip = devCover.getIp();
-        int login_port = devCover.getPort();
-
-        double lat = devCover.getLat();
-        double lng = devCover.getLng();
-        double[] str;
-        str = new double[]{lng, lat};
+        // 设备地理信息
         MyGeometry myGeometry = new MyGeometry();
         myGeometry.setType("Point");
-        myGeometry.setCoordinates(str);
-
+        myGeometry.setCoordinates(new double[]{devCover.getLat(), devCover.getLng()});
         ascsModel.setGeometry(myGeometry);
 
+        // 设备拓展参数
         JsonObject jo = new JsonObject();
-        jo.addProperty("ip", login_ip);
-        jo.addProperty("port", login_port);
-
+        jo.addProperty("ip", devCover.getIp());
+        jo.addProperty("port", devCover.getPort());
         if (devCover.getModel() != null)
             jo.addProperty("model", devCover.getModel());
         ascsModel.setJsonparam(jo);
 
-        String login_agentid = devCover.getAgentid();   //用户id
-        String login_thirpartyid = devCover.getThirdpartyid(); //第三方id
+        String login_agentid = devCover.getAgentid();   // 平台数据库中保存的设备id
+        String login_thirpartyid = devCover.getThirdpartyid(); // 设备上报的真实id
 
         int isUpdate = 0;
         if (login_agentid == null) {
-            login_agentid = System.currentTimeMillis() + "";
+            login_agentid = String.valueOf(System.currentTimeMillis());
             //由于上报的agentid为null,且映射表中的agentid也为null,表明第一次上报，新设置agentid，发送redis通道消息
             isUpdate = 1;
         }

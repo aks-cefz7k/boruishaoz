@@ -12,7 +12,6 @@ import org.springframework.data.redis.connection.MessageListener;
 public class SubscribeListener implements MessageListener {
 
     private static Logger logger = LoggerFactory.getLogger(SubscribeListener.class.toString());
-    @Autowired
     DevIdMapService devIdMapService;
 
     /**
@@ -22,7 +21,7 @@ public class SubscribeListener implements MessageListener {
      */
     @Override
     public void onMessage(Message message, byte[] bytes) {
-        logger.info("initmap");
+        logger.info("init DevIdMapService map by:" + message.toString());
         devIdMapService.initMap();
     }
 }

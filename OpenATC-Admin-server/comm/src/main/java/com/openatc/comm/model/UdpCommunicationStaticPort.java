@@ -185,11 +185,17 @@ public class UdpCommunicationStaticPort implements Communication {
             message = m;
         }
 
-        @SneakyThrows
         @Override
         public void run() {
-            logger.warning("New Udp Receive Thread Started:" + datagramSocket.getLocalPort());
-            Thread.sleep(1000 * 3);
+            // 等待初始化完成
+            try {
+                Thread.sleep(1000 * 5);
+                logger.warning("UdpReceiveThread Started:" + datagramSocket.getLocalPort());
+            } catch (InterruptedException e) {
+                logger.warning("UdpReceiveThread sleep error: " + e.getMessage());
+            }
+
+            // 开始监听UDP端口
             while (datagramSocket != null) {
                 byte[] dataRecv = new byte[RECVBUFFER];
                 DatagramPacket recvPacket = new DatagramPacket(dataRecv, dataRecv.length);
@@ -203,7 +209,7 @@ public class UdpCommunicationStaticPort implements Communication {
 
                     // 收到不正确的消息
                     if (responceData.getOperation() == null) {
-                        logger.warning("Udp Receive Incorrect Data: " + addressStr + " : " + port + " Length: " + recvPacket.getLength() + " Data:" + responceData);
+                        logger.warning("Udp Receive Incorrect Data: " + addressStr + " : " + port + " Data:" + responceData);
                         continue;
                     }
                     //收到主动上报的消息

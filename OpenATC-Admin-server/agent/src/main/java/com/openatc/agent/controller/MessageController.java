@@ -54,9 +54,6 @@ public class MessageController {
     @Autowired(required = false)
     protected DevController devController;
 
-    @Autowired(required = false)
-    DevIdMapService devIdMapService;
-
 //    @Autowired
     protected CommClient commClient = new CommClient();
 
@@ -72,9 +69,6 @@ public class MessageController {
         commClient.setCommunicationServerType(COMM_SERVER_TYPE_CENTER);
     }
 
-
-
-
     /**
      * @param requestData 发送给设备的请求消息
      * @return RESTRetBase
@@ -85,7 +79,6 @@ public class MessageController {
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
         AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
-
 
         //获取主机ip，如果没有传入httpServletRequest，则设置ip为localhost
         String OperatorIp = null;
@@ -103,7 +96,6 @@ public class MessageController {
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
         String protocol = ascsBaseModel.getProtocol();
-
 
         RESTRet responceData = commClient.devMessage(requestData,ascsBaseModel);
 
@@ -128,9 +120,6 @@ public class MessageController {
 
         return responceData;
     }
-
-
-
 
     /**
      * @param requestData  请求消息
