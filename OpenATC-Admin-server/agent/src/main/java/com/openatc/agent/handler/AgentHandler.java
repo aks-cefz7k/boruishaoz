@@ -9,6 +9,7 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
+
 package com.openatc.agent.handler;
 
 import com.google.gson.Gson;
@@ -67,21 +68,14 @@ public class AgentHandler extends ICommHandler {
     private void setAgentid(MessageData msg, DevCover ascsModel) {
         String agentid = null;
         Map<String, String> thirdidToAgentidOcp = devIdMapService.getThirdidToAgentidOcp();
-        agentid = thirdidToAgentidOcp.get(msg.getThirdpartyid());
-//        Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
-//        //设置agentid，查映射表
-//        String key = null;
-//        String agentidthirdid = null;
-//        if (devIdMapService.getOcpLock() == 1) {
-//            agentid = null;
-//        } else {
-//            key = ascsModel.getIp() + Integer.toString(ascsModel.getPort());
-//            agentidthirdid = ocpidmap.get(key);
-//            if (agentidthirdid != null) {
-//                String[] values = agentidthirdid.split("\\:");
-//                agentid = values[0];
-//            }
-//        }
+        Map<String, String> thirdidToAgentidScp = devIdMapService.getThirdidToAgentidScp();
+        String type = ascsModel.getProtocol();
+        String thirdid = msg.getThirdpartyid();
+        if(type.equals("OCP") || type.equals("ocp")){
+            agentid = thirdidToAgentidOcp.get(thirdid);
+        }else if(type.equals("SCP") || type.equals("scp")){
+            agentid = thirdidToAgentidScp.get(thirdid);
+        }
         msg.setAgentid(agentid);
         ascsModel.setAgentid(agentid);
     }
@@ -131,18 +125,19 @@ public class AgentHandler extends ICommHandler {
             // 将方案信息保存到InfluxDB中
             if(isInfluxDBEnable)
                 influxDbUtils.insertPattern(msg);
-
-
         }
+
         // 收到故障消息，保存到数据库中
         else if (msg.getInfotype().equals("status/fault")) {
             faultService.processFaultMessage(msg);
         }
+
         // 收到流量消息，保存到InfluxDB中
         else if (msg.getInfotype().equals("status/currentvolume")) {
             if(isInfluxDBEnable)
                 influxDbUtils.insertVolume(msg);
         }
+
         // 收到灯色消息，保存到InfluxDB中
         else if (msg.getInfotype().equals("status/channel")) {
             if(isInfluxDBEnable)

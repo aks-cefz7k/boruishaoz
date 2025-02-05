@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
+import com.openatc.agent.utils.MyHttpUtil;
 import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
@@ -26,6 +27,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -65,7 +67,7 @@ public class DevController {
 //    private Gson gson = new Gson();
 
     @PostMapping(value = "/devs/agentid")
-    public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
+    public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject, HttpServletRequest request) {
 
         String oldAgentid = jsonObject.get("oldAgentid").getAsString();
         String newAgentid = jsonObject.get("newAgentid").getAsString();
@@ -73,6 +75,7 @@ public class DevController {
         if(result) {
             redisTemplate.convertAndSend(topic.getTopic(), "modifyAgentid:" + newAgentid);
         }
+        logger.info("Change dev's agentid, oldAgentid = " + oldAgentid + ", newAgentid = " + newAgentid + ", Source ip = " + MyHttpUtil.getIpAddress(request));
         return RESTRetUtils.successObj(result);
     }
 
@@ -221,9 +224,10 @@ public class DevController {
         return RESTRetUtils.successObj(as);
     }
 
+
     //添加设备
     @PostMapping(value = "/devs")
-    public RESTRetBase InsertDev(@RequestBody AscsBaseModel ascs) {
+    public RESTRetBase InsertDev(@RequestBody AscsBaseModel ascs, HttpServletRequest request) {
 
         int count = mDao.getDevByAgentid(ascs.getAgentid());
         if (count != 0) {
@@ -232,9 +236,10 @@ public class DevController {
         }
         //删除设备时，应通知所有服务更新映射
         redisTemplate.convertAndSend(topic.getTopic(), "InsertDev:" + ascs.getAgentid());
-        logger.info("Add a dev, info = " + ascs.toString());
+        logger.info("Add a dev, info = " + ascs.toString() + ", source ip = + " + MyHttpUtil.getIpAddress(request));
         return RESTRetUtils.successObj(mDao.insertDev(ascs));
     }
+
 
     //更新设备
     @PutMapping(value = "/devs")

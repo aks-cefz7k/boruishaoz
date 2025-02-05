@@ -851,6 +851,7 @@ public class AscsDao {
             rows = jdbcTemplate.update(sql, login_thirpartyid);
             return rows;
         }
+
         //第一次上报的ocp
         if(isUpdate == 1){
             //插入
