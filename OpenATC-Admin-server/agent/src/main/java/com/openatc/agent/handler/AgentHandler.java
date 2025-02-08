@@ -71,13 +71,21 @@ public class AgentHandler extends ICommHandler {
         Map<String, String> thirdidToAgentidScp = devIdMapService.getThirdidToAgentidScp();
         String type = ascsModel.getProtocol();
         String thirdid = msg.getThirdpartyid();
-        if(type.equals("OCP") || type.equals("ocp")){
-            agentid = thirdidToAgentidOcp.get(thirdid);
-        }else if(type.equals("SCP") || type.equals("scp")){
-            agentid = thirdidToAgentidScp.get(thirdid);
+        try {
+            if(type.equals("OCP") || type.equals("ocp")){
+                agentid = thirdidToAgentidOcp.get(thirdid);
+                msg.setAgentid(agentid);
+                ascsModel.setAgentid(agentid);
+            }else if(type.equals("SCP") || type.equals("scp")){
+                agentid = thirdidToAgentidScp.get(thirdid);
+                ascsModel.setAgentid(msg.getAgentid());
+                ascsModel.setThirdpartyid(msg.getThirdpartyid());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        msg.setAgentid(agentid);
-        ascsModel.setAgentid(agentid);
+
+
     }
 
 
