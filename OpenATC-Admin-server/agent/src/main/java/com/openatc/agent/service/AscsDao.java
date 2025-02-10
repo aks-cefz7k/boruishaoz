@@ -841,7 +841,7 @@ public class AscsDao {
         if (protocol.equals("scp") || protocol.equals("SCP")) {
             //只需要更新一下时间
             String sql = "update dev set lastTime=LOCALTIMESTAMP where agentid = ?";
-            rows = jdbcTemplate.update(sql, login_thirpartyid);
+            rows = jdbcTemplate.update(sql, login_agentid);
             return rows;
         }
 
