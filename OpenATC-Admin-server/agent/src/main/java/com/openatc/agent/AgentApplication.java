@@ -52,10 +52,14 @@ public class AgentApplication implements CommandLineRunner {
     @Value("${agent.server.shiro}")
     private String shiroOpen;
 
-    @Value("${agent.buildtime}")
-    private String buildtime;
+    @Value("${agent.version}")
+    private String serviceVersion;
+    // 打包时间
+    @Value("${agent.build.time}")
+    private String serviceBuildDate;
 
-//    private void setShiroOpen(Boolean shiroOpen){
+
+    //    private void setShiroOpen(Boolean shiroOpen){
 //        AgentApplication.shiroOpen = shiroOpen;
 //    }
     public static List<String> tokenlist = null;
@@ -73,9 +77,12 @@ public class AgentApplication implements CommandLineRunner {
     public void run(String... args) {
 //        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
 
-        logger.warning("App Build Time：" + buildtime);
-        logger.warning("Is Shiro Open：" + shiroOpen);
+        logger.warning("=================Project=================");
+        logger.warning("service version:%s" + serviceVersion);
+        logger.warning(String.format("service build date:%s",serviceBuildDate));
+        logger.warning("Shiro Config：" + shiroOpen);
         logger.warning("Current Path：" + System.getProperty("user.dir"));
+        logger.warning("=================Project=================");
 
         try {
             tokenlist = JwtFileUtil.initList();
