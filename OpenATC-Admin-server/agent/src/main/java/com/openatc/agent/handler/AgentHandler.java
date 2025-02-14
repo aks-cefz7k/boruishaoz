@@ -9,6 +9,7 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
+
 package com.openatc.agent.handler;
 
 import com.google.gson.Gson;
@@ -88,9 +89,13 @@ public class AgentHandler extends ICommHandler {
         String operation = msg.getOperation();
 
         // 根据设备真实ID，设置平台的agentidID,此处的agentid不是设备的agentid，是平台在数据库中的唯一ID
-        String agentid = devIdMapService.getAgentidFromThirdPartyid(msg.getThirdpartyid());
-        msg.setAgentid(agentid);
-
+        String agentid = null;
+        if(msg.getAgentid() == null){
+            agentid = devIdMapService.getAgentidFromThirdPartyid(msg.getThirdpartyid());
+            msg.setAgentid(agentid);
+        }else{
+            agentid = msg.getAgentid();
+        }
         String key = agenttype + ":" + infotype + ":" + agentid;
 
         // 如果开启Redis，则将消息存入Redis
@@ -133,5 +138,4 @@ public class AgentHandler extends ICommHandler {
                 influxDbUtils.insertChannelLamp(msg);
         }
     }
-
 }
