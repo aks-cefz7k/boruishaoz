@@ -3,16 +3,16 @@ package com.openatc.agent.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
-@Table(name = "fault", schema = "public",
-        indexes = {@Index(columnList = "m_unFaultRenewTime")})
+@Table(name = "fault")
 @Entity
+@IdClass(FaultKey.class)
 public class Fault {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String agentid;
+    @Id
     private Long m_wFaultID;
     private Integer m_byFaultBoardType;
     private Long m_unFaultOccurTime;
@@ -22,8 +22,11 @@ public class Fault {
     private int[] m_byFaultDescValue;
     private Integer m_byFaultLevel;
 
-    public Fault setId(Long id) {
-        this.id = id;
-        return this;
-    }
+
+}
+
+@Data
+class FaultKey implements Serializable  {
+    private String agentid;
+    private Long m_wFaultID;
 }

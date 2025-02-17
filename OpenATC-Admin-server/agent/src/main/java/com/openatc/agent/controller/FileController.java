@@ -1,6 +1,7 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
@@ -28,8 +29,8 @@ public class FileController {
 
     private Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    @Autowired
-    private DevController devController;
+    @Autowired(required = false)
+    AscsDao ascsDao;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -37,14 +38,8 @@ public class FileController {
     @PostMapping(value = "/system/update")
     public RESTRetBase uploadFile(@RequestParam(value = "file") MultipartFile file,
                                   @RequestParam(value = "agentid") String agentid) {
-        RESTRet<AscsBaseModel> restRet = null;
         RESTRetBase result;
-        try {
-            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentid);
-        } catch (ParseException e) {
-            logger.warn(e.getMessage());
-        }
-        AscsBaseModel ascsBaseModel = restRet.getData();
+        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012" + "/openatc/system/update";
         //设置请求头

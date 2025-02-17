@@ -78,7 +78,7 @@ public class AgentApplication implements CommandLineRunner {
 //        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
 
         logger.warning("=================Project=================");
-        logger.warning("service version:%s" + serviceVersion);
+        logger.warning("service version:" + serviceVersion);
         logger.warning(String.format("service build date:%s",serviceBuildDate));
         logger.warning("Shiro Config：" + shiroOpen);
         logger.warning("Current Path：" + System.getProperty("user.dir"));

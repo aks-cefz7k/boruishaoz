@@ -97,10 +97,11 @@ public class AgentHandler extends ICommHandler {
             agentid = msg.getAgentid();
         }
         String key = agenttype + ":" + infotype + ":" + agentid;
-
+        String value = null;
         // 如果开启Redis，则将消息存入Redis
         if (isRedisEnable) {
-            stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
+            value = gson.toJson(msg);
+            stringRedisTemplate.opsForValue().set(key, value);
         }
 
         // ** 以下为消息的特殊处理 **
@@ -116,24 +117,26 @@ public class AgentHandler extends ICommHandler {
             ascsDao.updateAscsByReport(ascsModel);
         }
         // 收到方案消息，往Redis通道里发布消息
-        else if (msg.getInfotype().equals("status/pattern")) {
+        else if (infotype.equals("status/pattern")) {
             if(isRedisEnable)
-                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
+                stringRedisTemplate.convertAndSend(agenttype + ":" + infotype, value);
             // 将方案信息保存到InfluxDB中
             if(isInfluxDBEnable)
                 influxDbUtils.insertPattern(msg);
         }
-        // 收到故障消息，保存到数据库中
-        else if (msg.getInfotype().equals("status/fault")) {
+        // 收到故障消息，发布故障消息，并保存到数据库中
+        else if (infotype.equals("status/fault")) {
+            if(isRedisEnable)
+                stringRedisTemplate.convertAndSend(agenttype + ":" + infotype, value);
             faultService.processFaultMessage(msg);
         }
         // 收到流量消息，保存到InfluxDB中
-        else if (msg.getInfotype().equals("status/currentvolume")) {
+        else if (infotype.equals("status/currentvolume")) {
             if(isInfluxDBEnable)
                 influxDbUtils.insertVolume(msg);
         }
         // 收到灯色消息，保存到InfluxDB中
-        else if (msg.getInfotype().equals("status/channel")) {
+        else if (infotype.equals("status/channel")) {
             if(isInfluxDBEnable)
                 influxDbUtils.insertChannelLamp(msg);
         }

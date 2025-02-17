@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.controller.DevController;
 import com.openatc.agent.model.Fault;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.FtpFileSystemUtil;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -35,57 +37,35 @@ public class FaultServiceImpl {
     @Autowired
     FaultDao faultDao;
 
-    @Autowired
-    StringRedisTemplate stringRedisTemplate;
+//    @Autowired
+//    StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    DevController devController;
+    @Autowired(required = false)
+    AscsDao ascsDao;
 
     @Value("${fault.filepath}")
     private String faultFilePath;
 
-    Gson gson = new Gson();
-
     @Value("${ftpclient.port}")
     private int port;
 
+    Gson gson = new Gson();
+
+
+
     public void processFaultMessage(MessageData msg) {
-        JsonObject messageJson = gson.fromJson(gson.toJson(msg), JsonObject.class);
-        String agentid = messageJson.get("agentid").getAsString();
-        JsonArray m_faultDeque = messageJson.getAsJsonObject("data").getAsJsonArray("m_FaultDeque");
+        String agentid = msg.getAgentid();
+        Fault[] m_faultDeque = gson.fromJson(msg.getData().getAsJsonObject().getAsJsonArray("m_FaultDeque"),Fault[].class);
 
-        for (JsonElement faultJson : m_faultDeque) {
-            Fault fault = gson.fromJson(faultJson.toString(), Fault.class);
-
+        for (Fault fault : m_faultDeque) {
             fault.setAgentid(agentid);
-            Long id = faultDao.selectByAgentidAndMwFaultID(agentid, fault.getM_wFaultID());
-            Fault dbFault = (id == null) ? faultDao.save(fault) : faultDao.save(fault.setId(id));
-            stringRedisTemplate.convertAndSend("asc:event/faultdata", gson.toJson(transformFault(dbFault)));
+            faultDao.save(fault);
         }
     }
 
-    private JsonObject transformFault(Fault fault) {
-        JsonObject jsonObject = gson.fromJson(gson.toJson(fault), JsonObject.class);
-        if (fault.getM_unFaultOccurTime() != 0) {
-            jsonObject.addProperty("m_unFaultOccurTime", DateUtil.longToString(fault.getM_unFaultOccurTime() * 1000));
-        } else {
-            jsonObject.addProperty("m_unFaultOccurTime", 0);
-        }
-        if (fault.getM_unFaultRenewTime() != 0) {
-            jsonObject.addProperty("m_unFaultRenewTime", DateUtil.longToString(fault.getM_unFaultRenewTime() * 1000));
-        } else {
-            jsonObject.addProperty("m_unFaultRenewTime", 0);
-        }
-        JsonObject result = new JsonObject();
-        result.add("data", jsonObject);
-        result.addProperty("infotype", "event/faultdata");
-        result.addProperty("agentid", fault.getAgentid());
-        return result;
-    }
 
-    public RESTRetBase getHistoryFault(String agentid, String username, String password) throws ParseException, IOException {
-        RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentid);
-        AscsBaseModel ascsBaseModel = restRet.getData();
+    public RESTRetBase getHistoryFault(String agentid, String username, String password) {
+        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         // 登录信号机
         FTPClient ftpClient = FtpFileSystemUtil.login(ip, port, username, password);

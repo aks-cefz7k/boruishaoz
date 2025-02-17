@@ -82,24 +82,8 @@ public class DevController {
         return RESTRetUtils.successObj(mDao.getAscsNoCode());
     }
 
-    /*
-     * @param id
-     * @param i1
-     * @return
-     */
-    @GetMapping(value = "/devs/info/{id}")
-    public RESTRetBase GetAscsInfo(@PathVariable String id) {
-        return RESTRetUtils.successObj(mDao.getAscsByID(id));
-    }
-
-
     //得到所有设备
-    @GetMapping(value = "/devs/all")
-    public RESTRetBase GetDevAll() throws ParseException {
-        return GetDevs();
-    }
-
-    @GetMapping(value = "/devs")
+    @GetMapping(value = { "/devs" ,  "/devs/all"})
     public RESTRetBase GetDevs() throws ParseException {
         String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
@@ -107,7 +91,7 @@ public class DevController {
         return RESTRetUtils.successObj(ascsBaseModels);
     }
 
-    //按照列表获取设备
+    // todo: 改造获取方式，按照列表获取设备
     @PostMapping(value = "/devs/list")
     public RESTRetBase getDevList(@RequestBody JsonObject jsonObject) {
         Gson gson = new Gson();
@@ -127,26 +111,15 @@ public class DevController {
     }
 
     //得到某一Id设备
-    @GetMapping(value = "/devs/{id}")
-    public RESTRetBase GetDevById(@PathVariable String id) throws ParseException {
-        AscsBaseModel ascsBaseModel = null;
-        String sql =
-                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid ='"
-                        + id + "'";
-        List<AscsBaseModel> listAscs = mDao.getDevByPara(sql);
-        if (listAscs.size() > 0) {
-            ascsBaseModel = listAscs.get(0);
-        }
-
-        return RESTRetUtils.successObj(ascsBaseModel);
-
+    @GetMapping(value = { "/devs/{id}" , "/devs/info/{id}" })
+    public RESTRetBase GetAscsInfo(@PathVariable String id) {
+        return RESTRetUtils.successObj(mDao.getAscsByID(id));
     }
 
     //得到某类型的设备
     @GetMapping(value = "/devs/type/{ptype}")
     public RESTRetBase GetDevByType(@PathVariable String ptype) throws ParseException {
-        String sql = "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='"
-                + ptype + "'";
+        String sql = "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='" + ptype + "'";
         return RESTRetUtils.successObj(mDao.getDevByPara(sql));
     }
 
@@ -235,61 +208,4 @@ public class DevController {
         }
         return RESTRetUtils.successObj(result);
     }
-
-    //获取设备优化状态参数
-//    @GetMapping(value = "/devs/{agentid}/optstatparam")
-//    public RESTRetBase getDevOptstatparam(@PathVariable String agentid) {
-//        List<TStat> tStats = tStatDao.findByAgentid(agentid);
-//        return RESTRetUtils.successObj(tStats);
-//    }
-//
-//    //修改设备状态优化参数
-//    @PostMapping(value = "/devs/{agentid}/optstatparam")
-//    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
-//
-//        // 1 先删除之前的
-//        int deleteResult = tStatDao.deleteByAgentid(agentid);
-//        log.info(deleteResult + "");
-//        // 2 保存到数据库
-//        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
-//        for (JsonElement tstatJson : tstats) {
-//            TStat tStat = gson.fromJson(tstatJson, TStat.class);
-//            tStat.setAgentid(agentid);
-//            tStatDao.save(tStat);
-//        }
-//        return RESTRetUtils.successObj();
-//    }
-//
-//    //查询数据库中饱和数据表
-//    @GetMapping(value = "/devs/optstatparam")
-//    public RESTRetBase getOptstatparam() {
-//        List<TStat> tStats = tStatDao.findAll();
-//        return RESTRetUtils.successObj(tStats);
-//    }
-
-
-//    //获取设备优化状态参数
-//    @GetMapping(value = "/devs/{agentid}/optstatparam")
-//    public RESTRetBase getDevOptstatparam(@PathVariable String agentid) {
-//        List<TStat> tStats = tStatDao.findByAgentid(agentid);
-//        return RESTRetUtils.successObj(tStats);
-//    }
-//
-//    //修改设备状态优化参数
-//    @PostMapping(value = "/devs/{agentid}/optstatparam")
-//    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
-//        // 0 下发到信号机
-//        MessageData messageData = new MessageData(agentid, "set-request", "status/optstatparam", jsonObject);
-//        messageController.postDevsMessage(null, messageData);
-//
-//        // 1 保存到数据库
-//        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
-//        for(JsonElement tstatJson : tstats){
-//            TStat tStat = gson.fromJson(tstatJson, TStat.class);
-//            tStat.setAgentid(agentid);
-//            tStatDao.save(tStat);
-//        }
-//        return RESTRetUtils.successObj();
-//    }
-
 }
