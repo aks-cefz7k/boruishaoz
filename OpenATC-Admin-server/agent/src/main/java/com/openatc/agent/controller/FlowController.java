@@ -26,7 +26,7 @@ public class FlowController {
 
     @PostMapping(value = "/flow/history")
     public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) {
-        String agentId = jsonObject.get("agentId").getAsString();
+        String agentId = jsonObject.get("agentid").getAsString();
         AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentId);
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/flow/history"; //读取流量文件

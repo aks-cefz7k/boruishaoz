@@ -52,6 +52,12 @@ public class AgentApplication implements CommandLineRunner {
     @Value("${agent.server.shiro}")
     private String shiroOpen;
 
+    @Value("${spring.redis.enable}")
+    private String redisOpen;
+
+    @Value("${spring.influx.enable}")
+    private String influxdbOpen;
+
     @Value("${agent.version}")
     private String serviceVersion;
     // 打包时间
@@ -81,6 +87,8 @@ public class AgentApplication implements CommandLineRunner {
         logger.warning("service version:" + serviceVersion);
         logger.warning(String.format("service build date:%s",serviceBuildDate));
         logger.warning("Shiro Config：" + shiroOpen);
+        logger.warning("Redis Config：" + redisOpen);
+        logger.warning("InfluxDB Config：" + influxdbOpen);
         logger.warning("Current Path：" + System.getProperty("user.dir"));
         logger.warning("=================Project=================");
 
