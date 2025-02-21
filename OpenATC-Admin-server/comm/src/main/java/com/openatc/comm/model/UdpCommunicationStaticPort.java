@@ -126,7 +126,7 @@ public class UdpCommunicationStaticPort implements Communication {
         }
         globalLock.unlock();
 
-        logger.info("Message Lock : Lock id:" + lock.hashCode() + " KEY:" + messageKey);
+//        logger.info("Message Lock : Lock id:" + lock.hashCode() + " KEY:" + messageKey);
         lock.lock();
         lockMap.put(messageKey, lock);
 
@@ -163,13 +163,13 @@ public class UdpCommunicationStaticPort implements Communication {
             responceData = CreateErrorResponceData(agentid, "Receive Time Out or Receive Incorrect Data!");
             logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
         } catch (InterruptedException e) {
-            logger.info("Send & Receive Data Correct! Thread#" + thread.getId() + " KEY:" + messageKey);
+            logger.info("Exange Msg Succeed! Thread#" + thread.getId() + " KEY:" + messageKey);
         }
 
         messageMap.remove(messageKey);
         lockMap.remove(messageKey);
         lock.unlock();
-        logger.info("Message unLock : Lock id:" + lock.hashCode() + " KEY:" + messageKey);
+//        logger.info("Message unLock : Lock id:" + lock.hashCode() + " KEY:" + messageKey);
         return responceData;
     }
 

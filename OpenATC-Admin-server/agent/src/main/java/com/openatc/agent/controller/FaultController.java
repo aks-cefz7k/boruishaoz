@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.Fault;
 import com.openatc.agent.resmodel.PageOR;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
@@ -42,7 +43,7 @@ public class FaultController {
     FaultServiceImpl faultService;
 
     @Autowired
-    private DevController devController;
+    AscsDao ascsDao;
 
     Gson gson = new Gson();
 
@@ -147,13 +148,7 @@ public class FaultController {
     @PostMapping(value = "/fault/history")
     public RESTRetBase getHistoryFault(@RequestBody JsonObject jsonObject) {
         String agentId = jsonObject.get("agentId").getAsString();
-        RESTRet<AscsBaseModel> restRet = null;
-        try {
-            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
-        } catch (ParseException e) {
-            logger.warn(e.getMessage());
-        }
-        AscsBaseModel ascsBaseModel = restRet.getData();
+        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentId);
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
         String json = MyHttpUtil.doPost(url, new JsonObject().toString());
@@ -170,13 +165,7 @@ public class FaultController {
     @PostMapping(value = "/operation/history")
     public RESTRetBase getHistoryOperation(@RequestBody JsonObject jsonObject) {
         String agentId = jsonObject.get("agentId").getAsString();
-        RESTRet<AscsBaseModel> restRet = null;
-        try {
-            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
-        } catch (ParseException e) {
-            logger.warn(e.getMessage());
-        }
-        AscsBaseModel ascsBaseModel = restRet.getData();
+        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentId);
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
         String json = MyHttpUtil.doPost(url, new JsonObject().toString());

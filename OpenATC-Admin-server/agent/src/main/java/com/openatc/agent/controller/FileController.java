@@ -29,7 +29,7 @@ public class FileController {
 
     private Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    @Autowired(required = false)
+    @Autowired
     AscsDao ascsDao;
 
     @Autowired

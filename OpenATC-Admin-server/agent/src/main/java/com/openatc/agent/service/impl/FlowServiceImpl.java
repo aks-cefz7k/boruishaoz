@@ -3,6 +3,7 @@ package com.openatc.agent.service.impl;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.openatc.agent.controller.DevController;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FlowService;
 import com.openatc.agent.utils.FtpFileSystemUtil;
 import com.openatc.comm.data.AscsBaseModel;
@@ -22,8 +23,9 @@ import java.util.Map;
 
 @Repository
 public class FlowServiceImpl implements FlowService {
-    @Autowired(required = false)
-    protected DevController devController;
+
+    @Autowired
+    AscsDao ascsDao;
 
     @Value("${ftpclient.port}")
     private int port;
@@ -33,11 +35,8 @@ public class FlowServiceImpl implements FlowService {
 
     @Override
     public RESTRetBase getHistoryFlow(String agentid, String username, String password) throws ParseException, IOException {
-        Map<String, JsonObject> result = new HashMap<>(32);
-        RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentid);
-        AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
+        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        JsonArray jsonArray = new JsonArray();
         // 登录信号机
         FTPClient ftpClient = FtpFileSystemUtil.login(ip, port, username, password);
         if (ftpClient == null) {
@@ -47,12 +46,6 @@ public class FlowServiceImpl implements FlowService {
         }
 
         JsonArray jsonFile = FtpFileSystemUtil.getJsonFile(ftpClient, flowFilePath);
-//        List<String> fileNames = FtpFileSystemUtil.getFileNames(ftpClient, flowFilePath);
-//        for (String fileName : fileNames) {
-//            JsonArray jsonFile = FtpFileSystemUtil.getJsonFile(ftpClient, fileName);
-//            if (jsonFile == null) continue;
-//            jsonArray.addAll(jsonFile);
-//        }
 
         return RESTRetUtils.successObj(jsonFile);
     }

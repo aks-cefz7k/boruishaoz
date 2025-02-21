@@ -13,7 +13,6 @@ package com.openatc.agent.controller;
 
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
-import com.openatc.agent.service.DevIdMapService;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
@@ -51,9 +50,6 @@ public class MessageController {
     @Autowired(required = false)
     protected HisParamServiceImpl hisParamService;
 
-    @Autowired(required = false)
-    protected DevController devController;
-
 //    @Autowired
     protected CommClient commClient = new CommClient();
 
@@ -77,8 +73,8 @@ public class MessageController {
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
-        RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
-        AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
+
+        AscsBaseModel ascsBaseModel = mDao.getAscsByID(requestData.getAgentid());
 
         //获取主机ip，如果没有传入httpServletRequest，则设置ip为localhost
         String OperatorIp = null;
