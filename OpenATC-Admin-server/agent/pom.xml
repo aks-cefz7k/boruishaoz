@@ -12,10 +12,10 @@
 
     <properties>
         <java.version>1.8</java.version>
-<!--        &lt;!&ndash;maven.build.timestamp保存了maven编译时间戳&ndash;&gt;-->
-<!--        <timestamp>${maven.build.timestamp}</timestamp>-->
-<!--        &lt;!&ndash;指定时间格式&ndash;&gt;-->
-<!--        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>-->
+        <!--        &lt;!&ndash;maven.build.timestamp保存了maven编译时间戳&ndash;&gt;-->
+        <!--        <timestamp>${maven.build.timestamp}</timestamp>-->
+        <!--        &lt;!&ndash;指定时间格式&ndash;&gt;-->
+        <!--        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>-->
     </properties>
 
     <!--    <repositories>-->
@@ -45,12 +45,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.influxdb</groupId>
-            <artifactId>influxdb-java</artifactId>
-            <version>2.15</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
 
@@ -73,10 +67,10 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.dataformat</groupId>-->
-<!--            <artifactId>jackson-dataformat-xml</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.fasterxml.jackson.dataformat</groupId>-->
+        <!--            <artifactId>jackson-dataformat-xml</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>com.auth0</groupId>
@@ -106,6 +100,13 @@
             <artifactId>comm</artifactId>
             <version>1.1.9</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.openatc</groupId>
+            <artifactId>model</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.openatc</groupId>
             <artifactId>algorithm</artifactId>
@@ -127,10 +128,10 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.dataformat</groupId>-->
-<!--            <artifactId>jackson-dataformat-xml</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.fasterxml.jackson.dataformat</groupId>-->
+        <!--            <artifactId>jackson-dataformat-xml</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -157,73 +158,72 @@
                 </configuration>
 
             </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-<!--&lt;!&ndash;            Docker 打包插件&ndash;&gt;-->
-<!--            <plugin>-->
-<!--                <groupId>com.spotify</groupId>-->
-<!--                <artifactId>dockerfile-maven-plugin</artifactId>-->
-<!--                <version>1.4.4</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>default</id>-->
-<!--                        <goals>-->
-<!--                            <goal>build</goal>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>tag-version</id>-->
-<!--                        <goals>-->
-<!--                            <goal>tag</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <tag>${project.version}</tag>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>tag-latest</id>-->
-<!--                        <goals>-->
-<!--                            <goal>tag</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <tag>latest</tag>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>push-latest</id>-->
-<!--                        <phase>none</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <tag>latest</tag>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>push-version</id>-->
-<!--                        <phase>none</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>push</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <tag>${project.version}</tag>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <configuration>-->
-<!--&lt;!&ndash;                    <repository>kiss-registry:5000/${project.artifactId}</repository>&ndash;&gt;-->
-<!--                    <repository>nexus.kedacom.com/content/repositories/yuanqu-snapshot/${project.artifactId}</repository>-->
-<!--                    <tag>${project.version}</tag>-->
-<!--                    <tag>latest</tag>-->
-<!--                    <buildArgs>-->
-<!--                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
-<!--                    </buildArgs>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <!--&lt;!&ndash;            Docker 打包插件&ndash;&gt;-->
+            <!--            <plugin>-->
+            <!--                <groupId>com.spotify</groupId>-->
+            <!--                <artifactId>dockerfile-maven-plugin</artifactId>-->
+            <!--                <version>1.4.4</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>default</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>build</goal>-->
+            <!--                            <goal>push</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                    <execution>-->
+            <!--                        <id>tag-version</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>tag</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <tag>${project.version}</tag>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                    <execution>-->
+            <!--                        <id>tag-latest</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>tag</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <tag>latest</tag>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                    <execution>-->
+            <!--                        <id>push-latest</id>-->
+            <!--                        <phase>none</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>push</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <tag>latest</tag>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                    <execution>-->
+            <!--                        <id>push-version</id>-->
+            <!--                        <phase>none</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>push</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <tag>${project.version}</tag>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--                <configuration>-->
+            <!--&lt;!&ndash;                    <repository>kiss-registry:5000/${project.artifactId}</repository>&ndash;&gt;-->
+            <!--                    <repository>nexus.kedacom.com/content/repositories/yuanqu-snapshot/${project.artifactId}</repository>-->
+            <!--                    <tag>${project.version}</tag>-->
+            <!--                    <tag>latest</tag>-->
+            <!--                    <buildArgs>-->
+            <!--                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>-->
+            <!--                    </buildArgs>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 

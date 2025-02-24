@@ -1,9 +1,7 @@
 package com.openatc.agent.controller;
 
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.openatc.agent.model.AscPattern;
 import com.openatc.agent.model.ControlMsg;
 import com.openatc.agent.model.OptDev;
 import com.openatc.agent.model.Overflow;
@@ -15,6 +13,7 @@ import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

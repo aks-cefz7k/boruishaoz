@@ -14,7 +14,6 @@ package com.openatc.agent;
 
 import com.openatc.agent.handler.AgentHandler;
 import com.openatc.agent.model.FileProperties;
-import com.openatc.agent.utils.InfluxDbUtils;
 import com.openatc.agent.utils.JwtFileUtil;
 import com.openatc.comm.model.UdpCommunicationStaticPort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -37,11 +37,11 @@ import java.util.logging.Logger;
  * @Description: TODO
  * @date 2019年10月19日 下午6:50:52
  */
-@SpringBootApplication
 @EnableScheduling
 @EnableConfigurationProperties({FileProperties.class})
 @ComponentScan({"com.openatc.agent", "com.openatc.comm", "com.openatc.core"})
 @EnableTransactionManagement
+@SpringBootApplication
 public class AgentApplication implements CommandLineRunner {
 
     private static Logger logger = Logger.getLogger(AgentApplication.class.toString());

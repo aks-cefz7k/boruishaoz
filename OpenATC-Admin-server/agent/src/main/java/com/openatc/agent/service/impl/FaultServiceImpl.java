@@ -1,32 +1,21 @@
 package com.openatc.agent.service.impl;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.openatc.agent.controller.DevController;
 import com.openatc.agent.model.Fault;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FaultDao;
-import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.FtpFileSystemUtil;
 import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.core.common.IErrorEnumImplOuter;
-import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @Service

@@ -12,7 +12,6 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.THisParams;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_2004;

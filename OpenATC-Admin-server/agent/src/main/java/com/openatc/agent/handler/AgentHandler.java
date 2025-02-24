@@ -14,13 +14,11 @@ package com.openatc.agent.handler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.openatc.agent.controller.DevController;
 import com.openatc.agent.model.DevCover;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.DevIdMapService;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
-import com.openatc.agent.utils.InfluxDbUtils;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,6 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -46,14 +43,11 @@ public class AgentHandler extends ICommHandler {
 
     @Value("${spring.redis.enable}")
     private boolean isRedisEnable;
-    @Value("${spring.influx.enable}")
-    private boolean isInfluxDBEnable;
+
     @Autowired
     public StringRedisTemplate stringRedisTemplate;
     @Autowired
     private FaultServiceImpl faultService;
-    @Autowired
-    private InfluxDbUtils influxDbUtils;
     @Autowired
     AscsDao ascsDao;
     @Autowired
@@ -102,6 +96,7 @@ public class AgentHandler extends ICommHandler {
         if (isRedisEnable) {
             value = gson.toJson(msg);
             stringRedisTemplate.opsForValue().set(key, value);
+            stringRedisTemplate.convertAndSend(key, value);
         }
 
         // ** 以下为消息的特殊处理 **
@@ -116,29 +111,9 @@ public class AgentHandler extends ICommHandler {
             ascsModel.setThirdpartyid(msg.getThirdpartyid());
             ascsDao.updateAscsByReport(ascsModel);
         }
-        // 收到方案消息，往Redis通道里发布消息
-        else if (infotype.equals("status/pattern")) {
-            if(isRedisEnable)
-                stringRedisTemplate.convertAndSend(agenttype + ":" + infotype, value);
-            // 将方案信息保存到InfluxDB中
-            if(isInfluxDBEnable)
-                influxDbUtils.insertPattern(msg);
-        }
         // 收到故障消息，发布故障消息，并保存到数据库中
         else if (infotype.equals("status/fault")) {
-            if(isRedisEnable)
-                stringRedisTemplate.convertAndSend(agenttype + ":" + infotype, value);
             faultService.processFaultMessage(msg);
-        }
-        // 收到流量消息，保存到InfluxDB中
-        else if (infotype.equals("status/currentvolume")) {
-            if(isInfluxDBEnable)
-                influxDbUtils.insertVolume(msg);
-        }
-        // 收到灯色消息，保存到InfluxDB中
-        else if (infotype.equals("status/channel")) {
-            if(isInfluxDBEnable)
-                influxDbUtils.insertChannelLamp(msg);
         }
     }
 }

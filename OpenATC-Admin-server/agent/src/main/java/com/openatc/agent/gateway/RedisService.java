@@ -1,6 +1,6 @@
 package com.openatc.agent.gateway;
 
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.MyWebSocketServer;
 import org.slf4j.Logger;
@@ -47,8 +47,9 @@ public class RedisService {
             unSubsMessage(null);
             return;
         }
-        JSONObject pattern = JSONObject.parseObject(message);
-        String agentId = pattern.getString("agentid");
+
+        JsonObject jsonObject = new Gson().fromJson(message, JsonObject.class);
+        String agentId = jsonObject.get("agentid").getAsString();
 
         log.info("receive " + type + " message: " + message);
         if ("asc:status/pattern".equals(type)) {
