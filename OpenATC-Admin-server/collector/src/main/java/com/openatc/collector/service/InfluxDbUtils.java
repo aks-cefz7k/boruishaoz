@@ -1,10 +1,9 @@
-package com.openatc.agent.utils;
+package com.openatc.collector.service;
 
 import com.google.gson.Gson;
-import com.openatc.agent.model.*;
 import com.openatc.comm.data.MessageData;
+import com.openatc.model.model.*;
 import org.influxdb.InfluxDB;
-import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -98,7 +97,7 @@ public class InfluxDbUtils {
                 influxDB.write(point);
             }
         }catch (Exception e){
-            log.warning("InfluxDB insert Volume error:" + e.getMessage());
+            log.warning("InfluxDB insert channellamp error:" + e.getMessage());
             return 1;
         }
         return 0;
@@ -114,15 +113,13 @@ public class InfluxDbUtils {
 
             // 判断周期剩余时间是否小于最后可变时间，如果小于的话，则代表周期即将结束，将方案存入数据库
             String phase = "";
+            String countdown = "";
             String stages = "";
-            if(ascPattern.getSyncTime() > 3){
-                for (AscPhase ascPhase : ascPattern.getPhase()) {
-                    phase += "P" + ascPhase.getId() + ":" + ascPhase.getSplit() + ", ";
-
-                }
-                stages = ascPattern.getStages().toString();
+            for (AscPhase ascPhase : ascPattern.getPhase()) {
+                phase += "P" + ascPhase.getId() + ":" + ascPhase.getSplit() + ", ";
+                countdown += "P" + ascPhase.getId() + ":" + ascPhase.getType() + "-" + ascPhase.getCountdown() + ", ";
             }
-
+            stages = ascPattern.getStages().toString();
 
             Point point = Point.measurement("pattern")
                     .tag("agentid",md.getAgentid())
@@ -136,12 +133,13 @@ public class InfluxDbUtils {
                     .addField("total_stages",ascPattern.getTotal_stages())
                     .addField("stages",stages)
                     .addField("phase",phase)
+                    .addField("countdown",countdown)
                     .time(System.currentTimeMillis(),TimeUnit.MILLISECONDS)
                     .build();
             influxDB.write(point);
 
         }catch (Exception e){
-            log.warning("InfluxDB insert Volume error:" + e.getMessage());
+            log.warning("InfluxDB insert pattern error:" + e.getMessage());
             return 1;
         }
         return 0;
