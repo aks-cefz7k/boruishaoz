@@ -8,11 +8,8 @@ import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
-import com.openatc.agent.utils.MyHttpUtil;
 import com.openatc.agent.utils.PageInit;
-import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
-import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.slf4j.Logger;
@@ -139,38 +136,7 @@ public class FaultController {
         return jsonObject;
     }
 
-    /**
-     * @param jsonObject -> agentId
-     * @return RESTRetBase
-     * @descripation 获取信号机内故障文件
-     * @Date 2021/9/16 13:57
-     **/
-    @PostMapping(value = "/fault/history")
-    public RESTRetBase getHistoryFault(@RequestBody JsonObject jsonObject) {
-        String agentId = jsonObject.get("agentId").getAsString();
-        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentId);
-        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
-        String json = MyHttpUtil.doPost(url, new JsonObject().toString());
-        return gson.fromJson(json, RESTRet.class);
-    }
 
-
-    /**
-     * @param jsonObject agentId
-     * @return RESTRetBase
-     * @descripation 获取信号机内操作记录文件
-     * @Date 2021/9/16 13:56
-     **/
-    @PostMapping(value = "/operation/history")
-    public RESTRetBase getHistoryOperation(@RequestBody JsonObject jsonObject) {
-        String agentId = jsonObject.get("agentId").getAsString();
-        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentId);
-        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
-        String json = MyHttpUtil.doPost(url, new JsonObject().toString());
-        return gson.fromJson(json, RESTRet.class);
-    }
 
 
     /**

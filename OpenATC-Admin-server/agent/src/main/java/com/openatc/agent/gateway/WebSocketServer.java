@@ -131,10 +131,12 @@ public class WebSocketServer {
             // 拥堵事件订阅消息
             if ("event/trafficdata".equals(messageType)) {
                 trafficIncidentWebSocketSet.put(session, new MyWebSocketServer(username, this));
+                webSocketComponent.redisService.subsMessage("asc:event/trafficdata");
             }
             // 故障事件订阅消息
-            if ("event/faultdata".equals(messageType)) {
+            if ("status/fault".equals(messageType)) {
                 faultIncidentWebSocketSet.put(session, new MyWebSocketServer(username, this));
+                webSocketComponent.redisService.subsMessage("asc:"+messageType);
             } else if (isPollingType(messageType)) {//messageType含有pattern就不是轮询
                 //添加监听记录映射
                 for (int i = 0; i < para.length; i++) {
@@ -154,7 +156,7 @@ public class WebSocketServer {
                     log.info("RedisConnectionException: Unable to connect to redis:6379");
                     return;
                 }
-            } else {// Channel订阅
+            } else {
                 for (int i = 0; i < para.length; i++) {
                     String subsChannel = ChannelSubsCheck(para[i]);
                     //传入消息"asc:status/pattern :22"     截取后的消息"asc:status/pattern"
@@ -171,10 +173,12 @@ public class WebSocketServer {
         } else if ("down".equals(subscribe)) {//结束消息订阅
             // 事件消息
             if (messageType.equals("event/trafficdata")) {
+                webSocketComponent.redisService.unSubsMessage("asc:event/trafficdata");
                 trafficIncidentWebSocketSet.remove(session);
             }
             //事故消息
-            if (messageType.equals("event/faultdata")) {
+            if (messageType.equals("status/fault")) {
+                webSocketComponent.redisService.unSubsMessage("asc:"+messageType);
                 faultIncidentWebSocketSet.remove(session);
             }
             // 定时器订
