@@ -130,13 +130,16 @@ public class WebSocketServer {
         } else if ("up".equals(subscribe)) {//开启订阅消息
             // 拥堵事件订阅消息
             if ("event/trafficdata".equals(messageType)) {
+                if (trafficIncidentWebSocketSet.size() == 0)
+                    webSocketComponent.redisService.subsMessage("asc:" + messageType);
                 trafficIncidentWebSocketSet.put(session, new MyWebSocketServer(username, this));
-                webSocketComponent.redisService.subsMessage("asc:event/trafficdata");
             }
             // 故障事件订阅消息
             if ("status/fault".equals(messageType)) {
+                //set集合不为空则表明已经订阅
+                if (faultIncidentWebSocketSet.size() == 0)
+                    webSocketComponent.redisService.subsMessage("asc:" + messageType);
                 faultIncidentWebSocketSet.put(session, new MyWebSocketServer(username, this));
-                webSocketComponent.redisService.subsMessage("asc:"+messageType);
             } else if (isPollingType(messageType)) {//messageType含有pattern就不是轮询
                 //添加监听记录映射
                 for (int i = 0; i < para.length; i++) {
@@ -173,12 +176,15 @@ public class WebSocketServer {
         } else if ("down".equals(subscribe)) {//结束消息订阅
             // 事件消息
             if (messageType.equals("event/trafficdata")) {
-                webSocketComponent.redisService.unSubsMessage("asc:event/trafficdata");
+                if (trafficIncidentWebSocketSet.size() == 1)
+                    webSocketComponent.redisService.unSubsMessage("asc:" + messageType);
                 trafficIncidentWebSocketSet.remove(session);
             }
             //事故消息
             if (messageType.equals("status/fault")) {
-                webSocketComponent.redisService.unSubsMessage("asc:"+messageType);
+                //当set集合里面没有元素时结束当前订阅
+                if (faultIncidentWebSocketSet.size() == 1)
+                    webSocketComponent.redisService.unSubsMessage("asc:" + messageType);
                 faultIncidentWebSocketSet.remove(session);
             }
             // 定时器订
