@@ -50,7 +50,7 @@ public class MessageController {
     @Autowired(required = false)
     protected HisParamServiceImpl hisParamService;
 
-//    @Autowired
+//  @Autowired
     protected CommClient commClient = new CommClient();
 
     @Autowired(required = false)
@@ -64,6 +64,7 @@ public class MessageController {
         // 设置通讯模式为UDP固定端口
         commClient.setCommunicationServerType(COMM_SERVER_TYPE_CENTER);
     }
+
 
     /**
      * @param requestData 发送给设备的请求消息
@@ -85,7 +86,7 @@ public class MessageController {
         }
 
         // 发送请求，并把应答返
-        if( ascsBaseModel == null){
+        if (ascsBaseModel == null) {
             logger.info("GetDevById is null, request = " + requestData.toString());
             return new RESTRet();
         }
@@ -93,7 +94,7 @@ public class MessageController {
         int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
         String protocol = ascsBaseModel.getProtocol();
 
-        RESTRet responceData = commClient.devMessage(requestData,ascsBaseModel);
+        RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
 
         // 把设置请求的操作保存到历史记录中
         String token = null;
@@ -102,21 +103,19 @@ public class MessageController {
         }
 
         if (requestData.getOperation().equals("set-request")) {
-            if(token == null){
+            if (token == null) {
                 logger.warning("token of set-request is null;");
             }
             logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            try{
+            try {
                 hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.warning(e.toString());
                 return responceData;
             }
         }
-
         return responceData;
     }
-
     /**
      * @param requestData  请求消息
      * @param responceData 应答消息
@@ -143,7 +142,6 @@ public class MessageController {
         hisParams.setSource(ip);
         //设备id
         hisParams.setAgentid(requestData.getAgentid());
-
         //消息类型
         hisParams.setInfotype(requestData.getInfotype());
         //请求内容
@@ -160,5 +158,4 @@ public class MessageController {
         }
         return hisParams;
     }
-
 }

@@ -9,11 +9,14 @@ import org.springframework.data.redis.connection.MessageListener;
 
 
 
+
+
+
 public class SubscribeListener implements MessageListener {
-
     private static Logger logger = LoggerFactory.getLogger(SubscribeListener.class.toString());
-    DevIdMapService devIdMapService;
 
+    @Autowired
+    DevIdMapService devIdMapService;
     /**
      * 收到到updateIdMap后，触发更新id映射
      * @param message：订阅消息类型

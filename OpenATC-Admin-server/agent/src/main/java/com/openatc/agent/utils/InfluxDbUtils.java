@@ -98,7 +98,7 @@ public class InfluxDbUtils {
                 influxDB.write(point);
             }
         }catch (Exception e){
-            log.warning("InfluxDB insert Volume error:" + e.getMessage());
+            log.warning("InfluxDB insert channellamp error:" + e.getMessage());
             return 1;
         }
         return 0;
@@ -141,7 +141,7 @@ public class InfluxDbUtils {
             influxDB.write(point);
 
         }catch (Exception e){
-            log.warning("InfluxDB insert Volume error:" + e.getMessage());
+            log.warning("InfluxDB insert pattern error:" + e.getMessage());
             return 1;
         }
         return 0;
@@ -164,7 +164,7 @@ public class InfluxDbUtils {
 
             influxDB.write(point);
         }catch (Exception e){
-            log.warning("InfluxDB insert Volume error:" + e.getMessage());
+            log.warning("InfluxDB insert volume error:" + e.getMessage());
             return 1;
         }
         return 0;

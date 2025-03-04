@@ -70,7 +70,6 @@ public class ManualpanelController {
             }
             lsCheckList.add(new LSCheck(channelid, channelcontrolsource, channeldirection));
         }
-
         // List<Channel> [{"channelid":1,"channelstatus":1},{"channelid":2,"channelstatus":1},{"channelid":3,"channelstatus":3},{"channelid":4,"channelstatus":1}]
         // channelList 表示如上List<Channel>的集合
         List<List<Channel>> channelList = new ArrayList<>();
@@ -87,7 +86,6 @@ public class ManualpanelController {
                 } else {
                     channelList.get(i).add(new Channel(lsCheck.getId(), 0));
                 }
-
             }
         }
         //设置keyconfigList
