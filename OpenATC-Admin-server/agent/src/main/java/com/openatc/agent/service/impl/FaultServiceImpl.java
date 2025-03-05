@@ -26,9 +26,6 @@ public class FaultServiceImpl {
     @Autowired
     FaultDao faultDao;
 
-//    @Autowired
-//    StringRedisTemplate stringRedisTemplate;
-
     @Autowired(required = false)
     AscsDao ascsDao;
 
@@ -41,10 +38,9 @@ public class FaultServiceImpl {
     Gson gson = new Gson();
 
 
-
     public void processFaultMessage(MessageData msg) {
         String agentid = msg.getAgentid();
-        Fault[] m_faultDeque = gson.fromJson(msg.getData().getAsJsonObject().getAsJsonArray("m_FaultDeque"),Fault[].class);
+        Fault[] m_faultDeque = gson.fromJson(msg.getData().getAsJsonObject().getAsJsonArray("m_FaultDeque"), Fault[].class);
 
         for (Fault fault : m_faultDeque) {
             fault.setAgentid(agentid);

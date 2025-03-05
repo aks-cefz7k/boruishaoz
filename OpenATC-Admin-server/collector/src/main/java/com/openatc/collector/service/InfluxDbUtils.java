@@ -162,7 +162,7 @@ public class InfluxDbUtils {
 
             influxDB.write(point);
         }catch (Exception e){
-            log.warning("InfluxDB insert Volume error:" + e.getMessage());
+            log.warning("InfluxDB insert volume error:" + e.getMessage());
             return 1;
         }
         return 0;

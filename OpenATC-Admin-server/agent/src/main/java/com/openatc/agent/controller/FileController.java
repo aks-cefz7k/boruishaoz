@@ -1,7 +1,9 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.utils.MyHttpUtil;
 import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
@@ -15,6 +17,7 @@ import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 
 @RestController
 public class FileController {
@@ -31,6 +33,8 @@ public class FileController {
 
     @Autowired
     AscsDao ascsDao;
+
+    Gson gson = new Gson();
 
     @Autowired
     private RestTemplate restTemplate;
@@ -70,6 +74,40 @@ public class FileController {
             }
         }
         return result;
+    }
+
+
+    /**
+     * @param jsonObject -> agentId
+     * @return RESTRetBase
+     * @descripation 获取信号机内故障文件
+     * @Date 2021/9/16 13:57
+     **/
+    @PostMapping(value = "/fault/history")
+    public RESTRetBase getHistoryFault(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentId").getAsString();
+        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentId);
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
+        String json = MyHttpUtil.doPost(url, new JsonObject().toString());
+        return gson.fromJson(json, RESTRet.class);
+    }
+
+
+    /**
+     * @param jsonObject agentId
+     * @return RESTRetBase
+     * @descripation 获取信号机内操作记录文件
+     * @Date 2021/9/16 13:56
+     **/
+    @PostMapping(value = "/operation/history")
+    public RESTRetBase getHistoryOperation(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentId").getAsString();
+        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentId);
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
+        String json = MyHttpUtil.doPost(url, new JsonObject().toString());
+        return gson.fromJson(json, RESTRet.class);
     }
 
 }

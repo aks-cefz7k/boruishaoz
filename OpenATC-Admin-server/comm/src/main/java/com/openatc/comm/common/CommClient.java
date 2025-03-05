@@ -204,6 +204,7 @@ public class CommClient {
         if(responceData == null){
             responceData = CreateErrorResponceData(agentId,"Responce Data is null");
         }
+
 //        log.info("receive responceData: " + responceData);
 
 //        try {

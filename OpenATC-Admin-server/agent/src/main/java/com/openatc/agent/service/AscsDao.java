@@ -655,14 +655,138 @@ public class AscsDao {
     public List<AscsBaseModel> alterStatus(List<AscsBaseModel> ascsBaseModels) {
         List<String> faultDevAgentids = getFaultDev();
         for (AscsBaseModel ascsBaseModel : ascsBaseModels) {
-            if (ascsBaseModel.getState().equals("UP")) {
-                if (faultDevAgentids.contains(ascsBaseModel.getAgentid())) {
-                    ascsBaseModel.setState("FAULT");
+            if (faultDevAgentids.contains(ascsBaseModel.getAgentid())) {
+                if (ascsBaseModel.getState().equals("DOWN")) {
+                    continue;
                 }
+                ascsBaseModel.setState("FAULT");
             }
         }
         return ascsBaseModels;
     }
+
+
+//    public int updateAscsByReport(DevCover devCover) {
+//        AscsBaseModel ascsModel = new AscsBaseModel();
+//        ascsModel.setType(devCover.getType());
+//        ascsModel.setStatus(devCover.getStatus());
+//
+//        String login_ip = devCover.getIp();
+//        int login_port = devCover.getPort();
+//
+//        double lat = devCover.getLat();
+//        double lng = devCover.getLng();
+//        double[] str;
+//        str = new double[]{lng, lat};
+//        MyGeometry myGeometry = new MyGeometry();
+//        myGeometry.setType("Point");
+//        myGeometry.setCoordinates(str);
+//
+//        ascsModel.setGeometry(myGeometry);
+//
+//        JsonObject jo = new JsonObject();
+//        jo.addProperty("ip", login_ip);
+//        jo.addProperty("port", login_port);
+//
+//        if (devCover.getModel() != null)
+//            jo.addProperty("model", devCover.getModel());
+//        ascsModel.setJsonparam(jo);
+//
+//        String login_agentid = devCover.getAgentid();   //用户id
+//        String login_thirpartyid = devCover.getThirdpartyid(); //第三方id
+//
+//        int isUpdate = 0;
+//        if (login_agentid == null) {
+//            login_agentid = System.currentTimeMillis() + "";
+//            //由于上报的agentid为null,且映射表中的agentid也为null,表明第一次上报，新设置agentid，发送redis通道消息
+//            isUpdate = 1;
+//        }
+//
+//        ascsModel.setAgentid(login_agentid);
+//        ascsModel.setThirdplatformid(login_thirpartyid);
+//        ascsModel.setProtocol(devCover.getProtocol());
+//        Gson gson = new Gson();
+//
+//        int updateCount = 0;
+//        int rows = 0;
+//        String protocol = devCover.getProtocol();
+//        //遍历dev表的 ip、port，未找到插入，找到更新
+//        String sqlIdAndJsonparamList = "SELECT id, agentid, jsonparam,geometry FROM dev";
+//        List<Map<String, Object>> idAndJsonparamList = jdbcTemplate.queryForList(sqlIdAndJsonparamList);
+//
+//        for (Map<String, Object> idAndJson : idAndJsonparamList) {
+//            Map jsonparamMap = gson.fromJson(idAndJson.get("jsonparam").toString(), Map.class);
+//            //scp协议的ip和port均相同，用agentid来判断
+//            if (protocol.equals("scp") || protocol.equals("SCP")) {
+//                String agentid = (String) idAndJson.get("agentid");
+//                if (login_thirpartyid.equals(agentid)) {
+//                    //只需要更新一下时间
+//                    String sql = "update dev set lastTime=LOCALTIMESTAMP where agentid = ?";
+//                    rows = jdbcTemplate.update(sql, agentid);
+//                    return rows;
+//                }
+//            } else {
+//                int id = (int) idAndJson.get("id");
+//                int port = 0;
+//
+//                if (!jsonparamMap.get("port").toString().equals("")) {
+//                    port = Double.valueOf(jsonparamMap.get("port").toString()).intValue();
+//                }
+//                //找到对应ip + port
+//                if (jsonparamMap.get("ip").equals(devCover.getIp()) && port == devCover.getPort()) {
+//                    //坐标为空，更新坐标
+//                    if (idAndJson.get("geometry") == null) {
+//                        String sql = "update dev set type=?,status=?,protocol=?,geometry=?,jsonparam=(to_json(?::json)), thirdplatformid=?, lastTime=LOCALTIMESTAMP where id = ?";
+//                        String strGeo = ascsModel.getGeometry().toString();
+//                        rows = jdbcTemplate.update(sql,
+//                                ascsModel.getType(),
+//                                ascsModel.getStatus(),
+//                                ascsModel.getProtocol(),
+//                                strGeo,
+//                                ascsModel.getJsonparam().toString(),
+//                                ascsModel.getThirdplatformid(),
+//                                id);
+//                        updateCount++;
+//                    } else {
+//                        //坐标非空，不更新坐标
+//                        String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where id = ?";
+//                        rows = jdbcTemplate.update(sql,
+//                                ascsModel.getThirdplatformid(),
+//                                ascsModel.getType(),
+//                                ascsModel.getStatus(),
+//                                ascsModel.getProtocol(),
+//                                ascsModel.getJsonparam().toString(),
+//                                id);
+//                        updateCount++;
+//                    }
+//                }
+//            }//id (protocol.equals("ocp") || protocol.equals("OCP"))
+//        }//for (Map<String, Object> idAndJson : idAndJsonparamList)
+//
+//        //scp直接返回
+//        if (protocol.equals("scp") || protocol.equals("SCP")) {
+//            return rows;
+//        }
+//
+//        //未找到,说明未新注册，插入
+//        if (updateCount == 0) {
+//            String sql = "INSERT INTO dev(agentid, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+//            rows = jdbcTemplate.update(sql,
+//                    ascsModel.getAgentid(),
+//                    ascsModel.getThirdplatformid(),
+//                    ascsModel.getType(),
+//                    ascsModel.getStatus(),
+//                    ascsModel.getProtocol(),
+//                    ascsModel.getGeometry().toString(),
+//                    ascsModel.getJsonparam().toString());
+//        }
+//
+//        if (isUpdate == 1 && rows > 0) {
+//            //发送redis通道消息，更新映射表
+//            redisTemplate.convertAndSend(topic.getTopic(), "updateAscsByReport:" + devCover.getAgentid());
+//        }
+//        return rows;
+//    }
 
     public int updateAscsByReport(DevCover devCover) {
 
