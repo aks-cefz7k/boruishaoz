@@ -3,6 +3,7 @@ package com.openatc.agent.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
 import com.openatc.comm.data.AscsBaseModel;
@@ -18,7 +19,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Null;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.*;
@@ -45,7 +45,7 @@ public class VipRouteController {
     MessageController messageController;
 
     @Autowired
-    DevController devController;
+    AscsDao ascsDao;
 
     private static final String ASC_VIPROUTE_STATUS = "asc:viproute/status:";
     private static final String ZEROSECONDS = "00:00";
@@ -83,8 +83,7 @@ public class VipRouteController {
                 return;
             }
             String agentid = vipRouteDev.getAgentid();
-            RESTRet restRet = (RESTRet) devController.GetDevById(agentid);
-            AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
+            AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
             if(ascsBaseModel == null) return;
             vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
         }

@@ -13,7 +13,6 @@ package com.openatc.agent.realm;
 
 import java.util.List;
 
-import com.openatc.agent.AgentApplication;
 import com.openatc.agent.model.Permission;
 import com.openatc.agent.model.User;
 import com.openatc.agent.service.PermissionDao;

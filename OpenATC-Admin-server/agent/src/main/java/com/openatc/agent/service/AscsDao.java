@@ -34,10 +34,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+import java.util.logging.Logger;
 
 @Repository
 public class AscsDao {
 
+    private static Logger logger = Logger.getLogger(AscsDao.class.toString());
 
     @Autowired(required = false)
     private JdbcTemplate jdbcTemplate;
@@ -203,27 +205,21 @@ public class AscsDao {
 
 
     public AscsBaseModel getAscsByID(String id) throws EnumConstantNotPresentException {
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, name,agentid,protocol descs, geometry,type,status,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state FROM dev WHERE agentid ='" + id + "'";
-        Map<String, Object> lvRet = jdbcTemplate.queryForMap(sql);
-        AscsBaseModel ascBase = new AscsBaseModel();
-        Gson gs = new Gson();
-        ascBase.setId((int) lvRet.get("id"));
-        ascBase.setThirdplatformid((String) lvRet.get("thirdplatformid"));
-        ascBase.setPlatform((String) lvRet.get("platform"));
-        ascBase.setGbid((String) lvRet.get("gbid"));
-        ascBase.setFirm((String) lvRet.get("firm"));
-        ascBase.setAgentid((String) lvRet.get("agentid"));
-        ascBase.setProtocol((String) lvRet.get("protocol"));
-        ascBase.setStatus((int) lvRet.get("status"));
-        ascBase.setDescs((String) lvRet.get("descs"));
-        ascBase.setType((String) lvRet.get("type"));
-        ascBase.setName((String) lvRet.get("name"));
-        String geometry = (String) lvRet.get("geometry");
-        ascBase.setGeometry(gs.fromJson(geometry, MyGeometry.class));
-        JsonObject jsonparam = new JsonParser().parse(lvRet.get("jsonparam").toString()).getAsJsonObject();
-        ascBase.setJsonparam(jsonparam);
-        ascBase.setState((String) lvRet.get("state"));
-        return ascBase;
+
+        AscsBaseModel ascsBaseModel = null;
+        String sql =
+                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid ='"
+                        + id + "'";
+        List<AscsBaseModel> listAscs = null;
+        try {
+            listAscs = getDevByPara(sql);
+        } catch (ParseException e) {
+            logger.warning("getAscsByID error :" + e.getMessage());
+        }
+        if (listAscs.size() > 0) {
+            ascsBaseModel = listAscs.get(0);
+        }
+        return ascsBaseModel;
     }
 
     public int updateAscsonReport(DevCover devCover) {
@@ -550,7 +546,7 @@ public class AscsDao {
     public AscsBaseModel insertDev(AscsBaseModel ascs) {
 
         int id = ascs.getId();
-        String sql = "INSERT INTO dev(platform, gbid, firm, agentid,protocol,type,descs,status,geometry,jsonparam,name,sockettype) VALUES (?, ?,?,?,?,?,?,?,?,to_json(?::json),?,?)";
+        String sql = "INSERT INTO dev(platform, gbid, firm, agentid,protocol,type,descs,status,geometry,jsonparam,name,sockettype,lasttime) VALUES (?, ?,?,?,?,?,?,?,?,to_json(?::json),?,?,LOCALTIMESTAMP)";
         if (id == 0) {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             String finalSql = sql;
@@ -580,7 +576,7 @@ public class AscsDao {
 
             ascs.setId(keyHolder.getKey().intValue());
         } else {
-            sql = "INSERT INTO dev(gbid,firm,name,id,agentid,protocol,type,descs,status,geometry,jsonparam,sockettype) VALUES (?,?,?,?,?,?,?,?,?,?,to_json(?::json),?)";
+            sql = "INSERT INTO dev(gbid,firm,name,id,agentid,protocol,type,descs,status,geometry,jsonparam,sockettype,lasttime) VALUES (?,?,?,?,?,?,?,?,?,?,to_json(?::json),?,LOCALTIMESTAMP)";
             jdbcTemplate.update(sql,
                     ascs.getGbid(),
                     ascs.getFirm(),
@@ -634,14 +630,15 @@ public class AscsDao {
                 ascs.getSockettype(),
                 ascs.getAgentid()
         );
-
         return res;
     }
+
 
     public void updateDevByCode(String code, String agentid) {
         String sql = "update dev set code=? where agentid=? ";
         jdbcTemplate.update(sql, code, agentid);
     }
+
 
     public List<String> getAllAgentids() {
 
@@ -797,35 +794,33 @@ public class AscsDao {
         ascsModel.setType(devCover.getType());
         ascsModel.setStatus(devCover.getStatus());
 
-        String login_ip = devCover.getIp();
-        int login_port = devCover.getPort();
-
-        double lat = devCover.getLat();
-        double lng = devCover.getLng();
-        double[] str;
-        str = new double[]{lng, lat};
+        // 设备地理信息
         MyGeometry myGeometry = new MyGeometry();
         myGeometry.setType("Point");
-        myGeometry.setCoordinates(str);
-
+        myGeometry.setCoordinates(new double[]{devCover.getLat(), devCover.getLng()});
         ascsModel.setGeometry(myGeometry);
 
+        // 设备拓展参数
         JsonObject jo = new JsonObject();
-        jo.addProperty("ip", login_ip);
-        jo.addProperty("port", login_port);
-
+        jo.addProperty("ip", devCover.getIp());
+        jo.addProperty("port", devCover.getPort());
         if (devCover.getModel() != null)
             jo.addProperty("model", devCover.getModel());
         ascsModel.setJsonparam(jo);
 
-        String login_agentid = devCover.getAgentid();   //用户id
-        String login_thirpartyid = devCover.getThirdpartyid(); //第三方id
+        String login_agentid = devCover.getAgentid();   // 平台数据库中保存的设备id
+        String login_thirpartyid = devCover.getThirdpartyid(); // 设备上报的真实id
 
         int isUpdate = 0;
         if (login_agentid == null) {
-            login_agentid = System.currentTimeMillis() + "";
+            login_agentid = String.valueOf(System.currentTimeMillis());
             //由于上报的agentid为null,且映射表中的agentid也为null,表明第一次上报，新设置agentid，发送redis通道消息
             isUpdate = 1;
+        }
+
+        if(login_thirpartyid == null){
+            logger.warning("Report thirpartyid = null, devCover = " + devCover.toString());
+            return 0;
         }
 
         ascsModel.setAgentid(login_agentid);
@@ -840,9 +835,10 @@ public class AscsDao {
         if (protocol.equals("scp") || protocol.equals("SCP")) {
             //只需要更新一下时间
             String sql = "update dev set lastTime=LOCALTIMESTAMP where agentid = ?";
-            rows = jdbcTemplate.update(sql, login_thirpartyid);
+            rows = jdbcTemplate.update(sql, login_agentid);
             return rows;
         }
+
         //第一次上报的ocp
         if(isUpdate == 1){
             //插入
@@ -855,6 +851,7 @@ public class AscsDao {
                     ascsModel.getProtocol(),
                     ascsModel.getGeometry().toString(),
                     ascsModel.getJsonparam().toString());
+
         }else{
             //之前存在，则更新时间
             String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
@@ -873,7 +870,6 @@ public class AscsDao {
             //发送redis通道消息，更新映射表
             redisTemplate.convertAndSend(topic.getTopic(), "updateAscsByReport:" + devCover.getAgentid());
         }
-
         return rows;
     }
 

@@ -23,7 +23,7 @@ services:
 
   # redis服务
   redis:
-    image: 'kiss-registry:5000/redis/redis:3.2-alpine'
+    image: 'docker-registry:5000/redis/redis:3.2-alpine'
     deploy:
       replicas: 1
       restart_policy:
@@ -47,6 +47,9 @@ services:
       replicas: 1
       restart_policy:
         condition: none
+      placement:
+        constraints:
+          - node.hostname == mesos103
 
   # OpenATC平台服务
   openatc:
@@ -57,13 +60,15 @@ services:
       - '31002:31002/udp'
     volumes:
       - /root/static:/static
-    networks:
-      - kiss-net-17
+    network_mode:
+      "host"
     deploy:
       replicas: 1
       restart_policy:
         condition: none
-
+      placement:
+        constraints:
+          - node.hostname == mesos103
     environment:
       - ppostgresql=192.168.13.103
       - ppostgresport=55432
@@ -72,10 +77,13 @@ services:
       - predis=192.168.13.103
       - predisport=6379
       - predispassword=
+      - influxenable=true
+      - influxurl=http://192.168.13.103:8086
+      - influxdatabase=openatc
 
   # 时序数据库
   influxdb:
-    image: tutum/influxdb:0.9
+    image: influxdb:1.8
     container_name: influxdb
     deploy:
       replicas: 1
@@ -85,15 +93,17 @@ services:
         constraints:
           - node.hostname == mesos104
     environment:
-      PRE_CREATE_DB=openatc
+      - PRE_CREATE_DB=openatc
     ports:
-      "8083:8083"
-      "8086:8086"
+      # The API for InfluxDB is served on port 8086
+      - "8086:8086"
+      - "8082:8082"
+      # UDP Port
+      - "8089:8089/udp"
     volumes:
-      - /data/influxdb/conf:/etc/influxdb
-      - /data/influxdb/data:/var/lib/influxdb/data
-      - /data/influxdb/meta:/var/lib/influxdb/meta
-      - /data/influxdb/wal:/var/lib/influxdb/wal
+      - /data/influxdb/conf/:/etc/influxdb/
+      - /data/influxdb/:/root/.influxdb/
+
 
   # 监控可视化
   grafana:
@@ -107,7 +117,7 @@ services:
         constraints:
           - node.hostname == mesos104
     ports:
-      "3000:3000"
+      - "3000:3000"
     volumes:
       - /data/grafana/data:/var/lib/grafana
 

@@ -13,7 +13,6 @@ package com.openatc.agent.controller;
 
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
-import com.openatc.agent.service.DevIdMapService;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
@@ -32,6 +31,7 @@ import java.net.SocketException;
 import java.text.ParseException;
 import java.util.logging.Logger;
 
+import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
 import static com.openatc.comm.common.CommunicationType.*;
 
 
@@ -50,13 +50,7 @@ public class MessageController {
     @Autowired(required = false)
     protected HisParamServiceImpl hisParamService;
 
-    @Autowired(required = false)
-    protected DevController devController;
-
-    @Autowired(required = false)
-    DevIdMapService devIdMapService;
-
-//    @Autowired
+//  @Autowired
     protected CommClient commClient = new CommClient();
 
     @Autowired(required = false)
@@ -71,6 +65,7 @@ public class MessageController {
         commClient.setCommunicationServerType(COMM_SERVER_TYPE_CENTER);
     }
 
+
     /**
      * @param requestData 发送给设备的请求消息
      * @return RESTRetBase
@@ -79,9 +74,8 @@ public class MessageController {
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
-        RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
-        AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
 
+        AscsBaseModel ascsBaseModel = mDao.getAscsByID(requestData.getAgentid());
 
         //获取主机ip，如果没有传入httpServletRequest，则设置ip为localhost
         String OperatorIp = null;
@@ -92,7 +86,7 @@ public class MessageController {
         }
 
         // 发送请求，并把应答返
-        if( ascsBaseModel == null){
+        if (ascsBaseModel == null) {
             logger.info("GetDevById is null, request = " + requestData.toString());
             return new RESTRet();
         }
@@ -100,8 +94,7 @@ public class MessageController {
         int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
         String protocol = ascsBaseModel.getProtocol();
 
-
-        RESTRet responceData = commClient.devMessage(requestData,ascsBaseModel);
+        RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
 
         // 把设置请求的操作保存到历史记录中
         String token = null;
@@ -110,24 +103,19 @@ public class MessageController {
         }
 
         if (requestData.getOperation().equals("set-request")) {
-            if(token == null){
+            if (token == null) {
                 logger.warning("token of set-request is null;");
             }
             logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            try{
+            try {
                 hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.warning(e.toString());
                 return responceData;
             }
         }
-
         return responceData;
     }
-
-
-
-
     /**
      * @param requestData  请求消息
      * @param responceData 应答消息
@@ -154,7 +142,6 @@ public class MessageController {
         hisParams.setSource(ip);
         //设备id
         hisParams.setAgentid(requestData.getAgentid());
-
         //消息类型
         hisParams.setInfotype(requestData.getInfotype());
         //请求内容
@@ -170,26 +157,5 @@ public class MessageController {
             hisParams.setResponsebody(responceData.getData().toString());
         }
         return hisParams;
-    }
-
-    public static String getIpAddress(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        String unknown = "unknown";
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
     }
 }

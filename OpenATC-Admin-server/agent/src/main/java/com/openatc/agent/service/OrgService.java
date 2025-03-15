@@ -11,23 +11,14 @@
  **/
 package com.openatc.agent.service;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 
 import com.openatc.agent.model.Role;
 import com.openatc.agent.model.Route;
 import com.openatc.agent.model.SysOrg;
-import com.openatc.core.model.RESTRetBase;
-import com.openatc.core.util.RESTRetUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Set;
 
 
 public interface OrgService extends JpaRepository<SysOrg, Integer> {

@@ -3,14 +3,13 @@ package com.openatc.agent.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.Fault;
+import com.openatc.agent.resmodel.PageOR;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
-import com.openatc.agent.utils.MyHttpUtil;
 import com.openatc.agent.utils.PageInit;
-import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
-import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.slf4j.Logger;
@@ -41,9 +40,29 @@ public class FaultController {
     FaultServiceImpl faultService;
 
     @Autowired
-    private DevController devController;
+    AscsDao ascsDao;
 
     Gson gson = new Gson();
+
+
+    /**
+     * @param pageNum:页码 pageRow:pageRow
+     * @descripation 获取所有的故障
+     * @Date 2021/9/16 14:16
+     **/
+    @GetMapping(value = "/fault/all")
+    public RESTRetBase getAllFault(@RequestParam(required = false) Integer pageNum,
+                                   @RequestParam(required = false) Integer pageRow) {
+        PageInit pageInit = new PageInit(pageNum, pageRow);
+        Pageable pageRequest = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
+        Specification<Fault> query = null;
+        Page<Fault> faults = faultDao.findAll(query, pageRequest);
+        PageOR<JsonObject> pageOR = new PageOR<>();
+        pageOR.setTotal(faults.getTotalElements());
+        pageOR.setContent(transformFaultList(faults.getContent()));
+        return RESTRetUtils.successObj(pageOR);
+    }
+
 
     /**
      * @param pageNum 页码
@@ -88,9 +107,8 @@ public class FaultController {
     @DeleteMapping(value = "/fault/{id}")
     public RESTRetBase deleteFault(@PathVariable Long id) {
         Optional<Fault> optFault = faultDao.findById(id);
-        Fault fault = optFault.get();
-        if (fault != null) fault.setM_unFaultRenewTime(System.currentTimeMillis() / 1000);
-        faultDao.save(fault);
+        if (optFault.isPresent())
+            faultDao.delete(optFault.get());
         return RESTRetUtils.successObj();
     }
 
@@ -118,52 +136,18 @@ public class FaultController {
         return jsonObject;
     }
 
-    @PostMapping(value = "/fault/history")
-    public RESTRetBase getHistoryFault(@RequestBody JsonObject jsonObject) {
-        String agentId = jsonObject.get("agentId").getAsString();
-        RESTRet<AscsBaseModel> restRet = null;
-        try {
-            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
-        } catch (ParseException e) {
-            logger.warn(e.getMessage());
-        }
-        AscsBaseModel ascsBaseModel = restRet.getData();
-        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        String url = "http://" + ip + ":8012/openatc/fault/history"; //读取历史故障文件
-        String json = MyHttpUtil.doGet(url);
-        return gson.fromJson(json, RESTRet.class);
-    }
 
-
-
-
-
-    @PostMapping(value = "/operation/history")
-    public RESTRetBase getHistoryOperation(@RequestBody JsonObject jsonObject) {
-        String agentId = jsonObject.get("agentId").getAsString();
-        RESTRet<AscsBaseModel> restRet = null;
-        try {
-            restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(agentId);
-        } catch (ParseException e) {
-            logger.warn(e.getMessage());
-        }
-        AscsBaseModel ascsBaseModel = restRet.getData();
-        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        String url = "http://" + ip + ":8012/openatc/operation/history"; //读取操作日志文件
-        String json = MyHttpUtil.doGet(url);
-        return gson.fromJson(json, RESTRet.class);
-    }
 
 
     /**
-     * @return
-     * @throws
+     * @return RESTRetBase
      * @Date 2021/9/1 9:49
      * @Descripation 查询指定agentId范围内的故障记录
      * 没有上传时间范围则查询所有范围内的故障记录
      */
     @PostMapping(value = "/fault/range")
     public RESTRetBase getRangeFault(@RequestBody JsonObject jsonObject) {
+        PageOR<JsonObject> pageOR = new PageOR<>();
         if (jsonObject == null) {
             return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
         }
@@ -173,8 +157,8 @@ public class FaultController {
         String agentId = jsonObject.get("agentId").getAsString();
         Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
         Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
-        String beginTime = jsonObject.get("beginTime") == null ? null : jsonObject.get("beginTime").getAsString();
-        String endTime = jsonObject.get("endTime") == null ? null : jsonObject.get("endTime").getAsString();
+        String beginTime = jsonObject.get("beginTime") == null ? "0" : jsonObject.get("beginTime").getAsString();
+        String endTime = jsonObject.get("endTime") == null ? "0" : jsonObject.get("endTime").getAsString();
         long bTime;
         long eTime;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -201,6 +185,9 @@ public class FaultController {
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         };
         Page<Fault> faultList = faultDao.findAll(queryCondition, pageable);
-        return RESTRetUtils.successObj(faultList);
+        List<JsonObject> list = transformFaultList(faultList.getContent());
+        pageOR.setContent(list);
+        pageOR.setTotal(faultList.getTotalElements());
+        return RESTRetUtils.successObj(pageOR);
     }
 }

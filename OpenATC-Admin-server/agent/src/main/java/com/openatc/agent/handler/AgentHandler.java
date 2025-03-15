@@ -9,12 +9,13 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
+
 package com.openatc.agent.handler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.openatc.agent.controller.DevController;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.DevIdMapService;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
@@ -27,7 +28,6 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -41,87 +41,79 @@ public class AgentHandler extends ICommHandler {
 
     private static Logger logger = Logger.getLogger(AgentHandler.class.toString());
 
-    @Autowired(required = false)
-    DevController devController;
-    @Autowired(required = false)
-    DevIdMapService devIdMapService;
-
     @Value("${spring.redis.enable}")
     private boolean isRedisEnable;
+
     @Autowired
     public StringRedisTemplate stringRedisTemplate;
     @Autowired
     private FaultServiceImpl faultService;
+    @Autowired
+    AscsDao ascsDao;
+    @Autowired
+    DevIdMapService devIdMapService;
 
     private String agenttype = "asc";
 
+    private Gson gson = new Gson();
 
-    //id转换，根据上报的thirdpartyid查找映射表，进而设置agentid
-    private void setAgentid(MessageData msg, DevCover ascsModel) {
-        String agentid = null;
-        Map<String, String> thirdidToAgentidOcp = devIdMapService.getThirdidToAgentidOcp();
-        agentid = thirdidToAgentidOcp.get(msg.getThirdpartyid());
-//        Map<String, String> ocpidmap = devIdMapService.getOCPIDMAP();
-//        //设置agentid，查映射表
-//        String key = null;
-//        String agentidthirdid = null;
-//        if (devIdMapService.getOcpLock() == 1) {
-//            agentid = null;
-//        } else {
-//            key = ascsModel.getIp() + Integer.toString(ascsModel.getPort());
-//            agentidthirdid = ocpidmap.get(key);
-//            if (agentidthirdid != null) {
-//                String[] values = agentidthirdid.split("\\:");
-//                agentid = values[0];
-//            }
-//        }
-        msg.setAgentid(agentid);
-        ascsModel.setAgentid(agentid);
-    }
-
-
+    // todo: 此处删除同步锁，观察是否有影响
     @Override
-    public synchronized void process(MessageData msg) throws ParseException {
-        if (msg.getCreatetime() == null) {
-            msg.setCreatetime(DateUtil.date2esstr(new Date()));
-        }
+    public /*synchronized*/ void process(MessageData msg) throws ParseException {
 
-        Gson gson = new Gson();
-        JsonElement data = msg.getData();
-        DevCover ascsModel = gson.fromJson(data, DevCover.class);
-
+        // 如果消息为空，则返回
         if (msg == null) {
             logger.warning("AgentHandler/process: MessageData is null");
             return;
         }
 
-        if (msg.getInfotype() == null) {
+        // 检查消息时间
+        if (msg.getCreatetime() == null) {
+            msg.setCreatetime(DateUtil.date2esstr(new Date()));
+        }
+
+        // 获取消息类型
+        String infotype = msg.getInfotype();
+        if (infotype == null) {
             logger.warning("AgentHandler/process: MessageData.operation()/.infoType is null");
             return;
         }
 
-        setAgentid(msg, ascsModel);
-        String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
-        // 收到注册消息
-        if (msg.getInfotype().equals("login") && msg.getOperation().equals("report")) {
-            //更新设备信息
-            ascsModel.setThirdpartyid(msg.getThirdpartyid());
-            devController.DevAscsDiscovery(ascsModel);
+        // 获取操作类型
+        String operation = msg.getOperation();
+
+        // 根据设备真实ID，设置平台的agentidID,此处的agentid不是设备的agentid，是平台在数据库中的唯一ID
+        String agentid = null;
+        if(msg.getAgentid() == null){
+            agentid = devIdMapService.getAgentidFromThirdPartyid(msg.getThirdpartyid());
+            msg.setAgentid(agentid);
+        }else{
+            agentid = msg.getAgentid();
         }
-        //收到其他消息
-        else if (key != null && isRedisEnable) {
-            //收到方案消息
-            if (msg.getInfotype().equals("status/pattern")) {
-                stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
-                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
-            } else if (msg.getInfotype().equals("status/fault")) {
-                faultService.processFaultMessage(msg);
-            }
-            //收到其他消息
-            else {
-                stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
-                //stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
-            }
+        String key = agenttype + ":" + infotype + ":" + agentid;
+        String value = null;
+        // 如果开启Redis，则将消息存入Redis
+        if (isRedisEnable) {
+            value = gson.toJson(msg);
+            stringRedisTemplate.opsForValue().set(key, value);
+            stringRedisTemplate.convertAndSend(key, value);
+        }
+
+        // ** 以下为消息的特殊处理 **
+
+        // 收到注册消息，更新设备信息
+        if (infotype.equals("login") && operation.equals("report")) {
+            // 反序列化注册消息对象
+            JsonElement data = msg.getData();
+            DevCover ascsModel = gson.fromJson(data, DevCover.class);
+            // 更新设备信息,把设备的真实ID替换为平台的设备ID
+            ascsModel.setAgentid(agentid);
+            ascsModel.setThirdpartyid(msg.getThirdpartyid());
+            ascsDao.updateAscsByReport(ascsModel);
+        }
+        // 收到故障消息，发布故障消息，并保存到数据库中
+        else if (infotype.equals("status/fault")) {
+            faultService.processFaultMessage(msg);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.openatc.agent.model;
+package com.openatc.model.model;
 
 
 import lombok.Data;

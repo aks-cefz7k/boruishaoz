@@ -1,4 +1,4 @@
-package com.openatc.agent.model;
+package com.openatc.model.model;
 
 
 import lombok.Data;
@@ -14,13 +14,14 @@ public class AscPattern {
     private String                  name;
     private int                     cycle;
     private int                     offset;
-    private int                     curtime;
-    private int                     synctime;
+    private int                     curTime;
+    private int                     syncTime;
+    private int                     total_stages;
+    private List<List<Integer>>     stages;
 
     private List<AscPhase>             phase;
     private List<OptRings>             rings;
 
-    private List<List<Integer>>     stages;
 }
 
 

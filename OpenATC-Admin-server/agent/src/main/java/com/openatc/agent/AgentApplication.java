@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -36,11 +37,11 @@ import java.util.logging.Logger;
  * @Description: TODO
  * @date 2019年10月19日 下午6:50:52
  */
-@SpringBootApplication
 @EnableScheduling
 @EnableConfigurationProperties({FileProperties.class})
 @ComponentScan({"com.openatc.agent", "com.openatc.comm", "com.openatc.core"})
 @EnableTransactionManagement
+@SpringBootApplication
 public class AgentApplication implements CommandLineRunner {
 
     private static Logger logger = Logger.getLogger(AgentApplication.class.toString());
@@ -51,11 +52,17 @@ public class AgentApplication implements CommandLineRunner {
     @Value("${agent.server.shiro}")
     private String shiroOpen;
 
-    @Value("${agent.buildtime}")
-    private String buildtime;
-       
+    @Value("${spring.redis.enable}")
+    private String redisOpen;
 
-//    private void setShiroOpen(Boolean shiroOpen){
+    @Value("${agent.version}")
+    private String serviceVersion;
+    // 打包时间
+    @Value("${agent.build.time}")
+    private String serviceBuildDate;
+
+
+    //    private void setShiroOpen(Boolean shiroOpen){
 //        AgentApplication.shiroOpen = shiroOpen;
 //    }
     public static List<String> tokenlist = null;
@@ -73,9 +80,13 @@ public class AgentApplication implements CommandLineRunner {
     public void run(String... args) {
 //        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
 
-        logger.warning("App Build Time：" + buildtime);
-        logger.warning("Is Shiro Open：" + shiroOpen);
+        logger.warning("=================Project=================");
+        logger.warning("service version:" + serviceVersion);
+        logger.warning(String.format("service build date:%s",serviceBuildDate));
+        logger.warning("Shiro Config：" + shiroOpen);
+        logger.warning("Redis Config：" + redisOpen);
         logger.warning("Current Path：" + System.getProperty("user.dir"));
+        logger.warning("=================Project=================");
 
         try {
             tokenlist = JwtFileUtil.initList();

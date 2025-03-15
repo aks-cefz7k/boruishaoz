@@ -45,4 +45,5 @@ public class Device {
     public void setBackphasedirection(int[] backphasedirection) {
         this.backphasedirection = backphasedirection.clone();
     }
+
 }

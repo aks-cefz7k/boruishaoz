@@ -1,4 +1,4 @@
-package com.openatc.agent.model;
+package com.openatc.model.model;
 
 
 import lombok.Data;
@@ -9,6 +9,4 @@ public class AscPhase {
     private int split;
     private int type;
     private int countdown;
-    private String conphase;
-
 }

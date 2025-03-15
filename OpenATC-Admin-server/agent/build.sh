@@ -1,2 +1,2 @@
-docker build -t kiss-registry:5000/openatc/openatcagent:latest .
-docker push kiss-registry:5000/openatc/openatcagent
+docker build -t docker-registry:5000/openatc/admin:latest .
+docker push docker-registry:5000/openatc/admin:latest
