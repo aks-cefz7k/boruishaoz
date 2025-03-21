@@ -41,7 +41,6 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.overlap.includedPhases')">
         <template slot-scope="scope">
-          {{scope.row.includedphases}}
             <el-select multiple v-model="scope.row.includedphases" :placeholder="$t('edge.common.select')" size="small">
               <el-option
                 v-for="item in includedPhasess"
