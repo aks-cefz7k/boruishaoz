@@ -15,7 +15,6 @@
     <el-table :data="patternList" :max-height="tableHeight" highlight-current-row  @expand-change="expandChange" ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
         <template slot-scope="scope">
-          <!-- {{scope.row}} -->
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
               <el-row :gutter="20">
@@ -26,7 +25,7 @@
                 </el-col>
                 <el-col :span="12">
                   <FollowPhase>
-                    111
+
                   </FollowPhase>
                 </el-col>
               </el-row>
@@ -53,42 +52,27 @@
               <el-row :gutter="20">
                 <el-col :span="12">
                  <div class="components-container board">
-                  <ExpendConfig  class="kanban todo" v-for="j in ringCount" :key="j" :index="scope.$index" :header-text="$t('edge.pattern.ring')+j" :list="scope.row.rings[j-1]"  :options="scope.row.options"  @handleSplit="handleSplit" />
+                  <ExpendConfig  class="kanban todo" v-for="j in ringCounts" :key="j" :index="scope.$index" :header-text="$t('edge.pattern.ring')+j" :list="scope.row.rings[j-1]"  :options="scope.row.options" @handleSplit="handleSplit1" />
                 </div>
                 </el-col>
                 <el-col :span="12">
-                   <div class="stage-item" style="margin: 30px 50px;">
+                  <div class="stage-item" style="margin: 30px 50px;">
                     <el-row style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.forbiddenstage')}}
-                        <el-input-number
-                        :controls="false"
-                        v-model="scope.row.forbiddenstage"
-                          size="small"
-                          class="stage-value">
-                        </el-input-number>
+                        <el-input class="stage-value" size="small" v-model="scope.row.forbiddenstage"></el-input>
                       </el-col>
                     </el-row>
                     <el-row style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.screenstage')}}
-                          <el-input-number
-                        :controls="false"
-                        v-model="scope.row.screenstage"
-                          size="small"
-                          class="stage-value">
-                        </el-input-number>
+                        <el-input class="stage-value" size="small" v-model="scope.row.screenstage"></el-input>
                       </el-col>
                     </el-row>
                     <el-row style="margin-top:10px">
                       <el-col :span="8">
                         {{$t('edge.pattern.coordinatestage')}}
-                        <el-input-number
-                        :controls="false"
-                        v-model="scope.row.coordinatestage"
-                          size="small"
-                          class="stage-value">
-                        </el-input-number>
+                        <el-input class="stage-value" size="small" v-model="scope.row.coordinatestage"></el-input>
                       </el-col>
                     </el-row>
                   </div>
@@ -122,22 +106,14 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.plan')" width="700px"  prop="plan">
         <template slot-scope="scope">
-          <!-- <div class="pattern-figure" v-show="isShowPatternStatus"> -->
             <div class="pattern-figure">
-              <div class="pattern-status">方案{{scope.row.id}}</div>
-              <span class="pattern-explain">：绿信比</span>
-              <span class="pattern-explain" style="margin-right: 15px;">P相位</span>
               <BoardCard
               :patternStatusList="scope.row.rings"
               :cycles="scope.row.cycle"
+              :isPhase="false"
               >
               </BoardCard>
-              <!-- <StageStatus  :patternStatusList="scope.row.rings" ></StageStatus>
-              <PatternStatus style="margin-top: 25px;"  :patternStatusList="scope.row.rings" :cycles="scope.row.cycle"></PatternStatus> -->
             </div>
-            <!-- <StageStatus style="margin-top: 10px;" :narr="narr" :numList="numList" :stateList="stateList" :patternStatusList="patternStatusList"></StageStatus>
-            <PatternStatus style="margin-top: 20px;"  :hideWidth ="hideWidth"  :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus> -->
-          <!-- </div> -->
          </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">
@@ -183,6 +159,7 @@ export default {
       tableHeight: 760,
       screenHeight: window.innerHeight, // 屏幕高度
       ringCount: 1,
+      ringCounts: 1,
       addId: 1,
       options: {
         group: 'pattern'
@@ -266,6 +243,8 @@ export default {
       }
       this.ringCount = Array.from(new Set(rings)) // 去除数组重复的元素
       this.ringCount = this.ringCount.sort(this.sortNumbers) // 把数组中的值按照从小到大的顺序重新排序
+      this.ringCounts = Array.from(new Set(rings)) // 去除数组重复的元素
+      this.ringCounts = this.ringCounts.sort(this.sortNumbers) // 把数组中的值按照从小到大的顺序重新排序
       this.increaseId()
       this.getCycle()
       this.updatePhaseDescription()
@@ -630,7 +609,7 @@ export default {
     //   }
     //   console.log(this.patternStatusList, 2322)
     //   this.handleBarrier(this.patternStatusList, phaseList)
-    //   this.getPhaseId(val.rings)
+    //   // this.getPhaseId(val.rings)
     //   // this.getBarrier(val.rings)
     // },
     // handleBarrier (patternStatusList, phaseList) {
@@ -681,7 +660,7 @@ export default {
     //   }
     //   this.barrierList.push('100%')// 添加末尾处的屏障
 
-    // this.barrId = Array.from(new Set(this.newBarrid))
+    //   this.barrId = Array.from(new Set(this.newBarrid))
     // if (newAdd > newAdd1) {
     //   let secendPatternStatus = patternStatusList[1]
     //   let secend = secendPatternStatus.filter(value => {
@@ -694,7 +673,7 @@ export default {
     //     return value.id === this.barrId[0]
     //   })
     //   first[0].hideWidth = this.hideWidth
-    //   // console.log(first, 999)
+    // // console.log(first, 999)
     // } else if (newAdd < newAdd1 && this.barrId.length > 1) {
     //   let firstPatternStatus = patternStatusList[0]
     //   let first = firstPatternStatus.filter(value => {
@@ -705,27 +684,29 @@ export default {
     //   })
     //   first[0].hideWidth = this.hideWidth
     //   two[0].hideWidth = this.hideWidth
-    //   // console.log(first, two, this.barrId, 889)
+    // // console.log(first, two, this.barrId, 889)
     // }
 
-    // let firstAdd = firstPatternStatus.map(item => {
-    //   return item.split
-    // })
-    // let firstNum = firstAdd.reduce((a, b) => {
-    //   return a + b
-    // })
-    // if (firstNum === this.max) {
+    //   let firstAdd = firstPatternStatus.map(item => {
+    //     return item.split
+    //   })
+    //   let firstNum = firstAdd.reduce((a, b) => {
+    //     return a + b
+    //   })
+    //   if (firstNum === this.max) {
 
-    // }
-    // if (firstNum === this.max) {
-    //   this.barrierList.push(barrierWidth)
-    // } else {
-    // }
+    //   }
+    //   if (firstNum === this.max) {
+    //     this.barrierList.push(barrierWidth)
+    //   } else {
+    //   }
     // },
     // isEqualsForArray (listA, listB) {
     //   return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))// 判断两个数组包含的值是否完全相同
     // },
     expandChange (val1, val2) {
+      // debugger
+
       if (val1.desc === '') {
         if (this.$i18n.locale === 'en') {
           this.currPatternName = 'pattern' + val1.id
@@ -742,6 +723,12 @@ export default {
       }
     },
     handleSplit (index) {
+      let currPattern = this.patternList[index]
+      // this.handleCurrentChange(currPattern)
+      // this.currentPattern = this.patternList[index]
+      this.getRowStages(currPattern.rings)
+    },
+    handleSplit1 (index) {
       let currPattern = this.patternList[index]
       // this.handleCurrentChange(currPattern)
       // this.currentPattern = this.patternList[index]
@@ -904,6 +891,9 @@ export default {
     justify-content: center;
     flex-direction: row;
     align-items: flex-start;
+  }
+  /deep/.el-table .cell {
+    overflow: unset;
   }
   .kanban {
     &.todo {

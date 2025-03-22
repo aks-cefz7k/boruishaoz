@@ -153,6 +153,7 @@
             :cycle="crossStatusData ? crossStatusData.cycle : 0"
             :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
             :patternStatusList="patternStatusList"
+            :isPhase="true"
               >
             </BoardCard>
           </div>
@@ -1086,7 +1087,6 @@ export default {
       if (!this.controlData.phase) return
       let cycle = this.controlData.cycle
       console.log(this.controlData)
-      // debugger
       for (let rings of this.controlData.rings) {
         let list = []
         let phase = this.controlData.phase

@@ -276,6 +276,7 @@ $light_gray: #eee;
 
 /********************** 设置kanban样式 ********************/
 .phase-description {
+  border-radius: 4px;
   background: rgb(217, 236, 255);
   width: 40px;
   height: 40px;
@@ -1471,6 +1472,17 @@ color: $--color-text-secondary;
     line-height: 22px;
     letter-spacing: 0px;
     color: #ffffff;
+  }
+  .ring-nums {
+    float: left;
+    margin-top:7px;
+    margin-left: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    font-stretch: normal;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: #333333;
   }
   .ring-phase {
     float: left;
