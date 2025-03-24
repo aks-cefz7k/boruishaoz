@@ -156,7 +156,9 @@ export default {
           hash[newCon[i]] = true
         }
       }
-      res.map(item => {
+      let newRes = JSON.parse(JSON.stringify(res))
+      newRes.map(item => {
+        if (item.length === 0) return
         let newId = this.concurrentList.filter(value => {
           return value.id === item[0]
         })[0].concurrent

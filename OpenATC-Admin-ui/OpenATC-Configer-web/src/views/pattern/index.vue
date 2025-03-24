@@ -705,8 +705,6 @@ export default {
     //   return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))// 判断两个数组包含的值是否完全相同
     // },
     expandChange (val1, val2) {
-      // debugger
-
       if (val1.desc === '') {
         if (this.$i18n.locale === 'en') {
           this.currPatternName = 'pattern' + val1.id
