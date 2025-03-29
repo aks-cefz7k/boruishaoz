@@ -21,7 +21,13 @@
               <el-row :gutter="20">
                 <el-col :span="12" >
                   <div class="components-container board" >
-                    <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="$t('edge.pattern.ring')+n" :index="scope.$index" @handleSplit="handleSplit"/>
+                    <Kanban v-for="n in ringCount"
+                            :key="n" class="kanban todo"
+                            :list="scope.row.rings[n-1]"
+                            :options="scope.row.options"
+                            :header-text="$t('edge.pattern.ring')+n"
+                            :index="scope.$index"
+                            @handleSplit="handleSplit"/>
                   </div>
                 </el-col>
                 <el-col :span="12">
@@ -53,7 +59,14 @@
               <el-row :gutter="20">
                 <el-col :span="12">
                  <div class="components-container board">
-                  <ExpendConfig  class="kanban todo" v-for="j in ringCount" :key="j" :index="scope.$index" :header-text="$t('edge.pattern.ring')+j" :list="scope.row.rings[j-1]"  :options="scope.row.options"  @handleSplit="handleSplit" />
+                  <ExpendConfig class="kanban todo"
+                                v-for="j in ringCount"
+                                :key="j"
+                                :index="scope.$index"
+                                :header-text="$t('edge.pattern.ring')+j"
+                                :list="scope.row.rings[j-1]"
+                                :options="scope.row.options"
+                                @handleSplit="handleSplit" />
                 </div>
                 </el-col>
                 <el-col :span="12">
@@ -248,6 +261,7 @@ export default {
                 250
     },
     patternList: function (val) {
+      console.log(val)
       if (!val.length) return
       this.initData()
     }
