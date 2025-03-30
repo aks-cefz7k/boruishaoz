@@ -71,21 +71,9 @@ export default {
       // console.log(this.patternStatusList, 8888)
     }
   },
-  updated () {
-    // debugger
-    // if (this.patternStatusList && this.patternStatusList.length > 1) {
-    //   this.getPhaseId(this.patternStatusList)
-    //   // console.log(this.patternStatusList, 7878)
-    // } else if (this.patternStatusList && this.patternStatusList.length === 1) {
-    //   this.handleStages()
-    //   // console.log(this.patternStatusList, 8888)
-    // }
-  },
   methods: {
     getPhaseId (rings) { // 画阶段方法
-      // debugger
       rings = JSON.parse(JSON.stringify(rings))
-      // console.log(rings, 3232)
       if (rings.length === 0) {
         this.stageLineStatus = false
         return
@@ -93,7 +81,7 @@ export default {
       this.stageLineStatus = true
       let mapAdd = rings.map(item => {
         return item.map(val => {
-          return val.value
+          return val.split
         })
       })
       let maxCycle = mapAdd.length > 0 ? mapAdd.map(item => {
@@ -101,9 +89,7 @@ export default {
           return a + b
         }) : 0
       }) : 0
-      // console.log(maxCycle, 23232)
       this.max = Math.max(...maxCycle)// 每个环的周期最大值
-      // console.log(this.max, 'max')
       this.stateList = [0]
       this.narr = []
       let currentIds = ''
@@ -113,7 +99,7 @@ export default {
           let ring = rings[i]// 每个环对象
           let sum = 0
           for (let n = 0; n < ring.length; n++) { // 相位累计长度
-            sum = sum + ring[n].value
+            sum = sum + ring[n].split
             if (j < sum) {
               let phaseId = ring[n].id
               currentIds = currentIds + '-' + phaseId
@@ -134,8 +120,6 @@ export default {
         this.narr.push((Number.parseFloat(this.numList[i]) - Number.parseFloat(this.numList[i - 1])) / 2 + Number.parseFloat(this.numList[i - 1]) - 1 + '%')
       }
       this.narr = JSON.parse(JSON.stringify(this.narr.reverse()))
-      console.log(this.narr, 766767)
-      // console.log(this.numList, 12323)
     },
     handleStages () {
       this.numList = [0]
@@ -146,7 +130,6 @@ export default {
       }
       this.stageLineStatus = true
       let firstPatternStatusList = this.patternStatusList[0]
-      // this.numList.push(0)
       let stageLength = 0
       let stageStatusLength = 0
       for (let i = 0; i < firstPatternStatusList.length; i++) {
@@ -155,7 +138,6 @@ export default {
         stageLength = stageLength + tempLength
         this.numList.push(stageLength + '%')
         this.narr.push(stageStatusLength + '%')
-        // console.log(this.numList, this.narr, 9999)
       }
     }
   },

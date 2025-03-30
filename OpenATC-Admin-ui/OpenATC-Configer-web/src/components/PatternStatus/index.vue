@@ -13,18 +13,15 @@
     <div class="main-patternstatus">
       <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
         <div v-for="(item,index2) in list" :key="index2">
-          <!-- {{item}} -->
           <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
             <div class="ring-phase"><xdrdirselector Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector></div>
             <el-tooltip placement="top-start" effect="light">
               <div slot="content">P{{item.id}}:{{item.split}}</div>
               <div style="cursor:pointer;">
-                <div class="ring-num">P{{item.id}}:</div>
-                <div class="ring-num">{{item.split}}</div>
+                <div :class="[cycles?'ring-nums':'ring-num']">P{{item.id}}:</div>
+                <div :class="[cycles?'ring-nums':'ring-num']">{{item.split}}</div>
               </div>
             </el-tooltip>
-            <!-- <div class="ring-num">P:{{item.id}}</div>
-            <div class="ring-num">S:{{item.split}}</div> -->
           </div>
           <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
           <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
@@ -32,7 +29,6 @@
         </div>
       </div>
       <div v-for="(item, index) in barrierList" :key="index + '1'">
-        <!-- {{item}} -->
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
       </div>
       <div v-show="syncTime && cycle && cycle > 0">
@@ -96,6 +92,7 @@ export default {
     patternStatusList: {
       handler: function (val, oldVal) {
         this.handleBarrierHeight() // 计算屏障高度
+        // this.handleCurrentChange(this.patternStatusList)
         if (this.patternStatusList && this.cycles) {
           this.handleCurrentChange(this.patternStatusList)
         }
@@ -219,7 +216,6 @@ export default {
       // this.getBarrier(val.rings)
     },
     handleBarrier (pattern, phaseList) {
-      // debugger
       if (pattern.length < 2) return
       // let mapAdd = pattern.map(item => {
       //   return item.map(value => {
@@ -239,19 +235,20 @@ export default {
       for (let patternStatus of firstPatternStatus) {
         let concurrent = phaseList.filter((item) => {
           return item.id === patternStatus.id
-        })[0].concurrent
+        })[0].concurrent// 当前相位的并发相位
         if (concurrent.length === 0) {
           this.barrierList = []
           return
         }
         if (!this.isEqualsForArray(tempList, concurrent)) {
+          // debugger
           tempList = concurrent
           this.barrierList.push(barrierWidth)
         }
         barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.hideWidth ? patternStatus.hideWidth : 0) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
       }
       this.barrierList.push('100%')// 添加末尾处的屏障
-      // console.log(this.barrierList, 33333)
+      console.log(this.barrierList, 33333)
     },
     isEqualsForArray (listA, listB) {
       return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))// 判断两个数组包含的值是否完全相同
