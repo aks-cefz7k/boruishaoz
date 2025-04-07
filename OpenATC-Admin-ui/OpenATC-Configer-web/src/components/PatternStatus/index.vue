@@ -64,12 +64,6 @@ export default {
     patternStatusList: {
       type: Array
     },
-    // barrierList: {
-    //   type: Array
-    // },
-    // currentPattern: {
-    //   type: Array
-    // },
     syncTime: {
       type: Number
     }
@@ -132,7 +126,6 @@ export default {
       let allPhase = val.reduce(function (a, b) { return a.concat(b) })// 所以相位值id
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
       this.pattern = []
-      // let cycle = val.cycle
       this.concurrentList = phaseList.map(item => { // 每个相位对应的并发相位
         return {
           concurrent: item.concurrent,
@@ -149,7 +142,6 @@ export default {
       })
       let hash = {}
       let res = []
-      // console.log(this.cycles, 98989)
       for (let i = 0; i < newCon.length; i++) {
         if (!hash[newCon[i]]) {
           res.push(newCon[i])
@@ -166,7 +158,6 @@ export default {
         this.redux = ((allPhase[newArr2[0][0] - 1].value) + (allPhase[newArr2[0][1] - 1].value)) - ((allPhase[newArr2[1][0] - 1].value) + (allPhase[newArr2[1][1] - 1].value))
         if (this.redux < 0) { // 每组最小的
           this.barrId = newArr2[0][1]
-          // debugger
           // this.newBarrid.push(this.barrId)
           // if (this.newBarrid.length > 1) {
           this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
@@ -175,7 +166,6 @@ export default {
           //   this.hideWidth = (Math.abs(this.redux) / cycle * 100).toFixed(3) + '%'
           // }
         } else if (this.redux > 0) {
-          // debugger
           // this.barrId = newArr2[1][1]
           this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
         }
@@ -199,7 +189,6 @@ export default {
             return item.id === ring.id
           })[0]
           if (this.hideWidth && obj.id === this.barrId) {
-            // debugger
             obj.hideWidth = this.hideWidth
           }
           obj.redWidth = (currPhase.redclear / this.cycles * 100).toFixed(3) + '%'
@@ -214,22 +203,9 @@ export default {
         this.pattern.push(list)
       }
       this.handleBarrier(this.pattern, phaseList)
-      // this.getPhaseId(val.rings)
-      // this.getBarrier(val.rings)
     },
     handleBarrier (pattern, phaseList) {
       if (pattern.length < 2) return
-      // let mapAdd = pattern.map(item => {
-      //   return item.map(value => {
-      //     return value.split
-      //   })
-      // })
-      // let maxCycle = mapAdd.map(item => {
-      //   return item.reduce((a, b) => {
-      //     return a + b
-      //   })
-      // })
-      // this.max = Math.max(...maxCycle)// 每个环的周期最大值
       this.barrierList = []
       let tempList = []
       let barrierWidth = 0
