@@ -256,6 +256,7 @@ import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
 import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
+import { getMessageByCode } from '../../utils/responseMessage'
 export default {
   name: 'overview',
   components: {
@@ -634,7 +635,7 @@ export default {
             }
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           this.clearPatternInterval() // 清除其他定时器
           this.clearVolumeInterval()
           if (this.isResend) {
@@ -709,7 +710,7 @@ export default {
       putTscControl(control).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
@@ -724,7 +725,7 @@ export default {
       getTscPattern(this.agentId).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$message.success(this.$t('edge.common.querysucess'))
@@ -958,7 +959,7 @@ export default {
         that.unlockScreen()
         let success = 0
         if (!data.data.success) {
-          that.$message.error(data.data.message)
+          that.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         } else {
           success = data.data.data.data.success
@@ -1009,7 +1010,7 @@ export default {
         //   'comtype': 0
         // }
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         let devParams = res.data.data.jsonparam
@@ -1034,7 +1035,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(res.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.phaseList = res.data.data.phaseList
@@ -1135,7 +1136,7 @@ export default {
     getPlatform () {
       queryDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
 
