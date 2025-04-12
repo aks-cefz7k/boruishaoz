@@ -560,10 +560,15 @@ border: 1px solid $--border-color-base;
     border-left: 1px solid $--color-primary;
     cursor: pointer;
   }
-  .model-icon {
+  .single-model .closephase-icon {
     margin-top: 10px;
-    width: 26px;
-    height: 26px;
+    width: 56px;
+    height: 24px;
+  }
+  .single-model .model-icon {
+    margin-top: 10px;
+    width: 24px;
+    height: 24px;
   }
   .control-center {
     // float: left;
@@ -796,7 +801,7 @@ border: 1px solid $--border-color-base;
     font-size: 14px;
     font-weight: 400;
     color: #606266;
-    line-height: 40px;
+    line-height: 28px;
     padding-right: 12px;
   }
   .single-model {
@@ -922,18 +927,17 @@ border: 1px solid $--border-color-base;
     color: $--color-text-primary;
   }
   .model-label {
-    line-height: 14px;
-    margin-top: 4px;
+    margin-top: 14px;
   }
   .stage-label {
-    margin-top: 36px;
+    margin-top: 30px;
   }
   .footer {
     float: right;
     margin: 38px 24px 40px 0;
   }
   .el-form-item {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
   }
   .el-form-item__label {
     font-size: 14px;
@@ -968,6 +972,104 @@ border: 1px solid $--border-color-base;
     color: $--color-text-secondary;
   }
 } 
+
+.closephase-control{
+  height: 100%;
+  .closephasekanban {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 13px;
+  }
+} 
+
+// 公共面板组件通用样式
+.common-board-column {
+    min-width: 180px;
+    min-height: 100px;
+    max-width: 350px;
+    height: auto;
+    overflow: hidden;
+    background: #f0f0f0;
+    // border: 1px solid $--border-color-base;
+  .common-phase-description {
+    background: rgb(217, 236, 255);
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .common-board-column-header {
+    line-height: 40px;
+    overflow: hidden;
+    text-align: center;
+    background: $--color-primary;
+    color: #FFFFFF;
+    height: 40px;
+  }
+  .common-board-table-header {
+    height: 42px;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: -20px;
+    font-size: 14px;
+    color: $--color-info;
+    background-color: $--color-black;
+    border: 20px solid transparent;
+    border-bottom-width: 0px;
+    .common-titlecolumn {
+      float: left;
+      text-align: left;
+    }
+    .phase {
+      width: 50px;
+    }
+    .mode {
+      width: calc(100% - 50px)
+    }
+  }
+
+  .common-board-column-content {
+    height: auto;
+    overflow: hidden;
+    border: 10px solid transparent;
+    min-height: 60px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    background-color: $--color-black;
+    border-width: 20px;
+    border-top-width: 16px;
+    border-bottom-width: 15px;
+    .common-contentcolumn {
+      float: left;
+    }
+    .phase {
+      width: 40px;
+    }
+    .mode {
+      margin-left: 10px;
+      width: calc(100% - 50px);
+    }
+
+    .common-board-item {
+      cursor: pointer;
+      width: 100%;
+      height: 40px;
+      margin-top: 10px;
+      text-align: left;
+      box-sizing: border-box;
+      .el-input {
+        width: 100%;
+        .el-input__inner {
+          height: 40px;
+          line-height: 40px;
+        }
+      }
+    }
+  }
+}
+
 .main-statgestatus {
   position: relative;
 }

@@ -118,6 +118,8 @@ const zh = {
       'controlnumber': '控制编号',
       'mode': '控制方式',
       'stage': '阶段(驻留)',
+      'specialcontrol': '特殊控制',
+      'phaseclosecontrol': '相位关断控制',
       'implement': '执行',
       'ipaddress': 'IP地址',
       'deviceport': '设备端口',
@@ -179,6 +181,7 @@ const zh = {
       'modelList12': '行人过街',
       'modelList13': '方案恢复过渡',
       'modelList19': '感应式行人过街',
+      'modelList23': '相位关断',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
       'canceled': '已取消',
@@ -201,7 +204,14 @@ const zh = {
       'JSONFormatError': 'JSON格式错误!',
       'showFault': '显示故障详情',
       'hideFault': '隐藏故障详情',
-      'close': '关闭'
+      'close': '关闭',
+      'closemode': '方式',
+      'closeOption0': '恢复',
+      'closeOption1': '关断',
+      'closeOption2': '仅机动车关断',
+      'closeOption3': '仅行人关断',
+      'vehicle': '机动车',
+      'pedestrian': '行人'
     },
     'phase': {
       'desc': '车道方向',

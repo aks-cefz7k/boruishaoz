@@ -159,13 +159,14 @@
         </div>
         <div class="tuxing-right" v-if="!graphicMode" ref="tuxingRight">
           <transition name="fade-right" mode="out-in"
-          enter-active-class="animated fadeInRight"
-          leave-active-class="animated fadeOutRight">
-            <div style="position: absolute;width: 100%;"  v-show="isOperation">
+          :enter-active-class="toPage === 1 ? 'animated fadeInRight' : 'animated fadeInLeft'"
+          :leave-active-class="toPage === 1 ? 'animated fadeOutRight' : 'animated fadeOutLeft' ">
+            <div style="position: absolute;width: 100%;"  v-show="(isOperation && !isClosePhase)">
              <ManualControlModal
                :controlData="controlData"
                :modelList="modelList"
                :stagesList="stagesList"
+               :specialcontrolList="specialcontrolList"
                :currModel="currModel"
                :preselectModel="preselectModel"
                :currentStage="currentStage"
@@ -173,7 +174,19 @@
                @closeManualModal="closeManualModal"
                @selectModel="selectModel"
                @selectStages="selectStages"
-               @patternCommit="patternCommit" />
+               @patternCommit="patternCommit"
+               @selectSpecialModel="selectSpecialModel" />
+            </div>
+          </transition>
+          <transition name="fade-left" mode="out-in"
+          enter-active-class="animated fadeInRight"
+          leave-active-class="animated fadeOutRight">
+            <div style="position: absolute;width: 100%;height: 100%;" v-show="(isOperation && isClosePhase)">
+              <ClosePhaseControlModal
+                :controlData="controlData"
+                :closePhaseRings="closePhaseRings"
+                @closePhaseBack="closePhaseBack"
+                @closePhaseControl= "closePhaseControl" />
             </div>
           </transition>
 
@@ -236,7 +249,7 @@
                   <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
                 </div>
                 <div class="cross-content">
-                  <el-tag type="danger" size="small" v-for="(phaseid, index) in closePhase" :key="index">{{$t('edge.overview.phase') + phaseid + $t('edge.overview.close')}}</el-tag>
+                  <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
                 </div>
               </div>
             </div>
@@ -260,6 +273,7 @@ import BoardCard from '@/components/BoardCard'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
+import ClosePhaseControlModal from './closePhaselControlModal'
 import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 export default {
   name: 'overview',
@@ -271,7 +285,8 @@ export default {
     BoardCard,
     CurVolume,
     CurPhase,
-    ManualControlModal
+    ManualControlModal,
+    ClosePhaseControlModal
   },
   data () {
     return {
@@ -433,7 +448,15 @@ export default {
       basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
       isResend: true,
       commonHeight: undefined, // 左右侧面板的高度值
-      faultvisible: false
+      faultvisible: false,
+      isClosePhase: false, // 是否在相位关断
+      toPage: 1, // 与哪一个页面交互，1 代表路口信息页面，3代表 相位关断页面
+      specialcontrolList: [{ // 特殊控制
+        id: 23,
+        iconClass: 'closephase',
+        iconName: '关断相位'
+      }],
+      closePhaseRings: []
     }
   },
   computed: {
@@ -649,9 +672,6 @@ export default {
         }
         // let param = JSON.parse(data.data.data)
         this.crossStatusData = JSON.parse(JSON.stringify(data.data.data.data))
-        if (data.data.data.data.close_phase) {
-          this.closePhase = data.data.data.data.close_phase
-        }
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
         this.currModel = TscData.control
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
@@ -661,6 +681,7 @@ export default {
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
         // this.handlePatternData() // 计算方案状态展示数据
+        this.handleGetPhaseClose()
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
@@ -709,7 +730,7 @@ export default {
       control.delay = Number(this.form.delay)
       control.duration = Number(this.form.duration)
       // eslint-disable-next-line no-useless-escape
-      control.data = this.form.data.replace(/\ +/g, '').replace(/[\r\n]/g, '')
+      control.data = JSON.parse(this.form.data)
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
@@ -924,6 +945,7 @@ export default {
       }
     },
     changeStatus () {
+      this.toPage = 1
       this.isOperation = true
       if (this.modelList.filter(ele => ele.id === 0).length === 0) {
         let autonomyControl = {
@@ -944,6 +966,7 @@ export default {
       this.modelList = this.modelList.filter((item) => {
         return item.id !== 0
       })
+      this.toPage = 1
     },
     patternCommit (manualInfo) {
       let that = this
@@ -1085,8 +1108,7 @@ export default {
       if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
       if (!this.controlData.phase) return
       let cycle = this.controlData.cycle
-      console.log(this.controlData)
-      // debugger
+      // console.log(this.controlData)
       for (let rings of this.controlData.rings) {
         let list = []
         let phase = this.controlData.phase
@@ -1174,6 +1196,97 @@ export default {
     },
     handleFaultsVisible () {
       this.faultvisible = !this.faultvisible
+    },
+    handleGetPhaseClose () {
+      if (this.crossStatusData.phase) {
+        this.crossStatusData.phase = this.crossStatusData.phase.map(ele => {
+          return {
+            ...ele,
+            close: ele.close || 0
+          }
+        })
+        // 相位关断标签
+        this.closePhase = []
+        this.crossStatusData.phase.forEach(phase => {
+          if (phase.close !== undefined && phase.close !== 0) {
+            let typename
+            switch (phase.close) {
+              case 1: typename = ''
+                break
+              case 2: typename = this.$t('edge.overview.vehicle')
+                break
+              case 3: typename = this.$t('edge.overview.pedestrian')
+                break
+              default:typename = ''
+            }
+            this.closePhase.push({
+              id: phase.id,
+              typename: typename
+            })
+          }
+        })
+      }
+    },
+    selectSpecialModel (id) {
+      if (id === 23) {
+        this.toPage = 3
+        this.isClosePhase = true
+        this.initRingPhaseData()
+      } else {
+        this.isClosePhase = false
+      }
+    },
+    closePhaseBack () {
+      this.toPage = 3
+      this.isClosePhase = false
+    },
+    closePhaseControl (controldata) {
+      this.lockScreen()
+      putTscControl(controldata).then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          this.$message.error(data.data.message)
+          return
+        }
+        this.$alert(this.$t('edge.common.download'), { type: 'success' })
+      }).catch(error => {
+        this.unlockScreen()
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    initRingPhaseData () {
+      this.closePhaseRings = []
+      if (!this.crossStatusData.rings) return
+      this.crossStatusData.rings.forEach(ring => {
+        let obj = {}
+        obj.num = ring.num
+        obj.phases = []
+        for (let i = 0; i < ring.sequence.length; i++) {
+          let phaseid = ring.sequence[i]
+          let originphase = this.crossStatusData.phase.filter(phase => phase.id === phaseid)[0]
+          let addphse = this.getPhasesInfo(phaseid)
+          obj.phases.push({...originphase, ...addphse})
+        }
+        this.closePhaseRings.push(obj)
+      })
+    },
+    getPhasesInfo (phaseid) {
+      if (this.phaseList === undefined || this.phaseList.filter(phase => phase.id === phaseid).length === 0) return
+      let phaseinfo = this.phaseList.filter(phase => phase.id === phaseid)[0]
+      phaseinfo.name = this.$t('edge.overview.phase') + phaseinfo.id
+      phaseinfo.desc = this.getPhaseDescription(phaseinfo.direction)
+      return phaseinfo
+    },
+    getPhaseDescription (phaseList) {
+      let list = []
+      for (let id of phaseList) {
+        let obj = {}
+        obj.id = id
+        obj.color = '#454545'
+        list.push(obj)
+      }
+      return list
     }
   },
   // beforeDestroy () {
