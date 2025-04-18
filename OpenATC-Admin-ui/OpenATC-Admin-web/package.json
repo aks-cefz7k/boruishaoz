@@ -21,7 +21,7 @@
     "chalk": "^2.4.2",
     "concat-map": "^0.0.1",
     "echarts": "^4.5.0",
-    "edgebase-front": "^1.19.1",
+    "edgebase-front": "^1.19.3",
     "element-theme": "^2.0.1",
     "element-ui": "^2.13.0",
     "file-saver": "^2.0.5",

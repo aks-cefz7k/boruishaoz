@@ -13,18 +13,15 @@
     <div class="main-patternstatus">
       <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
         <div v-for="(item,index2) in list" :key="index2">
-          <!-- {{item}} -->
           <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
             <div class="ring-phase"><xdrdirselector Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector></div>
             <el-tooltip placement="top-start" effect="light">
               <div slot="content">P{{item.id}}:{{item.split}}</div>
               <div style="cursor:pointer;">
-                <div class="ring-num">P{{item.id}}:</div>
-                <div class="ring-num">{{item.split}}</div>
+                <div class="ring-nums">P{{item.id}}:</div>
+                <div class="ring-nums">{{item.split}}</div>
               </div>
             </el-tooltip>
-            <!-- <div class="ring-num">P:{{item.id}}</div>
-            <div class="ring-num">S:{{item.split}}</div> -->
           </div>
           <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
           <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
@@ -32,7 +29,6 @@
         </div>
       </div>
       <div v-for="(item, index) in barrierList" :key="index + '1'">
-        <!-- {{item}} -->
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
       </div>
       <div v-show="syncTime && cycle && cycle > 0">
@@ -68,12 +64,6 @@ export default {
     patternStatusList: {
       type: Array
     },
-    // barrierList: {
-    //   type: Array
-    // },
-    // currentPattern: {
-    //   type: Array
-    // },
     syncTime: {
       type: Number
     }
@@ -96,6 +86,7 @@ export default {
     patternStatusList: {
       handler: function (val, oldVal) {
         this.handleBarrierHeight() // 计算屏障高度
+        // this.handleCurrentChange(this.patternStatusList)
         if (this.patternStatusList && this.cycles) {
           this.handleCurrentChange(this.patternStatusList)
         }
@@ -135,7 +126,6 @@ export default {
       let allPhase = val.reduce(function (a, b) { return a.concat(b) })// 所以相位值id
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
       this.pattern = []
-      // let cycle = val.cycle
       this.concurrentList = phaseList.map(item => { // 每个相位对应的并发相位
         return {
           concurrent: item.concurrent,
@@ -152,14 +142,15 @@ export default {
       })
       let hash = {}
       let res = []
-      // console.log(this.cycles, 98989)
       for (let i = 0; i < newCon.length; i++) {
         if (!hash[newCon[i]]) {
           res.push(newCon[i])
           hash[newCon[i]] = true
         }
       }
-      res.map(item => {
+      let newRes = JSON.parse(JSON.stringify(res))
+      newRes.map(item => {
+        if (item.length === 0) return
         let newId = this.concurrentList.filter(value => {
           return value.id === item[0]
         })[0].concurrent
@@ -167,7 +158,6 @@ export default {
         this.redux = ((allPhase[newArr2[0][0] - 1].value) + (allPhase[newArr2[0][1] - 1].value)) - ((allPhase[newArr2[1][0] - 1].value) + (allPhase[newArr2[1][1] - 1].value))
         if (this.redux < 0) { // 每组最小的
           this.barrId = newArr2[0][1]
-          // debugger
           // this.newBarrid.push(this.barrId)
           // if (this.newBarrid.length > 1) {
           this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
@@ -176,7 +166,6 @@ export default {
           //   this.hideWidth = (Math.abs(this.redux) / cycle * 100).toFixed(3) + '%'
           // }
         } else if (this.redux > 0) {
-          // debugger
           // this.barrId = newArr2[1][1]
           this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
         }
@@ -200,7 +189,6 @@ export default {
             return item.id === ring.id
           })[0]
           if (this.hideWidth && obj.id === this.barrId) {
-            // debugger
             obj.hideWidth = this.hideWidth
           }
           obj.redWidth = (currPhase.redclear / this.cycles * 100).toFixed(3) + '%'
@@ -215,23 +203,9 @@ export default {
         this.pattern.push(list)
       }
       this.handleBarrier(this.pattern, phaseList)
-      // this.getPhaseId(val.rings)
-      // this.getBarrier(val.rings)
     },
     handleBarrier (pattern, phaseList) {
-      // debugger
       if (pattern.length < 2) return
-      // let mapAdd = pattern.map(item => {
-      //   return item.map(value => {
-      //     return value.split
-      //   })
-      // })
-      // let maxCycle = mapAdd.map(item => {
-      //   return item.reduce((a, b) => {
-      //     return a + b
-      //   })
-      // })
-      // this.max = Math.max(...maxCycle)// 每个环的周期最大值
       this.barrierList = []
       let tempList = []
       let barrierWidth = 0
@@ -239,19 +213,20 @@ export default {
       for (let patternStatus of firstPatternStatus) {
         let concurrent = phaseList.filter((item) => {
           return item.id === patternStatus.id
-        })[0].concurrent
+        })[0].concurrent// 当前相位的并发相位
         if (concurrent.length === 0) {
           this.barrierList = []
           return
         }
         if (!this.isEqualsForArray(tempList, concurrent)) {
+          // debugger
           tempList = concurrent
           this.barrierList.push(barrierWidth)
         }
         barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.hideWidth ? patternStatus.hideWidth : 0) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
       }
       this.barrierList.push('100%')// 添加末尾处的屏障
-      // console.log(this.barrierList, 33333)
+      console.log(this.barrierList, 33333)
     },
     isEqualsForArray (listA, listB) {
       return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))// 判断两个数组包含的值是否完全相同

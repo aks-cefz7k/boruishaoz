@@ -86,9 +86,11 @@ import L from 'leaflet'
 import { GetAllDevice } from '@/api/device'
 import Update from './update'
 import EdgeModal from './edgeModal'
+import XRDDirSelector from '@/components/XRDDirSelector'
+// import PhaseMarkerVue from './index'
 export default {
   name: 'device',
-  components: { Update, EdgeModal },
+  components: { Update, EdgeModal, XRDDirSelector },
   props: {
     // devicesData: {
     //   type: Array
@@ -174,6 +176,33 @@ export default {
       let dev = e.target.options.icon.options.alt
       let row = this.devList.filter(item => item.id === dev.id)[0]
       this.setCurrent(row)
+      // let htmlStr =
+      //   `
+      //     <div id="test1">
+      //     </div>
+      //   `
+      // let coordinates = row.geometry.coordinates.slice().reverse()
+      // let iconAnchor = [coordinates[0] + 110, coordinates[1] - 20]
+      // let icon = L.divIcon({
+      //   html: htmlStr,
+      //   iconSize: [80, 80],
+      //   iconAnchor: iconAnchor,
+      //   className: 'map-circle'
+      // })
+      // L.marker(coordinates, {icon: icon}).addTo(this.deviceLayer)
+      // let dom = new PhaseMarkerVue({})
+      // dom.$mount(`#test1`)
+
+      // var svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+      // svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+      // svgElement.setAttribute('viewBox', '0 0 2000 200')
+      // svgElement.innerHTML = '<rect width="200" height="200"/><rect x="75" y="23" width="50" height="50" style="fill:red"/><rect x="75" y="123" width="50" height="50" style="fill:#0013ff"/>'
+      // var svgElementBounds = [coordinates, [coordinates[0] + 20, coordinates[1] + 20]]
+      // L.svgOverlay(svgElement, svgElementBounds).addTo(this.deviceLayer)
+
+      // var imageUrl = 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg'
+      // let imageBounds = [coordinates, [coordinates[0] + 20, coordinates[1] + 20]]
+      // L.imageOverlay(imageUrl, imageBounds).addTo(this.deviceLayer)
     },
     addMessage () {
       let _this = this
