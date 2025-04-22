@@ -18,8 +18,8 @@
             <el-tooltip placement="top-start" effect="light">
               <div slot="content">P{{item.id}}:{{item.split}}</div>
               <div style="cursor:pointer;">
-                <div :class="[cycles?'ring-nums':'ring-num']">P{{item.id}}:</div>
-                <div :class="[cycles?'ring-nums':'ring-num']">{{item.split}}</div>
+                <div class="ring-nums">P{{item.id}}:</div>
+                <div class="ring-nums">{{item.split}}</div>
               </div>
             </el-tooltip>
           </div>

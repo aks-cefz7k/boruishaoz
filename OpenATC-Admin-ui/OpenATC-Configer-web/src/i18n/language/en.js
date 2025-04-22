@@ -118,6 +118,8 @@ const en = {
       'controlnumber': 'Control Num',
       'mode': 'Mode',
       'stage': 'Stage',
+      'specialcontrol': 'Special Control',
+      'phaseclosecontrol': 'Phase Close Control',
       'implement': 'Execute',
       'ipaddress': 'IP',
       'deviceport': 'Port',
@@ -179,6 +181,7 @@ const en = {
       'modelList12': 'phasewalk',
       'modelList13': 'Pattern Recovery',
       'modelList19': 'Inductive Pedestrian Crossing Control',
+      'modelList23': 'Close Phase',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
       'canceled': 'Cancelled',
@@ -201,7 +204,14 @@ const en = {
       'JSONFormatError': 'JSON format error!',
       'showFault': 'Display fault details',
       'hideFault': 'Hide fault details',
-      'close': 'close'
+      'close': 'close',
+      'closemode': 'mode',
+      'closeOption0': 'recovery',
+      'closeOption1': 'close',
+      'closeOption2': 'only vehicle close',
+      'closeOption3': 'only pedestrian close',
+      'vehicle': 'vehicle',
+      'pedestrian': 'pedestrian'
     },
     'phase': {
       'desc': 'LaneDirection',

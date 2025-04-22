@@ -1,7 +1,7 @@
 let errorCodeMap = new Map([
   [101, '相位编号超出限值'],
   [102, '行人绿闪时间超出限值'],
-  [103, '最小绿应大于行人绿灯时间'],
+  [103, '最小绿应大于行人清空时间'],
   [104, '最大绿1应大于最小绿时间'],
   [105, '最大绿2应大于最大绿1时间'],
   [106, '单位延长绿灯时间超出限值'],
@@ -19,7 +19,6 @@ let errorCodeMap = new Map([
   [301, '方案数量超出限值'],
   [302, '相位差应小于周期时间'],
   [303, '环内配置未知相位'],
-  [307, '方案中阶段时长应大于相位过渡灯色'],
   [401, '计划数量超出限值'],
   [402, '控制方式不存在'],
   [403, '时段数量超出限值'],
@@ -84,7 +83,7 @@ let errorCodeMap = new Map([
 let errorCodeMapEn = new Map([
   [101, 'Phase number exceeds limit'],
   [102, 'The time of pedestrian flashing green exceeds the limit'],
-  [103, 'The minimum green time should be longer than the pedestrian green'],
+  [103, 'The minimum green time should be longer than the pedestrian clear time'],
   [104, 'The maximum green 1 should be longer than the minimum green'],
   [105, 'Maximum green 2 should be greater than maximum green 1'],
   [106, 'Unit extended green time out of limit'],
@@ -102,7 +101,6 @@ let errorCodeMapEn = new Map([
   [301, 'The number of schemes exceeds the limit'],
   [302, 'The phase difference should be less than the cycle time'],
   [303, 'Unknown phase configuration in the ring'],
-  [307, 'The phase duration in the scheme shall be greater than the phase transition lamp color'],
   [401, 'The number of plans exceeds the limit'],
   [402, 'Control mode does not exist'],
   [403, 'The periods number exceeds the limit'],
