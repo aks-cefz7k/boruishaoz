@@ -75,6 +75,7 @@
 <script>
 import { getTscControl, putTscControl } from '@/api/control'
 // import { getKiss } from '@/utils/auth'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'control',
   data () {
@@ -105,7 +106,7 @@ export default {
     initData () {
       getTscControl().then((data) => {
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.controlData = this.handleGetData(data.data.data.data)
@@ -128,7 +129,7 @@ export default {
       let controlObj = this.handlePutData(control)
       putTscControl(controlObj).then(data => {
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // downloadTscParam(this.$store.state.user.name, this.$store.getters.tscParam)

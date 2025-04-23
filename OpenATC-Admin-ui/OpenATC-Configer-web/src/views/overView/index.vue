@@ -982,7 +982,7 @@ export default {
         that.unlockScreen()
         let success = 0
         if (!data.data.success) {
-          that.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          that.$message.error(getMessageByCode(data.data.code, that.$i18n.locale))
           return
         } else {
           success = data.data.data.data.success

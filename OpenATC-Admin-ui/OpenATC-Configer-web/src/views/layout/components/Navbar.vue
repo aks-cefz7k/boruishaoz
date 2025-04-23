@@ -160,6 +160,7 @@ import versioninfo from './versionInfo'
 import { getErrorMesZh, getErrorMesEn } from '../../../utils/errorcode.js'
 import { getControSource, getOverLap, getTypeOptions, getEtypeOptions } from '@/utils/channeldesc.js'
 
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {
     Breadcrumb,
@@ -456,7 +457,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$store.state.user.route = this.$route.path
@@ -489,7 +490,7 @@ export default {
               this.$message.error(this.$t('edge.errorTip.devicenotonline'))
               return
             }
-            this.$message.error(data.data.message)
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
           if (Object.keys(data.data.data.data).length === 0) {
@@ -509,7 +510,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let allTscParam = data.data.data.data
@@ -582,7 +583,7 @@ export default {
             })
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // downloadTscParam(this.$store.state.user.name, tscParam)
@@ -674,7 +675,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // downloadTscParam(this.$store.state.user.name, tscParam)
@@ -724,7 +725,6 @@ export default {
           if (data.data.success) {
             resolve(data.data.data)
           } else {
-            console.log(data.data.message)
             this.$message.error(this.$t('edge.common.getmd5error'))
             reject(new Error(data.data.message))
           }
@@ -1287,7 +1287,7 @@ export default {
       if (!val) return
       getInfo().then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.userInfo = data.data.data

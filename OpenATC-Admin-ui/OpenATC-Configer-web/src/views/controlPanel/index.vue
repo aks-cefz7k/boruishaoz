@@ -96,6 +96,7 @@
 <script>
 import { mapState } from 'vuex'
 import { getManualpanel, getChannel, getDefaultManualpanel } from '@/api/manual'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'manualcontrol',
   components: {},
@@ -217,7 +218,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.channelList = res.data.data.channelList
@@ -234,7 +235,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         console.log(res)
@@ -335,7 +336,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.controlpanel.getdefaultmanualpaneltips'), { type: 'success' })

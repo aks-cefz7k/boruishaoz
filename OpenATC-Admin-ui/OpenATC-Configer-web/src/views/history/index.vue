@@ -31,6 +31,7 @@ import boardTable from './table/index'
 import { getFault, getFaultHistoryByFtp } from '@/api/fault'
 import { getIframdevid } from '@/utils/auth'
 import detailFault from './dialog/index'
+import { getMessageByCode } from '@/utils/responseMessage'
 import {
   faultCodeMap,
   faultCodeMapEn,
@@ -90,8 +91,7 @@ export default {
       getFaultHistoryByFtp(reqData).then(data => {
         if (data.data.success !== true) {
           this.listLoading = false
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
@@ -207,8 +207,7 @@ export default {
       getFault(val).then(data => {
         if (data.data.success !== true) {
           this.listLoading = false
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false

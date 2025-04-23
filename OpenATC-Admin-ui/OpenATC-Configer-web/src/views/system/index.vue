@@ -171,6 +171,7 @@ import realTimeChannel from './realTimeChannel'
 import deviceInfo from '../deviceInfo/systemInfo'
 import { getSignVersion, getSystemTime, getParamVersion, getCode, getSignIp, getSerialPort, setRemoteControl, getRemoteDebug, setRemoteDebug, udiskupdate } from '@/api/system'
 import { getChannel } from '@/api/manual'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'system',
   components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel, deviceInfo },
@@ -272,7 +273,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.software = res.data.data.software
@@ -290,7 +291,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.systemTime = res.data.data.time
@@ -307,7 +308,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.paramVersion = res.data.data.version
@@ -324,7 +325,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.code = res.data.data.code
@@ -341,7 +342,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.ip = res.data.data.ip
@@ -360,7 +361,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.Baudrate = res.data.data.Baudrate
@@ -380,7 +381,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         if (res.data.data) {
@@ -400,7 +401,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = '设置成功！'
@@ -452,7 +453,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('edge.system.resetSuccess')
@@ -471,7 +472,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('edge.common.updatesucess')
@@ -490,7 +491,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.channelList = res.data.data.channelList
