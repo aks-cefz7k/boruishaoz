@@ -60,6 +60,7 @@ import LottieAnim from './lottieDemo/index'
 import deviceAnim from '../../../static/lottiejson/deviceManager.json'
 import userAnim from '../../../static/lottiejson/userManager.json'
 import operatAnim from '../../../static/lottiejson/operationRecord.json'
+import FaultEventData from '../../model/EventModal/faultData.js'
 
 export default {
   data () {
@@ -177,6 +178,10 @@ export default {
         }
         this.faultList = list
       })
+    },
+    handleFaultEventData (data) {
+      console.log(data)
+      debugger
     }
   },
   mounted () {
@@ -195,6 +200,9 @@ export default {
         _this.Visible = true
       })
     }
+    // 订阅故障测试
+    this.FaultEventData = new FaultEventData()
+    this.FaultEventData.Init(this.handleFaultEventData)
   },
   destroyed () {
     clearInterval(this.getDevsDataTimer)
