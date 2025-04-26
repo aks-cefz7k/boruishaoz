@@ -25,9 +25,11 @@ import com.openatc.core.util.RESTRetUtils;
 import com.openatc.agent.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.*;
+
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 /**
@@ -42,6 +44,8 @@ import static com.openatc.core.common.IErrorEnumImplOuter.*;
 public class TemplateController {
     @Autowired
     private MessageController messageController;
+
+    Gson gson = new Gson();
 
     /**
      * @return RESTRetBase
@@ -60,12 +64,16 @@ public class TemplateController {
         //无方向十字路口
         typeList.add("101-000-04");
         typeList.add("101-000-08");
+        //两相位匝道路口
+//        typeList.add("103-001-02");
+//        typeList.add("103-002-02");
+//        typeList.add("103-003-02");
+//        typeList.add("103-004-02");
         //自定义路口
         typeList.add("999-000-00");
 
         // 最终返回的数据集
         List<TypeAndPhase> templateLists = new ArrayList<>();
-
 
         //遍历typeList，向其中添加数据
         for (String type : typeList) {
@@ -78,6 +86,7 @@ public class TemplateController {
             String phaseCount = intersectionInfo[2];
 
             int[][] direction = new int[Integer.parseInt(phaseCount)][];
+            int[][] peddirection = new int[Integer.parseInt(phaseCount)][];
 
             if (intersectionShape.equals("100")) {
                 switch (intersectionDirection) {
@@ -85,25 +94,41 @@ public class TemplateController {
                         direction[0] = new int[]{9, 13};
                         direction[1] = new int[]{2};
                         direction[2] = new int[]{10};
+                        peddirection[0] = new int[]{1, 3};
+                        peddirection[1] = new int[]{4};
+                        peddirection[2] = new int[]{2};
                         break;
                     case "002":
                         direction[0] = new int[]{1, 5};
                         direction[1] = new int[]{2};
                         direction[2] = new int[]{14};
+                        peddirection[0] = new int[]{2, 4};
+                        peddirection[1] = new int[]{3};
+                        peddirection[2] = new int[]{1};
                         break;
                     case "003":
                         direction[0] = new int[]{9, 13};
                         direction[1] = new int[]{14};
                         direction[2] = new int[]{6};
+                        peddirection[0] = new int[]{1, 3};
+                        peddirection[1] = new int[]{4};
+                        peddirection[2] = new int[]{2};
                         break;
                     case "004":
                         direction[0] = new int[]{1, 5};
                         direction[1] = new int[]{6};
                         direction[2] = new int[]{10};
+                        peddirection[0] = new int[]{2, 4};
+                        peddirection[1] = new int[]{1};
+                        peddirection[1] = new int[]{3};
+                        break;
                     default:
                         direction[0] = new int[]{};
                         direction[0] = new int[]{};
                         direction[0] = new int[]{};
+                        peddirection[0] = new int[]{};
+                        peddirection[1] = new int[]{};
+                        peddirection[1] = new int[]{};
                         break;
                 }
             }
@@ -115,6 +140,10 @@ public class TemplateController {
                         direction[1] = new int[]{2, 6};
                         direction[2] = new int[]{9, 13};
                         direction[3] = new int[]{10, 14};
+                        peddirection[0] = new int[]{1, 3};
+                        peddirection[1] = new int[]{};
+                        peddirection[2] = new int[]{2, 4};
+                        peddirection[3] = new int[]{};
                         break;
                     case "08":
                         direction[0] = new int[]{1};
@@ -125,15 +154,41 @@ public class TemplateController {
                         direction[5] = new int[]{9};
                         direction[6] = new int[]{14};
                         direction[7] = new int[]{10};
+                        peddirection[0] = new int[]{1};
+                        peddirection[1] = new int[]{};
+                        peddirection[2] = new int[]{4};
+                        peddirection[3] = new int[]{};
+                        peddirection[4] = new int[]{2};
+                        peddirection[5] = new int[]{};
+                        peddirection[6] = new int[]{3};
+                        peddirection[7] = new int[]{};
                         break;
                     default:
                         break;
                 }
-            }  //到此方向已经设定好了
+            }
+//            if (intersectionShape.equals("103")) {
+//                switch (intersectionDirection) {
+//                    case "001":
+//                        direction[0] = new int[]{17};
+//                        break;
+//                    case "002":
+//                        direction[0] = new int[]{18};
+//                        break;
+//                    case "003":
+//                        direction[0] = new int[]{19};
+//                        break;
+//                    case "004":
+//                        direction[0] = new int[]{20};
+//                        break;
+//                }
+//                direction[1] = new int[]{};
+//            }
 
+            //到此方向已经设定好了
             List<SimTemPhase> simTemPhases = new ArrayList<>();
             for (int i = 0; i < Integer.parseInt(phaseCount); i++) {
-                simTemPhases.add(new SimTemPhase(i + 1, direction[i]));
+                simTemPhases.add(new SimTemPhase(i + 1, direction[i], peddirection[i]));
             }
 
             TypeAndPhase typeAndPhase = new TypeAndPhase();
@@ -173,6 +228,7 @@ public class TemplateController {
         //声明8相位的相位方向及其相位
         Template template = new Template();
         int[][] direction = new int[phaseCount][];
+        int[][] peddirection = new int[phaseCount][];
         TemPhase[] temPhaseArray = new TemPhase[phaseCount];
         TemPattern[] temPatternArray = new TemPattern[patternCount];
         List<List<Ring>> rings = new ArrayList<>();
@@ -187,25 +243,37 @@ public class TemplateController {
                     direction[0] = new int[]{9, 13};
                     direction[1] = new int[]{2};
                     direction[2] = new int[]{10};
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear);
+                    peddirection[0] = new int[]{1, 3};
+                    peddirection[1] = new int[]{4};
+                    peddirection[2] = new int[]{2};
+                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
                     break;
                 case "002":
                     direction[0] = new int[]{1, 5};
                     direction[1] = new int[]{2};
                     direction[2] = new int[]{14};
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear);
+                    peddirection[0] = new int[]{2, 4};
+                    peddirection[1] = new int[]{3};
+                    peddirection[2] = new int[]{1};
+                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
                     break;
                 case "003":
                     direction[0] = new int[]{9, 13};
                     direction[1] = new int[]{14};
                     direction[2] = new int[]{6};
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear);
+                    peddirection[0] = new int[]{1, 3};
+                    peddirection[1] = new int[]{4};
+                    peddirection[2] = new int[]{2};
+                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
                     break;
                 case "004":
                     direction[0] = new int[]{1, 5};
                     direction[1] = new int[]{6};
                     direction[2] = new int[]{10};
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear);
+                    peddirection[0] = new int[]{2, 4};
+                    peddirection[1] = new int[]{1};
+                    peddirection[1] = new int[]{3};
+                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
                 default:
                     break;
             }
@@ -218,8 +286,12 @@ public class TemplateController {
                     direction[1] = new int[]{2, 6};
                     direction[2] = new int[]{9, 13};
                     direction[3] = new int[]{10, 14};
+                    peddirection[0] = new int[]{1, 3};
+                    peddirection[1] = new int[]{};
+                    peddirection[2] = new int[]{2, 4};
+                    peddirection[3] = new int[]{};
                     phaseCount = 4;
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear);
+                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
                     break;
                 case 8:
                     direction[0] = new int[]{1};
@@ -230,8 +302,16 @@ public class TemplateController {
                     direction[5] = new int[]{2};
                     direction[6] = new int[]{13};
                     direction[7] = new int[]{10};
+                    peddirection[0] = new int[]{1};
+                    peddirection[1] = new int[]{};
+                    peddirection[2] = new int[]{4};
+                    peddirection[3] = new int[]{};
+                    peddirection[4] = new int[]{2};
+                    peddirection[5] = new int[]{};
+                    peddirection[6] = new int[]{3};
+                    peddirection[7] = new int[]{};
                     phaseCount = 8;
-                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear);
+                    setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
             }
         }
 
@@ -240,7 +320,7 @@ public class TemplateController {
             for (int i = 0; i < phaseCount; i++) {
                 direction[i] = new int[]{};
             }
-            setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear);
+            setAllTemPhase(phaseCount, temPhaseArray, direction, flashgreen, yellow, redclear, peddirection);
         }
 
         //确定每一个模板方案
@@ -253,7 +333,7 @@ public class TemplateController {
         int j = 0;
         while (0 < phaseCount) {
             for (int i = 0; i < phaseCount; i++) {
-                rings.get(j).add(new Ring(i + 1, "", (int) split,15,2));
+                rings.get(j).add(new Ring(i + 1, "", (int) split, 15, 2));
                 if (i == 3) break;
             }
             j += 1;
@@ -301,7 +381,7 @@ public class TemplateController {
         return RESTRetUtils.successObj(template);
     }
 
-    private void setTemPhase(TemPhase temPhase, int[] direction, int id, int flashgreen, int yellow, int redclear, int phaseCount) {
+    private TemPhase setTemPhase(TemPhase temPhase, int[] direction, int id, int flashgreen, int yellow, int redclear, int phaseCount) {
         temPhase.setDirection(direction);
         temPhase.setId(id + 1);
         temPhase.setFlashgreen(flashgreen);
@@ -315,29 +395,31 @@ public class TemplateController {
             switch (id) {
                 case 0:
                 case 1:
-                    temPhase.setConcurrent(new int[]{5,6});
+                    temPhase.setConcurrent(new int[]{5, 6});
                     break;
                 case 2:
                 case 3:
-                    temPhase.setConcurrent(new int[]{7,8});
+                    temPhase.setConcurrent(new int[]{7, 8});
                     break;
                 case 4:
                 case 5:
-                    temPhase.setConcurrent(new int[]{1,2});
+                    temPhase.setConcurrent(new int[]{1, 2});
                     break;
                 case 6:
                 case 7:
-                    temPhase.setConcurrent(new int[]{3,4});
+                    temPhase.setConcurrent(new int[]{3, 4});
                 default:
                     break;
             }
         }
+        return temPhase;
     }
 
-    private void setAllTemPhase(int phaseCount, TemPhase[] temPhaseArray, int[][] direction, int flashgreen, int yellow, int redclear) {
+    private void setAllTemPhase(int phaseCount, TemPhase[] temPhaseArray, int[][] direction, int flashgreen, int yellow, int redclear, int[][] peddirection) {
         for (int i = 0; i < phaseCount; i++) {
             temPhaseArray[i] = new TemPhase();
-            setTemPhase(temPhaseArray[i], direction[i], i, flashgreen, yellow, redclear, phaseCount);
+            TemPhase temPhase = setTemPhase(temPhaseArray[i], direction[i], i, flashgreen, yellow, redclear, phaseCount);
+            temPhase.setPeddirection(peddirection[i]);
         }
     }
 
@@ -349,43 +431,133 @@ public class TemplateController {
     @GetMapping(value = "/intersection/info/{agentid}")
     public RESTRetBase getTemplate(@PathVariable String agentid) throws SocketException, ParseException {
 
+
         //返回的路口类型
         String type = "999-000-00";
 
         //directionSet存放相位方向
         Set directionSet = new HashSet();
-        //没有做处理的set集合,用于检查direction是否存在重复项
-        Set alldirections = new HashSet();
 
         //使用设备通讯接口获取相位
-        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.phase);
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
         RESTRet<MessageData> retBase = null;
         retBase = messageController.postDevsMessage(null, messageData);
-        if (retBase.getMessage().equals("Device not online!")) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.phase, IErrorEnumImplInner.E_301);
+        if (retBase.getCode().equals(E_4002.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            return RESTRetUtils.errorDetialObj(E_4002, devCommError);
+        }
+        if (retBase.getCode().equals(E_4003.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_301);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
+        }
+        if (retBase.getCode().equals(E_4005.getErrorCode())) {
+            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
         if (retBase.getData() == null) {
             return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
         }
-        JsonArray phaseArray = retBase.getData().getData().getAsJsonObject().get("phaseList").getAsJsonArray();
-        int phaseCount = 0;
-        int directionsCount = 0;
-        Gson gson = new Gson();
-        for (JsonElement phase : phaseArray) {
-            int[] directions = gson.fromJson(phase.getAsJsonObject().get("direction"), int[].class);
-            directionsCount = directionsCount + directions.length;
-            phaseCount = phase.getAsJsonObject().get("id").getAsInt();
-            for (double direction : directions) {
-                alldirections.add(direction);
-                directionSet.add((int) Math.ceil(direction / 4));
-            }
+        if (retBase.getData().getData() == null) {
+            return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
         }
-
+        JsonArray phaseArray = retBase.getData().getData().getAsJsonObject().get("phaseList").getAsJsonArray();
+        JsonElement overlapElement = retBase.getData().getData().getAsJsonObject().get("overlaplList");
+        JsonArray overlapArray = new JsonArray();
+        if (overlapElement != null) {
+            overlapArray = overlapElement.getAsJsonArray();
+        }
+        JsonArray phaseAndOverlapArray = new JsonArray();
+        phaseAndOverlapArray.addAll(phaseArray);
+        phaseAndOverlapArray.addAll(overlapArray);
+        int phaseCount = phaseArray.size();
         //相位用两位字符串表示，不足位数补0
         String phaseCountString = String.format("%2d", phaseCount).replace(" ", "0");
 
-        //判断是什么路口类型
+        if (!directionConflict(phaseArray) && !directionConflict(overlapArray)) {
+            //判断是否是T型或十字型路口
+            type = calTenOrType(phaseAndOverlapArray, type, directionSet, phaseCountString);
+            if (type.equals("999-000-00")){
+                //判断是不是人行横道
+                type = calPedCrossType(phaseAndOverlapArray, type, phaseCountString);
+            }
+        }
+
+        //判断是否是匝道类型的路开口
+        if (type.equals("999-000-00")) {
+            type = calRampType(phaseArray, type, phaseCountString);
+        }
+
+
+        //返回的json对象
+        JsonObject intersectionInfo = new JsonObject();
+        intersectionInfo.addProperty("type", type);
+        intersectionInfo.add("phaseList", phaseArray);
+        intersectionInfo.add("overlaplList", overlapArray);
+        return RESTRetUtils.successObj(intersectionInfo);
+    }
+
+    /**
+     * 判断direction时候会有冲突
+     */
+    private boolean directionConflict(JsonArray jsonArray) {
+        Set set = new HashSet<>();
+        for (JsonElement jsonElement : jsonArray) {
+            int[] directions = gson.fromJson(jsonElement.getAsJsonObject().get("direction"), int[].class);
+            if (directions == null || directions.length == 0) continue;
+            for (double direction : directions) {
+                if (set.contains(direction)) {
+                    return true;
+                } else {
+                    set.add(direction);
+                }
+            }
+        }
+        return false;
+    }
+
+    private String calPedCrossType(JsonArray phaseArray, String type, String phaseCountString) {
+        for (JsonElement phase : phaseArray) {
+            if (phase.getAsJsonObject().get("controltype") == null || phase.getAsJsonObject().get("peddirection") == null)
+                continue;
+
+            // 确定为人行横道
+            if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
+                Set<Integer> peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), Set.class);
+                if (peddirection.contains(15) && peddirection.contains(16)) {
+                    return type = "999-000-00";
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        for (JsonElement phase : phaseArray) {
+            if (phase.getAsJsonObject().get("controltype") == null || phase.getAsJsonObject().get("peddirection") == null)
+                continue;
+
+            // 确定为人行横道
+            if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
+                Set<Integer> peddirection = gson.fromJson(phase.getAsJsonObject().get("peddirection"), Set.class);
+                if (peddirection.contains(15)) {
+                    return type = "104-005-" + phaseCountString;
+                } else if (peddirection.contains(16)) {
+                    return type = "104-006-" + phaseCountString;
+                } else {
+                    return type = "999-000-00";
+                }
+            }
+        }
+        return type;
+    }
+
+    private String calTenOrType(JsonArray phaseAndOverlapArray, String type, Set directionSet, String phaseCountString) {
+        for (JsonElement phaseAndOverlap : phaseAndOverlapArray) {
+            int[] directions = gson.fromJson(phaseAndOverlap.getAsJsonObject().get("direction"), int[].class);
+            if (directions == null || directions.length == 0) continue;
+            for (double direction : directions) {
+                directionSet.add((int) Math.ceil(direction / 4));
+            }
+        }
         if (isSetEqual(directionSet, new HashSet<>(Arrays.asList(1, 2, 3, 4)))) {
             type = "101-000-" + phaseCountString;
         }
@@ -401,16 +573,75 @@ public class TemplateController {
         if (isSetEqual(directionSet, new HashSet<>(Arrays.asList(2, 3, 4)))) {
             type = "100-003-" + phaseCountString;
         }
-        //如果direction中存在重复项，type仍然是999
-//        if (alldirections.size() != directionsCount) {
-//            type = "999-000-00";
-//        }
+        return type;
+    }
 
-        //返回的json对象
-        JsonObject intersectionInfo = new JsonObject();
-        intersectionInfo.addProperty("type", type);
-        intersectionInfo.add("phaseList", phaseArray);
-        return RESTRetUtils.successObj(intersectionInfo);
+    //判断方向是不是全空
+    public boolean allDirectionEmpty(Set<String> allStringDirections) {
+        Iterator<String> iterator = allStringDirections.iterator();
+        if (allStringDirections.size() == 1 && iterator.next().equals("")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //判断匝道路口类型
+    public String calRampType(JsonArray phaseArray, String type, String phaseCountString) {
+        Map<Integer, String> map = new HashMap<>();
+        //存放所有方向
+        Set<String> allStringDiretions = new HashSet<>();
+
+        for (JsonElement phase : phaseArray) {
+            // 没有方向,直接跳到下一个相位;
+            if (phase.getAsJsonObject().get("direction") == null) continue;
+            String stringDirections = arrayToString(gson.fromJson(phase.getAsJsonObject().get("direction"), int[].class));
+            allStringDiretions.add(stringDirections);
+
+            int controltype = phase.getAsJsonObject().get("controltype") == null ? 0 : phase.getAsJsonObject().get("controltype").getAsInt();
+            // map中没有控制类型, 添加到map中
+            if (!map.containsKey(controltype)) {
+                map.put(controltype, stringDirections);
+            }
+            // 把map中的类型都取出来,必须完全相等,否则就不是闸道,直接返回原来的类型
+            if (map.containsKey(0)) {
+                if (!map.get(0).equals(stringDirections)) return type;
+            }
+            if (map.containsKey(1)) {
+                if (!map.get(1).equals(stringDirections)) return type;
+            }
+        }
+        // 检测map, 并查看是否是匝道类型，以及匝道的方向 (其实到这里基本上判断出就是匝道类型了，主要是判断匝道方向)
+        if (allDirectionEmpty(allStringDiretions)) return type;
+        int direction = 1;
+        if (map.containsKey(0)) {
+            direction = (int) Math.ceil(Double.parseDouble(map.get(0)) / 4);
+        } else if (map.containsKey(1)) {
+            direction = (int) Math.ceil(Double.parseDouble(map.get(1)) / 4);
+        }
+        switch (direction) {
+            case 1:
+                type = "103-001-" + phaseCountString;
+                break;
+            case 2:
+                type = "103-003-" + phaseCountString;
+                break;
+            case 3:
+                type = "103-004-" + phaseCountString;
+                break;
+            case 4:
+                type = "103-002-" + phaseCountString;
+        }
+        return type;
+    }
+
+    public String arrayToString(int[] directions) {
+        Arrays.sort(directions);
+        StringBuilder stringDirection = new StringBuilder();
+        for (Integer direction : directions) {
+            stringDirection.append(direction);
+        }
+        return stringDirection.toString();
     }
 
     public boolean isSetEqual(Set set1, Set set2) {

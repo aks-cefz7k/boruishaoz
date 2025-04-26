@@ -35,6 +35,7 @@
 
 <script>
 import { getRealTimeChannel } from '@/api/system'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'realtimechannel',
   components: {},
@@ -139,7 +140,7 @@ export default {
       getRealTimeChannel().then(data => {
         let res = data.data
         if (!res.success) {
-          this.$message.error(res.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.handleRealTimeChannelData(res.data.data.channellamp)

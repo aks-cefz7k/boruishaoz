@@ -145,6 +145,7 @@ import LTShapeSouthRoadsSvg from './baseImg/leftroad/LTShapeSouthRoadsSvg.vue'
 import LPhaseIconSvg from './phaseIcon/LphaseIconSvg'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import BusMapSvg from './busIcon/busMapSvg'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'crossDiagram',
   components: {
@@ -474,7 +475,7 @@ export default {
             this.$message.error(this.$t('edge.common.deviceoffline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.isLoaded = true
@@ -489,7 +490,7 @@ export default {
           this.getOverlapPhasePos()
           this.getPedPhasePos()
           this.getOverlapPedPhasePos()
-          // this.getBusPos()
+          this.getBusPos()
         }
         if (this.mainType === '103') {
           // 获取匝道道路的主路和支路的相位坐标

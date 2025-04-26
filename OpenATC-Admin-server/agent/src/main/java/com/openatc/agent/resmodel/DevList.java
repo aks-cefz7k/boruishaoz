@@ -17,5 +17,5 @@ import java.util.List;
 
 @Data
 public class DevList {
-    private List intersections;
+    private List devs;
 }

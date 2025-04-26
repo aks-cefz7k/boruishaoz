@@ -17,7 +17,7 @@ import lombok.Data;
 public class Device {
     private int id;
     private String name;
-    private String intersectionid;
+    private String agentid;
     private int routeid;
     private int forwardphaseid;
     private int[] forwardphasedirection;

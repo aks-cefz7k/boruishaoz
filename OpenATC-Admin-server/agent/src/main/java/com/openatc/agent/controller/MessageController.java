@@ -13,19 +13,16 @@ package com.openatc.agent.controller;
 
 import com.openatc.agent.model.AscsBaseModel;
 import com.openatc.agent.model.THisParams;
-import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
+import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
-import com.openatc.comm.common.CommunicationType;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.packupack.CosntDataDefine;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,11 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.logging.Logger;
 
+import static com.openatc.comm.common.CommunicationType.*;
 import static com.openatc.core.common.IErrorEnumImplInner.*;
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
@@ -63,19 +60,16 @@ public class MessageController {
     @Autowired
     protected CommClient commClient;
 
-    @Value("${agent.server.mode.config}")
-    private boolean isConfigMode;
-
-    @Value("${agent.server.shiro}")
-    private boolean shiroOpen;
-
     @Autowired(required = false)
     protected AscsDao mDao;
+
+    @Autowired
+    protected TokenUtil tokenUtil;
 
     @PostConstruct
     public void init(){
         // 设置通讯模式为UDP固定端口
-        commClient.setCommunicationType(CommunicationType.COMM_UDP_HOSTPORT);
+        commClient.setCommunicationServerType(COMM_SERVER_TYPE_CENTER);
     }
 
     /**
@@ -88,7 +82,7 @@ public class MessageController {
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
         RESTRet<AscsBaseModel> restRet = (RESTRet<AscsBaseModel>) devController.GetDevById(requestData.getAgentid());
         AscsBaseModel ascsBaseModel = (AscsBaseModel) restRet.getData();
-        
+
         //获取主机ip，如果没有传入httpServletRequest，则设置ip为localhost
         String OperatorIp = null;
         if (httpServletRequest == null) {
@@ -119,11 +113,13 @@ public class MessageController {
             devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_101);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
+
         //判断消息类型是否为空
         if (requestData.getInfotype() == null) {
             devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_102);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
+
         //判断协议是否为空
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
@@ -133,42 +129,51 @@ public class MessageController {
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
+        // 判断通讯类型是设备直连还是平台转发
+        String protocal = ascsBaseModel.getProtocol();
+        int exangeType = EXANGE_TYPE_DEVICE;
+        if(protocal.equals(SCP_PROTYPE) )
+            exangeType = EXANGE_TYPE_CENTER;
+
         //增加mode字段
         if (requestData.getOperation().equals("set-request") && requestData.getInfotype().equals("control/pattern")) {
-            if (!isConfigMode) {
-                requestData.getData().getAsJsonObject().addProperty("mode", 1);
-            } else {
-                requestData.getData().getAsJsonObject().addProperty("mode", 2);
-            }
+            requestData.getData().getAsJsonObject().addProperty("mode", 1);
         }
 
         // 获取responceData
         MessageData responceData = null;
         try {
             responceData = commClient
-                    .exange(ip, port, protocol, requestData);
+                    .exange(ip, port, protocol, exangeType,requestData,ascsBaseModel.getSockettype());
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // 把设置请求的操作保存到历史记录中
-        if (requestData.getOperation().equals("set-request") && isConfigMode == false && shiroOpen) {
-            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp));
+            logger.warning( "message exange error:" + e.getCause());
         }
 
         if (responceData == null){
-            return RESTRetUtils.errorDetialObj(E_4004, devCommError);
+            devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_200);
+            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
 
+        // 把设置请求的操作保存到历史记录中
+        String token = null;
+        if (httpServletRequest != null) {
+            token = httpServletRequest.getHeader("Authorization");
+        }
+        if (requestData.getOperation().equals("set-request") && token != null) {
+            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
+            hisParamService.insertHisParam(CreateHisParam(requestData, responceData, OperatorIp, token));
+        }
+
+
         if (responceData.getOperation() == null){
-            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
+            devCommError = RESTRetUtils.errorObj(agentid, errorquest, infotype, E_101);
+            return RESTRetUtils.errorDetialObj(E_4006, devCommError);
         }
 
         //判断设备是否在线
         if (responceData.getOperation().equals("Communication Error!")) {
             devCommError = RESTRetUtils.errorObj(agentid, errorresponse, infotype, E_301);
-            return RESTRetUtils.errorDetialObj(E_4003, devCommError);
+            return RESTRetUtils.errorDetialObj(E_4003, devCommError, responceData.getDelay());
         }
 
         //判断应答是否成功
@@ -179,6 +184,7 @@ public class MessageController {
         return RESTRetUtils.successObj(responceData);
     }
 
+
     /**
      * @param requestData  请求消息
      * @param responceData 应答消息
@@ -186,11 +192,20 @@ public class MessageController {
      * @Title: CreateHisParam
      * @Description: 生成一条操作记录
      */
-    private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip) {
+    private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip, String token) {
+
+        logger.info( "Create History Param - requestData： " + requestData + " token：" + token);
+
         THisParams hisParams = new THisParams();
-        User subject = (User) SecurityUtils.getSubject().getPrincipal();
+        String username = tokenUtil.getUsernameFromToken(token);
+
         //操作者
-        hisParams.setOperator(subject.getUser_name());
+        if(username == null){
+            hisParams.setOperator("");
+        }
+        else{
+            hisParams.setOperator(username);
+        }
         //操作时间自动生成
         //操作源地址
         hisParams.setSource(ip);
@@ -198,16 +213,19 @@ public class MessageController {
         hisParams.setAgentid(requestData.getAgentid());
         //消息类型
         hisParams.setInfotype(requestData.getInfotype());
-        //消息描述
-        hisParams.setStatus(responceData.getOperation());
         //请求内容
         try {
             hisParams.setRequestbody(requestData.getData().toString());
         } catch (Exception e) {
             hisParams.setRequestbody("{}");
         }
-        //响应内容
-        hisParams.setResponsebody(responceData.getData().toString());
+        if(responceData != null){
+            //消息描述
+            hisParams.setStatus(responceData.getOperation());
+            //响应内容
+            hisParams.setResponsebody(responceData.getData().toString());
+        }
+
         return hisParams;
     }
 

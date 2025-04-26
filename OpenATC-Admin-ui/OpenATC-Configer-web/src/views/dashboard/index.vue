@@ -162,6 +162,7 @@
 import { getTscControl, putTscControl, getTscPattern } from '@/api/control'
 import { registerMessage } from '@/api/param'
 import { setIframdevid } from '@/utils/auth'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'overview',
   data () {
@@ -278,7 +279,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // let param = JSON.parse(data.data.data)
@@ -337,7 +338,7 @@ export default {
       putTscControl(control).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
@@ -352,7 +353,7 @@ export default {
       getTscPattern(this.agentId).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$message.success(this.$t('edge.common.querysucess'))

@@ -11,13 +11,27 @@
  **/
 package com.openatc.comm.model;
 
-import com.openatc.comm.common.CommunicationProxy;
 import com.openatc.comm.common.CommunicationType;
 
+import static com.openatc.comm.common.CommunicationType.*;
+
 public class scpFactory implements ProtocolFactory {
+//    @Override
+//    public CommunicationProxy createCommunication(CommunicationType communicationType) {
+//        return new CommunicationProxy(communicationType);
+//    }
+
     @Override
-    public CommunicationProxy createCommunication(CommunicationType communicationType) {
-        return new CommunicationProxy(communicationType);
+    public Communication createCommunication(Message message, CommunicationType commType, int exangeType) {
+
+        if(commType == COMM_UDP_CONFIGER)
+            return new UdpCommunicationForConfiger(message);
+        else if (commType == COMM_UDP_HOSTPORT)
+            return new UdpCommunicationStaticPort(SCP_PROTYPE, exangeType);
+        if(commType == COMM_TCP)
+            return new TcpCommunication(message);
+        else
+            return null;
     }
 
     @Override

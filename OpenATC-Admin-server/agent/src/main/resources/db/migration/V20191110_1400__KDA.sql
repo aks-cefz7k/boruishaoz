@@ -17,10 +17,10 @@ INSERT INTO public.t_user (user_name, password, nick_name, create_time, update_t
 INSERT INTO public.t_user (user_name, password, nick_name, create_time, update_time, status, ext_infos, email, mobile_phone, login_ip_limit) VALUES ('demo_user', '123456', 'Demo User', '2018-07-26 19:27:53.978316', '2018-08-10 04:50:32.687712', 1, '{}', null, null, '*');
 
 -- insert roles
-INSERT INTO public.t_role (name, description, create_time, update_time, ext_infos, status) VALUES ('superadmin', '超级管理员', '2018-07-26 19:28:26.496294', '2018-07-26 19:28:26.496294', '{}', 1);
-INSERT INTO public.t_role (name, description, create_time, update_time, ext_infos, status) VALUES ('test user', '测试用户', '2018-08-03 01:15:00.672822', '2018-08-03 01:15:00.672822', '{}', 1);
-INSERT INTO public.t_role (name, description, create_time, update_time, ext_infos, status) VALUES ('admin', '管理员', '2018-08-03 01:15:00.672822', '2018-08-03 01:15:00.672822', '{}', 1);
-INSERT INTO public.t_role (name, description, create_time, update_time, ext_infos, status) VALUES ('ordinary user', '普通用户', '2018-08-03 01:15:00.672822', '2018-08-03 01:15:00.672822', '{}', 1);
+INSERT INTO public.t_role (name, description, create_time, update_time, ext_infos, status) VALUES ('超级管理员', '超级管理员', '2018-07-26 19:28:26.496294', '2018-07-26 19:28:26.496294', '{}', 1);
+INSERT INTO public.t_role (name, description, create_time, update_time, ext_infos, status) VALUES ('测试用户', '测试用户', '2018-08-03 01:15:00.672822', '2018-08-03 01:15:00.672822', '{}', 1);
+INSERT INTO public.t_role (name, description, create_time, update_time, ext_infos, status) VALUES ('管理员', '管理员', '2018-08-03 01:15:00.672822', '2018-08-03 01:15:00.672822', '{}', 1);
+INSERT INTO public.t_role (name, description, create_time, update_time, ext_infos, status) VALUES ('普通用户', '普通用户', '2018-08-03 01:15:00.672822', '2018-08-03 01:15:00.672822', '{}', 1);
 
 -- insert role user
 INSERT INTO public.t_user_role (role_id, user_id) VALUES (1, 1);

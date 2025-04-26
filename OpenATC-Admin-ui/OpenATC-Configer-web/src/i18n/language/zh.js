@@ -118,6 +118,8 @@ const zh = {
       'controlnumber': '控制编号',
       'mode': '控制方式',
       'stage': '阶段(驻留)',
+      'specialcontrol': '特殊控制',
+      'phaseclosecontrol': '相位关断控制',
       'implement': '执行',
       'ipaddress': 'IP地址',
       'deviceport': '设备端口',
@@ -179,6 +181,7 @@ const zh = {
       'modelList12': '行人过街',
       'modelList13': '方案恢复过渡',
       'modelList19': '感应式行人过街',
+      'modelList23': '相位关断',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
       'canceled': '已取消',
@@ -195,7 +198,20 @@ const zh = {
       'putTscControlError3': '不支持的控制参数',
       'putTscControlError4': '设备初始化中，无法执行',
       'putTscControlError5': '优先级更高的方案控制中，无法执行',
-      'putTscControlError6': '优先级更高的用户控制中，无法执行'
+      'putTscControlError6': '优先级更高的用户控制中，无法执行',
+      'nofault': '无',
+      'extendedContent': '扩展内容',
+      'JSONFormatError': 'JSON格式错误!',
+      'showFault': '显示故障详情',
+      'hideFault': '隐藏故障详情',
+      'close': '关闭',
+      'closemode': '方式',
+      'closeOption0': '恢复',
+      'closeOption1': '关断',
+      'closeOption2': '仅机动车关断',
+      'closeOption3': '仅行人关断',
+      'vehicle': '机动车',
+      'pedestrian': '行人'
     },
     'phase': {
       'desc': '车道方向',
@@ -272,7 +288,7 @@ const zh = {
       'lane': '车道',
       'operation': '操作',
       'deletetip': '确认删除此跟随相位？',
-      'mostdata': '最多只能创建40条数据!'
+      'mostdata': '最多只能创建16条数据!'
     },
     'pattern': {
       'property': '属性',
@@ -300,6 +316,8 @@ const zh = {
       'delaystart': '晚启动时间 ',
       'advanceend': '早结束时间',
       'stageConfig': '阶段配置',
+      'parameters': '扩展参数配置',
+      'plan': '方案',
       'ringConfig': '环配置',
       'stage': '阶段',
       'phase': '相位',
@@ -308,6 +326,10 @@ const zh = {
     },
     'plan': {
       'tipcontext': '请输入计划名！',
+      'editcontext': '请编辑计划名！',
+      'plannamerequired': '必须填写计划名！',
+      'plannamerepeated': '计划名不能重复！',
+      'mostplandata': '最多只能创建16条数据!',
       'tip': '提示',
       'ok': '确定',
       'cancel': '取消',
@@ -318,6 +340,7 @@ const zh = {
       'deletetip': '确认删除此计划？',
       'tabtip': '确认删除此标签？',
       'mostdata': '最多只能创建48条数据!',
+      'editname': '编辑计划名',
       'controltype': '控制方式',
       'ControlOption1': '黄闪',
       'ControlOption2': '全红',
@@ -383,7 +406,7 @@ const zh = {
       'operation': '操作',
       'deletetip': '确认删除此检测器？',
       'deleteAlltip': '确认删除所有检测器？',
-      'mostdata': '最多只能创建72条数据！'
+      'mostdata': '最多只能创建64条数据！'
     },
     'channellock': {
       'deleteAlltip': '确认删除所有通道锁定？',
@@ -471,7 +494,7 @@ const zh = {
       'detectgapnoredon': '无红灯亮起检测时间间隔(0.1秒):',
       'detectgapgreenconflict': '绿灯冲突检测时间间隔(0.1秒): ',
       'startOrderParams': '启动时序参数 ',
-      'netcardInfo': '网卡信息: ',
+      'netcardInfo': '网络信息: ',
       'stepType': '步进类型',
       'seeCutEffect': '查看剪断效果',
       'siteIdLimit': '地址码规定范围是 0 ~ 99999',
@@ -557,6 +580,7 @@ const zh = {
       'sure': '确定',
       'oper': '操作',
       'selectfile': '选择文件',
+      'noselectfile': '未选择更新文件！',
       'updateUSB': '更新U盘数据',
       'recovery': '恢复',
       'lampcontrolpanel': '灯控板',
@@ -580,12 +604,13 @@ const zh = {
       'remote3': '自定义',
       'test': '检测',
       'realTimeChannel': '实时通道',
-      'isReboot': '系统文件下载成功,是否重启设备？',
+      'isReboot': '系统文件下载成功,更新重启后生效,是否重启设备？',
       'rebootSuccess': '重启成功！',
       'rebootFaile': '重启失败！',
       'resetSuccess': '设置成功！',
       'filesuccess': '升级文件传输完成!',
-      'filefailed': '升级接口调用失败!'
+      'filefailed': '升级接口调用失败!',
+      'updateovertime': '更新超时！'
     },
     'optimize': {
       'strategy': '优化策略',
@@ -717,7 +742,7 @@ const zh = {
       'commitandexecute': '提交并执行',
       'uploadsuccess': '参数上传成功!',
       'download': '参数下发成功!',
-      'downloaderror': '下发失败！',
+      'downloaderror': '信号机校验失败！',
       'downloadandrun': '提交并运行成功！',
       'editagentid': '编辑设备ID',
       'querysucess': '查询成功！',
@@ -749,6 +774,7 @@ const zh = {
     },
     'errorTip': {
       'phaseNotZero': '必须含有至少一个相位!',
+      'phaseExceed': '一个环最大不能超过16相位!',
       'planNotZero': '必须含有至少一个计划!',
       'patternNotZero': '必须含有至少一个方案!',
       'dataNotZero': '必须含有至少一个日期!',
@@ -823,6 +849,54 @@ const zh = {
       'company': '苏州科达科技股份有限公司',
       'packedtime': '打包时间',
       'opensourceagreement': '开源协议'
+    },
+    'message': {
+      '10000': '参数为空',
+      '10001': '参数长度错误',
+      '1002': '错误',
+      '10002': '记录不能为空',
+      '20003': 'id不能为空且不能为0',
+      '20004': '无参数记录',
+      '20005': '没有发现设备id',
+      // 全局异常错误
+      '0001': '空指针',
+      '0002': '错误请求方式',
+      '0003': '输入参数类型不正确',
+      '0004': '输入参数不全',
+      '0005': '输入参数不满足约束',
+      '0006': '系统错误',
+      // 用户管理错误
+      '3001': '用户名不存在',
+      '3002': '认证失败',
+      '3003': '用户名重复',
+      '3004': '新旧密码不能相同',
+      '3005': '密码不能为空',
+      '3006': '原密码错误',
+      '3007': '登录用户不存在',
+      '3008': '没有权限访问',
+      '3009': '密码错误',
+      '3010': '超级用户角色不能被修改',
+      '3011': '用户名密码错误',
+      '3013': '账号已停用',
+      '3014': 'token已过期',
+      '3015': 'token失效',
+      '3016': '用户组织机构为空',
+      '3017': '组织机构不存在',
+      '3018': '访问ip与用户ip不一致，禁止登录',
+      // 消息通讯错误
+      '4001': '错误请求',
+      '4002': '错误应答',
+      '4003': '设备不在线',
+      '4004': '重复的设备id',
+      '4005': '信号机应答为空',
+      '4006': '信号机应答操作类型为空',
+      // 协调路线错误
+      '5001': '重复的协调路线名称',
+      // 勤务路线错误
+      '6001': '重复的勤务路线名称',
+      '6002': '勤务路线正在执行中',
+      // 流量错误
+      '7001': 'ftp客户端连接失败'
     }
   }
 }

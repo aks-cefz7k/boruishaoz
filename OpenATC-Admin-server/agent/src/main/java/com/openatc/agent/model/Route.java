@@ -14,6 +14,7 @@ package com.openatc.agent.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.util.Set;
 
 @Data
@@ -37,21 +38,24 @@ public class Route {
 
     private int downspeed = 50;
 
-    private String type;
+    private int type;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "route_id")
     @OrderBy("sortid ASC")
-    private Set<RouteIntersection> intersections;
+    private Set<RouteIntersection> devs;
 
     private Long areaid;
 
     private Long routegroupid;
 
+    @Column(nullable = true)
+    private boolean enable = false;
+
     @Transient
     private Boolean flag; //过渡判断路线是否有路线组;
 
-    public Route(Long id, String name, String keyintsid, String direction, String opstrategy, int upspeed, int downspeed, String type) {
+    public Route(Long id, String name, String keyintsid, String direction, String opstrategy, int upspeed, int downspeed, int type, boolean enable) {
         this.id = id;
         this.name = name;
         this.keyintsid = keyintsid;
@@ -60,6 +64,7 @@ public class Route {
         this.upspeed = upspeed;
         this.downspeed = downspeed;
         this.type = type;
+        this.enable = enable;
     }
 
     public Route() {

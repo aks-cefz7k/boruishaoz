@@ -21,6 +21,7 @@ import com.openatc.core.model.DevCommError;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -244,9 +245,16 @@ public final class RESTRetUtils {
                 .success(false)
                 .build();
     }
+    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, List<DevCommError> devCommErrors) {
+        return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommErrors);
+    }
 
     public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, DevCommError devCommError) {
         return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommError);
+    }
+
+    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, DevCommError devCommError, Long delay) {
+        return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommError, delay);
     }
 
     public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, JsonElement jsonElement) {

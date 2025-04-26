@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.Role;
+import com.openatc.agent.model.Token;
 import com.openatc.agent.model.User;
 import com.openatc.agent.model.UserRole;
 import com.openatc.agent.realm.JwtToken;
@@ -22,6 +23,7 @@ import com.openatc.agent.service.PermissionDao;
 import com.openatc.agent.service.RoleDao;
 import com.openatc.agent.service.UserDao;
 import com.openatc.agent.service.UserRoleDao;
+import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -32,11 +34,13 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,9 +63,9 @@ import static com.openatc.core.common.IErrorEnumImplOuter.*;
 @RestController
 @CrossOrigin
 public class UserController {
-
     private static Logger logger = Logger.getLogger(UserController.class.toString());
     private static String STANDARD_DATE_FORMAT_UTC = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    //    public volatile Map<String, Token> tokenMap = new HashMap<>();
     public long timestamp;
     @Autowired(required = false)
     protected UserDao userDao;
@@ -71,15 +75,27 @@ public class UserController {
     protected UserRoleDao userRoleDao;
     @Autowired(required = false)
     protected RoleDao roleDao;
-    @Autowired(required = false)
+    @Autowired
     protected TokenUtil tokenUtil;
     @Value("${default.user.password}")
     private String initialPassword;
-    @Value("${agent.server.shiro}")
-    private boolean shiroOpen;
 
-    private Gson gson = new Gson();
-
+    /**
+     * 根据用户创建授权token
+     */
+    @PostMapping(value = "/auth/user/token")
+    public RESTRetBase getTokenByUsername(@RequestBody JsonObject jsonObject) {
+        String userName = jsonObject.get("user_name").getAsString();
+        String endtime = jsonObject.get("end_time").getAsString();
+        String starttime = jsonObject.get("start_time").getAsString();
+        Date enddate = DateUtil.stringToDate(endtime);
+        Date startdate = DateUtil.stringToDate(starttime);
+        String token = tokenUtil.generateToken(userName, System.currentTimeMillis());
+        tokenUtil.tokenMap.put(token, new Token(token, 1, startdate.getTime(), enddate.getTime()));
+        Map resultmap = new HashMap();
+        resultmap.put("token", token);
+        return RESTRetUtils.successObj(resultmap);
+    }
 
     /**
      * @return RESTRetBase
@@ -107,8 +123,7 @@ public class UserController {
 
         Subject subject = SecurityUtils.getSubject();
         String token = tokenUtil.generateToken(userName, timestamp);
-        long experTime = timestamp + 31536000000L;
-        tokenUtil.tokenMap.put(token, experTime);
+        tokenUtil.tokenMap.put(token, new Token(token, 0, System.currentTimeMillis(), System.currentTimeMillis() + 86400000L));
         JwtToken loginJwt = JwtToken.builder().token(token).ip(ip).build();
         try {
             subject.login(loginJwt);
@@ -127,8 +142,9 @@ public class UserController {
                 return RESTRetUtils.errorObj(E_3013);
             } else if (ex.getMessage().equals("Token is expired!")) {
                 return RESTRetUtils.errorObj(E_3014);
+            } else if (ex.getMessage().equals("access ip is inconsistent with user ip!")){
+                return RESTRetUtils.errorObj(E_3018);
             }
-
             return RESTRetUtils.errorObj(E_3002);
         }
     }
@@ -139,12 +155,13 @@ public class UserController {
      * @Description: TODO
      */
     @GetMapping(value = "/auth/info")  //获取登录用户信息
-    public RESTRetBase edgeInfo() {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+    public RESTRetBase edgeInfo(@RequestHeader("Authorization") String token) {
 
-        if (user != null) {
-            List<String> rolenames = userDao.getRoleNamesByUsername(user.getUser_name());
-            user.setRoleNames(rolenames);
+        String username = tokenUtil.getUsernameFromToken(token);
+//        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        if (username != null) {
+            User user = userDao.getUserByUserName(username);
             return RESTRetUtils.successObj(user);
         }
         return RESTRetUtils.errorObj(E_3011);
@@ -185,8 +202,9 @@ public class UserController {
         }
 
         //分页获取
-        Sort sort = new Sort(Sort.Direction.ASC, "user_name");
-        Pageable pageable = new PageRequest(pageNum, pageRow, sort); //分页设置
+//        Sort sort = new Sort(Sort.Direction.ASC, "user_name");
+//        Pageable pageable = new PageRequest(pageNum, pageRow, sort); //分页设置
+        Pageable pageable = PageRequest.of(pageNum, pageRow); //分页设置
 
         Page<User> users = userDao.findAll(pageable);
         for (User user : users) {

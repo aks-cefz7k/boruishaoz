@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
@@ -40,16 +41,13 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
 @RestController
 public class ManualpanelController {
 
-    @Autowired
-    private MessageController messageController;
-
     private int[] ewSPhase = new int[]{1, 5}; //东西直行
-    private int[] nPPhase = new int[]{9, 10, 11}; //北向通行
+    private int[] nPPhase = new int[]{9, 10, 11, 12}; //北向通行
     private int[] ewLPhase = new int[]{2, 6}; //东西左转
-    private int[] wPPhase = new int[]{5, 6, 7}; //西向通行
-    private int[] ePPhase = new int[]{1, 2, 3}; //东向通行
+    private int[] wPPhase = new int[]{5, 6, 7, 8}; //西向通行
+    private int[] ePPhase = new int[]{1, 2, 3, 4}; //东向通行
     private int[] snSPhase = new int[]{9, 13}; //南北直行
-    private int[] sPPhase = new int[]{13, 14, 15}; //南向通行
+    private int[] sPPhase = new int[]{13, 14, 15, 16}; //南向通行
     private int[] snLPhase = new int[]{10, 14}; //南北左转
 
 
@@ -121,7 +119,7 @@ public class ManualpanelController {
         int[] direction = lsCheck.getDirection();
         boolean result = false;
         for (int j : arr) {
-            if (ArrayUtils.contains(direction, j)) {
+            if (Arrays.asList(direction).contains(j)) {
                 result = true;
                 break;
             }
@@ -129,36 +127,30 @@ public class ManualpanelController {
         if (result) {
             // 这里要多一层校验
             // 第一个按钮，东西执行（1、5）
-            chenck(channelList, lsCheck, i, phaseArray, gson, arr);
+            check(channelList, lsCheck, i, phaseArray, gson, arr);
         } else {
-            channelList.get(i).add(new Channel(lsCheck.getId(), 1));
+            channelList.get(i).add(new Channel(lsCheck.getId(), 1)); //1红灯，3绿灯
         }
-
-
     }
 
-    private void chenck(List<List<Channel>> channelList, LSCheck lsCheck, int i, JsonArray phaseArray, Gson gson, int[] arr) {
-        //判断有没有被设置为红灯
+    public void check(List<List<Channel>> channelList, LSCheck lsCheck, int i, JsonArray phaseArray, Gson gson, int[] arr) {
         int x = 0;
         for (int k = 0; k < phaseArray.size(); k++) {
-            if(x != 0) break;
-            //获取各个相位的directions
-            int[] directions0 = gson.fromJson(phaseArray.get(k).getAsJsonObject().get("direction"), int[].class);  //directions0 [1, 3, 5, 7]
+            if (x != 0) break;
+            int[] directions0 = gson.fromJson(phaseArray.get(k).getAsJsonObject().get("direction"), int[].class);
             int[] concurrent0 = gson.fromJson(phaseArray.get(k).getAsJsonObject().get("concurrent"), int[].class);
-            // arr [1, 4]
-            for (int s : arr) {  //s 1
-                if(x != 0) break;
-                if (ArrayUtils.contains(directions0, s)) {
+            int id = phaseArray.get(k).getAsJsonObject().get("id").getAsInt();
+            for (int s : arr) {
+                if (x != 0) break;
+                if (Arrays.asList(directions0).contains(s)) {
                     for (int u = 0; u < phaseArray.size(); u++) {
                         if (u == k) continue;
-                        // 获取其他相位的directions   directions1是其他相位
                         int[] directions1 = gson.fromJson(phaseArray.get(u).getAsJsonObject().get("direction"), int[].class);
-                        // 其他相位的并发相位
                         int[] concurrent2 = gson.fromJson(phaseArray.get(u).getAsJsonObject().get("concurrent"), int[].class);
+                        int id2 = phaseArray.get(u).getAsJsonObject().get("id").getAsInt();
                         for (int m : arr) {
-                            //如果其他相位包含他的其他相位，那么要检查并发相位是否
-                            if (ArrayUtils.contains(directions1, m)) {
-                                if (!(ArrayUtils.contains(concurrent2, s) && ArrayUtils.contains(concurrent0, m))) {
+                            if (Arrays.asList(directions1).contains(m)) {
+                                if (!(Arrays.asList(concurrent2).contains(id) && Arrays.asList(concurrent0).contains(id2))) {
                                     channelList.get(i).add(new Channel(lsCheck.getId(), 1));
                                     x++;
                                     break;

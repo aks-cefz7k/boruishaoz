@@ -11,52 +11,57 @@
  **/
 package com.openatc.comm.common;
 
+
 import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.comm.packupack.CosntDataDefine;
-//import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
 import java.util.logging.Logger;
 
-import static com.openatc.comm.common.CommunicationType.COMM_UDP;
+import static com.openatc.comm.common.CommunicationType.*;
 
 
-//@Slf4j
 @Component
 public class CommClient {
-    private static final String ocpProtype = "ocp";
-    private static final String scpProtype = "scp";
-    private static CommunicationType commType = COMM_UDP;
 
-    private Logger log = Logger.getLogger(CommClient.class.toString());
+    // 服务的类型，分为平台和配置软件
+    private static int commServerType = COMM_SERVER_TYPE_CONFIGER;
 
-    // 设置通讯模式
-    //  UDP - 随机端UDP口通讯
-    //  UDP_HOSTPORT - 固定端口UDP通讯
-    public void setCommunicationType(CommunicationType type) {
-        commType = type;
+    private static Logger log = Logger.getLogger(CommClient.class.toString());
+
+    static{
+        LogUtil.SetLogLevelfromProp(log);
     }
 
-    public MessageData exange(String ip, int port, String protype, MessageData sendMsg) throws UnsupportedEncodingException {
+    // 设置服务通讯模式
+    //  UDP - 随机端UDP口通讯，用于配置软件服务
+    //  UDP_HOSTPORT - 固定端口UDP通讯，用于平台服务
+    public void setCommunicationServerType(int type) {
+        commServerType = type;
+    }
+
+    public MessageData exange(String ip, int port, String protype, int platform, MessageData sendMsg,int socketType) throws UnsupportedEncodingException {
+
+//        long starttime = System.currentTimeMillis();
+//        long endtime = 0L;
 
         // 产品工厂类
         ProtocolFactory factory = new scpFactory();
         // 协议判断
-        if (protype.equals(ocpProtype)) {
+        if (protype.equals(OCP_PROTYPE)) {
             factory = new ocpFactory();
-        } else if (protype.equals(scpProtype)) {
+        } else if (protype.equals(SCP_PROTYPE)) {
             factory = new scpFactory();
         }
 
+        String sendmsgtype = sendMsg.getInfotype();
+
         // 创建消息处理对象
         Message message = factory.createMessage();
-        CommunicationProxy communication = factory.createCommunication(commType);
 
         // 打包
         PackData packData = message.pack(sendMsg);
@@ -70,32 +75,75 @@ public class CommClient {
             }
             return sendMsg;
         }
+//        endtime = System.currentTimeMillis();
+//        log.info("Send Msg:" + sendMsg );
+//        log.info("Pack Data time:"+ (endtime-starttime) );
 
-        // 通讯
-        DatagramPacket datagramPacket = null;
+
+//        starttime = System.currentTimeMillis();
+        // 设置通讯类型
+        CommunicationType commType;
+        if(socketType == COMM_SOCKET_TYPE_UDP && commServerType == COMM_SERVER_TYPE_CONFIGER){
+            commType = COMM_UDP_CONFIGER;
+        }
+        else if(socketType == COMM_SOCKET_TYPE_TCP)
+            commType = COMM_TCP;
+        else
+            commType = COMM_UDP_HOSTPORT;
+
+        // 创建消息通讯对象
+        Communication communication = factory.createCommunication(message,commType, platform);
+
+        // 发送
+        int sendrev = 0;
+        String agentId = sendMsg.getAgentid();
         try {
-            datagramPacket = communication.exange(packData, ip, port);
-        } catch (InterruptedIOException e) {//检测超时
-            log.info("exange error: Time out - " + e.getMessage());
-            return CreateErrorResponceData(e.getMessage());
-        } catch (IOException e) {// 其他错误
-            log.info("exange error: Other Error - " + e.getMessage());
-            return CreateErrorResponceData(e.getMessage());
+            sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
+        } catch (IOException e) {
+            log.warning("exange send error: " + e.getMessage());
+            return CreateErrorResponceData(agentId,e.getMessage());
         }
 
-        if (datagramPacket == null) {
-            log.info("exange error: return packet is null");
-            return CreateErrorResponceData("Socker Error, Maybe too busy!");
+        if(sendrev != 0){
+            log.warning("exange send error: socket return null");
+            return CreateErrorResponceData(agentId,"exange send error: socket return null");
         }
 
-        // 解析
-        MessageData responceData = message.uppack(datagramPacket);
+//        endtime = System.currentTimeMillis();
+//        log.info("Send Data time:"+ (endtime-starttime) );
+
+//        starttime = System.currentTimeMillis();
+        // 接收-解析
+        MessageData responceData = null;
+        try {
+            responceData = communication.receiveData();
+
+            // 没有收到消息
+            if(responceData == null){
+                responceData = CreateErrorResponceData(agentId,"Responce Data is null");
+            }
+
+//            log.info("receive responceData: " + responceData);
+        } catch (IOException e) {
+            log.warning("exange receive error: " + e.getMessage());
+            return CreateErrorResponceData(agentId,e.getMessage());
+        }
+
+
+//        endtime = System.currentTimeMillis();
+//        responceData.setDelay(endtime-starttime);
+//        log.info("Receive & Unpack Data time:"+ (endtime-starttime) );
+//        log.info("Receive Msg:"+ responceData );
+
         return responceData;
     }
 
-    private static MessageData CreateErrorResponceData(String desc) {
+
+    private static MessageData CreateErrorResponceData(String agentId,String desc) {
+
         MessageData responceData = new MessageData();
-        responceData.setOperation("Communication Error!");
+        responceData.setAgentid(agentId);
+        responceData.setOperation("error-response");
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("desc", desc);
         responceData.setData(jsonObject);

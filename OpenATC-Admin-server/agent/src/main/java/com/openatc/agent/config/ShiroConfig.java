@@ -14,17 +14,19 @@ package com.openatc.agent.config;
 import com.openatc.agent.realm.JwtAuthenticationFilter;
 import com.openatc.agent.realm.MyRealm;
 import com.openatc.agent.realm.StatelessDefaultSubjectFactory;
+import com.openatc.comm.common.PropertiesUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -38,7 +40,10 @@ import java.util.Map;
  * @author kedacom
  */
 @Configuration
+
 public class ShiroConfig {
+
+    private String shiroOpen = PropertiesUtil.getStringProperty("agent.server.shiro");;
 
     @Bean
     @DependsOn("securityManager")
@@ -50,17 +55,22 @@ public class ShiroConfig {
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
-        // 配置不会被拦截的链接 顺序判断
-        filterChainDefinitionMap.put("/", "anon");
-        filterChainDefinitionMap.put("/apiconfig.json", "anon");
-        filterChainDefinitionMap.put("/servConfig.json", "anon");
-        filterChainDefinitionMap.put("/favicon.ico", "anon");
-        filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/fonts/**", "anon");
-        filterChainDefinitionMap.put("/img/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/auth/login", "anon");
-        filterChainDefinitionMap.put("/**", "jwt");
+        if(shiroOpen.equals("true")){
+            // 配置不会被拦截的链接 顺序判断
+            filterChainDefinitionMap.put("/", "anon");
+            filterChainDefinitionMap.put("/apiconfig.json", "anon");
+            filterChainDefinitionMap.put("/servConfig.json", "anon");
+            filterChainDefinitionMap.put("/favicon.ico", "anon");
+            filterChainDefinitionMap.put("/css/**", "anon");
+            filterChainDefinitionMap.put("/fonts/**", "anon");
+            filterChainDefinitionMap.put("/img/**", "anon");
+            filterChainDefinitionMap.put("/js/**", "anon");
+            filterChainDefinitionMap.put("/auth/login", "anon");
+            filterChainDefinitionMap.put("/**", "jwt");
+        }
+        else{
+            filterChainDefinitionMap.put("/**", "anon");
+        }
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
@@ -120,7 +130,6 @@ public class ShiroConfig {
 
 
     @Bean
-//    @DependsOn("lifecycleBeanPostProcessor")
     public MyRealm myRealm() {
         MyRealm myRealm = new MyRealm();
         return myRealm;
@@ -130,10 +139,10 @@ public class ShiroConfig {
      * Shiro生命周期处理器
      * @return
      */
-//    @Bean
-//    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-//        return new LifecycleBeanPostProcessor();
-//    }
+    @Bean
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
 
     /**
      * 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证
@@ -142,7 +151,6 @@ public class ShiroConfig {
      * @return
      */
     @Bean
-//    @DependsOn({"lifecycleBeanPostProcessor"})
     public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
@@ -150,6 +158,7 @@ public class ShiroConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "agent.server",name = "shiro",havingValue = "true")
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());

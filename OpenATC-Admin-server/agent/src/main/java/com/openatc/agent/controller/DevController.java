@@ -12,26 +12,25 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.AscsBaseModel;
-import com.openatc.agent.model.DevCover;
-import com.openatc.agent.model.Route;
-import com.openatc.agent.model.RouteIntersection;
-import com.openatc.agent.service.AscsDao;
-import com.openatc.agent.service.RouteDao;
+import com.openatc.agent.model.*;
+import com.openatc.agent.service.*;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin
@@ -43,24 +42,41 @@ public class DevController {
     AscsBaseModel ascsModel;
     @Autowired(required = false)
     private RouteDao routeDao;
+    @Autowired
+    private VipRouteDao vipRouteDao;
+    @Autowired(required = false)
+    private UserDao userDao;
+    @Autowired(required = false)
+    private OrgService orgService;
+//    @Autowired
+//    private TStatDao tStatDao;
 
-    @Value("${agent.server.mode.config}")
-    private boolean isConfigMode;
-    private Logger log = LoggerFactory.getLogger(DevController.class);
+    private Logger log = Logger.getLogger(DevController.class.toString());
 
-    @GetMapping(value = "/devs/all/{val}")
-    public RESTRetBase GetAllAscsInfo(@PathVariable int val) {
-        List<AscsBaseModel> ascsModels = null;
-        //获取全部信号机
-        if (val == 0) {
-            ascsModels = mDao.getAscsInfo();
+    private Gson gson = new Gson();
+
+    @PostMapping(value = "/devs/agentid")
+    public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
+        String oldAgentid = jsonObject.get("oldAgentid").getAsString();
+        String newAgentid = jsonObject.get("newAgentid").getAsString();
+        boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
+        return RESTRetUtils.successObj(result);
+    }
+
+
+    @GetMapping(value = "/devs/user/{username}")
+    public RESTRetBase GetAllAscsByUsername(@PathVariable String username) {
+        User user = userDao.getUserByUserName(username);
+        String organizationName = user.getOrganization();
+        if (organizationName == null) return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_3016);
+        List<SysOrg> sysOrgs = orgService.findByOrgnizationCodeLike(organizationName);
+        if (sysOrgs == null) return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_3017);
+        List<AscsBaseModel> devices = new ArrayList<>();
+        for (SysOrg sysOrg : sysOrgs) {
+            List<AscsBaseModel> ascsByCode = mDao.getAscsByCode(sysOrg.getOrgnization_code());
+            devices.addAll(ascsByCode);
         }
-        //获取在线信号机
-        else if (val == 1) {
-            ascsModels = mDao.getAscsInfoOnline();
-        }
-
-        return RESTRetUtils.successObj(ascsModels);
+        return RESTRetUtils.successObj(devices);
     }
 
     @GetMapping(value = "/devs/orgnization/{code}")
@@ -92,32 +108,22 @@ public class DevController {
      */
     @PutMapping(value = "/devs/discovery")
     public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel) throws ParseException {
-        mDao.updateAscs(ascsModel);
+        mDao.updateAscsByReport(ascsModel);
+//        mDao.updateAscs(ascsModel);
         return RESTRetUtils.successObj(ascsModel);
     }
 
     //得到所有设备
     @GetMapping(value = "/devs/all")
     public RESTRetBase GetDevAll() throws ParseException {
-        String sql = null;
-        if (isConfigMode) {
-            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (datetime('now', 'localtime') - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime, code FROM dev ORDER BY agentid";
-        } else {
-            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime, code FROM dev ORDER BY agentid";
-        }
-        List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
-        return RESTRetUtils.successObj(ascsBaseModels);
+        return GetDevs();
     }
 
     @GetMapping(value = "/devs")
     public RESTRetBase GetDevs() throws ParseException {
-        String sql = null;
-        if (isConfigMode) {
-            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (datetime('now', 'localtime') - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
-        } else {
-            sql = "SELECT id, agentid, protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
-        }
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
+        mDao.alterStatus(ascsBaseModels);
         return RESTRetUtils.successObj(ascsBaseModels);
     }
 
@@ -128,8 +134,15 @@ public class DevController {
         List<AscsBaseModel> devList = new ArrayList<>();
         List<String> routeIntersectionIdList = gson.fromJson(jsonObject.get("routeIntersectionIdList"), List.class);
         for (String routeIntersectionId : routeIntersectionIdList) {
-            devList.add(mDao.getAscsByID(routeIntersectionId));
+            AscsBaseModel device = null;
+            try {
+                device = mDao.getAscsByID(routeIntersectionId);
+            } catch (EmptyResultDataAccessException e) {
+                return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_8001);
+            }
+            devList.add(device);
         }
+        mDao.alterStatus(devList);
         return RESTRetUtils.successObj(devList);
     }
 
@@ -138,16 +151,9 @@ public class DevController {
     @GetMapping(value = "/devs/{id}")
     public RESTRetBase GetDevById(@PathVariable String id) throws ParseException {
         AscsBaseModel ascsBaseModel = null;
-        String sql = null;
-        if (isConfigMode) {
-            sql =
-                    "SELECT id,agentid,protocol, geometry,type,status,descs,name, jsonparam FROM dev WHERE agentid ='"
-                            + id + "'";
-        } else {
-            sql =
-                    "SELECT id,agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime FROM dev WHERE agentid ='"
-                            + id + "'";
-        }
+        String sql =
+                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime FROM dev WHERE agentid ='"
+                        + id + "'";
         List<AscsBaseModel> listAscs = mDao.getDevByPara(sql);
         if (listAscs.size() > 0) {
             ascsBaseModel = listAscs.get(0);
@@ -155,24 +161,13 @@ public class DevController {
 
         return RESTRetUtils.successObj(ascsBaseModel);
 
-        //配置工具
-        //return RESTRetUtils.successObj(DataPool.getInstance().GetDevicebyID(id));
-
     }
 
     //得到某类型的设备
     @GetMapping(value = "/devs/type/{ptype}")
     public RESTRetBase GetDevByType(@PathVariable String ptype) throws ParseException {
-        String sql = null;
-        if (isConfigMode) {
-            sql =
-                    "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (datetime('now', 'localtime') - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='"
-                            + ptype + "'";
-        } else {
-            sql =
-                    "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='"
-                            + ptype + "'";
-        }
+        String sql = "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='"
+                + ptype + "'";
         return RESTRetUtils.successObj(mDao.getDevByPara(sql));
     }
 
@@ -185,17 +180,30 @@ public class DevController {
         //删除协调路线的id设备
         List<Route> routes = routeDao.findAll();
         for (Route route : routes) {
-            Set<RouteIntersection> intersections = route.getIntersections();
-            for (RouteIntersection intersection : intersections) {
-                if (intersection.getIntersectionid().equals(id)) {
-                    //在set中剔除设备
-                    intersections.remove(intersection);
+            Set<RouteIntersection> intersections = route.getDevs();
+            Iterator<RouteIntersection> intersectionIterator = intersections.iterator();
+            while (intersectionIterator.hasNext()) {
+                RouteIntersection next = intersectionIterator.next();
+                if (next.getAgentid().equals(id)) {
+                    intersectionIterator.remove();
                 }
             }
             routeDao.save(route);
         }
 
-
+        //删除勤务路线的设备
+        List<VipRoute> vipRoutes = vipRouteDao.findAll();
+        for (VipRoute vipRoute : vipRoutes) {
+            Set<VipRouteDevice> devs = vipRoute.getDevs();
+            Iterator<VipRouteDevice> vipRouteDeviceIterator = devs.iterator();
+            while(vipRouteDeviceIterator.hasNext()){
+                VipRouteDevice next = vipRouteDeviceIterator.next();
+                if (next.getAgentid().equals(id)){
+                    vipRouteDeviceIterator.remove();
+                }
+            }
+            vipRouteDao.save(vipRoute);
+        }
         return RESTRetUtils.successObj(as);
     }
 
@@ -209,9 +217,6 @@ public class DevController {
             return RESTRetUtils.successObj(ascs);
         }
         return RESTRetUtils.successObj(mDao.insertDev(ascs));
-//            Boolean bl = DataPool.getInstance().PutDevice(ascs);
-//            log.info("Current device build success," + ascs.getJsonparam().get("ip").getAsString() + "&" + ascs.getJsonparam().get("port").getAsString() + "&" + ascs.getProtocol());
-//            return RESTRetUtils.successObj(bl);
     }
 
     //更新设备
@@ -224,5 +229,61 @@ public class DevController {
             return RESTRetUtils.successObj(ascs);
         }
     }
+
+    //获取设备优化状态参数
+//    @GetMapping(value = "/devs/{agentid}/optstatparam")
+//    public RESTRetBase getDevOptstatparam(@PathVariable String agentid) {
+//        List<TStat> tStats = tStatDao.findByAgentid(agentid);
+//        return RESTRetUtils.successObj(tStats);
+//    }
+//
+//    //修改设备状态优化参数
+//    @PostMapping(value = "/devs/{agentid}/optstatparam")
+//    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
+//
+//        // 1 先删除之前的
+//        int deleteResult = tStatDao.deleteByAgentid(agentid);
+//        log.info(deleteResult + "");
+//        // 2 保存到数据库
+//        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
+//        for (JsonElement tstatJson : tstats) {
+//            TStat tStat = gson.fromJson(tstatJson, TStat.class);
+//            tStat.setAgentid(agentid);
+//            tStatDao.save(tStat);
+//        }
+//        return RESTRetUtils.successObj();
+//    }
+//
+//    //查询数据库中饱和数据表
+//    @GetMapping(value = "/devs/optstatparam")
+//    public RESTRetBase getOptstatparam() {
+//        List<TStat> tStats = tStatDao.findAll();
+//        return RESTRetUtils.successObj(tStats);
+//    }
+
+
+//    //获取设备优化状态参数
+//    @GetMapping(value = "/devs/{agentid}/optstatparam")
+//    public RESTRetBase getDevOptstatparam(@PathVariable String agentid) {
+//        List<TStat> tStats = tStatDao.findByAgentid(agentid);
+//        return RESTRetUtils.successObj(tStats);
+//    }
+//
+//    //修改设备状态优化参数
+//    @PostMapping(value = "/devs/{agentid}/optstatparam")
+//    public RESTRetBase modDevOptstatparam(@PathVariable String agentid, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
+//        // 0 下发到信号机
+//        MessageData messageData = new MessageData(agentid, "set-request", "status/optstatparam", jsonObject);
+//        messageController.postDevsMessage(null, messageData);
+//
+//        // 1 保存到数据库
+//        JsonArray tstats = jsonObject.get("tstats").getAsJsonArray();
+//        for(JsonElement tstatJson : tstats){
+//            TStat tStat = gson.fromJson(tstatJson, TStat.class);
+//            tStat.setAgentid(agentid);
+//            tStatDao.save(tStat);
+//        }
+//        return RESTRetUtils.successObj();
+//    }
 
 }

@@ -16,9 +16,13 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.openatc.agent.model.Token;
+import com.openatc.agent.model.User;
+import com.openatc.agent.service.UserDao;
 import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,14 +30,24 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class TokenUtil {
 
-    //  String为token的内容，long为token的过期时间戳
-    public Map<String, Long> tokenMap = new HashMap<>();
+    //      String为token的内容，long为token的过期时间戳
+    public volatile Map<String, Token> tokenMap = new HashMap<>();
+    private final String patternIp = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
+            + "(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+            + "(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+            + "(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
+    private Pattern pattern = Pattern.compile(patternIp);
 
     private Logger logger = LoggerFactory.getLogger(TokenUtil.class);
+
+    @Autowired
+    private UserDao userDao;
 
     @Value("${jwt.token.secret:kedacom}")
     private String secret;
@@ -44,7 +58,6 @@ public class TokenUtil {
     private Algorithm algorithm = null;
 
     private JWTVerifier verifier = null;
-
 
     public String getSecret() {
         return secret;
@@ -94,13 +107,16 @@ public class TokenUtil {
         return token;
     }
 
-
     /**
      * 生成token时间 = 当前时间 + expiration（properties中配置的失效时间）
      *
      * @return
      */
     private Date generateExpirationDate() {
+        return new Date(System.currentTimeMillis() + expiration * 1000);
+    }
+
+    private Date generateExpirationDate(long expiration) {
         return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 
@@ -111,6 +127,10 @@ public class TokenUtil {
      * @return
      */
     public String getUsernameFromToken(String token) {
+
+        if(token == null){
+            return null;
+        }
 
         try {
             DecodedJWT jwt = getVerifier().verify(token);
@@ -191,18 +211,43 @@ public class TokenUtil {
         if (tokenMap.get(token) == null) {
             throw new AuthenticationException("there is no token in tokenmap");
         }
-
-
-        //token的过期时间戳 expirationDate
-        long expirationDate = ((Long) tokenMap.get(token)).longValue();
-        // 当前时间戳
-        long currentDate = System.currentTimeMillis();
-        if (expirationDate > currentDate) {
-            //token没有过期
-            tokenMap.put(token, currentDate + expiration);
+        // 获取token的属性
+        Token tokenAtt = tokenMap.get(token);
+        long starttime = tokenAtt.getStarttime();
+        long endtime = tokenAtt.getEndtime();
+        long currenttime = System.currentTimeMillis();
+        // token没有过期
+        if (currenttime >= starttime && currenttime <= endtime) {
+            // 从登录接口传过来的token需要续期
+            if (tokenAtt.getSource() == 0) {
+                if (endtime <= (currenttime + expiration)) {
+                    tokenAtt.setEndtime(currenttime + expiration);
+                    tokenMap.put(token, tokenAtt);
+                }
+            }
             return false;
         } else {
             return true;
         }
+    }
+
+    /**
+     * Token ip校验，如果ip与数据库中不一致，则拒绝访问
+     *
+     * @param token token字符串
+     * @return
+     */
+    public boolean checkip(String ip, String token) throws AuthenticationException {
+        String username = getUsernameFromToken(token);
+        if(username == null){
+            return false;
+        }
+        User user = userDao.getUserByUserName(username);
+        String login_ip_limit = user.getLogin_ip_limit();
+        Matcher matcher = pattern.matcher(ip);
+        if (login_ip_limit.equals("*") || ip.equals("0:0:0:0:0:0:0:1")) return true;
+        if (!matcher.matches()) return false;
+        if (login_ip_limit.equals(ip)) return true;
+        return false;
     }
 }

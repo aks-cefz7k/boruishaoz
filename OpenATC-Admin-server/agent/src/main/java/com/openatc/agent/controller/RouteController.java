@@ -27,17 +27,18 @@ import com.openatc.core.util.RESTRetUtils;
 import com.openatc.agent.model.*;
 import algorithm.Greenwave;
 import algorithm.Kdalgorithm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
+
 import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
 
@@ -50,7 +51,7 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
 @RestController
 @CrossOrigin
 public class RouteController {
-    private Logger logger = LoggerFactory.getLogger(RouteController.class);
+    private Logger logger = Logger.getLogger(RouteController.class.toString());
 
     @Autowired(required = false)
     private RouteDao routeDao;
@@ -142,10 +143,10 @@ public class RouteController {
         Long id = routeEntity.getId();
         Route route = routeDao.findById(id);
         route.setName(routeEntity.getName());
-        try{
+        try {
             routeDao.save(route);
-        }catch (Exception e){
-            return  RESTRetUtils.errorObj(E_5001);
+        } catch (Exception e) {
+            return RESTRetUtils.errorObj(E_5001);
         }
         return RESTRetUtils.successObj(route);
     }
@@ -170,24 +171,24 @@ public class RouteController {
     @PostMapping(value = "/route/generate")
     public RESTRetBase generate(@RequestBody RoutePara routePara) {
         RouteOpt routeOpt = new RouteOpt();
-        routeOpt.setIntersections(routePara.getIntersections());
+        routeOpt.setDevs(routePara.getDevs());
         //计算优化
-        double intslenth[] = new double[routePara.getIntersections().size()]; //保存路口长度的值
-        int intssplit[] = new int[routePara.getIntersections().size()]; //保存路口协调相位绿信比的值
+        double intslenth[] = new double[routePara.getDevs().size()]; //保存路口长度的值
+        int intssplit[] = new int[routePara.getDevs().size()]; //保存路口协调相位绿信比的值
 
-        int intsoffset[] = new int[routePara.getIntersections().size()]; //保存优化后各路口的相位差的值
-        int intsabs[]= new int[routePara.getIntersections().size()];//各路口协调相位所属周期时间位置，用来计算绝对相位差
+        int intsoffset[] = new int[routePara.getDevs().size()]; //保存优化后各路口的相位差的值
+        int intsabs[] = new int[routePara.getDevs().size()];//各路口协调相位所属周期时间位置，用来计算绝对相位差
 
         try {
             double intsvelup = 0.00;
             double intsveldown = 0.00;
 
-             intsvelup = routePara.getUpspeed();
-             intsveldown = routePara.getDownspeed();
+            intsvelup = routePara.getUpspeed();
+            intsveldown = routePara.getDownspeed();
 
             int phaseno = 0;
             int cycle = 100;
-            List<Device> deviceList = routePara.getIntersections();
+            List<Device> deviceList = routePara.getDevs();
             for (Device device : deviceList) {
                 //得到距离
                 intslenth[device.getSortid() - 1] = device.getDistance();
@@ -211,35 +212,33 @@ public class RouteController {
                         if (ring.getId() == phaseno) {
                             intssplit[device.getSortid() - 1] = ring.getValue();
                             break label;
-                        }else
-                        {
-                            intsabs[device.getSortid() - 1]+=ring.getValue();
+                        } else {
+                            intsabs[device.getSortid() - 1] += ring.getValue();
                         }
                     }
                 }
 
-                while(intsabs[device.getSortid() - 1]>=cycle)
-                {
-                    intsabs[device.getSortid() - 1]-=cycle;
+                while (intsabs[device.getSortid() - 1] >= cycle) {
+                    intsabs[device.getSortid() - 1] -= cycle;
                 }
             }
 
             kdalgorithm.setAftcycle(cycle);
             if (routePara.getDirection().equals("up"))
                 intsoffset = kdalgorithm.offsetOpt(routePara.getDirection(), intslenth, intsvelup, intssplit);
-            else if(routePara.getDirection().equals("down"))
+            else if (routePara.getDirection().equals("down"))
                 intsoffset = kdalgorithm.offsetOpt(routePara.getDirection(), intslenth, intsveldown, intssplit);
             else
-                intsoffset=kdalgorithm.offsetByBiDirection(intslenth,intsvelup,intsveldown,intssplit);
+                intsoffset = kdalgorithm.offsetByBiDirection(intslenth, intsvelup, intsveldown, intssplit);
 
-            List<Device> routeOptList = routeOpt.getIntersections();
+            List<Device> routeOptList = routeOpt.getDevs();
 
             for (Device device : routeOptList) {
 
                 //把每个路口相位差转成绝对相位差，start位置也会变化
-                intsoffset[device.getSortid() - 1]-=intsabs[device.getSortid() - 1];
-                if(intsoffset[device.getSortid() - 1]<0)
-                    intsoffset[device.getSortid() - 1]+=cycle;
+                intsoffset[device.getSortid() - 1] -= intsabs[device.getSortid() - 1];
+                if (intsoffset[device.getSortid() - 1] < 0)
+                    intsoffset[device.getSortid() - 1] += cycle;
 
                 device.getFeature().getPatternList().setOffset(intsoffset[device.getSortid() - 1]);
             }
@@ -247,10 +246,9 @@ public class RouteController {
             List<Greenwave> greenwaveList = new LinkedList<>();
             if (routePara.getDirection().equals("up"))
                 greenwaveList.add(kdalgorithm.getGwup());
-            else if(routePara.getDirection().equals("down"))
+            else if (routePara.getDirection().equals("down"))
                 greenwaveList.add(kdalgorithm.getGwdown());
-            else
-            {
+            else {
                 greenwaveList.add(kdalgorithm.getGwup());
                 greenwaveList.add(kdalgorithm.getGwdown());
             }
@@ -276,21 +274,25 @@ public class RouteController {
         List<RouteIntersectionBase> devs = new ArrayList<>();
         //拿到各个列表的id，再根据id进行请求获得数据后，存放到list当中
         Route rr = routeDao.findById(id);
-        Set<RouteIntersection> routeIntersections = rr.getIntersections();
+        Set<RouteIntersection> routeIntersections = rr.getDevs();
 
         //为每一个设备设置id和feature
         for (RouteIntersection r : routeIntersections) {
             //创建返回的设备
             RouteIntersectionBase eachDev = new RouteIntersectionBase();
             //为设备设置id
-            eachDev.setIntersectionid(r.getIntersectionid());
+            eachDev.setAgentid(r.getAgentid());
             //为设备设置feature
-            MessageData messageData = new MessageData(r.getIntersectionid(), CosntDataDefine.getrequest, "feature/" + feature, new JsonObject());
+            MessageData messageData = new MessageData(r.getAgentid(), CosntDataDefine.getrequest, "feature/" + feature, new JsonObject());
             RESTRet<MessageData> retBase = null;
             retBase = messageController.postDevsMessage(null, messageData);
+
             if (retBase.getMessage().equals("Device not online!")) {
-                DevCommError devCommError = RESTRetUtils.errorObj(r.getIntersectionid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
+                DevCommError devCommError = RESTRetUtils.errorObj(r.getAgentid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
                 return RESTRetUtils.errorDetialObj(E_4003, devCommError);
+            }
+            if (retBase.getMessage().equals("error request!")) {
+                return retBase;
             }
 
             Interfeature intersectionFeature = new Interfeature();
@@ -303,7 +305,7 @@ public class RouteController {
             eachDev.setFeature(intersectionFeature);
             devs.add(eachDev);
         }
-        devList.setIntersections(devs);
+        devList.setDevs(devs);
         return RESTRetUtils.successObj(devList);
     }
 
@@ -316,11 +318,11 @@ public class RouteController {
     public RESTRetBase downloadConfigure(@PathVariable String feature, @RequestBody JsonObject jsonObject) throws SocketException, ParseException {
 
         //先拿到pattern的jsonObject对象feature
-        JsonArray devlistJsonArray = jsonObject.get("intersections").getAsJsonArray();
+        JsonArray devlistJsonArray = jsonObject.get("devs").getAsJsonArray();
         String intersectionid;
         JsonObject featureList;
         for (JsonElement device : devlistJsonArray) {
-            intersectionid = device.getAsJsonObject().get("intersectionid").getAsString();
+            intersectionid = device.getAsJsonObject().get("agentid").getAsString();
             //featureList就是要发送的patternList
             featureList = device.getAsJsonObject().get("feature").getAsJsonObject();
             MessageData messageData = new MessageData(intersectionid, CosntDataDefine.setrequest, "feature/" + feature, featureList);

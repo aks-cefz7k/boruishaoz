@@ -13,6 +13,7 @@ package com.openatc.agent.realm;
 
 import java.util.List;
 
+import com.openatc.agent.AgentApplication;
 import com.openatc.agent.model.Permission;
 import com.openatc.agent.model.User;
 import com.openatc.agent.service.PermissionDao;
@@ -23,6 +24,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -40,6 +43,8 @@ public class MyRealm extends AuthorizingRealm {
     @Autowired
     @Lazy
     private TokenUtil tokenUtil;
+
+    private Logger logger = LoggerFactory.getLogger(MyRealm.class);
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -66,17 +71,23 @@ public class MyRealm extends AuthorizingRealm {
      * 认证
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException{
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+
         JwtToken jwtToken = (JwtToken) authenticationToken;
         String token = jwtToken.getToken();
-
-        if (token == null){
+        String ip = jwtToken.getIp();
+        if (token == null) {
             throw new AuthenticationException("Token is null!");
         }
         String username = tokenUtil.getUsernameFromToken(token);
+
+        if (username == null) {
+            throw new AuthenticationException("Get null username from token!");
+        }
+
         User user = userDao.getUserByUserName(username);
         //判断用户是否停用
-        if(user.getStatus() == 0){
+        if (user.getStatus() == 0) {
             throw new AuthenticationException("Account has been deactivated!");
         }
         //判断token是否过期 true表示过期了
@@ -84,9 +95,10 @@ public class MyRealm extends AuthorizingRealm {
         if (isExpired) {
             throw new AuthenticationException("Token is expired!");
         }
-        if (username == null) {
-            throw new AuthenticationException("Get null username from token!");
+        if (!tokenUtil.checkip(ip, token)) {
+            throw new AuthenticationException("access ip is inconsistent with user ip!");
         }
+
         try {
             return new SimpleAuthenticationInfo(user, token, getName());
         } catch (Exception e) {

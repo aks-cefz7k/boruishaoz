@@ -1,7 +1,7 @@
 let errorCodeMap = new Map([
   [101, '相位编号超出限值'],
   [102, '行人绿闪时间超出限值'],
-  [103, '最小绿应大于行人绿灯时间'],
+  [103, '最小绿应大于行人清空时间'],
   [104, '最大绿1应大于最小绿时间'],
   [105, '最大绿2应大于最大绿1时间'],
   [106, '单位延长绿灯时间超出限值'],
@@ -11,13 +11,14 @@ let errorCodeMap = new Map([
   [110, '环数量超出限值'],
   [111, '相位并发配置冲突'],
   [112, '所有环不能同时配一个相位'],
+  [113, '环索引应从1开始配置'],
+  [114, '环索引应连续配置'],
   [201, '跟随相位数量超出限值'],
   [202, '跟随相位的母相位为空'],
   [203, '跟随相位配置未知母相位'],
   [301, '方案数量超出限值'],
   [302, '相位差应小于周期时间'],
   [303, '环内配置未知相位'],
-  [304, '绿信比应大于相位的最小绿+绿闪+黄灯+全红'],
   [401, '计划数量超出限值'],
   [402, '控制方式不存在'],
   [403, '时段数量超出限值'],
@@ -73,7 +74,8 @@ let errorCodeMap = new Map([
   [2003, '信号机地址码配置错误'],
   [2004, '参数JSON格式解析错误'],
   [2005, '设备参数同步失败'],
-  [2006, '设备参数同步失败'],
+  [2006, '信号机配置非法网卡信息'],
+  [2007, '信号机路口ID超过两个字符'],
   [3001, 'U盘挂载失败'],
   [3002, '未找到U盘']
 ])
@@ -81,7 +83,7 @@ let errorCodeMap = new Map([
 let errorCodeMapEn = new Map([
   [101, 'Phase number exceeds limit'],
   [102, 'The time of pedestrian flashing green exceeds the limit'],
-  [103, 'The minimum green time should be longer than the pedestrian green'],
+  [103, 'The minimum green time should be longer than the pedestrian clear time'],
   [104, 'The maximum green 1 should be longer than the minimum green'],
   [105, 'Maximum green 2 should be greater than maximum green 1'],
   [106, 'Unit extended green time out of limit'],
@@ -91,13 +93,14 @@ let errorCodeMapEn = new Map([
   [110, 'Number of rings exceeds limit'],
   [111, 'Phase concurrency configuration conflict'],
   [112, 'All rings cannot be equipped with only one phase'],
+  [113, 'The ring index should be configured from 1'],
+  [114, 'The ring index shall be configured continuously'],
   [201, 'The number of following phases exceeds the limit'],
   [202, 'The mother phase following the phase is null'],
   [203, 'Follow the phase configuration with an agnostic phase'],
   [301, 'The number of schemes exceeds the limit'],
   [302, 'The phase difference should be less than the cycle time'],
   [303, 'Unknown phase configuration in the ring'],
-  [304, 'The green time ratio should be longer than the minimum phase green + green clear + yellow light + all red'],
   [401, 'The number of plans exceeds the limit'],
   [402, 'Control mode does not exist'],
   [403, 'The periods number exceeds the limit'],
@@ -154,6 +157,7 @@ let errorCodeMapEn = new Map([
   [2004, 'Parsing error of parameters JSON format'],
   [2005, 'Device parameters synchronization failed'],
   [2006, 'Signal configuration illegal network card information'],
+  [2007, 'The signal intersection ID exceeds two characters'],
   [3001, 'USB disk mount failed'],
   [3002, 'USB disk not found']
 ])
@@ -162,6 +166,8 @@ function getErrorMesEn (errorMes, code) {
   let errorstr = errorMes
   if (code[0] === 305) {
     errorstr = errorstr + '</br>' + 'There is an intra-ring phase concurrency conflict in scheme' + code[1]
+  } else if (code[0] === 304) {
+    errorstr = errorstr + '</br>' + 'The green splits should be longer than the minimum phase green + yellow light + all red, And less than the maximum green 1 + yellow light + all red in scheme' + code[1]
   } else if (code[0] === 306) {
     errorstr = errorstr + '</br>' + 'The cycle time of each ring is inconsistent in scheme' + code[1]
   } else if (code[0] === 1001) {
@@ -182,6 +188,8 @@ function getErrorMesZh (errorMes, code) {
   let errorstr = errorMes
   if (code[0] === 305) {
     errorstr = errorstr + '</br>' + '方案' + code[1] + '中存在环内相位并发冲突'
+  } else if (code[0] === 304) {
+    errorstr = errorstr + '</br>' + '方案' + code[1] + '中绿信比应大于相位的最小绿+黄灯+全红，并小于最大绿1+黄灯+全红'
   } else if (code[0] === 306) {
     errorstr = errorstr + '</br>' + '方案' + code[1] + '中存在各个环周期时长不一致'
   } else if (code[0] === 1001) {

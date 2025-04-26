@@ -12,6 +12,7 @@
 package com.openatc.configserver.model;
 
 import lombok.Data;
+
 import java.io.Serializable;
 
 @Data

@@ -11,6 +11,10 @@
  **/
 package com.openatc.core.common;
 
+
+
+
+
 /**
 * @ClassName: IErrorEnumImplOuter
 * @Description: 返回码第一层（包装的一层）错误信息
@@ -46,6 +50,9 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_3013("3013","Account has been deactivated!"),
     E_3014("3014","Token is expired!"),
     E_3015("3015","Invaid token!"),
+    E_3016("3016","user organization is null"),
+    E_3017("3017","organization does not exist"),
+    E_3018("3018","access ip is inconsistent with user ip!"),
 
     // 消息通讯错误
     E_4001("4001", "error request!"),
@@ -57,6 +64,21 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
 
     //协调路线错误
     E_5001("5001","Duplicate Route name!"),
+
+    //勤务路线错误
+    E_6001("6001","Duplicate vipRoute name!"),
+    E_6002("6002","Device is in execution!"),
+
+    //历史流量错误
+    E_7001("7001","ftpClient connect failed!"),
+
+    //设备管理错误
+    E_8001("8001","device not found By Agentid"),
+
+    //控制相关
+    E_9001("9001","Overflow control failed"),
+    E_9002("9002","Auto control failed"),
+
 
     //全局异常错误
     E_0001("0001","NullPointerException"),

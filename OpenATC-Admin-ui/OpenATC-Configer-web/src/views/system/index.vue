@@ -56,62 +56,62 @@
               <el-button type="primary" @click="editSignCode" size="mini">设置</el-button>
             </div> -->
         </div>
-        <div class="identification-code" style="margin-top: 50px;">
-            <div class="signal-version-name">{{$t('edge.system.remotedebugging')}}：</div>
-            <div class="signal-version-value" style="height: 95px;">
-              <el-form
-                ref="template"
-                :model="remoteDebugInfo"
-                label-width="80px">
-                    <el-form-item
-                        :label="$t('edge.system.openornot')"
-                        prop="status"
-                        style="margin-bottom: 5px;">
-                      <el-switch
-                        v-model="remoteDebugInfo.status"
-                        active-color="#409EFF"
-                        :active-value="1"
-                        :inactive-value="0">
-                      </el-switch>
-                    </el-form-item>
-                    <el-form-item
-                        :label="$t('edge.system.automaticshutdown')"
-                        prop=".duration">
-                        <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
-                            <el-option v-for="item in durationList" :key="item.value" :label="$t('edge.system.duration' + item.id)" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-            </div>
-            <div class="signal-version-bottom">
-              <el-button type="primary" @click="editRemoteDebug" size="mini">{{$t('edge.system.sure')}}</el-button>
-            </div>
-        </div>
       </div>
     </el-tab-pane>
     <el-tab-pane :label="$t('edge.system.remotecontrol')" name="remote">
-        <div class="system-information">
+          <div class="system-information">
             <div class="currsystemtime">
-                <div class="signal-version-name">{{$t('edge.system.remotecontrol')}}：</div>
-                <div class="signal-version-value" style="height: 70px;">
-                    <div>
-                        <div class="software"><div style="float: left; margin-top: 30px;">{{$t('edge.system.oper')}}</div>
-                          <div class="remote-select">
-                            <el-select v-model="remoteControl" placeholder="请选择" size="small">
-                              <el-option
-                                v-for="item in remoteOptions"
-                                :key="item.value"
-                                :label="$t('edge.system.remote' + item.id)"
-                                :value="item.value">
-                              </el-option>
-                            </el-select>
-                          </div>
-                        </div>
+              <div class="signal-version-name">{{$t('edge.system.remotecontrol')}}：</div>
+              <div class="signal-version-value" style="height: 70px;">
+                <div>
+                    <div class="software"><div style="float: left; margin-top: 30px;">{{$t('edge.system.oper')}}</div>
+                      <div class="remote-select">
+                        <el-select v-model="remoteControl" placeholder="请选择" size="small">
+                          <el-option
+                            v-for="item in remoteOptions"
+                            :key="item.value"
+                            :label="$t('edge.system.remote' + item.id)"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
+                      </div>
                     </div>
                 </div>
-                <div class="signal-version-bottom">
-                    <el-button type="primary" @click="editRemoteControl" size="mini">{{$t('edge.system.sure')}}</el-button>
-                </div>
+              </div>
+              <div class="signal-version-bottom">
+                  <el-button type="primary" @click="editRemoteControl" size="mini">{{$t('edge.system.sure')}}</el-button>
+              </div>
+            </div>
+            <div class="identification-code" style="margin-top: 50px;">
+              <div class="signal-version-name">{{$t('edge.system.remotedebugging')}}：</div>
+              <div class="signal-version-value" style="height: 95px;">
+                <el-form
+                  ref="template"
+                  :model="remoteDebugInfo"
+                  label-width="80px">
+                      <el-form-item
+                          :label="$t('edge.system.openornot')"
+                          prop="status"
+                          style="margin-bottom: 5px;">
+                        <el-switch
+                          v-model="remoteDebugInfo.status"
+                          active-color="#409EFF"
+                          :active-value="1"
+                          :inactive-value="0">
+                        </el-switch>
+                      </el-form-item>
+                      <el-form-item
+                          :label="$t('edge.system.automaticshutdown')"
+                          prop=".duration">
+                          <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
+                              <el-option v-for="item in durationList" :key="item.value" :label="$t('edge.system.duration' + item.id)" :value="item.value"></el-option>
+                          </el-select>
+                      </el-form-item>
+                  </el-form>
+              </div>
+              <div class="signal-version-bottom">
+                <el-button type="primary" @click="editRemoteDebug" size="mini">{{$t('edge.system.sure')}}</el-button>
+              </div>
             </div>
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
                 <div class="signal-version-name">{{$t('edge.system.systemupdate')}}：</div>
@@ -171,6 +171,7 @@ import realTimeChannel from './realTimeChannel'
 import deviceInfo from '../deviceInfo/systemInfo'
 import { getSignVersion, getSystemTime, getParamVersion, getCode, getSignIp, getSerialPort, setRemoteControl, getRemoteDebug, setRemoteDebug, udiskupdate } from '@/api/system'
 import { getChannel } from '@/api/manual'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'system',
   components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel, deviceInfo },
@@ -235,8 +236,8 @@ export default {
           this.getSystemTime() // 获取当前时间
           this.getParamVersion() // 获取特征参数版本
           this.getCode() // 获取识别码
-          this.getSignIp() // 获取ip数据
-          this.getSerialPort() // 获取串口数据
+          // this.getSignIp() // 获取ip数据
+          // this.getSerialPort() // 获取串口数据
           // this.getRemoteDebug() // 获取远程调试信息
         }
       },
@@ -249,8 +250,8 @@ export default {
     this.getSystemTime() // 获取当前时间
     this.getParamVersion() // 获取特征参数版本
     this.getCode() // 获取识别码
-    this.getSignIp() // 获取ip数据
-    this.getSerialPort() // 获取串口数据
+    // this.getSignIp() // 获取ip数据
+    // this.getSerialPort() // 获取串口数据
     // this.getRemoteDebug() // 获取远程调试信息
     this.getChannelList() // 自动上载通道
   },
@@ -272,7 +273,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.software = res.data.data.software
@@ -290,7 +291,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.systemTime = res.data.data.time
@@ -307,7 +308,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.paramVersion = res.data.data.version
@@ -324,7 +325,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.code = res.data.data.code
@@ -341,7 +342,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.ip = res.data.data.ip
@@ -360,7 +361,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.Baudrate = res.data.data.Baudrate
@@ -380,7 +381,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         if (res.data.data) {
@@ -400,7 +401,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = '设置成功！'
@@ -452,7 +453,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('edge.system.resetSuccess')
@@ -471,7 +472,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('edge.common.updatesucess')
@@ -490,7 +491,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.channelList = res.data.data.channelList

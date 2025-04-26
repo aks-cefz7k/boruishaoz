@@ -82,7 +82,7 @@
       </el-row>
       <el-row :gutter="0" v-if="isShowVideo">
         <el-col :span="24">
-          <Flv :curDevVideos="node.videos"></Flv>
+          <Flv :curDevVideos="node.videos" :autoPlay="autoPlay"></Flv>
         </el-col>
       </el-row>
     </div>
@@ -113,7 +113,8 @@ export default {
   data () {
     return {
       isShow: true,
-      isBtnDisabled: false
+      isBtnDisabled: false,
+      autoPlay: true
     }
   },
   methods: {

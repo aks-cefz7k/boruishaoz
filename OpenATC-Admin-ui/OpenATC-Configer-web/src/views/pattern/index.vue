@@ -12,14 +12,29 @@
 <template>
   <div class="app-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
-    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row @current-change="handleCurrentChange" @expand-change="expandChange" ref="singleTable" id="footerBtn">
+    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row  @expand-change="expandChange" ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
         <template slot-scope="scope">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
-              <div class="components-container board">
-                <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="$t('edge.pattern.ring')+n" :index="scope.$index" @handleSplit="handleSplit"/>
-              </div>
+              <el-row :gutter="20">
+                <el-col :span="12" >
+                  <div class="components-container board" >
+                    <Kanban v-for="n in ringCount"
+                            :key="n" class="kanban todo"
+                            :list="scope.row.rings[n-1]"
+                            :options="scope.row.options"
+                            :header-text="$t('edge.pattern.ring')+n"
+                            :index="scope.$index"
+                            @handleSplit="handleSplit"/>
+                  </div>
+                </el-col>
+                <el-col :span="12">
+                  <FollowPhase>
+
+                  </FollowPhase>
+                </el-col>
+              </el-row>
             </el-tab-pane>
             <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="stage">
               <el-scrollbar :vertical="false">
@@ -38,6 +53,44 @@
                     />
                 </div>
               </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('edge.pattern.parameters')" name="parame">
+              <el-row :gutter="20">
+                <el-col :span="12">
+                 <div class="components-container board">
+                  <ExpendConfig class="kanban todo"
+                                v-for="j in ringCounts"
+                                :key="j"
+                                :index="scope.$index"
+                                :header-text="$t('edge.pattern.ring')+j"
+                                :list="scope.row.rings[j-1]"
+                                :options="scope.row.options"
+                                />
+                </div>
+                </el-col>
+                <el-col :span="12">
+                  <div class="stage-item" style="margin: 30px 50px;">
+                    <el-row style="margin-top:10px">
+                      <el-col :span="8">
+                        {{$t('edge.pattern.forbiddenstage')}}
+                        <el-input class="stage-value" size="small" v-model="scope.row.forbiddenstage"></el-input>
+                      </el-col>
+                    </el-row>
+                    <el-row style="margin-top:10px">
+                      <el-col :span="8">
+                        {{$t('edge.pattern.screenstage')}}
+                        <el-input class="stage-value" size="small" v-model="scope.row.screenstage"></el-input>
+                      </el-col>
+                    </el-row>
+                    <el-row style="margin-top:10px">
+                      <el-col :span="8">
+                        {{$t('edge.pattern.coordinatestage')}}
+                        <el-input class="stage-value" size="small" v-model="scope.row.coordinatestage"></el-input>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </el-col>
+              </el-row>
             </el-tab-pane>
           </el-tabs>
         </template>
@@ -64,20 +117,17 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.forbiddenstage')" prop="forbiddenstage">
+      <el-table-column align="center" :label="$t('edge.pattern.plan')" width="700px"  prop="plan">
         <template slot-scope="scope">
-          <el-input size="small" v-model="scope.row.forbiddenstage"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.screenstage')" prop="screenstage">
-        <template slot-scope="scope">
-          <el-input size="small" v-model="scope.row.screenstage"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.coordinatestage')" prop="coordinatestage">
-        <template slot-scope="scope">
-          <el-input size="small" v-model="scope.row.coordinatestage"></el-input>
-        </template>
+            <div class="pattern-figure">
+              <BoardCard
+              :patternStatusList="scope.row.rings"
+              :cycles="scope.row.cycle"
+              :isPhase="false"
+              >
+              </BoardCard>
+            </div>
+         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">
         <template slot-scope="scope">
@@ -85,27 +135,26 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="pattern-figure" v-show="isShowPatternStatus">
-      <div class="pattern-status">{{currPatternName}}</div>
-      <span class="pattern-explain">：绿信比</span>
-      <span class="pattern-explain" style="margin-right: 15px;">P相位</span>
-      <PatternStatus style="margin-top: 20px;" :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus>
-    </div>
   </div>
 </template>
 
 <script>
 import Kanban from '@/components/Kanban'
 import StageKanban from '@/views/pattern/StageKanban'
-import PatternStatus from '@/components/PatternStatus'
+import BoardCard from '@/components/BoardCard'
+import FollowPhase from '@/components/FollowPhase'
+import ExpendConfig from '@/components/ExpendConfig'
 import { mapState } from 'vuex'
 import { getTscControl } from '@/api/control'
 import { getIframdevid } from '@/utils/auth'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'patterns',
   components: {
     Kanban,
-    PatternStatus,
+    BoardCard,
+    FollowPhase,
+    ExpendConfig,
     StageKanban
   },
   data () {
@@ -113,18 +162,26 @@ export default {
       tableHeight: 760,
       screenHeight: window.innerHeight, // 屏幕高度
       ringCount: 1,
+      ringCounts: 1,
       addId: 1,
       options: {
         group: 'pattern'
       },
       id: 1,
-      patternStatusList: [],
       barrierList: [],
-      isShowPatternStatus: false,
       currPatternName: '--',
       patternStatusIndex: -1,
       activeName: 'ring',
-      stagesList: []
+      stagesList: [],
+      concurrentList: [],
+      barrId: [],
+      hideWidth: '',
+      newBarrid: [],
+      max: '',
+      stateList: [],
+      numList: [],
+      narr: [],
+      redux: ''
     }
   },
   computed: {
@@ -161,6 +218,7 @@ export default {
                 250
     },
     patternList: function (val) {
+      console.log(val)
       if (!val.length) return
       this.initData()
     }
@@ -179,6 +237,8 @@ export default {
       }
       this.ringCount = Array.from(new Set(rings)) // 去除数组重复的元素
       this.ringCount = this.ringCount.sort(this.sortNumbers) // 把数组中的值按照从小到大的顺序重新排序
+      this.ringCounts = Array.from(new Set(rings)) // 去除数组重复的元素
+      this.ringCounts = this.ringCounts.sort(this.sortNumbers) // 把数组中的值按照从小到大的顺序重新排序
       this.increaseId()
       this.getCycle()
       this.updatePhaseDescription()
@@ -187,13 +247,6 @@ export default {
     sortNumbers (a, b) {
       return a - b
     },
-    // increaseId () { // 实现id在之前的基础上加1
-    //   let patternList = this.globalParamModel.getParamsByType('patternList')
-    //   let i = patternList.length - 1
-    //   if (i >= 0) {
-    //     this.id = patternList[i].id + 1
-    //   }
-    // },
     increaseId () { // 实现id在之前的基础上寻找最小的
       let patternList = this.globalParamModel.getParamsByType('patternList')
       let patternIdList = patternList.map(ele => ele.id)
@@ -215,7 +268,7 @@ export default {
           type: 'warning'
         }).then(() => {
         if (value.id === this.patternStatusIndex) {
-          this.isShowPatternStatus = false
+          // this.isShowPatternStatus = false
           this.patternStatusIndex = -1
         }
         this.globalParamModel.deleteParamsByType('patternList', index, 1)
@@ -326,6 +379,7 @@ export default {
     },
     getDecimalSystem (list) {
       let arr = []
+      // if (list === null || list === undefined || list.length === 0) return arr
       if (list[0] === 1) arr.push(1)
       if (list[1] === 1) arr.push(2)
       if (list[2] === 1) arr.push(4)
@@ -407,79 +461,6 @@ export default {
         this.$message.error('相位差不能大于周期！')
       }
     },
-    handleCurrentChange (val) {
-      if (val === null) return
-      this.patternStatusIndex = val.id
-      this.isShowPatternStatus = true
-      if (val.desc === '') {
-        if (this.$i18n.locale === 'en') {
-          this.currPatternName = 'pattern' + val.id
-        } else {
-          this.currPatternName = '方案' + val.id
-        }
-        // this.currPatternName = 'pattern' + val.id
-      } else {
-        this.currPatternName = val.desc
-      }
-      let phaseList = this.globalParamModel.getParamsByType('phaseList')
-      this.patternStatusList = []
-      let cycle = val.cycle
-      for (let rings of val.rings) {
-        if (rings.length === 0) continue
-        let list = []
-        for (let ring of rings) {
-          if (ring.value === 0) continue
-          let obj = {}
-          let split = ring.value
-          obj.id = ring.id
-          obj.split = split
-          obj.direction = ring.desc.map(item => {
-            return {
-              id: item.id,
-              color: '#454545'
-            }
-          })
-          let currPhase = phaseList.filter((item) => {
-            return item.id === ring.id
-          })[0]
-          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          // 忽略相位不显示
-          let mode = ring.mode
-          if (mode !== 7) {
-            list.push(obj)
-          }
-        }
-        this.patternStatusList.push(list)
-      }
-      this.handleBarrier(this.patternStatusList, phaseList)
-    },
-    handleBarrier (patternStatusList, phaseList) {
-      this.barrierList = []
-      if (patternStatusList.length < 2) return
-      let tempList = []
-      let barrierWidth = 0
-      let firstPatternStatus = patternStatusList[0]
-      for (let patternStatus of firstPatternStatus) {
-        let concurrent = phaseList.filter((item) => {
-          return item.id === patternStatus.id
-        })[0].concurrent
-        if (concurrent.length === 0) {
-          this.barrierList = []
-          return
-        }
-        if (!this.isEqualsForArray(tempList, concurrent)) {
-          tempList = concurrent
-          this.barrierList.push(barrierWidth)
-        }
-        barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
-      }
-      this.barrierList.push(barrierWidth) // 添加末尾处的屏障
-    },
-    isEqualsForArray (listA, listB) {
-      return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))
-    },
     expandChange (val1, val2) {
       if (val1.desc === '') {
         if (this.$i18n.locale === 'en') {
@@ -491,14 +472,15 @@ export default {
       } else {
         this.currPatternName = val1.desc
       }
-      this.handleCurrentChange(val1)
+      // this.handleCurrentChange(val1)
       if (val2.length > 0) { // 此种情况为收起看板
         this.getRowStages(val1.rings)
       }
     },
     handleSplit (index) {
       let currPattern = this.patternList[index]
-      this.handleCurrentChange(currPattern)
+      // this.handleCurrentChange(currPattern)
+      // this.currentPattern = this.patternList[index]
       this.getRowStages(currPattern.rings)
     },
     handleClick (tab, event) {
@@ -519,7 +501,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
@@ -532,44 +514,6 @@ export default {
     handleStageData (data, rings) {
       let stagesList = []
       let stages = data.stages
-      // let phaseList = data.phase
-      // let ringsList = [...data.rings]
-      // let maxCycle = data.cycle
-      // for (let ring of ringsList) {
-      //   let sequence = ring.sequence
-      //   let ringCycle = 0
-      //   for (let phaseid of sequence) {
-      //     let phase = phaseList.filter(item => {
-      //       return item.id === phaseid
-      //     })[0]
-      //     let split = phase.split
-      //     ringCycle = ringCycle + split
-      //   }
-      //   if (ringCycle > maxCycle) {
-      //     maxCycle = ringCycle
-      //   }
-      // }
-      // // for (let ring of ringsList) {
-      // //     let minSplit = 0
-      // //     let sequence = ring.sequence
-      // //     let passSplit = 0 //当前加载的环相位总时间
-      // //     //如果累计走过的绿性比 < 当前时间i,则有阶段变化
-      // //     for (let phaseid of sequence) {
-      // //       let phase = phaseList.filter(item => {
-      // //         return item.id === phaseid
-      // //       })[0]
-      // //       let split = phase.split
-      // //       let id = phase.id
-      // //       passSplit= passSplit + split
-      // //       if () {
-      // //         minSplit = split
-      // //       }
-      // //     }
-      // //   }
-      // // let curPhaseStr = ''
-      // for (let i = 0; i < maxCycle; i++) {
-
-      // }
       for (let i = 0; i < stages.length; i++) {
         let stage = stages[i]
         let stageItem = this.getStageItem(stage, rings)
@@ -658,6 +602,9 @@ export default {
     justify-content: center;
     flex-direction: row;
     align-items: flex-start;
+  }
+  /deep/.el-table .cell {
+    overflow: unset;
   }
   .kanban {
     &.todo {

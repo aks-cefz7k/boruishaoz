@@ -261,6 +261,7 @@
 import seeCutEffect from './components/seeCutEffect'
 import { uploadDeviceInfo, downloadDeviceInfo } from '@/api/param'
 import { getErrorMesZh, getErrorMesEn } from '../../utils/errorcode.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'deviceinfo',
   components: {seeCutEffect},
@@ -371,7 +372,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$store.state.user.route = this.$route.path
@@ -396,6 +397,7 @@ export default {
     },
     download () {
       let customInfo = this.customInfo
+      this.handleIpPortValue()
       this.lockScreen()
       downloadDeviceInfo(customInfo).then(data => {
         this.unlockScreen()
@@ -425,7 +427,7 @@ export default {
             })
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
@@ -453,6 +455,37 @@ export default {
         return false
       }
       this.$refs.seeCutEffect.show(this.customInfo.siteid)
+    },
+    handleIpPortValue () {
+      // IP，子网掩码，网关为空时，默认设为0.0.0.0
+      // 端口为空时默认改为0
+      let customInfo = this.customInfo
+      if (!customInfo.centerip) {
+        customInfo.centerip = {
+          ip: '0.0.0.0',
+          port: 0
+        }
+      }
+      if (customInfo.centerip.ip === '') {
+        customInfo.centerip.ip = '0.0.0.0'
+      }
+      if (customInfo.centerip.port === '') {
+        customInfo.centerip.port = 0
+      }
+      customInfo.netcard.forEach(netcard => {
+        if (!netcard.ip || netcard.ip === '') {
+          netcard.ip = '0.0.0.0'
+        }
+        if (!netcard.gateway || netcard.gateway === '') {
+          netcard.gateway = '0.0.0.0'
+        }
+        if (!netcard.subnetmask || netcard.subnetmask === '') {
+          netcard.subnetmask = '0.0.0.0'
+        }
+      })
+      if (!customInfo.commuport || customInfo.commuport === '') {
+        customInfo.commuport = 0
+      }
     }
   }
 }

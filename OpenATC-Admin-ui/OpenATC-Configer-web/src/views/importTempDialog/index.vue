@@ -176,6 +176,7 @@
 <script>
 import { getSupportedTemplate, createTemplate } from '@/api/template'
 import CrossDiagram from './crossDirection/crossDiagram'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'importTemp',
   components: {
@@ -295,7 +296,7 @@ export default {
     submitDeviceInfo () {
       createTemplate(this.templateInfo).then(res => {
         if (!res.data.success) {
-          console.log(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.$message({
@@ -402,7 +403,7 @@ export default {
       this.createClearOptions()
       getSupportedTemplate().then(res => {
         if (!res.data.success) {
-          console.log(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.handleTempSort(res.data.data)

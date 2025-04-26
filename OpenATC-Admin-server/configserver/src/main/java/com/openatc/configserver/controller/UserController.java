@@ -18,6 +18,7 @@ import com.openatc.configserver.utils.TokenUtil;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
@@ -31,6 +32,7 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_3011;
 public class UserController {
     private static final String TOKEN = "token";
     private static final String EXPIRE = "expire";
+    private static User user= (User)SerializeUtil.readObject();
 
     /**
      * 登录
@@ -46,10 +48,16 @@ public class UserController {
         String password = loginUser.get("password").getAsString();
         Long timestamp = loginUser.get("timestamp").getAsLong();
 
-        // 从本地文件中获取用户
-        User user = (User) SerializeUtil.readObject();
-        String secretPassword = Base64.getEncoder().encodeToString(DigestUtils.md5(user.getPassword() + timestamp));
-        if (!password.equals(secretPassword)) return RESTRetUtils.errorObj(E_3011);
+        // 判断用户信息
+        if(user != null){
+            String secretPassword = Base64.getEncoder().encodeToString(DigestUtils.md5(user.getPassword() + timestamp));
+            if (!password.equals(secretPassword))
+                return RESTRetUtils.errorObj(E_3011);
+            System.out.println("user is not null");
+        }else{
+            System.out.println("user is null");
+        }
+
 
         // 生成token返回给前端
         String token = TokenUtil.generateToken(userName, timestamp);
@@ -58,6 +66,7 @@ public class UserController {
         tokenMap.put(EXPIRE, false);
 
         return RESTRetUtils.successObj(tokenMap);
+        //return RESTRetUtils.successObj();
     }
 
     /**
@@ -67,16 +76,17 @@ public class UserController {
     @Path("/auth/info")
     @GET
     public RESTRetBase info() {
-        User user = (User) SerializeUtil.readObject();
         Map<String, Object> map = new HashMap<>();
         List list = new ArrayList();
         list.add("超级管理员");
         map.put("roleNames", list);
-        map.put("user_name",user.getUser_name());
-        map.put("password",user.getPassword());
+        if(user != null){
+            map.put("user_name",user.getUser_name());
+            map.put("password",user.getPassword());
+        }
+
 
         return RESTRetUtils.successObj(map);
-
     }
 
     /**

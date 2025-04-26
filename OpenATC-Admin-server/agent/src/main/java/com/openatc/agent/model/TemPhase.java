@@ -17,6 +17,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TemPhase extends Phase {
+    private int[] peddirection;
     private int[] direction;
     private int mingreen = 15;
     private int max1 = 30;
@@ -28,12 +29,4 @@ public class TemPhase extends Phase {
     private int flashgreen;
     private int redyellow = 3;
     private int ring = 1;
-
-    public int[] getDirection() {
-        return direction.clone();
-    }
-
-    public void setDirection(int[] direction) {
-        this.direction = direction.clone();
-    }
 }

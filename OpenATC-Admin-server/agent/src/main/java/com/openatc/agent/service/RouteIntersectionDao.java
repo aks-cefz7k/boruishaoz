@@ -23,9 +23,4 @@ public interface RouteIntersectionDao extends JpaRepository<RouteIntersection, I
 
     @Transactional
     void deleteByRouteid(Long id);
-
-    Boolean existsByIntersectionid(Long id);
-
-    @Query( " SELECT routeint from RouteIntersection AS routeint where routeid = :id order by sortid asc")
-    List<RouteIntersection> findRouteInt(@Param("id")Long id);
 }

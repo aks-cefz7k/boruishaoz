@@ -115,6 +115,9 @@
                 <el-form-item :label="$t('edge.overview.duration')">
                     <el-input v-model="form.duration" style="width: 70%"></el-input>
                 </el-form-item>
+                <el-form-item :label="$t('edge.overview.extendedContent')">
+                    <el-input class="jsontextarea" type="textarea" v-model="form.data" style="width: 70%"></el-input>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" size="small">{{$t('edge.common.setup')}}</el-button>
                     <el-button type="primary" @click="onGet" size="small">{{$t('edge.common.query')}}</el-button>
@@ -124,7 +127,7 @@
         </div>
       </div>
       <div class="tuxingjiemian" v-show="isShowGui" :class="{'minifont': curBodyWidth <= 650}">
-        <div class="tuxing-left" :class="{'changeWidth': graphicMode}">
+        <div class="tuxing-left" :class="{'changeWidth': graphicMode}" ref="tuxingLeft">
           <div class="crossDirection-display" :class="{'superlargeCrossImg': curBodyWidth <= 1680 && curBodyWidth > 1440,
             'largeCrossImg': curBodyWidth <= 1440 && curBodyWidth > 1280,
             'middleCrossImg': curBodyWidth <= 1280 && curBodyWidth > 960,
@@ -140,23 +143,25 @@
             <div class="pattern-message">({{$t('edge.overview.cycle')}}: {{controlData.cycle}}  {{$t('edge.overview.phasedifference')}}: {{controlData.offset}})</div>
             <span class="pattern-explain">：{{$t('edge.overview.phasesplit')}}</span>
             <span class="pattern-explain" style="margin-right: 15px;">P{{$t('edge.overview.phase')}}</span>
-            <StageStatus style="margin-top: 10px;" :patternStatusList="stageStatusList"></StageStatus>
-            <PatternStatus style="margin-top: 30px;"
-                          :cycle="crossStatusData ? crossStatusData.cycle : 0"
-                          :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
-                          :patternStatusList="patternStatusList"
-                          :barrierList="barrierList"></PatternStatus>
+            <BoardCard
+            :cycle="crossStatusData ? crossStatusData.cycle : 0"
+            :syncTime="crossStatusData ? crossStatusData.syncTime : 0"
+            :patternStatusList="patternStatusList"
+            :isPhase="true"
+              >
+            </BoardCard>
           </div>
         </div>
-        <div class="tuxing-right" v-if="!graphicMode">
+        <div class="tuxing-right" v-if="!graphicMode" ref="tuxingRight">
           <transition name="fade-right" mode="out-in"
-          enter-active-class="animated fadeInRight"
-          leave-active-class="animated fadeOutRight">
-            <div style="position: absolute;width: 100%;"  v-show="isOperation">
+          :enter-active-class="toPage === 1 ? 'animated fadeInRight' : 'animated fadeInLeft'"
+          :leave-active-class="toPage === 1 ? 'animated fadeOutRight' : 'animated fadeOutLeft' ">
+            <div style="position: absolute;width: 100%;"  v-show="(isOperation && !isClosePhase)">
              <ManualControlModal
                :controlData="controlData"
                :modelList="modelList"
                :stagesList="stagesList"
+               :specialcontrolList="specialcontrolList"
                :currModel="currModel"
                :preselectModel="preselectModel"
                :currentStage="currentStage"
@@ -164,7 +169,19 @@
                @closeManualModal="closeManualModal"
                @selectModel="selectModel"
                @selectStages="selectStages"
-               @patternCommit="patternCommit" />
+               @patternCommit="patternCommit"
+               @selectSpecialModel="selectSpecialModel" />
+            </div>
+          </transition>
+          <transition name="fade-left" mode="out-in"
+          enter-active-class="animated fadeInRight"
+          leave-active-class="animated fadeOutRight">
+            <div style="position: absolute;width: 100%;height: 100%;" v-show="(isOperation && isClosePhase)">
+              <ClosePhaseControlModal
+                :controlData="controlData"
+                :closePhaseRings="closePhaseRings"
+                @closePhaseBack="closePhaseBack"
+                @closePhaseControl= "closePhaseControl" />
             </div>
           </transition>
 
@@ -185,7 +202,16 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalID')}}:</div><div style="margin-left: 85px;" class="cross-value">{{agentId}}</div></div>
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.signalIP')}}:</div><div style="margin-left: 85px;" class="cross-value">{{ip}}</div></div>
                 <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div><div style="margin-left: 85px;"><el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index">{{faultMsg}}</el-tag></div></div>
+                <div class="cross-content">
+                  <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
+                  <div style="margin-left: 85px;" v-if="faultArr.length">
+                    <div style="margin-bottom: 10px;"><el-button type="primary" size="mini" class="faultbtn" @click="handleFaultsVisible">{{ faultvisible ? $t('edge.overview.hideFault') : $t('edge.overview.showFault')}}</el-button></div>
+                    <div v-if="faultvisible">
+                      <el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index" size="small" >{{faultMsg}}</el-tag>
+                    </div>
+                  </div>
+                  <div style="margin-left: 85px;" class="cross-value" v-if="!faultArr.length">{{$t('edge.overview.nofault')}}</div>
+                </div>
               </div>
               <div class="control-bottom">
                 <div class="cross-mess" style="float: left;margin-top: 40px;margin-bottom: 18px;">{{$t('edge.overview.controlmode')}}</div>
@@ -217,6 +243,9 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.responseTime')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{responseTime + ' ms'}}</div>
                 </div>
+                <div class="cross-content">
+                  <el-tag type="danger" size="small" v-for="(phase, index) in closePhase" :key="index">{{phase.typename + $t('edge.overview.phase') + phase.id + $t('edge.overview.close')}}</el-tag>
+                </div>
               </div>
             </div>
           </transition>
@@ -233,21 +262,27 @@ import { registerMessage, uploadSingleTscParam } from '@/api/param'
 import { setIframdevid } from '@/utils/auth'
 import FloatImgBtn from '@/components/FloatImgBtn'
 import CrossDiagram from './crossDirection/crossDiagram'
-import PatternStatus from '@/components/PatternStatus'
-import StageStatus from '@/components/StageStatus'
+// import PatternStatus from '@/components/PatternStatus'
+// import StageStatus from '@/components/StageStatus'
+import BoardCard from '@/components/BoardCard'
 import CurVolume from './textPage/currentVolume'
 import CurPhase from './textPage/currentPhase'
 import ManualControlModal from './manualControlModal'
+import ClosePhaseControlModal from './closePhaselControlModal'
+import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
+import { getMessageByCode } from '../../utils/responseMessage'
 export default {
   name: 'overview',
   components: {
     FloatImgBtn,
     CrossDiagram,
-    PatternStatus,
-    StageStatus,
+    // PatternStatus,
+    // StageStatus,
+    BoardCard,
     CurVolume,
     CurPhase,
-    ManualControlModal
+    ManualControlModal,
+    ClosePhaseControlModal
   },
   data () {
     return {
@@ -357,6 +392,7 @@ export default {
       reset: false,
       currentStage: 0,
       responseTime: 0,
+      closePhase: [],
       stagesList: [],
       isOperation: false, // 是否为手动可操作状态
       isdalayshow: true,
@@ -407,16 +443,16 @@ export default {
       shrink: 1,
       basicFuncControlId: [0, 1, 4, 5], // 基础功能包含的控制方式： 自主控制（手动下）、黄闪、步进、定周期
       isResend: true,
-      faultCodeMap: new Map([[101, 'can总线通信故障'], [102, '黄闪器故障'], [103, '特征参数故障'], [104, '故障检测板不在线'], [105, '继电器未吸合'], [201, '灯控板ID故障'], [202, '灯控板脱机'], [203, '无红灯亮起'], [204, '红绿同亮'], [205, '绿冲突'], [206, '红灯灯电压故障'], [207, '黄灯灯电压故障'], [208, '绿灯灯电压故障'], [209, '红灯灯功率故障'], [210, '黄灯灯功率故障'], [211, '绿灯灯功率故障'], [212, '灯组故障'], [213, '车检器故障'], [214, '灯控板插槽编码错误'], [215, '灯控板插头编码错误'], [216, '本机灯控板数量未配置'], [301, '车检板未初始化'], [302, '车检板脱机'], [303, '车辆检测器短路'], [304, '车辆检测器断路'], [401, 'I/O板未初始化'], [402, 'I/O板脱机']]),
-      faultCodeMapEn: new Map([[101, 'CanBus Fault'], [102, 'Yellow Flasher Fault'], [103, 'TZParam Fault'], [104, 'FaultDet Offline'], [105, 'Relay Not Work'], [201, 'LampBoard ID Fault'], [202, 'LampBoard Offline'], [203, 'No Red Lamp Is On'], [204, 'Red And Green Conflict'], [205, 'Green Conflict'], [206, 'Red Lamp Voltage Fault'], [207, 'Yellow Lamp Voltage Fault'], [208, 'Green Lamp Voltage Fault'], [209, 'Red Lamp Lamp Power Fault'], [210, 'Yellow Lamp Lamp Power Fault'], [211, 'Green Lamp Lamp Power Fault'], [212, 'Lamp pack failure'], [213, 'Car detector failure'], [214, 'Lamp Control Board Slot Code Error'], [215, 'Code Error Of Lamp Control Board Plug'], [216, 'The Number Of Lamp Control Board Not be Configed for The Master'], [301, 'VehDetBoard Is Not Init'], [302, 'VehDetBoard Is Offline'], [303, 'VehDetector Short Circiut'], [304, 'VehDetector Open  Circiut'], [401, 'I/O Board Is Not Init'], [402, 'I/O Board Offline']]),
-      TZParamSubtypeMap: new Map([[0, ''], [1, '特征参数不存在'], [2, '特征参数文件不可读'], [3, '特征参数人为修改'], [4, '特征参数文件打开失败'], [5, '特征参数文件更新失败'], [6, '信号机地址码校验失败'], [7, '特征参数内容格式错误'], [8, 'USB挂载失败']]),
-      TZParamSubtypeMapEn: new Map([[0, ''], [1, 'Non-existent'], [2, 'File Is Unreadable'], [3, 'File Artificial Changes'], [4, 'File Open Fail'], [5, 'File Update Fail'], [6, 'File Check SiteID Fail'], [7, 'Format Error'], [8, 'USB Mount Fail']]),
-      greenLampSubtypeMap: new Map([[0, ''], [1, '未输出有效电压'], [2, '输出电压低于输入电压过多'], [3, '输出电压高于输入电压'], [4, '关闭输出但实际电压仍然输出'], [5, '关闭输出但实际电压部分输出'], [6, '线路残留电压过高']]),
-      greenLampSubtypeMapEn: new Map([[0, ''], [1, 'Output Volatage Is Fail'], [2, 'Output Volatage Is Low'], [3, 'Output Volatage Is High'], [4, 'Off Output Volatage Is high'], [5, 'Off Output Volatage Is low'], [6, 'Residual Voltage Is Over-High']]),
-      lampPowerSubtypeMap: new Map([[0, ''], [1, '功率异常增加'], [2, '功率异常减少'], [3, '功率无输出'], [4, '关闭状态有功率输出']]),
-      lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']]),
-      LampGroupSubtypeMap: new Map([[0, ''], [1, '红灯故障'], [2, '黄灯故障'], [3, '绿灯故障']]),
-      LampGroupSubtypeMapEn: new Map([[0, ''], [1, 'Red Lamp Fault'], [2, 'Yellow Lamp Fault'], [3, 'Green Lamp Fault']])
+      commonHeight: undefined, // 左右侧面板的高度值
+      faultvisible: false,
+      isClosePhase: false, // 是否在相位关断
+      toPage: 1, // 与哪一个页面交互，1 代表路口信息页面，3代表 相位关断页面
+      specialcontrolList: [{ // 特殊控制
+        id: 23,
+        iconClass: 'closephase',
+        iconName: '关断相位'
+      }],
+      closePhaseRings: []
     }
   },
   computed: {
@@ -468,6 +504,13 @@ export default {
     this.getPlatform()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
+    }
+  },
+  updated () {
+    if (this.$refs.tuxingLeft.offsetHeight !== this.commonHeight) {
+      // 根据左侧面板动态变化的高度，同步更新右侧面板高度
+      this.commonHeight = this.$refs.tuxingLeft.offsetHeight
+      this.$refs.tuxingRight.style.height = this.commonHeight + 'px'
     }
   },
   methods: {
@@ -565,43 +608,11 @@ export default {
       })
     },
     getFaultMes (codeList) {
-      let faultArr = []
-      for (let data of codeList) {
-        let strArr = []
-        if (this.$i18n.locale === 'en') {
-          if (data[0] === 103) {
-            strArr[1] = this.TZParamSubtypeMapEn.get(data[1])
-          } else if (data[0] === 208 || data[0] === 207 || data[0] === 206) {
-            strArr[1] = this.greenLampSubtypeMapEn.get(data[1])
-          } else if (data[0] === 211 || data[0] === 210 || data[0] === 209) {
-            strArr[1] = this.lampPowerSubtypeMapEn.get(data[1])
-          } else if (data[0] === 212) {
-            strArr[1] = this.LampGroupSubtypeMapEn.get(data[1])
-          } else {
-            strArr[1] = ''
-          }
-          strArr[0] = this.faultCodeMapEn.get(data[0])
-        } else {
-          if (data[0] === 103) {
-            strArr[1] = this.TZParamSubtypeMap.get(data[1])
-          } else if (data[0] === 208 || data[0] === 207 || data[0] === 206) {
-            strArr[1] = this.greenLampSubtypeMap.get(data[1])
-          } else if (data[0] === 211 || data[0] === 210 || data[0] === 209) {
-            strArr[1] = this.lampPowerSubtypeMap.get(data[1])
-          } else if (data[0] === 212) {
-            strArr[1] = this.LampGroupSubtypeMap.get(data[1])
-          } else {
-            strArr[1] = ''
-          }
-          strArr[0] = this.faultCodeMap.get(data[0])
-        }
-        if (data[1] !== 0) {
-          faultArr.push(`${strArr[0]}--${strArr[1]}`)
-        } else {
-          faultArr.push(`${strArr[0]}`)
-        }
+      if (this.$i18n.locale === 'en') {
+        return getFaultMesEn(codeList)
+      } else {
+        return getFaultMesZh(codeList)
       }
-      return faultArr
     },
     reSend () { // 设备掉线重连机制
       this.devStatus = 1
@@ -647,7 +658,7 @@ export default {
             }
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           this.clearPatternInterval() // 清除其他定时器
           this.clearVolumeInterval()
           if (this.isResend) {
@@ -666,6 +677,7 @@ export default {
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
         // this.handlePatternData() // 计算方案状态展示数据
+        this.handleGetPhaseClose()
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
@@ -696,6 +708,10 @@ export default {
       }
     },
     onSubmit () {
+      if (!this.isJsonString(this.form.data)) {
+        this.$message.error(this.$t('edge.overview.JSONFormatError'))
+        return
+      }
       if (this.form.control === '999' && this.controlNum === '') {
         this.$message.error(this.$t('edge.overview.controlnumerrormess'))
         return
@@ -709,11 +725,13 @@ export default {
       control.value = Number(this.form.value)
       control.delay = Number(this.form.delay)
       control.duration = Number(this.form.duration)
+      // eslint-disable-next-line no-useless-escape
+      control.data = JSON.parse(this.form.data)
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
@@ -728,7 +746,7 @@ export default {
       getTscPattern(this.agentId).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$message.success(this.$t('edge.common.querysucess'))
@@ -752,6 +770,7 @@ export default {
         this.form.value = patternData.value
         this.form.delay = patternData.delay
         this.form.duration = patternData.duration
+        this.form.data = patternData.data
       }).catch(error => {
         this.unlockScreen()
         this.$message.error(error)
@@ -922,6 +941,7 @@ export default {
       }
     },
     changeStatus () {
+      this.toPage = 1
       this.isOperation = true
       if (this.modelList.filter(ele => ele.id === 0).length === 0) {
         let autonomyControl = {
@@ -942,6 +962,7 @@ export default {
       this.modelList = this.modelList.filter((item) => {
         return item.id !== 0
       })
+      this.toPage = 1
     },
     patternCommit (manualInfo) {
       let that = this
@@ -961,10 +982,10 @@ export default {
         that.unlockScreen()
         let success = 0
         if (!data.data.success) {
-          that.$message.error(data.data.message)
+          that.$message.error(getMessageByCode(data.data.code, that.$i18n.locale))
           return
         } else {
-          success = data.data.data.data.sucess
+          success = data.data.data.data.success
           if (success !== 0) {
             let errormsg = 'edge.overview.putTscControlError' + success
             that.$message.error(this.$t(errormsg))
@@ -1012,7 +1033,7 @@ export default {
         //   'comtype': 0
         // }
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         let devParams = res.data.data.jsonparam
@@ -1037,7 +1058,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(res.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.phaseList = res.data.data.phaseList
@@ -1083,8 +1104,7 @@ export default {
       if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
       if (!this.controlData.phase) return
       let cycle = this.controlData.cycle
-      console.log(this.controlData)
-      // debugger
+      // console.log(this.controlData)
       for (let rings of this.controlData.rings) {
         let list = []
         let phase = this.controlData.phase
@@ -1139,7 +1159,7 @@ export default {
     getPlatform () {
       queryDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
 
@@ -1161,6 +1181,108 @@ export default {
         }
         this.$store.dispatch('SaveFunctionLevel', func)
       })
+    },
+    isJsonString (str) {
+      try {
+        JSON.parse(str)
+        return true
+      } catch (err) {
+        return false
+      }
+    },
+    handleFaultsVisible () {
+      this.faultvisible = !this.faultvisible
+    },
+    handleGetPhaseClose () {
+      if (this.crossStatusData.phase) {
+        this.crossStatusData.phase = this.crossStatusData.phase.map(ele => {
+          return {
+            ...ele,
+            close: ele.close || 0
+          }
+        })
+        // 相位关断标签
+        this.closePhase = []
+        this.crossStatusData.phase.forEach(phase => {
+          if (phase.close !== undefined && phase.close !== 0) {
+            let typename
+            switch (phase.close) {
+              case 1: typename = ''
+                break
+              case 2: typename = this.$t('edge.overview.vehicle')
+                break
+              case 3: typename = this.$t('edge.overview.pedestrian')
+                break
+              default:typename = ''
+            }
+            this.closePhase.push({
+              id: phase.id,
+              typename: typename
+            })
+          }
+        })
+      }
+    },
+    selectSpecialModel (id) {
+      if (id === 23) {
+        this.toPage = 3
+        this.isClosePhase = true
+        this.initRingPhaseData()
+      } else {
+        this.isClosePhase = false
+      }
+    },
+    closePhaseBack () {
+      this.toPage = 3
+      this.isClosePhase = false
+    },
+    closePhaseControl (controldata) {
+      this.lockScreen()
+      putTscControl(controldata).then(data => {
+        this.unlockScreen()
+        if (!data.data.success) {
+          this.$message.error(data.data.message)
+          return
+        }
+        this.$alert(this.$t('edge.common.download'), { type: 'success' })
+      }).catch(error => {
+        this.unlockScreen()
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    initRingPhaseData () {
+      this.closePhaseRings = []
+      if (!this.crossStatusData.rings) return
+      this.crossStatusData.rings.forEach(ring => {
+        let obj = {}
+        obj.num = ring.num
+        obj.phases = []
+        for (let i = 0; i < ring.sequence.length; i++) {
+          let phaseid = ring.sequence[i]
+          let originphase = this.crossStatusData.phase.filter(phase => phase.id === phaseid)[0]
+          let addphse = this.getPhasesInfo(phaseid)
+          obj.phases.push({...originphase, ...addphse})
+        }
+        this.closePhaseRings.push(obj)
+      })
+    },
+    getPhasesInfo (phaseid) {
+      if (this.phaseList === undefined || this.phaseList.filter(phase => phase.id === phaseid).length === 0) return
+      let phaseinfo = this.phaseList.filter(phase => phase.id === phaseid)[0]
+      phaseinfo.name = this.$t('edge.overview.phase') + phaseinfo.id
+      phaseinfo.desc = this.getPhaseDescription(phaseinfo.direction)
+      return phaseinfo
+    },
+    getPhaseDescription (phaseList) {
+      let list = []
+      for (let id of phaseList) {
+        let obj = {}
+        obj.id = id
+        obj.color = '#454545'
+        list.push(obj)
+      }
+      return list
     }
   },
   // beforeDestroy () {
@@ -1179,443 +1301,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-// .container-main {
-//   width: 100%;
-//   height: 880px;
-//   min-width: 1250px;
-//   background: #ffffff;
-// }
-// .container-main .iconfont {
-//     font-size: 34px;
-//     text-align: center;
-//     font-weight: 500;
-//     color: #000000;
-//     font-style: normal;
-//     -webkit-font-smoothing: antialiased;
-//     -moz-osx-font-smoothing: grayscale;
-// }
-// .container-left {
-//   float: left;
-//   margin-top: 20px;
-//   margin-left: 20px;
-//   width: 76.8%;
-//   height: 840px;
-//   background-color: #ffffff;
-//   border: solid 1px #e6e6e6;
-// }
-// .container-right {
-//   float: left;
-//   margin-top: 20px;
-//   margin-left: 20px;
-//   width: 20%;
-//   height: 840px;
-//   background-color: #ffffff;
-//   border: solid 1px #e6e6e6;
-// }
-// .container-left-top {
-//   width: 100%;
-//   height: 420px;
-// }
-// .container-left-bottom {
-//   width: 100%;
-//   height: 400px;
-//   background-color: #ffffff;
-// }
-// .curr-order {
-//   float: left;
-//   margin-left: 20px;
-//   margin-top: 1px;
-// }
-// .control-right {
-//   margin-top: 40px;
-//   margin-left: 20px;
-// }
-// .agent-div {
-//   float: left;
-//   width: 28%;
-//   height: 420px;
-//   border-bottom: solid 0.5px #e6e6e6;
-// }
-// .other-div {
-//   float: left;
-//   width: 24%;
-//   height: 210px;
-//   border-left: solid 1px #e6e6e6;
-//   border-bottom: solid 1px #e6e6e6;
-// }
-// .agent-icon {
-//   position:relative;
-//   float: left;
-//   width: 50%;
-//   height: 210px;
-// }
-// .agent-num {
-//   float: left;
-//   width: 50%;
-//   height: 210px;
-// }
-// .lianji-success {
-//   position:relative;
-//   float: right;
-//   right: 30px;
-//   top: 25px;
-//   text-align: center;
-//   width: 81px;
-//   height: 34px;
-//   background-color: #409eff;
-//   border-radius: 4px;
-//   font-size: 14px;
-//   padding:10px 0;
-//   color: #ffffff;
-// }
-// .lianji-fail {
-//   position:relative;
-//   float: right;
-//   right: 30px;
-//   top: 25px;
-//   text-align: center;
-//   width: 81px;
-//   height: 34px;
-//   background-color: #909399;
-//   border-radius: 4px;
-//   font-size: 14px;
-//   padding:10px 0;
-//   color: #ffffff;
-// }
-// .lianji-wait {
-//   position:relative;
-//   float: right;
-//   right: 30px;
-//   top: 25px;
-//   text-align: center;
-//   width: 110px;
-//   height: 34px;
-//   background-color: #e6a23c;
-//   border-radius: 4px;
-//   font-size: 14px;
-//   padding:10px 0;
-//   color: #ffffff;
-// }
-// .agent-id {
-//   margin-top: 20px;
-//   margin-right: 30px;
-//   text-align: right;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   letter-spacing: 0px;
-//   color: #999999;
-// }
-// .agent-number {
-//   margin-top: 10px;
-//   margin-right: 30px;
-//   text-align: right;
-//   font-size: 16px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   letter-spacing: 0px;
-//   color: #333333;
-// }
-// .agent-port {
-//   margin-top: 20px;
-//   margin-right: 30px;
-//   text-align: right;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   letter-spacing: 0px;
-//   color: #999999;
-// }
-// .port-number {
-//   margin-top: 10px;
-//   margin-right: 30px;
-//   text-align: right;
-//   font-size: 16px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   letter-spacing: 0px;
-//   color: #333333;
-// }
-// .model-name {
-//   float: left;
-//   margin-top: 32px;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   letter-spacing: 0px;
-//   color: #666666;
-//   margin-right: 10px;
-// }
-// .model-tupian {
-//   float: left;
-//   margin-top: 20px;
-//   margin-left: 20px;
-// }
-// .to-detail {
-//   float: left;
-//   margin-top: 35px;
-//   line-height: 10px;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   letter-spacing: 0px;
-//   color: #409eff;
-//   padding-left: 10px;
-//   border-left: 1px solid #409eff;
-//   cursor: pointer;
-// }
-// .model-icon {
-//   margin-top: 6px;
-//   width: 26px;
-//   height: 26px;
-// }
-// .control-center {
-//   // float: left;
-//   text-align: center;
-//   margin-top: 40px;
-//   font-size: 30px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 20px;
-//   letter-spacing: 0px;
-//   color: #333333;
-// }
-// .curr-grade {
-//   margin-top: 30px;
-//   font-size: 24px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: #666666;
-// }
-// .curr-num {
-//   margin-top: 20px;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: #999999;
-// }
-// .icon-ziyuan:before {
-//   content: "\e670";
-//   position:absolute;
-//   z-index:2;
-//   left: 45px;
-//   top: 72px;
-//   // color: #409eff;
-// }
-// .yuanxing {
-//   position:absolute;
-//   left: 20px;
-//   top: 50px;
-//   z-index:1;
-//   width: 90px;
-//   height: 90px;
-//   // background-color: #459ffc;
-//   opacity: 0.2;
-//   border-radius: 50%;
-// }
-// .dev-status {
-//   position:absolute;
-//   // text-align: center;
-//   // margin-top: 150px;
-//   // left: 30px;
-//   top: 150px;
-//   height: 21px;
-//   font-size: 22px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   // color: #409eff;
-// }
-// .tuxing-left {
-//   float: left;
-//   margin-top: 20px;
-//   width: 63%;
-//   height: 840px;
-// }
-// .crossDirection-display {
-//   height: 650px;
-// }
-// /*当屏幕小于等于1680px的屏幕样式*/
-// @media only screen and (max-width: 1680px){
-//   .crossDirection-display{
-//         transform: scale(0.9);
-//         transform-origin: center top;
-//     }
-//   .centerText .text {
-//     font-size: 14px;
-//   }
-//  }
-// /*当屏幕小于等于1440px的屏幕样式*/
-// @media only screen and (max-width: 1440px){
-//   .crossDirection-display{
-//         transform: scale(0.8);
-//         /* transform-origin: center top; */
-//     }
-//   .centerText .text {
-//     font-size: 18px;
-//   }
-//  }
-//  /*当屏幕小于等于1280px的屏幕样式*/
-// @media only screen and (max-width: 1280px){
-//   .crossDirection-display{
-//         transform: scale(0.7);
-//         transform-origin: center top;
-//     }
-//   .centerText .text {
-//     font-size: 20px;
-//   }
-//  }
-// .pattern-status {
-//   height: 200px;
-//   margin-left: 20px;
-// }
-// .pattern-name {
-//   display: inline;
-//   font-size: 20px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 22px;
-//   letter-spacing: 0px;
-//   color: #303133;
-// }
-// .pattern-message {
-//   display: inline;
-//   margin-left: 10px;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 22px;
-//   letter-spacing: 0px;
-//   color: #606266;
-// }
-// .tuxing-right {
-//   float: left;
-//   margin-top: 20px;
-//   width: 35%;
-//   height: 840px;
-// }
-// .cross-mess {
-//   margin-left: 5px;
-//   height: 20px;
-//   font-size: 20px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 22px;
-//   letter-spacing: 0px;
-//   color: #303133;
-// }
-// .cross-module {
-//   float: left;
-//   margin-top: 10px;
-//   width: 95%;
-//   min-width: 600px;
-//   // height: 180px;
-//   background-color: #f9fcff;
-// }
-// .cross-name {
-//   // height: 13px;
-//   font-size: 14px;font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 22px;
-//   letter-spacing: 0px;
-//   color: #606266;
-// }
-// .cross-value {
-//   width: 180px;
-//   height: 22px;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 22px;
-//   letter-spacing: 0px;
-//   color: #303133;
-// }
-// .control-model {
-//   float: left;
-//   margin-top: 10px;
-//   // margin-left: 15px;
-// }
-// .single-model {
-//   margin-right: 10px;
-//   text-align: center;
-//   cursor:pointer;
-//   width: 70px;
-//   height: 65px;
-//   background-color: #edf6ff;
-//   border-radius: 6px;
-// }
-// .single-model-select {
-//   margin-right: 10px;
-//   text-align: center;
-//   cursor:pointer;
-//   width: 70px;
-//   height: 65px;
-//   background-color: #c1e0ff;
-//   border-radius: 6px;
-//   // border: solid 1px #409eff;
-// }
-// .single-model-name {
-//   margin-top: 3px;
-//   font-size: 12px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   // line-height: 22px;
-//   letter-spacing: 0px;
-//   color: #606266;
-// }
-// .current-stage-num {
-//   margin-top: 3px;
-//   font-size: 12px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   letter-spacing: 0px;
-//   color: #303133;
-// }
-// .sloat-icon {
-//   cursor:pointer;
-//   margin-top: 15px;
-// }
-// .control-time {
-//   margin-top: 40px;
-//   font-size: 30px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 20px;
-//   letter-spacing: 0px;
-//   color: #333333;
-// }
-// .control-time .time {
-//   width: 50%;
-//   display: inline-block;
-//   text-align: center;
-// }
-// .control-time span:first-of-type {
-//   border-right: 1px solid #e5e5e5;
-// }
-// .pattern-explain {
-//     float: right;
-//   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
-// .container-right .el-form-item__label {
-//     text-align: right;
-//     float: left;
-//     font-size: 14px;
-//     line-height: 40px;
-//     padding: 0 12px 0 0;
-//     -webkit-box-sizing: border-box;
-//     box-sizing: border-box;
-//     font-weight: normal;
-//     font-stretch: normal;
-//     letter-spacing: 0px;
-//     color: #999999;
-// }
-// .container-right .el-select {
-//   width: 70%;
-// }
 </style>

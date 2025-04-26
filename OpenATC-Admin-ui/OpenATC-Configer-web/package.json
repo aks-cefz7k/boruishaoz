@@ -1,6 +1,6 @@
 {
   "name": "edgebase-front",
-  "version": "1.17.2",
+  "version": "1.19.3",
   "license": "MulanPSL2",
   "description": "",
   "author": "",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "ajv": "^6.0.0",
-    "animate.css": "^3.7.0",
+    "animate.css": "^3.7.2",
     "axios": "0.17.1",
     "basic-ftp": "^4.6.2",
     "echarts": "^4.9.0",

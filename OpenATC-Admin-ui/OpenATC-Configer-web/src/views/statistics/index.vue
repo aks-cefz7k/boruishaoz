@@ -78,6 +78,7 @@
 
 <script>
 import { setVolumelog, getHistoryFlow } from '@/api/statistics'
+import { getMessageByCode } from '@/utils/responseMessage'
 import echart from 'echarts'
 // import Ftp from 'vinyl-ftp'
 export default {
@@ -119,7 +120,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.software = res.data.data.software
@@ -149,7 +150,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.unlockScreen()

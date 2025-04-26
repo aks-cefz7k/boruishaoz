@@ -204,7 +204,7 @@ export default {
       }
       let includedphaseList = this.includedPhasess.map(ele => ele.value)
       for (let over of overlaplList) {
-        over.includedphases = over.includedphases.filter(v => includedphaseList.includes(v))
+        over.includedphases = over.includedphases.filter(v => includedphaseList.includes(v))// emit
       }
     },
     // increaseId () { // 实现id在之前的基础上加1
@@ -257,7 +257,7 @@ export default {
         )
         return
       }
-      if (this.globalParamModel.getParamLength('overlaplList') >= 40) {
+      if (this.globalParamModel.getParamLength('overlaplList') >= 16) {
         this.$message.error(
           this.$t('edge.overlap.mostdata')
         )

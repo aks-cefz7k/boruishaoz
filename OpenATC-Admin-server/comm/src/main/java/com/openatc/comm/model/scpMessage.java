@@ -20,6 +20,8 @@ import com.openatc.comm.packupack.DataParamMD5;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 
+import static com.openatc.comm.common.CommunicationType.*;
+
 public class scpMessage implements Message {
 //    private static Logger logger = Logger.getLogger(KedacomMessage.class.toString());
 
@@ -48,11 +50,16 @@ public class scpMessage implements Message {
     }
 
     @Override
-    public MessageData uppack(DatagramPacket recvPacket) throws UnsupportedEncodingException {
+    public MessageData uppack(byte[] dataSource) throws UnsupportedEncodingException {
         Gson gson = new Gson();
-        String str_receive = new String(recvPacket.getData(), 0, recvPacket.getLength(),"UTF-8");
+        String str_receive = new String(dataSource, 0, dataSource.length,"UTF-8");
         MessageData responceData = gson.fromJson(str_receive, MessageData.class);
 //        logger.info("receive Kedacom responceData: " + responceData);
         return responceData;
+    }
+
+    @Override
+    public int geyExangeType() {
+        return EXANGE_TYPE_CENTER;
     }
 }

@@ -23,9 +23,6 @@ public class RouteIntersection extends RouteIntersectionBase{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(name = "intersection_id")
-//    private String intersectionid;
-
     private int forwardphaseid;
 
     private int[] forwardphasedirection;
@@ -46,24 +43,5 @@ public class RouteIntersection extends RouteIntersectionBase{
 
     @Column(name="route_id")
     private Long routeid;
-
-    public int[] getForwardphasedirection() {
-        return forwardphasedirection.clone();
-    }
-
-    public void setForwardphasedirection(int[] forwardphasedirection) {
-        this.forwardphasedirection = forwardphasedirection.clone();
-    }
-
-    public int[] getBackphasedirection() {
-        return backphasedirection.clone();
-    }
-
-    public void setBackphasedirection(int[] backphasedirection) {
-        this.backphasedirection = backphasedirection.clone();
-    }
-
-    //    @Transient
-//    private Interfeature feature;
 
 }

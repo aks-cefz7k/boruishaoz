@@ -12,6 +12,7 @@
 package com.openatc.configserver.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.packupack.CosntDataDefine;
@@ -20,22 +21,35 @@ import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
+
+import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_TCP;
+import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_UDP;
 import static com.openatc.core.common.IErrorEnumImplInner.*;
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 
 @Path("/")
 public class DeviceController {
-    Logger logger = Logger.getLogger(DeviceController.class.getName());
 
     protected CommClient commClient = new CommClient();
+    static AscsBaseModel ascsBaseModel = new AscsBaseModel();
 
-    static AscsBaseModel ascsBaseModel;
-    static Gson gson = new Gson();
+    static {
+        ascsBaseModel.setId(0);
+        ascsBaseModel.setProtocol("ocp");
+        ascsBaseModel.setType("asc");
+        JsonObject json = new JsonObject();
+        json.addProperty("ip","localhost");
+        json.addProperty("port","8880");
+        ascsBaseModel.setJsonparam(json);
+    }
+
+    public DeviceController() {
+    }
 
     @Path("devs")
     @POST
@@ -43,16 +57,14 @@ public class DeviceController {
     @Produces(MediaType.APPLICATION_JSON)
     public RESTRetBase insertDev(AscsBaseModel ascs) {
 
-        logger.info("InsertDev：" + ascs);
         ascsBaseModel = ascs;
-        return RESTRetUtils.successObj();
+        return RESTRetUtils.successObj(ascsBaseModel);
     }
 
     @Path("devs/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public RESTRetBase getDevs(@PathParam("id") int id) {
-
         return RESTRetUtils.successObj(ascsBaseModel);
     }
 
@@ -100,8 +112,9 @@ public class DeviceController {
         // 获取responceData
         MessageData responceData = null;
         try {
-            responceData = commClient
-                    .exange(ip, port, protocol, requestData);
+
+            responceData = commClient.exange(ip, port, protocol, 0, requestData,ascsBaseModel.getSockettype());
+
         } catch (Exception e) {
             e.printStackTrace();
         }

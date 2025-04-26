@@ -15,6 +15,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.openatc.agent.controller.DevController;
 import com.openatc.agent.model.DevCover;
+import com.openatc.agent.service.impl.FaultServiceImpl;
+import com.openatc.agent.utils.DateUtil;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 /**
@@ -42,19 +45,25 @@ public class AgentHandler extends ICommHandler {
     private boolean isRedisEnable;
     @Autowired
     public StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private FaultServiceImpl faultService;
 
     private String agenttype = "asc";
 
     @Override
     public synchronized void process(MessageData msg) throws ParseException {
+        if (msg.getCreatetime() == null) {
+            msg.setCreatetime(DateUtil.date2esstr(new Date()));
+        }
+//        logger.info(msg.toString());
         Gson gson = new Gson();
         if (msg == null) {
-            logger.info("AgentHandler/process: MessageData is null");
+            logger.warning("AgentHandler/process: MessageData is null");
             return;
         }
 
         if (msg.getInfotype() == null) {
-            logger.info("AgentHandler/process: MessageData.operation()/.infotype is null");
+            logger.warning("AgentHandler/process: MessageData.operation()/.infotype is null");
             return;
         }
 
@@ -69,18 +78,19 @@ public class AgentHandler extends ICommHandler {
 //     收到其他消息
         else if (isRedisEnable) {
             String key = agenttype + ":" + msg.getInfotype() + ":" + msg.getAgentid();
+
             //收到方案消息
             if (msg.getInfotype().equals("status/pattern")) {
-                stringRedisTemplate.opsForValue().set("status/pattern", gson.toJson(msg));
+                stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
                 stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
+            } else if (msg.getInfotype().equals("status/fault")) {
+                faultService.processFaultMessage(msg);
             }
             //收到其他消息
             else {
                 stringRedisTemplate.opsForValue().set(key, gson.toJson(msg));
-                stringRedisTemplate.convertAndSend(key, gson.toJson(msg));
+//                stringRedisTemplate.convertAndSend(agenttype + ":" + msg.getInfotype(), gson.toJson(msg));
             }
-        } else {
-            logger.info(gson.toJson(msg));
         }
     }
 }

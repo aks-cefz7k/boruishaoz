@@ -46,6 +46,10 @@ export default {
     },
     Title: { // 播放窗口的标题，如果不传，默认是视频信息里name
       type: String
+    },
+    autoPlay: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -85,7 +89,11 @@ export default {
         this.curVideoInfo.flvPlayer = flvPlayer
         flvPlayer.attachMediaElement(this.curVideoInfo.videoElement)
         flvPlayer.load()
-        flvPlayer.pause()
+        if (this.autoPlay) {
+          flvPlayer.play() // 播放
+        } else {
+          flvPlayer.pause()
+        }
       }
     },
     play (media) {
