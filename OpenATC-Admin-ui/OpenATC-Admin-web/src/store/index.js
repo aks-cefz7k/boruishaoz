@@ -14,6 +14,8 @@ import Vuex from 'vuex'
 import app from './modules/app'
 import user from './modules/user'
 import globalVariable from './modules/globalVariable'
+import KissModel from './modules/KissModel'
+import WebsocketModel from './modules/WesocketModel'
 import getters from './getters'
 import Edgebase from 'edgebase-front'
 
@@ -30,7 +32,9 @@ const store = new Vuex.Store({
     globalVariable,
     globalParam,
     globalParamModel,
-    permissionRoutes
+    permissionRoutes,
+    KissModel,
+    WebsocketModel
   },
   getters
 })

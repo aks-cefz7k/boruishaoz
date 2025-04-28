@@ -40,8 +40,34 @@ import VueKonva from 'vue-konva'
 import './mock'
 import { getTheme } from '@/utils/auth'
 import animate from 'animate.css'
+import KissModel from './model/KissModel'
 
 window.dev = process.env.NODE_ENV
+
+const getHost = () => {
+  let host = location.host
+  if (process.env.NODE_ENV === 'development') {
+    return `ws://${host}/socket/openatc/ws`
+    // return 'ws://192.168.13.103:10003/openatc/ws'
+  }
+  return `ws://${host}/openatc/ws`
+}
+
+const initMapmodel = () => {
+  const kissmodel = new KissModel()
+  kissmodel.Init()
+  store.dispatch('InitKissModel', kissmodel)
+}
+const InitWSSubMgr = () => {
+  return new Promise((resolve, reject) => {
+    store.dispatch('InitWsSubMgrObj')
+    let ssSubMgr = store.getters['wsSubMgr']
+    let hostapi = getHost()
+    ssSubMgr.createnew('CrossState', hostapi).then(() => {
+      resolve()
+    })
+  })
+}
 
 Vue.use(ElementUI, {
   locale
@@ -63,7 +89,8 @@ if (getTheme() === 'dark') {
   // require('./styles/light/index.scss')
   import('./styles/light/index.scss')
 }
-
+initMapmodel()
+InitWSSubMgr()
 // mian test hg
 new Vue({
   el: '#app',

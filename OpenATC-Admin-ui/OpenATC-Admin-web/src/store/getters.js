@@ -26,7 +26,9 @@ const getter = {
   openedDevice: state => state.globalVariable.openedDevice,
   openedPath: state => state.globalVariable.openedPath,
   deviceInfos: state => state.globalVariable.deviceTags,
-  devicePath: state => state.globalVariable.devicePath
+  devicePath: state => state.globalVariable.devicePath,
+  kissModel: state => state.KissModel.KissModelObject,
+  wsSubMgr: state => state.WebsocketModel.WsSubMgr
 }
 const getters = Object.assign(getter, Edgebase.Store.getters)
 export default getters
