@@ -15,7 +15,7 @@
     <el-table :data="patternList" :max-height="tableHeight" highlight-current-row  @expand-change="expandChange" ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
         <template slot-scope="scope">
-          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+          <el-tabs v-model="activeList[scope.$index]" type="card" @tab-click="handleClick">
             <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
               <el-row :gutter="20">
                 <el-col :span="12" >
@@ -59,13 +59,12 @@
                 <el-col :span="12">
                  <div class="components-container board">
                   <ExpendConfig class="kanban todo"
-                                v-for="j in ringCounts"
-                                :key="j"
-                                :index="scope.$index"
-                                :header-text="$t('edge.pattern.ring')+j"
-                                :list="scope.row.rings[j-1]"
-                                :options="scope.row.options"
-                                />
+                    v-for="(j,index) in ringCounts"
+                    :key="index"
+                    :header-text="$t('edge.pattern.ring')+j"
+                    :list="scope.row.rings[j-1]"
+                    :options="scope.row.options"
+                    />
                 </div>
                 </el-col>
                 <el-col :span="12">
@@ -117,7 +116,7 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.plan')" width="700px"  prop="plan">
+      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan">
         <template slot-scope="scope">
             <div class="pattern-figure">
               <BoardCard
@@ -170,7 +169,7 @@ export default {
       barrierList: [],
       currPatternName: '--',
       patternStatusIndex: -1,
-      activeName: 'ring',
+      // activeName: 'ring',
       stagesList: [],
       concurrentList: [],
       barrId: [],
@@ -186,7 +185,10 @@ export default {
   computed: {
     ...mapState({
       patternList: state => state.globalParam.tscParam.patternList
-    })
+    }),
+    activeList () {
+      return this.patternList.map(i => 'ring')
+    }
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel

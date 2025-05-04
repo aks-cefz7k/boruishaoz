@@ -46,6 +46,7 @@
 <script>
 import draggable from 'vuedraggable'
 export default {
+  name: 'ExpendConfig',
   components: {
     draggable
   },
