@@ -130,6 +130,7 @@
 <script>
 // import { putTscControl } from '@/api/control'
 import { channelcheck, channeltest } from '@/api/system'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'channelcontrol',
   components: {},
@@ -243,7 +244,7 @@ export default {
       }
       channelcheck(params).then(data => {
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
         }
       }).catch(error => {
         this.$message.error(error)
@@ -256,7 +257,7 @@ export default {
       // control.control = 0
       // putTscControl(control).then(data => {
       //   if (!data.data.success) {
-      //     this.$message.error(data.data.message)
+      //     this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
       //     return
       //   }
       //   this.$alert(this.$t('edge.channelControl.recoverysuccess'), { type: 'success' })
@@ -272,7 +273,7 @@ export default {
       }
       channelcheck(params).then(data => {
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.channelControl.recoverysuccess'), { type: 'success' })
@@ -285,7 +286,7 @@ export default {
     getTesting () {
       channeltest().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.list = res.data.data.data.channeltest

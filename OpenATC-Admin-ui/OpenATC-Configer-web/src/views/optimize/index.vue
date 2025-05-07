@@ -78,6 +78,7 @@
 
 <script>
 import { initOptParam, uploadOptParam, downloadOptParam, runStrategyType } from '@/api/optimize'
+import { getMessageByCode } from '@/utils/responseMessage'
 const clickoutside = {
   // 初始化指令
   bind (el, binding, vnode) {
@@ -162,7 +163,7 @@ export default {
       }
       downloadOptParam(optimize, override).then(data => {
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         if (exec) {
@@ -182,7 +183,7 @@ export default {
     commitAndExec () {
       runStrategyType().then(data => {
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.common.downloadandrun'), { type: 'success' })
@@ -199,7 +200,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.getParams()
@@ -217,7 +218,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         for (let obj of res.data) {

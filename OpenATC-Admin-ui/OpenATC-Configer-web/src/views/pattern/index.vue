@@ -146,6 +146,7 @@ import ExpendConfig from '@/components/ExpendConfig'
 import { mapState } from 'vuex'
 import { getTscControl } from '@/api/control'
 import { getIframdevid } from '@/utils/auth'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'patterns',
   components: {
@@ -502,7 +503,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))

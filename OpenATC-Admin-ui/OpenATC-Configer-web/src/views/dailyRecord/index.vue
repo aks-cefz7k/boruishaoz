@@ -55,6 +55,7 @@
 
 <script>
 import { getAllDailyRecord } from '@/api/param'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'dailyRecord',
   components: {},
@@ -123,7 +124,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false

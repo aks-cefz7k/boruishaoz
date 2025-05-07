@@ -118,6 +118,8 @@ const en = {
       'controlnumber': 'Control Num',
       'mode': 'Mode',
       'stage': 'Stage',
+      'specialcontrol': 'Special Control',
+      'phaseclosecontrol': 'Phase Close Control',
       'implement': 'Execute',
       'ipaddress': 'IP',
       'deviceport': 'Port',
@@ -179,6 +181,7 @@ const en = {
       'modelList12': 'phasewalk',
       'modelList13': 'Pattern Recovery',
       'modelList19': 'Inductive Pedestrian Crossing Control',
+      'modelList23': 'Close Phase',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
       'canceled': 'Cancelled',
@@ -201,7 +204,14 @@ const en = {
       'JSONFormatError': 'JSON format error!',
       'showFault': 'Display fault details',
       'hideFault': 'Hide fault details',
-      'close': 'close'
+      'close': 'close',
+      'closemode': 'mode',
+      'closeOption0': 'recovery',
+      'closeOption1': 'close',
+      'closeOption2': 'only vehicle close',
+      'closeOption3': 'only pedestrian close',
+      'vehicle': 'vehicle',
+      'pedestrian': 'pedestrian'
     },
     'phase': {
       'desc': 'LaneDirection',
@@ -840,6 +850,54 @@ const en = {
       'company': 'KEDACOM',
       'packedtime': 'Packed time',
       'opensourceagreement': 'Opensource Agreement'
+    },
+    'message': {
+      '10000': 'Parameter is empty',
+      '10001': 'Parameter length error',
+      '1002': 'Error',
+      '10002': 'Record cannot be empty',
+      '20003': 'id cannot be empty and cannot be 0',
+      '20004': 'No parameter record',
+      '20005': 'No device id found',
+      // 全局异常错误
+      '0001': 'Null pointer',
+      '0002': 'Wrong request method',
+      '0003': 'Incorrect input parameter type',
+      '0004': 'Incomplete input parameters',
+      '0005': 'Input parameters do not meet constraints',
+      '0006': 'system error',
+      // 用户管理错误
+      '3001': 'Username does not exist',
+      '3002': 'Authentication failed',
+      '3003': 'Duplicate username',
+      '3004': 'The old and new passwords cannot be the same',
+      '3005': 'password can not be blank',
+      '3006': 'The original password is wrong',
+      '3007': 'Login user does not exist',
+      '3008': 'No access',
+      '3009': 'wrong password',
+      '3010': 'Super user role cannot be modified',
+      '3011': 'username or password is wrong',
+      '3013': 'Account is disabled',
+      '3014': 'token has expired',
+      '3015': 'token failure',
+      '3016': 'User organization is empty',
+      '3017': 'Organization does not exist',
+      '3018': 'Access ip is inconsistent with user ip, login is forbidden',
+      // 消息通讯错误
+      '4001': '错误请求',
+      '4002': '错误应答',
+      '4003': '设备不在线',
+      '4004': '重复的设备id',
+      '4005': '信号机应答为空',
+      '4006': '信号机应答操作类型为空',
+      // 协调路线错误
+      '5001': '重复的协调路线名称',
+      // 勤务路线错误
+      '6001': '重复的勤务路线名称',
+      '6002': '勤务路线正在执行中',
+      // 流量错误
+      '7001': 'ftp客户端连接失败'
     }
   }
 }
