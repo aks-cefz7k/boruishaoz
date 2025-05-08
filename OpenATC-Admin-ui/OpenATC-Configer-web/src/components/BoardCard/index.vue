@@ -22,9 +22,6 @@ export default {
     patternStatusList: {
       type: Array
     },
-    // barrierList: {
-    //   type: Array
-    // },
     isPhase: {
       type: Boolean
     },

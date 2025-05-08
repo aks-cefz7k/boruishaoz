@@ -1588,8 +1588,10 @@ color: $--color-text-secondary;
   }
   .ring-phase {
     float: left;
-    margin-left: 5px;
-    margin-top:1px;
+    // margin-left: 5px;
+    height: 34px;
+    background: rgba(30, 96, 12, 0.2);
+    // margin-top:1px;
   }
   .divider {
     position: absolute;
