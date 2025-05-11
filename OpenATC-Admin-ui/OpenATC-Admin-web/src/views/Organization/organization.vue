@@ -55,6 +55,7 @@ import {
 } from '../../api/organization'
 import { elTreeModel } from '../../model/tree/eltreemodel'
 import organizationTreeTable from './components/organizationTreeTable'
+import { getMessageByCode } from '@/utils/responseMessage'
 
 export default {
   name: 'organization',
@@ -92,7 +93,7 @@ export default {
           return
         }
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.allOrganization = data.data.data

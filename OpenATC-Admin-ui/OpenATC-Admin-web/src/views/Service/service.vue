@@ -43,6 +43,7 @@ import PlanMenu from './planMenu'
 import PlanContent from './planContent'
 import { GetAllViproutes } from '@/api/service'
 import '@/mock/index.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'Service',
   components: {
@@ -103,7 +104,7 @@ export default {
       GetAllViproutes().then(res => {
         this.loading = false
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.planData = res.data.data

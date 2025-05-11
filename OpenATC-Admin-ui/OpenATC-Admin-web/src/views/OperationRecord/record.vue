@@ -84,6 +84,7 @@
 
 <script>
 import { getHisParamsList, exportHisParams } from '../../api/table'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'user',
   components: {},
@@ -158,11 +159,9 @@ export default {
           this.listLoading = false
           if (data.data.code === '20004') {
             this.$message.error('无参数记录!')
-            console.log(data.data.message)
             return
           }
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
@@ -174,8 +173,7 @@ export default {
       let id = this.tableData[index].id
       exportHisParams(id).then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let exportData = data.data.data
