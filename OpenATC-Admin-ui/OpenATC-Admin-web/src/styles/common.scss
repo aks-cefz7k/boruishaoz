@@ -315,6 +315,31 @@
   /deep/ .el-radio__input {
       display: none;
   }
+  .header-left {
+    position: fixed;
+    top: 70px;
+    left: 2%;
+    width: 180px;
+    height: 40px;
+    z-index: 904;
+    line-height: 35px;
+    font-size: 30px;
+    text-indent: -5px;
+    text-align: center;
+    .layerControl {
+      width: 29%;
+      height: 40px;
+      font-size: 14px;
+      float:left;
+      background-color: $--color-white;
+      color: $--color-text-primary;
+    }
+    .layerDetail {
+      width: 70%;
+      float:right;
+      background-color: $--color-white;
+    }
+  }
   .footer-left {
     position: absolute;
     bottom: 1rem;

@@ -29,9 +29,11 @@
           <device v-if="bizType === 'deviceState'" ref="device"> </device>
           <dutyRoute v-if="bizType === 'dutyRoute'"
                      ref="dutyRoute"
+                     @onDeviceIdsChange = "onDeviceIdsChange"
                      @onRouteChange="onRouteChange"> </dutyRoute>
           <greenWaveCharts v-if="bizType === 'coordinateRoute'"
                            ref="greenwavecharts"
+                           @onDeviceIdsChange = "onDeviceIdsChange"
                            @onRouteChange="onRouteChange"></greenWaveCharts>
         </div>
       </div>
@@ -44,6 +46,19 @@
         :width="30"
         :height="30"
         v-on:animCreated="handleAnimation"/>
+    </div>
+    <div class="header-left">
+    <layerControl ref="layerControl"
+                  :isShowPattern="isShowPattern"
+                  :targetDeviceIds="showPatternDeviceIds"
+                  :showLevel="showLevel"></layerControl>
+      <div class="layerControl" @click="onLayerControlClick">图层</div>
+      <div class="layerDetail">
+        <el-checkbox-group v-model="checkList">
+          <el-checkbox label="设备"></el-checkbox>
+          <el-checkbox label="方案"></el-checkbox>
+        </el-checkbox-group>
+      </div>
     </div>
     <div class="header">
       <el-radio-group v-model="bizType">
@@ -70,12 +85,14 @@ import greenWaveCharts from './components/greenWaveCharts/index'
 import { getTheme } from '@/utils/auth'
 import AnimDark from './toggleDataDark.json'
 import Anim from './toggleData.json'
+import layerControl from './components/layerControl/layerControl'
 export default {
   components: {
     lottie,
     device,
     dutyRoute,
-    greenWaveCharts
+    greenWaveCharts,
+    layerControl
   },
   data () {
     return {
@@ -102,7 +119,20 @@ export default {
       gisBoundLeftTop: [31.36360615, 121.30622863],
       gisBoundRightBottom: [31.11040156, 121.95270538],
       routLength: 0,
-      tianDiTuKey: '3bfb2112c0920226f0592fd64cd2c70d'
+      tianDiTuKey: '3bfb2112c0920226f0592fd64cd2c70d',
+      checkList: ['设备'],
+      isShowPattern: false,
+      showLevel: 3,
+      showPatternDeviceIds: []
+    }
+  },
+  watch: {
+    checkList (val) {
+      if (val.includes('方案')) {
+        this.isShowPattern = true
+      } else {
+        this.isShowPattern = false
+      }
     }
   },
   mounted () {
@@ -364,6 +394,12 @@ export default {
         width: width,
         height: height
       }
+    },
+    onDeviceIdsChange (ids) {
+      this.showPatternDeviceIds = ids
+    },
+    onLayerControlClick () {
+
     }
   }
 }
@@ -383,6 +419,9 @@ export default {
   /* background:  rgba(0, 32, 60, 0.1); */
 }
 .header >>> .el-radio__input {
+      display: none;
+}
+.header-left >>> .el-checkbox__input {
       display: none;
 }
 </style>

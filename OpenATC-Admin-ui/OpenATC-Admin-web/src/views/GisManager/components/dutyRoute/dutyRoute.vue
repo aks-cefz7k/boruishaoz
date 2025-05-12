@@ -100,6 +100,7 @@ export default {
   watch: {
     chooseId (val) {
       this.setRoute()
+      this.onDeviceIdsChange()
     }
   },
   mounted () {
@@ -200,6 +201,10 @@ export default {
       await this.getRouteVideos()
       let pointArr = []
       for (let item of this.routeData.devs) {
+        if (!item.geometry || !item.geometry.coordinates) {
+          console.log('no geometry: ' + item)
+          continue
+        }
         pointArr.push(item.geometry.coordinates)
         for (let state of this.stateList) {
           if (item.agentid === state.agentid) {
@@ -261,11 +266,11 @@ export default {
       for (let item of this.routeList) {
         let latlngs = []
         for (let dev of item.devs) {
-          let coordinates = dev.geometry.coordinates
-          if (!coordinates) {
+          if (!dev.geometry || !dev.geometry.coordinates) {
             console.log('no geometry: ' + dev)
             continue
           }
+          let coordinates = dev.geometry.coordinates
           latlngs.push(coordinates.slice().reverse())
         }
         if (latlngs) {
@@ -293,7 +298,10 @@ export default {
       }
       let markers = []
       for (let dev of devs) {
-        if (dev.geometry === undefined) continue
+        if (!dev.geometry || !dev.geometry.coordinates) {
+          console.log('no geometry: ' + dev)
+          continue
+        }
         let coordinates = dev.geometry.coordinates
         let devPoint = [coordinates[1], coordinates[0]]
         let iconUrl = this.deviceOnlineIcon
@@ -518,6 +526,17 @@ export default {
         .setLatLng(latlng)
         .setContent(contents)
         .openOn(this.map)
+    },
+    onDeviceIdsChange () {
+      if (this.chooseId) {
+        let currentDeviceIds = []
+        let currentRoute = this.routeList.filter(item => item.id === this.chooseId)[0]
+        let devs = currentRoute.devs
+        for (let dev of devs) {
+          currentDeviceIds.push(dev.agentid)
+        }
+        this.$emit('onDeviceIdsChange', currentDeviceIds)
+      }
     }
   }
 }
