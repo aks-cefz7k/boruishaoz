@@ -816,6 +816,8 @@ const en = {
         'crossroads': 'Crossroads',
         'tjunction': 'T-junction',
         'roundabout': 'Roundabout',
+        'rampintersection': 'RampIntersection',
+        'pedestriancrossing': 'PedestrianCrossing',
         'otherIntersections': 'OtherIntersections',
         'customIntersection': 'CustomIntersection'
       },
@@ -823,7 +825,9 @@ const en = {
         'eastward': 'Eastward',
         'westward': 'Westward',
         'southward': 'Southward',
-        'northward': 'Northward'
+        'northward': 'Northward',
+        'eastwestward': 'Eastwestdirection',
+        'southnorthward': 'Northsouthdirection'
       },
       'crossPhase': {
         'onePhase': 'OnePhase',

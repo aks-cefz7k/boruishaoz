@@ -815,6 +815,8 @@ const zh = {
         'crossroads': '十字路口',
         'tjunction': '丁字路口',
         'roundabout': '环形路口',
+        'rampintersection': '匝道路口',
+        'pedestriancrossing': '行人过街路口',
         'otherIntersections': '其他形状路口',
         'customIntersection': '自定义路口'
       },
@@ -822,7 +824,9 @@ const zh = {
         'eastward': '东向',
         'westward': '西向',
         'southward': '南向',
-        'northward': '北向'
+        'northward': '北向',
+        'eastwestward': '东西向',
+        'southnorthward': '南北向'
       },
       'crossPhase': {
         'onePhase': '一相位',
