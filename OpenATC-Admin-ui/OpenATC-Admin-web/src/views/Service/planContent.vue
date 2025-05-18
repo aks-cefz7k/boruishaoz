@@ -72,6 +72,7 @@ import {
 } from '@/api/service'
 import { GetDeviceByIds } from '@/api/device'
 import SelectControl from '@/views/Service/components/SelectControl'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'PlanContent',
   components: {
@@ -128,7 +129,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetSingleViproute(_this.chooseId).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             return
           }
           _this.routeData = res.data.data
@@ -146,7 +147,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetViprouteStatus(_this.chooseId).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             resolve()
           }
           let stateList = res.data.data
@@ -163,7 +164,7 @@ export default {
         _this.deviceIds = _this.routeData.devs.map(ele => ele.agentid)
         GetDeviceByIds(_this.deviceIds).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             resolve()
           }
           _this.devicesData = res.data.data

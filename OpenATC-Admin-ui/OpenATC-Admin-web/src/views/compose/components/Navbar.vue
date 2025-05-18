@@ -112,6 +112,7 @@ import SystemSettings from './SystemSettings'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
 import { setLanguage, getTheme, setTheme } from '@/utils/auth'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'navbar',
   components: { modifypasswd, versioninfo, SystemSettings },
@@ -235,7 +236,7 @@ export default {
       if (!val) return
       getInfo().then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.userInfo = data.data.data

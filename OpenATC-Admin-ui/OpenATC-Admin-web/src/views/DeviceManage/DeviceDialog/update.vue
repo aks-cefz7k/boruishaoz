@@ -170,6 +170,7 @@
 
 <script>
 import { AddDevice, UpdateDevice, UpdateDeviceId } from '@/api/device'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'deviceUpdate',
   props: {
@@ -353,7 +354,7 @@ export default {
       }
       UpdateDeviceId(data).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           this.$message({
             message: this.$t('openatc.common.updatefailed'),
             type: 'error',
@@ -385,7 +386,7 @@ export default {
       delete devInfo.lat
       AddDevice(devInfo).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           this.$message({
             message: res.data.message,
             type: 'error',
@@ -416,7 +417,7 @@ export default {
       delete devInfo.lat
       UpdateDevice(devInfo).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           this.$message({
             message: this.$t('openatc.common.updatefailed'),
             type: 'error',

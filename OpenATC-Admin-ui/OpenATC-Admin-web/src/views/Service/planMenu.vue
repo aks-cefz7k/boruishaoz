@@ -77,6 +77,7 @@
 import Messagebox from '../../components/MessageBox'
 import AddRouteDialog from './components/addRouteDialog'
 import { AddViproute, DeleteViproute, RenameViproute } from '@/api/service'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'PlanMenu',
   components: {
@@ -177,7 +178,7 @@ export default {
     handleDelete () {
       DeleteViproute(this.chooseId).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.deleteDiologVisible = false
@@ -206,7 +207,7 @@ export default {
           if (res.data.code === '6001') {
             this.$message.error(this.$t('openatc.dutyroute.namerepeat'))
           } else {
-            this.$message.error(res.data.message)
+            this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           }
           return
         }
@@ -247,7 +248,7 @@ export default {
           if (res.data.code === '6001') {
             this.$message.error(this.$t('openatc.dutyroute.namerepeat'))
           } else {
-            this.$message.error(res.data.message)
+            this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           }
           return
         }

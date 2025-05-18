@@ -14,20 +14,22 @@
       <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
         <div v-for="(item,index2) in list" :key="index2">
           <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
-            <div class="ring-phase"><xdrdirselector Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector></div>
-            <el-tooltip placement="top-start" effect="light">
-              <div slot="content">P{{item.id}}:{{item.split}}</div>
-              <div style="cursor:pointer;">
-                <div class="ring-nums">P{{item.id}}:</div>
-                <div class="ring-nums">{{item.split}}</div>
+            <div class="ring-phase">
+                <xdrdirselector Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
               </div>
-            </el-tooltip>
-          </div>
-          <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
-          <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
+              <el-tooltip placement="top-start" effect="light">
+                <div slot="content">P{{item.id}}:{{item.split}}</div>
+                <div style="cursor:pointer;">
+                  <div class="ring-nums">P{{item.id}}:</div>
+                  <div class="ring-nums">{{item.split}}</div>
+                </div>
+              </el-tooltip>
+            </div>
+            <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
+            <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
           <!-- <div class="first-1" v-show="pattern.length > 1" :style="{'width':item.hideWidth,'height':'34px','background':'#191F34'}"></div> -->
+          </div>
         </div>
-      </div>
       <div v-for="(item, index) in barrierList" :key="index + '1'">
         <div class="divider" :style="{'left':item, 'height':barrierHeight}"></div>
       </div>
@@ -85,10 +87,11 @@ export default {
   watch: {
     patternStatusList: {
       handler: function (val, oldVal) {
+        this.pattern = []
         this.handleBarrierHeight() // 计算屏障高度
-        // this.handleCurrentChange(this.patternStatusList)
         if (this.patternStatusList && this.cycles) {
           this.handleCurrentChange(this.patternStatusList)
+          this.handleBarrierHeight()
         }
       },
       // 深度观察监听
@@ -98,10 +101,9 @@ export default {
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
     if (this.patternStatusList && this.cycles) {
-      this.handleCurrentChange(this.pattern)
+      this.handleCurrentChange(this.patternStatusList)
       this.handleBarrierHeight()
     }
-    // this.pattern = this.currentPattern
   },
   mounted () {
   },
@@ -123,7 +125,7 @@ export default {
       this.barrId = []
       this.newBarrid = []
       if (val === null) return
-      let allPhase = val.reduce(function (a, b) { return a.concat(b) })// 所以相位值id
+      // let allPhase = val.reduce(function (a, b) { return a.concat(b) })// 所以相位值id
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
       this.pattern = []
       this.concurrentList = phaseList.map(item => { // 每个相位对应的并发相位
@@ -150,25 +152,25 @@ export default {
       }
       let newRes = JSON.parse(JSON.stringify(res))
       newRes.map(item => {
-        if (item.length === 0) return
-        let newId = this.concurrentList.filter(value => {
-          return value.id === item[0]
-        })[0].concurrent
-        let newArr2 = [newId.sort(), item.sort()]
-        this.redux = ((allPhase[newArr2[0][0] - 1].value) + (allPhase[newArr2[0][1] - 1].value)) - ((allPhase[newArr2[1][0] - 1].value) + (allPhase[newArr2[1][1] - 1].value))
-        if (this.redux < 0) { // 每组最小的
-          this.barrId = newArr2[0][1]
-          // this.newBarrid.push(this.barrId)
-          // if (this.newBarrid.length > 1) {
-          this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
-          // } else if (this.newBarrid.length === 1) {
-          //   this.barrId = newArr2[0][1]
-          //   this.hideWidth = (Math.abs(this.redux) / cycle * 100).toFixed(3) + '%'
-          // }
-        } else if (this.redux > 0) {
-          // this.barrId = newArr2[1][1]
-          this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
-        }
+        // if (item.length === 0) return
+        // let newId = this.concurrentList.filter(value => {
+        //   return value.id === item[0]
+        // })[0].concurrent
+        // let newArr2 = [newId.sort(), item.sort()]
+        // this.redux = ((allPhase[newArr2[0][0] - 1].value) + (allPhase[newArr2[0][1] - 1].value)) - ((allPhase[newArr2[1][0] - 1].value) + (allPhase[newArr2[1][1] - 1].value))
+        // if (this.redux < 0) { // 每组最小的
+        //   this.barrId = newArr2[0][1]
+        //   // this.newBarrid.push(this.barrId)
+        //   // if (this.newBarrid.length > 1) {
+        //   this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
+        //   // } else if (this.newBarrid.length === 1) {
+        //   //   this.barrId = newArr2[0][1]
+        //   //   this.hideWidth = (Math.abs(this.redux) / cycle * 100).toFixed(3) + '%'
+        //   // }
+        // } else if (this.redux > 0) {
+        //   // this.barrId = newArr2[1][1]
+        //   this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
+        // }
       })
       for (let rings of val) {
         if (rings.length === 0) continue
@@ -219,7 +221,6 @@ export default {
           return
         }
         if (!this.isEqualsForArray(tempList, concurrent)) {
-          // debugger
           tempList = concurrent
           this.barrierList.push(barrierWidth)
         }

@@ -72,6 +72,7 @@
 <script>
 import UpdateDetector from './UpdateDetector'
 import { OverflowDecApi } from '@/api/overflowDetector.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 // import Util from 'utils/util'
 export default {
   name: 'overflowdectorlist',
@@ -106,7 +107,7 @@ export default {
         OverflowDecApi.GetDetector()
           .then(data => {
             if (!data.data.success) {
-              this.$message.error(data.data.message)
+              this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
               return
             }
             this.loading = false
@@ -142,7 +143,7 @@ export default {
           OverflowDecApi.DeleteDetectorById(row.id)
             .then(data => {
               if (!data.data.success) {
-                this.$message.error(data.data.message)
+                this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
               }
               this.$message({
@@ -174,7 +175,7 @@ export default {
           OverflowDecApi.openOverflowsControl(row.id)
             .then(data => {
               if (!data.data.success) {
-                this.$message.error(data.data.message)
+                this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
               }
               this.$message({
@@ -206,7 +207,7 @@ export default {
           OverflowDecApi.offOverflowsControl(row.id)
             .then(data => {
               if (!data.data.success) {
-                this.$message.error(data.data.message)
+                this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 return
               }
               this.$message({
@@ -250,7 +251,7 @@ export default {
       OverflowDecApi.AddDetector(this.submitData)
         .then(data => {
           if (!data.data.success) {
-            this.$message.error(data.data.message)
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
           this.$message({
@@ -269,7 +270,7 @@ export default {
       OverflowDecApi.UpdateDetector(this.submitData)
         .then(data => {
           if (!data.data.success) {
-            this.$message.error(data.data.message)
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
           this.$message({

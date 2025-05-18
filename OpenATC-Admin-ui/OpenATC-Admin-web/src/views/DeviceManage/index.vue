@@ -143,6 +143,7 @@ import FaultDetail from './DeviceDialog/FaultDetail'
 import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
 import { GetCurrentFaultByAgentid } from '@/api/fault'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'device',
   components: { Update, Messagebox, DeviceTags, FaultDetail },
@@ -221,7 +222,7 @@ export default {
       this.listLoading = true
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
@@ -274,7 +275,7 @@ export default {
       let _this = this
       GetCurrentFaultByAgentid(row.agentid).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return false
         } else {
           let list = res.data.data
@@ -294,7 +295,7 @@ export default {
     ok () {
       DeleteDevice(this.deleteId).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           this.$message({
             message: this.$t('openatc.common.deletefailed'),
             type: 'error',

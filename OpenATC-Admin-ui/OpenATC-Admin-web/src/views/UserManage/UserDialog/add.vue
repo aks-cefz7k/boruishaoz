@@ -133,6 +133,7 @@
 */
 import { AddUsr, getRoles } from '../../../api/user'
 import chooseOrganizationDialog from '@/views/Organization/components/chooseOrganizationDialog'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {chooseOrganizationDialog},
   data () {
@@ -259,7 +260,7 @@ export default {
             this.$message.error(this.$t('openatc.common.authtip'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         let rolesData = res.data.data
@@ -305,8 +306,7 @@ export default {
         this.tempUser.login_ip_limit
       ).then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('openatc.common.addsuccess')
