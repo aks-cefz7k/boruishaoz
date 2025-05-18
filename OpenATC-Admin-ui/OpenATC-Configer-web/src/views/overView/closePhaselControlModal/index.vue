@@ -32,7 +32,7 @@
            </el-form>
       </el-col>
     </el-row>
-    <el-row style="height: 68%;">
+    <el-row style="height: 78%;">
         <div class="model-label">{{$t('edge.overview.mode')}}:</div>
         <div style="width: 100%; overflow: hidden;max-height: 90%;overflow-y: auto;margin-top: 20px;">
           <CommonKanban

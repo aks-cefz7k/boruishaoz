@@ -67,6 +67,7 @@
             <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
             <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
             <el-dropdown-item command="signout">{{$t('openatc.main.signout')}}</el-dropdown-item>
+            <!-- <el-dropdown-item command="opentapd">跳转</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -196,9 +197,15 @@ export default {
           break
         case 'systemsettings': this.showSettings()
           break
+        // case 'opentapd': this.opentapd()
+        //   break
         default: router.push({ path: '/' })
       }
     },
+    // opentapd () {
+    //   window.open('https://www.tapd.cn/42881942/documents/file_list/1142881942001014450')
+    //   // window.location.href = 'https://www.tapd.cn/42881942/documents/file_list/1142881942001014450'
+    // },
     showVersion () {
       let versionInfoChild = this.$refs.versioninfoChild
       versionInfoChild.showMessage()
