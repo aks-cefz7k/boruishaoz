@@ -189,15 +189,15 @@ export default {
         this.PlanOption.push(obj)
       }
       for (let i = 0; i < dateList.length; i++) {
-        if (dateList[i].month.length === 12) dateList[i].month.push(0)
-        if (dateList[i].date.length === 31) {
+        if (dateList[i].month && dateList[i].month.length === 12) dateList[i].month.push(0)
+        if (dateList[i].date && dateList[i].date.length === 31) {
           if (this.$i18n.locale === 'en') {
             dateList[i].date.push('All')
           } else if (this.$i18n.locale === 'zh') {
             dateList[i].date.push('全选')
           }
         }
-        if (dateList[i].day.length === 7) dateList[i].day.push(8)
+        if (dateList[i].day && dateList[i].day.length === 7) dateList[i].day.push(8)
         let plan = dateList[i].plan
         let idList = []
         for (let option of this.PlanOption) {
