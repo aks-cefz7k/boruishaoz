@@ -345,8 +345,6 @@ export default {
   },
   methods: {
     submitDeviceInfo () {
-      console.log(this.templateInfo)
-      debugger
       createTemplate(this.templateInfo).then(res => {
         if (!res.data.success) {
           this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
@@ -470,67 +468,44 @@ export default {
 }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
-.temp-import .el-form-item__label {
-    color: #999;
-    font-weight: 400;
-}
-.temp-import .el-dialog__footer {
-  padding: 10px 72px 38px 0;
-}
-.temp-import .el-dialog__body {
-  line-height: 0px;
-}
-</style>
-<style lang="scss" rel="stylesheet/scss" scoped>
-.temp-import {
-  .el-select {
-    width: 75px;
-  }
-  .footer {
-    button {
-      width: 56px;
-      height: 32px;
-      padding: 0;
-      text-align: center;
-      line-height: 30px;
-      font-size: 12px;
-      font-weight: normal;
-      font-stretch: normal;
-    }
-  }
-}
-.sort-name {
-    font-size: 15px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 40px;
-    letter-spacing: 0px;
-    color: #303133;
-    text-align: right;
-    padding-right: 30px;
-}
-.crossImg {
-  width: 225px;
-  height: 225px;
-  background-repeat: no-repeat;
-}
-.Crossroads {
-  background-image: url('../../assets/intersection_type/Crossroads.png')
-}
-.TypeT-east {
-  background-image: url('../../assets/intersection_type/TypeT-east.png')
-}
-.TypeT-south {
-  background-image: url('../../assets/intersection_type/TypeT-south.png')
-}
-.TypeT-west {
-  background-image: url('../../assets/intersection_type/TypeT-west.png')
-}
-.TypeT-north {
-  background-image: url('../../assets/intersection_type/TypeT-north.png')
-}
-.Customroads {
-  background-image: url('../../assets/intersection_type/Customroads.png')
-}
-</style>
+// <style lang="scss" rel="stylesheet/scss">
+// .temp-import .el-form-item__label {
+//     color: #999;
+//     font-weight: 400;
+// }
+// .temp-import .el-dialog__footer {
+//   padding: 10px 72px 38px 0;
+// }
+// .temp-import .el-dialog__body {
+//   line-height: 0px;
+// }
+// </style>
+// <style lang="scss" rel="stylesheet/scss" scoped>
+// .temp-import {
+//   .el-select {
+//     width: 75px;
+//   }
+//   .footer {
+//     button {
+//       width: 56px;
+//       height: 32px;
+//       padding: 0;
+//       text-align: center;
+//       line-height: 30px;
+//       font-size: 12px;
+//       font-weight: normal;
+//       font-stretch: normal;
+//     }
+//   }
+//   .sort-name {
+//     font-size: 15px;
+//     font-weight: normal;
+//     font-stretch: normal;
+//     line-height: 40px;
+//     letter-spacing: 0px;
+//     color: #303133;
+//     text-align: right;
+//     padding-right: 30px;
+// }
+// }
+// </style>

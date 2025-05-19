@@ -181,12 +181,14 @@ export default {
           let split = ring.value
           obj.id = ring.id
           obj.split = split
-          obj.direction = ring.desc.map(item => {
-            return {
-              id: item.id,
-              color: '#454545'
-            }
-          })
+          if (ring.desc) {
+            obj.direction = ring.desc.map(item => {
+              return {
+                id: item.id,
+                color: '#454545'
+              }
+            })
+          }
           let currPhase = phaseList.filter((item) => {
             return item.id === ring.id
           })[0]
