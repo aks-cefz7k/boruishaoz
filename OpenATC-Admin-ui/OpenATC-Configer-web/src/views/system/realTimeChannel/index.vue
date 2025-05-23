@@ -30,11 +30,106 @@
       </div>
     </div>
   </div>
+  <div class="channeltest" ref="channeltest">
+    <el-button class="controlbtn" type="primary" @click="getTesting">{{$t('edge.system.test')}}</el-button>
+    <div class="list">
+      <div class="title">通道信息</div>
+      <el-table
+        :data="list"
+        :max-height="tableHeight"
+        style="width: 100%">
+        <el-table-column
+          align="left"
+          prop="id"
+          width="80"
+          :label="$t('edge.channelControl.channel')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="inputvolt"
+          width='120'
+          :label="$t('edge.channelControl.inputvoltage')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="redresvolt"
+          width='180'
+          :label="$t('edge.channelControl.redresidualvoltage')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="redoutvolt"
+          width='180'
+          :label="$t('edge.channelControl.redoutputvoltage')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="redoffrespower"
+          width='210'
+          :label="$t('edge.channelControl.redoffresidualpower')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="redonoutpower"
+          width='210'
+          :label="$t('edge.channelControl.redonoutputpower')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="yelresvolt"
+          width='180'
+          :label="$t('edge.channelControl.yellowresidualvoltage')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="yeloutvolt"
+          width='180'
+          :label="$t('edge.channelControl.yellowoutputvoltage')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="yeloffrespower"
+          width='210'
+          :label="$t('edge.channelControl.yellowoffresidualpower')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="yelonoutpower"
+          width='210'
+          :label="$t('edge.channelControl.yellowonoutputpower')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="greenresvolt"
+          width='180'
+          :label="$t('edge.channelControl.greenresidualvoltage')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="greenoutvolt"
+          width='180'
+          :label="$t('edge.channelControl.greenoutputvoltage')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="greenoffrespower"
+          width='210'
+          :label="$t('edge.channelControl.greenoffresidualpower')">
+        </el-table-column>
+        <el-table-column
+          align="left"
+          prop="greenonoutpower"
+          width='210'
+          :label="$t('edge.channelControl.greenonoutputpower')">
+        </el-table-column>
+      </el-table>
+    </div>
+  </div>
 </div>
 </template>
 
 <script>
-import { getRealTimeChannel } from '@/api/system'
+import { getRealTimeChannel, channeltest } from '@/api/system'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'realtimechannel',
@@ -62,7 +157,9 @@ export default {
       data: [],
       list: [],
       loading: false,
-      realTimeChannelTimer: null // 定时器
+      realTimeChannelTimer: null, // 定时器
+      tableHeight: 620,
+      lightMap: new Map([[1, 0], [2, 1], [3, 2], [4, 2], [5, 1], [6, 0]]) // key: light的值, 0关灯、1红、2黄、3绿 4绿闪 5黄闪 6红闪   value: 对应的板子上的灯的索引，范围0～2，分别对应红灯、黄灯、绿灯
     }
   },
   watch: {
@@ -76,11 +173,21 @@ export default {
   mounted () {
     this.globalParamModel = this.$store.getters.globalParamModel
     this.handleCreateLampCtrboard()
+    this.setTableMaxHeight()
   },
   //   beforeUpdate () {
   //     this.getRealTimeChannel()
   //   },
   methods: {
+    setTableMaxHeight () {
+      var _this = this
+      _this.$nextTick(function () {
+        _this.tableHeight = _this.$refs['channeltest'].offsetHeight - 150
+        window.onresize = function () {
+          _this.tableHeight = _this.$refs['channeltest'].offsetHeight - 150
+        }
+      })
+    },
     handleCreateLampCtrboard () {
       // let channel = this.globalParamModel.getParamsByType('channelList')
       let channel = this.channelList
@@ -161,8 +268,25 @@ export default {
           num--
           index = 4
         }
-        this.data[num].channels[index - 1].lamps[light - 1].selected = true
+        if (light > 0) {
+          // 非关灯状态下
+          let lightindex = this.lightMap.get(light)
+          this.data[num].channels[index - 1].lamps[lightindex].selected = true
+        }
       }
+    },
+    getTesting () {
+      channeltest().then(res => {
+        if (!res.data.success) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return
+        }
+        this.list = res.data.data.data.channeltest
+        this.$alert(this.$t('edge.channelControl.testsuccess'), { type: 'success' })
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
     }
   },
   destroyed () {
@@ -174,6 +298,7 @@ export default {
 <style lang="scss" scoped>
 .channel-panel {
   padding-left: 30px;
+  padding-right: 30px;
   .channels {
     overflow: hidden;
   }

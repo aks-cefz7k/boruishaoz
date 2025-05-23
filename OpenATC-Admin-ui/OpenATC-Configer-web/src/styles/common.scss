@@ -17,7 +17,8 @@ $dark_gray: #889aa4;
 $light_gray: #eee;
 
 .app-container {
-  min-width: 1730px;
+  // min-width: 1730px;
+  height: 100%;
   background-color: $--background-color-base;
 }
 // 侧边栏
@@ -1469,80 +1470,143 @@ border: 1px solid $--border-color-base;
 .currsystemtime {
   width: 100%;
 }
-.channel-panel {
-  .single-channel {
-    width: 148px;
-    height: 240px;
-    background-color: $--color-info;
-    border-radius: 4px;
-    border: solid 1px $--border-color-base;
-    float: left;
-    margin-right: 20px;
-    .name {
-      height: 40px;
-      background: $--color-black;
-      line-height: 40px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      letter-spacing: 0px;
-      color: $--color-text-primary;
+.system-container {
+  .el-tabs {
+  height: 100%;
+  }
+  .el-tabs__content {
+    height: calc(100% - 55px);
+    overflow-y: auto;
+    .el-tab-pane {
+      height: calc(100% - 20px);
     }
   }
-  .list {
-    margin-top: 30px;
-    .title {
-      margin-bottom: 10px;
-      color: $--color-text-primary;
+  .channel-panel {
+    height: 100%;
+    .channels{
+      .single-channel {
+        width: 148px;
+        height: 240px;
+        background-color: $--color-info;
+        border-radius: 4px;
+        border: solid 1px $--border-color-base;
+        float: left;
+        margin-right: 20px;
+        .name {
+          height: 40px;
+          background: $--color-black;
+          line-height: 40px;
+          text-align: center;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0px;
+          color: $--color-text-primary;
+        }
+      }
+    }
+    
+    .channeltest {
+      height: calc(100% - 240px);
+      .list {
+        margin-top: 30px;
+        .title {
+          margin-bottom: 10px;
+          color: $--color-text-primary;
+        }
+      }
     }
   }
 }
+
+.history-container {
+  .el-tabs {
+    height: calc(100% - 42px);
+    }
+    .el-tabs__content {
+      height: calc(100% - 65px);
+      overflow-y: auto;
+      .el-tab-pane {
+        height: 100%;
+      }
+    }
+    .history-table {
+      height: 100%;
+      .atc-table {
+        height: 100%;
+      }
+    }
+}
+
+.plan-container {
+  .tabs-style {
+    height: 100%;
+    .plan-table {
+      height: 100%;
+    }
+  }
+  .el-tabs {
+    height: 100%;
+    }
+  .el-tabs__content {
+    height: calc(100% - 65px);
+    overflow-y: auto;
+    .el-tab-pane {
+      height: 100%;
+    }
+  }
+}
+
 // 统计
 .statistics {
   height: 100%;
+  .one {
+    // height: 6%;
+    overflow: hidden;
+  }
+  .two {
+    height: 47%;
+  }
+  .three {
+    height: 47%;
+    text-align: center;
+  }
+  .flow-echarts {
+    height: 100%;
+  }
 }
-.one {
-  height: 6%;
-}
-.two {
-  height: 47%;
-}
-.flow-echarts {
-  height: 100%;
-}
-.three {
-  height: 47%;
-  text-align: center;
-}
-.statistics-table {
-  width: 96%;
-  margin-left: 2%;
-  border: solid 1px $--border-color-lighter;
-}
-.statistics-button {
-  float: right;
-  margin-right: 2%;
-}
-.statistics-input {
-float: left;
-// margin-left: 20px;
-}
-.statistics-bottom {
-float: left;
-}
-.statistics-name {
-float: left;
-margin-top: 8px;
-margin-left: 10px;
-height: 14px;
-font-size: 14px;
-font-weight: normal;
-font-stretch: normal;
-line-height: 14px;
-letter-spacing: 0px;
-color: $--color-text-secondary;
-}
+  
+  .statistics-table {
+    width: 96%;
+    height: 100%;
+    margin-left: 2%;
+    // border: solid 1px $--border-color-lighter;
+  }
+  .statistics-button {
+    float: right;
+    margin-right: 2%;
+  }
+  .statistics-input {
+  float: left;
+  // margin-left: 20px;
+  }
+  .statistics-bottom {
+  float: left;
+  }
+  .statistics-name {
+  float: left;
+  margin-top: 8px;
+  margin-left: 10px;
+  height: 14px;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 14px;
+  letter-spacing: 0px;
+  color: $--color-text-secondary;
+  }
+
+
 // 方案
 .pattern-figure {
   // position: fixed;
@@ -1639,7 +1703,7 @@ color: $--color-text-secondary;
   top: 150px;
   left: 20px;
   right: 20px;
-  border: solid 1px $--border-color-base;
+  // border: solid 1px $--border-color-base;
   overflow: auto;
 }
 // el-switch样式

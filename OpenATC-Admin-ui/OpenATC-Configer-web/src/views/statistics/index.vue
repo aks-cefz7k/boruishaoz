@@ -35,11 +35,11 @@
     <div class="two">
         <div class="flow-echarts" id="historyFlowEcharts"></div>
     </div>
-    <div class="three">
+    <div class="three" ref="three">
         <div class="statistics-table">
             <el-table
             :data="tableData"
-            height="380"
+            :max-height="tableHeight"
             size="small"
             style="width: 100%"
             v-loading.body="listLoading"
@@ -86,6 +86,7 @@ export default {
   components: {},
   data () {
     return {
+      tableHeight: 380,
       listLoading: false,
       radio: 0,
       allFlowData: [],
@@ -104,10 +105,20 @@ export default {
   mounted () {
     this.initEcharts()
     this.getEchartsData()
+    this.setTableMaxHeight()
   },
   created () {
   },
   methods: {
+    setTableMaxHeight () {
+      var _this = this
+      _this.$nextTick(function () {
+        _this.tableHeight = _this.$refs['three'].offsetHeight
+        window.onresize = function () {
+          _this.tableHeight = _this.$refs['three'].offsetHeight
+        }
+      })
+    },
     getStatisticsData1 () {
       let param = {
         'udiskset': 1,
