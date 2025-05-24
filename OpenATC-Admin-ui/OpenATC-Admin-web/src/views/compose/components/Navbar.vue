@@ -27,6 +27,7 @@
       <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item>
       <!-- <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item> -->
       <el-menu-item index="jupyter" style="display:inline">{{$t('openatc.main.script')}}</el-menu-item>
+      <el-menu-item index="faultrecord" style="display:inline">{{$t('openatc.main.faultrecord')}}</el-menu-item>
     </div>
     <div class="openatc-operate">
       <div class="admin">
@@ -128,6 +129,7 @@ export default {
         organization: '/organization',
         dutyroute: '/dutyroute',
         jupyter: '/jupyter',
+        faultrecord: '/faultrecord',
         bottleneckcontrol: '/bottleneckControl'
       },
       roleType: ['', 'success', 'warning'],

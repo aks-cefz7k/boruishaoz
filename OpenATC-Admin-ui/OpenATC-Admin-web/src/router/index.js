@@ -161,7 +161,15 @@ export const constantRouterMapOfLogin = [{
   }]
 },
 {
-  path: '/dutyroute',
+  path: '/faultrecord',
+  component: compose,
+  children: [{
+    path: '',
+    component: () => import('@/views/FaultRecord/index')
+  }]
+},
+{
+  path: '/',
   component: compose,
   children: [{
     path: '',

@@ -16,6 +16,7 @@ const en = {
       'delete': 'Delete',
       'edit': 'Edit',
       'detail': 'Detail',
+      'searchdeviceid': 'Enter deviceid search',
       'searchplaceholder': 'Enter keyword search',
       'addfailed': 'Add Failed!',
       'addsuccess': 'Add Success!',
@@ -66,6 +67,7 @@ const en = {
       'organization': 'Organization',
       'bottleneckcontrol': 'Overflow Detector',
       'script': 'Script',
+      'faultrecord': 'Fault Record',
       'dutyroute': 'Duty Route',
       'realname': 'RealName',
       'telno': 'Telno',
@@ -92,6 +94,18 @@ const en = {
       'usermanager': 'User Manager',
       'operationrecord': 'Operation Record',
       'faultOrOffLine': 'Fault / Online'
+    },
+    'faultrecord': {
+      'deviceid': 'Device Id',
+      'faultid': 'Fault Id',
+      'boardcardtype': 'Board Card Type',
+      'faultbegintime': 'Fault Begin Time',
+      'faultendtime': 'Fault End Time',
+      'faulttype': 'Fault Type',
+      'faultchild': 'Fault Child',
+      'faultgrade': 'Fault Grade',
+      'operation': 'Operation',
+      'faultvaluedetail': 'Fault Value Detail'
     },
     'devicemanager': {
       'devicelist': 'Device List',

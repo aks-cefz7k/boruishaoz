@@ -87,10 +87,12 @@ export default {
   watch: {
     patternStatusList: {
       handler: function (val, oldVal) {
-        this.pattern = []
+        // this.pattern = []
         this.handleBarrierHeight() // 计算屏障高度
         if (this.patternStatusList && this.cycles) {
-          this.handleCurrentChange(this.patternStatusList)
+          setTimeout(() => {
+            this.handleCurrentChange(this.patternStatusList)
+          }, 100)
           this.handleBarrierHeight()
         }
       },
@@ -108,7 +110,7 @@ export default {
   mounted () {
   },
   updated () {
-    if (this.patternStatusList && this.syncTime) {
+    if (this.patternStatusList) {
       this.$nextTick(() => {
         this.handleBarrierHeight()
         this.pattern = this.patternStatusList
@@ -121,57 +123,57 @@ export default {
       this.barrierHeight = (patternLength * 35 + 21) + 'px'
     },
     handleCurrentChange (val) { // 两个ring的数据
-      this.hideWidth = ''
-      this.barrId = []
-      this.newBarrid = []
+      // this.hideWidth = ''
+      // this.barrId = []
+      // this.newBarrid = []
+      this.pattern = []
       if (val === null) return
       // let allPhase = val.reduce(function (a, b) { return a.concat(b) })// 所以相位值id
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
-      this.pattern = []
-      this.concurrentList = phaseList.map(item => { // 每个相位对应的并发相位
-        return {
-          concurrent: item.concurrent,
-          id: item.id
-        }
-      })
-      this.concurrentList1 = phaseList.map(item => {
-        return {
-          concurrent: item.concurrent
-        }
-      })
-      let newCon = this.concurrentList1.map(item => {
-        return item.concurrent
-      })
-      let hash = {}
-      let res = []
-      for (let i = 0; i < newCon.length; i++) {
-        if (!hash[newCon[i]]) {
-          res.push(newCon[i])
-          hash[newCon[i]] = true
-        }
-      }
-      let newRes = JSON.parse(JSON.stringify(res))
-      newRes.map(item => {
-        // if (item.length === 0) return
-        // let newId = this.concurrentList.filter(value => {
-        //   return value.id === item[0]
-        // })[0].concurrent
-        // let newArr2 = [newId.sort(), item.sort()]
-        // this.redux = ((allPhase[newArr2[0][0] - 1].value) + (allPhase[newArr2[0][1] - 1].value)) - ((allPhase[newArr2[1][0] - 1].value) + (allPhase[newArr2[1][1] - 1].value))
-        // if (this.redux < 0) { // 每组最小的
-        //   this.barrId = newArr2[0][1]
-        //   // this.newBarrid.push(this.barrId)
-        //   // if (this.newBarrid.length > 1) {
-        //   this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
-        //   // } else if (this.newBarrid.length === 1) {
-        //   //   this.barrId = newArr2[0][1]
-        //   //   this.hideWidth = (Math.abs(this.redux) / cycle * 100).toFixed(3) + '%'
-        //   // }
-        // } else if (this.redux > 0) {
-        //   // this.barrId = newArr2[1][1]
-        //   this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
-        // }
-      })
+      // this.concurrentList = phaseList.map(item => { // 每个相位对应的并发相位
+      //   return {
+      //     concurrent: item.concurrent,
+      //     id: item.id
+      //   }
+      // })
+      // this.concurrentList1 = phaseList.map(item => {
+      //   return {
+      //     concurrent: item.concurrent
+      //   }
+      // })
+      // let newCon = this.concurrentList1.map(item => {
+      //   return item.concurrent
+      // })
+      // let hash = {}
+      // let res = []
+      // for (let i = 0; i < newCon.length; i++) {
+      //   if (!hash[newCon[i]]) {
+      //     res.push(newCon[i])
+      //     hash[newCon[i]] = true
+      //   }
+      // }
+      // let newRes = JSON.parse(JSON.stringify(res))
+      // newRes.map(item => {
+      // if (item.length === 0) return
+      // let newId = this.concurrentList.filter(value => {
+      //   return value.id === item[0]
+      // })[0].concurrent
+      // let newArr2 = [newId.sort(), item.sort()]
+      // this.redux = ((allPhase[newArr2[0][0] - 1].value) + (allPhase[newArr2[0][1] - 1].value)) - ((allPhase[newArr2[1][0] - 1].value) + (allPhase[newArr2[1][1] - 1].value))
+      // if (this.redux < 0) { // 每组最小的
+      //   this.barrId = newArr2[0][1]
+      //   // this.newBarrid.push(this.barrId)
+      //   // if (this.newBarrid.length > 1) {
+      //   this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
+      //   // } else if (this.newBarrid.length === 1) {
+      //   //   this.barrId = newArr2[0][1]
+      //   //   this.hideWidth = (Math.abs(this.redux) / cycle * 100).toFixed(3) + '%'
+      //   // }
+      // } else if (this.redux > 0) {
+      //   // this.barrId = newArr2[1][1]
+      //   this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
+      // }
+      // })
       for (let rings of val) {
         if (rings.length === 0) continue
         let list = []
@@ -190,9 +192,9 @@ export default {
           let currPhase = phaseList.filter((item) => {
             return item.id === ring.id
           })[0]
-          if (this.hideWidth && obj.id === this.barrId) {
-            obj.hideWidth = this.hideWidth
-          }
+          // if (this.hideWidth && obj.id === this.barrId) {
+          //   obj.hideWidth = this.hideWidth
+          // }
           obj.redWidth = (currPhase.redclear / this.cycles * 100).toFixed(3) + '%'
           obj.yellowWidth = (currPhase.yellow / this.cycles * 100).toFixed(3) + '%'
           obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / this.cycles * 100).toFixed(3) + '%'

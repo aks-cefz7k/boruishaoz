@@ -116,7 +116,7 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan">
+      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" min-width="200px">
         <template slot-scope="scope">
             <div class="pattern-figure">
               <BoardCard
@@ -146,7 +146,6 @@ import ExpendConfig from '@/components/ExpendConfig'
 import { mapState } from 'vuex'
 import { getTscControl } from '@/api/control'
 import { getIframdevid } from '@/utils/auth'
-import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'patterns',
   components: {
@@ -503,7 +502,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          this.$message.error(data.data.message)
           return
         }
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))
