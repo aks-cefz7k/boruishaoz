@@ -379,6 +379,7 @@ export default {
       }
     },
     getDecimalSystem (list) {
+      if (!list) return
       let arr = []
       // if (list === null || list === undefined || list.length === 0) return arr
       if (list[0] === 1) arr.push(1)
@@ -444,6 +445,7 @@ export default {
       }
     },
     getPhaseDescription (phaseList) {
+      if (!phaseList) return
       let list = []
       for (let id of phaseList) {
         let obj = {}

@@ -92,6 +92,7 @@
 <script>
 import { ExecuteViproute } from '@/api/service'
 import Flv from '@/components/Flvjs/index.vue'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'nodeCard',
   components: {
@@ -137,7 +138,7 @@ export default {
       ExecuteViproute(reqData).then(res => {
         // this.isBtnDisabled = false
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return false
         }
         this.$emit('research')

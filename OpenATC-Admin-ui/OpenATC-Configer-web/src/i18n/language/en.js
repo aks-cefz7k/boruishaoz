@@ -173,7 +173,7 @@ const en = {
       'modelList1': 'Yellow Flash',
       'modelList2': 'Red Control',
       'modelList3': 'Dark Control',
-      'modelList4': 'Step Control',
+      'modelList4': 'Sequential Step Control',
       'modelList5': 'Fixed_Cycle Control',
       'modelList6': 'Free Control',
       'modelList9': 'Self-Adaption',
@@ -816,6 +816,8 @@ const en = {
         'crossroads': 'Crossroads',
         'tjunction': 'T-junction',
         'roundabout': 'Roundabout',
+        'rampintersection': 'RampIntersection',
+        'pedestriancrossing': 'PedestrianCrossing',
         'otherIntersections': 'OtherIntersections',
         'customIntersection': 'CustomIntersection'
       },
@@ -823,7 +825,9 @@ const en = {
         'eastward': 'Eastward',
         'westward': 'Westward',
         'southward': 'Southward',
-        'northward': 'Northward'
+        'northward': 'Northward',
+        'eastwestward': 'Eastwestdirection',
+        'southnorthward': 'Northsouthdirection'
       },
       'crossPhase': {
         'onePhase': 'OnePhase',

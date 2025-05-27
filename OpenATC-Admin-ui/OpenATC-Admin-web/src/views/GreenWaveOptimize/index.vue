@@ -37,6 +37,7 @@
 import PlanMenu from './planMenu'
 import PlanContent from './planContent'
 import { GetSimpleRoute } from '@/api/route'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'GreenWaveOptimize',
   components: {
@@ -88,7 +89,7 @@ export default {
       GetSimpleRoute().then(res => {
         this.loading = false
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.planData = res.data.data

@@ -56,6 +56,7 @@
 import Messagebox from '../../components/MessageBox'
 import AddOptimizeDialog from './components/addOptimizeDialog'
 import { AddRoute, DeleteRoute, UpdateRouteName } from '@/api/route'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'PlanMenu',
   components: {
@@ -156,7 +157,7 @@ export default {
     handleDelete () {
       DeleteRoute(this.chooseId).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.deleteDiologVisible = false
@@ -185,7 +186,7 @@ export default {
           if (res.data.code === '5001') {
             this.$message.error(this.$t('openatc.greenwaveoptimize.namerepeat'))
           } else {
-            this.$message.error(res.data.message)
+            this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           }
           return
         }
@@ -206,7 +207,7 @@ export default {
           if (res.data.code === '5001') {
             this.$message.error(this.$t('openatc.greenwaveoptimize.addfail'))
           } else {
-            this.$message.error(res.data.message)
+            this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           }
           return
         }

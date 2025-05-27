@@ -125,6 +125,7 @@ import DeviceAdd from './deviceAdd'
 import { images } from '@/utils/phaseList.js'
 import { getTscPhase } from '@/api/route'
 import { OverflowDecApi } from '@/api/overflowDetector.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 const { mapState } = createNamespacedHelpers('kissStore')
 
 export default {
@@ -219,7 +220,7 @@ export default {
       OverflowDecApi.UpdateOverflows(submitData)
         .then(data => {
           if (!data.data.success) {
-            this.$message.error(data.data.message)
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
           this.$message({
@@ -267,7 +268,7 @@ export default {
             this.$message.error(this.$t('openatc.common.devicenotonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
 

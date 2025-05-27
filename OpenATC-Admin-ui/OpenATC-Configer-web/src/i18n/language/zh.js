@@ -173,7 +173,7 @@ const zh = {
       'modelList1': '黄闪',
       'modelList2': '全红',
       'modelList3': '关灯',
-      'modelList4': '步进',
+      'modelList4': '顺序步进',
       'modelList5': '定周期',
       'modelList6': '感应控制',
       'modelList9': '自适应控制',
@@ -815,6 +815,8 @@ const zh = {
         'crossroads': '十字路口',
         'tjunction': '丁字路口',
         'roundabout': '环形路口',
+        'rampintersection': '匝道路口',
+        'pedestriancrossing': '行人过街路口',
         'otherIntersections': '其他形状路口',
         'customIntersection': '自定义路口'
       },
@@ -822,7 +824,9 @@ const zh = {
         'eastward': '东向',
         'westward': '西向',
         'southward': '南向',
-        'northward': '北向'
+        'northward': '北向',
+        'eastwestward': '东西向',
+        'southnorthward': '南北向'
       },
       'crossPhase': {
         'onePhase': '一相位',

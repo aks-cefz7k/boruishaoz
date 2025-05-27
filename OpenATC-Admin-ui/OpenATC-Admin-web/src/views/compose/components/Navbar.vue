@@ -68,6 +68,7 @@
             <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
             <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
             <el-dropdown-item command="signout">{{$t('openatc.main.signout')}}</el-dropdown-item>
+            <!-- <el-dropdown-item command="opentapd">跳转</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -113,6 +114,7 @@ import SystemSettings from './SystemSettings'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
 import { setLanguage, getTheme, setTheme } from '@/utils/auth'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'navbar',
   components: { modifypasswd, versioninfo, SystemSettings },
@@ -197,9 +199,15 @@ export default {
           break
         case 'systemsettings': this.showSettings()
           break
+        // case 'opentapd': this.opentapd()
+        //   break
         default: router.push({ path: '/' })
       }
     },
+    // opentapd () {
+    //   window.open('https://www.tapd.cn/42881942/documents/file_list/1142881942001014450')
+    //   // window.location.href = 'https://www.tapd.cn/42881942/documents/file_list/1142881942001014450'
+    // },
     showVersion () {
       let versionInfoChild = this.$refs.versioninfoChild
       versionInfoChild.showMessage()
@@ -237,7 +245,7 @@ export default {
       if (!val) return
       getInfo().then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.userInfo = data.data.data

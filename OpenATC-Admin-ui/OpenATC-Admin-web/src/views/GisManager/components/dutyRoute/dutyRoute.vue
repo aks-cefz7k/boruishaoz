@@ -32,6 +32,7 @@ import { GetRouteVideos } from '@/api/deviceVideo'
 import { GetAllDevice, GetDeviceByIds } from '@/api/device'
 import routePreview from './routePreview'
 import SelectControl from '@/views/Service/components/SelectControl'
+import { getMessageByCode } from '@/utils/responseMessage'
 
 export default {
   name: 'dutyRoute',
@@ -117,7 +118,7 @@ export default {
     getAllAdevice () {
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.allDevList = res.data.data
@@ -133,7 +134,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetRouteVideos(_this.deviceIds).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             return
           }
           _this.routeVideoArr = res.data.data
@@ -146,7 +147,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetSingleViproute(_this.chooseId).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             return
           }
           _this.routeData = res.data.data
@@ -164,7 +165,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetViprouteStatus(_this.chooseId).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             resolve()
           }
           let stateList = res.data.data
@@ -181,7 +182,7 @@ export default {
         _this.deviceIds = _this.routeData.devs.map(ele => ele.agentid)
         GetDeviceByIds(_this.deviceIds).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             resolve()
           }
           _this.devicesData = res.data.data
@@ -232,7 +233,7 @@ export default {
     getAllViproutes () {
       GetAllViproutes().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.routeList = res.data.data

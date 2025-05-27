@@ -49,6 +49,7 @@ import PatternTable from './pattern/patternTable'
 import PlanChart from './pattern/planChart/index'
 import { GetRouteInfo, getAllPatternOfRoute, getAllPhaseOfRoute, generateRoute, putAllPatternOfRoute } from '@/api/route'
 import Messagebox from '../../components/MessageBox/index'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'PlanContent',
   data () {
@@ -154,7 +155,7 @@ export default {
             this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.routeData = res.data.data
@@ -182,7 +183,7 @@ export default {
       param.devs = this.patternList
       putAllPatternOfRoute(param).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('openatc.greenwaveoptimize.planissuedsucc'), { type: 'success' })
@@ -225,7 +226,7 @@ export default {
       }
       generateRoute(param).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.greenwave = res.data.data.greenwave
@@ -252,7 +253,7 @@ export default {
             this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.patternList = res.data.data.devs
@@ -269,7 +270,7 @@ export default {
             this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.phaseList = res.data.data.devs

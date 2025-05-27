@@ -87,6 +87,7 @@ import { GetAllDevice } from '@/api/device'
 import Update from './update'
 import EdgeModal from './edgeModal'
 import XRDDirSelector from '@/components/XRDDirSelector'
+import { getMessageByCode } from '@/utils/responseMessage'
 // import PhaseMarkerVue from './index'
 export default {
   name: 'device',
@@ -132,7 +133,7 @@ export default {
     getAllAdevice () {
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.devList = res.data.data

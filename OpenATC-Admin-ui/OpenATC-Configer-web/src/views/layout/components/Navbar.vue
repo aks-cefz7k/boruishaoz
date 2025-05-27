@@ -963,7 +963,7 @@ export default {
       let ringList = []
       let concurrentIsNull = false
       for (let phase of phaseList) {
-        if (phase.concurrent.length === 0) {
+        if (phase.concurrent && phase.concurrent.length === 0) {
           concurrentIsNull = true
         }
         ringList.push(phase.ring)

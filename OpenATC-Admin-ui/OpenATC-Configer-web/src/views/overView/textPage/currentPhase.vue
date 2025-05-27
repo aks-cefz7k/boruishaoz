@@ -29,10 +29,10 @@
             <div class="current-phasetable">
               <el-table
                 :data="tableData"
+                max-height="324"
                 :span-method="objectSpanMethod"
                 :cell-class-name="addClass"
-                size="mini"
-                style="width: 100%">
+                size="mini">
                 <el-table-column
                   align="center"
                   prop="ring"
