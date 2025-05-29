@@ -110,7 +110,7 @@ export default {
   mounted () {
   },
   updated () {
-    if (this.patternStatusList) {
+    if (this.patternStatusList && this.cycle) {
       this.$nextTick(() => {
         this.handleBarrierHeight()
         this.pattern = this.patternStatusList
@@ -183,14 +183,12 @@ export default {
           let split = ring.value
           obj.id = ring.id
           obj.split = split
-          if (ring.desc) {
-            obj.direction = ring.desc.map(item => {
-              return {
-                id: item.id,
-                color: '#454545'
-              }
-            })
-          }
+          obj.direction = ring.desc.map(item => {
+            return {
+              id: item.id,
+              color: '#454545'
+            }
+          })
           let currPhase = phaseList.filter((item) => {
             return item.id === ring.id
           })[0]
