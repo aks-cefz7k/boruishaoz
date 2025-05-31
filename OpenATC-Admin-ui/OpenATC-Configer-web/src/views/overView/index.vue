@@ -742,7 +742,6 @@ export default {
         control.data = JSON.parse(this.form.data)
       }
       // let controlObj = this.handlePutData(control)
-      debugger
       putTscControl(control).then(data => {
         this.unlockScreen()
         if (!data.data.success) {

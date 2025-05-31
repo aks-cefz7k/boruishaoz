@@ -173,7 +173,7 @@ const en = {
       'modelList1': 'Yellow Flash',
       'modelList2': 'Red Control',
       'modelList3': 'Dark Control',
-      'modelList4': 'Sequential Step Control',
+      'modelList4': 'Step Control',
       'modelList5': 'Fixed_Cycle Control',
       'modelList6': 'Free Control',
       'modelList9': 'Self-Adaption',
