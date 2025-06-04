@@ -1599,11 +1599,23 @@ color: $--color-text-secondary;
     color: #333333;
   }
   .ring-phase {
+    position: relative;
     float: left;
     // margin-left: 5px;
     height: 34px;
     background: rgba(30, 96, 12, 0.2);
     // margin-top:1px;
+  }
+  .ring-phase::after {
+    position: absolute;
+    display: block;
+    content: '';
+    height: 0;
+    width: 0;
+    top: 11px;
+    left: 36px;
+    border: 5px solid transparent;
+    border-left-color: rgba(30, 96, 12, 0.2);
   }
   .divider {
     position: absolute;
