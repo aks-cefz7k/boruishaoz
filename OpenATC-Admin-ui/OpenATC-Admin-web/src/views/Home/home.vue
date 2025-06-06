@@ -182,7 +182,6 @@ export default {
     },
     handleFaultEventData (data) {
       console.log(data)
-      debugger
     }
   },
   mounted () {

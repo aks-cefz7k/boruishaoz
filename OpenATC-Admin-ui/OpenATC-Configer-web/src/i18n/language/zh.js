@@ -173,7 +173,7 @@ const zh = {
       'modelList1': '黄闪',
       'modelList2': '全红',
       'modelList3': '关灯',
-      'modelList4': '顺序步进',
+      'modelList4': '步进',
       'modelList5': '定周期',
       'modelList6': '感应控制',
       'modelList9': '自适应控制',
