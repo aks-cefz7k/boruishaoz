@@ -276,6 +276,7 @@ const zh = {
       'busonly': '公交专用',
       'BRTonly': 'BRT专用',
       'tramonly': '有轨电车专用',
+      'virtualphase': '虚相位',
       'pulsetype': '脉冲屏蔽',
       'offpulse': '关闭行人及机动车脉冲',
       'sendvehiclepulse': '发送机动车脉冲',
