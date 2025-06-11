@@ -101,6 +101,7 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="help">{{$t('edge.main.help')}}</el-dropdown-item>
                 <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
@@ -1276,12 +1277,22 @@ export default {
           break
         case 'about': this.showVersion()
           break
+        case 'help': this.showHelp()
+          break
         default: router.push({ path: '/' })
       }
     },
     showVersion () {
       let versionInfoChild = this.$refs.versioninfoChild
       versionInfoChild.showMessage()
+    },
+    showHelp () {
+      if (this.$i18n.locale === 'zh') {
+        window.open('/configUserManual/zh/index.html')
+      }
+      if (this.$i18n.locale === 'en') {
+        window.open('/configUserManual/en/index.html')
+      }
     },
     showInfo (val) {
       if (!val) return

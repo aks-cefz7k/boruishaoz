@@ -87,6 +87,7 @@ const zh = {
       'changepass': '修改密码',
       'about': '关于',
       'exit': '退出',
+      'help': '帮助',
       'options': 'options',
       'options1': '全部',
       'options2': '相位',

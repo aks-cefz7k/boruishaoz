@@ -176,7 +176,7 @@
           <transition name="fade-left" mode="out-in"
           enter-active-class="animated fadeInRight"
           leave-active-class="animated fadeOutRight">
-            <div style="position: absolute;width: 100%;height: 100%;" v-show="(isOperation && isClosePhase)">
+            <div style="position: absolute;width: 100%;" v-show="(isOperation && isClosePhase)">
               <ClosePhaseControlModal
                 :controlData="controlData"
                 :closePhaseRings="closePhaseRings"

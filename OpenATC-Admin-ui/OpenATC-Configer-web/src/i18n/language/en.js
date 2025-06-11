@@ -87,6 +87,7 @@ const en = {
       'changepass': 'Change Password',
       'about': 'About',
       'exit': 'Exit',
+      'help': 'Help',
       'options': 'options',
       'options1': 'All',
       'options2': 'Phase',
