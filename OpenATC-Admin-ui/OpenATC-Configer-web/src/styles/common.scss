@@ -16,6 +16,22 @@ $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
 
+ // 全局滚动条样式
+ ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  // 滚动条的滑块
+  border-radius: 4px;
+  background: rgba(144, 147, 153, 0.3);
+}
+::-webkit-scrollbar-corner{
+  // 横向滚动条和纵向滚动条同时出现，右下角有个小白方格
+  background: transparent;
+}
+
+
 .app-container {
   // min-width: 1730px;
   height: 100%;
@@ -747,7 +763,7 @@ border: 1px solid $--border-color-base;
     background-color: $--color-white;
     border: solid 1px $--border-color-lighter;
     position: relative;
-    overflow-x: auto;
+    overflow-x: hidden;
     // min-height: 700px;
   }
   .cross-mess {
