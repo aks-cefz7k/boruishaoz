@@ -87,6 +87,7 @@ const en = {
       'changepass': 'Change Password',
       'about': 'About',
       'exit': 'Exit',
+      'help': 'Help',
       'options': 'options',
       'options1': 'All',
       'options2': 'Phase',
@@ -276,7 +277,8 @@ const en = {
       'pedestrianonly': 'pedestrian only',
       'busonly': 'bus only',
       'BRTonly': 'BRT only',
-      'tramonly': 'Tram only',
+      'tramonly': 'tram only',
+      'virtualphase': 'virtual phase',
       'pulsetype': 'PulseType',
       'offpulse': 'Turn off pedestrian and vehicle pulses',
       'sendvehiclepulse': 'Send vehicle pulse',
@@ -816,6 +818,8 @@ const en = {
         'crossroads': 'Crossroads',
         'tjunction': 'T-junction',
         'roundabout': 'Roundabout',
+        'rampintersection': 'RampIntersection',
+        'pedestriancrossing': 'PedestrianCrossing',
         'otherIntersections': 'OtherIntersections',
         'customIntersection': 'CustomIntersection'
       },
@@ -823,7 +827,9 @@ const en = {
         'eastward': 'Eastward',
         'westward': 'Westward',
         'southward': 'Southward',
-        'northward': 'Northward'
+        'northward': 'Northward',
+        'eastwestward': 'Eastwestdirection',
+        'southnorthward': 'Northsouthdirection'
       },
       'crossPhase': {
         'onePhase': 'OnePhase',

@@ -43,7 +43,7 @@
           <div class="control-model" v-for="(item, index) in modelList" :key="index">
             <div class="single-model"
             @click="selectModel(item.id)"
-            :class="preselectModel == item.id ? 'single-model-select' : ''"
+            :class="(preselectModel == item.id && preselectStages == -1)? 'single-model-select' : ''"
             v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
               <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
               <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>

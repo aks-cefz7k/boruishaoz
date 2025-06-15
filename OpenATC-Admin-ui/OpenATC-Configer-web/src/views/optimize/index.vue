@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container" ref="opt-container">
     <el-row class="top-row">
       <div class="grid-content bg-purple">
         <span class="sysytem-strategy">{{$t('edge.optimize.strategy')}}</span>
@@ -109,7 +109,6 @@ export default {
   data () {
     return {
       tableHeight: 760,
-      screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false,
       form: {
         name: '',
@@ -129,27 +128,11 @@ export default {
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                110
+      _this.tableHeight = _this.$refs['opt-container'].offsetHeight - 120
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['opt-container'].offsetHeight - 120
       }
     })
-  },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
-    }
   },
   methods: {
     cancelTable (e) {

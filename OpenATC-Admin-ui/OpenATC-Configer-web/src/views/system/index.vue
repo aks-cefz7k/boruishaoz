@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container system-container">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane :label="$t('edge.system.information')" name="information">
       <div class="system-information">

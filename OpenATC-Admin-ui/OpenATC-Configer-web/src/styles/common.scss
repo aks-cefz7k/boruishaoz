@@ -16,8 +16,25 @@ $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
 
+ // 全局滚动条样式
+ ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  // 滚动条的滑块
+  border-radius: 4px;
+  background: rgba(144, 147, 153, 0.3);
+}
+::-webkit-scrollbar-corner{
+  // 横向滚动条和纵向滚动条同时出现，右下角有个小白方格
+  background: transparent;
+}
+
+
 .app-container {
-  min-width: 1730px;
+  // min-width: 1730px;
+  height: 100%;
   background-color: $--background-color-base;
 }
 // 侧边栏
@@ -33,7 +50,7 @@ $light_gray: #eee;
 }
 .cssstyle-auth {
   #pass-label .el-form-item__label {
-    color: #999;
+    color: $--color-text-secondary;
   }
 
   #pass-state-succ {
@@ -42,7 +59,7 @@ $light_gray: #eee;
   }
 
   #pass-state-err {
-    color: #999;
+    color: $--color-text-secondary;
     float: left;
   }
 
@@ -208,7 +225,7 @@ $light_gray: #eee;
 // .cssstylelogin,
 
 #pass-label .el-form-item__label {
-  color: #999;
+  color: $--color-text-secondary;
 }
 
 #pass-state-succ {
@@ -396,7 +413,7 @@ border: 1px solid $--border-color-base;
     margin-top: 20px;
     margin-left: 20px;
     width: 76.8%;
-    height: 840px;
+    height: 880px;
     background-color: $--color-white;
     border: solid 1px $--border-color-lighter;
   }
@@ -405,7 +422,7 @@ border: 1px solid $--border-color-base;
     margin-top: 20px;
     margin-left: 20px;
     width: 20%;
-    height: 840px;
+    height: 880px;
     background-color: $--color-white;
     border: solid 1px $--border-color-lighter;
   }
@@ -439,6 +456,10 @@ border: 1px solid $--border-color-base;
     height: 210px;
     border-left: solid 1px $--border-color-lighter;
     border-bottom: solid 1px $--border-color-lighter;
+    .model-icon {
+      width: 20px;
+      height: 20px;
+    }
   }
   .agent-icon {
     position:relative;
@@ -545,8 +566,9 @@ border: 1px solid $--border-color-base;
   }
   .model-tupian {
     float: left;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-left: 20px;
+    margin-right: 10px;
   }
   .to-detail {
     float: left;
@@ -741,7 +763,7 @@ border: 1px solid $--border-color-base;
     background-color: $--color-white;
     border: solid 1px $--border-color-lighter;
     position: relative;
-    overflow-x: auto;
+    overflow-x: hidden;
     // min-height: 700px;
   }
   .cross-mess {
@@ -1166,8 +1188,12 @@ border: 1px solid $--border-color-base;
   }
   .current-phasetable {
     width: 96%;
-    height: 380px;
+    height: 330px;
     margin-top: 40px;
+    .el-table {
+      width: 100%;
+      font-size: 14px;
+    }
   }
   .color-block {
     float: left;
@@ -1212,8 +1238,11 @@ border: 1px solid $--border-color-base;
   }
   .current-volumetable {
     width: 96%;
-    /* height: 380px; */
+    height: 330px;
     margin-top: 40px;
+    .el-table {
+      font-size: 14px;
+    }
   }
 }
 // 通道锁定
@@ -1457,80 +1486,143 @@ border: 1px solid $--border-color-base;
 .currsystemtime {
   width: 100%;
 }
-.channel-panel {
-  .single-channel {
-    width: 148px;
-    height: 240px;
-    background-color: $--color-info;
-    border-radius: 4px;
-    border: solid 1px $--border-color-base;
-    float: left;
-    margin-right: 20px;
-    .name {
-      height: 40px;
-      background: $--color-black;
-      line-height: 40px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      letter-spacing: 0px;
-      color: $--color-text-primary;
+.system-container {
+  .el-tabs {
+  height: 100%;
+  }
+  .el-tabs__content {
+    height: calc(100% - 55px);
+    overflow-y: auto;
+    .el-tab-pane {
+      height: calc(100% - 20px);
     }
   }
-  .list {
-    margin-top: 30px;
-    .title {
-      margin-bottom: 10px;
-      color: $--color-text-primary;
+  .channel-panel {
+    height: 100%;
+    .channels{
+      .single-channel {
+        width: 148px;
+        height: 240px;
+        background-color: $--color-info;
+        border-radius: 4px;
+        border: solid 1px $--border-color-base;
+        float: left;
+        margin-right: 20px;
+        .name {
+          height: 40px;
+          background: $--color-black;
+          line-height: 40px;
+          text-align: center;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0px;
+          color: $--color-text-primary;
+        }
+      }
+    }
+    
+    .channeltest {
+      height: calc(100% - 240px);
+      .list {
+        margin-top: 30px;
+        .title {
+          margin-bottom: 10px;
+          color: $--color-text-primary;
+        }
+      }
     }
   }
 }
+
+.history-container {
+  .el-tabs {
+    height: calc(100% - 42px);
+    }
+    .el-tabs__content {
+      height: calc(100% - 65px);
+      overflow-y: auto;
+      .el-tab-pane {
+        height: 100%;
+      }
+    }
+    .history-table {
+      height: 100%;
+      .atc-table {
+        height: 100%;
+      }
+    }
+}
+
+.plan-container {
+  .tabs-style {
+    height: 100%;
+    .plan-table {
+      height: 100%;
+    }
+  }
+  .el-tabs {
+    height: 100%;
+    }
+  .el-tabs__content {
+    height: calc(100% - 65px);
+    overflow-y: auto;
+    .el-tab-pane {
+      height: 100%;
+    }
+  }
+}
+
 // 统计
 .statistics {
   height: 100%;
+  .one {
+    // height: 6%;
+    overflow: hidden;
+  }
+  .two {
+    height: 47%;
+  }
+  .three {
+    height: 47%;
+    text-align: center;
+  }
+  .flow-echarts {
+    height: 100%;
+  }
 }
-.one {
-  height: 6%;
-}
-.two {
-  height: 47%;
-}
-.flow-echarts {
-  height: 100%;
-}
-.three {
-  height: 47%;
-  text-align: center;
-}
-.statistics-table {
-  width: 96%;
-  margin-left: 2%;
-  border: solid 1px $--border-color-lighter;
-}
-.statistics-button {
-  float: right;
-  margin-right: 2%;
-}
-.statistics-input {
-float: left;
-// margin-left: 20px;
-}
-.statistics-bottom {
-float: left;
-}
-.statistics-name {
-float: left;
-margin-top: 8px;
-margin-left: 10px;
-height: 14px;
-font-size: 14px;
-font-weight: normal;
-font-stretch: normal;
-line-height: 14px;
-letter-spacing: 0px;
-color: $--color-text-secondary;
-}
+  
+  .statistics-table {
+    width: 96%;
+    height: 100%;
+    margin-left: 2%;
+    // border: solid 1px $--border-color-lighter;
+  }
+  .statistics-button {
+    float: right;
+    margin-right: 2%;
+  }
+  .statistics-input {
+  float: left;
+  // margin-left: 20px;
+  }
+  .statistics-bottom {
+  float: left;
+  }
+  .statistics-name {
+  float: left;
+  margin-top: 8px;
+  margin-left: 10px;
+  height: 14px;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 14px;
+  letter-spacing: 0px;
+  color: $--color-text-secondary;
+  }
+
+
 // 方案
 .pattern-figure {
   // position: fixed;
@@ -1587,11 +1679,23 @@ color: $--color-text-secondary;
     color: #333333;
   }
   .ring-phase {
+    position: relative;
     float: left;
     // margin-left: 5px;
     height: 34px;
     background: rgba(30, 96, 12, 0.2);
     // margin-top:1px;
+  }
+  .ring-phase::after {
+    position: absolute;
+    display: block;
+    content: '';
+    height: 0;
+    width: 0;
+    top: 11px;
+    left: 36px;
+    border: 5px solid transparent;
+    border-left-color: rgba(30, 96, 12, 0.2);
   }
   .divider {
     position: absolute;
@@ -1627,7 +1731,7 @@ color: $--color-text-secondary;
   top: 150px;
   left: 20px;
   right: 20px;
-  border: solid 1px $--border-color-base;
+  // border: solid 1px $--border-color-base;
   overflow: auto;
 }
 // el-switch样式
@@ -1871,4 +1975,43 @@ color: $--color-text-secondary;
     margin-top: 8px;
     font-size: 12px;
   }
+}
+
+// 模版导入
+.temp-import {
+  .el-select {
+    width: 75px;
+  }
+  .footer {
+    button {
+      width: 56px;
+      height: 32px;
+      padding: 0;
+      text-align: center;
+      line-height: 30px;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+    }
+  }
+  .sort-name {
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 40px;
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+    text-align: right;
+    padding-right: 30px;
+}
+.el-form-item__label {
+  color: $--color-text-secondary;
+  font-weight: 400;
+}
+.el-dialog__footer {
+  padding: 10px 72px 38px 0;
+}
+.el-dialog__body {
+  line-height: 0px;
+}
 }

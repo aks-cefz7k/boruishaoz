@@ -87,6 +87,7 @@ const zh = {
       'changepass': '修改密码',
       'about': '关于',
       'exit': '退出',
+      'help': '帮助',
       'options': 'options',
       'options1': '全部',
       'options2': '相位',
@@ -276,6 +277,7 @@ const zh = {
       'busonly': '公交专用',
       'BRTonly': 'BRT专用',
       'tramonly': '有轨电车专用',
+      'virtualphase': '虚相位',
       'pulsetype': '脉冲屏蔽',
       'offpulse': '关闭行人及机动车脉冲',
       'sendvehiclepulse': '发送机动车脉冲',
@@ -815,6 +817,8 @@ const zh = {
         'crossroads': '十字路口',
         'tjunction': '丁字路口',
         'roundabout': '环形路口',
+        'rampintersection': '匝道路口',
+        'pedestriancrossing': '行人过街路口',
         'otherIntersections': '其他形状路口',
         'customIntersection': '自定义路口'
       },
@@ -822,7 +826,9 @@ const zh = {
         'eastward': '东向',
         'westward': '西向',
         'southward': '南向',
-        'northward': '北向'
+        'northward': '北向',
+        'eastwestward': '东西向',
+        'southnorthward': '南北向'
       },
       'crossPhase': {
         'onePhase': '一相位',

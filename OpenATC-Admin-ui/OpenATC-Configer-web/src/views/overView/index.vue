@@ -85,7 +85,7 @@
                   <div>{{form.mode}}</div>
                 </el-form-item>
                 <el-form-item :label="$t('edge.control.control_style')">
-                    <el-select v-model="form.control" :placeholder="$t('edge.common.select')">
+                    <el-select v-model="control" :placeholder="$t('edge.common.select')">
                         <el-option :label="$t('edge.overview.autocontrol')" value="0"></el-option>
                         <el-option :label="$t('edge.overview.yellowflash')" value="1"></el-option>
                         <el-option :label="$t('edge.overview.allred')" value="2"></el-option>
@@ -101,7 +101,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('edge.overview.controlmodevalue')">
-                    <el-input v-model="controlNum" style="width: 70%" :disabled="form.control!=='999'"></el-input>
+                    <el-input v-model="controlNum" style="width: 70%" :disabled="control!=='999'"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('edge.control.pattern')">
                     <el-input v-model="form.terminal" style="width: 70%"></el-input>
@@ -176,7 +176,7 @@
           <transition name="fade-left" mode="out-in"
           enter-active-class="animated fadeInRight"
           leave-active-class="animated fadeOutRight">
-            <div style="position: absolute;width: 100%;height: 100%;" v-show="(isOperation && isClosePhase)">
+            <div style="position: absolute;width: 100%;" v-show="(isOperation && isClosePhase)">
               <ClosePhaseControlModal
                 :controlData="controlData"
                 :closePhaseRings="closePhaseRings"
@@ -287,8 +287,9 @@ export default {
   data () {
     return {
       controlData: {},
+      control: '',
       form: {
-        control: '',
+        // control: '',
         terminal: '',
         mode: '',
         value: '',
@@ -482,6 +483,17 @@ export default {
       },
       // 深度观察监听
       deep: true
+    },
+    control: {
+      handler: function (val, oldVal) {
+        if (val !== oldVal) {
+          if (val !== '999') {
+            this.controlNum = val
+          } else {
+            this.controlNum = ''
+          }
+        }
+      }
     }
   },
   created () {
@@ -708,25 +720,27 @@ export default {
       }
     },
     onSubmit () {
-      if (!this.isJsonString(this.form.data)) {
+      if (this.form.data && !this.isJsonString(this.form.data)) {
         this.$message.error(this.$t('edge.overview.JSONFormatError'))
         return
       }
-      if (this.form.control === '999' && this.controlNum === '') {
+      if (this.control === '999' && this.controlNum === '') {
         this.$message.error(this.$t('edge.overview.controlnumerrormess'))
         return
       }
       this.lockScreen()
       // let control = { ...this.controlData }
       let control = {}
-      control.control = Number(this.form.control === '999' ? this.controlNum : this.form.control)
+      control.control = Number(this.control === '999' ? this.controlNum : this.control)
       // control.pattern = Number(this.form.pattern)
       control.terminal = Number(this.form.terminal)
       control.value = Number(this.form.value)
       control.delay = Number(this.form.delay)
       control.duration = Number(this.form.duration)
-      // eslint-disable-next-line no-useless-escape
-      control.data = JSON.parse(this.form.data)
+      if (this.form.data) {
+        // eslint-disable-next-line no-useless-escape
+        control.data = JSON.parse(this.form.data)
+      }
       // let controlObj = this.handlePutData(control)
       putTscControl(control).then(data => {
         this.unlockScreen()
@@ -753,12 +767,11 @@ export default {
         let patternData = data.data.data.data
         let patternList = [0, 1, 2, 4, 5, 6, 10, 12, 14, 19]
         if (patternList.includes(patternData.control)) {
-          this.form.control = String(patternData.control)
+          this.control = String(patternData.control)
         } else {
-          this.form.control = '999'
+          this.control = '999'
           this.controlNum = String(patternData.control)
         }
-        // this.form.control = String(patternData.control)
         this.form.terminal = String(patternData.terminal)
         if (this.$i18n.locale === 'en') {
           this.form.mode = this.ParamsModeEn.get(patternData.mode)
@@ -915,16 +928,18 @@ export default {
     },
     selectModel (value) {
       if (!this.isOperation) return
-      if (this.preselectModel !== -1) {
-        this.preselectStages = -1
-        if (this.preselectModel === value) {
-          this.preselectModel = -1
-        } else {
-          this.preselectModel = value
-        }
-      } else {
-        this.preselectModel = value
-      }
+      // if (this.preselectModel !== -1) {
+      //   this.preselectStages = -1
+      //   if (this.preselectModel === value) {
+      //     this.preselectModel = -1
+      //   } else {
+      //     this.preselectModel = value
+      //   }
+      // } else {
+      //   this.preselectModel = value
+      // }
+      this.preselectStages = -1
+      this.preselectModel = value
     },
     selectStages (value) {
       if (!this.isOperation) return

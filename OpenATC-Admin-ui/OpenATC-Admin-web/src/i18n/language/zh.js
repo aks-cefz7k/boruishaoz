@@ -16,6 +16,7 @@ const zh = {
       'delete': '删除',
       'edit': '编辑',
       'detail': '详情',
+      'searchdeviceid': '输入设备ID搜索',
       'searchplaceholder': '输入关键字搜索',
       'addfailed': '新增失败!',
       'addsuccess': '新增成功!',
@@ -66,6 +67,7 @@ const zh = {
       'organization': '组织机构',
       'bottleneckcontrol': '瓶颈控制',
       'script': '脚本',
+      'faultrecord': '故障记录',
       'dutyroute': '勤务路线',
       'realname': '真实姓名',
       'telno': '联系电话',
@@ -92,6 +94,18 @@ const zh = {
       'usermanager': '用户管理',
       'operationrecord': '操作记录',
       'faultOrOffLine': '故障 / 在线'
+    },
+    'faultrecord': {
+      'deviceid': '设备ID',
+      'faultid': '故障ID',
+      'boardcardtype': '板卡类型',
+      'faultbegintime': '故障发生时间',
+      'faultendtime': '故障恢复时间',
+      'faulttype': '故障主类型',
+      'faultchild': '故障子类型',
+      'faultgrade': '故障等级',
+      'faultvaluedetail': '故障详细值',
+      'operation': '操作'
     },
     'devicemanager': {
       'devicelist': '设备列表',

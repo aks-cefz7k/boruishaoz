@@ -609,6 +609,17 @@
         overflow: auto;
       }
 }
+  //故障记录页面样式
+  .openatc-faultrecord {
+    // .el-range-editor .el-range-input {
+    //   background-color: $--background-color-base;
+    // }
+    .filter-container {
+      float: right;
+      margin-top: 20px;
+      margin-right: 20px;
+    }
+  }
   // 用户管理页面样式
   .openatc-user {
     .filter-container {

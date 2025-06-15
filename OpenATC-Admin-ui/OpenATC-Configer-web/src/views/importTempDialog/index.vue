@@ -159,7 +159,6 @@
                </el-row>
           </el-col>
           <el-col :span="11">
-            <!-- <div class="crossImg" ref="crossImg" :class="crossTypeImgClass"></div> -->
             <CrossDiagram :intersection="intersection" :phaseList="phaseList" />
           </el-col>
         </el-row>
@@ -204,8 +203,6 @@ export default {
     },
     intersection: {
       handler: function (val) {
-        let crossintersection = val.split('-')[1]
-        this.getCrossTypeImgClass(crossintersection)
         // 同步可提交的表单数据 templateInfo
         this.templateInfo.template.type = val
         // 更新相位数量
@@ -229,12 +226,38 @@ export default {
       visible: this.imortVisible,
       list: [], // 模板列表
       cate: {}, // 经过分类的模板列表
-      CrossShape: new Map([['100', this.$t('edge.importTemp.crossShapes.tjunction')], ['101', this.$t('edge.importTemp.crossShapes.crossroads')], ['102', this.$t('edge.importTemp.crossShapes.Roundabout')], ['110', this.$t('edge.importTemp.crossShapes.otherIntersections')], ['999', this.$t('edge.importTemp.crossShapes.customIntersection')]]),
-      CrossIntersection: new Map([['000', ''], ['001', this.$t('edge.importTemp.crossIntersection.eastward')], ['002', this.$t('edge.importTemp.crossIntersection.southward')], ['003', this.$t('edge.importTemp.crossIntersection.westward')], ['004', this.$t('edge.importTemp.crossIntersection.northward')]]),
-      CrossPhase: new Map([['00', ''], ['01', this.$t('edge.importTemp.crossPhase.onePhase')], ['02', this.$t('edge.importTemp.crossPhase.twoPhase')], ['03', this.$t('edge.importTemp.crossPhase.threePhase')],
-        ['04', this.$t('edge.importTemp.crossPhase.fourPhase')], ['05', this.$t('edge.importTemp.crossPhase.fivePhase')], ['06', this.$t('edge.importTemp.crossPhase.sixPhase')], ['07', this.$t('edge.importTemp.crossPhase.sevenPhase')], ['08', this.$t('edge.importTemp.crossPhase.eightPhase')], ['09', this.$t('edge.importTemp.crossPhase.ninePhase')],
-        ['10', this.$t('edge.importTemp.crossPhase.tenPhase')], ['11', this.$t('edge.importTemp.crossPhase.elevenPhase')], ['12', this.$t('edge.importTemp.crossPhase.twelvePhase')], ['13', this.$t('edge.importTemp.crossPhase.thirteenPhase')], ['14', this.$t('edge.importTemp.crossPhase.fourteenPhase')],
-        ['15', this.$t('edge.importTemp.crossPhase.fifteenPhase')], ['16', this.$t('edge.importTemp.crossPhase.sixteenPhase')]]),
+      CrossShape: new Map([
+        ['100', this.$t('edge.importTemp.crossShapes.tjunction')],
+        ['101', this.$t('edge.importTemp.crossShapes.crossroads')],
+        ['102', this.$t('edge.importTemp.crossShapes.Roundabout')],
+        ['103', this.$t('edge.importTemp.crossShapes.rampintersection')],
+        ['104', this.$t('edge.importTemp.crossShapes.pedestriancrossing')],
+        ['110', this.$t('edge.importTemp.crossShapes.otherIntersections')],
+        ['999', this.$t('edge.importTemp.crossShapes.customIntersection')]]),
+      CrossIntersection: new Map([['000', ''],
+        ['001', this.$t('edge.importTemp.crossIntersection.eastward')],
+        ['002', this.$t('edge.importTemp.crossIntersection.southward')],
+        ['003', this.$t('edge.importTemp.crossIntersection.westward')],
+        ['004', this.$t('edge.importTemp.crossIntersection.northward')],
+        ['005', this.$t('edge.importTemp.crossIntersection.eastwestward')],
+        ['006', this.$t('edge.importTemp.crossIntersection.southnorthward')]]),
+      CrossPhase: new Map([['00', ''],
+        ['01', this.$t('edge.importTemp.crossPhase.onePhase')],
+        ['02', this.$t('edge.importTemp.crossPhase.twoPhase')],
+        ['03', this.$t('edge.importTemp.crossPhase.threePhase')],
+        ['04', this.$t('edge.importTemp.crossPhase.fourPhase')],
+        ['05', this.$t('edge.importTemp.crossPhase.fivePhase')],
+        ['06', this.$t('edge.importTemp.crossPhase.sixPhase')],
+        ['07', this.$t('edge.importTemp.crossPhase.sevenPhase')],
+        ['08', this.$t('edge.importTemp.crossPhase.eightPhase')],
+        ['09', this.$t('edge.importTemp.crossPhase.ninePhase')],
+        ['10', this.$t('edge.importTemp.crossPhase.tenPhase')],
+        ['11', this.$t('edge.importTemp.crossPhase.elevenPhase')],
+        ['12', this.$t('edge.importTemp.crossPhase.twelvePhase')],
+        ['13', this.$t('edge.importTemp.crossPhase.thirteenPhase')],
+        ['14', this.$t('edge.importTemp.crossPhase.fourteenPhase')],
+        ['15', this.$t('edge.importTemp.crossPhase.fifteenPhase')],
+        ['16', this.$t('edge.importTemp.crossPhase.sixteenPhase')]]),
       shapeList: [], // 路口形状可选项
       tempList: [], // 模板名称可选项
       TempMap: new Map(), // 模板字符串与模板名称映射
@@ -247,7 +270,6 @@ export default {
       greenOptions: [],
       yellowOptions: [],
       redOptions: [],
-      crossTypeImgClass: '', // 示意图类名
       templateInfo: {
         template: {
           type: ''
@@ -269,30 +291,59 @@ export default {
           count: 1,
           allyear: true
         }
-      }
+      },
+      mock: [{
+        'type': '103-001-03',
+        'phaseList': [
+          {
+            'id': 1,
+            'direction': [
+              9,
+              13
+            ],
+            'peddirection': [
+              9,
+              13
+            ]
+          }
+        ]
+      }, {
+        'type': '104-005-03',
+        'phaseList': [
+          {
+            'id': 1,
+            'direction': [
+              9,
+              13
+            ],
+            'peddirection': [
+              9,
+              13
+            ]
+          },
+          {
+            'id': 2,
+            'direction': [
+              2
+            ],
+            'peddirection': [
+              2
+            ]
+          },
+          {
+            'id': 3,
+            'direction': [
+              10
+            ],
+            'peddirection': [
+              10
+            ]
+          }
+        ]
+      } ]
     }
   },
   methods: {
-    getCrossTypeImgClass (intersection) {
-      if (this.shape === '101') {
-        this.crossTypeImgClass = 'Crossroads'
-      }
-      if (this.shape === '100') {
-        switch (intersection) {
-          case '001': this.crossTypeImgClass = 'TypeT-east'
-            break
-          case '002': this.crossTypeImgClass = 'TypeT-south'
-            break
-          case '003': this.crossTypeImgClass = 'TypeT-west'
-            break
-          case '004': this.crossTypeImgClass = 'TypeT-north'
-            break
-        }
-      }
-      if (this.shape === '999') {
-        this.crossTypeImgClass = 'Customroads'
-      }
-    },
     submitDeviceInfo () {
       createTemplate(this.templateInfo).then(res => {
         if (!res.data.success) {
@@ -417,67 +468,44 @@ export default {
 }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
-.temp-import .el-form-item__label {
-    color: #999;
-    font-weight: 400;
-}
-.temp-import .el-dialog__footer {
-  padding: 10px 72px 38px 0;
-}
-.temp-import .el-dialog__body {
-  line-height: 0px;
-}
-</style>
-<style lang="scss" rel="stylesheet/scss" scoped>
-.temp-import {
-  .el-select {
-    width: 75px;
-  }
-  .footer {
-    button {
-      width: 56px;
-      height: 32px;
-      padding: 0;
-      text-align: center;
-      line-height: 30px;
-      font-size: 12px;
-      font-weight: normal;
-      font-stretch: normal;
-    }
-  }
-}
-.sort-name {
-    font-size: 15px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 40px;
-    letter-spacing: 0px;
-    color: #303133;
-    text-align: right;
-    padding-right: 30px;
-}
-.crossImg {
-  width: 225px;
-  height: 225px;
-  background-repeat: no-repeat;
-}
-.Crossroads {
-  background-image: url('../../assets/intersection_type/Crossroads.png')
-}
-.TypeT-east {
-  background-image: url('../../assets/intersection_type/TypeT-east.png')
-}
-.TypeT-south {
-  background-image: url('../../assets/intersection_type/TypeT-south.png')
-}
-.TypeT-west {
-  background-image: url('../../assets/intersection_type/TypeT-west.png')
-}
-.TypeT-north {
-  background-image: url('../../assets/intersection_type/TypeT-north.png')
-}
-.Customroads {
-  background-image: url('../../assets/intersection_type/Customroads.png')
-}
-</style>
+// <style lang="scss" rel="stylesheet/scss">
+// .temp-import .el-form-item__label {
+//     color: #999;
+//     font-weight: 400;
+// }
+// .temp-import .el-dialog__footer {
+//   padding: 10px 72px 38px 0;
+// }
+// .temp-import .el-dialog__body {
+//   line-height: 0px;
+// }
+// </style>
+// <style lang="scss" rel="stylesheet/scss" scoped>
+// .temp-import {
+//   .el-select {
+//     width: 75px;
+//   }
+//   .footer {
+//     button {
+//       width: 56px;
+//       height: 32px;
+//       padding: 0;
+//       text-align: center;
+//       line-height: 30px;
+//       font-size: 12px;
+//       font-weight: normal;
+//       font-stretch: normal;
+//     }
+//   }
+//   .sort-name {
+//     font-size: 15px;
+//     font-weight: normal;
+//     font-stretch: normal;
+//     line-height: 40px;
+//     letter-spacing: 0px;
+//     color: #303133;
+//     text-align: right;
+//     padding-right: 30px;
+// }
+// }
+// </style>

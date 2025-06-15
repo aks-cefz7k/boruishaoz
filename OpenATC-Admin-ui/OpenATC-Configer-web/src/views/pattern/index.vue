@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container" ref="pattern-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-table :data="patternList" :max-height="tableHeight" highlight-current-row  @expand-change="expandChange" ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
@@ -116,7 +116,7 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan">
+      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" min-width="200px">
         <template slot-scope="scope">
             <div class="pattern-figure">
               <BoardCard
@@ -146,7 +146,6 @@ import ExpendConfig from '@/components/ExpendConfig'
 import { mapState } from 'vuex'
 import { getTscControl } from '@/api/control'
 import { getIframdevid } from '@/utils/auth'
-import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'patterns',
   components: {
@@ -159,7 +158,6 @@ export default {
   data () {
     return {
       tableHeight: 760,
-      screenHeight: window.innerHeight, // 屏幕高度
       ringCount: 1,
       ringCounts: 1,
       addId: 1,
@@ -198,27 +196,13 @@ export default {
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                250
+      _this.tableHeight = _this.$refs['pattern-container'].offsetHeight - 80
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['pattern-container'].offsetHeight - 80
       }
     })
   },
   watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                250
-    },
     patternList: function (val) {
       console.log(val)
       if (!val.length) return
@@ -380,6 +364,7 @@ export default {
       }
     },
     getDecimalSystem (list) {
+      if (!list) return
       let arr = []
       // if (list === null || list === undefined || list.length === 0) return arr
       if (list[0] === 1) arr.push(1)
@@ -445,6 +430,7 @@ export default {
       }
     },
     getPhaseDescription (phaseList) {
+      if (!phaseList) return
       let list = []
       for (let id of phaseList) {
         let obj = {}
@@ -503,7 +489,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          this.$message.error(data.data.message)
           return
         }
         let TscData = JSON.parse(JSON.stringify(data.data.data.data))

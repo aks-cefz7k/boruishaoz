@@ -23,7 +23,7 @@
             <el-table
               :data="tableData"
               size="mini"
-              max-height="300"
+              max-height="324"
               style="width: 100%">
               <el-table-column
                 align="center"
