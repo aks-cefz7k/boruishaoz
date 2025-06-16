@@ -89,12 +89,12 @@ export default {
   computed: {
   },
   methods: {
-    show (dirshow, params, showLevel, phaseCountdownColor) {
+    show (dirshow, params, showLevel) {
       this.dirshow = dirshow
       this.params = params
       this.showLevel = showLevel
       this.phaseCountdownColor = {
-        color: phaseCountdownColor
+        color: params.phaseCountdownColor
       }
     }
   },
