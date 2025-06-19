@@ -79,7 +79,8 @@ const zh = {
       'language': '语言',
       'skin': '皮肤',
       'dark': '暗色',
-      'light': '亮色'
+      'light': '亮色',
+      'other': '其他'
     },
     'home': {
       'devicestatus': '设备状态',

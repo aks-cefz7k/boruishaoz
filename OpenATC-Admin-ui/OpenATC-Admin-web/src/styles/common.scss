@@ -1636,6 +1636,13 @@ table td {
     .el-menu--horizontal {
       border-bottom: solid 1px $--border-color-base!important;
   }
+  .alarm-message {
+    cursor: pointer;
+    margin-top: 17px;
+    margin-right: 30px;
+    float: right;
+    color: $--color-text-secondary;
+  }
 // 瓶颈控制页面样式
 .overflow-detector-page {
   // height: calc(100% - 30px);
