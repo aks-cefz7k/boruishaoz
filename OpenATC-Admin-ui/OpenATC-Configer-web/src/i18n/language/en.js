@@ -97,7 +97,9 @@ const en = {
       'options6': 'Date',
       'options7': 'Channel',
       'options8': 'Detector',
-      'options9': 'PedestrianDetector'
+      'options9': 'PedestrianDetector',
+      'graphics': 'Graphics interface',
+      'text': 'Text interface'
     },
     'overview': {
       'crossinfo': 'Cross Information',

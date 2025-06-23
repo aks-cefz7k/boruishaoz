@@ -391,6 +391,26 @@ border: 1px solid $--border-color-base;
   position: absolute;
   z-index: 999;
 }
+.navbar {
+.sloat-icon {
+  float: right;
+  margin-right: 45px;
+  .iconfont {
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .el-button {
+    margin-left: 8px;
+    line-height: 22px;
+  }
+  .choosedIcon {
+    color: #409eff;
+  }
+  .defaultIcon {
+    color: $--color-text-secondary;
+  }
+}
+}
 // 总览页面
 .container-main {
   width: 100%;
