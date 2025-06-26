@@ -54,10 +54,14 @@
                   :showLevel="showLevel"></layerControl>
       <div class="layerControl" @click="onLayerControlClick">图层</div>
       <div class="layerDetail">
-        <el-checkbox-group v-model="checkList">
-          <el-checkbox label="设备"></el-checkbox>
-          <el-checkbox label="方案"></el-checkbox>
-        </el-checkbox-group>
+        <transition name="el-zoom-in-center">
+          <div v-show="isCollapse" class="transition-box">
+            <el-checkbox-group v-model="checkList">
+              <el-checkbox label="设备"></el-checkbox>
+              <el-checkbox label="方案"></el-checkbox>
+            </el-checkbox-group>
+          </div>
+        </transition>
       </div>
     </div>
     <div class="header">
@@ -96,6 +100,7 @@ export default {
   },
   data () {
     return {
+      isCollapse: true,
       layoutStyle: {
         width: screen.width * 0.3 + 'px',
         height: screen.height * 0.7 + 'px'
@@ -399,7 +404,7 @@ export default {
       this.showPatternDeviceIds = ids
     },
     onLayerControlClick () {
-
+      this.isCollapse = !this.isCollapse
     }
   }
 }
