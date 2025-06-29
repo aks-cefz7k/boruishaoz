@@ -1297,10 +1297,10 @@ export default {
     },
     showHelp () {
       if (this.$i18n.locale === 'zh') {
-        window.open('/configUserManual/zh/index.html')
+        window.open('/UserManual/openatcConfig/zh/index.html')
       }
       if (this.$i18n.locale === 'en') {
-        window.open('/configUserManual/en/index.html')
+        window.open('/UserManual/openatcConfig/en/index.html')
       }
     },
     showInfo (val) {
