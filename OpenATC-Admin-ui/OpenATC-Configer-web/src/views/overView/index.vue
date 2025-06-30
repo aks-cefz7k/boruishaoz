@@ -11,12 +11,6 @@
  **/
 <template>
   <div class="container-main">
-    <FloatImgBtn @onFloatBtnClicked="onFloatBtnClicked" v-if="!hideMenu && !graphicMode">
-      <div slot="icon" class="sloat-icon">
-        <i class="iconfont icon-tuxingjiemian" style="color: #ffffff;" v-show="!isShowGui"></i>
-        <i class="iconfont icon-wenzijiemian" style="color: #ffffff;" v-show="isShowGui"></i>
-      </div>
-    </FloatImgBtn>
     <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
       <div class="wenzijiemian" v-show="!isShowGui">
         <div class="container-left">
@@ -344,7 +338,6 @@ export default {
       agentId: '0',
       agentName: '--',
       platform: undefined,
-      isShowGui: true,
       modelList: [{
         id: 1,
         iconClass: 'huangshan',
@@ -462,7 +455,8 @@ export default {
       curBodyHeight: state => state.globalParam.curBodyHeight,
       FuncSort: state => state.globalParam.FuncSort,
       hideMenu: state => state.globalParam.hideMenu,
-      graphicMode: state => state.globalParam.graphicMode
+      graphicMode: state => state.globalParam.graphicMode,
+      isShowGui: state => state.globalParam.isShowGui
     })
   },
   watch: {
@@ -922,9 +916,6 @@ export default {
       //   }, 300000)
       //   this.getPhase()
       // })
-    },
-    onFloatBtnClicked () {
-      this.isShowGui = !this.isShowGui
     },
     selectModel (value) {
       if (!this.isOperation) return

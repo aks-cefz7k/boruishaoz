@@ -119,6 +119,14 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
+      <div class="sloat-icon">
+        <el-tooltip :content="$t('edge.main.graphics')" placement="bottom" effect="dark">
+          <el-button type="text" @click="clickSwitchIcon(true)"><i class="iconfont icon-tuxingjiemian" :class="{'choosedIcon': isShowGui, 'defaultIcon': !isShowGui}"></i></el-button>
+        </el-tooltip>
+        <el-tooltip :content="$t('edge.main.text')" placement="bottom" effect="dark">
+          <el-button type="text" @click="clickSwitchIcon(false)"><i class="iconfont icon-wenzijiemian" :class="{'choosedIcon': !isShowGui, 'defaultIcon': isShowGui}"></i></el-button>
+        </el-tooltip>
+      </div>
     </el-menu>
     <el-dialog
       :title="$t('edge.plan.tip')"
@@ -258,7 +266,8 @@ export default {
       copiedTscParam: state => state.globalParam.copiedTscParam,
       userInfo: state => state.user.userInfo,
       hideMenu: state => state.globalParam.hideMenu,
-      graphicMode: state => state.globalParam.graphicMode
+      graphicMode: state => state.globalParam.graphicMode,
+      isShowGui: state => state.globalParam.isShowGui
     }),
     userInfo: {
       get: function () {
@@ -1288,10 +1297,10 @@ export default {
     },
     showHelp () {
       if (this.$i18n.locale === 'zh') {
-        window.open('/configUserManual/zh/index.html')
+        window.open('/UserManual/openatcConfig/zh/index.html')
       }
       if (this.$i18n.locale === 'en') {
-        window.open('/configUserManual/en/index.html')
+        window.open('/UserManual/openatcConfig/en/index.html')
       }
     },
     showInfo (val) {
@@ -1318,7 +1327,7 @@ export default {
       } else {
         return false
       }
-    }
+    },
     // extendErrorCodeMap () {
     //   let patternInitCode = 3000
     //   let channelInitCode = 1200
@@ -1339,6 +1348,9 @@ export default {
     //     errorCodeMapEn.set(channelInitCode, enMes)
     //   }
     // }
+    clickSwitchIcon (isShowGUI) {
+      this.$store.dispatch('SetShowGui', isShowGUI)
+    }
   }
 }
 </script>

@@ -97,7 +97,9 @@ const zh = {
       'options6': '日期',
       'options7': '通道',
       'options8': '检测器',
-      'options9': '行人检测器'
+      'options9': '行人检测器',
+      'graphics': '图形界面',
+      'text': '文字界面'
     },
     'overview': {
       'crossinfo': '路口信息',
