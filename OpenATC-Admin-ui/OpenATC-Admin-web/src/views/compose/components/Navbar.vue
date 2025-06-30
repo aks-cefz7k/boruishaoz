@@ -34,7 +34,7 @@
         <el-dropdown trigger="click" @command="handleSelect">
           <span class="el-dropdown-link">
             <i class="iconfont icon-lukou"></i>{{$t('openatc.main.gis')}}
-            <i class="el-icon-arrow-down el-icon--right"></i>
+            <i class="el-icon-arrow-down menu-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="deviceState">{{this.$t('openatc.gis.deviceState') }}</el-dropdown-item>
@@ -47,7 +47,7 @@
         <el-dropdown trigger="click" @command="handleSelect">
           <span class="el-dropdown-link">
             <i class="iconfont icon-pingjia"></i>{{$t('openatc.main.other')}}
-            <i class="el-icon-arrow-down el-icon--right"></i>
+            <i class="el-icon-arrow-down menu-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="operate">{{$t('openatc.main.operationrecord')}}</el-dropdown-item>

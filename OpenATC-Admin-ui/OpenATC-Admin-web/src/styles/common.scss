@@ -1643,6 +1643,9 @@ table td {
     float: right;
     color: $--color-text-secondary;
   }
+  .menu-icon--right {
+    margin-left: -5px;
+  }
 // 瓶颈控制页面样式
 .overflow-detector-page {
   // height: calc(100% - 30px);
