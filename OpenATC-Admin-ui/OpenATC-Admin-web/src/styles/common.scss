@@ -590,25 +590,28 @@
 }
 // 设备管理页面样式
 .openatc-device {
-    .tag-container {
-        float: left;
-        max-width: 70%;
-        overflow: hidden;
-      }
-      .filter-container {
-        float: right;
-        margin-top: 20px;
-        margin-right: 20px;
-      }
-      .devs-table {
-        position: absolute;
-        top: 130px;
-        left: 20px;
-        right: 20px;
-        border: solid 1px $--border-color-lighter;
-        overflow: auto;
-      }
-}
+  .tag-container {
+      float: left;
+      max-width: 70%;
+      overflow: hidden;
+    }
+    .filter-container {
+      float: right;
+      margin-top: 20px;
+      margin-right: 20px;
+    }
+    .devs-table {
+      position: absolute;
+      top: 130px;
+      left: 20px;
+      right: 20px;
+      border: solid 1px $--border-color-lighter;
+      overflow: auto;
+    }
+  }
+  .state-search {
+    margin-left: 2px;
+  }
   //故障记录页面样式
   .openatc-faultrecord {
     // .el-range-editor .el-range-input {

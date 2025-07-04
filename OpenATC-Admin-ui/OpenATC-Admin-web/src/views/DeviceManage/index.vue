@@ -34,7 +34,7 @@
       </div>
     <div class="devs-table">
       <el-table
-          :data="tableData.filter(data => !devsfilter || (data.agentid !== undefined && data.agentid.toLowerCase().includes(devsfilter.toLowerCase())) || (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(devsfilter.toLowerCase())) || (data.name !== undefined && data.name.toLowerCase().includes(devsfilter.toLowerCase())))"
+          :data="computedTable"
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -102,14 +102,30 @@
           align="center">
           </el-table-column>
           <el-table-column
-          prop="roles"
-          :label="$t('openatc.devicemanager.state')"
-          align="center">
-            <template slot-scope="scope">
-              <div>
-                  <el-tag size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
-              </div>
-            </template>
+            prop="roles"
+            :label="$t('openatc.devicemanager.state')"
+            align="center">
+              <template slot="header">
+                <el-popover
+                  placement="bottom"
+                  trigger="click">
+                  <div>
+                    <template>
+                      <el-checkbox @change="onOnlineChange" :checked="true" :label="$t('openatc.devicemanager.online')"></el-checkbox>
+                      <el-checkbox @change="onFaultChange" :checked="true" :label="$t('openatc.devicemanager.fault')"></el-checkbox>
+                      <el-checkbox @change="onOfflineChange" :checked="true" :label="$t('openatc.devicemanager.offline')"></el-checkbox>
+                    </template>
+                  </div>
+                  <el-row type="text" slot="reference">
+                    {{$t('openatc.main.devicemanager')}}<i class="el-icon-caret-bottom state-search"></i>
+                  </el-row>
+                </el-popover>
+              </template>
+              <template  slot-scope="scope">
+                <div>
+                    <el-tag size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
+                </div>
+              </template>
           </el-table-column>
           <el-table-column
           prop="lastTime"
@@ -149,6 +165,10 @@ export default {
   components: { Update, Messagebox, DeviceTags, FaultDetail },
   data () {
     return {
+      stateList: [],
+      isOnlineChecked: true,
+      isFaultChecked: true,
+      isOfflineChecked: true,
       tableHeight: 700,
       devsfilter: '',
       childTitle: 'adddevice',
@@ -162,36 +182,59 @@ export default {
     var _this = this
     _this.$nextTick(function () {
       // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-      window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
-      }
+      _this.tableHeight = window.innerHeight * 0.8
     })
-  },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-    }
   },
   computed: {
     ...mapState({
       tags: state => state.globalVariable.deviceTags
-    })
+    }),
+    computedTable () {
+      let list = []
+      list = this.tableData.filter(data =>
+        !this.devsfilter ||
+        (data.agentid !== undefined && data.agentid.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
+        (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
+        (data.name !== undefined && data.name.toLowerCase().includes(this.devsfilter.toLowerCase()))
+      )
+      let stateList = this.stateList
+      if (stateList && stateList.length > 0) {
+        list = list.filter(dev => {
+          return stateList.includes(dev.state)
+        })
+      }
+      return list
+    }
   },
   created () {
     this.getList()
   },
   methods: {
+    onOnlineChange (val) {
+      this.isOnlineChecked = val
+      this.onStateChange()
+    },
+    onFaultChange (val) {
+      this.isFaultChecked = val
+      this.onStateChange()
+    },
+    onOfflineChange (val) {
+      this.isOfflineChecked = val
+      this.onStateChange()
+    },
+    onStateChange () {
+      let stateList = []
+      if (this.isOnlineChecked) {
+        stateList.push('UP')
+      }
+      if (this.isFaultChecked) {
+        stateList.push('FAULT')
+      }
+      if (this.isOfflineChecked) {
+        stateList.push('DOWN')
+      }
+      this.stateList = stateList
+    },
     getTag (row) {
       if (row.state === 'DOWN') {
         return {
