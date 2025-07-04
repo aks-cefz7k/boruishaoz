@@ -96,6 +96,7 @@ const zh = {
       'faultOrOffLine': '故障 / 在线'
     },
     'faultrecord': {
+      'fixdetail': '故障描述',
       'deviceid': '设备ID',
       'faultid': '故障ID',
       'boardcardtype': '板卡类型',
