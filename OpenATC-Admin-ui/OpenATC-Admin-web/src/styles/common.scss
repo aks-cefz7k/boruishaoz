@@ -1636,26 +1636,6 @@ table td {
   .row-bg {
     padding: 10px 0;
   }
-    .notice {
-      cursor: pointer;
-      margin-top: 4px;
-      float: right;
-      .item {
-        margin-top: 10px;
-        margin-right: 40px;
-        .Img {
-          float: left;
-          margin-left: 13px;
-          margin-right: 6px;
-          height: 28px;
-          width: 28px;
-          background-size: 28px 28px;
-          background-repeat: no-repeat;
-          background-position:center center;
-          background-image: url('../../assets/home/notice.png');
-        }
-      }
-    }
     .el-menu--horizontal {
       border-bottom: solid 1px $--border-color-base!important;
   }
