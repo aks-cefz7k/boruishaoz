@@ -101,6 +101,7 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="help">{{$t('edge.main.help')}}</el-dropdown-item>
                 <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
@@ -117,6 +118,14 @@
             <el-dropdown-item command="En">English</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+      </div>
+      <div class="sloat-icon">
+        <el-tooltip :content="$t('edge.main.graphics')" placement="bottom" effect="dark">
+          <el-button type="text" @click="clickSwitchIcon(true)"><i class="iconfont icon-tuxingjiemian" :class="{'choosedIcon': isShowGui, 'defaultIcon': !isShowGui}"></i></el-button>
+        </el-tooltip>
+        <el-tooltip :content="$t('edge.main.text')" placement="bottom" effect="dark">
+          <el-button type="text" @click="clickSwitchIcon(false)"><i class="iconfont icon-wenzijiemian" :class="{'choosedIcon': !isShowGui, 'defaultIcon': isShowGui}"></i></el-button>
+        </el-tooltip>
       </div>
     </el-menu>
     <el-dialog
@@ -257,7 +266,8 @@ export default {
       copiedTscParam: state => state.globalParam.copiedTscParam,
       userInfo: state => state.user.userInfo,
       hideMenu: state => state.globalParam.hideMenu,
-      graphicMode: state => state.globalParam.graphicMode
+      graphicMode: state => state.globalParam.graphicMode,
+      isShowGui: state => state.globalParam.isShowGui
     }),
     userInfo: {
       get: function () {
@@ -1276,12 +1286,22 @@ export default {
           break
         case 'about': this.showVersion()
           break
+        case 'help': this.showHelp()
+          break
         default: router.push({ path: '/' })
       }
     },
     showVersion () {
       let versionInfoChild = this.$refs.versioninfoChild
       versionInfoChild.showMessage()
+    },
+    showHelp () {
+      if (this.$i18n.locale === 'zh') {
+        window.open('/UserManual/openatcConfig/zh/index.html')
+      }
+      if (this.$i18n.locale === 'en') {
+        window.open('/UserManual/openatcConfig/en/index.html')
+      }
     },
     showInfo (val) {
       if (!val) return
@@ -1307,7 +1327,7 @@ export default {
       } else {
         return false
       }
-    }
+    },
     // extendErrorCodeMap () {
     //   let patternInitCode = 3000
     //   let channelInitCode = 1200
@@ -1328,6 +1348,9 @@ export default {
     //     errorCodeMapEn.set(channelInitCode, enMes)
     //   }
     // }
+    clickSwitchIcon (isShowGUI) {
+      this.$store.dispatch('SetShowGui', isShowGUI)
+    }
   }
 }
 </script>

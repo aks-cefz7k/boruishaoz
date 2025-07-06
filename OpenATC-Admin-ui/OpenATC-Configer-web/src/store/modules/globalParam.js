@@ -67,7 +67,8 @@ const Global = {
     hideMenu: false,
     graphicMode: false, // 为true时，切换到图形界面模式，只显示路口图部分
     roadDirection: 'right', // 当前路口行车方向：默认右行
-    channelDescMap: new Map() // 管理实时通道描述数据
+    channelDescMap: new Map(), // 管理实时通道描述数据
+    isShowGui: true // 总览当前是否是图形界面
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -120,6 +121,9 @@ const Global = {
     },
     CLEAR_MANUAL_PANEL: (state) => {
       state.tscParam.manualpanel = tscParam.manualpanel
+    },
+    SET_SHOW_GUI: (state, isShowGui) => {
+      state.isShowGui = isShowGui
     }
   },
   actions: {
@@ -176,6 +180,9 @@ const Global = {
     },
     ClearManualPanel ({ commit }) {
       commit('CLEAR_MANUAL_PANEL')
+    },
+    SetShowGui ({ commit }, isShowGui) {
+      commit('SET_SHOW_GUI', isShowGui)
     }
   }
 }

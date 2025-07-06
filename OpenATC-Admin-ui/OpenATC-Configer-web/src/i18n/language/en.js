@@ -87,6 +87,7 @@ const en = {
       'changepass': 'Change Password',
       'about': 'About',
       'exit': 'Exit',
+      'help': 'Help',
       'options': 'options',
       'options1': 'All',
       'options2': 'Phase',
@@ -96,7 +97,9 @@ const en = {
       'options6': 'Date',
       'options7': 'Channel',
       'options8': 'Detector',
-      'options9': 'PedestrianDetector'
+      'options9': 'PedestrianDetector',
+      'graphics': 'Graphics interface',
+      'text': 'Text interface'
     },
     'overview': {
       'crossinfo': 'Cross Information',
@@ -276,7 +279,8 @@ const en = {
       'pedestrianonly': 'pedestrian only',
       'busonly': 'bus only',
       'BRTonly': 'BRT only',
-      'tramonly': 'Tram only',
+      'tramonly': 'tram only',
+      'virtualphase': 'virtual phase',
       'pulsetype': 'PulseType',
       'offpulse': 'Turn off pedestrian and vehicle pulses',
       'sendvehiclepulse': 'Send vehicle pulse',

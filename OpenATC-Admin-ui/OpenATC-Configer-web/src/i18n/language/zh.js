@@ -87,6 +87,7 @@ const zh = {
       'changepass': '修改密码',
       'about': '关于',
       'exit': '退出',
+      'help': '帮助',
       'options': 'options',
       'options1': '全部',
       'options2': '相位',
@@ -96,7 +97,9 @@ const zh = {
       'options6': '日期',
       'options7': '通道',
       'options8': '检测器',
-      'options9': '行人检测器'
+      'options9': '行人检测器',
+      'graphics': '图形界面',
+      'text': '文字界面'
     },
     'overview': {
       'crossinfo': '路口信息',
@@ -276,6 +279,7 @@ const zh = {
       'busonly': '公交专用',
       'BRTonly': 'BRT专用',
       'tramonly': '有轨电车专用',
+      'virtualphase': '虚相位',
       'pulsetype': '脉冲屏蔽',
       'offpulse': '关闭行人及机动车脉冲',
       'sendvehiclepulse': '发送机动车脉冲',

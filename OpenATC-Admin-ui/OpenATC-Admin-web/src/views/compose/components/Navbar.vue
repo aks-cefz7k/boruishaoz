@@ -15,23 +15,56 @@
     <div class="openatc-main">OpenATC-Admin</div>
     <div class="openatc-line"></div>
     <div class="openatc-menu">
-      <el-menu-item index="home" style="display:inline">{{$t('openatc.main.homepage')}}</el-menu-item>
-      <el-menu-item index="gis" style="display:inline">{{$t('openatc.main.gis')}}</el-menu-item>
-      <el-menu-item index="device" style="display:inline">{{$t('openatc.main.devicemanager')}}</el-menu-item>
-      <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item>
-      <!-- <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item> -->
-      <el-menu-item index="greenwave" style="display:inline">{{$t('openatc.main.greenwaveoptimize')}}</el-menu-item>
-      <el-menu-item index="bottleneckcontrol" style="display:inline">{{$t('openatc.main.bottleneckcontrol')}}</el-menu-item>
-      <el-menu-item index="operate" style="display:inline">{{$t('openatc.main.operationrecord')}}</el-menu-item>
-      <el-menu-item index="organization" style="display:inline">{{$t('openatc.main.organization')}}</el-menu-item>
-      <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item>
-      <!-- <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item> -->
-      <el-menu-item index="jupyter" style="display:inline">{{$t('openatc.main.script')}}</el-menu-item>
-      <el-menu-item index="faultrecord" style="display:inline">{{$t('openatc.main.faultrecord')}}</el-menu-item>
+      <el-menu-item index="home" style="display:inline">
+        <i class="iconfont icon-zhuye1"></i>{{$t('openatc.main.homepage')}}
+      </el-menu-item>
+      <el-menu-item index="device" style="display:inline">
+        <i class="iconfont icon-shebeiguanli"></i>{{$t('openatc.main.devicemanager')}}
+      </el-menu-item>
+      <el-menu-item index="dutyroute" style="display:inline">
+        <i class="iconfont icon-qinwuluxian"></i>{{$t('openatc.main.dutyroute')}}
+      </el-menu-item>
+      <el-menu-item index="greenwave" style="display:inline">
+        <i class="iconfont icon-jingtailvbo"></i>{{$t('openatc.main.greenwaveoptimize')}}
+      </el-menu-item>
+      <el-menu-item index="bottleneckcontrol" style="display:inline">
+        <i class="iconfont icon-pingjingkongzhi"></i>{{$t('openatc.main.bottleneckcontrol')}}
+      </el-menu-item>
+      <el-menu-item index="gis" style="display:inline">
+        <el-dropdown trigger="click" @command="handleSelect">
+          <span class="el-dropdown-link">
+            <i class="iconfont icon-lukou"></i>{{$t('openatc.main.gis')}}
+            <i class="el-icon-arrow-down menu-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="deviceState">{{this.$t('openatc.gis.deviceState') }}</el-dropdown-item>
+            <el-dropdown-item command="dutyRoute">{{this.$t('openatc.gis.dutyRoute') }}</el-dropdown-item>
+            <el-dropdown-item command="coordinateRoute">{{this.$t('openatc.gis.coordinateRoute') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+      <el-menu-item index="operate" style="display:inline">
+        <el-dropdown trigger="click" @command="handleSelect">
+          <span class="el-dropdown-link">
+            <i class="iconfont icon-pingjia"></i>{{$t('openatc.main.other')}}
+            <i class="el-icon-arrow-down menu-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="operate">{{$t('openatc.main.operationrecord')}}</el-dropdown-item>
+            <el-dropdown-item command="organization">{{$t('openatc.main.organization')}}</el-dropdown-item>
+            <el-dropdown-item command="user">{{$t('openatc.main.usermanager')}}</el-dropdown-item>
+            <el-dropdown-item command="jupyter">{{$t('openatc.main.script')}}</el-dropdown-item>
+            <el-dropdown-item command="faultrecord">{{$t('openatc.main.faultrecord')}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
     </div>
     <div class="openatc-operate">
       <div class="admin">
-        <el-dropdown trigger="click" @command="handleCommand" @visible-change="showInfo">
+        <el-dropdown trigger="click"
+                     :hide-on-click= "false"
+                     @command="handleCommand"
+                     @visible-change="showInfo">
           <span class="el-dropdown-link">
             {{userInfo.user_name}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
@@ -63,6 +96,27 @@
                 <div class="laber-name">{{$t('openatc.main.email')}}</div>
                 <div class="laber-value">{{userInfo.email}}</div>
               </div>
+            </el-dropdown-item>
+            <el-dropdown-item divided command="switchTheme">
+              <el-dropdown trigger="click" @command="switchTheme">
+                <span class="el-dropdown-link">
+                  {{$t('openatc.main.skin')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="dark">{{$t('openatc.main.dark')}}</el-dropdown-item>
+                  <el-dropdown-item command="light">{{$t('openatc.main.light')}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <br/>
+              <el-dropdown trigger="click" @command="switchLanguage">
+                <span class="el-dropdown-link">
+                  {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="Ch">中文</el-dropdown-item>
+                  <el-dropdown-item command="En">English</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </el-dropdown-item>
             <el-dropdown-item divided command="changepass">{{$t('openatc.main.changepass')}}</el-dropdown-item>
             <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
@@ -167,13 +221,15 @@
           </el-card>
         </span>
       </el-drawer>
+    <div class="alarm-message">
+      <el-badge is-dot class="item">
+        <i class="el-icon-message-solid"></i>
+      </el-badge>
+    </div>
   </el-menu>
   <modifypasswd ref="modifypasswdChild"></modifypasswd>
   <versioninfo ref="versioninfoChild"></versioninfo>
   <SystemSettings ref="settinngChild"></SystemSettings>
-  <!-- <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
-    <div>123456</div>
-</el-dialog> -->
   </div>
 </template>
 <script>
@@ -258,6 +314,12 @@ export default {
       console.log(data)
     },
     handleJump (key) {
+      if (key === 'deviceState' || key === 'dutyRoute' || key === 'coordinateRoute') {
+        this.$store.dispatch('SetGisBizType', key)
+        if (this.$route.path === this.routerPath.gis) {
+          return false
+        }
+      }
       router.push({
         path: this.routerPath[key]
       })
@@ -277,8 +339,10 @@ export default {
           break
         case 'systemsettings': this.showSettings()
           break
-        // case 'opentapd': this.opentapd()
-        //   break
+        case 'switchTheme':
+          break
+        case 'switchLanguage':
+          break
         default: router.push({ path: '/' })
       }
     },
@@ -381,34 +445,6 @@ export default {
 .el-menu-demo {
   padding: 0 18px;
 }
-
-// .openatc-main {
-//   float:left;
-//   height: 50px;
-//   line-height: 50px;
-//   font-size: 22px;
-//   font-weight: bold;
-//   font-stretch: normal;
-//   letter-spacing: 0px;
-//   color: $--color-text-primary;
-// }
-// .openatc-line {
-//   float:left;
-//   margin-left: 20px;
-//   margin-top: 19px;
-//   width: 1px;
-//   height: 14px;
-//   background-color: $--color-text-placeholder;
-// }
-// .openatc-menu {
-//   float:left;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: $--color-primary;
-// }
 .openatc-operate {
   cursor: pointer;
   float: right;
@@ -418,86 +454,12 @@ export default {
     float: left;
   }
 }
-// .el-menu-demo  {
-// .el-dropdown-menu {
-//   width: 228px;
-//   .el-dropdown-menu__item {
-//     color: $--color-text-regular;
-//   }
-//   .label {
-//     font-size: 12px;
-//     color: $--color-text-secondary;
-//     margin-bottom: 12px;
-//   }
-//   .content {
-//     font-size: 12px;
-//     color: $--color-text-primary;
-//   }
-//   .user {
-//     padding: 0 24px;
-//     .name {
-//       font-size: 20px;
-//       color: $--color-primary;
-//       margin-bottom: 14px;
-//       margin-top: 13px;
-//     }
-//   }
-//   .message {
-//     padding: 16px 24px 0 24px;
-//     margin-bottom: 10px;
-//     .email {
-//       margin-top: 22px;
-//     }
-//     .content {
-//       font-size: 14px;
-//     }
-//   }
-// }
-// }
-// .user-name {
-//   width: 58px;
-//   height: 21px;
-//   margin-top: 10px;
-//   font-size: 20px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: $--color-primary;
-// }
-// .organization {
-//   margin-top: 8px;
-// }
-// .real-name {
-//   margin-top: 14px;
-//   margin-bottom: 10px;
-// }
-// .laber-name {
-//   width: 48px;
-//   height: 13px;
-//   font-size: 12px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: $--color-text-secondary;
-// }
-// .laber-value {
-//   margin-top: 5px;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: $--color-text-primary;
-// }
-// .switch-language {
-//     cursor: pointer;
-//     margin-top: 17px;
-//     margin-right: 30px;
-//     float: right;
-//   }
-// .el-menu--horizontal {
-//     border-bottom: solid 1px $--border-color-base!important;
-// }
+</style>
+<style scoped>
+.openatc-navbar >>> .iconfont {
+    margin-right: 5px;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+}
 </style>
