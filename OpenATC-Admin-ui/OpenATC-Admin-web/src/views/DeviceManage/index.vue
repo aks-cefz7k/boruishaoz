@@ -74,10 +74,9 @@
           align="center">
           </el-table-column>
           <el-table-column
-            prop="sockettype"
-            :label="$t('openatc.devicemanager.sockettype')"
-            align="center"
-            :formatter="formatterSockettype">
+            prop="thirdplatformid"
+            :label="$t('openatc.devicemanager.thirdplatformid')"
+            align="center">
           </el-table-column>
           <el-table-column
           prop="platform"
@@ -117,7 +116,7 @@
                     </template>
                   </div>
                   <el-row type="text" slot="reference">
-                    {{$t('openatc.main.devicemanager')}}<i class="el-icon-caret-bottom state-search"></i>
+                    {{$t('openatc.devicemanager.state')}}<i class="el-icon-caret-bottom state-search"></i>
                   </el-row>
                 </el-popover>
               </template>
@@ -202,6 +201,10 @@ export default {
         list = list.filter(dev => {
           return stateList.includes(dev.state)
         })
+      }
+      for (let dev of list) {
+        dev.platform = dev.platform ? dev.platform : ''
+        dev.lastTime = dev.lastTime ? dev.lastTime : ''
       }
       return list
     }
