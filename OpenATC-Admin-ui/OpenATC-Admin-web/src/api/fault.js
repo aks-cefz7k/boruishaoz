@@ -16,6 +16,15 @@ export const GetAllCurrentFault = () => {
   return api.Send({}, {}, [])
 }
 
+export const GetAllFault = (pageNum, pageSize) => {
+  let api = new Authapi('GetAllFault')
+  let param = {
+    'pageNum': pageNum,
+    'pageRow': pageSize
+  }
+  return api.Send(param, {})
+}
+
 export const GetAllHistoryFault = () => {
   let api = new Authapi('GetAllHistoryFault')
   return api.Send({}, {}, [])
@@ -39,10 +48,24 @@ export const DeleteFaultById = (id) => {
   return api.Send({}, {}, urlParamList)
 }
 
+export const GetAllFaultRange = (pageNum, pageSize, id, beginTime, endTime) => {
+  let api = new Authapi('GetAllFaultRange')
+  let param = {
+    'pageNum': pageNum,
+    'pageRow': pageSize,
+    'agentId': id,
+    'beginTime': beginTime,
+    'endTime': endTime
+  }
+  return api.Send({}, param)
+}
+
 export default {
   GetAllCurrentFault,
   GetAllHistoryFault,
   GetCurrentFaultByAgentid,
   GetAllHistoryFaultByAgentid,
-  DeleteFaultById
+  DeleteFaultById,
+  GetAllFaultRange,
+  GetAllFault
 }

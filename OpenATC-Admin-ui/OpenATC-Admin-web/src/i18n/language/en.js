@@ -97,6 +97,7 @@ const en = {
       'faultOrOffLine': 'Fault / Online'
     },
     'faultrecord': {
+      'fixdetail': 'Fix Detail',
       'deviceid': 'Device Id',
       'faultid': 'Fault Id',
       'boardcardtype': 'Board Card Type',

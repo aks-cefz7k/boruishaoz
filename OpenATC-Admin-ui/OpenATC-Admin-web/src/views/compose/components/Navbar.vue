@@ -54,6 +54,7 @@
             <el-dropdown-item command="organization">{{$t('openatc.main.organization')}}</el-dropdown-item>
             <el-dropdown-item command="user">{{$t('openatc.main.usermanager')}}</el-dropdown-item>
             <el-dropdown-item command="jupyter">{{$t('openatc.main.script')}}</el-dropdown-item>
+            <el-dropdown-item command="faultrecord">{{$t('openatc.main.faultrecord')}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
@@ -127,6 +128,99 @@
       </div>
     </div>
 
+    <div class="switch-language">
+        <el-dropdown trigger="click" @command="switchTheme">
+          <span class="el-dropdown-link">
+            {{$t('openatc.main.skin')}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="dark">{{$t('openatc.main.dark')}}</el-dropdown-item>
+            <el-dropdown-item command="light">{{$t('openatc.main.light')}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+
+    <div class="switch-language">
+        <el-dropdown trigger="click" @command="switchLanguage">
+          <span class="el-dropdown-link">
+            {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="Ch">中文</el-dropdown-item>
+            <el-dropdown-item command="En">English</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <!-- <div class="notice" @click="drawer = true">
+        <el-badge is-dot class="item">
+          <div class="Img"></div>
+        </el-badge>
+      </div> -->
+      <el-drawer
+        title="故障列表"
+        :visible.sync="drawer"
+        :with-header="true">
+        <span>
+          <el-card class="box-card" style="margin:10px 16px">
+            <div slot="header" class="clearfix">
+              <span>{{$t('openatc.faultrecord.deviceid')}}</span>
+              <el-button style="float: right; padding: 3px 0" type="text">
+                <i class="el-icon-close"></i>
+              </el-button>
+            </div>
+            <div class="text item">
+              <el-row :gutter="20" class="row-bg">
+                <el-col :span="12">
+                  <el-row :gutter="0">
+                    <el-col :span="10">
+                      <div class="grid-content-label">
+                        {{ $t("openatc.faultrecord.deviceid") }}:
+                      </div>
+                    </el-col>
+                    <el-col :span="14">
+                      <div class="grid-content bg-purple">
+                        1111
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20"  class="row-bg">
+                <el-col :span="12">
+                  <el-row :gutter="0">
+                    <el-col :span="10">
+                      <div class="grid-content-label">
+                        {{ $t("openatc.devicemanager.faultOccurtime") }}:
+                      </div>
+                    </el-col>
+                    <el-col :span="14">
+                      <div class="grid-content bg-purple">
+                        1111
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" class="row-bg">
+                <el-col :span="12">
+                  <el-row :gutter="0">
+                    <el-col :span="10">
+                      <div class="grid-content-label">
+                        {{ $t("openatc.faultrecord.fixdetail") }}:
+                      </div>
+                    </el-col>
+                    <el-col :span="14">
+                      <div class="grid-content bg-purple">
+                        1111
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+            </div>
+          </el-card>
+        </span>
+      </el-drawer>
     <div class="alarm-message">
       <el-badge is-dot class="item">
         <i class="el-icon-message-solid"></i>
@@ -140,6 +234,7 @@
 </template>
 <script>
 import router from '@/router'
+import FaultEventData from '@/model/EventModal/faultData.js'
 import modifypasswd from './modifyPasswd'
 import versioninfo from './versionInfo'
 import SystemSettings from './SystemSettings'
@@ -153,6 +248,7 @@ export default {
   data () {
     return {
       activeIndex: '',
+      drawer: false,
       routerPath: {
         home: '/home',
         gis: '/gis',
@@ -204,6 +300,9 @@ export default {
     }
   },
   mounted () {
+    // 订阅故障测试
+    this.FaultEventData = new FaultEventData()
+    this.FaultEventData.Init(this.handleFaultEventData)
     if (getTheme() === 'dark') {
       require('../../../styles/dark/theme/element-dark.scss')
     } else {
@@ -211,6 +310,9 @@ export default {
     }
   },
   methods: {
+    handleFaultEventData (data) {
+      console.log(data)
+    },
     handleJump (key) {
       if (key === 'deviceState' || key === 'dutyRoute' || key === 'coordinateRoute') {
         this.$store.dispatch('SetGisBizType', key)

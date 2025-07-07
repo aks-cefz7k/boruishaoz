@@ -614,9 +614,9 @@
   }
   //故障记录页面样式
   .openatc-faultrecord {
-    // .el-range-editor .el-range-input {
-    //   background-color: $--background-color-base;
-    // }
+    .el-range-editor .el-range-input {
+      background-color: $--background-color-base;
+    }
     .filter-container {
       float: right;
       margin-top: 20px;
@@ -1636,6 +1636,9 @@ table td {
       margin-right: 30px;
       float: right;
     }
+  .row-bg {
+    padding: 10px 0;
+  }
     .el-menu--horizontal {
       border-bottom: solid 1px $--border-color-base!important;
   }
