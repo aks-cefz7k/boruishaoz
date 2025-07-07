@@ -94,11 +94,6 @@
           </el-tabs>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="No" minWidth="40">
-        <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label="ID" minWidth="40">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
