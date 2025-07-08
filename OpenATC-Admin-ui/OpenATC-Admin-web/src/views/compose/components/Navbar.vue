@@ -127,35 +127,6 @@
         </el-dropdown>
       </div>
     </div>
-
-    <div class="switch-language">
-        <el-dropdown trigger="click" @command="switchTheme">
-          <span class="el-dropdown-link">
-            {{$t('openatc.main.skin')}}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="dark">{{$t('openatc.main.dark')}}</el-dropdown-item>
-            <el-dropdown-item command="light">{{$t('openatc.main.light')}}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-
-    <div class="switch-language">
-        <el-dropdown trigger="click" @command="switchLanguage">
-          <span class="el-dropdown-link">
-            {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="Ch">中文</el-dropdown-item>
-            <el-dropdown-item command="En">English</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-      <!-- <div class="notice" @click="drawer = true">
-        <el-badge is-dot class="item">
-          <div class="Img"></div>
-        </el-badge>
-      </div> -->
       <el-drawer
         title="故障列表"
         :visible.sync="drawer"
@@ -163,6 +134,7 @@
         <span>
           <el-card class="box-card" style="margin:10px 16px">
             <div slot="header" class="clearfix">
+              <i class="el-icon-location-outline" type="primary"></i>
               <span>{{$t('openatc.faultrecord.deviceid')}}</span>
               <el-button style="float: right; padding: 3px 0" type="text">
                 <i class="el-icon-close"></i>
@@ -298,6 +270,7 @@ export default {
     if (this.fromKstpPath.indexOf(this.devicePath) !== -1) {
       this.isShow = false
     }
+    this.handleFaultEventData(true)
   },
   mounted () {
     // 订阅故障测试
@@ -311,7 +284,7 @@ export default {
   },
   methods: {
     handleFaultEventData (data) {
-      console.log(data)
+      debugger
     },
     handleJump (key) {
       if (key === 'deviceState' || key === 'dutyRoute' || key === 'coordinateRoute') {
