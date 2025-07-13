@@ -64,7 +64,7 @@
         </transition>
       </div>
     </div>
-    <div class="header">
+    <div class="header" v-show="false">
       <el-radio-group v-model="bizType">
         <el-radio label="deviceState">{{this.$t('openatc.gis.deviceState') }}</el-radio>
         <el-radio label="dutyRoute">{{this.$t('openatc.gis.dutyRoute') }}</el-radio>
@@ -90,6 +90,7 @@ import { getTheme } from '@/utils/auth'
 import AnimDark from './toggleDataDark.json'
 import Anim from './toggleData.json'
 import layerControl from './components/layerControl/layerControl'
+import { mapState } from 'vuex'
 export default {
   components: {
     lottie,
@@ -105,7 +106,7 @@ export default {
         width: screen.width * 0.3 + 'px',
         height: screen.height * 0.7 + 'px'
       },
-      bizType: 'deviceState',
+      // bizType: 'deviceState',
       mapType: '2D',
       devList: [],
       lngLat: {
@@ -148,6 +149,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      bizType: state => state.globalVariable.gisBizType
+    }),
     defaultOptions () {
       let res = { animationData: Anim, loop: false, autoplay: false }
       if (getTheme() === 'dark') {

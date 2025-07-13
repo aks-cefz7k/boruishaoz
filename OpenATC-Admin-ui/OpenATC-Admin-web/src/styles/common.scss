@@ -590,30 +590,33 @@
 }
 // 设备管理页面样式
 .openatc-device {
-    .tag-container {
-        float: left;
-        max-width: 70%;
-        overflow: hidden;
-      }
-      .filter-container {
-        float: right;
-        margin-top: 20px;
-        margin-right: 20px;
-      }
-      .devs-table {
-        position: absolute;
-        top: 130px;
-        left: 20px;
-        right: 20px;
-        border: solid 1px $--border-color-lighter;
-        overflow: auto;
-      }
-}
+  .tag-container {
+      float: left;
+      max-width: 70%;
+      overflow: hidden;
+    }
+    .filter-container {
+      float: right;
+      margin-top: 20px;
+      margin-right: 20px;
+    }
+    .devs-table {
+      position: absolute;
+      top: 130px;
+      left: 20px;
+      right: 20px;
+      border: solid 1px $--border-color-lighter;
+      overflow: auto;
+    }
+  }
+  .state-search {
+    margin-left: 2px;
+  }
   //故障记录页面样式
   .openatc-faultrecord {
-    // .el-range-editor .el-range-input {
-    //   background-color: $--background-color-base;
-    // }
+    .el-range-editor .el-range-input {
+      background-color: $--background-color-base;
+    }
     .filter-container {
       float: right;
       margin-top: 20px;
@@ -1633,8 +1636,21 @@ table td {
       margin-right: 30px;
       float: right;
     }
+  .row-bg {
+    padding: 10px 0;
+  }
     .el-menu--horizontal {
       border-bottom: solid 1px $--border-color-base!important;
+  }
+  .alarm-message {
+    cursor: pointer;
+    margin-top: 17px;
+    margin-right: 30px;
+    float: right;
+    color: $--color-text-secondary;
+  }
+  .menu-icon--right {
+    margin-left: -5px;
   }
 // 瓶颈控制页面样式
 .overflow-detector-page {

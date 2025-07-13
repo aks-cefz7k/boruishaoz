@@ -79,7 +79,8 @@ const en = {
       'language': 'Language',
       'skin': 'Skin',
       'dark': 'Dark',
-      'light': 'Light'
+      'light': 'Light',
+      'other': '其他'
     },
     'home': {
       'devicestatus': 'Device Status',
@@ -96,6 +97,7 @@ const en = {
       'faultOrOffLine': 'Fault / Online'
     },
     'faultrecord': {
+      'fixdetail': 'Fix Detail',
       'deviceid': 'Device Id',
       'faultid': 'Fault Id',
       'boardcardtype': 'Board Card Type',

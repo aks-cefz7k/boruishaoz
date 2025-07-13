@@ -9,7 +9,7 @@
                 :placeholder="$t('openatc.common.searchdeviceid')"
                 @keyup.enter.native="handleFilter"
                 v-model="devsfilter"
-                style="width: 200px;"
+                style="width: 200px;margin-right: 10px;"
             />
             </el-form-item>
             </el-col>
@@ -19,6 +19,7 @@
                     v-model="timeValue"
                     size="small"
                     type="datetimerange"
+                    style="height:41px;"
                     :range-separator="$t('openatc.usermanager.to')"
                     :start-placeholder="$t('openatc.usermanager.starttime')"
                     :end-placeholder="$t('openatc.usermanager.endtime')">
@@ -29,7 +30,7 @@
             <el-button
                 type="primary"
                 icon="el-icon-search"
-                @click="handleFilter"
+                @click="searchRecord()"
                 >{{ $t("openatc.button.search") }}</el-button
             >
             </el-col>
@@ -54,47 +55,49 @@
           align="center">
           </el-table-column>
            <el-table-column
-          prop="faultid"
+          prop="m_wFaultID"
           :label="$t('openatc.faultrecord.faultid')"
           align="center">
           </el-table-column>
           <el-table-column
-          prop="boardcardtype"
+          prop="m_byFaultBoardType"
+          :formatter="formatterBoardType"
           :label="$t('openatc.faultrecord.boardcardtype')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
-          prop="faultbegintime"
+          prop="m_unFaultOccurTime"
           :label="$t('openatc.faultrecord.faultbegintime')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
-          prop="faultendtime"
+          prop="m_unFaultRenewTime"
           :label="$t('openatc.faultrecord.faultendtime')"
           align="center">
           </el-table-column>
           <el-table-column
-            prop="faulttype"
+            prop="m_wFaultType"
+            :formatter="m_wFaultTypes"
             :label="$t('openatc.faultrecord.faulttype')"
             align="center"
             >
           </el-table-column>
           <el-table-column
-          prop="faultchild"
+          prop="m_wSubFaultType"
           :label="$t('openatc.faultrecord.faultchild')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
-          prop="faultgrade"
+          prop="m_byFaultLevel"
           :label="$t('openatc.faultrecord.faultgrade')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
-          prop="faultvaluedetail"
+          prop="m_byFaultDescValue"
           :label="$t('openatc.faultrecord.faultvaluedetail')"
           align="center">
           </el-table-column>
@@ -111,8 +114,8 @@
 </template>
 
 <script>
-import { getHisParamsList } from '../../api/table'
-import { DeleteDevice } from '@/api/device'
+import { getMessageByCode } from '@/utils/responseMessage'
+import { GetAllFault, GetAllFaultRange, DeleteFaultById } from '@/api/fault'
 import Messagebox from '../../components/MessageBox'
 export default {
   components: { Messagebox },
@@ -126,10 +129,7 @@ export default {
       devsfilter: '',
       messageboxVisible: false,
       tableData: [],
-      statusMode: new Map([['set-request', '请求错误'], ['set-response', '应答成功'], ['error-response', '应答错误'], ['Communication Error!', '通讯错误']]),
-      statusModeEn: new Map([['set-request', 'Request error'], ['set-response', 'Successful response'], ['error-response', 'Response error'], ['Communication Error!', 'Communication error']]),
-      infotypeMode: new Map([['control/pattern', '控制消息'], ['control/interrupt', '方案控制消息'], ['control/preempt', '优先控制'], ['control/channelcheck', '通道检测'], ['control/remote', '远程控制'], ['system/centerip', '中心ip地址'], ['system/ip1', '设备ip地址1'], ['system/ip2', '设备ip地址2'], ['system/serialport', '串口信息'], ['system/time', '系统时间'], ['system/remote', '远程调试'], ['system/update', '系统更新'], ['system/paramversion', '参数版本'], ['system/optstatparam', '优化统计参数'], ['system/faultclear', '故障消除'], ['system/udiskupdate', '更新U盘数据'], ['system/volumelog', '交通流量历史数据'], ['feature/channel', '通道'], ['feature/phase', '相位'], ['feature/overlap', '跟随相位'], ['feature/pattern', '方案'], ['feature/plan', '计划'], ['feature/date', '日期'], ['feature/peddetecter', '行人检测器'], ['feature/devinfo', '设备信息'], ['feature/manualpanel', '手动面板配置'], ['feature/channellock', '通道灯色锁定参数配置'], ['feature/all', '整体参数']]),
-      // infotypeModeEn: new Map([['control/pattern', '控制消息'], ['control/interrupt', '方案控制消息'], ['control/preempt', '优先控制'], ['control/channelcheck', '通道检测'], ['control/remote', '远程控制'], ['system/centerip', '中心ip地址'], ['system/ip1', '设备ip地址1'], ['system/ip2', '设备ip地址2'], ['system/serialport', '串口信息'], ['system/time', '系统时间'], ['system/remote', '远程调试'], ['system/update', '系统更新'], ['system/paramversion', '参数版本'], ['system/optstatparam', '优化统计参数'], ['system/faultclear', '故障消除'], ['system/udiskupdate', '更新U盘数据'], ['system/volumelog', '交通流量历史数据'], ['feature/channel', '通道'], ['feature/phase', '相位'], ['feature/overlap', '跟随相位'], ['feature/pattern', '方案'], ['feature/plan', '计划'], ['feature/date', '日期'], ['feature/peddetecter', '行人检测器'], ['feature/devinfo', '设备信息'], ['feature/manualpanel', '手动面板配置'], ['feature/channellock', '通道灯色锁定参数配置'], ['feature/all', '整体参数']]),
+      deleteId: '',
       listQuery: {
         pageNum: 1, // 页码
         pageRow: 50 // 每页条数
@@ -168,8 +168,36 @@ export default {
   methods: {
     handleDelete (row) {
       let dev = row
-      this.deleteId = dev.agentid
+      this.deleteId = dev.id
       this.messageboxVisible = true
+    },
+    formatterBoardType (row, column) {
+      let boardType = row.m_byFaultBoardType
+      let res = ''
+      if (boardType === 1) {
+        res = '主控板'
+      } else if (boardType === 2) {
+        res = '灯控版'
+      } else if (boardType === 3) {
+        res = '车检板'
+      } else if (boardType === 4) {
+        res = 'I/O板'
+      }
+      return res
+    },
+    m_wFaultTypes (row, column) {
+      let faultType = row.m_wFaultType
+      let res = ''
+      if (faultType >= 101 && faultType <= 199) {
+        res = '主控板故障'
+      } else if (faultType >= 201 && faultType <= 299) {
+        res = '灯控版故障'
+      } else if (faultType >= 301 && faultType <= 399) {
+        res = '车检板故障'
+      } else if (faultType >= 401 && faultType <= 499) {
+        res = 'I/O板故障'
+      }
+      return res
     },
     formateDate (newDate) {
       var y = newDate.getFullYear()
@@ -185,55 +213,40 @@ export default {
       second = second < 10 ? ('0' + second) : second
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
     },
-    getAllRecord () {
-      //     if (this.value === '' || this.value === null) {
-    //     this.$message.error(this.$t('openatc.usermanager.Authorization'))
-    //     return
-    //   }
-    //   let startDate = this.formateDate(this.timeValue[0])
-    //   let endDate = this.formateDate(this.timeValue[1])
-      this.listLoading = true
-      getHisParamsList(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
-        if (data.data.success !== true) {
-          this.listLoading = false
-          if (data.data.code === '20004') {
-            this.$message.error('无参数记录!')
-            console.log(data.data.message)
+    searchRecord () {
+      if (this.timeValue && this.devsfilter) {
+        let beginTime = this.formateDate(this.timeValue[0])
+        let endTime = this.formateDate(this.timeValue[1])
+        GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
+          if (data.data.success !== true) {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.tableData = data.data.data.content
+          this.totalCount = data.data.data.total
+        })
+      } else {
+        this.getAllRecord()
+      }
+    },
+    getAllRecord () {
+      this.listLoading = true
+      GetAllFault(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
+        if (data.data.success !== true) {
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        this.listLoading = false
-        this.tableData = this.handleData(data.data.data.content)
-        this.totalCount = data.data.data.total
+        if (data.data.success) {
+          this.listLoading = false
+          this.tableData = data.data.data.content
+          this.totalCount = data.data.data.total
+        }
       })
-    },
-    handleData (data) {
-      let that = this
-      for (let obj of data) {
-        Object.keys(obj).forEach(function (key) {
-          if (key === 'status') {
-            if (that.$i18n.locale === 'en') {
-              obj[key] = that.statusModeEn.get(obj[key])
-            } else {
-              obj[key] = that.statusMode.get(obj[key])
-            }
-          }
-          if (key === 'infotype') {
-            if (that.$i18n.locale === 'zh') {
-              obj[key] = that.infotypeMode.get(obj[key])
-            }
-          }
-        })
-      }
-      return data
     },
     handleSizeChange (val) {
       // 改变每页数量
       this.listQuery.pageRow = val
-      this.handleFilter()
+      this.getAllRecord()
     },
     handleCurrentChange (val) {
       // 改变页码
@@ -249,7 +262,7 @@ export default {
       this.messageboxVisible = false
     },
     ok () {
-      DeleteDevice(this.deleteId).then(res => {
+      DeleteFaultById(this.deleteId).then(res => {
         if (!res.data.success) {
           this.$message.error(res.data.message)
           this.$message({
@@ -264,13 +277,22 @@ export default {
           type: 'success'
         })
         this.messageboxVisible = false
-        this.getList()
+        this.getAllRecord()
       })
     }
+
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+// .el-date-editor .el-range-separator {
+//     padding: 0 5px;
+//     line-height: 32px;
+//     width: 10%;
+//     color: #303133;
+// }
+.openatc-faultrecord .el-input__inner {
 
+}
 </style>
