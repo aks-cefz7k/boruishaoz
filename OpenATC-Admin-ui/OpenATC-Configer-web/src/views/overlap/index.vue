@@ -13,11 +13,6 @@
   <div class="app-container" ref="overlap-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-table :data="overlaplList" v-loading.body="listLoading" element-loading-text="Loading" fit highlight-current-row :max-height="tableHeight" id="footerBtn">
-      <el-table-column align="center" label='No' min-width="30">
-        <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label='ID' min-width="30">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>

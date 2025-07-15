@@ -26,9 +26,6 @@
       :max-height="tableHeight"
       id="footerBtn"
     >
-      <el-table-column align="center" label="No" width="60">
-        <template slot-scope="scope">{{scope.$index + 1}}</template>
-      </el-table-column>
       <el-table-column align="center" label="ID" width="60">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>

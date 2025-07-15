@@ -14,11 +14,6 @@
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-button style="margin-bottom:10px" type="primary" @click="deleteAllData">{{$t('edge.common.deleteall')}}</el-button>
     <el-table class="tb-edit" ref="singleTable" :data="detectorList" v-loading.body="listLoading" element-loading-text="Loading" fit highlight-current-row v-clickoutside="cancelTable" :max-height="tableHeight" id="footerBtn">
-      <el-table-column align="center" label='No' min-width="40">
-        <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label='ID' min-width="40">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>

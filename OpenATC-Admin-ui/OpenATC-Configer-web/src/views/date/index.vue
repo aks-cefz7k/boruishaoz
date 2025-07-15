@@ -13,11 +13,6 @@
   <div class="app-container" ref="date-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-table :data="dateList" :max-height="tableHeight" id="footerBtn">
-      <el-table-column align="center" label="No" min-width="40">
-        <template slot-scope="scope">
-          {{scope.$index + 1}}
-        </template>
-      </el-table-column>
       <el-table-column align="center" label="ID" min-width="40">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
