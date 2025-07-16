@@ -80,7 +80,8 @@ const zh = {
       'skin': '皮肤',
       'dark': '暗色',
       'light': '亮色',
-      'other': '其他'
+      'other': '其他',
+      'help': '帮助'
     },
     'home': {
       'devicestatus': '设备状态',

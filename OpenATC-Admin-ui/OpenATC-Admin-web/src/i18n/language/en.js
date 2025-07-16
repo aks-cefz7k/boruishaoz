@@ -80,7 +80,8 @@ const en = {
       'skin': 'Skin',
       'dark': 'Dark',
       'light': 'Light',
-      'other': '其他'
+      'other': 'Other',
+      'help': 'Help'
     },
     'home': {
       'devicestatus': 'Device Status',
