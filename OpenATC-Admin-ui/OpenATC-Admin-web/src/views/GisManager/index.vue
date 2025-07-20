@@ -115,7 +115,7 @@ export default {
       },
       zoom: 12,
       minZoom: 3,
-      maxZoom: 18,
+      maxZoom: 21,
       center: [31.23636, 121.53413],
       gis: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       gisNormal: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
