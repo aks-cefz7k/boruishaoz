@@ -119,7 +119,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <div class="sloat-icon">
+      <div class="sloat-icon" v-show="isShowSwitchBtn">
         <el-tooltip :content="$t('edge.main.graphics')" placement="bottom" effect="dark">
           <el-button type="text" @click="clickSwitchIcon(true)"><i class="iconfont icon-tuxingjiemian" :class="{'choosedIcon': isShowGui, 'defaultIcon': !isShowGui}"></i></el-button>
         </el-tooltip>
@@ -251,7 +251,8 @@ export default {
       isShowLogout: true,
       isShowMenu: false,
       planName: '',
-      typeOptions: []
+      typeOptions: [],
+      isShowSwitchBtn: false
     }
   },
   computed: {
@@ -286,6 +287,11 @@ export default {
         } else {
           this.isShowMenu = false
         }
+        if (val.path.includes('overview')) {
+          this.isShowSwitchBtn = true
+        } else {
+          this.isShowSwitchBtn = false
+        }
       },
       // 深度观察监听
       deep: true
@@ -298,6 +304,11 @@ export default {
       this.isShowMenu = true
     } else {
       this.isShowMenu = false
+    }
+    if (path.includes('overview')) {
+      this.isShowSwitchBtn = true
+    } else {
+      this.isShowSwitchBtn = false
     }
     if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
       // 增加判断toSingleEdge，解决isfromatc参数丢失问题
