@@ -1687,14 +1687,19 @@ border: 1px solid $--border-color-base;
   //   letter-spacing: 0px;
   //   color: #ffffff;
   // }
-  .ring-nums {
+  .box {
     float: left;
-    margin-top:7px;
-    margin-left: 5px;
-    font-size: 14px;
+    margin-left: 6px;
+  }
+  .ring-nums {
+    // float: left;
+    // margin-top:7px;
+    // margin-left: 5px;
+    font-size: 12px;
+    height: 17px;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 22px;
+    // line-height: 22px;
     letter-spacing: 0px;
     color: #333333;
   }
