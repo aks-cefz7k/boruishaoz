@@ -286,13 +286,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .el-date-editor .el-range-separator {
-//     padding: 0 5px;
-//     line-height: 32px;
-//     width: 10%;
-//     color: #303133;
-// }
-.openatc-faultrecord .el-input__inner {
-
-}
 </style>

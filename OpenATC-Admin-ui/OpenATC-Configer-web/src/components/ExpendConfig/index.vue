@@ -19,7 +19,7 @@
       :list="list"
       :options="options">
       <div class="board-item" v-for="element in list" :key="element.id">
-        <el-row>
+        <el-row :gutter="13">
           <el-col :span="8">
             <el-select v-model="element.options" class="col-content" size="small" multiple collapse-tags :placeholder="$t('edge.common.select')">
               <el-option
@@ -87,5 +87,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.el-input-number--small {
+  width: 94px;
+}
 </style>

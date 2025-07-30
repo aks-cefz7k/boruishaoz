@@ -120,7 +120,6 @@
             </el-dropdown-item>
             <el-dropdown-item divided command="changepass">{{$t('openatc.main.changepass')}}</el-dropdown-item>
             <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
-            <el-dropdown-item command="help">{{$t('openatc.main.help')}}</el-dropdown-item>
             <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
             <el-dropdown-item command="signout">{{$t('openatc.main.signout')}}</el-dropdown-item>
             <!-- <el-dropdown-item command="opentapd">跳转</el-dropdown-item> -->
@@ -133,7 +132,7 @@
         :visible.sync="drawer"
         :with-header="true">
         <span>
-          <el-card class="box-card" style="margin:10px 16px">
+          <el-card v-for="(fault,index) in faultData" :key="index" class="box-card" style="margin:10px 16px">
             <div slot="header" class="clearfix">
               <i class="el-icon-location-outline" type="primary"></i>
               <span>{{$t('openatc.faultrecord.deviceid')}}</span>
@@ -152,7 +151,7 @@
                     </el-col>
                     <el-col :span="14">
                       <div class="grid-content bg-purple">
-                        1111
+                       {{fault.agentid}}
                       </div>
                     </el-col>
                   </el-row>
@@ -168,7 +167,7 @@
                     </el-col>
                     <el-col :span="14">
                       <div class="grid-content bg-purple">
-                        1111
+                        {{fault.m_unFaultOccurTime}}
                       </div>
                     </el-col>
                   </el-row>
@@ -184,7 +183,7 @@
                     </el-col>
                     <el-col :span="14">
                       <div class="grid-content bg-purple">
-                        1111
+                        {{fault.m_byFaultDescValue}}
                       </div>
                     </el-col>
                   </el-row>
@@ -215,12 +214,12 @@ import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
 import { setLanguage, getTheme, setTheme } from '@/utils/auth'
 import { getMessageByCode } from '@/utils/responseMessage'
-import { SystemconfigApi } from '@/api/systemconfig.js'
 export default {
   name: 'navbar',
   components: { modifypasswd, versioninfo, SystemSettings },
   data () {
     return {
+      faultData: [],
       activeIndex: '',
       drawer: false,
       routerPath: {
@@ -239,9 +238,7 @@ export default {
       roleType: ['', 'success', 'warning'],
       isShow: true,
       fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew', '/overviewNew/index'],
-      language: 'Language',
-      zh_handbook: '',
-      en_handbook: ''
+      language: 'Language'
     }
   },
   watch: {
@@ -274,7 +271,7 @@ export default {
     if (this.fromKstpPath.indexOf(this.devicePath) !== -1) {
       this.isShow = false
     }
-    this.handleFaultEventData(true)
+    // this.handleFaultEventData()
   },
   mounted () {
     // 订阅故障测试
@@ -289,6 +286,8 @@ export default {
   methods: {
     handleFaultEventData (data) {
       // debugger
+      // console.log(data, 777)
+      this.faultData = data
     },
     handleJump (key) {
       if (key === 'deviceState' || key === 'dutyRoute' || key === 'coordinateRoute') {
@@ -310,8 +309,6 @@ export default {
       switch (command) {
         case 'changepass': this.modifyPasswd()
           break
-        case 'help': this.showHelp()
-          break
         case 'about': this.showVersion()
           break
         case 'signout': this.logout()
@@ -325,36 +322,10 @@ export default {
         default: router.push({ path: '/' })
       }
     },
-    getGisConfig () {
-      return new Promise((resolve, reject) => {
-        SystemconfigApi.GetSystemconfigByModule('system').then((data) => {
-          if (data.data.success !== true) {
-            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-            return
-          }
-          for (let config of data.data.data) {
-            if (config['key'] === 'zh_handbook') {
-              this.zh_handbook = config['value']
-            }
-            if (config['key'] === 'en_handbook') {
-              this.en_handbook = config['value']
-            }
-          }
-          resolve(data.data.data)
-        })
-      })
-    },
-    opentapd (url) {
-      window.open(url)
-    },
-    async showHelp () {
-      await this.getGisConfig()
-      let url = this.zh_handbook
-      if (this.$i18n.locale === 'en') {
-        url = this.en_handbook
-      }
-      this.opentapd(url)
-    },
+    // opentapd () {
+    //   window.open('https://www.tapd.cn/42881942/documents/file_list/1142881942001014450')
+    //   // window.location.href = 'https://www.tapd.cn/42881942/documents/file_list/1142881942001014450'
+    // },
     showVersion () {
       let versionInfoChild = this.$refs.versioninfoChild
       versionInfoChild.showMessage()
