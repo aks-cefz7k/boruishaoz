@@ -43,7 +43,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index="operate" style="display:inline">
+      <el-menu-item index="others" style="display:inline">
         <el-dropdown trigger="click" @command="handleSelect">
           <span class="el-dropdown-link">
             <i class="iconfont icon-pingjia"></i>{{$t('openatc.main.other')}}
