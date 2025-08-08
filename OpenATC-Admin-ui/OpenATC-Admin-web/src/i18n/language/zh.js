@@ -255,6 +255,7 @@ const zh = {
       'up': '上行',
       'down': '下行',
       'optstrategyoption1': '绿波优化',
+      'optstrategyoption2': '红波优化',
       'directionOption1': '上行',
       'directionOption2': '下行',
       'directionOption3': '双向',

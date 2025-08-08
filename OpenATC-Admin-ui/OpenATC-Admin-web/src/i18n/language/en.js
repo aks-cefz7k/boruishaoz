@@ -255,6 +255,7 @@ const en = {
       'up': 'Up',
       'down': 'Down',
       'optstrategyoption1': 'Green wave optimization',
+      'optstrategyoption2': 'Red wave optimization',
       'directionOption1': 'Up',
       'directionOption2': 'Down',
       'directionOption3': 'All',

@@ -169,7 +169,7 @@ export const constantRouterMapOfLogin = [{
   }]
 },
 {
-  path: '/',
+  path: '/dutyroute',
   component: compose,
   children: [{
     path: '',
