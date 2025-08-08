@@ -52,7 +52,10 @@
                   :isShowPattern="isShowPattern"
                   :targetDeviceIds="showPatternDeviceIds"
                   :showLevel="showLevel"></layerControl>
-      <div class="layerControl" @click="onLayerControlClick">图层</div>
+      <div class="layerControl" @click="onLayerControlClick">
+        <el-checkbox v-model="isShowPattern">{{this.$t('openatc.greenwaveoptimize.pattern') }}</el-checkbox>
+      </div>
+      <!-- <div class="layerControl" @click="onLayerControlClick">图层</div>
       <div class="layerDetail">
         <transition name="el-zoom-in-center">
           <div v-show="isCollapse" class="transition-box">
@@ -62,7 +65,7 @@
             </el-checkbox-group>
           </div>
         </transition>
-      </div>
+      </div> -->
     </div>
     <div class="header" v-show="false">
       <el-radio-group v-model="bizType">
