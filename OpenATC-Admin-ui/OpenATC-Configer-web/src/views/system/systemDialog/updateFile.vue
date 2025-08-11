@@ -37,6 +37,7 @@
 import { updateFile } from '@/api/param'
 import { setRemoteControl } from '@/api/system'
 import ProgressAnim from './progressAnim'
+import { getMessageByCode } from '@/utils/responseMessage'
 import {
   getIframdevid
 } from '../../../utils/auth'
@@ -149,7 +150,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('edge.system.rebootSuccess')

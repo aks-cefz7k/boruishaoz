@@ -44,6 +44,7 @@
   Created: 2019/11/01
 */
 import { UpdateCurUsrPassWd } from '../../../api/base'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   data () {
     var validatePass = (rule, value, callback) => {
@@ -129,7 +130,7 @@ export default {
             this.$message.error(this.$t('openatc.usermanager.originalpassworderror'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('openatc.usermanager.modificationsucc')

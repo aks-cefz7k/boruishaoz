@@ -43,6 +43,7 @@
   Created: 2019/12/11
 */
 import { setParamVersion } from '@/api/system'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   data () {
     return {
@@ -80,7 +81,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = '设置成功！'

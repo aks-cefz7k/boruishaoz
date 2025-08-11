@@ -16,6 +16,7 @@ const zh = {
       'delete': '删除',
       'edit': '编辑',
       'detail': '详情',
+      'searchdeviceid': '输入设备ID搜索',
       'searchplaceholder': '输入关键字搜索',
       'addfailed': '新增失败!',
       'addsuccess': '新增成功!',
@@ -66,6 +67,7 @@ const zh = {
       'organization': '组织机构',
       'bottleneckcontrol': '瓶颈控制',
       'script': '脚本',
+      'faultrecord': '故障记录',
       'dutyroute': '勤务路线',
       'realname': '真实姓名',
       'telno': '联系电话',
@@ -77,7 +79,9 @@ const zh = {
       'language': '语言',
       'skin': '皮肤',
       'dark': '暗色',
-      'light': '亮色'
+      'light': '亮色',
+      'other': '其他',
+      'help': '帮助'
     },
     'home': {
       'devicestatus': '设备状态',
@@ -92,6 +96,19 @@ const zh = {
       'usermanager': '用户管理',
       'operationrecord': '操作记录',
       'faultOrOffLine': '故障 / 在线'
+    },
+    'faultrecord': {
+      'fixdetail': '故障描述',
+      'deviceid': '设备ID',
+      'faultid': '故障ID',
+      'boardcardtype': '板卡类型',
+      'faultbegintime': '故障发生时间',
+      'faultendtime': '故障恢复时间',
+      'faulttype': '故障主类型',
+      'faultchild': '故障子类型',
+      'faultgrade': '故障等级',
+      'faultvaluedetail': '故障详细值',
+      'operation': '操作'
     },
     'devicemanager': {
       'devicelist': '设备列表',
@@ -238,6 +255,7 @@ const zh = {
       'up': '上行',
       'down': '下行',
       'optstrategyoption1': '绿波优化',
+      'optstrategyoption2': '红波优化',
       'directionOption1': '上行',
       'directionOption2': '下行',
       'directionOption3': '双向',
@@ -389,6 +407,15 @@ const zh = {
       'company': '苏州科达科技股份有限公司',
       'packedtime': '打包时间',
       'opensourceagreement': '开源协议'
+    },
+    'message': {
+      // 协调路线错误
+      '5001': '重复的协调路线名称',
+      // 勤务路线错误
+      '6001': '重复的勤务路线名称',
+      '6002': '勤务路线正在执行中',
+      // 流量错误
+      '7001': 'ftp客户端连接失败'
     }
   }
 }

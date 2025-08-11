@@ -1,7 +1,7 @@
 <template>
     <div class="boradCard">
-        <StageStatus :patternStatusList="patternStatusList"></StageStatus>
-        <PatternStatus :cycle="cycle" :syncTime="syncTime"  :patternStatusList="patternStatusList" :cycles="cycles" style="margin-top: 25px;"></PatternStatus>
+        <StageStatus v-show="isPhase" :patternStatusList="patternStatusList"></StageStatus>
+        <PatternStatus :cycle="cycle" :syncTime="syncTime" :style="{'margin-top':cycle ? '25px':'0'}" :patternStatusList="patternStatusList" :cycles="cycles"></PatternStatus>
     </div>
 </template>
 
@@ -22,9 +22,9 @@ export default {
     patternStatusList: {
       type: Array
     },
-    // barrierList: {
-    //   type: Array
-    // },
+    isPhase: {
+      type: Boolean
+    },
     cycles: {
       type: Number
     },

@@ -60,6 +60,8 @@ import LottieAnim from './lottieDemo/index'
 import deviceAnim from '../../../static/lottiejson/deviceManager.json'
 import userAnim from '../../../static/lottiejson/userManager.json'
 import operatAnim from '../../../static/lottiejson/operationRecord.json'
+// import FaultEventData from '../../model/EventModal/faultData.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 
 export default {
   data () {
@@ -150,7 +152,7 @@ export default {
     getdata () {
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.resetData()
@@ -170,7 +172,7 @@ export default {
       GetAllCurrentFault().then(res => {
         let list = []
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return false
         } else {
           list = res.data.data
@@ -178,6 +180,9 @@ export default {
         this.faultList = list
       })
     }
+    // handleFaultEventData (data) {
+    //   console.log(data)
+    // }
   },
   mounted () {
     this.calculateHeight()
@@ -195,6 +200,9 @@ export default {
         _this.Visible = true
       })
     }
+    // 订阅故障测试
+    // this.FaultEventData = new FaultEventData()
+    // this.FaultEventData.Init(this.handleFaultEventData)
   },
   destroyed () {
     clearInterval(this.getDevsDataTimer)

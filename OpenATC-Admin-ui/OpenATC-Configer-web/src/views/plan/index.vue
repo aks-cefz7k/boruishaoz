@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container plan-container">
     <div class="tabs-style">
       <el-tabs v-model="curTabsValue" type="card" editable @edit="handleTabsEdit">
         <el-tab-pane v-for="item in planList" :key="item.index" :label="item.desc" :name="item.index">

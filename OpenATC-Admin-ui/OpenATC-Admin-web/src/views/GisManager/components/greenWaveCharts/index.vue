@@ -68,6 +68,11 @@ export default {
       _this.init()
     })
   },
+  watch: {
+    chooseRouteId (val) {
+      this.onDeviceIdsChange()
+    }
+  },
   created () {
   },
   methods: {
@@ -338,6 +343,17 @@ export default {
       }
       if (_this.oldPolyline !== '') {
         _this.oldPolyline = ''
+      }
+    },
+    onDeviceIdsChange () {
+      if (this.chooseRouteId) {
+        let currentDeviceIds = []
+        let currentRoute = this.allRoute.filter(item => item.id === this.chooseRouteId)[0]
+        let devs = currentRoute.devs
+        for (let dev of devs) {
+          currentDeviceIds.push(dev.agentid)
+        }
+        this.$emit('onDeviceIdsChange', currentDeviceIds)
       }
     }
   },

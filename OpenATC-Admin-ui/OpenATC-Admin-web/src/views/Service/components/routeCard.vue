@@ -136,6 +136,7 @@
 
 <script>
 import { ExecuteViproute } from '@/api/service'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'nodeCard',
   props: {
@@ -173,7 +174,7 @@ export default {
       ExecuteViproute(reqData).then(res => {
         // this.isBtnDisabled = false
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return false
         }
         this.$emit('research')

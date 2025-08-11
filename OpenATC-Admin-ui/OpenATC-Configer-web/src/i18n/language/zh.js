@@ -87,6 +87,7 @@ const zh = {
       'changepass': '修改密码',
       'about': '关于',
       'exit': '退出',
+      'help': '帮助',
       'options': 'options',
       'options1': '全部',
       'options2': '相位',
@@ -96,7 +97,9 @@ const zh = {
       'options6': '日期',
       'options7': '通道',
       'options8': '检测器',
-      'options9': '行人检测器'
+      'options9': '行人检测器',
+      'graphics': '图形界面',
+      'text': '文字界面'
     },
     'overview': {
       'crossinfo': '路口信息',
@@ -118,6 +121,8 @@ const zh = {
       'controlnumber': '控制编号',
       'mode': '控制方式',
       'stage': '阶段(驻留)',
+      'specialcontrol': '特殊控制',
+      'phaseclosecontrol': '相位关断控制',
       'implement': '执行',
       'ipaddress': 'IP地址',
       'deviceport': '设备端口',
@@ -179,6 +184,7 @@ const zh = {
       'modelList12': '行人过街',
       'modelList13': '方案恢复过渡',
       'modelList19': '感应式行人过街',
+      'modelList23': '相位关断',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
       'canceled': '已取消',
@@ -201,7 +207,14 @@ const zh = {
       'JSONFormatError': 'JSON格式错误!',
       'showFault': '显示故障详情',
       'hideFault': '隐藏故障详情',
-      'close': '关闭'
+      'close': '关闭',
+      'closemode': '方式',
+      'closeOption0': '恢复',
+      'closeOption1': '关断',
+      'closeOption2': '仅机动车关断',
+      'closeOption3': '仅行人关断',
+      'vehicle': '机动车',
+      'pedestrian': '行人'
     },
     'phase': {
       'desc': '车道方向',
@@ -266,6 +279,7 @@ const zh = {
       'busonly': '公交专用',
       'BRTonly': 'BRT专用',
       'tramonly': '有轨电车专用',
+      'virtualphase': '虚相位',
       'pulsetype': '脉冲屏蔽',
       'offpulse': '关闭行人及机动车脉冲',
       'sendvehiclepulse': '发送机动车脉冲',
@@ -805,6 +819,8 @@ const zh = {
         'crossroads': '十字路口',
         'tjunction': '丁字路口',
         'roundabout': '环形路口',
+        'rampintersection': '匝道路口',
+        'pedestriancrossing': '行人过街路口',
         'otherIntersections': '其他形状路口',
         'customIntersection': '自定义路口'
       },
@@ -812,7 +828,9 @@ const zh = {
         'eastward': '东向',
         'westward': '西向',
         'southward': '南向',
-        'northward': '北向'
+        'northward': '北向',
+        'eastwestward': '东西向',
+        'southnorthward': '南北向'
       },
       'crossPhase': {
         'onePhase': '一相位',
@@ -839,6 +857,54 @@ const zh = {
       'company': '苏州科达科技股份有限公司',
       'packedtime': '打包时间',
       'opensourceagreement': '开源协议'
+    },
+    'message': {
+      '10000': '参数为空',
+      '10001': '参数长度错误',
+      '1002': '错误',
+      '10002': '记录不能为空',
+      '20003': 'id不能为空且不能为0',
+      '20004': '无参数记录',
+      '20005': '没有发现设备id',
+      // 全局异常错误
+      '0001': '空指针',
+      '0002': '错误请求方式',
+      '0003': '输入参数类型不正确',
+      '0004': '输入参数不全',
+      '0005': '输入参数不满足约束',
+      '0006': '系统错误',
+      // 用户管理错误
+      '3001': '用户名不存在',
+      '3002': '认证失败',
+      '3003': '用户名重复',
+      '3004': '新旧密码不能相同',
+      '3005': '密码不能为空',
+      '3006': '原密码错误',
+      '3007': '登录用户不存在',
+      '3008': '没有权限访问',
+      '3009': '密码错误',
+      '3010': '超级用户角色不能被修改',
+      '3011': '用户名密码错误',
+      '3013': '账号已停用',
+      '3014': 'token已过期',
+      '3015': 'token失效',
+      '3016': '用户组织机构为空',
+      '3017': '组织机构不存在',
+      '3018': '访问ip与用户ip不一致，禁止登录',
+      // 消息通讯错误
+      '4001': '错误请求',
+      '4002': '错误应答',
+      '4003': '设备不在线',
+      '4004': '重复的设备id',
+      '4005': '信号机应答为空',
+      '4006': '信号机应答操作类型为空',
+      // 协调路线错误
+      '5001': '重复的协调路线名称',
+      // 勤务路线错误
+      '6001': '重复的勤务路线名称',
+      '6002': '勤务路线正在执行中',
+      // 流量错误
+      '7001': 'ftp客户端连接失败'
     }
   }
 }

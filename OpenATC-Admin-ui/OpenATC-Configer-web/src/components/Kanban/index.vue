@@ -22,12 +22,6 @@
         </el-col>
         <el-col :span="10">{{this.$t('edge.detector.mode')}}
         </el-col>
-        <!-- <el-col :span="5">{{this.$t('edge.pattern.property')}}
-        </el-col>
-        <el-col :span="4">{{this.$t('edge.pattern.delaystart')}}
-        </el-col>
-        <el-col :span="4">{{this.$t('edge.pattern.advanceend')}}
-        </el-col> -->
       </el-row>
     </div>
     <draggable
@@ -57,22 +51,6 @@
             </el-option>
           </el-select>
         </el-col>
-        <!-- <el-col :span="5">
-          <el-select v-model="element.options" class="col-content" size="small" multiple collapse-tags :placeholder="$t('edge.common.select')">
-            <el-option
-              v-for="item in coordphaseOption"
-              :key="item.value"
-              :label="$t('edge.pattern.coordphaseOption' + item.value)"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="4">
-          <el-input-number :controls="false" class="col-content" size="small" :min="0" :max="255" :step="1" v-model.number="element.delaystart" ref="type"></el-input-number>
-        </el-col>
-        <el-col :span="4">
-          <el-input-number :controls="false" class="col-content" size="small" :min="0" :max="255" :step="1" v-model.number="element.advanceend" ref="type"></el-input-number>
-        </el-col> -->
         </el-row>
       </div>
     </draggable>

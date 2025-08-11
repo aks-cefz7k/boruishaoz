@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="plan-table" ref="plan-table">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-button
       style="margin-bottom:10px"
@@ -26,9 +26,6 @@
       :max-height="tableHeight"
       id="footerBtn"
     >
-      <el-table-column align="center" label="No" width="60">
-        <template slot-scope="scope">{{scope.$index + 1}}</template>
-      </el-table-column>
       <el-table-column align="center" label="ID" width="60">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
@@ -543,20 +540,7 @@ export default {
     this.increaseId()
   },
   mounted: function () {
-    var _this = this
-    _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-        window.innerHeight -
-        document.querySelector('#footerBtn').offsetTop -
-        150
-      window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
-      }
-    })
+    this.setTableMaxHeight()
   },
   watch: {
     screenHeight: function () {
@@ -568,6 +552,15 @@ export default {
     }
   },
   methods: {
+    setTableMaxHeight () {
+      var _this = this
+      _this.$nextTick(function () {
+        _this.tableHeight = _this.$refs['plan-table'].offsetHeight - 50
+        window.onresize = function () {
+          _this.tableHeight = _this.$refs['plan-table'].offsetHeight - 50
+        }
+      })
+    },
     // increaseId () { // 实现id在之前的基础上加1
     //   let plan = this.plan
     //   let i = plan.length - 1

@@ -1,7 +1,7 @@
 let errorCodeMap = new Map([
   [101, '相位编号超出限值'],
   [102, '行人绿闪时间超出限值'],
-  [103, '最小绿应大于行人绿灯时间'],
+  [103, '最小绿应大于行人清空时间'],
   [104, '最大绿1应大于最小绿时间'],
   [105, '最大绿2应大于最大绿1时间'],
   [106, '单位延长绿灯时间超出限值'],
@@ -83,7 +83,7 @@ let errorCodeMap = new Map([
 let errorCodeMapEn = new Map([
   [101, 'Phase number exceeds limit'],
   [102, 'The time of pedestrian flashing green exceeds the limit'],
-  [103, 'The minimum green time should be longer than the pedestrian green'],
+  [103, 'The minimum green time should be longer than the pedestrian clear time'],
   [104, 'The maximum green 1 should be longer than the minimum green'],
   [105, 'Maximum green 2 should be greater than maximum green 1'],
   [106, 'Unit extended green time out of limit'],

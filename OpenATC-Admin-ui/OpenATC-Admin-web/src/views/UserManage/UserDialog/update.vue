@@ -137,6 +137,7 @@ import {
   GetPassswordEncode
 } from '../../../api/passwdAssest'
 import chooseOrganizationDialog from '@/views/Organization/components/chooseOrganizationDialog'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {chooseOrganizationDialog},
   data () {
@@ -279,11 +280,9 @@ export default {
         if (data.data.success !== true) {
           if (data.data.code === '3010') {
             this.$message.error(this.$t('openatc.usermanager.superrolenotmodified'))
-            console.log(data.data.message)
             return
           }
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('openatc.usermanager.editsucc')
@@ -344,7 +343,7 @@ export default {
             this.$message.error(this.$t('openatc.common.authtip'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         let rolesData = res.data.data

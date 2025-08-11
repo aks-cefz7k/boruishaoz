@@ -55,6 +55,7 @@
 import Messagebox from '../../../components/MessageBox/index'
 import DevicePanel from '../tables/device'
 import PatternPanel from '../tables/pattern'
+import { getMessageByCode } from '@/utils/responseMessage'
 import {
   UpdateViproute
 } from '@/api/service'
@@ -139,7 +140,7 @@ export default {
       }
       UpdateViproute(reqData).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.$message({

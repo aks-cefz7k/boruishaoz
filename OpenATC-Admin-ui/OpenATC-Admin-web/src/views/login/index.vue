@@ -53,6 +53,7 @@
 import { login } from '../../api/login'
 import { SetSimuUserKey, setLanguage, getLanguage, setTheme } from '@/utils/auth'
 import { SystemconfigApi } from '@/api/systemconfig.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 // import axios from 'axios'
 
 export default {
@@ -126,8 +127,7 @@ export default {
                   this.loading = false
                   return
                 }
-                this.$message.error(data.data.message)
-                console.log(data.data.message)
+                this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
                 this.loading = false
                 return
               }

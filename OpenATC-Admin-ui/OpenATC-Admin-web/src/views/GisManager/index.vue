@@ -29,9 +29,11 @@
           <device v-if="bizType === 'deviceState'" ref="device"> </device>
           <dutyRoute v-if="bizType === 'dutyRoute'"
                      ref="dutyRoute"
+                     @onDeviceIdsChange = "onDeviceIdsChange"
                      @onRouteChange="onRouteChange"> </dutyRoute>
           <greenWaveCharts v-if="bizType === 'coordinateRoute'"
                            ref="greenwavecharts"
+                           @onDeviceIdsChange = "onDeviceIdsChange"
                            @onRouteChange="onRouteChange"></greenWaveCharts>
         </div>
       </div>
@@ -45,7 +47,27 @@
         :height="30"
         v-on:animCreated="handleAnimation"/>
     </div>
-    <div class="header">
+    <div class="header-left">
+    <layerControl ref="layerControl"
+                  :isShowPattern="isShowPattern"
+                  :targetDeviceIds="showPatternDeviceIds"
+                  :showLevel="showLevel"></layerControl>
+      <div class="layerControl" @click="onLayerControlClick">
+        <el-checkbox v-model="isShowPattern">{{this.$t('openatc.greenwaveoptimize.pattern') }}</el-checkbox>
+      </div>
+      <!-- <div class="layerControl" @click="onLayerControlClick">图层</div>
+      <div class="layerDetail">
+        <transition name="el-zoom-in-center">
+          <div v-show="isCollapse" class="transition-box">
+            <el-checkbox-group v-model="checkList">
+              <el-checkbox label="设备"></el-checkbox>
+              <el-checkbox label="方案"></el-checkbox>
+            </el-checkbox-group>
+          </div>
+        </transition>
+      </div> -->
+    </div>
+    <div class="header" v-show="false">
       <el-radio-group v-model="bizType">
         <el-radio label="deviceState">{{this.$t('openatc.gis.deviceState') }}</el-radio>
         <el-radio label="dutyRoute">{{this.$t('openatc.gis.dutyRoute') }}</el-radio>
@@ -70,20 +92,24 @@ import greenWaveCharts from './components/greenWaveCharts/index'
 import { getTheme } from '@/utils/auth'
 import AnimDark from './toggleDataDark.json'
 import Anim from './toggleData.json'
+import layerControl from './components/layerControl/layerControl'
+import { mapState } from 'vuex'
 export default {
   components: {
     lottie,
     device,
     dutyRoute,
-    greenWaveCharts
+    greenWaveCharts,
+    layerControl
   },
   data () {
     return {
+      isCollapse: true,
       layoutStyle: {
         width: screen.width * 0.3 + 'px',
         height: screen.height * 0.7 + 'px'
       },
-      bizType: 'deviceState',
+      // bizType: 'deviceState',
       mapType: '2D',
       devList: [],
       lngLat: {
@@ -92,7 +118,7 @@ export default {
       },
       zoom: 12,
       minZoom: 3,
-      maxZoom: 18,
+      maxZoom: 21,
       center: [31.23636, 121.53413],
       gis: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       gisNormal: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -102,7 +128,20 @@ export default {
       gisBoundLeftTop: [31.36360615, 121.30622863],
       gisBoundRightBottom: [31.11040156, 121.95270538],
       routLength: 0,
-      tianDiTuKey: '3bfb2112c0920226f0592fd64cd2c70d'
+      tianDiTuKey: '3bfb2112c0920226f0592fd64cd2c70d',
+      checkList: ['设备'],
+      isShowPattern: false,
+      showLevel: 3,
+      showPatternDeviceIds: []
+    }
+  },
+  watch: {
+    checkList (val) {
+      if (val.includes('方案')) {
+        this.isShowPattern = true
+      } else {
+        this.isShowPattern = false
+      }
     }
   },
   mounted () {
@@ -113,6 +152,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      bizType: state => state.globalVariable.gisBizType
+    }),
     defaultOptions () {
       let res = { animationData: Anim, loop: false, autoplay: false }
       if (getTheme() === 'dark') {
@@ -364,6 +406,12 @@ export default {
         width: width,
         height: height
       }
+    },
+    onDeviceIdsChange (ids) {
+      this.showPatternDeviceIds = ids
+    },
+    onLayerControlClick () {
+      this.isCollapse = !this.isCollapse
     }
   }
 }
@@ -383,6 +431,9 @@ export default {
   /* background:  rgba(0, 32, 60, 0.1); */
 }
 .header >>> .el-radio__input {
+      display: none;
+}
+.header-left >>> .el-checkbox__input {
       display: none;
 }
 </style>

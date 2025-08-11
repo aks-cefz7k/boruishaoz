@@ -16,6 +16,7 @@ const en = {
       'delete': 'Delete',
       'edit': 'Edit',
       'detail': 'Detail',
+      'searchdeviceid': 'Enter deviceid search',
       'searchplaceholder': 'Enter keyword search',
       'addfailed': 'Add Failed!',
       'addsuccess': 'Add Success!',
@@ -66,6 +67,7 @@ const en = {
       'organization': 'Organization',
       'bottleneckcontrol': 'Overflow Detector',
       'script': 'Script',
+      'faultrecord': 'Fault Record',
       'dutyroute': 'Duty Route',
       'realname': 'RealName',
       'telno': 'Telno',
@@ -77,7 +79,9 @@ const en = {
       'language': 'Language',
       'skin': 'Skin',
       'dark': 'Dark',
-      'light': 'Light'
+      'light': 'Light',
+      'other': 'Other',
+      'help': 'Help'
     },
     'home': {
       'devicestatus': 'Device Status',
@@ -92,6 +96,19 @@ const en = {
       'usermanager': 'User Manager',
       'operationrecord': 'Operation Record',
       'faultOrOffLine': 'Fault / Online'
+    },
+    'faultrecord': {
+      'fixdetail': 'Fix Detail',
+      'deviceid': 'Device Id',
+      'faultid': 'Fault Id',
+      'boardcardtype': 'Board Card Type',
+      'faultbegintime': 'Fault Begin Time',
+      'faultendtime': 'Fault End Time',
+      'faulttype': 'Fault Type',
+      'faultchild': 'Fault Child',
+      'faultgrade': 'Fault Grade',
+      'operation': 'Operation',
+      'faultvaluedetail': 'Fault Value Detail'
     },
     'devicemanager': {
       'devicelist': 'Device List',
@@ -238,6 +255,7 @@ const en = {
       'up': 'Up',
       'down': 'Down',
       'optstrategyoption1': 'Green wave optimization',
+      'optstrategyoption2': 'Red wave optimization',
       'directionOption1': 'Up',
       'directionOption2': 'Down',
       'directionOption3': 'All',
@@ -389,6 +407,15 @@ const en = {
       'company': 'KEDACOM',
       'packedtime': 'Packed time',
       'opensourceagreement': 'Opensource Agreement'
+    },
+    'message': {
+      // 协调路线错误
+      '5001': '重复的协调路线名称',
+      // 勤务路线错误
+      '6001': '重复的勤务路线名称',
+      '6002': '勤务路线正在执行中',
+      // 流量错误
+      '7001': 'ftp客户端连接失败'
     }
   }
 }

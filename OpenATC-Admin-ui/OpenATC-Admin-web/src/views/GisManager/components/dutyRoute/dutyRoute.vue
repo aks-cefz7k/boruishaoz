@@ -32,6 +32,7 @@ import { GetRouteVideos } from '@/api/deviceVideo'
 import { GetAllDevice, GetDeviceByIds } from '@/api/device'
 import routePreview from './routePreview'
 import SelectControl from '@/views/Service/components/SelectControl'
+import { getMessageByCode } from '@/utils/responseMessage'
 
 export default {
   name: 'dutyRoute',
@@ -99,6 +100,7 @@ export default {
   watch: {
     chooseId (val) {
       this.setRoute()
+      this.onDeviceIdsChange()
     }
   },
   mounted () {
@@ -117,7 +119,7 @@ export default {
     getAllAdevice () {
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.allDevList = res.data.data
@@ -133,7 +135,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetRouteVideos(_this.deviceIds).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             return
           }
           _this.routeVideoArr = res.data.data
@@ -146,7 +148,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetSingleViproute(_this.chooseId).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             return
           }
           _this.routeData = res.data.data
@@ -164,7 +166,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetViprouteStatus(_this.chooseId).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             resolve()
           }
           let stateList = res.data.data
@@ -181,7 +183,7 @@ export default {
         _this.deviceIds = _this.routeData.devs.map(ele => ele.agentid)
         GetDeviceByIds(_this.deviceIds).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             resolve()
           }
           _this.devicesData = res.data.data
@@ -199,6 +201,10 @@ export default {
       await this.getRouteVideos()
       let pointArr = []
       for (let item of this.routeData.devs) {
+        if (!item.geometry || !item.geometry.coordinates) {
+          console.log('no geometry: ' + item)
+          continue
+        }
         pointArr.push(item.geometry.coordinates)
         for (let state of this.stateList) {
           if (item.agentid === state.agentid) {
@@ -232,7 +238,7 @@ export default {
     getAllViproutes () {
       GetAllViproutes().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.routeList = res.data.data
@@ -260,11 +266,11 @@ export default {
       for (let item of this.routeList) {
         let latlngs = []
         for (let dev of item.devs) {
-          let coordinates = dev.geometry.coordinates
-          if (!coordinates) {
+          if (!dev.geometry || !dev.geometry.coordinates) {
             console.log('no geometry: ' + dev)
             continue
           }
+          let coordinates = dev.geometry.coordinates
           latlngs.push(coordinates.slice().reverse())
         }
         if (latlngs) {
@@ -292,7 +298,10 @@ export default {
       }
       let markers = []
       for (let dev of devs) {
-        if (dev.geometry === undefined) continue
+        if (!dev.geometry || !dev.geometry.coordinates) {
+          console.log('no geometry: ' + dev)
+          continue
+        }
         let coordinates = dev.geometry.coordinates
         let devPoint = [coordinates[1], coordinates[0]]
         let iconUrl = this.deviceOnlineIcon
@@ -517,6 +526,17 @@ export default {
         .setLatLng(latlng)
         .setContent(contents)
         .openOn(this.map)
+    },
+    onDeviceIdsChange () {
+      if (this.chooseId) {
+        let currentDeviceIds = []
+        let currentRoute = this.routeList.filter(item => item.id === this.chooseId)[0]
+        let devs = currentRoute.devs
+        for (let dev of devs) {
+          currentDeviceIds.push(dev.agentid)
+        }
+        this.$emit('onDeviceIdsChange', currentDeviceIds)
+      }
     }
   }
 }

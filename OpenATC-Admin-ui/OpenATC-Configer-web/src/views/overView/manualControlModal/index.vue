@@ -43,7 +43,7 @@
           <div class="control-model" v-for="(item, index) in modelList" :key="index">
             <div class="single-model"
             @click="selectModel(item.id)"
-            :class="preselectModel == item.id ? 'single-model-select' : ''"
+            :class="(preselectModel == item.id && preselectStages == -1)? 'single-model-select' : ''"
             v-if="FuncSort === 'allFunc' || (FuncSort === 'basicFunc'&& basicFuncControlId.indexOf(item.id) !== -1)">
               <svg-icon :icon-class="item.iconClass" className="model-icon"></svg-icon>
               <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
@@ -51,11 +51,20 @@
           </div>
         </div>
         <div class="stage-label">{{$t('edge.overview.stage')}}:</div>
-        <div style="width: 100%; height: auto;">
+        <div style="width: 100%; height: auto;overflow: hidden;">
           <div class="control-model" v-for="(item, index) in stagesList" :key="index">
             <div class="single-model" @click="selectStages(index + 1)" :class="preselectStages == index + 1 ? 'single-model-select' : ''">
               <xdrdirselector Width="40px" Height="40px" :showlist="item"></xdrdirselector>
               <div class="current-stage-num">{{index + 1}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="stage-label">{{$t('edge.overview.specialcontrol')}}:</div>
+        <div style="width: 100%; height: auto;overflow: hidden;">
+          <div class="control-model" v-for="(item, index) in specialcontrolList" :key="index">
+            <div class="single-model" @click="selectSpecialStages(item.id)">
+              <svg-icon :icon-class="item.iconClass" :className="item.id === 23 ? 'closephase-icon' : 'model-icon'"></svg-icon>
+              <div class="single-model-name">{{$t('edge.overview.modelList' + item.id)}}</div>
             </div>
           </div>
         </div>
@@ -99,6 +108,9 @@ export default {
     },
     preselectStages: {
       type: Number
+    },
+    specialcontrolList: {
+      type: Array
     }
   },
   computed: {
@@ -129,6 +141,9 @@ export default {
     },
     selectStages (value) {
       this.$emit('selectStages', value)
+    },
+    selectSpecialStages (id) {
+      this.$emit('selectSpecialModel', id)
     }
   },
   mounted () {

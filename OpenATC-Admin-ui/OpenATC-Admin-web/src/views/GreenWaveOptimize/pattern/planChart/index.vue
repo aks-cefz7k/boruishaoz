@@ -30,6 +30,7 @@
           v-for="item in directionOptions"
           :key="item.value"
           :label="$t('openatc.greenwaveoptimize.directionOption' + item.id)"
+          :disabled="optstrategy === 'red' && item.value === 'all'"
           :value="item.value">
         </el-option>
       </el-select>
@@ -122,6 +123,10 @@ export default {
         value: 'green',
         label: '绿波优化',
         id: '1'
+      }, {
+        value: 'red',
+        label: '红波优化',
+        id: '2'
       }],
       routerData: {},
       isShowUpCard: false,

@@ -145,6 +145,7 @@ import LTShapeSouthRoadsSvg from './baseImg/leftroad/LTShapeSouthRoadsSvg.vue'
 import LPhaseIconSvg from './phaseIcon/LphaseIconSvg'
 import CrossDiagramMgr from '@/EdgeMgr/controller/crossDiagramMgr'
 import BusMapSvg from './busIcon/busMapSvg'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'crossDiagram',
   components: {
@@ -474,7 +475,7 @@ export default {
             this.$message.error(this.$t('edge.common.deviceoffline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.isLoaded = true

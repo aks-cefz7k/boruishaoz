@@ -102,6 +102,7 @@ import { GetDevicesByOrgCode } from '@/api/relate'
 import edit from '@/views/Organization/components/edit'
 import relateDevice from '@/views/Organization/components/relateDevice'
 import viewDevice from '@/views/Organization/components/viewDevice'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'OrganizationTreeTable',
   components: {
@@ -381,7 +382,7 @@ export default {
           return
         }
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('edge.common.updatesucess')
@@ -427,7 +428,7 @@ export default {
             return
           }
           if (data.data.success !== true) {
-            this.$message.error(data.data.message)
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
           let msg = this.$t('edge.common.addsucess')

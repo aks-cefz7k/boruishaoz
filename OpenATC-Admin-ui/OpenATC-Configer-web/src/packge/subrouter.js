@@ -277,6 +277,11 @@ const subRouter = [{
       icon: 'statistics'
     }
   }]
+},
+{
+  path: '*',
+  redirect: '/404',
+  hidden: true
 }
 ]
 
