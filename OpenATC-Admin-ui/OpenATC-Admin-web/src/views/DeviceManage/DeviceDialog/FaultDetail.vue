@@ -73,6 +73,7 @@
 
 <script>
 import { DeleteFaultById } from '@/api/fault'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'FaultDetail',
   props: {
@@ -162,7 +163,7 @@ export default {
       let _this = this
       DeleteFaultById(id).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           this.$message({
             message: this.$t('openatc.common.deletefailed'),
             type: 'error',

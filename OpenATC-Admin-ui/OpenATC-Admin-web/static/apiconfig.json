@@ -260,6 +260,16 @@
     "method": "get"
   },
   {
+    "key": "GetAllFaultRange",
+    "url": "/fault/range",
+    "method": "post"
+  },
+  {
+    "key": "GetAllFault",
+    "url": "/fault/all",
+    "method": "get"
+  },
+  {
     "key": "DeleteFaultById",
     "url": "/fault",
     "method": "delete"

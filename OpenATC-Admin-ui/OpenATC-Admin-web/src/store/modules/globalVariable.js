@@ -17,7 +17,8 @@ const GlobalVariable = {
     multDevicesPath: new Map(), // 存储所操作设备对应路由位置
     openedDevice: undefined, // 当前操作页的设备参数
     openedPath: undefined, // 当前打开页签对应的路由
-    devicePath: '/device' // 当前设备管理页面的路由
+    devicePath: '/device', // 当前设备管理页面的路由
+    gisBizType: 'deviceState' // 当前地图业务类型
   },
   mutations: {
     SET_DEV_TAG: (state, tag) => {
@@ -62,6 +63,9 @@ const GlobalVariable = {
     },
     SET_DEV_PATH: (state, path) => {
       state.devicePath = path
+    },
+    SET_GIS_BIZ_TYPE: (state, path) => {
+      state.gisBizType = path
     }
   },
   actions: {
@@ -88,6 +92,9 @@ const GlobalVariable = {
     },
     SetDevPath ({ commit }, path) {
       commit('SET_DEV_PATH', path)
+    },
+    SetGisBizType ({ commit }, path) {
+      commit('SET_GIS_BIZ_TYPE', path)
     }
   }
 }

@@ -261,6 +261,7 @@
 import seeCutEffect from './components/seeCutEffect'
 import { uploadDeviceInfo, downloadDeviceInfo } from '@/api/param'
 import { getErrorMesZh, getErrorMesEn } from '../../utils/errorcode.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'deviceinfo',
   components: {seeCutEffect},
@@ -371,7 +372,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$store.state.user.route = this.$route.path
@@ -426,7 +427,7 @@ export default {
             })
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })

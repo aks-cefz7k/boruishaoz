@@ -101,6 +101,7 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="help">{{$t('edge.main.help')}}</el-dropdown-item>
                 <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
@@ -117,6 +118,14 @@
             <el-dropdown-item command="En">English</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+      </div>
+      <div class="sloat-icon" v-show="isShowSwitchBtn">
+        <el-tooltip :content="$t('edge.main.graphics')" placement="bottom" effect="dark">
+          <el-button type="text" @click="clickSwitchIcon(true)"><i class="iconfont icon-tuxingjiemian" :class="{'choosedIcon': isShowGui, 'defaultIcon': !isShowGui}"></i></el-button>
+        </el-tooltip>
+        <el-tooltip :content="$t('edge.main.text')" placement="bottom" effect="dark">
+          <el-button type="text" @click="clickSwitchIcon(false)"><i class="iconfont icon-wenzijiemian" :class="{'choosedIcon': !isShowGui, 'defaultIcon': isShowGui}"></i></el-button>
+        </el-tooltip>
       </div>
     </el-menu>
     <el-dialog
@@ -160,6 +169,7 @@ import versioninfo from './versionInfo'
 import { getErrorMesZh, getErrorMesEn } from '../../../utils/errorcode.js'
 import { getControSource, getOverLap, getTypeOptions, getEtypeOptions } from '@/utils/channeldesc.js'
 
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {
     Breadcrumb,
@@ -241,7 +251,8 @@ export default {
       isShowLogout: true,
       isShowMenu: false,
       planName: '',
-      typeOptions: []
+      typeOptions: [],
+      isShowSwitchBtn: false
     }
   },
   computed: {
@@ -256,7 +267,8 @@ export default {
       copiedTscParam: state => state.globalParam.copiedTscParam,
       userInfo: state => state.user.userInfo,
       hideMenu: state => state.globalParam.hideMenu,
-      graphicMode: state => state.globalParam.graphicMode
+      graphicMode: state => state.globalParam.graphicMode,
+      isShowGui: state => state.globalParam.isShowGui
     }),
     userInfo: {
       get: function () {
@@ -275,6 +287,11 @@ export default {
         } else {
           this.isShowMenu = false
         }
+        if (val.path.includes('overview')) {
+          this.isShowSwitchBtn = true
+        } else {
+          this.isShowSwitchBtn = false
+        }
       },
       // 深度观察监听
       deep: true
@@ -287,6 +304,11 @@ export default {
       this.isShowMenu = true
     } else {
       this.isShowMenu = false
+    }
+    if (path.includes('overview')) {
+      this.isShowSwitchBtn = true
+    } else {
+      this.isShowSwitchBtn = false
     }
     if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
       // 增加判断toSingleEdge，解决isfromatc参数丢失问题
@@ -456,7 +478,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$store.state.user.route = this.$route.path
@@ -489,7 +511,7 @@ export default {
               this.$message.error(this.$t('edge.errorTip.devicenotonline'))
               return
             }
-            this.$message.error(data.data.message)
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
             return
           }
           if (Object.keys(data.data.data.data).length === 0) {
@@ -509,7 +531,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let allTscParam = data.data.data.data
@@ -582,7 +604,7 @@ export default {
             })
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // downloadTscParam(this.$store.state.user.name, tscParam)
@@ -674,7 +696,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // downloadTscParam(this.$store.state.user.name, tscParam)
@@ -724,7 +746,6 @@ export default {
           if (data.data.success) {
             resolve(data.data.data)
           } else {
-            console.log(data.data.message)
             this.$message.error(this.$t('edge.common.getmd5error'))
             reject(new Error(data.data.message))
           }
@@ -963,7 +984,7 @@ export default {
       let ringList = []
       let concurrentIsNull = false
       for (let phase of phaseList) {
-        if (phase.concurrent.length === 0) {
+        if (phase.concurrent && phase.concurrent.length === 0) {
           concurrentIsNull = true
         }
         ringList.push(phase.ring)
@@ -1276,6 +1297,8 @@ export default {
           break
         case 'about': this.showVersion()
           break
+        case 'help': this.showHelp()
+          break
         default: router.push({ path: '/' })
       }
     },
@@ -1283,11 +1306,19 @@ export default {
       let versionInfoChild = this.$refs.versioninfoChild
       versionInfoChild.showMessage()
     },
+    showHelp () {
+      if (this.$i18n.locale === 'zh') {
+        window.open('/UserManual/openatcConfig/zh/index.html')
+      }
+      if (this.$i18n.locale === 'en') {
+        window.open('/UserManual/openatcConfig/en/index.html')
+      }
+    },
     showInfo (val) {
       if (!val) return
       getInfo().then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.userInfo = data.data.data
@@ -1307,7 +1338,7 @@ export default {
       } else {
         return false
       }
-    }
+    },
     // extendErrorCodeMap () {
     //   let patternInitCode = 3000
     //   let channelInitCode = 1200
@@ -1328,6 +1359,9 @@ export default {
     //     errorCodeMapEn.set(channelInitCode, enMes)
     //   }
     // }
+    clickSwitchIcon (isShowGUI) {
+      this.$store.dispatch('SetShowGui', isShowGUI)
+    }
   }
 }
 </script>

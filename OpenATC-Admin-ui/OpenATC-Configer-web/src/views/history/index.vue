@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container history-container">
     <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">{{$t('edge.fault.refresh')}}</el-button>
     <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">{{$t('edge.fault.export')}}</el-button>
     <el-input v-model="username" :placeholder="$t('edge.statistics.username')" style="width:150px;margin-left:10px;"></el-input>
@@ -31,6 +31,7 @@ import boardTable from './table/index'
 import { getFault, getFaultHistoryByFtp } from '@/api/fault'
 import { getIframdevid } from '@/utils/auth'
 import detailFault from './dialog/index'
+import { getMessageByCode } from '@/utils/responseMessage'
 import {
   faultCodeMap,
   faultCodeMapEn,
@@ -90,8 +91,7 @@ export default {
       getFaultHistoryByFtp(reqData).then(data => {
         if (data.data.success !== true) {
           this.listLoading = false
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
@@ -207,8 +207,7 @@ export default {
       getFault(val).then(data => {
         if (data.data.success !== true) {
           this.listLoading = false
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false

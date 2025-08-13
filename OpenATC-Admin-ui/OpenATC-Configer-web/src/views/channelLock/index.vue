@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<div class="manual-record">
+<div class="manual-record" ref="channellock-container">
   <div class="manual-top">
     <el-button style="margin-bottom:10px;" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-button style="margin-bottom:10px;" type="primary" @click="deleteAllData">{{$t('edge.common.deleteall')}}</el-button>
@@ -99,7 +99,7 @@
         <div class="channel-status">{{$t('edge.channellock.channelstats')}}</div>
       </div>
       <div class="manual-tables-bottom">
-        <el-table :data="channelList" :max-height="tableHeight" v-loading.body="listLoading" style="width: 90%" border id="footerBtn">
+        <el-table :data="channelList" :max-height="tableHeight - 30" v-loading.body="listLoading" style="width: 90%" border id="footerBtn">
           <!-- <el-table-column align="center" label='No' width="40">
             <template slot-scope="scope">
               {{scope.$index + 1}}
@@ -439,24 +439,13 @@ export default {
     refreshChannelLockDescData()
     var _this = this
     _this.$nextTick(function () {
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                150
+      _this.tableHeight = _this.$refs['channellock-container'].offsetHeight - 80
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['channellock-container'].offsetHeight - 80
       }
     })
   },
   watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                150
-    },
     channelDescMap: function () {
       refreshChannelLockDescData()
     }

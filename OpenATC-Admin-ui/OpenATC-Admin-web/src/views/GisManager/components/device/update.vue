@@ -103,6 +103,7 @@
 <script>
 import { UpdateDevice } from '@/api/device'
 import chooseOrganizationDialog from '@/views/Organization/components/chooseOrganizationDialog'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'deviceUpdate',
   components: { chooseOrganizationDialog },
@@ -161,7 +162,7 @@ export default {
       delete devInfo.lat
       UpdateDevice(devInfo).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           this.$message({
             message: this.$t('openatc.common.updatefailed'),
             type: 'error',

@@ -81,6 +81,7 @@
 */
 import { UpdateCurUsrPassWd } from '../../../api/base'
 import passCheck from './passwordCheck.vue'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {
     passCheck
@@ -177,7 +178,7 @@ export default {
             this.$message.error(this.$t('edge.auth.originalpasserror'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('edge.auth.modifisucceeded')

@@ -10,20 +10,18 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div style="background:#f0f2f5;margin-top: -20px;">
+  <div style="margin-top: -20px;">
     <div class="wscn-http404">
       <div class="pic-404">
         <img class="pic-404__parent" :src="img404" alt="404">
-        <img class="pic-404__child left" :src="img404Cloud" alt="404">
-        <img class="pic-404__child mid" :src="img404Cloud" alt="404">
-        <img class="pic-404__child right" :src="img404Cloud" alt="404">
       </div>
       <div class="bullshit">
-        <div class="bullshit__oops">OOPS!</div>
-        <div class="bullshit__info">版权所有<a class="link-type" href="https://wallstreetcn.com" target='_blank'>华尔街见闻</a></div>
-        <div class="bullshit__headline">{{ message }}</div>
-        <div class="bullshit__info">请检查您输入的网址是否正确，请点击以下按钮返回主页或者发送错误报告</div>
-        <a href="" class="bullshit__return-home">返回首页</a>
+        <div class="bullshit__headline">抱歉，页面暂时无法访问!</div>
+        <div class="bullshit__info">请检查您输入的网址是否正确，请点击以下按钮返回主页或者刷新重试</div>
+        <div class="bullshit__link" >
+          <a href="" class="bullshit__return-home">返回首页</a>
+          <a class="bullshit__refresh" v-on:click.stop="handleRefresh">刷新</a>
+        </div>
       </div>
     </div>
   </div>
@@ -31,19 +29,21 @@
 
 <script>
 import img404 from '@/assets/404_images/404.png'
-import img404Cloud from '@/assets/404_images/404_cloud.png'
 
 export default {
   data () {
     return {
       img404,
-      img404Cloud
+      fromPath: '/'
     }
   },
-  computed: {
-    message () {
-      return '特朗普说这个页面你不能进......'
+  methods: {
+    handleRefresh () {
+      this.$router.push(this.fromPath)
     }
+  },
+  mounted () {
+    this.fromPath = this.$route.redirectedFrom
   }
 }
 </script>
@@ -57,10 +57,11 @@ export default {
   overflow: hidden;
   .pic-404 {
     position: relative;
-    float: left;
-    width: 600px;
-    padding: 150px 0;
+    // float: left;
+    width: 524px;
+    padding: 80px 0 34px 0;
     overflow: hidden;
+    margin: 0 auto;
     &__parent {
       width: 100%;
     }
@@ -169,55 +170,70 @@ export default {
   }
   .bullshit {
     position: relative;
-    float: left;
-    width: 300px;
-    padding: 150px 0;
+    // float: left;
+    width: 500px;
+    // padding: 150px 0;
     overflow: hidden;
-    &__oops {
-      font-size: 32px;
-      font-weight: bold;
-      line-height: 40px;
-      color: #1482f0;
-      opacity: 0;
-      margin-bottom: 20px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-fill-mode: forwards;
-    }
+    margin: 0 auto;
+    text-align: center;
     &__headline {
-      font-size: 20px;
+      font-size: 24px;
       line-height: 24px;
-      color: #1482f0;
+      font-weight: 400;
+      color: #409EFF;
       opacity: 0;
-      margin-bottom: 10px;
+      margin-bottom: 24px;
       animation-name: slideUp;
       animation-duration: 0.5s;
       animation-delay: 0.1s;
       animation-fill-mode: forwards;
     }
     &__info {
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 400;
       line-height: 21px;
-      color: grey;
+      color: #909399;
       opacity: 0;
-      margin-bottom: 30px;
+      margin-bottom: 34px;
       animation-name: slideUp;
       animation-duration: 0.5s;
       animation-delay: 0.2s;
       animation-fill-mode: forwards;
     }
+    &__link {
+      width: 220px;
+      margin-left: 192px;
+      overflow: hidden;
+    }
     &__return-home {
       display: block;
       float: left;
-      width: 110px;
-      height: 36px;
+      width: 140px;
+      height: 50px;
       background: #1482f0;
       border-radius: 100px;
       text-align: center;
       color: #ffffff;
       opacity: 0;
-      font-size: 14px;
-      line-height: 36px;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 50px;
+      cursor: pointer;
+      animation-name: slideUp;
+      animation-duration: 0.5s;
+      animation-delay: 0.3s;
+      animation-fill-mode: forwards;
+    }
+    &__refresh {
+      display: block;
+      float: left;
+      // width: 110px;
+      height: 50px;
+      text-align: center;
+      color: #909399;
+      font-size: 16px;
+      line-height: 50px;
+      margin-left: 21px;
       cursor: pointer;
       animation-name: slideUp;
       animation-duration: 0.5s;

@@ -19,7 +19,7 @@
       :list="list"
       :options="options">
       <div class="board-item" v-for="element in list" :key="element.id">
-        <el-row>
+        <el-row :gutter="13">
           <el-col :span="8">
             <el-select v-model="element.options" class="col-content" size="small" multiple collapse-tags :placeholder="$t('edge.common.select')">
               <el-option
@@ -46,6 +46,7 @@
 <script>
 import draggable from 'vuedraggable'
 export default {
+  name: 'ExpendConfig',
   components: {
     draggable
   },
@@ -80,87 +81,13 @@ export default {
         return {}
       }
     }
-  },
-  created () {
-    this.addMinSplit()
-  },
-  watch: {
-    list: {
-      handler: function () {
-        let list = this.$refs.type
-        let cycle = 0
-        let j = this.index
-        for (let i = 0; i < list.length; i++) {
-          cycle = cycle + Number(list[i].currentValue)
-        }
-        const globalParamModel = this.$store.getters.globalParamModel
-        // let MaxCycle = globalParamModel.getParamsByType('patternList')[n].cycle
-        let pattern = globalParamModel.getParamsByType('patternList')[j]
-        globalParamModel.getParamsByType('patternList')[j].cycle = this.getMaxCycle(pattern)
-        this.addMinSplit()
-        this.$emit('handleSplit', j)
-      },
-      deep: true
-    }
-  },
-  methods: {
-    addMinSplit () {
-      const globalParamModel = this.$store.getters.globalParamModel
-      let phaseList = globalParamModel.getParamsByType('phaseList')
-      for (let ls of this.list) {
-        let phase = phaseList.filter((item) => {
-          return item.id === ls.id
-        })[0]
-        if (!phase.redyellow) {
-          phase.redyellow = 0
-        }
-        if (!phase.yellow) {
-          phase.yellow = 0
-        }
-        if (!phase.redclear) {
-          phase.redclear = 0
-        }
-        if (!phase.flashgreen) {
-          phase.flashgreen = 0
-        }
-        if (!phase.phasewalk) {
-          phase.phasewalk = 0
-        }
-        if (!phase.pedclear) {
-          phase.pedclear = 0
-        }
-        let temp1 = phase.redyellow + phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
-        let temp2 = phase.phasewalk + phase.pedclear
-        if (temp1 > temp2) {
-          ls.minSplit = temp1
-        } else {
-          ls.minSplit = temp2
-        }
-        if (ls.mode !== 7 && ls.value < ls.minSplit) {
-          ls.value = ls.minSplit
-        }
-      }
-    },
-    getMaxCycle (pattern) {
-      let rings = pattern.rings
-      let maxCycle = 0
-      for (let ring of rings) {
-        if (ring.length === 0) continue
-        let cycle = 0
-        for (let r of ring) {
-          cycle = cycle + r.value
-        }
-        if (cycle > maxCycle) {
-          maxCycle = cycle
-        }
-      }
-      return maxCycle
-    }
   }
 
 }
 </script>
 
 <style lang="scss" scoped>
-
+.el-input-number--small {
+  width: 94px;
+}
 </style>

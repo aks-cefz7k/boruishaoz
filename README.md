@@ -325,12 +325,20 @@ PROJECT_FOLDER
 | gis  | maxZoom | 18 | 地图最大缩放等级 |
 | gis  | minZoom | 12 | 地图最小缩放等级 |
 | gis  | center | [31.22784056, 121.68148040] | 地图默认中心点 |
-| gis  | gisNormal | http://192.168.14.168:7080/PBS/rest/services/ | 2D地图本地服务资源地址 |
-| gis  | gisStatellite | http://192.168.14.168:7081/PBS/rest/services/ | 卫星图本地服务资源地址 |
+| gis  | gisNormal | http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x} | 2D地图本地服务资源地址 |
+| gis  | gisStatellite | http://192.168.14.168:7081/PBS/rest/services/MyPBSService2/MapServer/tile/{z}/{y}/{x} | 卫星图本地服务资源地址 |
 | gis  | gisBoundLeftTop | [31.36360615, 121.30622863] | 地图边界的左上角纬度经度 |
 | gis  | gisBoundRightBottom | [31.11040156, 121.95270538] | 地图边界的右下角纬度经度 |
 | gis  | isShowVideo | true | gis勤务路线是否显示视频 |
 
+
+#### 界面展示
+
+![avatar](http://192.168.13.103:10003/openatc/img/home.png)
+
+![avatar](http://192.168.13.103:10003/openatc/img/overview.png)
+
+![avatar](http://192.168.13.103:10003/openatc/img/gis.png)
 ---
 
 ### 后端部分
