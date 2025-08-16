@@ -107,7 +107,8 @@
                   <el-dropdown-item command="light">{{$t('openatc.main.light')}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <br/>
+            </el-dropdown-item>
+            <el-dropdown-item command="switchTheme">
               <el-dropdown trigger="click" @command="switchLanguage">
                 <span class="el-dropdown-link">
                   {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
