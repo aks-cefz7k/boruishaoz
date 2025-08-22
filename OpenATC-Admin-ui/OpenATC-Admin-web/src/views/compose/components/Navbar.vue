@@ -43,7 +43,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index="operate" style="display:inline">
+      <el-menu-item index="others" style="display:inline">
         <el-dropdown trigger="click" @command="handleSelect">
           <span class="el-dropdown-link">
             <i class="iconfont icon-pingjia"></i>{{$t('openatc.main.other')}}
@@ -121,8 +121,8 @@
             </el-dropdown-item>
             <el-dropdown-item divided command="changepass">{{$t('openatc.main.changepass')}}</el-dropdown-item>
             <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
-            <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
             <el-dropdown-item command="help">{{$t('openatc.main.help')}}</el-dropdown-item>
+            <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
             <el-dropdown-item command="signout">{{$t('openatc.main.signout')}}</el-dropdown-item>
             <!-- <el-dropdown-item command="opentapd">跳转</el-dropdown-item> -->
           </el-dropdown-menu>
