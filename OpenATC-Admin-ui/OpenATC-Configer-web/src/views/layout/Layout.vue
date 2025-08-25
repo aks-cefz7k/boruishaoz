@@ -135,8 +135,11 @@ export default {
       axios.get('./LRRoadConfig.json').then(val => {
         // 读取左行 右行配置文件
         let roadDir = val.data.roadDirection
-        // let roadDir = 'left'
-        this.$store.dispatch('SetRoadDirection', roadDir)
+        if (val.status === 200 && roadDir !== undefined) {
+          this.$store.dispatch('SetRoadDirection', roadDir)
+        } else {
+          this.$store.dispatch('SetRoadDirection', 'right')
+        }
         this.isload = true
       })
     }
