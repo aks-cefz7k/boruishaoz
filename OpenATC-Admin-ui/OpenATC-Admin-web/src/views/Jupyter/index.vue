@@ -1,5 +1,8 @@
 <template>
   <div class="jupyter-content">
+    <div style="float:left;margin:20px 20px;">
+      <el-tag type="info">{{$t('openatc.main.script')}}</el-tag>
+    </div>
     <!-- iframe -->
     <kissiframeontainer
       v-if="isShow"
