@@ -60,7 +60,7 @@ const en = {
     'main': {
       'homepage': 'Home',
       'gis': 'GIS',
-      'devicemanager': 'Device Manager',
+      'devicemanager': 'Cross Manager',
       'usermanager': 'User Manager',
       'greenwaveoptimize': 'Greenwave Optimize',
       'operationrecord': 'Operation Record',
@@ -111,9 +111,10 @@ const en = {
       'faultvaluedetail': 'Fault Value Detail'
     },
     'devicemanager': {
-      'devicelist': 'Device List',
+      'devicelist': 'Intersection List',
+      'crossid': 'Intersection Id',
       'deviceid': 'Device Id',
-      'devicename': 'Device Name',
+      'devicename': 'Intersection Name',
       'firm': 'Firm',
       'platform': 'Platform',
       'type': 'Type',
@@ -140,7 +141,7 @@ const en = {
       'chooseprotocol': 'Please select protocol',
       'chooseplatform': 'Please select platform',
       'enterId': 'Please enter device ID',
-      'entername': 'Please enter device name',
+      'entername': 'Please enter Intersection name',
       'enterrequired': 'Please fill in the required items!',
       'deletedevice': 'Do you want to delete this device?',
       'faultDetail': 'FaultDetail',

@@ -107,7 +107,8 @@
                   <el-dropdown-item command="light">{{$t('openatc.main.light')}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <br/>
+            </el-dropdown-item>
+            <el-dropdown-item command="switchTheme">
               <el-dropdown trigger="click" @command="switchLanguage">
                 <span class="el-dropdown-link">
                   {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -120,6 +121,7 @@
             </el-dropdown-item>
             <el-dropdown-item divided command="changepass">{{$t('openatc.main.changepass')}}</el-dropdown-item>
             <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
+            <el-dropdown-item command="help">{{$t('openatc.main.help')}}</el-dropdown-item>
             <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
             <el-dropdown-item command="signout">{{$t('openatc.main.signout')}}</el-dropdown-item>
             <!-- <el-dropdown-item command="opentapd">跳转</el-dropdown-item> -->
@@ -193,7 +195,7 @@
           </el-card>
         </span>
       </el-drawer>
-    <div class="alarm-message">
+    <div class="alarm-message" @click="drawer = true">
       <el-badge is-dot class="item">
         <i class="el-icon-message-solid"></i>
       </el-badge>
@@ -214,6 +216,7 @@ import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
 import { setLanguage, getTheme, setTheme } from '@/utils/auth'
 import { getMessageByCode } from '@/utils/responseMessage'
+import { SystemconfigApi } from '@/api/systemconfig.js'
 export default {
   name: 'navbar',
   components: { modifypasswd, versioninfo, SystemSettings },
@@ -238,7 +241,9 @@ export default {
       roleType: ['', 'success', 'warning'],
       isShow: true,
       fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew', '/overviewNew/index'],
-      language: 'Language'
+      language: 'Language',
+      zh_handbook: '',
+      en_handbook: ''
     }
   },
   watch: {
@@ -309,6 +314,8 @@ export default {
       switch (command) {
         case 'changepass': this.modifyPasswd()
           break
+        case 'help': this.showHelp()
+          break
         case 'about': this.showVersion()
           break
         case 'signout': this.logout()
@@ -322,10 +329,36 @@ export default {
         default: router.push({ path: '/' })
       }
     },
-    // opentapd () {
-    //   window.open('https://www.tapd.cn/42881942/documents/file_list/1142881942001014450')
-    //   // window.location.href = 'https://www.tapd.cn/42881942/documents/file_list/1142881942001014450'
-    // },
+    getGisConfig () {
+      return new Promise((resolve, reject) => {
+        SystemconfigApi.GetSystemconfigByModule('system').then((data) => {
+          if (data.data.success !== true) {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          for (let config of data.data.data) {
+            if (config['key'] === 'zh_handbook') {
+              this.zh_handbook = config['value']
+            }
+            if (config['key'] === 'en_handbook') {
+              this.en_handbook = config['value']
+            }
+          }
+          resolve(data.data.data)
+        })
+      })
+    },
+    opentapd (url) {
+      window.open(url)
+    },
+    async showHelp () {
+      await this.getGisConfig()
+      let url = this.zh_handbook
+      if (this.$i18n.locale === 'en') {
+        url = this.en_handbook
+      }
+      this.opentapd(url)
+    },
     showVersion () {
       let versionInfoChild = this.$refs.versioninfoChild
       versionInfoChild.showMessage()

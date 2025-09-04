@@ -48,9 +48,11 @@ Vue.use(Echarts)
 axios.get('./LRRoadConfig.json').then(val => {
   // 只有配置工具项目单独项目会加载main.js，当作为包被加载时，不会走到这里
   // 读取左行 右行配置文件
-  if (val.status === 200) {
-    let roadDir = val.data.roadDirection
+  let roadDir = val.data.roadDirection
+  if (val.status === 200 && roadDir !== undefined) {
     store.dispatch('SetRoadDirection', roadDir)
+  } else {
+    store.dispatch('SetRoadDirection', 'right')
   }
 })
 

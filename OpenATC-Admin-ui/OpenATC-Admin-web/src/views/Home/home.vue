@@ -121,7 +121,7 @@ export default {
       let viewH = document.documentElement.clientHeight - 10
       this.toPageMarginTop = (17 / 1080 * viewH).toFixed(0) + 'px'
       this.toPageMarginBottom = (17 / 1080 * viewH).toFixed(0) + 'px'
-      this.Width = document.getElementById('imagebox').clientWidth
+      this.Width = document.getElementById('imagebox').clientWidth - 44
       this.Height = document.getElementById('imagebox').clientHeight
       this.Visible = true
     },
