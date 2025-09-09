@@ -19,7 +19,8 @@ export default class Event {
   InitSub () {
     let TrafficDataMgr = store.getters['kissModel'].GetMgrByKey('TrafficDataMgr')[0]
     this.GlobalData = TrafficDataMgr.GetRelTimeDataInterface().GetDataObj('global')
-    this.curSub = this.GlobalData.getData('faulteventdata', this.recvMessage)
+    // this.curSub = this.GlobalData.getData('faulteventdata', this.recvMessage, ['1001', '1002']) // 有订阅消息参数
+    this.curSub = this.GlobalData.getData('faulteventdata', this.recvMessage) // 无订阅消息参数
   }
   unSub () {
     this.GlobalData.stop('faulteventdata', this.curSub)

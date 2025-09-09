@@ -272,7 +272,7 @@ export default {
       let ssSubMgr = store.getters['wsSubMgr']
       this.wsSubMgr = ssSubMgr
       let CrossStatSubMgr = this.wsSubMgr.getByName('CrossState')
-      this.sub = CrossStatSubMgr.getSubByType('status/pattern')
+      this.sub = CrossStatSubMgr.getSubByType('status/pattern', 'asc')
       // this.sub.start([simuid]) // wholist = []
       let reqData = this.getReqData()
       if (!flag) {

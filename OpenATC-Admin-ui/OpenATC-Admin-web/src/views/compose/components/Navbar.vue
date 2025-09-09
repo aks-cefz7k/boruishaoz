@@ -366,6 +366,7 @@ export default {
     logout () {
       this.$store.dispatch('LogOut').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
+        this.FaultEventData.UnInit() // 取消故障事件订阅
       })
     },
     modifyPasswd () {
