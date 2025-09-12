@@ -334,11 +334,17 @@ PROJECT_FOLDER
 
 #### 界面展示
 
-![avatar](http://openatc.org.cn/openatc/img/home.png)
+![Image text](https://gitee.com/openatc/openatc-doc/raw/master/OpenATCAdminManual_cn/docs/imgs/ch01-01.png)
 
-![avatar](http://openatc.org.cn/openatc/img/overview.png)
 
-![avatar](http://openatc.org.cn/openatc/img/gis.png)
+
+
+![Image text](https://gitee.com/openatc/openatc-doc/raw/user/OpenATCconfigerManual_cn/docs/imgs/ch01-01.png)
+
+
+
+
+![Image text](https://gitee.com/openatc/openatc-doc/raw/user/OpenATCAdminManual_cn/docs/imgs/ch03-14.png)
 ---
 
 ### 后端部分
