@@ -158,7 +158,10 @@ const en = {
       'thirdplatformid': 'Third party ID',
       'timeSpaceGraph': 'Time space graph',
       'keyintersection': 'Key Intersection：',
-      'sockettype': 'Socket Type'
+      'sockettype': 'Socket Type',
+      'patternStatistics': 'Pattern Statistics',
+      'trafficStatistics': 'Traffic Statistics',
+      'more': 'More'
     },
     'usermanager': {
       'username': 'Username',

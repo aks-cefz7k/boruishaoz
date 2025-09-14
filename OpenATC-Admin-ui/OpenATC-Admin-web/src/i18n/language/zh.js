@@ -158,7 +158,10 @@ const zh = {
       'thirdplatformid': '第三方ID',
       'timeSpaceGraph': '实时时距图',
       'keyintersection': '关键路口：',
-      'sockettype': '通讯类型'
+      'sockettype': '通讯类型',
+      'patternStatistics': '方案统计',
+      'trafficStatistics': '交通流统计',
+      'more': '更多'
     },
     'usermanager': {
       'username': '用户名称',

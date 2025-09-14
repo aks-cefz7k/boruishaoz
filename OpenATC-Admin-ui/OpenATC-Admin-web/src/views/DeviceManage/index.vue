@@ -138,13 +138,25 @@
               <el-button type="text" @click="handleEdit(scope.row)">{{$t('openatc.common.edit')}}</el-button>
               <el-button type="text" @click="handleToDetail(scope.row)">{{$t('openatc.common.detail')}}</el-button>
               <el-button type="text" @click="handleDelete(scope.row)">{{$t('openatc.common.delete')}}</el-button>
-              <el-button type="text" @click="handleFault(scope.row)">{{$t('openatc.devicemanager.faultDetail')}}</el-button>
+              <!-- <el-button type="text" @click="handleFault(scope.row)">{{$t('openatc.devicemanager.faultDetail')}}</el-button> -->
+              <el-dropdown  @command="handleMoreCommand">
+                <span class="el-dropdown-link">
+                  {{$t('openatc.devicemanager.more')}}<i class="el-icon-arrow-down el-icon--left"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="fault" @click.native="handleFault(scope.row)">{{$t('openatc.devicemanager.faultDetail')}}</el-dropdown-item>
+                  <el-dropdown-item command="pattern" @click.native="handlePatternClick(scope.row)">{{$t('openatc.devicemanager.patternStatistics')}}</el-dropdown-item>
+                  <el-dropdown-item command="traffic" @click.native="handleTrafficClick(scope.row)">{{$t('openatc.devicemanager.trafficStatistics')}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
           </template>
           </el-table-column>
       </el-table>
     </div>
     <Update ref="updateChild" :childTitle="childTitle"></Update>
     <Fault-detail ref="faultDetail" :childTitle="childTitle"></Fault-detail>
+    <!-- <patternStatistics ref="patternStatistics" :childTitle="childTitle"></patternStatistics>
+    <trafficStatistics ref="trafficStatistics" :childTitle="childTitle"></trafficStatistics> -->
   </div>
   <router-view></router-view>
 </div>
@@ -335,6 +347,42 @@ export default {
         }
       })
     },
+    handlePatternClick (row) {
+      let _this = this
+      GetCurrentFaultByAgentid(row.agentid).then(res => {
+        if (!res.data.success) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return false
+        } else {
+          let list = res.data.data
+          if (list && list.length > 0) {
+            this.childTitle = 'faultDetail'
+            let component = _this.$refs.faultDetail
+            component.onViewFaultClick(list)
+          } else {
+            this.$message.info(this.$t('openatc.common.nodata'))
+          }
+        }
+      })
+    },
+    handleTrafficClick (row) {
+      let _this = this
+      GetCurrentFaultByAgentid(row.agentid).then(res => {
+        if (!res.data.success) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return false
+        } else {
+          let list = res.data.data
+          if (list && list.length > 0) {
+            this.childTitle = 'faultDetail'
+            let component = _this.$refs.faultDetail
+            component.onViewFaultClick(list)
+          } else {
+            this.$message.info(this.$t('openatc.common.nodata'))
+          }
+        }
+      })
+    },
     cancle () {
       this.messageboxVisible = false
     },
@@ -371,12 +419,22 @@ export default {
         res = 'TCP'
       }
       return res
+    },
+    handleMoreCommand (command) {
+      switch (command) {
+        case 'fault':
+          break
+        case 'pattern':
+          break
+        case 'traffic':
+          break
+      }
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // .tag-container {
 //   float: left;
 //   max-width: 70%;
@@ -395,4 +453,12 @@ export default {
 //   border: solid 1px $--border-color-lighter;
 //   overflow: auto;
 // }
+.el-dropdown-link {
+    margin-left: 5px;
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 </style>
