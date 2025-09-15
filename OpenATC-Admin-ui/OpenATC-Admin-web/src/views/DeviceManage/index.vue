@@ -155,8 +155,8 @@
     </div>
     <Update ref="updateChild" :childTitle="childTitle"></Update>
     <Fault-detail ref="faultDetail" :childTitle="childTitle"></Fault-detail>
-    <!-- <patternStatistics ref="patternStatistics" :childTitle="childTitle"></patternStatistics>
-    <trafficStatistics ref="trafficStatistics" :childTitle="childTitle"></trafficStatistics> -->
+    <PatternStatistics ref="patternStatistics" :childTitle="childTitle"></PatternStatistics>
+    <TrafficStatistics ref="trafficStatistics" :childTitle="childTitle"></TrafficStatistics>
   </div>
   <router-view></router-view>
 </div>
@@ -167,13 +167,15 @@ import { mapState } from 'vuex'
 import Messagebox from '../../components/MessageBox'
 import Update from './DeviceDialog/update'
 import FaultDetail from './DeviceDialog/FaultDetail'
+import PatternStatistics from './DeviceDialog/PatternStatistics'
+import TrafficStatistics from './DeviceDialog/TrafficStatistics'
 import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
 import { GetCurrentFaultByAgentid } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'device',
-  components: { Update, Messagebox, DeviceTags, FaultDetail },
+  components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics },
   data () {
     return {
       stateList: [],
@@ -348,40 +350,12 @@ export default {
       })
     },
     handlePatternClick (row) {
-      let _this = this
-      GetCurrentFaultByAgentid(row.agentid).then(res => {
-        if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          return false
-        } else {
-          let list = res.data.data
-          if (list && list.length > 0) {
-            this.childTitle = 'faultDetail'
-            let component = _this.$refs.faultDetail
-            component.onViewFaultClick(list)
-          } else {
-            this.$message.info(this.$t('openatc.common.nodata'))
-          }
-        }
-      })
+      let component = this.$refs.patternStatistics
+      component.onView(row)
     },
     handleTrafficClick (row) {
-      let _this = this
-      GetCurrentFaultByAgentid(row.agentid).then(res => {
-        if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          return false
-        } else {
-          let list = res.data.data
-          if (list && list.length > 0) {
-            this.childTitle = 'faultDetail'
-            let component = _this.$refs.faultDetail
-            component.onViewFaultClick(list)
-          } else {
-            this.$message.info(this.$t('openatc.common.nodata'))
-          }
-        }
-      })
+      let component = this.$refs.trafficStatistics
+      component.onView(row)
     },
     cancle () {
       this.messageboxVisible = false
