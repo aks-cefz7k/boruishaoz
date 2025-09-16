@@ -11,6 +11,9 @@
  **/
 <template>
 <div class="openatc-user">
+    <div style="float:left;margin:20px 20px;">
+      <el-tag type="info">{{$t('openatc.main.usermanager')}}</el-tag>
+    </div>
     <div class="filter-container">
       <el-form>
         <el-form-item>

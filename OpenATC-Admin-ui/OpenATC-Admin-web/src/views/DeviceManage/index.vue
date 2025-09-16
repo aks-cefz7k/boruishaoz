@@ -46,7 +46,7 @@
           </el-table-column>
           <el-table-column
           prop="agentid"
-          :label="$t('openatc.devicemanager.deviceid')"
+          :label="$t('openatc.devicemanager.crossid')"
           :sort-method="sortAgentId"
           sortable
           align="center">
@@ -75,7 +75,7 @@
           </el-table-column>
           <el-table-column
             prop="thirdplatformid"
-            :label="$t('openatc.devicemanager.thirdplatformid')"
+            :label="$t('openatc.devicemanager.deviceid')"
             align="center">
           </el-table-column>
           <el-table-column
@@ -138,13 +138,25 @@
               <el-button type="text" @click="handleEdit(scope.row)">{{$t('openatc.common.edit')}}</el-button>
               <el-button type="text" @click="handleToDetail(scope.row)">{{$t('openatc.common.detail')}}</el-button>
               <el-button type="text" @click="handleDelete(scope.row)">{{$t('openatc.common.delete')}}</el-button>
-              <el-button type="text" @click="handleFault(scope.row)">{{$t('openatc.devicemanager.faultDetail')}}</el-button>
+              <!-- <el-button type="text" @click="handleFault(scope.row)">{{$t('openatc.devicemanager.faultDetail')}}</el-button> -->
+              <el-dropdown  @command="handleMoreCommand">
+                <span class="el-dropdown-link">
+                  {{$t('openatc.devicemanager.more')}}<i class="el-icon-arrow-down el-icon--left"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="fault" @click.native="handleFault(scope.row)">{{$t('openatc.devicemanager.faultDetail')}}</el-dropdown-item>
+                  <el-dropdown-item command="pattern" @click.native="handlePatternClick(scope.row)">{{$t('openatc.devicemanager.patternStatistics')}}</el-dropdown-item>
+                  <el-dropdown-item command="traffic" @click.native="handleTrafficClick(scope.row)">{{$t('openatc.devicemanager.trafficStatistics')}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
           </template>
           </el-table-column>
       </el-table>
     </div>
     <Update ref="updateChild" :childTitle="childTitle"></Update>
     <Fault-detail ref="faultDetail" :childTitle="childTitle"></Fault-detail>
+    <PatternStatistics ref="patternStatistics" :childTitle="childTitle"></PatternStatistics>
+    <TrafficStatistics ref="trafficStatistics" :childTitle="childTitle"></TrafficStatistics>
   </div>
   <router-view></router-view>
 </div>
@@ -155,13 +167,15 @@ import { mapState } from 'vuex'
 import Messagebox from '../../components/MessageBox'
 import Update from './DeviceDialog/update'
 import FaultDetail from './DeviceDialog/FaultDetail'
+import PatternStatistics from './DeviceDialog/PatternStatistics'
+import TrafficStatistics from './DeviceDialog/TrafficStatistics'
 import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
 import { GetCurrentFaultByAgentid } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'device',
-  components: { Update, Messagebox, DeviceTags, FaultDetail },
+  components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics },
   data () {
     return {
       stateList: [],
@@ -335,6 +349,14 @@ export default {
         }
       })
     },
+    handlePatternClick (row) {
+      let component = this.$refs.patternStatistics
+      component.onView(row)
+    },
+    handleTrafficClick (row) {
+      let component = this.$refs.trafficStatistics
+      component.onView(row)
+    },
     cancle () {
       this.messageboxVisible = false
     },
@@ -371,12 +393,22 @@ export default {
         res = 'TCP'
       }
       return res
+    },
+    handleMoreCommand (command) {
+      switch (command) {
+        case 'fault':
+          break
+        case 'pattern':
+          break
+        case 'traffic':
+          break
+      }
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // .tag-container {
 //   float: left;
 //   max-width: 70%;
@@ -395,4 +427,12 @@ export default {
 //   border: solid 1px $--border-color-lighter;
 //   overflow: auto;
 // }
+.el-dropdown-link {
+    margin-left: 5px;
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 </style>

@@ -11,6 +11,9 @@
  **/
 <template>
   <div class="openatc-organization">
+    <div style="float:left;margin:20px 20px;">
+      <el-tag type="info">{{$t('openatc.main.organization')}}</el-tag>
+    </div>
     <div class="filter-container">
       <el-form>
         <el-form-item>
