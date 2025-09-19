@@ -261,9 +261,9 @@ export default {
     getReqData () {
       let reqData = []
       for (let dev of this.showList) {
-        let devtype = dev.type
+        // let devtype = dev.type
         let agentid = dev.agentid
-        let simuid = devtype + ':status/pattern:' + agentid
+        let simuid = agentid
         reqData.push(simuid)
       }
       return reqData
