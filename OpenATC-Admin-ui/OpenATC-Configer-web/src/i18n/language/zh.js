@@ -636,6 +636,7 @@ const zh = {
     },
     'fault': {
       'refresh': '刷新',
+      'uploadfault': '上载故障',
       'export': '导出',
       'faultofcurrentdetailedlightgroup': '当前详细灯组故障',
       'faultofcurrentdetailedvehicleinspectionversion': '当前详细车检版故障',
@@ -657,7 +658,7 @@ const zh = {
       'pass': '密码：',
       'usernameplaceholder': '请输入用户名',
       'passplaceholder': '请输入密码',
-      'getdevicedata': '获取设备流量数据',
+      'getdevicedata': '上载流量',
       'detector': '检测器',
       'time': '时间',
       'flow': '流量',
@@ -671,7 +672,8 @@ const zh = {
       'infotype': '事件类型',
       'subject': '主体标时',
       'object': '客体标时',
-      'operationresults': '操作结果'
+      'operationresults': '操作结果',
+      'uploaddailyrecord': '上载日志'
     },
     'control': {
       'mode': '模式:',
