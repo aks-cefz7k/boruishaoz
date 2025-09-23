@@ -63,6 +63,28 @@
                 </el-option>
               </el-select>
             </el-col>
+             <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.timezonehour')}}:</div>
+              <el-select v-model="customInfo.timezone.hour" :placeholder="$t('edge.common.select')" size="small">
+                <el-option
+                  v-for="item in hourOptions"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+             <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.timezoneminute')}}:</div>
+              <el-select v-model="customInfo.timezone.minute" :placeholder="$t('edge.common.select')" size="small">
+                <el-option
+                  v-for="item in minuteOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+              </el-select>
+            </el-col>
           </el-row>
           <el-row class="demo-autocomplete" :gutter="30">
             <el-col :span="4">
@@ -313,11 +335,17 @@ export default {
           closenoredon: 0,
           detectgapnoredon: 0,
           detectgapgreenconflict: 0
+        },
+        timezone: {
+          hour: 8,
+          minute: 0
         }
       },
       loading: {},
       commutypeOptions: [{label: 'TCP', value: 1}, {label: 'UDP', value: 2}, {label: 'RS232', value: 3}],
-      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}]
+      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}],
+      hourOptions: [],
+      minuteOptions: []
     }
   },
   computed: {
@@ -334,6 +362,7 @@ export default {
   created () {
     // this.globalParamModel = this.$store.getters.globalParamModel
     // this.init()
+    this.createTimezoneOptions()
   },
   methods: {
     init () {
@@ -485,6 +514,23 @@ export default {
       })
       if (!customInfo.commuport || customInfo.commuport === '') {
         customInfo.commuport = 0
+      }
+    },
+    createTimezoneOptions () {
+      this.hourOptions = []
+      this.minuteOptions = []
+      for (let i = -12; i <= 12; i++) {
+        let obj = {
+          label: `UTC ${i}`,
+          value: i
+        }
+        if (i >= 0) {
+          obj.label = `UTC +${i}`
+        }
+        this.hourOptions.push(obj)
+      }
+      for (let i = 0; i <= 59; i++) {
+        this.minuteOptions.push(i)
       }
     }
   }
