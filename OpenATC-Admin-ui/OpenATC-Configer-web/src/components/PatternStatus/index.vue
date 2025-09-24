@@ -14,18 +14,18 @@
       <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
         <div v-for="(item,index2) in list" :key="index2">
           <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
-            <div class="ring-phase">
-                <xdrdirselector Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
-              </div>
               <el-tooltip placement="top-start" effect="light">
                 <div slot="content">P{{item.id}}:{{item.split}}</div>
                 <div style="cursor:pointer;">
-                  <div class="box">
-                    <div class="ring-nums">P{{item.id}}</div>
-                    <div class="ring-nums">{{item.split}}</div>
+                  <div class="ring-phase">
+                    <xdrdirselector Width="36px" Height="34px" :showlist="item.direction"></xdrdirselector>
                   </div>
                 </div>
               </el-tooltip>
+              <div class="box">
+                <div class="ring-nums">P{{item.id}}</div>
+                <div class="ring-nums">{{item.split}}</div>
+              </div>
             </div>
             <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
             <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
@@ -54,8 +54,6 @@ export default {
       barrierHeight: '',
       barrierList: [],
       hideWidth: '',
-      // newB: '',
-      // max: '',
       pattern: this.patternStatusList
     }
   },
@@ -95,7 +93,7 @@ export default {
         if (this.patternStatusList && this.cycles) {
           setTimeout(() => {
             this.handleCurrentChange(this.patternStatusList)
-          }, 100)
+          }, 10)
           this.handleBarrierHeight()
         }
       },
@@ -105,6 +103,7 @@ export default {
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
+    // console.log(this.patternStatusList, this.cycles, 111)
     if (this.patternStatusList && this.cycles) {
       this.handleCurrentChange(this.patternStatusList)
       this.handleBarrierHeight()
@@ -126,100 +125,19 @@ export default {
       this.barrierHeight = (patternLength * 35 + 21) + 'px'
     },
     handleCurrentChange (val) { // 两个ring的数据
-      // this.hideWidth = ''
-      // this.barrId = []
-      // this.newBarrid = []
       this.pattern = []
       if (val === null) return
-      // let allPhase = val.reduce(function (a, b) { return a.concat(b) })// 所以相位值id
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
-      // this.concurrentList = phaseList.map(item => { // 每个相位对应的并发相位
-      //   return {
-      //     concurrent: item.concurrent,
-      //     id: item.id
-      //   }
-      // })
-      // this.concurrentList1 = phaseList.map(item => {
-      //   return {
-      //     concurrent: item.concurrent
-      //   }
-      // })
-      // let newCon = this.concurrentList1.map(item => {
-      //   return item.concurrent
-      // })
-      // console.log(newCon, 88888)
-      // let hash = {}
-      // let res = []
-      // for (let i = 0; i < newCon.length; i++) {
-      //   if (!hash[newCon[i]]) {
-      //     res.push(newCon[i])
-      //     hash[newCon[i]] = true
-      //   }
-      // }
-      // let newRes = JSON.parse(JSON.stringify(res))
-      // console.log(newRes, 999)
-      // newRes.map(item => {
-      //   if (item.length === 0) return
-      //   let newId = this.concurrentList.filter(value => {
-      //     return value.id === item[0]
-      //   })[0].concurrent
-      //   debugger
-      //   console.log(newId, 89)
-      // let newArr2 = [...newId.sort(), ...item.sort()]
-      // console.log(newArr2, 888)
-      // let newList = []
-      // newArr2.map(i => {
-      //   for (let rings of val) {
-      //     for (let ring of rings) {
-      //       if (i === ring.id) {
-      //         newList.push(ring.value)
-      //       }
-      //     }
-      //   }
-      // })
-      // console.log(newList, 76)
-      // this.redux = ((allPhase[newArr2[0][0] - 1].value) + (allPhase[newArr2[0][1] - 1].value)) - ((allPhase[newArr2[1][0] - 1].value) + (allPhase[newArr2[1][1] - 1].value))
-      // if (this.redux < 0) { // 每组最小的
-      //   this.barrId = newArr2[0][1]
-      //   // this.newBarrid.push(this.barrId)
-      //   // if (this.newBarrid.length > 1) {
-      //   this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
-      //   // } else if (this.newBarrid.length === 1) {
-      //   //   this.barrId = newArr2[0][1]
-      //   //   this.hideWidth = (Math.abs(this.redux) / cycle * 100).toFixed(3) + '%'
-      //   // }
-      // } else if (this.redux > 0) {
-      //   // this.barrId = newArr2[1][1]
-      //   this.hideWidth = (Math.abs(this.redux) / this.cycles * 100).toFixed(3) + '%'
-      // }
-      // })
-      // for (let split of val) {
-      //   this.splitList = split.map(i => {
-      //     return {
-      //       id: i.id,
-      //       value: i.value
-      //     }
-      //   })
-      //   // console.log(this.splitList, 80)
-      // }
       for (let rings of val) {
         if (rings.length === 0) continue
         let list = []
         for (let ring of rings) {
-          // ring.id ===
-          // let valueList = rings.map(i => {
-          //   return {
-          //     id: i.id,
-          //     value: i.value
-          //   }
-          // })
-          // console.log(valueList, 8989)
           if (ring.value === 0) continue
           let obj = {}
           let split = ring.value
           obj.id = ring.id
           obj.split = split
-          obj.direction = ring.desc.map(item => {
+          obj.direction = ring.desc.map(item => { // 虚相位desc为空
             return {
               id: item.id,
               color: '#454545'
@@ -233,72 +151,91 @@ export default {
           obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / this.cycles * 100).toFixed(3) + '%'
           // 忽略相位不显示
           let mode = ring.mode
-          if (mode !== 7) {
+          if (mode !== 7) { // 忽略相位不显示
             list.push(obj)
           }
         }
         this.pattern.push(list)
+        // console.log(list, this.cycles, 888)
       }
       this.handleBarrier(this.pattern, phaseList)
     },
+    tranform (arr) { // 分barrier
+      let newMap = new Map()
+      arr.forEach(({id, current}) => {
+        const find = newMap.get(current.join())
+        if (find) newMap.get(current.join()).push(id)
+        else newMap.set(current.join(), [id])
+      })
+      let ret = []
+      newMap.forEach((value, key) => {
+        ret.push(Array.from(new Set(key.split(',').map(Number).concat(value))))
+      })
+      return ret
+    },
+    step1 (list, arr) { // 各个环包含的相位
+      const ret = []
+      const listObj = {}
+      list.forEach(l => {
+        listObj[l.id] = l.ring
+      })
+      arr.forEach(a => {
+        const retItem = []
+        a.forEach(b => {
+          const find = retItem.find(r => r.ring === listObj[b])
+          if (find) find.data.push(b)
+          else retItem.push({ring: listObj[b], data: [b]})
+        })
+        ret.push(retItem)
+      })
+      return ret
+    },
+    step2 (newArr, pattern) { // 不同环并发相位做比较
+      let ret = []
+      const patternObj = {}
+      pattern.forEach(l => {
+        patternObj[l.id] = l.split
+      })
+      newArr.forEach((na, index) => {
+        let max = 0
+        na.forEach(n => {
+          const total = n.data.reduce((pre, cur) => pre + patternObj[cur], 0)
+          if (total > max) max = total
+        })
+        while (index > 0 && max < this.cycles) {
+          index--
+          max += ret[index]
+        }
+        ret.push(max)
+      })
+      return ret
+    },
     handleBarrier (pattern, phaseList) {
-      // debugger
       if (pattern.length < 2) return
+      let newPattern = []
+      pattern.map(i => {
+        newPattern.push(...i)
+      })
       this.barrierList = []
-      // this.newB = []
-      let tempList = []
       let currentArr = []
-      // let newA = []
-      let barrierWidth = 0
       let firstPatternStatus = pattern[0]
       for (let patternStatus of firstPatternStatus) {
         let concurrent = phaseList.filter((item) => {
           return item.id === patternStatus.id // patternStatus.id当前相位id concurrent当前相位的并发相位
         })[0].concurrent// 当前相位的并发相位
-        if (concurrent.length === 0) {
-          this.barrierList = []
-          return
-        }
-        if (!this.isEqualsForArray(tempList, concurrent)) {
-          tempList = concurrent
-          this.barrierList.push(barrierWidth)
-        }
         let obj = {
           id: patternStatus.id,
-          current: concurrent
+          current: concurrent.sort()
         }
         currentArr.push(obj)
-        console.log(currentArr, 88889)
-        // this.newB = [patternStatus.id + ',' + concurrent]
-        // newA.push(this.newB)
-        // console.log(newA, 377)
-        barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.hideWidth ? patternStatus.hideWidth : 0) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
       }
-      let map = {}
-      let arr1 = []
-      for (let i = 0; i < currentArr.length; i++) {
-        let ai = currentArr
-        if (!map[ai.current]) {
-          arr1.push({
-            id: ai.id,
-            current: ai.current
-          })
-        } else {
-          for (let j = 0; j < arr1.length; j++) {
-            let dj = arr1[j]
-            if (dj.current === ai.current) {
-              dj.current = dj.current + ai.current
-              break
-            }
-          }
-        }
-      }
-      console.log(arr1, 90)
-      this.barrierList.push('100%')// 添加末尾处的屏障
-      console.log(this.barrierList, 33333)
-    },
-    isEqualsForArray (listA, listB) {
-      return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))// 判断两个数组包含的值是否完全相同
+      let newCurrent = this.tranform(currentArr)
+      let ringTeam = this.step1(phaseList, newCurrent)
+      let barrier = this.step2(ringTeam, newPattern)
+      this.barrierList = barrier.map(j => {
+        return (j / this.cycles * 100) + '%'
+      })
+      this.barrierList.unshift(0)
     }
   }
 }

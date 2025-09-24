@@ -5,43 +5,38 @@
       <el-tag type="info">{{$t('openatc.main.faultrecord')}}</el-tag>
     </div>
     <div class="filter-container">
-        <el-form>
-            <el-col :span="7">
-            <el-form-item>
-            <el-input
-                :placeholder="$t('openatc.common.searchdeviceid')"
-                @keyup.enter.native="handleFilter"
-                v-model="devsfilter"
-                style="width: 200px;margin-right: 10px;"
-            />
-            </el-form-item>
-            </el-col>
-            <el-col :span="14">
-            <el-form-item>
-                <el-date-picker
-                    v-model="timeValue"
-                    size="small"
-                    type="datetimerange"
-                    style="height:41px;"
-                    :range-separator="$t('openatc.usermanager.to')"
-                    :start-placeholder="$t('openatc.usermanager.starttime')"
-                    :end-placeholder="$t('openatc.usermanager.endtime')">
-                </el-date-picker>
-            </el-form-item>
-            </el-col>
-            <el-col :span="3">
-            <el-button
-                type="primary"
-                icon="el-icon-search"
-                @click="searchRecord()"
-                >{{ $t("openatc.button.search") }}</el-button
-            >
-            </el-col>
-        </el-form>
+      <el-row>
+        <el-col :span="7">
+        <el-input
+            :placeholder="$t('openatc.common.searchdeviceid')"
+            @keyup.enter.native="handleFilter"
+            v-model="devsfilter"
+            style="width: 200px;margin-right: 10px;"
+        />
+        </el-col>
+        <el-col :span="14">
+            <el-date-picker
+                v-model="timeValue"
+                size="small"
+                type="datetimerange"
+                style="height:40px;"
+                :range-separator="$t('openatc.usermanager.to')"
+                :start-placeholder="$t('openatc.usermanager.starttime')"
+                :end-placeholder="$t('openatc.usermanager.endtime')">
+            </el-date-picker>
+        </el-col>
+        <el-col :span="3">
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="searchRecord()"
+          >{{ $t("openatc.button.search") }}</el-button>
+        </el-col>
+      </el-row>
     </div>
     <div class="devs-table">
       <el-table
-          :data="tableData.filter(data => !devsfilter || (data.agentid !== undefined && data.agentid.toLowerCase().includes(devsfilter.toLowerCase())) )"
+          :data="tableData"
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -70,12 +65,14 @@
           align="center">
           </el-table-column>
           <el-table-column
+          width="140px"
           prop="m_unFaultOccurTime"
           :label="$t('openatc.faultrecord.faultbegintime')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
+          width="140px"
           prop="m_unFaultRenewTime"
           :label="$t('openatc.faultrecord.faultendtime')"
           align="center">
@@ -103,6 +100,25 @@
           prop="m_byFaultDescValue"
           :label="$t('openatc.faultrecord.faultvaluedetail')"
           align="center">
+          </el-table-column>
+          <el-table-column
+          prop="operator"
+          :label="$t('openatc.faultrecord.operator')"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="operationTime"
+          width="140px"
+          :label="$t('openatc.faultrecord.operationTime')"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="enumerate"
+          :label="$t('openatc.faultrecord.enumerate')"
+          align="center">
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.enumerate === '1'?'info':scope.row.enumerate === '2'?'success':scope.row.enumerate === '0'?'':''">{{formatterEnumerate(scope.row)}}</el-tag>
+          </template>
           </el-table-column>
           <el-table-column :label="$t('openatc.faultrecord.operation')" align="center" width="240">
           <template slot-scope="scope">
@@ -188,6 +204,18 @@ export default {
       }
       return res
     },
+    formatterEnumerate (row, column) {
+      let enumerate = row.enumerate
+      let res = ''
+      if (enumerate === '0') {
+        res = '未处理'
+      } else if (enumerate === '1') {
+        res = '已忽略'
+      } else if (enumerate === '2') {
+        res = '已确认'
+      }
+      return res
+    },
     m_wFaultTypes (row, column) {
       let faultType = row.m_wFaultType
       let res = ''
@@ -217,9 +245,20 @@ export default {
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
     },
     searchRecord () {
-      if (this.timeValue && this.devsfilter) {
+      if (this.timeValue) {
         let beginTime = this.formateDate(this.timeValue[0])
         let endTime = this.formateDate(this.timeValue[1])
+        GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
+          if (data.data.success !== true) {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          this.tableData = data.data.data.content
+          this.totalCount = data.data.data.total
+        })
+      } else if (this.devsfilter) {
+        let beginTime = ''
+        let endTime = ''
         GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
           if (data.data.success !== true) {
             this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))

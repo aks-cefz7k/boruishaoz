@@ -108,6 +108,9 @@ const zh = {
       'faultchild': '故障子类型',
       'faultgrade': '故障等级',
       'faultvaluedetail': '故障详细值',
+      'operator': '确认者',
+      'operationTime': '确认时间',
+      'enumerate': '确认结果',
       'operation': '操作'
     },
     'devicemanager': {

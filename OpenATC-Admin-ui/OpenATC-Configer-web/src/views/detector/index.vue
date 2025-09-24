@@ -264,17 +264,19 @@ export default {
       const phaseList = this.globalParamModel.getParamsByType('phaseList')
       this.CallPhaseOption = []
       for (let i = 0; i < phaseList.length; i++) {
-        let pattern = {}
-        var patternNum = phaseList[i].id
-        var patternDescription
-        if (phaseList[i].direction.length > 0 && phaseList[i].direction !== undefined) {
-          patternDescription = patternNum + '-' + getPhaseDesc(phaseList[i].direction, this.$i18n.locale)
-        } else {
-          patternDescription = patternNum
+        if (phaseList[i].controltype !== 99) {
+          let pattern = {}
+          var patternNum = phaseList[i].id
+          var patternDescription
+          if (phaseList[i].direction.length > 0 && phaseList[i].direction !== undefined) {
+            patternDescription = patternNum + '-' + getPhaseDesc(phaseList[i].direction, this.$i18n.locale)
+          } else {
+            patternDescription = patternNum
+          }
+          pattern.value = patternNum
+          pattern.label = patternDescription
+          this.CallPhaseOption.push(pattern)
         }
-        pattern.value = patternNum
-        pattern.label = patternDescription
-        this.CallPhaseOption.push(pattern)
       }
       let callPhaseList = this.CallPhaseOption.map(ele => ele.value)
       let detectorList = this.globalParamModel.getParamsByType('detectorList')

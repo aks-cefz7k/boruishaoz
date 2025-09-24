@@ -94,25 +94,26 @@
           </el-tabs>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="ID" minWidth="40">
+      <el-table-column align="center" label="ID" width="140">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc">
+      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc" width="140">
         <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"></el-input>
         </template>
       </el-table-column>
-      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset">
+      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset" width="140">
         <template slot-scope="scope">
           <el-input size="small" v-model.number="scope.row.offset" @blur="checkOffset(scope.row.offset, scope.row)"></el-input>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
+      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle" width="140">
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" min-width="200px">
+      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan">
         <template slot-scope="scope">
+          {{scope.row.cycle}}
             <div class="pattern-figure">
               <BoardCard
               :patternStatusList="scope.row.rings"
@@ -169,7 +170,6 @@ export default {
       barrId: [],
       hideWidth: '',
       newBarrid: [],
-      max: '',
       stateList: [],
       numList: [],
       narr: [],

@@ -108,7 +108,10 @@ const en = {
       'faultchild': 'Fault Child',
       'faultgrade': 'Fault Grade',
       'operation': 'Operation',
-      'faultvaluedetail': 'Fault Value Detail'
+      'faultvaluedetail': 'Fault Value Detail',
+      'operator': 'Operator',
+      'operationTime': 'Operation Time',
+      'enumerate': 'Enumerate'
     },
     'devicemanager': {
       'devicelist': 'Intersection',
