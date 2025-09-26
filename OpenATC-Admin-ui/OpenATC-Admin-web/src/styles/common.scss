@@ -28,6 +28,14 @@
   height: calc(100% - 57px);
   background: $--background-color-base;
 }
+//commom 样式
+.common-table-title {
+  float: left;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: $--color-text-secondary;
+}
  // 主页样式
  .homeLayout {
     padding: 19px;

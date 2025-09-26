@@ -11,8 +11,8 @@
  **/
 <template>
   <div class="openatc-organization">
-    <div style="float:left;margin:20px 20px;">
-      <el-tag type="info">{{$t('openatc.main.organization')}}</el-tag>
+    <div style="float:left;margin:25px 20px;">
+      <div class="common-table-title">{{$t('openatc.main.organization')}}</div>
     </div>
     <div class="filter-container">
       <el-form>
