@@ -113,7 +113,6 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan">
         <template slot-scope="scope">
-          {{scope.row.cycle}}
             <div class="pattern-figure">
               <BoardCard
               :patternStatusList="scope.row.rings"
