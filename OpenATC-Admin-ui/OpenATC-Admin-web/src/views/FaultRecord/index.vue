@@ -65,14 +65,14 @@
           align="center">
           </el-table-column>
           <el-table-column
-          width="140px"
+          width="150px"
           prop="m_unFaultOccurTime"
           :label="$t('openatc.faultrecord.faultbegintime')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
-          width="140px"
+          width="150px"
           prop="m_unFaultRenewTime"
           :label="$t('openatc.faultrecord.faultendtime')"
           align="center">
@@ -108,7 +108,7 @@
           </el-table-column>
           <el-table-column
           prop="operationTime"
-          width="140px"
+          width="150px"
           :label="$t('openatc.faultrecord.operationTime')"
           align="center">
           </el-table-column>
