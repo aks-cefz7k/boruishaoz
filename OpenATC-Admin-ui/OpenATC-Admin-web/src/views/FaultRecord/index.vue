@@ -85,12 +85,14 @@
             >
           </el-table-column>
           <el-table-column
+          :formatter="m_wSubFaultType"
           prop="m_wSubFaultType"
           :label="$t('openatc.faultrecord.faultchild')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
+          :formatter="m_byFaultLevel"
           prop="m_byFaultLevel"
           :label="$t('openatc.faultrecord.faultgrade')"
           sortable
@@ -194,13 +196,13 @@ export default {
       let boardType = row.m_byFaultBoardType
       let res = ''
       if (boardType === 1) {
-        res = '主控板'
+        res = this.$t('openatc.faultrecord.maincontrolboard')
       } else if (boardType === 2) {
-        res = '灯控版'
+        res = this.$t('openatc.faultrecord.lightcontrolversion')
       } else if (boardType === 3) {
-        res = '车检板'
+        res = this.$t('openatc.faultrecord.carinspectionboard')
       } else if (boardType === 4) {
-        res = 'I/O板'
+        res = this.$t('openatc.faultrecord.ioboard')
       }
       return res
     },
@@ -208,11 +210,39 @@ export default {
       let enumerate = row.enumerate
       let res = ''
       if (enumerate === '0') {
-        res = '未处理'
+        res = this.$t('openatc.faultrecord.untreated')
       } else if (enumerate === '1') {
-        res = '已忽略'
+        res = this.$t('openatc.faultrecord.ignored')
       } else if (enumerate === '2') {
-        res = '已确认'
+        res = this.$t('openatc.faultrecord.confirmed')
+      }
+      return res
+    },
+    m_wSubFaultType (row, column) {
+      let wSubFaultType = row.m_wSubFaultType
+      let res = ''
+      if (wSubFaultType === 0) {
+        res = ''
+      } else if (wSubFaultType === 1) {
+        res = this.$t('openatc.faultrecord.powerup')
+      } else if (wSubFaultType === 2) {
+        res = this.$t('openatc.faultrecord.powerdown')
+      } else if (wSubFaultType === 3) {
+        res = this.$t('openatc.faultrecord.powerno')
+      } else if (wSubFaultType === 4) {
+        res = this.$t('openatc.faultrecord.powerfault')
+      }
+      return res
+    },
+    m_byFaultLevel (row, column) {
+      let byFaultLevel = row.m_byFaultLevel
+      let res = ''
+      if (byFaultLevel === 1) {
+        res = this.$t('openatc.faultrecord.general')
+      } else if (byFaultLevel === 2) {
+        res = this.$t('openatc.faultrecord.degradation')
+      } else if (byFaultLevel === 3) {
+        res = this.$t('openatc.faultrecord.serious')
       }
       return res
     },
@@ -220,13 +250,13 @@ export default {
       let faultType = row.m_wFaultType
       let res = ''
       if (faultType >= 101 && faultType <= 199) {
-        res = '主控板故障'
+        res = this.$t('openatc.faultrecord.maincontrolboardfault')
       } else if (faultType >= 201 && faultType <= 299) {
-        res = '灯控版故障'
+        res = this.$t('openatc.faultrecord.lightcontrolversionfault')
       } else if (faultType >= 301 && faultType <= 399) {
-        res = '车检板故障'
+        res = this.$t('openatc.faultrecord.carinspectionboardfault')
       } else if (faultType >= 401 && faultType <= 499) {
-        res = 'I/O板故障'
+        res = this.$t('openatc.faultrecord.ioboardfault')
       }
       return res
     },
