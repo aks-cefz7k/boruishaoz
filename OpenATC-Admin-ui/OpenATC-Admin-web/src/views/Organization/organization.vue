@@ -11,7 +11,7 @@
  **/
 <template>
   <div class="openatc-organization">
-    <div style="float:left;margin:25px 20px;">
+    <div style="float:left;margin:15px 20px;">
       <div class="common-table-title">{{$t('openatc.main.organization')}}</div>
     </div>
     <div class="filter-container">

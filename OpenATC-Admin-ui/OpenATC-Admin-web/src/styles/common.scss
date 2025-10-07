@@ -24,9 +24,12 @@
     color: $--color-primary;
   }
 }
+.openatc-navbar {
+  box-shadow: 0px 0px 11px 0px rgba(0, 64, 125, 0.14);
+}
 .appMain {
   height: calc(100% - 57px);
-  background: $--background-color-base;
+  background: $--color-white;
 }
 //commom 样式
 .common-table-title {
@@ -598,6 +601,7 @@
 }
 // 设备管理页面样式
 .openatc-device {
+  margin-top: 15px;
   .tag-container {
       float: left;
       max-width: 70%;
@@ -605,7 +609,7 @@
     }
     .filter-container {
       float: right;
-      margin-top: 20px;
+      margin-top: 10px;
       margin-right: 20px;
     }
     .devs-table {
@@ -622,20 +626,22 @@
   }
   //故障记录页面样式
   .openatc-faultrecord {
+    margin-top: 15px;
     .el-range-editor .el-range-input {
       background-color: $--background-color-base;
     }
     .filter-container {
       float: right;
-      margin-top: 20px;
+      margin-top: 10px;
       margin-right: 20px;
     }
   }
   // 用户管理页面样式
   .openatc-user {
+    margin-top: 15px;
     .filter-container {
         float: right;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-right: 20px;
     }
     .atc-table {
@@ -649,6 +655,7 @@
   }
   // 绿波协调页面样式
   .greenWaveOptimize {
+    margin-top: 15px;
     height: calc(100vh - 50px);
     .el-aside {
         height: calc(100vh - 50px);
@@ -970,6 +977,7 @@
   }
   // 操作记录页面样式
   .openatc-operationrecord {
+    margin-top: 15px;
     .atc-table {
         position: absolute;
         top: 130px;
@@ -980,13 +988,14 @@
       }
       .filter-container {
         float: right;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-right: 20px;
       }
   }
   // 组织机构页面样式
   // 勤务路线页面样式
   .openatc-serviceroute {
+    margin-top: 15px;
     height: calc(100vh - 50px);
     .el-aside {
         height: calc(100vh - 50px);
@@ -1495,6 +1504,7 @@
   padding: 0 16px 30px 16px;
 }
 .openatc-organization {
+  margin-top: 15px;
   .atc-table {
     position: absolute;
     top: 130px;
@@ -1505,7 +1515,7 @@
   }
   .filter-container {
     float: right;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-right: 20px;
   }
 }
@@ -1663,6 +1673,7 @@ table td {
   }
 // 瓶颈控制页面样式
 .overflow-detector-page {
+  margin-top: 15px;
   // height: calc(100% - 30px);
   height: 100%;
   position: relative;
