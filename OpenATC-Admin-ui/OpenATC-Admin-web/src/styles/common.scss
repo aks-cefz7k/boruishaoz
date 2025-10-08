@@ -630,6 +630,20 @@
     .el-range-editor .el-range-input {
       background-color: $--background-color-base;
     }
+    .el-date-editor .el-range-separator {
+      padding: 0
+    }
+    .el-range-editor--small .el-range-separator {
+      line-height: 32px;
+    }
+    .devs-table {
+      position: absolute;
+      top: 130px;
+      left: 20px;
+      right: 20px;
+      border: solid 1px $--border-color-lighter;
+      overflow: auto;
+    }
     .filter-container {
       float: right;
       margin-top: 10px;
