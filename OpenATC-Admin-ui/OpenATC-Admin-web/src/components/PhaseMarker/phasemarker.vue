@@ -77,6 +77,7 @@ export default {
   },
   data () {
     return {
+      timer: 0,
       isdestroy: true,
       phaseCountdownColor: { // 控制倒计时的颜色与相位方向颜色一致
         color: '#333333'
@@ -95,6 +96,13 @@ export default {
       this.showLevel = showLevel
       this.phaseCountdownColor = {
         color: params.phaseCountdownColor
+      }
+      clearInterval(this.timer)
+      let countdown = params.countdown
+      if (countdown) {
+        this.timer = setInterval(() => {
+          params.countdown = params.countdown > 0 ? params.countdown - 1 : 0
+        }, 1000)
       }
     }
   },

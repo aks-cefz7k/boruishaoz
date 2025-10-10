@@ -141,8 +141,6 @@ export default {
     async recvMessage (message) {
       let item = message
       if (item.hasOwnProperty('agentid')) {
-        console.log(item.agentid)
-        console.log(item)
         let phase = item.data.phase
         let curpattern = item.data.name
         let cycle = item.data.cycle + 's'
