@@ -1,7 +1,7 @@
 <template>
 <div class="openatc-faultrecord">
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
-    <div style="float:left;margin:25px 20px;">
+    <div style="float:left;margin:15px 20px;">
       <div class="common-table-title">{{$t('openatc.main.faultrecord')}}</div>
     </div>
     <div class="filter-container">

@@ -11,7 +11,7 @@
  **/
 <template>
 <div class="openatc-user">
-    <div style="float:left;margin:25px 20px;">
+    <div style="float:left;margin:15px 20px;">
       <div class="common-table-title">{{$t('openatc.main.usermanager')}}</div>
     </div>
     <div class="filter-container">
