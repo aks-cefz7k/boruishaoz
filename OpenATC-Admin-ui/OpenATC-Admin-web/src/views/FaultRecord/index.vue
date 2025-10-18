@@ -9,7 +9,6 @@
         <el-col :span="7">
         <el-input
             :placeholder="$t('openatc.common.searchdeviceid')"
-            @keyup.enter.native="handleFilter"
             v-model="devsfilter"
             style="width: 200px;margin-right: 10px;"
         />
@@ -323,11 +322,6 @@ export default {
     handleCurrentChange (val) {
       // 改变页码
       this.listQuery.pageNum = val
-      this.getAllRecord()
-    },
-    handleFilter () {
-      // 查询事件
-      this.listQuery.pageNum = 1
       this.getAllRecord()
     },
     cancle () {
