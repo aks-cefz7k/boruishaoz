@@ -98,6 +98,24 @@ const en = {
       'faultOrOffLine': 'Fault / Online'
     },
     'faultrecord': {
+      'untreated': 'Untreated',
+      'ignored': 'Ignored',
+      'confirmed': 'Confirmed',
+      'powerup': 'Output Power Is Up',
+      'powerdown': 'Output Power Is Down',
+      'powerno': 'Output Power Is Zero',
+      'powerfault': 'Off Output Power Is High',
+      'general': 'General failure',
+      'degradation': 'Degradation failure',
+      'serious': 'Serious failure',
+      'maincontrolboard': 'Main Control Board',
+      'lightcontrolversion': 'Light Control Version',
+      'carinspectionboard': 'Car Inspection Board',
+      'ioboard': 'I/O board',
+      'maincontrolboardfault': 'Main Control Board Fault',
+      'lightcontrolversionfault': 'Light Control Version Fault',
+      'carinspectionboardfault': 'Car Inspection Board Fault',
+      'ioboardfault': 'I/O board Fault',
       'fixdetail': 'Fix Detail',
       'deviceid': 'Device Id',
       'faultid': 'Fault Id',
@@ -108,7 +126,10 @@ const en = {
       'faultchild': 'Fault Child',
       'faultgrade': 'Fault Grade',
       'operation': 'Operation',
-      'faultvaluedetail': 'Fault Value Detail'
+      'faultvaluedetail': 'Fault Value Detail',
+      'operator': 'Operator',
+      'operationTime': 'Operation Time',
+      'enumerate': 'Enumerate'
     },
     'devicemanager': {
       'devicelist': 'Intersection',

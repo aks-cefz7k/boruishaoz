@@ -141,8 +141,6 @@ export default {
     async recvMessage (message) {
       let item = message
       if (item.hasOwnProperty('agentid')) {
-        console.log(item.agentid)
-        console.log(item)
         let phase = item.data.phase
         let curpattern = item.data.name
         let cycle = item.data.cycle + 's'
@@ -261,9 +259,9 @@ export default {
     getReqData () {
       let reqData = []
       for (let dev of this.showList) {
-        let devtype = dev.type
+        // let devtype = dev.type
         let agentid = dev.agentid
-        let simuid = devtype + ':status/pattern:' + agentid
+        let simuid = agentid
         reqData.push(simuid)
       }
       return reqData

@@ -70,25 +70,27 @@ export function getControSource (lang, phases) {
     phaseList = phases
   }
   for (let i = 0; i < phaseList.length; i++) {
-    let pattern = {}
-    var patternNum = phaseList[i].id
-    var patternDescription
-    let phaseDesc = phaseList[i].direction ? getPhaseDesc(phaseList[i].direction, lang) : ''
-    let pedphaseDesc = phaseList[i].peddirection ? getPedPhaseDesc(phaseList[i].peddirection, lang) : ''
-    if (phaseDesc === '' && pedphaseDesc === '') {
-      patternDescription = patternNum
-    } else {
-      if (phaseDesc !== '' && pedphaseDesc !== '') {
-        patternDescription = patternNum + '-' + phaseDesc + '--' + pedphaseDesc
-      } else if (phaseDesc === '') {
-        patternDescription = patternNum + '-' + pedphaseDesc
+    if (phaseList[i].controltype !== 99) {
+      let pattern = {}
+      var patternNum = phaseList[i].id
+      var patternDescription
+      let phaseDesc = phaseList[i].direction ? getPhaseDesc(phaseList[i].direction, lang) : ''
+      let pedphaseDesc = phaseList[i].peddirection ? getPedPhaseDesc(phaseList[i].peddirection, lang) : ''
+      if (phaseDesc === '' && pedphaseDesc === '') {
+        patternDescription = patternNum
       } else {
-        patternDescription = patternNum + '-' + phaseDesc
+        if (phaseDesc !== '' && pedphaseDesc !== '') {
+          patternDescription = patternNum + '-' + phaseDesc + '--' + pedphaseDesc
+        } else if (phaseDesc === '') {
+          patternDescription = patternNum + '-' + pedphaseDesc
+        } else {
+          patternDescription = patternNum + '-' + phaseDesc
+        }
       }
+      pattern.value = patternNum
+      pattern.label = patternDescription
+      controlSources.push(pattern)
     }
-    pattern.value = patternNum
-    pattern.label = patternDescription
-    controlSources.push(pattern)
   }
   return controlSources
 }
