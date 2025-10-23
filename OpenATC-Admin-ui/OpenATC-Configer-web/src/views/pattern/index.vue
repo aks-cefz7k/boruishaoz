@@ -335,6 +335,9 @@ export default {
           let num = 0
           for (let i = 0; i < rings.length; i++) {
             if (rings[i].length !== 0) {
+              if (rings[i].mode === 7) { // 忽略相位不计周期
+                continue
+              }
               num = num + Number(rings[i].value)
               let id = rings[i].id
               rings[i].name = this.getDescription(id)
