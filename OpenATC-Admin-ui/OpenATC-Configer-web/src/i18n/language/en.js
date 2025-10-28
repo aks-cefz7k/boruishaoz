@@ -507,7 +507,9 @@ const en = {
       'siteIdCutEffect': 'SiteId Cut Detail',
       'cutData': 'Cut Data',
       'cutEffect': 'Cut Detail',
-      'longgerThan20': 'Data length is longger than 20 ！'
+      'longgerThan20': 'Data length is longger than 20 ！',
+      'timezonehour': 'Time zone / Hour',
+      'timezoneminute': 'Time zone / Minute'
     },
     'singleoptim': {
       'deletetip': 'Sure to delete ？',

@@ -53,7 +53,6 @@
             <el-dropdown-item command="operate">{{$t('openatc.main.operationrecord')}}</el-dropdown-item>
             <el-dropdown-item command="organization">{{$t('openatc.main.organization')}}</el-dropdown-item>
             <el-dropdown-item command="user">{{$t('openatc.main.usermanager')}}</el-dropdown-item>
-            <el-dropdown-item command="jupyter">{{$t('openatc.main.script')}}</el-dropdown-item>
             <el-dropdown-item command="faultrecord">{{$t('openatc.main.faultrecord')}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>

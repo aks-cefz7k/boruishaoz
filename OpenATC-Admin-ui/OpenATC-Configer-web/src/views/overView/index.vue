@@ -679,7 +679,7 @@ export default {
         this.handleStageData(TscData) // 处理阶段（驻留）stage数据
         this.controlData = this.handleGetData(TscData)
         this.handlePatternData() // 计算方案状态展示数据
-        this.getStageStatusData()
+        // this.getStageStatusData()
         this.handleList(this.controlData)
         this.handleTableData(this.controlData)
         // this.handlePatternData() // 计算方案状态展示数据
@@ -1101,67 +1101,68 @@ export default {
           list.push(obj)
         }
         this.patternStatusList.push(list)
+        console.log(this.patternStatusList, 898)
       }
-      this.handleBarrier(this.patternStatusList, this.phaseList)
+      // this.handleBarrier(this.patternStatusList, this.phaseList)
     },
-    getStageStatusData () {
-      this.stageStatusList = []
-      this.barrierList = []
-      if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
-      if (!this.controlData.phase) return
-      let cycle = this.controlData.cycle
-      // console.log(this.controlData)
-      for (let rings of this.controlData.rings) {
-        let list = []
-        let phase = this.controlData.phase
-        for (let sequ of rings.sequence) {
-          let obj = {}
-          obj.id = sequ
-          let split = phase.filter((item) => {
-            return item.id === sequ
-          })[0].split
-          let currPhase = this.phaseList.filter((item) => {
-            return item.id === sequ
-          })[0]
-          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          obj.split = split
-          obj.direction = currPhase.direction.map(item => {
-            return {
-              id: item,
-              color: '#454545'
-            }
-          })
-          list.push(obj)
-        }
-        this.stageStatusList.push(list)
-      }
-    },
-    handleBarrier (patternStatusList, phaseList) {
-      if (patternStatusList.length < 2) return
-      let tempList = []
-      let barrierWidth = 0
-      let firstPatternStatus = patternStatusList[0]
-      for (let patternStatus of firstPatternStatus) {
-        let concurrent = phaseList.filter((item) => {
-          return item.id === patternStatus.id
-        })[0].concurrent
-        if (concurrent.length === 0) {
-          this.barrierList = []
-          return
-        }
-        if (!this.isEqualsForArray(tempList, concurrent)) {
-          tempList = concurrent
-          this.barrierList.push(barrierWidth)
-        }
-        barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
-      }
-      this.barrierList.push(barrierWidth) // 添加末尾处的屏障
-    },
-    isEqualsForArray (listA, listB) {
-      return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))
-    },
+    // getStageStatusData () {
+    //   this.stageStatusList = []
+    //   this.barrierList = []
+    //   if (Object.keys(this.controlData).length === 0 || this.phaseList.length === 0) return
+    //   if (!this.controlData.phase) return
+    //   let cycle = this.controlData.cycle
+    //   // console.log(this.controlData)
+    //   for (let rings of this.controlData.rings) {
+    //     let list = []
+    //     let phase = this.controlData.phase
+    //     for (let sequ of rings.sequence) {
+    //       let obj = {}
+    //       obj.id = sequ
+    //       let split = phase.filter((item) => {
+    //         return item.id === sequ
+    //       })[0].split
+    //       let currPhase = this.phaseList.filter((item) => {
+    //         return item.id === sequ
+    //       })[0]
+    //       obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
+    //       obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
+    //       obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
+    //       obj.split = split
+    //       obj.direction = currPhase.direction.map(item => {
+    //         return {
+    //           id: item,
+    //           color: '#454545'
+    //         }
+    //       })
+    //       list.push(obj)
+    //     }
+    //     this.stageStatusList.push(list)
+    //   }
+    // },
+    // handleBarrier (patternStatusList, phaseList) {
+    //   if (patternStatusList.length < 2) return
+    //   let tempList = []
+    //   let barrierWidth = 0
+    //   let firstPatternStatus = patternStatusList[0]
+    //   for (let patternStatus of firstPatternStatus) {
+    //     let concurrent = phaseList.filter((item) => {
+    //       return item.id === patternStatus.id
+    //     })[0].concurrent
+    //     if (concurrent.length === 0) {
+    //       this.barrierList = []
+    //       return
+    //     }
+    //     if (!this.isEqualsForArray(tempList, concurrent)) {
+    //       tempList = concurrent
+    //       this.barrierList.push(barrierWidth)
+    //     }
+    //     barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
+    //   }
+    //   this.barrierList.push(barrierWidth) // 添加末尾处的屏障
+    // },
+    // isEqualsForArray (listA, listB) {
+    //   return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))
+    // },
     getPlatform () {
       queryDevice().then(res => {
         if (!res.data.success) {

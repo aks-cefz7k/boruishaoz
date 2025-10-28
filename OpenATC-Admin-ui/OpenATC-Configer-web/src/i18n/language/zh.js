@@ -505,7 +505,9 @@ const zh = {
       'siteIdCutEffect': '地址码剪断效果',
       'cutData': '剪断数据：',
       'cutEffect': '剪断效果：',
-      'longgerThan20': '二进制数据超过20位！'
+      'longgerThan20': '二进制数据超过20位！',
+      'timezonehour': '时区 / 小时',
+      'timezoneminute': '时区 / 分钟'
     },
     'singleoptim': {
       'deletetip': '确认删除？',

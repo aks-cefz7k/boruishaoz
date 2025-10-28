@@ -94,24 +94,24 @@
           </el-tabs>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="ID" minWidth="40">
+      <el-table-column align="center" label="ID" width="140">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc">
+      <el-table-column align="center" :label="$t('edge.pattern.desc')" prop="desc" width="140">
         <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"></el-input>
         </template>
       </el-table-column>
-      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset">
+      <el-table-column  align="center" :label="$t('edge.pattern.offset')" prop="offset" width="140">
         <template slot-scope="scope">
           <el-input size="small" v-model.number="scope.row.offset" @blur="checkOffset(scope.row.offset, scope.row)"></el-input>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
+      <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle" width="140">
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" min-width="200px">
+      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan">
         <template slot-scope="scope">
             <div class="pattern-figure">
               <BoardCard
@@ -169,7 +169,6 @@ export default {
       barrId: [],
       hideWidth: '',
       newBarrid: [],
-      max: '',
       stateList: [],
       numList: [],
       narr: [],
@@ -336,6 +335,9 @@ export default {
           let num = 0
           for (let i = 0; i < rings.length; i++) {
             if (rings[i].length !== 0) {
+              if (rings[i].mode === 7) { // 忽略相位不计周期
+                continue
+              }
               num = num + Number(rings[i].value)
               let id = rings[i].id
               rings[i].name = this.getDescription(id)
