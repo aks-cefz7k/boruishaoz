@@ -180,7 +180,7 @@ const zh = {
       'timeSpaceGraph': '实时时距图',
       'keyintersection': '关键路口：',
       'sockettype': '通讯类型',
-      'patternStatistics': '方案统计',
+      'patternStatistics': '历史方案统计',
       'trafficStatistics': '交通流统计',
       'more': '更多'
     },
@@ -441,6 +441,26 @@ const zh = {
       '6002': '勤务路线正在执行中',
       // 流量错误
       '7001': 'ftp客户端连接失败'
+    },
+    'patternstatistic': {
+      'patterninfo': '方案信息',
+      'historicalcycle': '历史周期',
+      'schemerealtimedata': '方案实时数据',
+      'periodicdistribution': '周期分布',
+      'controlmodel': '控制模式',
+      'controltype': '控制方式',
+      'controlscheme': '控制方案',
+      'cycle': '周期',
+      'phasedifference': '相位差',
+      'synctime': '同步时间',
+      'coordinationtime': '协调时间',
+      'mode0': '自主控制',
+      'mode1': '本地手动',
+      'mode2': '系统控制',
+      'mode3': '配置软件控制',
+      'mode4': '遥控器控制',
+      'mode5': '黄闪器触发',
+      'pattern': '方案'
     }
   }
 }

@@ -441,6 +441,26 @@ const en = {
       '6002': '勤务路线正在执行中',
       // 流量错误
       '7001': 'ftp客户端连接失败'
+    },
+    'patternstatistic': {
+      'patterninfo': 'Pattern info',
+      'historicalcycle': 'Historical cycle',
+      'schemerealtimedata': 'Pattern realtime data',
+      'periodicdistribution': 'Periodic distribution',
+      'controlmodel': 'Model',
+      'controltype': 'Control',
+      'controlscheme': 'Pattern',
+      'cycle': 'Cycle',
+      'phasedifference': 'Offset',
+      'synctime': 'Sync Time',
+      'coordinationtime': 'Coordination time',
+      'mode0': 'Autonomous Control',
+      'mode1': 'Local Manual',
+      'mode2': 'System Control',
+      'mode3': 'Configuration Software Control',
+      'mode4': 'Remote Control',
+      'mode5': 'Yellow Flasher Trigger',
+      'pattern': 'Pattern'
     }
   }
 }
