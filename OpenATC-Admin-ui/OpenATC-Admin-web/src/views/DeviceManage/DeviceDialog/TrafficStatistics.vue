@@ -14,11 +14,12 @@
     <el-dialog
       :title="$t(`openatc.devicemanager.trafficStatistics`)"
       :visible.sync="dialogFormVisible"
-      width="60%"
+      width="90%"
+      top="5vh"
       :close-on-click-modal="false"
       @close='closeFormDialog'>
     <div class="content">
-
+      <trafficDetector :date="date" :curascid="curascid"></trafficDetector>
     </div>
     </el-dialog>
   </div>
@@ -27,8 +28,10 @@
 <script>
 import { DeleteFaultById } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
+import trafficDetector from '../Statistics/trafficDetector'
 export default {
   name: 'TrafficStatistics',
+  components: { trafficDetector },
   props: {
     childTitle: {
       type: String
@@ -38,13 +41,16 @@ export default {
     return {
       dialogFormVisible: false,
       deviceInfo: {},
+      curascid: '',
+      date: ['2021-10-20 15:40:42', '2021-10-21 15:50:42'],
       faultList: []
     }
   },
   methods: {
-    onView (list) {
+    onView (row) {
       this.dialogFormVisible = !this.dialogFormVisible
-      this.faultList = list
+      this.faultList = row
+      this.curascid = row.agentid
     },
     onIgnoreClick (id) {
       let _this = this
