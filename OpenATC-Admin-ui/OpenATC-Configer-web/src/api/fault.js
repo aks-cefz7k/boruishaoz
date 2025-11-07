@@ -33,3 +33,13 @@ export function getFaultHistoryByFtp (reqData) {
   let api = new Authapi('getFaultHistoryByFtp')
   return api.Send({}, reqData)
 }
+
+// 获取历史故障数据
+export function getFaultHistory (reqData) {
+  let agentid = reqData.agentid
+  // var iframdevid = getIframdevid()
+  let api = new Authapi('getFaultHistory')
+  let data = {}
+  data.agentId = agentid
+  return api.Send({}, data)
+}

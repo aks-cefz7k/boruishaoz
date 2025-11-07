@@ -200,6 +200,11 @@
   "method": "post"
 },
 {
+  "key": "getDailyRecord",
+  "url": "/operation/history",
+  "method": "post"
+},
+{
   "key": "getFault",
   "url": "/devs/message",
   "method": "post"
@@ -301,6 +306,11 @@
 {
   "key": "getFaultHistoryByFtp",
   "url": "/fault/history/ftp",
+  "method": "post"
+},
+{
+  "key": "getFaultHistory",
+  "url": "/fault/history",
   "method": "post"
 }
 ]

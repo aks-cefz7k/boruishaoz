@@ -16,7 +16,6 @@
     <el-table
         :data="tableData"
         size="small"
-        :max-height="tableHeight"
         style="width: 100%"
         v-loading.body="listLoading"
         :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
