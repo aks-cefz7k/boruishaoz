@@ -409,7 +409,14 @@ export default {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        this.customInfo = data.data.data.data
+        let allTscParam = data.data.data.data
+        if (allTscParam.timezone === undefined) {
+          allTscParam.timezone = {
+            hour: 8,
+            minute: 0
+          }
+        }
+        this.customInfo = allTscParam
         // let allTscParam = data.data.data.data
         // if (allTscParam.manualpanel === undefined) {
         //   allTscParam.manualpanel = {}
