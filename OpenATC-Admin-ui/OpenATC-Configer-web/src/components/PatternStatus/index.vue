@@ -12,7 +12,7 @@
 <template>
     <div class="main-patternstatus">
       <div class="ring-first" v-for="(list, index1) in pattern" :key="index1">
-        <div v-for="(item,index2) in list" :key="index2">
+        <div v-for="(item,index2) in list" :key="index2" :class="cycles && item.direction.length===0?'direction': ''">
           <div class="first-1" :style="{'width':item.greenWidth,'height':'34px','background':'#7ccc66'}">
               <el-tooltip placement="top-start" effect="light">
                 <div slot="content">P{{item.id}}:{{item.split}}</div>
@@ -248,6 +248,9 @@ export default {
   margin-top: 1px;
   width: 100%;
   height: 34px;
+}
+.direction {
+  opacity: 0.6;
 }
 .first-1 {
   float: left;

@@ -1809,6 +1809,123 @@ table td {
     }
   }
 }
+//交通流
+.trafficDetector {
+  // height: 100%;
+  height: 100vh;
+  .title {
+    line-height: 60px;
+    font-family: MicrosoftYaHei;
+    font-size: 18px;
+    font-weight: bold;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+  }
+  .top {
+    height: 50%;
+    width: 100%;
+    float: left;
+  }
+  .select {
+    position: absolute;
+    z-index: 999;
+    width: 107px;
+    height: 29px;
+  }
+  .lefttop {
+    width: 100%;
+    height: 52%;
+    background: $--color-white;
+    padding: 0 20px;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 4px 0px 
+        rgba(0, 32, 60, 0.06);
+    border-radius: 4px;
+  }
+  .chart1 {
+    width: 100%;
+    height: calc(100% - 70px);
+  }
+  .chart2 {
+    width: 100%;
+    height: calc(100% - 70px);
+  }
+  .bottom {
+    height: 50%;
+    width: 100%;
+    float: left;
+    margin-left: 15px;
+  }
+  .righttop {
+    height: 52%;
+    background: $--color-white;
+    padding: 0 20px;
+    box-shadow: 0px 0px 4px 0px 
+        rgba(0, 32, 60, 0.06);
+    border-radius: 4px;
+    box-sizing: border-box;
+  
+  }
+  .bottom-left {
+    float: left;
+    width: 60%;
+    height: calc(100% - 52% - 16px - 16px);
+    margin-top: 16px;
+    background: $--color-white;
+    padding: 0 20px;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 4px 0px 
+        rgba(0, 32, 60, 0.06);
+    border-radius: 4px;
+  }
+  .bottom-right {
+    float: right;
+    width: 40%;
+    margin-bottom: 17px;
+    height: calc(100% - 52% - 16px - 16px);
+    background: $--color-white;
+    padding: 0 20px;
+    box-shadow: 0px 0px 4px 0px 
+        rgba(0, 32, 60, 0.06);
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  .chartright {
+    width: 100%;
+    height: calc(100% - 70px);
+  }
+  .choosePanel {
+    position: absolute;
+    z-index: 999;
+  }
+  .btn {
+    float: left;
+    min-width: 60px;
+    height: 24px;
+    background-color: #ecf6ff;
+    border: solid 1px #005bac;
+    color: #005bac;
+    border-radius: 0;
+    padding: 0 6px;
+    text-align: center;
+    line-height: 24px;
+    font-family: MicrosoftYaHei;
+    font-size: 12px;
+    margin-right: 6px;
+    cursor: pointer;
+  }
+  .btn:hover {
+    background-color: #0874d4;
+    color: #fff;
+  }
+  .btnFocus {
+    background-color: #0874d4;
+    border: solid 1px #0874d4;
+    color: #fff;
+  }
+}
+
 // 方案统计
 
 .dev-pattern-detail {
@@ -1859,17 +1976,93 @@ table td {
     }
   }
 
-  .periodicPanel{
-    margin-top: 16px;
-      width: 100%;
-    height: calc(100% - 52% - 16px - 16px);
-      background: $--color-white;
-      padding: 0 20px;
-      box-shadow: 0px 0px 4px 0px 
-          rgba(0, 32, 60, 0.06);
-      border-radius: 4px;
-      box-sizing: border-box;
-      .title {
+  .trafficStrength {
+    height: 100%;
+    .left {
+        height: 100%;
+        width: 69%;
+        float: left;
+          .title {
+              line-height: 60px;
+              font-family: MicrosoftYaHei;
+              font-size: 18px;
+              font-weight: bold;
+              font-stretch: normal;
+              letter-spacing: 0px;
+              color: $--color-text-primary;
+          }
+      }
+      .lefttop {
+        width: 100%;
+        height: 52%;
+          background: $--color-white;
+          padding: 0 20px;
+          box-sizing: border-box;
+          box-shadow: 0px 0px 4px 0px 
+              rgba(0, 32, 60, 0.06);
+          border-radius: 4px;
+      }
+      .leftbottom {
+        width: 100%;
+        height: calc(100% - 52% - 16px - 16px);
+        margin-top: 16px;
+          background: $--color-white;
+          padding: 0 20px;
+          box-sizing: border-box;
+          box-shadow: 0px 0px 4px 0px 
+              rgba(0, 32, 60, 0.06);
+          border-radius: 4px;
+      }
+      .right {
+        height: 100%;
+        width: calc(31% - 15px);
+        float: left;
+        margin-left: 15px;
+      }
+
+      .chart1 {
+        width: 100%;
+        height: calc(100% - 70px);
+      }
+      .chart2 {
+        width: 100%;
+        height: calc(100% - 70px);
+      }
+      .choosePanel {
+        position: absolute;
+        z-index: 999;
+      }
+      .btn {
+        float: left;
+        min-width: 60px;
+        height: 24px;
+        background-color: #ecf6ff;
+        border: solid 1px $--color-primary;
+        color: $--color-primary;
+        border-radius: 0;
+        padding: 0 6px;
+        text-align: center;
+        line-height: 24px;
+        font-family: MicrosoftYaHei;
+        font-size: 12px;
+        margin-right: 6px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background-color: $--color-primary;
+        color: #fff;
+      }
+      .btnFocus {
+        background-color: $--color-primary;
+        border: solid 1px $--color-primary;
+        color: #fff;
+      }
+    .strengthPanel {
+        width: 100%;
+        background: $--color-white;
+        height: 52%;
+        padding: 0 20px;
+        .title {
           line-height: 60px;
           font-family: MicrosoftYaHei;
           font-size: 18px;
@@ -1877,46 +2070,22 @@ table td {
           font-stretch: normal;
           letter-spacing: 0px;
           color: $--color-text-primary;
-      }
-      .chart {
+        }
+        .chart {
           width: 100%;
-        height: 86.4%;
+          height: 79%;
+        }
       }
-  }
-  .charttip {
-    font-size: 12px;
-    color: #999999;
-    margin-top: 10px;
-  }
-  .strengthPanel {
-    width: 100%;
-    height: 52%;
-    background: $--color-white;
-    padding: 0 20px;
-    box-shadow: 0px 0px 4px 0px 
-        rgba(0, 32, 60, 0.06);
-    border-radius: 4px;
-    box-sizing: border-box;
-    .title {
-        line-height: 60px;
-        font-family: MicrosoftYaHei;
-        font-size: 18px;
-        font-weight: bold;
-        font-stretch: normal;
-        letter-spacing: 0px;
-        color: $--color-text-primary;
-    }
-    .chart {
-        width: 100%;
-      height: 79%;
-    }
-}
-.trafficStrength {
-  height: 100%;
-  .left {
-      height: 100%;
-      width: 69%;
-      float: left;
+    .periodicPanel{
+      margin-top: 16px;
+      width: 100%;
+      height: calc(100% - 52% - 16px - 16px);
+        background: $--color-white;
+        padding: 0 20px;
+        box-shadow: 0px 0px 4px 0px 
+            rgba(0, 32, 60, 0.06);
+        border-radius: 4px;
+        box-sizing: border-box;
         .title {
             line-height: 60px;
             font-family: MicrosoftYaHei;
@@ -1926,75 +2095,15 @@ table td {
             letter-spacing: 0px;
             color: $--color-text-primary;
         }
+        .chart {
+            width: 100%;
+          height: 86.4%;
+        }
     }
-    .lefttop {
-      width: 100%;
-      height: 52%;
-        background: $--color-white;
-        padding: 0 20px;
-        box-sizing: border-box;
-        box-shadow: 0px 0px 4px 0px 
-            rgba(0, 32, 60, 0.06);
-        border-radius: 4px;
-    }
-    .leftbottom {
-      width: 100%;
-      height: calc(100% - 52% - 16px - 16px);
-      margin-top: 16px;
-        background: $--color-white;
-        padding: 0 20px;
-        box-sizing: border-box;
-        box-shadow: 0px 0px 4px 0px 
-            rgba(0, 32, 60, 0.06);
-        border-radius: 4px;
-    }
-    .right {
-      height: 100%;
-      width: calc(31% - 15px);
-      float: left;
-      margin-left: 15px;
-    }
-    
-    .chart1 {
-      width: 100%;
-      height: calc(100% - 70px);
-    }
-    .chart2 {
-      width: 100%;
-      height: calc(100% - 70px);
-    }
-    .choosePanel {
-      position: absolute;
-      z-index: 999;
-    }
-    .btn {
-      float: left;
-      min-width: 60px;
-      height: 24px;
-      background-color: #ecf6ff;
-      border: solid 1px $--color-primary;
-      color: $--color-primary;
-      border-radius: 0;
-      padding: 0 6px;
-      text-align: center;
-      line-height: 24px;
-      font-family: MicrosoftYaHei;
-      font-size: 12px;
-      margin-right: 6px;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background-color: $--color-primary;
-      color: #fff;
-    }
-    .btnFocus {
-      background-color: $--color-primary;
-      border: solid 1px $--color-primary;
-      color: #fff;
-    }
-}
+  }
 } 
 .dev-pattern-detail-popper {
+  //日期选择器弹窗的快捷选项太多，被底部遮挡
   .el-picker-panel__sidebar {
     bottom: 45px;
   }

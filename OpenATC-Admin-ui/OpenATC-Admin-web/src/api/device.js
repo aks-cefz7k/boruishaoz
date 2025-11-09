@@ -59,10 +59,22 @@ export const DeleteDevice = (id) => {
   return api.Send({}, {}, paramList)
 }
 
+export const getAllTrafficData = (reqData) => {
+  let api = new Authapi('getAllTrafficData')
+  return api.Send({}, reqData, [])
+}
+
+export const getAllPatternData = (reqData) => {
+  let api = new Authapi('getAllPatternData')
+  return api.Send({}, reqData, [])
+}
+
 export default {
   GetAllDevice,
   AddDevice,
   UpdateDevice,
   DeleteDevice,
-  UpdateDeviceId
+  UpdateDeviceId,
+  getAllTrafficData,
+  getAllPatternData
 }

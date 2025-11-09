@@ -365,6 +365,11 @@
     "method": "post"
   },
   {
+    "key": "getAllTrafficData",
+    "url": "/historydata/flow/range",
+    "method": "post"
+  },
+  {
     "key": "getHistoryPatternData",
     "url": "/historydata/pattern/range",
     "method": "post"
