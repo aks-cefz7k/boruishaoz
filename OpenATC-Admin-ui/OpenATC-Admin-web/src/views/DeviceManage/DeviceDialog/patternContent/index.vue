@@ -269,8 +269,8 @@ export default {
         grid: {
           containLabel: true,
           height: '80%',
-          width: '95%',
-          left: '18',
+          width: '93%',
+          right: '45',
           bottom: '20'
         },
         xAxis: {
@@ -280,9 +280,29 @@ export default {
               color: getTheme() === 'light' ? '#666666' : '#B9BABF'
             }
           },
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
           data: this.getStrXAxis(this.strengthData)
         },
         yAxis: {
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
           splitLine: {
             lineStyle: {
               color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
@@ -291,7 +311,7 @@ export default {
           splitArea: {
             show: true,
             areaStyle: {
-              color: ['#fafafa', '#fff']
+              color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
             }
           },
           axisLabel: {
@@ -374,6 +394,16 @@ export default {
             data: this.getTimingLegend(this.TimingData)
           },
           xAxis: {
+            axisTick: {
+              lineStyle: {
+                color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+              }
+            },
             axisLabel: {
               textStyle: {
                 color: getTheme() === 'light' ? '#666666' : '#B9BABF'
@@ -382,6 +412,16 @@ export default {
             data: this.getTimingXAxis(this.TimingData)
           },
           yAxis: {
+            axisTick: {
+              lineStyle: {
+                color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+              }
+            },
             axisLabel: {
               textStyle: {
                 color: getTheme() === 'light' ? '#666666' : '#B9BABF'
@@ -389,13 +429,13 @@ export default {
             },
             splitLine: {
               lineStyle: {
-                color: '#f1f3f8'
+                color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
               }
             },
             splitArea: {
               show: true,
               areaStyle: {
-                color: ['#fafafa', '#fff']
+                color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
               }
             }
           },

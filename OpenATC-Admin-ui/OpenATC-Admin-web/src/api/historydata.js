@@ -13,13 +13,13 @@ import Authapi from './authapi'
 export function getHistoryPatternData (param) {
   let api = new Authapi('getHistoryPatternData')
   let data = {}
-  // data.agentId = param.agentId
-  // data.beginTime = param.beginTime
-  // data.endTime = param.endTime
+  data.agentId = param.agentId
+  data.beginTime = param.beginTime
+  data.endTime = param.endTime
   // data.beginTime = '2021-10-27 15:50:00'
   // data.endTime = '2021-10-27 15:59:45'
-  data.agentId = '1634181198793'
-  data.beginTime = '2021-10-25 08:40:42'
-  data.endTime = '2021-10-25 08:41:04'
+  // data.agentId = '1634181198793'
+  // data.beginTime = '2021-10-25 08:40:42'
+  // data.endTime = '2021-10-25 08:41:04'
   return api.Send({}, data)
 }
