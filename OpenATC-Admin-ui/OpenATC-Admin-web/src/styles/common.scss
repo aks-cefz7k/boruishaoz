@@ -1813,6 +1813,16 @@ table td {
   .dateChoosed {
     vertical-align: middle;
     display: inline-block;
+    .el-date-editor .el-range-input {
+      color: #606266;
+    }
+    .el-date-editor.el-input__inner {
+      height: 36px;
+      float: left;
+    }
+    .el-range-editor .el-range-input {
+      background-color: $--background-color-base;
+    }
   }
 }
 //交通流
