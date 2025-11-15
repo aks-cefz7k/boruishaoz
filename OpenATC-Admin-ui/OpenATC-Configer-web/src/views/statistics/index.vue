@@ -80,6 +80,7 @@
 import { setVolumelog, getHistoryFlow } from '@/api/statistics'
 import { getMessageByCode } from '@/utils/responseMessage'
 import echart from 'echarts'
+import { getTheme } from '@/utils/auth'
 // import Ftp from 'vinyl-ftp'
 export default {
   name: 'statistics',
@@ -209,6 +210,9 @@ export default {
       let _this = this
       let option = {
         legend: {
+          textStyle: {
+            color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+          },
           data: [_this.$t('edge.statistics.flow'), _this.$t('edge.statistics.occupyrate')],
           right: '2%'
           // align: 'right'

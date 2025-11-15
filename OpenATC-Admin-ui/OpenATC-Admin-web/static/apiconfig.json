@@ -370,7 +370,7 @@
     "method": "post"
   },
   {
-    "key": "getAllPatternData",
+    "key": "getHistoryPatternData",
     "url": "/historydata/pattern/range",
     "method": "post"
   }
