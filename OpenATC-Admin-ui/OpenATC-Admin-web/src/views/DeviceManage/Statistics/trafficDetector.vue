@@ -41,6 +41,7 @@
 <script>
 import echart from 'echarts'
 import { getAllTrafficData } from '@/api/device'
+import { getMessageByCode } from '@/utils/responseMessage'
 import moment from 'moment'
 export default {
   name: 'trafficDetector',
@@ -74,6 +75,11 @@ export default {
       Color: new Map([['大型车', '#007dc5'], ['中型车', '#7953b1'], ['小型车', '#cf6543']])
     }
   },
+  // watch: {
+  //   date (val) {
+  //     this.refreshChart(this.curascid)
+  //   }
+  // },
   mounted () {
     this.initChart()
     this.ascid = this.curascid
@@ -456,14 +462,17 @@ export default {
     },
     GetData () {
       return new Promise((resolve, reject) => {
-        let resData = {
-          agentId: '2',
-          beginTime: '2021-10-20 15:40:42',
-          endTime: '2021-10-21 15:50:42'
+        let reqData = {}
+        let from = moment(this.date[0]).format('YYYY-MM-DD HH:mm:ss')
+        let to = moment(this.date[1]).format('YYYY-MM-DD HH:mm:ss')
+        reqData = {
+          agentId: this.curascid,
+          beginTime: from,
+          endTime: to
         }
-        getAllTrafficData(resData).then(res => {
+        getAllTrafficData(reqData).then(res => {
           if (!res.data.success) {
-            console.log(res.data.message)
+            this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
             reject(res.data.message)
           }
           let resInfo = res.data.data
