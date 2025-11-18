@@ -30,7 +30,7 @@
         >
           <div class="tipContent">
             <div>
-              <i class="iconfont icon-yindaoicon"></i>
+              <i class="iconfont icon-yindaoicon handicon"></i>
             </div>
             <div class="text">{{ $t("openatc.dutyroute.clickaddroute") }}</div>
           </div>

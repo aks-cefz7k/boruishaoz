@@ -19,7 +19,7 @@
       <el-popover placement="top-start" trigger="manual" v-model="maskVisible" width="290">
         <div class="tipContent">
           <div>
-            <i class="iconfont icon-yindaoicon1"></i>
+            <i class="iconfont icon-yindaoicon1 handicon"></i>
           </div>
           <div class="text">{{$t('openatc.greenwaveoptimize.createconfig')}}</div>
         </div>
