@@ -81,5 +81,21 @@ export default {
       margin-left: 85px;
     }
   }
+   /*当屏幕小于等于1280px的屏幕样式*/
+  @media only screen and (max-height: 1000px){
+    .cross-content {
+      margin-bottom: 15px;
+    }
+   }
+  @media only screen and (max-height: 830px){
+    .cross-content {
+      margin-bottom: 10px;
+    }
+   }
+  @media only screen and (max-height: 720px){
+    .cross-content {
+      margin-bottom: 5px;
+    }
+   }
 }
 </style>

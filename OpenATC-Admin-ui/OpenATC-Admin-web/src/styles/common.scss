@@ -1942,6 +1942,7 @@ table td {
     height: calc(100% - 30vh);
     .el-dialog__body {
       height: 100%;
+      padding: 20px;
       background: $--background-color-base;
       .content {
         height: 100%;
@@ -1959,15 +1960,19 @@ table td {
       font-size: 20px;
       font-family: Source Han Sans CN;
       font-weight: 400;
-      color: $--color-text-primary;;
+      color: $--color-text-primary;
       line-height: 60px;
     }
     .timepicker {
       position: absolute;
       right: 72px;
       top: 11px;
+      .el-date-editor .el-range-separator {
+        line-height: 29px;
+      }
       .el-date-editor .el-range-input {
-        color: #606266;
+        color: $--color-text-primary;
+        background-color: $--color-white;
       }
       .el-date-editor.el-input__inner {
         height: 36px;
@@ -1987,12 +1992,16 @@ table td {
 
   .trafficStrength {
     height: 100%;
+    .el-loading-spinner{
+      font-size: 50px;
+      }
     .left {
         height: 100%;
         width: 69%;
         float: left;
           .title {
-              line-height: 60px;
+              padding-top: 25px;
+              margin-bottom: 20px;
               font-family: MicrosoftYaHei;
               font-size: 18px;
               font-weight: bold;
@@ -2013,7 +2022,7 @@ table td {
       }
       .leftbottom {
         width: 100%;
-        height: calc(100% - 52% - 16px - 16px);
+        height: calc(100% - 52% - 16px);
         margin-top: 16px;
           background: $--color-white;
           padding: 0 20px;
@@ -2031,15 +2040,16 @@ table td {
 
       .chart1 {
         width: 100%;
-        height: calc(100% - 70px);
+        height: calc(100% - 100px);
       }
       .chart2 {
         width: 100%;
         height: calc(100% - 70px);
       }
       .choosePanel {
-        position: absolute;
+        position: relative;
         z-index: 999;
+        height: 24px;
       }
       .btn {
         float: left;
@@ -2072,7 +2082,8 @@ table td {
         height: 52%;
         padding: 0 20px;
         .title {
-          line-height: 60px;
+          padding-top: 25px;
+          margin-bottom: 20px;
           font-family: MicrosoftYaHei;
           font-size: 18px;
           font-weight: bold;
@@ -2088,7 +2099,7 @@ table td {
     .periodicPanel{
       margin-top: 16px;
       width: 100%;
-      height: calc(100% - 52% - 16px - 16px);
+      height: calc(100% - 52% - 16px);
         background: $--color-white;
         padding: 0 20px;
         box-shadow: 0px 0px 4px 0px 
@@ -2096,7 +2107,7 @@ table td {
         border-radius: 4px;
         box-sizing: border-box;
         .title {
-            line-height: 60px;
+            padding-top: 25px;
             font-family: MicrosoftYaHei;
             font-size: 18px;
             font-weight: bold;

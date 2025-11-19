@@ -10,7 +10,10 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="trafficStrength" v-loading="loading">
+  <div class="trafficStrength"
+    v-loading="loading"
+    element-loading-spinner="el-icon-loading"
+    :element-loading-background="loadingBg">
     <div class="left">
       <div class="lefttop">
         <div class="title">{{$t('openatc.patternstatistic.patterninfo')}}</div>
@@ -69,6 +72,7 @@ export default {
       timeSelIndex: -1,
       strSelIndex: -1,
       loading: false,
+      loadingBg: '#202940',
       chooseButtons: [
         {
           key: 'model',
@@ -115,11 +119,17 @@ export default {
       Color: new Map([[0, '#43b4cf'], [1, '#c6bf72'], [2, '#5085d1'], [3, '#cc7966'], [4, '#537896'], [5, '#d39351'], [6, '#45ab89'], [7, '#a25768']])
     }
   },
+  created () {
+    this.setLoadingBg()
+  },
   mounted () {
     this.initChart()
     this.refreshChart()
   },
   methods: {
+    setLoadingBg () {
+      this.loadingBg = getTheme() === 'light' ? '#fff' : '#202940'
+    },
     changeBtnStyle (key) {
       // 选中按钮高亮
       this.chooseButtons.forEach(button => {
