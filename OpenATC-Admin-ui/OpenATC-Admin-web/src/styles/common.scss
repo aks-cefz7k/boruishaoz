@@ -1810,6 +1810,9 @@ table td {
   }
 }
 .dev-traffic-detail {
+  .content {
+    // background: #F5F7FA;
+  }
   .dateChoosed {
     vertical-align: middle;
     display: inline-block;
@@ -1828,6 +1831,7 @@ table td {
 //交通流
 .trafficDetector {
   // height: 100%;
+  // border: 1px solid red;
   height: 100vh;
   .title {
     line-height: 60px;
@@ -1839,6 +1843,8 @@ table td {
     color: $--color-text-primary;
   }
   .top {
+    background: $--color-white;
+    // border: 1px solid red;
     height: 50%;
     width: 100%;
     float: left;

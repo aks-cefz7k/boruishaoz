@@ -35,7 +35,8 @@ const zh = {
       'authtip': '没有权限访问 !',
       'nodata': '没有数据 !',
       'canceloperate': '操作已取消！',
-      'submitsuccess': '提交成功！'
+      'submitsuccess': '提交成功！',
+      'search': '查询'
     },
     'button': {
       'OK': '确定',
@@ -181,8 +182,27 @@ const zh = {
       'keyintersection': '关键路口：',
       'sockettype': '通讯类型',
       'patternStatistics': '历史方案统计',
-      'trafficStatistics': '交通流统计',
-      'more': '更多'
+      'trafficStatistics': '历史交通流统计',
+      'more': '更多',
+      'last15min': '最近15分钟',
+      'last30min': '最近30分钟',
+      'last1hour': '最近1小时',
+      'last2hour': '最近2小时',
+      'last4hour': '最近4小时',
+      'last1day': '最近1天',
+      'last2day': '最近2天',
+      'last1week': '最近一周',
+      'last1month': '最近一个月',
+      'today': '今天',
+      'thisWeek': '本周',
+      'thisMonth': '本月',
+      'trafficFlowStatistic': '交通流量统计',
+      'detectorFlowStatistics': '检测器流量热力图',
+      'detectorFlow': '检测器流量',
+      'largeVehicle': '大型车',
+      'middleVehicle': '中型车',
+      'smallVehicle': '小型车',
+      '': '检测器'
     },
     'usermanager': {
       'username': '用户名称',

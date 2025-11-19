@@ -35,7 +35,8 @@ const en = {
       'authtip': 'No access !',
       'nodata': 'No Data !',
       'canceloperate': 'Operation cancelled！',
-      'submitsuccess': 'Submit Success!'
+      'submitsuccess': 'Submit Success!',
+      'search': 'Search'
     },
     'button': {
       'OK': 'OK',
@@ -182,7 +183,26 @@ const en = {
       'sockettype': 'Socket Type',
       'patternStatistics': 'Pattern Statistics',
       'trafficStatistics': 'Traffic Statistics',
-      'more': 'More'
+      'more': 'More',
+      'last15min': 'last 15 min',
+      'last30min': 'last 30 min',
+      'last1hour': 'last 1 hour',
+      'last2hour': 'last 2 hour',
+      'last4hour': 'last 4 hour',
+      'last1day': 'last 1 day',
+      'last2day': 'last 2 day',
+      'last1week': 'last 1 week',
+      'last1month': 'last 1 month',
+      'today': 'today',
+      'thisWeek': 'this Week',
+      'thisMonth': 'this Month',
+      'trafficFlowStatistic': 'traffic Flow Statistic',
+      'detectorFlowStatistics': 'detector Flow Statistics',
+      'detectorFlow': 'detector Flow',
+      'largeVehicle': 'largeVehicle',
+      'middleVehicle': 'middleVehicle',
+      'smallVehicle': 'smallVehicle',
+      'detector': 'detector'
     },
     'usermanager': {
       'username': 'Username',

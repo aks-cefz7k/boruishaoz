@@ -2,7 +2,7 @@
   <div class="trafficDetector" v-loading="loading">
     <div class="top">
       <div class="lefttop">
-          <div class="title">交通流量统计</div>
+          <div class="title">{{$t('openatc.devicemanager.trafficFlowStatistic')}}</div>
           <div class="select">
             <el-select v-model="curDetectorName"
                        size="mini"
@@ -21,7 +21,7 @@
     <div class="bottom">
       <div class="bottom-left">
         <div class="title">
-          检测器流量热力图
+          {{$t(`openatc.devicemanager.detectorFlowStatistics`)}}
         </div>
         <div class="choosePanel">
         </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="bottom-right">
         <div class="title">
-          检测器流量
+          {{$t(`openatc.devicemanager.detectorFlow`)}}
         </div>
           <div class="chartright"
                id="strengthHeatMap"></div>
@@ -59,7 +59,7 @@ export default {
     return {
       ascid: '',
       loading: false,
-      valueTypeList: ['大型车', '中型车', '小型车'],
+      valueTypeList: [this.$t(`openatc.devicemanager.largeVehicle`), this.$t(`openatc.devicemanager.middleVehicle`), this.$t(`openatc.devicemanager.smallVehicle`)],
       heatmapColorList: [
         '#0064be',
         '#0874d4',
@@ -73,7 +73,7 @@ export default {
       curHistoryData: {},
       curHeatMapData: [],
       maxValueList: [],
-      Color: new Map([['大型车', '#007dc5'], ['中型车', '#7953b1'], ['小型车', '#cf6543']])
+      Color: new Map([[this.$t(`openatc.devicemanager.largeVehicle`), '#007dc5'], [this.$t(`openatc.devicemanager.middleVehicle`), '#7953b1'], [this.$t(`openatc.devicemanager.smallVehicle`), '#cf6543']])
     }
   },
   mounted () {
@@ -117,7 +117,7 @@ export default {
     makeSelectOption (data) {
       this.historySelectOption = this.detectorIdList.map(item => {
         return {
-          label: '检测器' + item,
+          label: this.$t(`openatc.devicemanager.detector`) + item,
           value: item
         }
       })
@@ -207,6 +207,7 @@ export default {
         let seriesInfo = {
           name: '',
           type: 'line',
+          smooth: true,
           yAxisIndex: valueIndex === 0 || valueIndex === 3 ? 1 : 0,
           lineStyle: {
             width: '1'
@@ -244,7 +245,7 @@ export default {
       // let i = 0
       for (let item of this.data) {
         // i++
-        let yName = '检测器' + item.id
+        let yName = this.$t(`openatc.devicemanager.detector`) + item.id
         let xName = item.date
         let y = days.indexOf(yName)
         let x = hours.indexOf(xName)
@@ -393,7 +394,7 @@ export default {
           axisLabel: {
             rotate: 15
           },
-          data: this.getDetectorList(this.curHeatMapData).map(item => '检测器' + item)
+          data: this.getDetectorList(this.curHeatMapData).map(item => this.$t(`openatc.devicemanager.detector`) + item)
         },
         series: this.getStrengthSeries(this.curHeatMapData)
       }
@@ -467,16 +468,6 @@ export default {
             }
           }
           resolve(resArr)
-          // resData = resInfo.map(item => {
-          //   return {
-          //     index: item.detectorid,
-          //     name: '检测器' + item.detectorid,
-          //     date: moment(item['createtime']).format('MM-DD HH:mm:ss'),
-          //     value: [item.intensity.toFixed(2), item.flow,
-          //       item.speed.toFixed(2), item.occupancy.toFixed(2), item.queue]
-          //   }
-          // })
-          // resolve(resData)
         }).catch(() => {
           this.unlockScreen()
         })
