@@ -208,7 +208,7 @@ export default {
           name: '',
           type: 'line',
           smooth: true,
-          yAxisIndex: valueIndex === 0 || valueIndex === 3 ? 1 : 0,
+          // yAxisIndex: valueIndex === 0 || valueIndex === 3 ? 1 : 0,
           lineStyle: {
             width: '1'
           },

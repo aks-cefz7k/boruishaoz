@@ -19,7 +19,7 @@
       top="5vh"
       :close-on-click-modal="false"
       @close='closeFormDialog'>
-      <div style="float:right;margin-top: -70px;margin-right:50px;">
+      <div style="float:right;margin-top: -65px;margin-right:50px;">
         <div class="dateChoosed">
           <el-date-picker v-model="date"
                           :type="dateType"
@@ -147,6 +147,27 @@ export default {
           onClick (picker) {
             const end = new Date()
             const start = moment().startOf('month')
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: this.$t(`openatc.devicemanager.lastDay`),
+          onClick (picker) {
+            const end = moment().subtract(1, 'day').endOf('day')
+            const start = moment().subtract(1, 'day').startOf('day')
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: this.$t(`openatc.devicemanager.lastWeek`),
+          onClick (picker) {
+            const end = moment().subtract(1, 'week').endOf('week')
+            const start = moment().subtract(1, 'week').startOf('week')
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: this.$t(`openatc.devicemanager.lastMonth`),
+          onClick (picker) {
+            const end = moment().subtract(1, 'month').endOf('month')
+            const start = moment().subtract(1, 'month').startOf('month')
             picker.$emit('pick', [start, end])
           }
         }]
