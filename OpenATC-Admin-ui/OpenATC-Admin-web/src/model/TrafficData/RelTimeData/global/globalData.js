@@ -6,7 +6,7 @@ const typeList = [ /// <可订阅的数据类型
   'faulteventdata'
 ]
 const typekeyMap = new Map([
-  ['faulteventdata', 'event/agentfault']
+  ['faulteventdata', 'status/fault']
 ])
 export default class GlobalData {
   constructor () {
