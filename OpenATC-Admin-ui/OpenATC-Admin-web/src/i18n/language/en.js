@@ -35,7 +35,8 @@ const en = {
       'authtip': 'No access !',
       'nodata': 'No Data !',
       'canceloperate': 'Operation cancelled！',
-      'submitsuccess': 'Submit Success!'
+      'submitsuccess': 'Submit Success!',
+      'search': 'Search'
     },
     'button': {
       'OK': 'OK',
@@ -190,7 +191,26 @@ const en = {
       'sockettype': 'Socket Type',
       'patternStatistics': 'Pattern Statistics',
       'trafficStatistics': 'Traffic Statistics',
-      'more': 'More'
+      'more': 'More',
+      'last15min': 'last 15 min',
+      'last30min': 'last 30 min',
+      'last1hour': 'last 1 hour',
+      'last2hour': 'last 2 hour',
+      'last4hour': 'last 4 hour',
+      'last1day': 'last 1 day',
+      'last2day': 'last 2 day',
+      'last1week': 'last 1 week',
+      'last1month': 'last 1 month',
+      'today': 'today',
+      'thisWeek': 'this Week',
+      'thisMonth': 'this Month',
+      'trafficFlowStatistic': 'traffic Flow Statistic',
+      'detectorFlowStatistics': 'detector Flow Statistics',
+      'detectorFlow': 'detector Flow',
+      'largeVehicle': 'largeVehicle',
+      'middleVehicle': 'middleVehicle',
+      'smallVehicle': 'smallVehicle',
+      'detector': 'detector'
     },
     'usermanager': {
       'username': 'Username',
@@ -449,6 +469,26 @@ const en = {
       '6002': '勤务路线正在执行中',
       // 流量错误
       '7001': 'ftp客户端连接失败'
+    },
+    'patternstatistic': {
+      'patterninfo': 'Pattern info',
+      'historicalcycle': 'Historical cycle',
+      'schemerealtimedata': 'Pattern realtime data',
+      'periodicdistribution': 'Periodic distribution',
+      'controlmodel': 'Model',
+      'controltype': 'Control',
+      'controlscheme': 'Pattern',
+      'cycle': 'Cycle',
+      'phasedifference': 'Offset',
+      'synctime': 'Sync Time',
+      'coordinationtime': 'Coordination time',
+      'mode0': 'Autonomous Control',
+      'mode1': 'Local Manual',
+      'mode2': 'System Control',
+      'mode3': 'Configuration Software Control',
+      'mode4': 'Remote Control',
+      'mode5': 'Yellow Flasher Trigger',
+      'pattern': 'Pattern'
     }
   }
 }

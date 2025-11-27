@@ -70,8 +70,8 @@
     </el-table>
 
     <div style="text-align: right; margin-top: 20px;">
-    <el-button class="el-icon-check" style="margin-bottom:10px; font-size: 10px;" type="primary" @click="onCommit(false)"> {{$t('edge.common.commit')}}</el-button>
-    <el-button class="iconfont icon-tijiaobingzhihang" style="margin-bottom:10px; font-size: 10px;color: #b6f0ff" type="primary" @click="onCommitAndExec"> {{$t('edge.common.commitandexecute')}}</el-button>
+    <el-button class="el-icon-check" style="margin-bottom:10px; font-size: 14px;" type="primary" @click="onCommit(false)"> {{$t('edge.common.commit')}}</el-button>
+    <el-button class="iconfont icon-tijiaobingzhihang" style="margin-bottom:10px; font-size: 14px;color: #fff;" type="primary" @click="onCommitAndExec"> {{$t('edge.common.commitandexecute')}}</el-button>
     </div>
   </div>
 </template>
