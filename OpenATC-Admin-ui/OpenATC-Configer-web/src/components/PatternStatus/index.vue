@@ -29,7 +29,7 @@
             </div>
             <div class="first-1" :style="{'width':item.yellowWidth,'height':'34px','background':'#f9dc6a'}"></div>
             <div class="first-1" :style="{'width':item.redWidth,'height':'34px','background':'#f27979'}"></div>
-          <!-- <div class="first-1" v-show="pattern.length > 1" :style="{'width':item.hideWidth,'height':'34px','background':'#191F34'}"></div> -->
+            <div class="first-1" v-show="pattern.length > 1" :style="{'width':item.hideWidth,'height':'34px'}"></div>
           </div>
         </div>
       <div v-for="(item, index) in barrierList" :key="index + '1'">
@@ -53,7 +53,6 @@ export default {
     return {
       barrierHeight: '',
       barrierList: [],
-      hideWidth: '',
       pattern: this.patternStatusList
     }
   },
@@ -103,7 +102,6 @@ export default {
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
-    // console.log(this.patternStatusList, this.cycles, 111)
     if (this.patternStatusList && this.cycles) {
       this.handleCurrentChange(this.patternStatusList)
       this.handleBarrierHeight()
@@ -156,7 +154,6 @@ export default {
           }
         }
         this.pattern.push(list)
-        // console.log(list, this.cycles, 888)
       }
       this.handleBarrier(this.pattern, phaseList)
     },
@@ -200,7 +197,9 @@ export default {
         let max = 0
         na.forEach(n => {
           const total = n.data.reduce((pre, cur) => pre + patternObj[cur], 0)
-          if (total > max) max = total
+          if (total > max) {
+            max = total
+          }
         })
         while (index > 0 && max < this.cycles) {
           index--
@@ -209,6 +208,36 @@ export default {
         ret.push(max)
       })
       return ret
+    },
+    fillGap (newArr, pattern) {
+      const patternObj = {}
+      pattern.forEach(l => {
+        l.map(k => {
+          patternObj[k.id] = k.split
+        })
+      })
+      newArr.forEach((na, index) => {
+        na.map(n => {
+          n.num = n.data.reduce((pre, cur) => pre + patternObj[cur], 0)
+        })
+        na.forEach((value, index, array) => {
+          let maxNum = Math.max.apply(Math, na.map(item => { return item.num }))
+          if (value.num !== maxNum) {
+            let newNa = []
+            newNa.push(value)
+            newNa.forEach(m => {
+              pattern.filter((i) => {
+                i.map(j => {
+                  if (j.id === m.data[1]) {
+                    let sum = Number(maxNum - m.num)
+                    j.hideWidth = (sum / this.cycles * 100).toFixed(3) + '%'
+                  }
+                })
+              })
+            })
+          }
+        })
+      })
     },
     handleBarrier (pattern, phaseList) {
       if (pattern.length < 2) return
@@ -236,6 +265,7 @@ export default {
         return (j / this.cycles * 100) + '%'
       })
       this.barrierList.unshift(0)
+      // this.fillGap(ringTeam, pattern)
     }
   }
 }

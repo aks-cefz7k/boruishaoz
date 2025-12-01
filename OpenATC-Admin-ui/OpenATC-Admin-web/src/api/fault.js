@@ -16,6 +16,22 @@ export const GetAllCurrentFault = () => {
   return api.Send({}, {}, [])
 }
 
+export const GetUntreated = (pageNum, pageSize, enumerate) => {
+  let api = new Authapi('GetUntreated')
+  let param = {
+    'pageNum': pageNum,
+    'pageRow': pageSize,
+    'enumerate': enumerate
+  }
+  return api.Send(param, {})
+}
+
+export const searchRoadName = (id) => {
+  let api = new Authapi('searchRoadName')
+  let paramList = [id]
+  return api.Send({}, {}, paramList)
+}
+
 export const GetAllFault = (pageNum, pageSize) => {
   let api = new Authapi('GetAllFault')
   let param = {
@@ -48,6 +64,16 @@ export const DeleteFaultById = (id) => {
   return api.Send({}, {}, urlParamList)
 }
 
+export const enumerateCheck = (agentid, id, enumerate) => {
+  let api = new Authapi('enumerateCheck')
+  let param = {
+    'agentid': agentid,
+    'id': id,
+    'enumerate': enumerate
+  }
+  return api.Send({}, param)
+}
+
 export const GetAllFaultRange = (pageNum, pageSize, id, beginTime, endTime) => {
   let api = new Authapi('GetAllFaultRange')
   let param = {
@@ -67,5 +93,8 @@ export default {
   GetAllHistoryFaultByAgentid,
   DeleteFaultById,
   GetAllFaultRange,
-  GetAllFault
+  GetAllFault,
+  GetUntreated,
+  searchRoadName,
+  enumerateCheck
 }

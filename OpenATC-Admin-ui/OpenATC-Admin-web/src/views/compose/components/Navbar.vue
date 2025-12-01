@@ -129,30 +129,52 @@
       </div>
     </div>
       <el-drawer
-        title="故障列表"
+        :title="$t('openatc.faultrecord.faultlist')"
         :visible.sync="drawer"
+        :modal="false"
+        :wrapperClosable="false"
         :with-header="true">
-        <span>
+        <!-- <span> -->
+          <div class="empty" v-show="faultData.length === 0">
+            <img src="../../../../static/img/noMessage.png">
+            <div class="noInfo">没有新消息</div>
+          </div>
           <el-card v-for="(fault,index) in faultData" :key="index" class="box-card" style="margin:10px 16px">
-            <div slot="header" class="clearfix">
+            <!-- <div slot="header" class="clearfix">
               <i class="el-icon-location-outline" type="primary"></i>
               <span>{{$t('openatc.faultrecord.deviceid')}}</span>
               <el-button style="float: right; padding: 3px 0" type="text">
                 <i class="el-icon-close"></i>
               </el-button>
-            </div>
+            </div> -->
             <div class="text item">
               <el-row :gutter="20" class="row-bg">
                 <el-col :span="12">
                   <el-row :gutter="0">
                     <el-col :span="10">
                       <div class="grid-content-label">
-                        {{ $t("openatc.faultrecord.deviceid") }}:
+                        {{ $t("openatc.faultrecord.eportingmodule") }}:
                       </div>
                     </el-col>
                     <el-col :span="14">
                       <div class="grid-content bg-purple">
-                       {{fault.agentid}}
+                       {{fault.model}}
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" class="row-bg">
+                <el-col :span="12">
+                  <el-row :gutter="0">
+                    <el-col :span="10">
+                      <div class="grid-content-label">
+                        {{ $t("openatc.faultrecord.roadname") }}:
+                      </div>
+                    </el-col>
+                    <el-col :span="14">
+                      <div class="grid-content bg-purple">
+                       {{fault.name}}
                       </div>
                     </el-col>
                   </el-row>
@@ -163,12 +185,12 @@
                   <el-row :gutter="0">
                     <el-col :span="10">
                       <div class="grid-content-label">
-                        {{ $t("openatc.devicemanager.faultOccurtime") }}:
+                        {{ $t("openatc.faultrecord.eventtype") }}:
                       </div>
                     </el-col>
                     <el-col :span="14">
                       <div class="grid-content bg-purple">
-                        {{fault.m_unFaultOccurTime}}
+                        {{fault.eventType}}
                       </div>
                     </el-col>
                   </el-row>
@@ -179,7 +201,7 @@
                   <el-row :gutter="0">
                     <el-col :span="10">
                       <div class="grid-content-label">
-                        {{ $t("openatc.faultrecord.fixdetail") }}:
+                        {{ $t("openatc.faultrecord.detaileddescription") }}:
                       </div>
                     </el-col>
                     <el-col :span="14">
@@ -191,11 +213,15 @@
                 </el-col>
               </el-row>
             </div>
+            <div style="text-align: right; padding: 5px 0 0 0;border-top: 1px solid #E5E9F2">
+              <el-button size="mini" icon="el-icon-circle-check" type="text" @click="cancels(fault)">{{$t('openatc.faultrecord.confirm')}}</el-button>
+              <el-button type="text" icon="el-icon-remove-outline" size="mini" @click="confirmeds(fault)">{{$t('openatc.faultrecord.neglect')}}</el-button>
+            </div>
           </el-card>
-        </span>
+        <!-- </span> -->
       </el-drawer>
-    <div class="alarm-message" @click="drawer = true">
-      <el-badge is-dot class="item">
+    <div class="alarm-message" @click="drawer = true, isDot=false">
+      <el-badge :is-dot="isDot" class="item">
         <i class="el-icon-message-solid"></i>
       </el-badge>
     </div>
@@ -208,6 +234,7 @@
 <script>
 import router from '@/router'
 import FaultEventData from '@/model/EventModal/faultData.js'
+import { GetUntreated, searchRoadName, enumerateCheck } from '@/api/fault.js'
 import modifypasswd from './modifyPasswd'
 import versioninfo from './versionInfo'
 import SystemSettings from './SystemSettings'
@@ -242,7 +269,17 @@ export default {
       fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew', '/overviewNew/index'],
       language: 'Language',
       zh_handbook: '',
-      en_handbook: ''
+      en_handbook: '',
+      pageNum: '1',
+      pageSize: '10',
+      enumerate: '0',
+      infotype: '',
+      model: '',
+      notify: undefined,
+      faultDescValue: '',
+      roadName: '',
+      faultDatas: '',
+      isDot: false
     }
   },
   watch: {
@@ -275,7 +312,7 @@ export default {
     if (this.fromKstpPath.indexOf(this.devicePath) !== -1) {
       this.isShow = false
     }
-    // this.handleFaultEventData()
+    this.getUntreated()
   },
   mounted () {
     // 订阅故障测试
@@ -289,9 +326,93 @@ export default {
   },
   methods: {
     handleFaultEventData (data) {
-      // debugger
-      // console.log(data, 777)
-      this.faultData = data
+      this.isDot = true
+      this.faultDatas = data
+      searchRoadName(data.agentid).then(j => {
+        this.roadName = j.data.data.name
+      })
+      this.infotype = data.infotype
+      this.model = data.model
+      this.faultDescValue = data.data.m_FaultDeque[0].m_byFaultDescValue
+      if (this.notify) {
+        this.notify.close()
+      }
+      this.open2()
+    },
+    open2 () {
+      const h = this.$createElement
+      this.notify = this.$notify({
+        title: this.$t('openatc.faultrecord.realtimealert'),
+        iconClass: 'warnIcon',
+        onClose: () => {
+        },
+        dangerouslyUseHTMLString: true,
+        message: h('div', {style: {'width': '236px'}}, [
+          h('div', {style: {padding: '5px 0'}}, [
+            h('span', `${this.$t('openatc.faultrecord.eportingmodule')}:`),
+            h('span', {style: {paddingLeft: '5px'}}, `${this.model}`)
+          ]),
+          h('div', [
+            h('span', `${this.$t('openatc.faultrecord.roadname')}:`),
+            h('span', {style: {paddingLeft: '5px'}}, `${this.roadName}`)
+          ]),
+          h('div', {style: {padding: '5px 0'}}, [
+            h('span', `${this.$t('openatc.faultrecord.eventtype')}:`),
+            h('span', {style: {paddingLeft: '5px'}}, `${this.infotype}`)
+          ]),
+          h('div', {style: {margin: '0 0 5px 0'}}, [
+            h('span', `${this.$t('openatc.faultrecord.detaileddescription')}:`),
+            h('span', {style: {paddingLeft: '5px'}}, `${this.faultDescValue}`)
+          ]),
+          h('div', {style: {textAlign: 'right', paddingTop: '10px', borderTop: '1px solid #E5E9F2'}}, [
+            h('el-button', {props: {size: 'mini', type: 'text', icon: 'el-icon-circle-check'}, on: {click: this.confirm}}, `${this.$t('openatc.faultrecord.confirm')}`),
+            h('el-button', {props: {size: 'mini', type: 'text', icon: 'el-icon-remove-outline'}, on: {click: this.cancel}}, `${this.$t('openatc.faultrecord.neglect')}`)
+          ])
+        ]),
+        duration: 0,
+        position: 'bottom-right'
+      })
+    },
+    cancel () {
+      this.enumerate = '1'
+      enumerateCheck(this.faultDatas.agentid, this.faultDatas.data.m_FaultDeque[0].m_wFaultID.toString(), this.enumerate).then(data => {
+      })
+      this.notify.close()
+    },
+    confirm () {
+      this.enumerate = '2'
+      enumerateCheck(this.faultDatas.agentid, this.faultDatas.data.m_FaultDeque[0].m_wFaultID.toString(), this.enumerate).then(data => {
+      })
+      this.notify.close()
+    },
+    cancels (data) {
+      this.enumerate = '2'
+      enumerateCheck(data.agentid, data.m_wFaultID.toString(), this.enumerate).then(data => {
+        if (data.data.success) {
+          this.getUntreated()
+        }
+      })
+    },
+    confirmeds (data) {
+      this.enumerate = '1'
+      enumerateCheck(data.agentid, data.m_wFaultID.toString(), this.enumerate).then(data => {
+        if (data.data.success) {
+          this.getUntreated()
+        }
+      })
+    },
+    getUntreated () {
+      this.enumerate = 0
+      GetUntreated(this.pageNum, this.pageSize, this.enumerate).then(data => {
+        if (data.data.success) {
+          for (let i = 0; i < data.data.data.content.length; i++) {
+            searchRoadName(data.data.data.content[i].agentid).then(j => {
+              data.data.data.content[i].name = j.data.data.name
+            })
+          }
+          this.faultData = data.data.data.content
+        }
+      })
     },
     handleJump (key) {
       if (key === 'deviceState' || key === 'dutyRoute' || key === 'coordinateRoute') {
@@ -453,6 +574,14 @@ export default {
  //  @import "../../../styles/theme/element-variables.scss";
 .el-menu-demo {
   padding: 0 18px;
+}
+.warnIcon {
+  height: 24px;
+  width: 24px;
+  background-size: 24px 24px;
+  background-repeat: no-repeat;
+  background-position:center center;
+  background-image: url('../../../assets/home/trouble.png');
 }
 .openatc-operate {
   cursor: pointer;

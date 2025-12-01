@@ -26,6 +26,16 @@
 }
 .openatc-navbar {
   box-shadow: 0px 0px 11px 0px rgba(0, 64, 125, 0.14);
+  .el-drawer__header {
+    color: $--color-text-regular;
+  }
+  .empty{
+    text-align: center;
+    color: $--color-text-regular;
+    .noInfo{
+      margin: 10px 0 0 22px;
+    }
+  }
 }
 .appMain {
   height: calc(100% - 57px);
