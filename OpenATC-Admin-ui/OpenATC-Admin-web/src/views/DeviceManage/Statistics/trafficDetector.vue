@@ -95,10 +95,10 @@ export default {
       }
     },
     initHistoryDataChart () {
-      this.historyChart = echart.init(document.getElementById('historyData'), getTheme())
+      this.historyChart = echart.init(document.getElementById('historyData'))
     },
     initHeatMapChart () {
-      this.heatmapChart = echart.init(document.getElementById('heatmap'), getTheme())
+      this.heatmapChart = echart.init(document.getElementById('heatmap'))
       this.heatmapChart.on('mouseover', event => {
         let index = event.value[0]
         let date = this.getXAxis(this.data)[index]
@@ -106,7 +106,7 @@ export default {
       })
     },
     initStrengthChart () {
-      this.strengthChart = echart.init(document.getElementById('strengthHeatMap'), getTheme())
+      this.strengthChart = echart.init(document.getElementById('strengthHeatMap'))
     },
     lockScreen () {
       this.loading = true
@@ -157,34 +157,58 @@ export default {
         },
         legend: {
           left: 'right',
+          textStyle: {
+            color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+          },
           data: this.valueTypeList
         },
         xAxis: {
           type: 'category',
-          data: []
-        },
-        yAxis: [
-          {
-            splitLine: {
-              show: false,
-              lineStyle: {
-                color: '#f1f3f8'
-              }
-            },
-            splitArea: {
-              show: true,
-              areaStyle: {
-                color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
-              }
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
             }
           },
-          {
-            position: 'right',
-            splitLine: {
-              show: false
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          data: []
+        },
+        yAxis: {
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
+            }
+          },
+          splitArea: {
+            show: true,
+            areaStyle: {
+              color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
             }
           }
-        ],
+        },
         series: []
       }
       option.legend.data = this.valueTypeList
@@ -270,6 +294,21 @@ export default {
         xAxis: {
           type: 'category',
           data: hours,
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
+          },
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
           splitArea: {
             show: true,
             areaStyle: {
@@ -280,8 +319,31 @@ export default {
         yAxis: {
           type: 'category',
           data: days,
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
+            }
+          },
           splitArea: {
-            show: true
+            show: true,
+            areaStyle: {
+              color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
           }
         },
         visualMap: {
@@ -327,11 +389,6 @@ export default {
     },
     getDetectorList (data) {
       let detectorIdList = [...new Set(data.map(item => { return item.id }))]
-      // detectorIdList.sort((item1, item2) => {
-      //   let num1 = item1.replace(/[^0-9]/ig, '')
-      //   let num2 = item2.replace(/[^0-9]/ig, '')
-      //   return parseInt(num1) - parseInt(num2)
-      // })
       return detectorIdList
     },
     getHeatMapSeries (data) {
@@ -385,14 +442,52 @@ export default {
         xAxis: {
           type: 'value',
           boundaryGap: [0, 0.01],
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
+          },
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
           splitLine: {// 去除网格线
             show: false
           }
         },
         yAxis: {
           type: 'category',
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
+            }
+          },
+          splitArea: {
+            show: true,
+            areaStyle: {
+              color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
+            }
+          },
           axisLabel: {
-            rotate: 15
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
           },
           data: this.getDetectorList(this.curHeatMapData).map(item => this.$t(`openatc.devicemanager.detector`) + item)
         },
@@ -410,7 +505,7 @@ export default {
           label: {
             show: true,
             position: 'right',
-            color: '#333333'
+            color: getTheme() === 'light' ? '#666666' : '#B9BABF'
           },
           type: 'bar',
           itemStyle: {

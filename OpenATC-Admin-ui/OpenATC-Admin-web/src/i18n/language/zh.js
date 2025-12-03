@@ -213,7 +213,7 @@ const zh = {
       'largeVehicle': '大型车',
       'middleVehicle': '中型车',
       'smallVehicle': '小型车',
-      '': '检测器'
+      'detector': '检测器'
     },
     'usermanager': {
       'username': '用户名称',

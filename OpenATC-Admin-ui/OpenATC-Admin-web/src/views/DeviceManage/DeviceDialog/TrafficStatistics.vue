@@ -175,6 +175,7 @@ export default {
       dateType: 'datetimerange', // 日期选择器类型，进入方案评价后，日期选择器按天选择
       curascid: '',
       isDialogShow: true,
+      dialogFormVisible: false,
       date: [new Date().getTime() - 3600 * 1000 * 24, new Date()]
     }
   },
