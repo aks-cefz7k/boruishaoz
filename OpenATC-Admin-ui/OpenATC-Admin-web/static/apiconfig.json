@@ -90,6 +90,16 @@
     "method": "post"
   },
   {
+    "key": "enumerateCheck",
+    "url": "/fault/check",
+    "method": "post"
+  },
+  {
+    "key": "searchRoadName",
+    "url": "/devs",
+    "method": "get"
+  },
+  {
     "key": "deleteDevice",
     "url": "/devs",
     "method": "delete"
@@ -242,6 +252,11 @@
   {
     "key": "GetAllCurrentFault",
     "url": "/fault/current",
+    "method": "get"
+  },
+  {
+    "key": "GetUntreated",
+    "url": "/fault/uncheck",
     "method": "get"
   },
   {

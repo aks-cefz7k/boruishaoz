@@ -2,7 +2,7 @@
   <div class="trafficDetector" v-loading="loading">
     <div class="top">
       <div class="lefttop">
-          <div class="title">交通流量统计</div>
+          <div class="title">{{$t('openatc.devicemanager.trafficFlowStatistic')}}</div>
           <div class="select">
             <el-select v-model="curDetectorName"
                        size="mini"
@@ -21,7 +21,7 @@
     <div class="bottom">
       <div class="bottom-left">
         <div class="title">
-          检测器流量热力图
+          {{$t(`openatc.devicemanager.detectorFlowStatistics`)}}
         </div>
         <div class="choosePanel">
         </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="bottom-right">
         <div class="title">
-          检测器流量
+          {{$t(`openatc.devicemanager.detectorFlow`)}}
         </div>
           <div class="chartright"
                id="strengthHeatMap"></div>
@@ -59,7 +59,7 @@ export default {
     return {
       ascid: '',
       loading: false,
-      valueTypeList: ['大型车', '中型车', '小型车'],
+      valueTypeList: [this.$t(`openatc.devicemanager.largeVehicle`), this.$t(`openatc.devicemanager.middleVehicle`), this.$t(`openatc.devicemanager.smallVehicle`)],
       heatmapColorList: [
         '#0064be',
         '#0874d4',
@@ -73,7 +73,7 @@ export default {
       curHistoryData: {},
       curHeatMapData: [],
       maxValueList: [],
-      Color: new Map([['大型车', '#007dc5'], ['中型车', '#7953b1'], ['小型车', '#cf6543']])
+      Color: new Map([[this.$t(`openatc.devicemanager.largeVehicle`), '#007dc5'], [this.$t(`openatc.devicemanager.middleVehicle`), '#7953b1'], [this.$t(`openatc.devicemanager.smallVehicle`), '#cf6543']])
     }
   },
   mounted () {
@@ -95,10 +95,10 @@ export default {
       }
     },
     initHistoryDataChart () {
-      this.historyChart = echart.init(document.getElementById('historyData'), getTheme())
+      this.historyChart = echart.init(document.getElementById('historyData'))
     },
     initHeatMapChart () {
-      this.heatmapChart = echart.init(document.getElementById('heatmap'), getTheme())
+      this.heatmapChart = echart.init(document.getElementById('heatmap'))
       this.heatmapChart.on('mouseover', event => {
         let index = event.value[0]
         let date = this.getXAxis(this.data)[index]
@@ -106,7 +106,7 @@ export default {
       })
     },
     initStrengthChart () {
-      this.strengthChart = echart.init(document.getElementById('strengthHeatMap'), getTheme())
+      this.strengthChart = echart.init(document.getElementById('strengthHeatMap'))
     },
     lockScreen () {
       this.loading = true
@@ -117,7 +117,7 @@ export default {
     makeSelectOption (data) {
       this.historySelectOption = this.detectorIdList.map(item => {
         return {
-          label: '检测器' + item,
+          label: this.$t(`openatc.devicemanager.detector`) + item,
           value: item
         }
       })
@@ -157,34 +157,58 @@ export default {
         },
         legend: {
           left: 'right',
+          textStyle: {
+            color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+          },
           data: this.valueTypeList
         },
         xAxis: {
           type: 'category',
-          data: []
-        },
-        yAxis: [
-          {
-            splitLine: {
-              show: false,
-              lineStyle: {
-                color: '#f1f3f8'
-              }
-            },
-            splitArea: {
-              show: true,
-              areaStyle: {
-                color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
-              }
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
             }
           },
-          {
-            position: 'right',
-            splitLine: {
-              show: false
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          data: []
+        },
+        yAxis: {
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
+            }
+          },
+          splitArea: {
+            show: true,
+            areaStyle: {
+              color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
             }
           }
-        ],
+        },
         series: []
       }
       option.legend.data = this.valueTypeList
@@ -207,7 +231,8 @@ export default {
         let seriesInfo = {
           name: '',
           type: 'line',
-          yAxisIndex: valueIndex === 0 || valueIndex === 3 ? 1 : 0,
+          smooth: true,
+          // yAxisIndex: valueIndex === 0 || valueIndex === 3 ? 1 : 0,
           lineStyle: {
             width: '1'
           },
@@ -244,7 +269,7 @@ export default {
       // let i = 0
       for (let item of this.data) {
         // i++
-        let yName = '检测器' + item.id
+        let yName = this.$t(`openatc.devicemanager.detector`) + item.id
         let xName = item.date
         let y = days.indexOf(yName)
         let x = hours.indexOf(xName)
@@ -269,6 +294,21 @@ export default {
         xAxis: {
           type: 'category',
           data: hours,
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
+          },
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
           splitArea: {
             show: true,
             areaStyle: {
@@ -279,8 +319,31 @@ export default {
         yAxis: {
           type: 'category',
           data: days,
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
+            }
+          },
           splitArea: {
-            show: true
+            show: true,
+            areaStyle: {
+              color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
           }
         },
         visualMap: {
@@ -326,11 +389,6 @@ export default {
     },
     getDetectorList (data) {
       let detectorIdList = [...new Set(data.map(item => { return item.id }))]
-      // detectorIdList.sort((item1, item2) => {
-      //   let num1 = item1.replace(/[^0-9]/ig, '')
-      //   let num2 = item2.replace(/[^0-9]/ig, '')
-      //   return parseInt(num1) - parseInt(num2)
-      // })
       return detectorIdList
     },
     getHeatMapSeries (data) {
@@ -384,16 +442,54 @@ export default {
         xAxis: {
           type: 'value',
           boundaryGap: [0, 0.01],
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
+          },
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
           splitLine: {// 去除网格线
             show: false
           }
         },
         yAxis: {
           type: 'category',
-          axisLabel: {
-            rotate: 15
+          axisTick: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
           },
-          data: this.getDetectorList(this.curHeatMapData).map(item => '检测器' + item)
+          axisLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#D7DFE1' : '#30384D'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: getTheme() === 'light' ? '#DCDFE6' : '#30384d'
+            }
+          },
+          splitArea: {
+            show: true,
+            areaStyle: {
+              color: getTheme() === 'light' ? ['#fafafa', '#fff'] : ['#202940', '#1a2338']
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+            }
+          },
+          data: this.getDetectorList(this.curHeatMapData).map(item => this.$t(`openatc.devicemanager.detector`) + item)
         },
         series: this.getStrengthSeries(this.curHeatMapData)
       }
@@ -409,7 +505,7 @@ export default {
           label: {
             show: true,
             position: 'right',
-            color: '#333333'
+            color: getTheme() === 'light' ? '#666666' : '#B9BABF'
           },
           type: 'bar',
           itemStyle: {
@@ -467,16 +563,6 @@ export default {
             }
           }
           resolve(resArr)
-          // resData = resInfo.map(item => {
-          //   return {
-          //     index: item.detectorid,
-          //     name: '检测器' + item.detectorid,
-          //     date: moment(item['createtime']).format('MM-DD HH:mm:ss'),
-          //     value: [item.intensity.toFixed(2), item.flow,
-          //       item.speed.toFixed(2), item.occupancy.toFixed(2), item.queue]
-          //   }
-          // })
-          // resolve(resData)
         }).catch(() => {
           this.unlockScreen()
         })

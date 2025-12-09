@@ -19,7 +19,7 @@
       top="5vh"
       :close-on-click-modal="false"
       @close='closeFormDialog'>
-      <div style="float:right;margin-top: -70px;margin-right:50px;">
+      <div style="float:right;margin-top: -65px;margin-right:50px;">
         <div class="dateChoosed">
           <el-date-picker v-model="date"
                           :type="dateType"
@@ -31,7 +31,7 @@
         </div>
           <el-button type="primary"
               icon="el-icon-search"
-              @click="doSearch">查询</el-button>
+              @click="doSearch">{{$t(`openatc.common.search`)}}</el-button>
       </div>
       <div class="content">
         <trafficDetector :date="date"
@@ -57,7 +57,7 @@ export default {
     return {
       pickerOptions: {
         shortcuts: [{
-          text: '最近15分钟',
+          text: this.$t(`openatc.devicemanager.last15min`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -65,7 +65,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近30分钟',
+          text: this.$t(`openatc.devicemanager.last30min`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -73,7 +73,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近1小时',
+          text: this.$t(`openatc.devicemanager.last1hour`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -81,7 +81,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近2小时',
+          text: this.$t(`openatc.devicemanager.last2hour`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -89,7 +89,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近4小时',
+          text: this.$t(`openatc.devicemanager.last4hour`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -97,7 +97,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近1天',
+          text: this.$t(`openatc.devicemanager.last1day`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -105,7 +105,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近2天',
+          text: this.$t(`openatc.devicemanager.last2day`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -113,7 +113,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近一周',
+          text: this.$t(`openatc.devicemanager.last1week`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -121,7 +121,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近一个月',
+          text: this.$t(`openatc.devicemanager.last1month`),
           onClick (picker) {
             const end = new Date()
             const start = new Date()
@@ -129,24 +129,45 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '今天',
+          text: this.$t(`openatc.devicemanager.today`),
           onClick (picker) {
             const end = new Date()
             const start = moment().startOf('day')
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '本周',
+          text: this.$t(`openatc.devicemanager.thisWeek`),
           onClick (picker) {
             const end = new Date()
             const start = moment().startOf('week')
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '本月',
+          text: this.$t(`openatc.devicemanager.thisMonth`),
           onClick (picker) {
             const end = new Date()
             const start = moment().startOf('month')
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: this.$t(`openatc.devicemanager.lastDay`),
+          onClick (picker) {
+            const end = moment().subtract(1, 'day').endOf('day')
+            const start = moment().subtract(1, 'day').startOf('day')
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: this.$t(`openatc.devicemanager.lastWeek`),
+          onClick (picker) {
+            const end = moment().subtract(1, 'week').endOf('week')
+            const start = moment().subtract(1, 'week').startOf('week')
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: this.$t(`openatc.devicemanager.lastMonth`),
+          onClick (picker) {
+            const end = moment().subtract(1, 'month').endOf('month')
+            const start = moment().subtract(1, 'month').startOf('month')
             picker.$emit('pick', [start, end])
           }
         }]
@@ -154,6 +175,7 @@ export default {
       dateType: 'datetimerange', // 日期选择器类型，进入方案评价后，日期选择器按天选择
       curascid: '',
       isDialogShow: true,
+      dialogFormVisible: false,
       date: [new Date().getTime() - 3600 * 1000 * 24, new Date()]
     }
   },

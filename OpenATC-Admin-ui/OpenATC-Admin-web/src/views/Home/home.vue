@@ -60,7 +60,6 @@ import LottieAnim from './lottieDemo/index'
 import deviceAnim from '../../../static/lottiejson/deviceManager.json'
 import userAnim from '../../../static/lottiejson/userManager.json'
 import operatAnim from '../../../static/lottiejson/operationRecord.json'
-// import FaultEventData from '../../model/EventModal/faultData.js'
 import { getMessageByCode } from '@/utils/responseMessage'
 
 export default {
@@ -180,9 +179,6 @@ export default {
         this.faultList = list
       })
     }
-    // handleFaultEventData (data) {
-    //   console.log(data)
-    // }
   },
   mounted () {
     this.calculateHeight()
