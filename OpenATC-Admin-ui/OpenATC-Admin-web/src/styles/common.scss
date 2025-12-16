@@ -692,6 +692,11 @@
       background-color: $--background-color-base;
     }
   }
+  .tipContent{
+    .handicon {
+      color: $--color-text-primary;
+    }
+  }
   .planContent {
     position: relative;
     .btnGroup {
@@ -771,7 +776,7 @@
           font-stretch: normal;
           line-height: 14px;
           letter-spacing: 1px;
-          color: $--color-primary;
+          color: red;
           margin-left: 7px;
           line-height: 42px;
       }
@@ -861,6 +866,9 @@
           color: $--color-primary;
           margin-left: 7px;
           line-height: 42px;
+      }
+      .tipContent .iconfont {
+        color: $--color-primary;
       }
   }
   .openatc-planchart {
@@ -1115,6 +1123,9 @@
         margin-left: 7px;
         line-height: 42px;
       }
+      .tipContent .iconfont {
+        color: $--color-primary;
+      }
   }
   .serviceroute-plancontent {
     position: relative;
@@ -1193,6 +1204,9 @@
         color: $--color-primary;
         margin-left: 7px;
         line-height: 42px;
+      }
+      .tipContent .iconfont {
+        color: $--color-primary;
       }
   }
   .serviceroute-pattern {
