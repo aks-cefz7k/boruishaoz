@@ -24,10 +24,48 @@
     color: $--color-primary;
   }
 }
+.borderStyle {
+  text-align: right;
+  padding-top: 10px;
+  border-top: 1px solid $--border-color-lighter;
+}
+.msgTitle {
+  color: $--color-text-secondary;
+  padding: 5px 0;
+}
+.msgTitles {
+  color: $--color-text-secondary;
+  padding: 0;
+}
+.msgTitleEventtype {
+  color: $--color-text-secondary;
+  margin: 0 0 5px 0;
+}
+.msgValue {
+  color: $--color-text-primary;
+  padding-left: 5px;
+}
 .openatc-navbar {
   box-shadow: 0px 0px 11px 0px rgba(0, 64, 125, 0.14);
   .el-drawer__header {
-    color: $--color-text-regular;
+    font-family: MicrosoftYaHei;
+    font-size: 18px;
+    font-weight: bold;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+  }
+  .btnBottom {
+    text-align: right; 
+    padding: 5px 0 0 0;
+    border-top: 1px solid $--border-color-lighter;
+  }
+  .grid-content{
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+  }
+  .grid-content-label {
+    color: $--color-text-secondary;
   }
   .empty{
     text-align: center;
