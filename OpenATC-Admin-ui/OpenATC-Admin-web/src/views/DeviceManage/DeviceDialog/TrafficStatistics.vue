@@ -22,7 +22,7 @@
       <div style="float:right;margin-top: -65px;margin-right:50px;">
         <div class="dateChoosed">
           <el-date-picker v-model="date"
-                          popper-class="dev-traffic-detail-popper"
+                          popper-class="common-date-popper"
                           :type="dateType"
                           :picker-options="pickerOptions"
                           align="right"

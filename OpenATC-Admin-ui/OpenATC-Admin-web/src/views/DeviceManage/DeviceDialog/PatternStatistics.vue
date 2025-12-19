@@ -23,7 +23,7 @@
           <el-date-picker
           v-model="date"
           type="datetimerange"
-          popper-class="dev-pattern-detail-popper"
+          popper-class="common-date-popper"
           :picker-options="pickerOptions"
           range-separator="至"
           start-placeholder="开始日期"

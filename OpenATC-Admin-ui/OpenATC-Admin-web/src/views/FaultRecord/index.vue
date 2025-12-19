@@ -16,6 +16,7 @@
         <el-col :span="14">
             <el-date-picker
                 v-model="timeValue"
+                popper-class="common-date-popper"
                 size="small"
                 type="datetimerange"
                 style="height:40px;"
