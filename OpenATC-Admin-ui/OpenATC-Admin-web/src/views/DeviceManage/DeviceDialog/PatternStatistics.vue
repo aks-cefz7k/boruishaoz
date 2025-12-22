@@ -206,7 +206,7 @@ export default {
       this.nowYear += (this.nowYear < 2000) ? 1900 : 0
       let end = new Date()
       let start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24)
+      start.setTime(start.getTime() - 3600 * 1000)
       return [start, end]
     },
     onView (list) {
