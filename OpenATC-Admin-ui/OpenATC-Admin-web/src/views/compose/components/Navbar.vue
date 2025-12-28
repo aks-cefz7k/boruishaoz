@@ -149,14 +149,14 @@
             </div> -->
             <div class="text item">
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-row :gutter="0">
-                    <el-col :span="9">
+                    <el-col :span="4">
                       <div class="grid-content-label">
                         {{ $t("openatc.faultrecord.eportingmodule") }}:
                       </div>
                     </el-col>
-                    <el-col :span="15">
+                    <el-col :span="20">
                       <div class="grid-content bg-purple">
                        {{fault.model}}
                       </div>
@@ -165,14 +165,14 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-row :gutter="0">
-                    <el-col :span="9">
+                    <el-col :span="4">
                       <div class="grid-content-label">
                         {{ $t("openatc.faultrecord.roadname") }}:
                       </div>
                     </el-col>
-                    <el-col :span="15">
+                    <el-col :span="20">
                       <div class="grid-content bg-purple">
                        {{fault.name}}
                       </div>
@@ -181,14 +181,14 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20"  class="row-bg">
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-row :gutter="0">
-                    <el-col :span="9">
+                    <el-col :span="4">
                       <div class="grid-content-label">
                         {{ $t("openatc.faultrecord.eventtype") }}:
                       </div>
                     </el-col>
-                    <el-col :span="15">
+                    <el-col :span="20">
                       <div class="grid-content bg-purple">
                         {{fault.eventType}}
                       </div>
@@ -197,16 +197,16 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-row :gutter="0">
-                    <el-col :span="9">
+                    <el-col :span="4">
                       <div class="grid-content-label">
                         {{ $t("openatc.faultrecord.detaileddescription") }}:
                       </div>
                     </el-col>
-                    <el-col :span="15">
+                    <el-col :span="20">
                       <div class="grid-content bg-purple">
-                        {{fault.m_byFaultDescValue}}
+                        {{ formmatter(fault) }}
                       </div>
                     </el-col>
                   </el-row>
@@ -279,7 +279,19 @@ export default {
       faultDescValue: '',
       roadName: '',
       faultDatas: '',
-      isDot: false
+      isDot: false,
+      faultCodeMap: new Map([[101, 'can总线通信故障'], [102, '黄闪器故障'], [103, '特征参数故障'], [104, '故障检测板不在线'], [105, '继电器未吸合'], [201, '灯控板ID故障'], [202, '灯控板脱机'], [203, '无红灯亮起'], [204, '红绿同亮'], [205, '绿冲突'], [206, '红灯灯电压故障'], [207, '黄灯灯电压故障'], [208, '绿灯灯电压故障'], [209, '红灯灯功率故障'], [210, '黄灯灯功率故障'], [211, '绿灯灯功率故障'], [212, '灯组故障'], [213, '车检器故障'], [214, '灯控板插槽编码错误'], [215, '灯控板插头编码错误'], [216, '本机灯控板数量未配置'], [301, '车检板未初始化'], [302, '车检板脱机'], [303, '车辆检测器短路'], [304, '车辆检测器断路'], [401, 'I/O板未初始化'], [402, 'I/O板脱机']]),
+      faultCodeMapEn: new Map([[101, 'CanBus Fault'], [102, 'Yellow Flasher Fault'], [103, 'TZParam Fault'], [104, 'FaultDet Offline'], [105, 'Relay Not Work'], [201, 'LampBoard ID Fault'], [202, 'LampBoard Offline'], [203, 'No Red Lamp Is On'], [204, 'Red And Green Conflict'], [205, 'Green Conflict'], [206, 'Red Lamp Voltage Fault'], [207, 'Yellow Lamp Voltage Fault'], [208, 'Green Lamp Voltage Fault'], [209, 'Red Lamp Lamp Power Fault'], [210, 'Yellow Lamp Lamp Power Fault'], [211, 'Green Lamp Lamp Power Fault'], [212, 'Lamp pack failure'], [213, 'Car detector failure'], [214, 'Lamp Control Board Slot Code Error'], [215, 'Code Error Of Lamp Control Board Plug'], [216, 'The Number Of Lamp Control Board Not be Configed for The Master'], [301, 'VehDetBoard Is Not Init'], [302, 'VehDetBoard Is Offline'], [303, 'VehDetector Short Circiut'], [304, 'VehDetector Open  Circiut'], [401, 'I/O Board Is Not Init'], [402, 'I/O Board Offline']]),
+      // faultLevelMap: new Map([[1, '一般故障'], [2, '降级故障'], [3, '严重故障']]),
+      // faultLevelMapEn: new Map([[1, 'General failure'], [2, 'Degradation failure'], [3, 'Serious failure']]),
+      TZParamSubtypeMap: new Map([[0, ''], [1, '特征参数不存在'], [2, '特征参数文件不可读'], [3, '特征参数人为修改'], [4, '特征参数文件打开失败'], [5, '特征参数文件更新失败'], [6, '信号机地址码校验失败'], [7, '特征参数内容格式错误'], [8, 'USB挂载失败']]),
+      TZParamSubtypeMapEn: new Map([[0, ''], [1, 'Non-existent'], [2, 'File Is Unreadable'], [3, 'File Artificial Changes'], [4, 'File Open Fail'], [5, 'File Update Fail'], [6, 'File Check SiteID Fail'], [7, 'Format Error'], [8, 'USB Mount Fail']]),
+      greenLampSubtypeMap: new Map([[0, ''], [1, '未输出有效电压'], [2, '输出电压低于输入电压过多'], [3, '输出电压高于输入电压'], [4, '关闭输出但实际电压仍然输出'], [5, '关闭输出但实际电压部分输出'], [6, '线路残留电压过高']]),
+      greenLampSubtypeMapEn: new Map([[0, ''], [1, 'Output Volatage Is Fail'], [2, 'Output Volatage Is Low'], [3, 'Output Volatage Is High'], [4, 'Off Output Volatage Is high'], [5, 'Off Output Volatage Is low'], [6, 'Residual Voltage Is Over-High']]),
+      lampPowerSubtypeMap: new Map([[0, ''], [1, '功率异常增加'], [2, '功率异常减少'], [3, '功率无输出'], [4, '关闭状态有功率输出']]),
+      lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']]),
+      lampgroupfailureMap: new Map([[0, ''], [1, '红灯故障'], [2, '黄灯故障'], [3, '绿灯故障']]),
+      lampgroupfailureMapEn: new Map([[0, ''], [1, 'Red light failure'], [2, 'Yellow light failure'], [3, 'Green light failure']])
     }
   },
   watch: {
@@ -325,6 +337,43 @@ export default {
     }
   },
   methods: {
+    formmatter (data) {
+      let value = ''
+      if (this.$i18n.locale === 'en') {
+        if (data.m_wFaultType === 103) {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType) + this.TZParamSubtypeMapEn.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 208 || data.m_wFaultType === 207 || data.m_wFaultType === 206) {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType) + this.greenLampSubtypeMapEn.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 212) {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType) + this.lampgroupfailureMapEn.get(data.m_wSubFaultType)
+        } else {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType)
+          return value
+        }
+      } else {
+        if (data.m_wFaultType === 103) {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType) + this.TZParamSubtypeMap.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 208 || data.m_wFaultType === 207 || data.m_wFaultType === 206) {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType) + this.greenLampSubtypeMap.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType) + this.lampPowerSubtypeMap.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 212) {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType) + this.lampgroupfailureMap.get(data.m_wSubFaultType)
+          return value
+        } else {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType)
+          return value
+        }
+      }
+    },
     handleFaultEventData (data) {
       this.isDot = true
       this.faultDatas = data
@@ -333,7 +382,31 @@ export default {
       })
       this.infotype = data.infotype
       this.model = data.model
-      this.faultDescValue = data.data.m_FaultDeque[0].m_byFaultDescValue
+      if (this.$i18n.locale === 'en') {
+        if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 208 || data.data.m_FaultDeque[0].m_wFaultType === 207 || data.data.m_FaultDeque[0].m_wFaultType === 206) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType)
+        }
+      } else {
+        if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 208 || data.data.m_FaultDeque[0].m_wFaultType === 207 || data.data.m_FaultDeque[0].m_wFaultType === 206) {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType)
+        }
+      }
       if (this.notify) {
         this.notify.close()
       }
