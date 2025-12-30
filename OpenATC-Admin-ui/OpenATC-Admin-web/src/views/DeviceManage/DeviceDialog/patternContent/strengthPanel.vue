@@ -15,15 +15,15 @@
       <div class="cross-module">
         <div class="cross-content">
           <div class="cross-name">{{$t('openatc.patternstatistic.controlmodel')}}:</div>
-          <div class="cross-value">{{$t('openatc.patternstatistic.mode' + controlData.mode)}}</div>
+          <div class="cross-value">{{controlData.mode !==undefined ? $t('openatc.patternstatistic.mode' + controlData.mode) : ''}}</div>
         </div>
         <div class="cross-content">
           <div class="cross-name">{{$t('openatc.patternstatistic.controlmodel')}}:</div>
-          <div class="cross-value">{{$t('edge.overview.modelList' + controlData.control)}}</div>
+          <div class="cross-value">{{controlData.control !==undefined ? $t('edge.overview.modelList' + controlData.control) : ''}}</div>
         </div>
         <div class="cross-content">
           <div class="cross-name">{{$t('openatc.patternstatistic.controlscheme')}}:</div>
-          <div class="cross-value">{{$t('openatc.patternstatistic.pattern') + controlData.patternid}}</div>
+          <div class="cross-value">{{controlData.patternid !==undefined ? $t('openatc.patternstatistic.pattern') + controlData.patternid : ''}}</div>
         </div>
         <div class="cross-content">
           <div class="cross-name">{{$t('openatc.patternstatistic.cycle')}}:</div>
@@ -74,6 +74,7 @@ export default {
 .strengthPanel {
   .cross-content {
     margin-bottom: 25px;
+    overflow: hidden;
     .cross-name {
       float: left;
     }

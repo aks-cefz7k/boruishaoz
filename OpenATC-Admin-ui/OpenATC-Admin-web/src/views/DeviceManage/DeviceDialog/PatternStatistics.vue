@@ -20,15 +20,19 @@
       <div slot="title">
         <div class="tittle">{{$t(`openatc.devicemanager.patternStatistics`)}}</div>
         <div class="timepicker">
+          <div class="crossName">
+            <span class="lukouIcon"><i class="iconfont icon-lukou"></i></span>
+            <span>{{crossName}}</span>
+          </div>
           <el-date-picker
-          v-model="date"
-          type="datetimerange"
-          popper-class="common-date-popper"
-          :picker-options="pickerOptions"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          align="right">
+            v-model="date"
+            type="datetimerange"
+            popper-class="common-date-popper"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
           </el-date-picker>
           <el-button type="primary" icon="el-icon-search" @click="onDateChange" class="searchbtn">查询</el-button>
         </div>
@@ -58,6 +62,7 @@ export default {
   data () {
     return {
       agentid: '0',
+      crossName: '',
       dialogFormVisible: false,
       pickerOptions: {
         shortcuts: [{
@@ -210,8 +215,11 @@ export default {
       return [start, end]
     },
     onView (list) {
-      this.dialogFormVisible = !this.dialogFormVisible
       this.agentid = list.agentid
+      this.dialogFormVisible = !this.dialogFormVisible
+      if (list.name !== undefined) {
+        this.crossName = list.name
+      }
     },
     onIgnoreClick (id) {
       let _this = this
