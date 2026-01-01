@@ -19,7 +19,7 @@
       top="5vh"
       :close-on-click-modal="false"
       @close='closeFormDialog'>
-      <div style="float:right;margin-top: -65px;margin-right:50px;">
+      <div class="header">
         <div class="dateChoosed">
           <el-date-picker v-model="date"
                           popper-class="common-date-popper"
@@ -31,8 +31,9 @@
           </el-date-picker>
         </div>
           <el-button type="primary"
-              icon="el-icon-search"
-              @click="doSearch">{{$t(`openatc.common.search`)}}</el-button>
+                    icon="el-icon-search"
+                    class="searchbtn"
+                    @click="doSearch">{{$t(`openatc.common.search`)}}</el-button>
       </div>
       <div class="content">
         <trafficDetector :date="date"
@@ -177,7 +178,7 @@ export default {
       curascid: '',
       isDialogShow: true,
       dialogFormVisible: false,
-      date: [new Date().getTime() - 3600 * 1000 * 24, new Date()]
+      date: [new Date().getTime() - 3600 * 1000 * 1, new Date()]
     }
   },
   methods: {

@@ -119,7 +119,7 @@
           :label="$t('openatc.faultrecord.enumerate')"
           align="center">
           <template slot-scope="scope">
-            <el-tag :type="scope.row.enumerate === '1'?'info':scope.row.enumerate === '2'?'success':scope.row.enumerate === '0'?'':''">{{formatterEnumerate(scope.row)}}</el-tag>
+            <el-tag v-show="scope.row.enumerate" :type="scope.row.enumerate === '1'?'info':scope.row.enumerate === '2'?'success':scope.row.enumerate === '0'?'':''">{{formatterEnumerate(scope.row)}}</el-tag>
           </template>
           </el-table-column>
           <el-table-column :label="$t('openatc.faultrecord.operation')" align="center" width="240">
@@ -210,11 +210,11 @@ export default {
       let enumerate = row.enumerate
       let res = ''
       if (enumerate === '0') {
-        res = this.$t('openatc.faultrecord.untreated')
+        res = this.$t('openatc.faultrecord.untreated')// 未处理
       } else if (enumerate === '1') {
-        res = this.$t('openatc.faultrecord.ignored')
+        res = this.$t('openatc.faultrecord.ignored')// 忽略
       } else if (enumerate === '2') {
-        res = this.$t('openatc.faultrecord.confirmed')
+        res = this.$t('openatc.faultrecord.confirmed')// 确认
       }
       return res
     },

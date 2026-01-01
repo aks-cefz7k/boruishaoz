@@ -151,12 +151,12 @@
               <el-row :gutter="20" class="row-bg">
                 <el-col :span="12">
                   <el-row :gutter="0">
-                    <el-col :span="10">
+                    <el-col :span="9">
                       <div class="grid-content-label">
                         {{ $t("openatc.faultrecord.eportingmodule") }}:
                       </div>
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="15">
                       <div class="grid-content bg-purple">
                        {{fault.model}}
                       </div>
@@ -167,12 +167,12 @@
               <el-row :gutter="20" class="row-bg">
                 <el-col :span="12">
                   <el-row :gutter="0">
-                    <el-col :span="10">
+                    <el-col :span="9">
                       <div class="grid-content-label">
                         {{ $t("openatc.faultrecord.roadname") }}:
                       </div>
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="15">
                       <div class="grid-content bg-purple">
                        {{fault.name}}
                       </div>
@@ -183,12 +183,12 @@
               <el-row :gutter="20"  class="row-bg">
                 <el-col :span="12">
                   <el-row :gutter="0">
-                    <el-col :span="10">
+                    <el-col :span="9">
                       <div class="grid-content-label">
                         {{ $t("openatc.faultrecord.eventtype") }}:
                       </div>
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="15">
                       <div class="grid-content bg-purple">
                         {{fault.eventType}}
                       </div>
@@ -199,12 +199,12 @@
               <el-row :gutter="20" class="row-bg">
                 <el-col :span="12">
                   <el-row :gutter="0">
-                    <el-col :span="10">
+                    <el-col :span="9">
                       <div class="grid-content-label">
                         {{ $t("openatc.faultrecord.detaileddescription") }}:
                       </div>
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="15">
                       <div class="grid-content bg-purple">
                         {{fault.m_byFaultDescValue}}
                       </div>
@@ -213,7 +213,7 @@
                 </el-col>
               </el-row>
             </div>
-            <div style="text-align: right; padding: 5px 0 0 0;border-top: 1px solid #E5E9F2">
+            <div  class="btnBottom">
               <el-button size="mini" icon="el-icon-circle-check" type="text" @click="cancels(fault)">{{$t('openatc.faultrecord.confirm')}}</el-button>
               <el-button type="text" icon="el-icon-remove-outline" size="mini" @click="confirmeds(fault)">{{$t('openatc.faultrecord.neglect')}}</el-button>
             </div>
@@ -222,7 +222,7 @@
       </el-drawer>
     <div class="alarm-message" @click="drawer = true, isDot=false">
       <el-badge :is-dot="isDot" class="item">
-        <i class="el-icon-message-solid"></i>
+        <img style ="width: 18px;" src="../../../assets/home/notice.png">
       </el-badge>
     </div>
   </el-menu>
@@ -349,22 +349,22 @@ export default {
         dangerouslyUseHTMLString: true,
         message: h('div', {style: {'width': '236px'}}, [
           h('div', {style: {padding: '5px 0'}}, [
-            h('span', `${this.$t('openatc.faultrecord.eportingmodule')}:`),
-            h('span', {style: {paddingLeft: '5px'}}, `${this.model}`)
+            h('span', {class: 'msgTitle'}, `${this.$t('openatc.faultrecord.eportingmodule')}:`),
+            h('span', {class: 'msgValue'}, `${this.model}`)
           ]),
           h('div', [
-            h('span', `${this.$t('openatc.faultrecord.roadname')}:`),
-            h('span', {style: {paddingLeft: '5px'}}, `${this.roadName}`)
+            h('span', {class: 'msgTitles'}, `${this.$t('openatc.faultrecord.roadname')}:`),
+            h('span', {class: 'msgValue'}, `${this.roadName}`)
           ]),
-          h('div', {style: {padding: '5px 0'}}, [
+          h('div', {class: 'msgTitle'}, [
             h('span', `${this.$t('openatc.faultrecord.eventtype')}:`),
-            h('span', {style: {paddingLeft: '5px'}}, `${this.infotype}`)
+            h('span', {class: 'msgValue'}, `${this.infotype}`)
           ]),
-          h('div', {style: {margin: '0 0 5px 0'}}, [
+          h('div', {class: 'msgTitleEventtype'}, [
             h('span', `${this.$t('openatc.faultrecord.detaileddescription')}:`),
-            h('span', {style: {paddingLeft: '5px'}}, `${this.faultDescValue}`)
+            h('span', {class: 'msgValue'}, `${this.faultDescValue}`)
           ]),
-          h('div', {style: {textAlign: 'right', paddingTop: '10px', borderTop: '1px solid #E5E9F2'}}, [
+          h('div', {class: 'borderStyle'}, [
             h('el-button', {props: {size: 'mini', type: 'text', icon: 'el-icon-circle-check'}, on: {click: this.confirm}}, `${this.$t('openatc.faultrecord.confirm')}`),
             h('el-button', {props: {size: 'mini', type: 'text', icon: 'el-icon-remove-outline'}, on: {click: this.cancel}}, `${this.$t('openatc.faultrecord.neglect')}`)
           ])
