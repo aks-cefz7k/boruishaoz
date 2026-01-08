@@ -20,6 +20,10 @@
       :close-on-click-modal="false"
       @close='closeFormDialog'>
       <div class="header">
+        <div class="crossName">
+          <span class="lukouIcon"><i class="iconfont icon-lukou"></i></span>
+          <span>{{crossName}}</span>
+        </div>
         <div class="dateChoosed">
           <el-date-picker v-model="date"
                           popper-class="common-date-popper"
@@ -178,6 +182,7 @@ export default {
       curascid: '',
       isDialogShow: true,
       dialogFormVisible: false,
+      crossName: '',
       date: [new Date().getTime() - 3600 * 1000 * 1, new Date()]
     }
   },
@@ -186,6 +191,9 @@ export default {
       this.isDialogShow = true
       this.dialogFormVisible = true
       this.curascid = row.agentid
+      if (row.name) {
+        this.crossName = row.name
+      }
     },
     doSearch () {
       this.$refs.trafficDetector.refreshChart(this.curascid)
