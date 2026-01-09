@@ -402,7 +402,7 @@ export default {
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
           this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
         } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
-          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
         } else {
           this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType)
         }
