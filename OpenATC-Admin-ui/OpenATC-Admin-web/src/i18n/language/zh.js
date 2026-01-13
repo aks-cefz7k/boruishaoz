@@ -99,6 +99,10 @@ const zh = {
       'faultOrOffLine': '故障 / 在线'
     },
     'faultrecord': {
+      'asc': '信号机',
+      'patterncalc': '方案检测服务',
+      'monitor': '监控服务',
+      'statusfault': '设备故障',
       'untreated': '未处理',
       'ignored': '已忽略',
       'confirmed': '已确认',

@@ -158,7 +158,7 @@
                     </el-col>
                     <el-col :span="20">
                       <div class="grid-content bg-purple">
-                       {{fault.model}}
+                       {{formatterModel(fault.model)}}
                       </div>
                     </el-col>
                   </el-row>
@@ -174,7 +174,7 @@
                     </el-col>
                     <el-col :span="20">
                       <div class="grid-content bg-purple">
-                       {{fault.name}}
+                       {{fault.id}} {{fault.name}}
                       </div>
                     </el-col>
                   </el-row>
@@ -190,7 +190,7 @@
                     </el-col>
                     <el-col :span="20">
                       <div class="grid-content bg-purple">
-                        {{fault.eventType}}
+                        {{ formatterInfotype(fault.eventType)}}
                       </div>
                     </el-col>
                   </el-row>
@@ -337,6 +337,24 @@ export default {
     }
   },
   methods: {
+    formatterModel (val) {
+      let res = ''
+      if (val === 'asc') {
+        res = this.$t('openatc.faultrecord.asc')
+      } else if (val === 'patterncalc') {
+        res = this.$t('openatc.faultrecord.patterncalc')
+      } else if (val === 'monitor') {
+        res = this.$t('openatc.faultrecord.monitor')
+      }
+      return res
+    },
+    formatterInfotype (val) {
+      let res = ''
+      if (val === 'status/fault') {
+        res = this.$t('openatc.faultrecord.statusfault')
+      }
+      return res
+    },
     formmatter (data) {
       let value = ''
       if (this.$i18n.locale === 'en') {
@@ -378,10 +396,14 @@ export default {
       this.isDot = true
       this.faultDatas = data
       searchRoadName(data.agentid).then(j => {
-        this.roadName = j.data.data.name
+        if (j.data.data.name) {
+          this.roadName = j.data.data.id + ' ' + j.data.data.name
+        } else {
+          this.roadName = j.data.data.id
+        }
       })
-      this.infotype = data.infotype
-      this.model = data.model
+      this.infotype = this.formatterInfotype(data.infotype)
+      this.model = this.formatterModel(data.model)
       if (this.$i18n.locale === 'en') {
         if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
           this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
@@ -481,6 +503,7 @@ export default {
           for (let i = 0; i < data.data.data.content.length; i++) {
             searchRoadName(data.data.data.content[i].agentid).then(j => {
               data.data.data.content[i].name = j.data.data.name
+              data.data.data.content[i].id = j.data.data.id
             })
           }
           this.faultData = data.data.data.content

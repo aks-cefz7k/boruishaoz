@@ -99,6 +99,10 @@ const en = {
       'faultOrOffLine': 'Fault / Online'
     },
     'faultrecord': {
+      'asc': 'Asc',
+      'patterncalc': 'Pattern Calc',
+      'monitor': 'Monitor',
+      'statusfault': 'Status Fault',
       'untreated': 'Untreated',
       'ignored': 'Ignored',
       'confirmed': 'Confirmed',
