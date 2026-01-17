@@ -90,6 +90,16 @@
     "method": "post"
   },
   {
+    "key": "enumerateCheck",
+    "url": "/fault/check",
+    "method": "post"
+  },
+  {
+    "key": "searchRoadName",
+    "url": "/devs",
+    "method": "get"
+  },
+  {
     "key": "deleteDevice",
     "url": "/devs",
     "method": "delete"
@@ -245,6 +255,11 @@
     "method": "get"
   },
   {
+    "key": "GetUntreated",
+    "url": "/fault/uncheck",
+    "method": "get"
+  },
+  {
     "key": "GetAllHistoryFault",
     "url": "/fault/history",
     "method": "get"
@@ -362,6 +377,16 @@
   {
     "key": "off_overflow_control",
     "url": "/overflow/control",
+    "method": "post"
+  },
+  {
+    "key": "getAllTrafficData",
+    "url": "/historydata/flow/range",
+    "method": "post"
+  },
+  {
+    "key": "getHistoryPatternData",
+    "url": "/historydata/pattern/range",
     "method": "post"
   }
 ]

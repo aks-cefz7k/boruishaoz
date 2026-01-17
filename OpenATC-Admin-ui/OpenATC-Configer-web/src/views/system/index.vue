@@ -116,17 +116,8 @@
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
                 <div class="signal-version-name">{{$t('edge.system.systemupdate')}}：</div>
                 <div class="signal-version-bottom">
-                    <!-- <el-button type="primary" @click="chooseFile" size="mini">{{$t('edge.system.selectfile')}}</el-button> -->
-                    <div class="statistics-name">{{$t('edge.statistics.username')}}</div>
-                    <div class="statistics-input">
-                      <el-input v-model="userName" :placeholder="$t('edge.statistics.usernameplaceholder')" size="small"></el-input>
-                    </div>
-                    <div class="statistics-name">{{$t('edge.statistics.pass')}}</div>
-                    <div class="statistics-input">
-                      <el-input v-model="password" :placeholder="$t('edge.statistics.passplaceholder')" size="small" show-password></el-input>
-                    </div>
+                  <el-button type="primary" @click="chooseFile" size="mini">{{$t('edge.system.selectfile')}}</el-button>
                 </div>
-                <el-button type="primary" @click="chooseFile" size="mini" style="margin-left: 20px;">{{$t('edge.system.selectfile')}}</el-button>
             </div>
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
                 <div class="signal-version-name">{{$t('edge.system.dataupdate')}}：</div>
@@ -221,8 +212,6 @@ export default {
         value: 0,
         id: '3'
       }],
-      userName: '',
-      password: '',
       channelList: [] // 上载获取的通道信息
     }
   },
@@ -436,14 +425,8 @@ export default {
       editSerialport.onEditSerialPort(this.Baudrate, this.databit, this.stopbit, this.paritybit)
     },
     chooseFile () {
-      let username = this.userName
-      let password = this.password
-      // if (username === '' || password === '') {
-      //   this.$message.error(this.$t('edge.statistics.userpassnotnull'))
-      //   return
-      // }
       let updateFile = this.$refs.updateFile
-      updateFile.onUpdateFile(username, password)
+      updateFile.onUpdateFile()
     },
     editRemoteDebug () {
       setRemoteDebug(this.remoteDebugInfo).then(data => {

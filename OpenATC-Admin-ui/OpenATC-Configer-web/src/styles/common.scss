@@ -1556,8 +1556,9 @@ border: 1px solid $--border-color-base;
 }
 
 .history-container {
+  padding: 0 20px !important;
   .el-tabs {
-    height: calc(100% - 42px);
+    height: calc(100% - 52px);
     }
     .el-tabs__content {
       height: calc(100% - 65px);
@@ -1596,9 +1597,9 @@ border: 1px solid $--border-color-base;
 // 统计
 .statistics {
   height: 100%;
+  padding: 0 20px;
   .one {
-    // height: 6%;
-    overflow: hidden;
+    position: relative;
   }
   .two {
     height: 47%;
@@ -1613,21 +1614,19 @@ border: 1px solid $--border-color-base;
 }
   
   .statistics-table {
-    width: 96%;
     height: 100%;
-    margin-left: 2%;
-    // border: solid 1px $--border-color-lighter;
   }
   .statistics-button {
-    float: right;
-    margin-right: 2%;
+    position: absolute;
+    left: 0px;
+    top: 45px;
+    z-index: 9999999;
+    .el-select {
+      width: 106px;
+    }
   }
   .statistics-input {
-  float: left;
-  // margin-left: 20px;
-  }
-  .statistics-bottom {
-  float: left;
+    float: left;
   }
   .statistics-name {
   float: left;

@@ -46,8 +46,6 @@ export default {
     return {
       dialogFormVisible: false,
       file: '',
-      username: '',
-      password: '',
       animvisible: false
     }
   },
@@ -64,9 +62,7 @@ export default {
     }
   },
   methods: {
-    onUpdateFile (username, password) {
-      this.username = username
-      this.password = password
+    onUpdateFile () {
       this.dialogFormVisible = !this.dialogFormVisible
     },
     closeFormDialog () {
@@ -91,8 +87,6 @@ export default {
       let iframdevid = getIframdevid()
       formData.append('file', this.file)
       formData.append('agentid', iframdevid)
-      formData.append('username', this.username)
-      formData.append('password', this.password)
       this.animvisible = true
       this.updateTimeoutTimer = setTimeout(() => {
         this.$message.error(this.$t('edge.system.updateovertime'))

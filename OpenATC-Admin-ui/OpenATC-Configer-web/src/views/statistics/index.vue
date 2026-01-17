@@ -12,24 +12,24 @@
 <template>
 <div class="statistics">
     <div class="one">
-      <div class="statistics-name">{{$t('edge.statistics.username')}}</div>
-      <div class="statistics-input">
-        <el-input v-model="userName" :placeholder="$t('edge.statistics.usernameplaceholder')" size="small"></el-input>
-      </div>
-      <div class="statistics-name">{{$t('edge.statistics.pass')}}</div>
-      <div class="statistics-input">
-        <el-input v-model="password" :placeholder="$t('edge.statistics.passplaceholder')" size="small" show-password></el-input>
-      </div>
       <div class="statistics-bottom">
-        <el-button type="primary" @click="getStatisticsData" size="small" style="margin-left: 10px;">{{$t('edge.statistics.getdevicedata')}}</el-button>
+        <el-button type="primary" @click="getStatisticsData" size="small">{{$t('edge.statistics.getdevicedata')}}</el-button>
       </div>
         <!-- <el-button type="primary" @click="getStatisticsData" size="small" style="margin-left: 10px;">获取设备流量数据</el-button> -->
         <!-- <el-button type="primary" @click="testSftp" size="small">导入本地流量文件</el-button>
         <a href="ftp://admin:kedacomIPC@192.168.15.11:21/mnt/TrafficFlowLog/2020-09-22%2000-00.json" download="">FTP下载 </a> -->
-        <div class="statistics-button">
-            <el-radio-group v-model="radio" @change="handleDetector" v-for="(item,index) in detectorList" :key="index">
+        <div class="statistics-button" v-if="detectorList.length">
+            <!-- <el-radio-group size="mini" v-model="radio" @change="handleDetector" v-for="(item,index) in detectorList" :key="index">
                 <el-radio-button :label="index">{{$t('edge.statistics.detector') + item.id}}</el-radio-button>
-            </el-radio-group>
+            </el-radio-group> -->
+            <el-select size="mini" v-model="radio" @change="handleDetector">
+              <el-option
+                v-for="(item, index) in detectorList"
+                :key="index"
+                :label="$t('edge.statistics.detector') + item.id"
+                :value="index">
+              </el-option>
+            </el-select>
         </div>
     </div>
     <div class="two">
@@ -80,6 +80,7 @@
 import { setVolumelog, getHistoryFlow } from '@/api/statistics'
 import { getMessageByCode } from '@/utils/responseMessage'
 import echart from 'echarts'
+import { getTheme } from '@/utils/auth'
 // import Ftp from 'vinyl-ftp'
 export default {
   name: 'statistics',
@@ -109,13 +110,18 @@ export default {
   },
   created () {
   },
+  destroyed () {
+    if (this.dataTimeoutTimer) {
+      clearTimeout(this.dataTimeoutTimer)
+    }
+  },
   methods: {
     setTableMaxHeight () {
       var _this = this
       _this.$nextTick(function () {
-        _this.tableHeight = _this.$refs['three'].offsetHeight
+        _this.tableHeight = _this.$refs['three'].offsetHeight - 10
         window.onresize = function () {
-          _this.tableHeight = _this.$refs['three'].offsetHeight
+          _this.tableHeight = _this.$refs['three'].offsetHeight - 10
         }
       })
     },
@@ -146,17 +152,17 @@ export default {
       this.handleData(this.allFlowData)
     },
     getStatisticsData () {
-      let username = this.userName
-      let password = this.password
-      if (username === '' || password === '') {
-        this.$message.error(this.$t('edge.statistics.userpassnotnull'))
-        return
-      }
       this.lockScreen()
-      getHistoryFlow(username, password).then((data) => {
+      this.dataTimeoutTimer = setTimeout(() => {
+        this.unlockScreen()
+      }, 30000)
+      getHistoryFlow().then((data) => {
+        this.unlockScreen()
+        if (this.dataTimeoutTimer) {
+          clearTimeout(this.dataTimeoutTimer)
+        }
         let res = data.data
         if (!res.success) {
-          this.unlockScreen()
           if (res.code === '4003') {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
@@ -164,13 +170,12 @@ export default {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        this.unlockScreen()
         if (res.data.length === 0) {
           this.$message.error(this.$t('edge.statistics.historicalisempty'))
           return
         }
-        this.detectorList = res.data[0].detector
-        this.allFlowData = res.data
+        this.detectorList = res.data.flowInfo[0].detector
+        this.allFlowData = res.data.flowInfo
         this.handleData(this.allFlowData)
       }).catch(error => {
         this.unlockScreen()
@@ -196,14 +201,18 @@ export default {
     initEcharts () {
       this.historyFlowEcharts = echart.init(document.getElementById('historyFlowEcharts'))
       let _this = this
-      window.onresize = function () {
-        _this.historyFlowEcharts.resize()
-      }
+      window.addEventListener('resize', () => _this.historyFlowEcharts.resize(), false)
+      // window.onresize = function () {
+      //   _this.historyFlowEcharts.resize()
+      // }
     },
     getEchartsData () {
       let _this = this
       let option = {
         legend: {
+          textStyle: {
+            color: getTheme() === 'light' ? '#666666' : '#B9BABF'
+          },
           data: [_this.$t('edge.statistics.flow'), _this.$t('edge.statistics.occupyrate')],
           right: '2%'
           // align: 'right'

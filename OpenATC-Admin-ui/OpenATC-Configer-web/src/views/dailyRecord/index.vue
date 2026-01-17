@@ -12,15 +12,18 @@
 <template>
 <div class="daily-record" ref="daily-container">
   <div>
+    <el-button type="primary" @click="getAllDailyRecord" size="small" style="margin-bottom: 10px;">{{$t('edge.dailyrecord.uploaddailyrecord')}}</el-button>
+  </div>
+  <div class="daily-table" ref="daily-table">
     <el-table
         :data="recordList"
         size="mini"
         :max-height="tableHeight"
-        v-loading.body="listLoading"
         style="width: 100%"
         id="footerBtn">
         <el-table-column
         type="index"
+        width="60px"
         align="center">
         </el-table-column>
         <el-table-column
@@ -54,7 +57,7 @@
 </template>
 
 <script>
-import { getAllDailyRecord } from '@/api/param'
+import { getDailyRecord } from '@/api/param'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'dailyRecord',
@@ -63,47 +66,36 @@ export default {
     return {
       tableHeight: 700,
       schfilter: '',
-      recordList: [],
-      // recordList: [{
-      //   'id': 1,
-      //   'starttime': '2019-10-23 10:12:40',
-      //   'endtime': '2019-10-23 11:12:40',
-      //   'subject': 'admin',
-      //   'object': 'video',
-      //   'infotype': 'feature/pattern',
-      //   'status': '成功'
-      // },
-      // {
-      //   'id': 2,
-      //   'starttime': '2019-10-23 10:12:40',
-      //   'endtime': '2019-10-23 11:12:40',
-      //   'subject': 'admin',
-      //   'object': 'video',
-      //   'infotype': 'feature/pattern',
-      //   'status': '失败'
-      // }],
-      listLoading: false // 数据加载等待动画
+      recordList: []
     }
   },
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      _this.tableHeight = _this.$refs['daily-container'].offsetHeight
+      _this.tableHeight = _this.$refs['daily-table'].offsetHeight
       window.onresize = function () {
-        _this.tableHeight = _this.$refs['daily-container'].offsetHeight
+        _this.tableHeight = _this.$refs['daily-table'].offsetHeight
       }
     })
   },
-  created () {
-    this.getAllDailyRecord()
+  destroyed () {
+    if (this.dataTimeoutTimer) {
+      clearTimeout(this.dataTimeoutTimer)
+    }
   },
   methods: {
     getAllDailyRecord () {
-      this.listLoading = true
-      getAllDailyRecord().then(data => {
+      this.lockScreen()
+      this.dataTimeoutTimer = setTimeout(() => {
+        this.unlockScreen()
+      }, 30000)
+      getDailyRecord().then(data => {
+        this.unlockScreen()
+        if (this.dataTimeoutTimer) {
+          clearTimeout(this.dataTimeoutTimer)
+        }
         let res = data.data
         if (!res.success) {
-          this.listLoading = false
           if (res.code === '4003') {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
@@ -111,8 +103,7 @@ export default {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        this.listLoading = false
-        this.recordList = this.formateDateForAllFault(res.data.data.operationrecord)
+        this.recordList = this.formateDateForAllFault(res.data.operationrecord)
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
@@ -141,6 +132,17 @@ export default {
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
     },
     handleFilter () {
+    },
+    lockScreen () {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+    },
+    unlockScreen () {
+      this.loading.close()
     }
   }
 }
@@ -156,5 +158,8 @@ export default {
   text-align: right;
   margin-top: 20px;
   margin-right: 20px;
+}
+.daily-table {
+  height: calc(100% - 42px);
 }
 </style>

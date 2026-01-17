@@ -18,6 +18,7 @@ const type = 'edge'
 const simuKey = 'simu_key'
 const language = 'intl_language'
 const kisspro = 'kiss_pro'
+const theme = 'kiss_theme'
 
 export function getToken () {
   return localStorage.getStorage(LoginKey)
@@ -86,4 +87,16 @@ export function setKiss (v) {
 
 export function getKiss () {
   return localStorage.getStorage(kisspro)
+}
+
+export function getTheme () {
+  let th = localStorage.getStorage(theme)
+  if (th === undefined || th === null || th === '') {
+    return 'dark'
+  }
+  return th
+}
+
+export function setTheme (th) {
+  return localStorage.setStorage(theme, th)
 }

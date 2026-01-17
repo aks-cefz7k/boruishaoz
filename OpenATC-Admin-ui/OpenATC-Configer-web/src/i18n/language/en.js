@@ -507,7 +507,9 @@ const en = {
       'siteIdCutEffect': 'SiteId Cut Detail',
       'cutData': 'Cut Data',
       'cutEffect': 'Cut Detail',
-      'longgerThan20': 'Data length is longger than 20 ！'
+      'longgerThan20': 'Data length is longger than 20 ！',
+      'timezonehour': 'Time zone / Hour',
+      'timezoneminute': 'Time zone / Minute'
     },
     'singleoptim': {
       'deletetip': 'Sure to delete ？',
@@ -638,6 +640,7 @@ const en = {
     },
     'fault': {
       'refresh': 'Refresh',
+      'uploadfault': 'Upload Fault',
       'export': 'Export',
       'faultofcurrentdetailedlightgroup': 'Detail Faults',
       'faultofcurrentdetailedvehicleinspectionversion': 'Detail Faults',
@@ -659,7 +662,7 @@ const en = {
       'pass': 'Password：',
       'usernameplaceholder': 'Enter one user name',
       'passplaceholder': 'Please input a password',
-      'getdevicedata': 'Get device traffic data',
+      'getdevicedata': 'Upload flow',
       'detector': 'Detector',
       'time': 'Time',
       'flow': 'Flow',
@@ -673,7 +676,8 @@ const en = {
       'infotype': 'Infotype',
       'subject': 'Subject',
       'object': 'Object',
-      'operationresults': 'Operation Result'
+      'operationresults': 'Operation Result',
+      'uploaddailyrecord': 'Upload Dailyrecord'
     },
     'control': {
       'mode': 'Mode:',

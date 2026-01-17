@@ -141,8 +141,6 @@ export default {
     async recvMessage (message) {
       let item = message
       if (item.hasOwnProperty('agentid')) {
-        console.log(item.agentid)
-        console.log(item)
         let phase = item.data.phase
         let curpattern = item.data.name
         let cycle = item.data.cycle + 's'
@@ -261,9 +259,9 @@ export default {
     getReqData () {
       let reqData = []
       for (let dev of this.showList) {
-        let devtype = dev.type
+        // let devtype = dev.type
         let agentid = dev.agentid
-        let simuid = devtype + ':status/pattern:' + agentid
+        let simuid = agentid
         reqData.push(simuid)
       }
       return reqData
@@ -272,7 +270,7 @@ export default {
       let ssSubMgr = store.getters['wsSubMgr']
       this.wsSubMgr = ssSubMgr
       let CrossStatSubMgr = this.wsSubMgr.getByName('CrossState')
-      this.sub = CrossStatSubMgr.getSubByType('status/pattern')
+      this.sub = CrossStatSubMgr.getSubByType('status/pattern', 'asc')
       // this.sub.start([simuid]) // wholist = []
       let reqData = this.getReqData()
       if (!flag) {

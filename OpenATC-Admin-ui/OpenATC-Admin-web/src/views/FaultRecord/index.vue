@@ -1,47 +1,42 @@
 <template>
 <div class="openatc-faultrecord">
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
-    <div style="float:left;margin:20px 20px;">
-      <el-tag type="info">{{$t('openatc.main.faultrecord')}}</el-tag>
+    <div style="float:left;margin:15px 20px;">
+      <div class="common-table-title">{{$t('openatc.main.faultrecord')}}</div>
     </div>
     <div class="filter-container">
-        <el-form>
-            <el-col :span="7">
-            <el-form-item>
-            <el-input
-                :placeholder="$t('openatc.common.searchdeviceid')"
-                @keyup.enter.native="handleFilter"
-                v-model="devsfilter"
-                style="width: 200px;margin-right: 10px;"
-            />
-            </el-form-item>
-            </el-col>
-            <el-col :span="14">
-            <el-form-item>
-                <el-date-picker
-                    v-model="timeValue"
-                    size="small"
-                    type="datetimerange"
-                    style="height:41px;"
-                    :range-separator="$t('openatc.usermanager.to')"
-                    :start-placeholder="$t('openatc.usermanager.starttime')"
-                    :end-placeholder="$t('openatc.usermanager.endtime')">
-                </el-date-picker>
-            </el-form-item>
-            </el-col>
-            <el-col :span="3">
-            <el-button
-                type="primary"
-                icon="el-icon-search"
-                @click="searchRecord()"
-                >{{ $t("openatc.button.search") }}</el-button
-            >
-            </el-col>
-        </el-form>
+      <el-row>
+        <el-col :span="7">
+        <el-input
+            :placeholder="$t('openatc.common.searchdeviceid')"
+            v-model="devsfilter"
+            style="width: 200px;margin-right: 10px;"
+        />
+        </el-col>
+        <el-col :span="14">
+            <el-date-picker
+                v-model="timeValue"
+                popper-class="common-date-popper"
+                size="small"
+                type="datetimerange"
+                style="height:40px;"
+                :range-separator="$t('openatc.usermanager.to')"
+                :start-placeholder="$t('openatc.usermanager.starttime')"
+                :end-placeholder="$t('openatc.usermanager.endtime')">
+            </el-date-picker>
+        </el-col>
+        <el-col :span="3">
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="searchRecord()"
+          >{{ $t("openatc.button.search") }}</el-button>
+        </el-col>
+      </el-row>
     </div>
     <div class="devs-table">
       <el-table
-          :data="tableData.filter(data => !devsfilter || (data.agentid !== undefined && data.agentid.toLowerCase().includes(devsfilter.toLowerCase())) )"
+          :data="tableData"
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -70,12 +65,14 @@
           align="center">
           </el-table-column>
           <el-table-column
+          width="150px"
           prop="m_unFaultOccurTime"
           :label="$t('openatc.faultrecord.faultbegintime')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
+          width="150px"
           prop="m_unFaultRenewTime"
           :label="$t('openatc.faultrecord.faultendtime')"
           align="center">
@@ -88,12 +85,14 @@
             >
           </el-table-column>
           <el-table-column
+          :formatter="m_wSubFaultType"
           prop="m_wSubFaultType"
           :label="$t('openatc.faultrecord.faultchild')"
           sortable
           align="center">
           </el-table-column>
           <el-table-column
+          :formatter="m_byFaultLevel"
           prop="m_byFaultLevel"
           :label="$t('openatc.faultrecord.faultgrade')"
           sortable
@@ -103,6 +102,25 @@
           prop="m_byFaultDescValue"
           :label="$t('openatc.faultrecord.faultvaluedetail')"
           align="center">
+          </el-table-column>
+          <el-table-column
+          prop="operator"
+          :label="$t('openatc.faultrecord.operator')"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="operationTime"
+          width="150px"
+          :label="$t('openatc.faultrecord.operationTime')"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="enumerate"
+          :label="$t('openatc.faultrecord.enumerate')"
+          align="center">
+          <template slot-scope="scope">
+            <el-tag v-show="scope.row.enumerate" :type="scope.row.enumerate === '1'?'info':scope.row.enumerate === '2'?'success':scope.row.enumerate === '0'?'':''">{{formatterEnumerate(scope.row)}}</el-tag>
+          </template>
           </el-table-column>
           <el-table-column :label="$t('openatc.faultrecord.operation')" align="center" width="240">
           <template slot-scope="scope">
@@ -178,13 +196,53 @@ export default {
       let boardType = row.m_byFaultBoardType
       let res = ''
       if (boardType === 1) {
-        res = '主控板'
+        res = this.$t('openatc.faultrecord.maincontrolboard')
       } else if (boardType === 2) {
-        res = '灯控版'
+        res = this.$t('openatc.faultrecord.lightcontrolversion')
       } else if (boardType === 3) {
-        res = '车检板'
+        res = this.$t('openatc.faultrecord.carinspectionboard')
       } else if (boardType === 4) {
-        res = 'I/O板'
+        res = this.$t('openatc.faultrecord.ioboard')
+      }
+      return res
+    },
+    formatterEnumerate (row, column) {
+      let enumerate = row.enumerate
+      let res = ''
+      if (enumerate === '0') {
+        res = this.$t('openatc.faultrecord.untreated')// 未处理
+      } else if (enumerate === '1') {
+        res = this.$t('openatc.faultrecord.ignored')// 忽略
+      } else if (enumerate === '2') {
+        res = this.$t('openatc.faultrecord.confirmed')// 确认
+      }
+      return res
+    },
+    m_wSubFaultType (row, column) {
+      let wSubFaultType = row.m_wSubFaultType
+      let res = ''
+      if (wSubFaultType === 0) {
+        res = ''
+      } else if (wSubFaultType === 1) {
+        res = this.$t('openatc.faultrecord.powerup')
+      } else if (wSubFaultType === 2) {
+        res = this.$t('openatc.faultrecord.powerdown')
+      } else if (wSubFaultType === 3) {
+        res = this.$t('openatc.faultrecord.powerno')
+      } else if (wSubFaultType === 4) {
+        res = this.$t('openatc.faultrecord.powerfault')
+      }
+      return res
+    },
+    m_byFaultLevel (row, column) {
+      let byFaultLevel = row.m_byFaultLevel
+      let res = ''
+      if (byFaultLevel === 1) {
+        res = this.$t('openatc.faultrecord.general')
+      } else if (byFaultLevel === 2) {
+        res = this.$t('openatc.faultrecord.degradation')
+      } else if (byFaultLevel === 3) {
+        res = this.$t('openatc.faultrecord.serious')
       }
       return res
     },
@@ -192,13 +250,13 @@ export default {
       let faultType = row.m_wFaultType
       let res = ''
       if (faultType >= 101 && faultType <= 199) {
-        res = '主控板故障'
+        res = this.$t('openatc.faultrecord.maincontrolboardfault')
       } else if (faultType >= 201 && faultType <= 299) {
-        res = '灯控版故障'
+        res = this.$t('openatc.faultrecord.lightcontrolversionfault')
       } else if (faultType >= 301 && faultType <= 399) {
-        res = '车检板故障'
+        res = this.$t('openatc.faultrecord.carinspectionboardfault')
       } else if (faultType >= 401 && faultType <= 499) {
-        res = 'I/O板故障'
+        res = this.$t('openatc.faultrecord.ioboardfault')
       }
       return res
     },
@@ -217,9 +275,20 @@ export default {
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
     },
     searchRecord () {
-      if (this.timeValue && this.devsfilter) {
+      if (this.timeValue) {
         let beginTime = this.formateDate(this.timeValue[0])
         let endTime = this.formateDate(this.timeValue[1])
+        GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
+          if (data.data.success !== true) {
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          this.tableData = data.data.data.content
+          this.totalCount = data.data.data.total
+        })
+      } else if (this.devsfilter) {
+        let beginTime = ''
+        let endTime = ''
         GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
           if (data.data.success !== true) {
             this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
@@ -254,11 +323,6 @@ export default {
     handleCurrentChange (val) {
       // 改变页码
       this.listQuery.pageNum = val
-      this.getAllRecord()
-    },
-    handleFilter () {
-      // 查询事件
-      this.listQuery.pageNum = 1
       this.getAllRecord()
     },
     cancle () {

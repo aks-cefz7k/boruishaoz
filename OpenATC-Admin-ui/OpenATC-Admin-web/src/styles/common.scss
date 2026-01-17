@@ -24,9 +24,97 @@
     color: $--color-primary;
   }
 }
+.borderStyle {
+  text-align: right;
+  padding-top: 10px;
+  border-top: 1px solid $--border-color-lighter;
+  .el-button--text {
+    font-size: 14px;
+  }
+}
+.msgTitle {
+  color: $--color-text-secondary;
+  padding: 5px 0;
+}
+.msgTitles {
+  color: $--color-text-secondary;
+  padding: 0;
+}
+.msgTitleEventtype {
+  color: $--color-text-secondary;
+  margin: 0 0 5px 0;
+}
+.msgValue {
+  color: $--color-text-primary;
+  padding-left: 5px;
+}
+.openatc-navbar {
+  box-shadow: 0px 0px 11px 0px rgba(0, 64, 125, 0.14);
+  .el-drawer__header {
+    font-family: MicrosoftYaHei;
+    font-size: 18px;
+    font-weight: bold;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+  }
+  .el-drawer__body { 
+    overflow: auto; 
+  }
+  .el-drawer__container::-webkit-scrollbar { 
+    display: none; 
+  }
+  .btnBottom {
+    text-align: right; 
+    padding: 5px 0 0 0;
+    border-top: 1px solid $--border-color-lighter;
+    .el-button--text {
+      font-size: 16px;
+    }
+  }
+  .grid-content{
+    letter-spacing: 0px;
+    color: $--color-text-primary;
+  }
+  .grid-content-label {
+    color: $--color-text-secondary;
+  }
+  .empty{
+    text-align: center;
+    color: $--color-text-regular;
+    .noInfo{
+      margin: 10px 0 0 22px;
+    }
+  }
+}
 .appMain {
   height: calc(100% - 57px);
-  background: $--background-color-base;
+  background: $--color-white;
+}
+//commom 样式
+.common-table-title {
+  float: left;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: $--color-text-secondary;
+}
+
+.common-date-popper {
+  //日期选择器弹窗的快捷选项太多，被底部遮挡
+  .el-picker-panel__sidebar {
+    bottom: 45px;
+    border-color: $--border-color-lighter;
+  }
+  .el-date-range-picker__time-header {
+    border-color: $--border-color-lighter;
+  }
+  .el-picker-panel__footer {
+    border-color: $--border-color-lighter;
+  }
+  .el-date-range-picker__content.is-left {
+    border-color: $--border-color-lighter;
+  }
 }
  // 主页样式
  .homeLayout {
@@ -590,6 +678,7 @@
 }
 // 设备管理页面样式
 .openatc-device {
+  margin-top: 15px;
   .tag-container {
       float: left;
       max-width: 70%;
@@ -597,7 +686,7 @@
     }
     .filter-container {
       float: right;
-      margin-top: 20px;
+      margin-top: 10px;
       margin-right: 20px;
     }
     .devs-table {
@@ -614,20 +703,36 @@
   }
   //故障记录页面样式
   .openatc-faultrecord {
+    margin-top: 15px;
     .el-range-editor .el-range-input {
       background-color: $--background-color-base;
     }
+    .el-date-editor .el-range-separator {
+      padding: 0
+    }
+    .el-range-editor--small .el-range-separator {
+      line-height: 32px;
+    }
+    .devs-table {
+      position: absolute;
+      top: 130px;
+      left: 20px;
+      right: 20px;
+      border: solid 1px $--border-color-lighter;
+      overflow: auto;
+    }
     .filter-container {
       float: right;
-      margin-top: 20px;
+      margin-top: 10px;
       margin-right: 20px;
     }
   }
   // 用户管理页面样式
   .openatc-user {
+    margin-top: 15px;
     .filter-container {
         float: right;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-right: 20px;
     }
     .atc-table {
@@ -641,6 +746,7 @@
   }
   // 绿波协调页面样式
   .greenWaveOptimize {
+    margin-top: 15px;
     height: calc(100vh - 50px);
     .el-aside {
         height: calc(100vh - 50px);
@@ -651,6 +757,11 @@
     .el-main {
       height: calc(100vh - 50px);
       background-color: $--background-color-base;
+    }
+  }
+  .tipContent{
+    .handicon {
+      color: $--color-text-primary;
     }
   }
   .planContent {
@@ -732,7 +843,7 @@
           font-stretch: normal;
           line-height: 14px;
           letter-spacing: 1px;
-          color: $--color-primary;
+          color: red;
           margin-left: 7px;
           line-height: 42px;
       }
@@ -822,6 +933,9 @@
           color: $--color-primary;
           margin-left: 7px;
           line-height: 42px;
+      }
+      .tipContent .iconfont {
+        color: $--color-primary;
       }
   }
   .openatc-planchart {
@@ -962,6 +1076,7 @@
   }
   // 操作记录页面样式
   .openatc-operationrecord {
+    margin-top: 15px;
     .atc-table {
         position: absolute;
         top: 130px;
@@ -972,13 +1087,14 @@
       }
       .filter-container {
         float: right;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-right: 20px;
       }
   }
   // 组织机构页面样式
   // 勤务路线页面样式
   .openatc-serviceroute {
+    margin-top: 15px;
     height: calc(100vh - 50px);
     .el-aside {
         height: calc(100vh - 50px);
@@ -1074,6 +1190,9 @@
         margin-left: 7px;
         line-height: 42px;
       }
+      .tipContent .iconfont {
+        color: $--color-primary;
+      }
   }
   .serviceroute-plancontent {
     position: relative;
@@ -1152,6 +1271,9 @@
         color: $--color-primary;
         margin-left: 7px;
         line-height: 42px;
+      }
+      .tipContent .iconfont {
+        color: $--color-primary;
       }
   }
   .serviceroute-pattern {
@@ -1487,6 +1609,7 @@
   padding: 0 16px 30px 16px;
 }
 .openatc-organization {
+  margin-top: 15px;
   .atc-table {
     position: absolute;
     top: 130px;
@@ -1497,7 +1620,7 @@
   }
   .filter-container {
     float: right;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-right: 20px;
   }
 }
@@ -1655,6 +1778,7 @@ table td {
   }
 // 瓶颈控制页面样式
 .overflow-detector-page {
+  margin-top: 15px;
   // height: calc(100% - 30px);
   height: 100%;
   position: relative;
@@ -1776,3 +1900,413 @@ table td {
     }
   }
 }
+
+//交通流
+.dev-traffic-detail {
+  .el-dialog {
+    height: calc(100%);
+    .el-dialog__body {
+      height: 100%;
+      padding: 20px;
+      background: $--background-color-base;
+      .content {
+        height: 100%;
+      }
+    }
+  }
+  .el-dialog__header {
+    position: relative;
+    height: 60px;
+    padding: 0 11px 0 11px;
+    .el-dialog__title {
+      position: absolute;
+      left: 24px;
+      font-size: 20px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: $--color-text-primary;
+      line-height: 60px;
+    }
+  }
+  .header {
+    float:right;
+    margin-top: -70px;
+    margin-right:50px;
+    .crossName {
+      float: left;
+      margin-right: 8px;
+      height: 36px;
+      line-height: 36px;
+      i {
+          color: #999;
+          margin-right: 6px;
+          font-size: 20px;
+      }
+      span {
+          color: $--color-text-regular;
+          float: left;
+          font-size: 14px;
+      }
+      .lukouIcon {
+          display: inline-block;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          color: $--color-text-regular;
+          text-align: center;
+          line-height: 22px;
+          margin-top: 7px;
+          margin-right: 1px;
+          .iconfont {
+              font-size: 14px;
+              margin-right: 0 !important;
+          }
+      }
+    }
+    .dateChoosed {
+      vertical-align: middle;
+      display: inline-block;
+      .el-date-editor .el-range-input {
+        color: $--color-text-secondary;
+      }
+      .el-date-editor.el-input__inner {
+        height: 36px;
+        float: left;
+      }
+      .el-range-editor .el-range-input {
+        background-color: $--color-white;
+      }
+    }
+    .searchbtn {
+      width: 70px;
+      height: 36px;
+      line-height: 36px;
+      padding: 0;
+      text-align: center;
+      margin-left: 5px;
+    }
+  }
+  .trafficDetector {
+    // height: 100%;
+    height: calc(100vh - 50px);
+    .title {
+      line-height: 60px;
+      font-family: MicrosoftYaHei;
+      font-size: 18px;
+      font-weight: bold;
+      font-stretch: normal;
+      letter-spacing: 0px;
+      color: $--color-text-primary;
+    }
+    .top {
+      background: $--color-white;
+      height: 48%;
+      width: 100%;
+      float: left;
+      margin-bottom: 20px;
+    }
+    .select {
+      position: absolute;
+      z-index: 999;
+      width: 107px;
+      height: 29px;
+    }
+    .lefttop {
+      width: 100%;
+      height: 100%;
+      background: $--color-white;
+      padding: 0 20px;
+      box-sizing: border-box;
+      box-shadow: 0px 0px 4px 0px 
+          rgba(0, 32, 60, 0.06);
+      border-radius: 4px;
+    }
+    .chart1 {
+      width: 100%;
+      height: calc(100% - 70px);
+    }
+    .chart2 {
+      width: 100%;
+      height: calc(100% - 70px);
+    }
+    .bottom {
+      height: 50%;
+      width: 100%;
+      float: left;
+    }
+    .bottom-left {
+      float: left;
+      width: calc(70% - 20px);
+      height:100%;
+      background: $--color-white;
+      padding: 0 20px;
+      box-sizing: border-box;
+      box-shadow: 0px 0px 4px 0px 
+          rgba(0, 32, 60, 0.06);
+      border-radius: 4px;
+    }
+    .bottom-right {
+      float: right;
+      width: 30%;
+      height: 100%;
+      background: $--color-white;
+      padding: 0 20px;
+      box-shadow: 0px 0px 4px 0px 
+          rgba(0, 32, 60, 0.06);
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .chartright {
+      width: 100%;
+      height: calc(100% - 70px);
+    }
+    .choosePanel {
+      position: absolute;
+      z-index: 999;
+    }
+    .btn {
+      float: left;
+      min-width: 60px;
+      height: 24px;
+      background-color: #ecf6ff;
+      border: solid 1px #005bac;
+      color: #005bac;
+      border-radius: 0;
+      padding: 0 6px;
+      text-align: center;
+      line-height: 24px;
+      font-family: MicrosoftYaHei;
+      font-size: 12px;
+      margin-right: 6px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #0874d4;
+      color: #fff;
+    }
+    .btnFocus {
+      background-color: #0874d4;
+      border: solid 1px #0874d4;
+      color: #fff;
+    }
+  }
+}
+
+// 方案统计
+
+.dev-pattern-detail {
+  .el-dialog {
+    height: calc(100% - 30vh);
+    .el-dialog__body {
+      height: 100%;
+      padding: 20px;
+      background: $--background-color-base;
+      .content {
+        height: 100%;
+      }
+    }
+  }
+
+  .el-dialog__header {
+    position: relative;
+    height: 60px;
+    padding: 0 11px 0 11px;
+    .tittle {
+      float: left;
+      margin-left: 13px;
+      font-size: 20px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: $--color-text-primary;
+      line-height: 60px;
+    }
+    .timepicker {
+      position: absolute;
+      right: 72px;
+      top: 11px;
+      .el-date-editor .el-range-separator {
+        line-height: 29px;
+      }
+      .el-date-editor .el-range-input {
+        color: $--color-text-primary;
+        background-color: $--color-white;
+      }
+      .el-date-editor.el-input__inner {
+        height: 36px;
+        float: left;
+      }
+    }
+    .searchbtn {
+      width: 70px;
+      height: 36px;
+      line-height: 36px;
+      padding: 0;
+      text-align: center;
+      float: left;
+      margin-left: 5px;
+    }
+    .crossName {
+      float: left;
+      margin-right: 8px;
+      height: 36px;
+      line-height: 36px;
+      i {
+          color: #999;
+          margin-right: 6px;
+          font-size: 20px;
+      }
+      span {
+          color: $--color-text-regular;
+          float: left;
+          font-size: 14px;
+      }
+      .lukouIcon {
+          display: inline-block;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          color: $--color-text-regular;
+          text-align: center;
+          line-height: 22px;
+          margin-top: 7px;
+          margin-right: 1px;
+          .iconfont {
+              font-size: 14px;
+              margin-right: 0 !important;
+          }
+      }
+    }
+  }
+
+  .trafficStrength {
+    height: 100%;
+    .el-loading-spinner{
+      font-size: 50px;
+      }
+    .left {
+        height: 100%;
+        width: 69%;
+        float: left;
+          .title {
+              padding-top: 25px;
+              margin-bottom: 20px;
+              font-family: MicrosoftYaHei;
+              font-size: 18px;
+              font-weight: bold;
+              font-stretch: normal;
+              letter-spacing: 0px;
+              color: $--color-text-primary;
+          }
+      }
+      .lefttop {
+        width: 100%;
+        height: 52%;
+          background: $--color-white;
+          padding: 0 20px;
+          box-sizing: border-box;
+          box-shadow: 0px 0px 4px 0px 
+              rgba(0, 32, 60, 0.06);
+          border-radius: 4px;
+      }
+      .leftbottom {
+        width: 100%;
+        height: calc(100% - 52% - 16px);
+        margin-top: 16px;
+          background: $--color-white;
+          padding: 0 20px;
+          box-sizing: border-box;
+          box-shadow: 0px 0px 4px 0px 
+              rgba(0, 32, 60, 0.06);
+          border-radius: 4px;
+      }
+      .right {
+        height: 100%;
+        width: calc(31% - 15px);
+        float: left;
+        margin-left: 15px;
+      }
+
+      .chart1 {
+        width: 100%;
+        height: calc(100% - 100px);
+      }
+      .chart2 {
+        width: 100%;
+        height: calc(100% - 70px);
+      }
+      .choosePanel {
+        position: relative;
+        z-index: 999;
+        height: 24px;
+      }
+      .btn {
+        float: left;
+        min-width: 60px;
+        height: 24px;
+        background-color: $--color-white;
+        border: solid 1px $--color-primary;
+        color: $--color-primary;
+        border-radius: 0;
+        padding: 0 6px;
+        text-align: center;
+        line-height: 24px;
+        font-family: MicrosoftYaHei;
+        font-size: 12px;
+        margin-right: 6px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background-color: $--color-primary;
+        color: #fff;
+      }
+      .btnFocus {
+        background-color: $--color-primary;
+        border: solid 1px $--color-primary;
+        color: #fff;
+      }
+    .strengthPanel {
+        width: 100%;
+        background: $--color-white;
+        height: 52%;
+        padding: 0 20px;
+        .title {
+          padding-top: 25px;
+          margin-bottom: 20px;
+          font-family: MicrosoftYaHei;
+          font-size: 18px;
+          font-weight: bold;
+          font-stretch: normal;
+          letter-spacing: 0px;
+          color: $--color-text-primary;
+        }
+        .chart {
+          width: 100%;
+          height: 79%;
+        }
+      }
+    .periodicPanel{
+      margin-top: 16px;
+      width: 100%;
+      height: calc(100% - 52% - 16px);
+        background: $--color-white;
+        padding: 0 20px;
+        box-shadow: 0px 0px 4px 0px 
+            rgba(0, 32, 60, 0.06);
+        border-radius: 4px;
+        box-sizing: border-box;
+        .title {
+            padding-top: 25px;
+            font-family: MicrosoftYaHei;
+            font-size: 18px;
+            font-weight: bold;
+            font-stretch: normal;
+            letter-spacing: 0px;
+            color: $--color-text-primary;
+        }
+        .chart {
+            width: 100%;
+          height: 86.4%;
+        }
+    }
+  }
+} 

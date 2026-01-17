@@ -11,10 +11,8 @@
  **/
 <template>
   <div class="app-container history-container">
-    <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">{{$t('edge.fault.refresh')}}</el-button>
+    <el-button type="primary" @click="getAllFault" size="small" style="margin-bottom: 10px;">{{$t('edge.fault.uploadfault')}}</el-button>
     <el-button type="primary" size="small" @click="leadingOutFault" style="margin-bottom: 10px;">{{$t('edge.fault.export')}}</el-button>
-    <el-input v-model="username" :placeholder="$t('edge.statistics.username')" style="width:150px;margin-left:10px;"></el-input>
-    <el-input v-model="password" :placeholder="$t('edge.statistics.pass')" type="password" style="width:150px;"></el-input>
     <el-button class="detail-fault" type="primary" size="small" @click="showLedDetailFault" style="" v-show="activeName === '2'">{{$t('edge.fault.faultofcurrentdetailedlightgroup')}}</el-button>
     <el-button class="detail-fault" type="primary" size="small" @click="showVehDetDetailFault" style="" v-show="activeName === '3'">{{$t('edge.fault.faultofcurrentdetailedvehicleinspectionversion')}}</el-button>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -28,7 +26,7 @@
 
 <script>
 import boardTable from './table/index'
-import { getFault, getFaultHistoryByFtp } from '@/api/fault'
+import { getFault, getFaultHistory } from '@/api/fault'
 import { getIframdevid } from '@/utils/auth'
 import detailFault from './dialog/index'
 import { getMessageByCode } from '@/utils/responseMessage'
@@ -51,8 +49,6 @@ export default {
   data () {
     return {
       activeName: '0',
-      username: '',
-      password: '',
       tabList: [{
         label: '总览',
         value: '0'
@@ -72,29 +68,35 @@ export default {
       listLoading: false,
       allFault: [],
       tableData: [],
-      dialogDetailFault: []
+      dialogDetailFault: [],
+      loading: {}
     }
   },
-  created () {
-    this.getAllFault()
+  destroyed () {
+    if (this.dataTimeoutTimer) {
+      clearTimeout(this.dataTimeoutTimer)
+    }
   },
   methods: {
     getAllFault () {
-      this.listLoading = true
-      // let faultType = Number(this.activeName)
+      this.lockScreen()
       let agentid = getIframdevid()
       let reqData = {
-        'username': this.username,
-        'password': this.password,
         'agentid': agentid
       }
-      getFaultHistoryByFtp(reqData).then(data => {
+      this.dataTimeoutTimer = setTimeout(() => {
+        this.unlockScreen()
+      }, 30000)
+      getFaultHistory(reqData).then(data => {
+        this.unlockScreen()
+        if (this.dataTimeoutTimer) {
+          clearTimeout(this.dataTimeoutTimer)
+        }
         if (data.data.success !== true) {
-          this.listLoading = false
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        this.listLoading = false
+        if (!data.data.data.m_FaultDeque.length) return
         this.allFault = this.formateDateForAllFault(data.data.data.m_FaultDeque)
         this.handlerFaultData()
       })
@@ -204,6 +206,7 @@ export default {
       this.showDetailFault(6)
     },
     showDetailFault (val) {
+      this.listLoading = true
       getFault(val).then(data => {
         if (data.data.success !== true) {
           this.listLoading = false
@@ -219,6 +222,17 @@ export default {
         let detailFault = this.$refs.detailfault
         detailFault.onShowDetailFault()
       })
+    },
+    lockScreen () {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+    },
+    unlockScreen () {
+      this.loading.close()
     }
   }
 }

@@ -21,21 +21,22 @@ export default class GlobalData {
   }
 
   /**
-   * param[in] type 可订阅类型中的一个
-   * param[in] func 回调函数  func(message) 参数为订阅返回数据l
+   * @param {in} type 可订阅类型中的一个
+   * @param {in} params 订阅消息参数
+   * @param {in} func 回调函数  func(message) 参数为订阅返回数据l
    */
-  getData (type, func) {
+  getData (type, func, params) {
     if (typeList.find(val => val === type) === undefined) return
 
     let funcList = this.funcMap.get(type)
     funcList.push(func)
 
-    this.Run(type, this.devtype, this.asid)
+    this.Run(type, params)
 
     return funcList.length - 1
   }
 
-  stop (type, index) {
+  stop (type, index, params) {
     if (typeList.find(val => val === type) === undefined) return
 
     let funcList = this.funcMap.get(type)
@@ -44,9 +45,9 @@ export default class GlobalData {
     funcList.splice(index, 1)
 
     if (funcList.length === 0) {
-      let simuid = this.getStartId(type)
+      // let simuid = this.getStartId(type)
       let subcirl = this.getSubCirl(type)
-      subcirl.stop([simuid])
+      subcirl.stop(params)
     }
   }
 
@@ -71,23 +72,24 @@ export default class GlobalData {
   /**
    * 按类型开始订阅数据
    * @param {in} type
+   * @param {in} params 订阅消息参数
    */
-  Run (type) {
+  Run (type, params) {
     let subcirl = this.getSubCirl(type)
-    subcirl.start([this.getStartId(type)])
+    subcirl.start(params)
     subcirl.addCare(this.callBack, this)
   }
 
   getSubCirl (type) {
     let sub = store.getters['wsSubMgr'].getByName(subKey)
     if (sub === undefined) return
-    let key = typekeyMap.get(type)
-    let subcirl = sub.getSubByType(key)
+    let infotype = typekeyMap.get(type)
+    let subcirl = sub.getSubByType(infotype, 'asc')
     return subcirl
   }
 
-  getStartId (type) {
-    let key = typekeyMap.get(type)
-    return `asc:${key}`
-  }
+  // getStartId (type) {
+  //   let key = typekeyMap.get(type)
+  //   return `asc:${key}`
+  // }
 }

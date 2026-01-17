@@ -146,3 +146,10 @@ export function getAllDailyRecord () {
   data.infotype = 'system/log'
   return api.Send({}, data)
 }
+export function getDailyRecord () {
+  var iframdevid = getIframdevid()
+  let api = new Authapi('getDailyRecord')
+  let data = {}
+  data.agentId = iframdevid
+  return api.Send({}, data)
+}

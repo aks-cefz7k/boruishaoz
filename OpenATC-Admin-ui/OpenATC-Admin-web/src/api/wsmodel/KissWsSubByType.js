@@ -107,26 +107,28 @@ export default class KissWsSubByType {
   /**
    * 创建一个订阅 指定订阅类型
    * @param {in} type 订阅类型标识 唯一 不能重复
+   * @param {in} model 订阅上报模块
    * @returns 如果已经存在返回已存在的对象 未存在创建
    */
-  createSub (type) {
+  createSub (type, model) {
     if (this._sub_map.has(type)) {
       return this._sub_map[type]
     }
-    let sub = new SubChannel(type, this._ws)
+    let sub = new SubChannel(type, model, this._ws)
     this._sub_map.set(type, sub)
     return sub
   }
   /**
    * 获取已经存在的订阅根据订阅类型
    * @param {*} type 订阅消息类型
+   * @param {in} model 订阅上报模块
    * @return subObject or null
    */
-  getSubByType (type) {
+  getSubByType (type, model) {
     if (this._sub_map.has(type)) {
       return this._sub_map.get(type)
     }
-    return this.createSub(type)
+    return this.createSub(type, model)
   }
   /**
    * 取消该消息类型的订阅

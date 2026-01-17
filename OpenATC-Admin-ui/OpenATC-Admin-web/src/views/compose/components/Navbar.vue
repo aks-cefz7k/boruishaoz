@@ -53,7 +53,6 @@
             <el-dropdown-item command="operate">{{$t('openatc.main.operationrecord')}}</el-dropdown-item>
             <el-dropdown-item command="organization">{{$t('openatc.main.organization')}}</el-dropdown-item>
             <el-dropdown-item command="user">{{$t('openatc.main.usermanager')}}</el-dropdown-item>
-            <el-dropdown-item command="jupyter">{{$t('openatc.main.script')}}</el-dropdown-item>
             <el-dropdown-item command="faultrecord">{{$t('openatc.main.faultrecord')}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -130,74 +129,100 @@
       </div>
     </div>
       <el-drawer
-        title="故障列表"
+        :title="$t('openatc.faultrecord.faultlist')"
         :visible.sync="drawer"
+        :modal="false"
+        :wrapperClosable="false"
         :with-header="true">
-        <span>
+        <!-- <span> -->
+          <div class="empty" v-show="faultData.length === 0">
+            <img src="../../../../static/img/noMessage.png">
+            <div class="noInfo">没有新消息</div>
+          </div>
           <el-card v-for="(fault,index) in faultData" :key="index" class="box-card" style="margin:10px 16px">
-            <div slot="header" class="clearfix">
+            <!-- <div slot="header" class="clearfix">
               <i class="el-icon-location-outline" type="primary"></i>
               <span>{{$t('openatc.faultrecord.deviceid')}}</span>
               <el-button style="float: right; padding: 3px 0" type="text">
                 <i class="el-icon-close"></i>
               </el-button>
-            </div>
+            </div> -->
             <div class="text item">
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-row :gutter="0">
-                    <el-col :span="10">
+                    <el-col :span="4">
                       <div class="grid-content-label">
-                        {{ $t("openatc.faultrecord.deviceid") }}:
+                        {{ $t("openatc.faultrecord.eportingmodule") }}:
                       </div>
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="20">
                       <div class="grid-content bg-purple">
-                       {{fault.agentid}}
+                       {{formatterModel(fault.model)}}
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" class="row-bg">
+                <el-col :span="24">
+                  <el-row :gutter="0">
+                    <el-col :span="4">
+                      <div class="grid-content-label">
+                        {{ $t("openatc.faultrecord.roadname") }}:
+                      </div>
+                    </el-col>
+                    <el-col :span="20">
+                      <div class="grid-content bg-purple">
+                       {{fault.id}} {{fault.name}}
                       </div>
                     </el-col>
                   </el-row>
                 </el-col>
               </el-row>
               <el-row :gutter="20"  class="row-bg">
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-row :gutter="0">
-                    <el-col :span="10">
+                    <el-col :span="4">
                       <div class="grid-content-label">
-                        {{ $t("openatc.devicemanager.faultOccurtime") }}:
+                        {{ $t("openatc.faultrecord.eventtype") }}:
                       </div>
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="20">
                       <div class="grid-content bg-purple">
-                        {{fault.m_unFaultOccurTime}}
+                        {{ formatterInfotype(fault.eventType)}}
                       </div>
                     </el-col>
                   </el-row>
                 </el-col>
               </el-row>
               <el-row :gutter="20" class="row-bg">
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-row :gutter="0">
-                    <el-col :span="10">
+                    <el-col :span="4">
                       <div class="grid-content-label">
-                        {{ $t("openatc.faultrecord.fixdetail") }}:
+                        {{ $t("openatc.faultrecord.detaileddescription") }}:
                       </div>
                     </el-col>
-                    <el-col :span="14">
+                    <el-col :span="20">
                       <div class="grid-content bg-purple">
-                        {{fault.m_byFaultDescValue}}
+                        {{ formmatter(fault) }}
                       </div>
                     </el-col>
                   </el-row>
                 </el-col>
               </el-row>
             </div>
+            <div  class="btnBottom">
+              <el-button size="mini" icon="el-icon-circle-check" type="text" @click="cancels(fault)">{{$t('openatc.faultrecord.confirm')}}</el-button>
+              <el-button type="text" icon="el-icon-remove-outline" size="mini" @click="confirmeds(fault)">{{$t('openatc.faultrecord.neglect')}}</el-button>
+            </div>
           </el-card>
-        </span>
+        <!-- </span> -->
       </el-drawer>
-    <div class="alarm-message" @click="drawer = true">
-      <el-badge is-dot class="item">
-        <i class="el-icon-message-solid"></i>
+    <div class="alarm-message" @click="drawer = true, isDot=false">
+      <el-badge :is-dot="isDot" class="item">
+        <img style ="width: 18px;" src="../../../assets/home/notice.png">
       </el-badge>
     </div>
   </el-menu>
@@ -209,6 +234,7 @@
 <script>
 import router from '@/router'
 import FaultEventData from '@/model/EventModal/faultData.js'
+import { GetUntreated, searchRoadName, enumerateCheck } from '@/api/fault.js'
 import modifypasswd from './modifyPasswd'
 import versioninfo from './versionInfo'
 import SystemSettings from './SystemSettings'
@@ -243,7 +269,29 @@ export default {
       fromKstpPath: ['/greenWaveOptimizeNew', '/deviceNew', '/operaterecordNew', '/overviewNew/index'],
       language: 'Language',
       zh_handbook: '',
-      en_handbook: ''
+      en_handbook: '',
+      pageNum: '1',
+      pageSize: '10',
+      enumerate: '0',
+      infotype: '',
+      model: '',
+      notify: undefined,
+      faultDescValue: '',
+      roadName: '',
+      faultDatas: '',
+      isDot: false,
+      faultCodeMap: new Map([[101, 'can总线通信故障'], [102, '黄闪器故障'], [103, '特征参数故障'], [104, '故障检测板不在线'], [105, '继电器未吸合'], [201, '灯控板ID故障'], [202, '灯控板脱机'], [203, '无红灯亮起'], [204, '红绿同亮'], [205, '绿冲突'], [206, '红灯灯电压故障'], [207, '黄灯灯电压故障'], [208, '绿灯灯电压故障'], [209, '红灯灯功率故障'], [210, '黄灯灯功率故障'], [211, '绿灯灯功率故障'], [212, '灯组故障'], [213, '车检器故障'], [214, '灯控板插槽编码错误'], [215, '灯控板插头编码错误'], [216, '本机灯控板数量未配置'], [301, '车检板未初始化'], [302, '车检板脱机'], [303, '车辆检测器短路'], [304, '车辆检测器断路'], [401, 'I/O板未初始化'], [402, 'I/O板脱机']]),
+      faultCodeMapEn: new Map([[101, 'CanBus Fault'], [102, 'Yellow Flasher Fault'], [103, 'TZParam Fault'], [104, 'FaultDet Offline'], [105, 'Relay Not Work'], [201, 'LampBoard ID Fault'], [202, 'LampBoard Offline'], [203, 'No Red Lamp Is On'], [204, 'Red And Green Conflict'], [205, 'Green Conflict'], [206, 'Red Lamp Voltage Fault'], [207, 'Yellow Lamp Voltage Fault'], [208, 'Green Lamp Voltage Fault'], [209, 'Red Lamp Lamp Power Fault'], [210, 'Yellow Lamp Lamp Power Fault'], [211, 'Green Lamp Lamp Power Fault'], [212, 'Lamp pack failure'], [213, 'Car detector failure'], [214, 'Lamp Control Board Slot Code Error'], [215, 'Code Error Of Lamp Control Board Plug'], [216, 'The Number Of Lamp Control Board Not be Configed for The Master'], [301, 'VehDetBoard Is Not Init'], [302, 'VehDetBoard Is Offline'], [303, 'VehDetector Short Circiut'], [304, 'VehDetector Open  Circiut'], [401, 'I/O Board Is Not Init'], [402, 'I/O Board Offline']]),
+      // faultLevelMap: new Map([[1, '一般故障'], [2, '降级故障'], [3, '严重故障']]),
+      // faultLevelMapEn: new Map([[1, 'General failure'], [2, 'Degradation failure'], [3, 'Serious failure']]),
+      TZParamSubtypeMap: new Map([[0, ''], [1, '特征参数不存在'], [2, '特征参数文件不可读'], [3, '特征参数人为修改'], [4, '特征参数文件打开失败'], [5, '特征参数文件更新失败'], [6, '信号机地址码校验失败'], [7, '特征参数内容格式错误'], [8, 'USB挂载失败']]),
+      TZParamSubtypeMapEn: new Map([[0, ''], [1, 'Non-existent'], [2, 'File Is Unreadable'], [3, 'File Artificial Changes'], [4, 'File Open Fail'], [5, 'File Update Fail'], [6, 'File Check SiteID Fail'], [7, 'Format Error'], [8, 'USB Mount Fail']]),
+      greenLampSubtypeMap: new Map([[0, ''], [1, '未输出有效电压'], [2, '输出电压低于输入电压过多'], [3, '输出电压高于输入电压'], [4, '关闭输出但实际电压仍然输出'], [5, '关闭输出但实际电压部分输出'], [6, '线路残留电压过高']]),
+      greenLampSubtypeMapEn: new Map([[0, ''], [1, 'Output Volatage Is Fail'], [2, 'Output Volatage Is Low'], [3, 'Output Volatage Is High'], [4, 'Off Output Volatage Is high'], [5, 'Off Output Volatage Is low'], [6, 'Residual Voltage Is Over-High']]),
+      lampPowerSubtypeMap: new Map([[0, ''], [1, '功率异常增加'], [2, '功率异常减少'], [3, '功率无输出'], [4, '关闭状态有功率输出']]),
+      lampPowerSubtypeMapEn: new Map([[0, ''], [1, 'Output Power Is Up'], [2, 'Output Power Is Down'], [3, 'Output Power Is Zero'], [4, 'Off Output Power Is High']]),
+      lampgroupfailureMap: new Map([[0, ''], [1, '红灯故障'], [2, '黄灯故障'], [3, '绿灯故障']]),
+      lampgroupfailureMapEn: new Map([[0, ''], [1, 'Red light failure'], [2, 'Yellow light failure'], [3, 'Green light failure']])
     }
   },
   watch: {
@@ -276,7 +324,7 @@ export default {
     if (this.fromKstpPath.indexOf(this.devicePath) !== -1) {
       this.isShow = false
     }
-    // this.handleFaultEventData()
+    this.getUntreated()
   },
   mounted () {
     // 订阅故障测试
@@ -289,10 +337,178 @@ export default {
     }
   },
   methods: {
+    formatterModel (val) {
+      let res = ''
+      if (val === 'asc') {
+        res = this.$t('openatc.faultrecord.asc')
+      } else if (val === 'patterncalc') {
+        res = this.$t('openatc.faultrecord.patterncalc')
+      } else if (val === 'monitor') {
+        res = this.$t('openatc.faultrecord.monitor')
+      }
+      return res
+    },
+    formatterInfotype (val) {
+      let res = ''
+      if (val === 'status/fault') {
+        res = this.$t('openatc.faultrecord.statusfault')
+      }
+      return res
+    },
+    formmatter (data) {
+      let value = ''
+      if (this.$i18n.locale === 'en') {
+        if (data.m_wFaultType === 103) {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType) + this.TZParamSubtypeMapEn.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 208 || data.m_wFaultType === 207 || data.m_wFaultType === 206) {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType) + this.greenLampSubtypeMapEn.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 212) {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType) + this.lampgroupfailureMapEn.get(data.m_wSubFaultType)
+        } else {
+          value = data.m_byFaultDescValue + this.faultCodeMapEn.get(data.m_wFaultType)
+          return value
+        }
+      } else {
+        if (data.m_wFaultType === 103) {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType) + this.TZParamSubtypeMap.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 208 || data.m_wFaultType === 207 || data.m_wFaultType === 206) {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType) + this.greenLampSubtypeMap.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 211 || data.m_wFaultType === 210 || data.m_wFaultType === 209) {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType) + this.lampPowerSubtypeMap.get(data.m_wSubFaultType)
+          return value
+        } else if (data.m_wFaultType === 212) {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType) + this.lampgroupfailureMap.get(data.m_wSubFaultType)
+          return value
+        } else {
+          value = data.m_byFaultDescValue + this.faultCodeMap.get(data.m_wFaultType)
+          return value
+        }
+      }
+    },
     handleFaultEventData (data) {
-      // debugger
-      // console.log(data, 777)
-      this.faultData = data
+      this.isDot = true
+      this.faultDatas = data
+      searchRoadName(data.agentid).then(j => {
+        if (j.data.data.name) {
+          this.roadName = j.data.data.id + ' ' + j.data.data.name
+        } else {
+          this.roadName = j.data.data.id
+        }
+      })
+      this.infotype = this.formatterInfotype(data.infotype)
+      this.model = this.formatterModel(data.model)
+      if (this.$i18n.locale === 'en') {
+        if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 208 || data.data.m_FaultDeque[0].m_wFaultType === 207 || data.data.m_FaultDeque[0].m_wFaultType === 206) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMapEn.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else {
+          this.faultDescValue = this.faultCodeMapEn.get(data.data.m_FaultDeque[0].m_wFaultType)
+        }
+      } else {
+        if (data.data.m_FaultDeque[0].m_wFaultType === 103) {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.TZParamSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 208 || data.data.m_FaultDeque[0].m_wFaultType === 207 || data.data.m_FaultDeque[0].m_wFaultType === 206) {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.greenLampSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 211 || data.data.m_FaultDeque[0].m_wFaultType === 210 || data.data.m_FaultDeque[0].m_wFaultType === 209) {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampPowerSubtypeMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else if (data.data.m_FaultDeque[0].m_wFaultType === 212) {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType) + this.lampgroupfailureMap.get(data.data.m_FaultDeque[0].m_wSubFaultType) + data.data.m_FaultDeque[0].m_byFaultDescValue
+        } else {
+          this.faultDescValue = this.faultCodeMap.get(data.data.m_FaultDeque[0].m_wFaultType)
+        }
+      }
+      if (this.notify) {
+        this.notify.close()
+      }
+      this.open2()
+    },
+    open2 () {
+      const h = this.$createElement
+      this.notify = this.$notify({
+        title: this.$t('openatc.faultrecord.realtimealert'),
+        iconClass: 'warnIcon',
+        onClose: () => {
+        },
+        dangerouslyUseHTMLString: true,
+        message: h('div', {style: {'width': '236px'}}, [
+          h('div', {style: {padding: '5px 0'}}, [
+            h('span', {class: 'msgTitle'}, `${this.$t('openatc.faultrecord.eportingmodule')}:`),
+            h('span', {class: 'msgValue'}, `${this.model}`)
+          ]),
+          h('div', [
+            h('span', {class: 'msgTitles'}, `${this.$t('openatc.faultrecord.roadname')}:`),
+            h('span', {class: 'msgValue'}, `${this.roadName}`)
+          ]),
+          h('div', {class: 'msgTitle'}, [
+            h('span', `${this.$t('openatc.faultrecord.eventtype')}:`),
+            h('span', {class: 'msgValue'}, `${this.infotype}`)
+          ]),
+          h('div', {class: 'msgTitleEventtype'}, [
+            h('span', `${this.$t('openatc.faultrecord.detaileddescription')}:`),
+            h('span', {class: 'msgValue'}, `${this.faultDescValue}`)
+          ]),
+          h('div', {class: 'borderStyle'}, [
+            h('el-button', {props: {size: 'mini', type: 'text', icon: 'el-icon-circle-check'}, on: {click: this.confirm}}, `${this.$t('openatc.faultrecord.confirm')}`),
+            h('el-button', {props: {size: 'mini', type: 'text', icon: 'el-icon-remove-outline'}, on: {click: this.cancel}}, `${this.$t('openatc.faultrecord.neglect')}`)
+          ])
+        ]),
+        duration: 0,
+        position: 'bottom-right'
+      })
+    },
+    cancel () {
+      this.enumerate = '1'
+      enumerateCheck(this.faultDatas.agentid, this.faultDatas.data.m_FaultDeque[0].m_wFaultID.toString(), this.enumerate).then(data => {
+      })
+      this.notify.close()
+    },
+    confirm () {
+      this.enumerate = '2'
+      enumerateCheck(this.faultDatas.agentid, this.faultDatas.data.m_FaultDeque[0].m_wFaultID.toString(), this.enumerate).then(data => {
+      })
+      this.notify.close()
+    },
+    cancels (data) {
+      this.enumerate = '2'
+      enumerateCheck(data.agentid, data.m_wFaultID.toString(), this.enumerate).then(data => {
+        if (data.data.success) {
+          this.getUntreated()
+        }
+      })
+    },
+    confirmeds (data) {
+      this.enumerate = '1'
+      enumerateCheck(data.agentid, data.m_wFaultID.toString(), this.enumerate).then(data => {
+        if (data.data.success) {
+          this.getUntreated()
+        }
+      })
+    },
+    getUntreated () {
+      this.enumerate = 0
+      GetUntreated(this.pageNum, this.pageSize, this.enumerate).then(data => {
+        if (data.data.success) {
+          for (let i = 0; i < data.data.data.content.length; i++) {
+            searchRoadName(data.data.data.content[i].agentid).then(j => {
+              data.data.data.content[i].name = j.data.data.name
+              data.data.data.content[i].id = j.data.data.id
+            })
+          }
+          this.faultData = data.data.data.content
+        }
+      })
     },
     handleJump (key) {
       if (key === 'deviceState' || key === 'dutyRoute' || key === 'coordinateRoute') {
@@ -366,6 +582,7 @@ export default {
     logout () {
       this.$store.dispatch('LogOut').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
+        this.FaultEventData.UnInit() // 取消故障事件订阅
       })
     },
     modifyPasswd () {
@@ -453,6 +670,14 @@ export default {
  //  @import "../../../styles/theme/element-variables.scss";
 .el-menu-demo {
   padding: 0 18px;
+}
+.warnIcon {
+  height: 24px;
+  width: 24px;
+  background-size: 24px 24px;
+  background-repeat: no-repeat;
+  background-position:center center;
+  background-image: url('../../../assets/home/trouble.png');
 }
 .openatc-operate {
   cursor: pointer;

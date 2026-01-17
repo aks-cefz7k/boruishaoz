@@ -5,17 +5,18 @@
  * @Modified By:
  */
 import Channel from 'chnl'
-import {
-  kdiff,
-  kconcat
-} from './ArryListUtil'
+// import {
+//   kdiff,
+//   kconcat
+// } from './ArryListUtil'
 export default class SubChannel {
   /**
    *
    * @param {in} name sub标识
    */
-  constructor (name, ws) {
-    this._name = name
+  constructor (name, model, ws) {
+    this._name = name // 订阅的消息类型
+    this._model = model // 订阅的上报模块
     this._channel = new Channel()
     this.setMessageListener()
     this._ws = ws
@@ -23,29 +24,37 @@ export default class SubChannel {
   }
   /**
    * 开始订阅,需要指定订阅哪些对象的该类型数据
-   * @param {*} wholist
+   * @param {*} wholist 订阅消息参数
    */
   start (wholist) {
-    // let difflist = kdiff(wholist, this._curCareWholist)
-    this._curCareWholist = kconcat(this._curCareWholist, wholist)
-    // if (difflist.length === 0) return
-    this._ws.sendPacked({
-      'messagetype': this._name,
-      param: wholist,
+    let wsbody = {
+      'model': this._model,
+      'infotype': this._name,
       subscribe: 'up'
-    })
+    }
+    if (wholist) {
+      wsbody.param = wholist
+    }
+    // let difflist = kdiff(wholist, this._curCareWholist)
+    // this._curCareWholist = kconcat(this._curCareWholist, wholist)
+    // if (difflist.length === 0) return
+    this._ws.sendPacked(wsbody)
   }
   /**
    * 停止订阅，需要指定取消哪些对象的该类型数据的订阅
-   * @param {*} wholist
+   * @param {*} wholist 订阅消息参数
    */
   stop (wholist) {
-    this._curCareWholist = kdiff(this._curCareWholist, wholist)
-    this._ws.sendPacked({
-      'messagetype': this._name,
-      param: wholist,
+    // this._curCareWholist = kdiff(this._curCareWholist, wholist)
+    let wsbody = {
+      'model': this._model,
+      'infotype': this._name,
       subscribe: 'down'
-    })
+    }
+    if (wholist) {
+      wsbody.param = wholist
+    }
+    this._ws.sendPacked(wsbody)
   }
   /**
    * 处理来的消息 分发给所有关心者
