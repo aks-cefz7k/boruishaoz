@@ -43,7 +43,7 @@ import java.util.Map;
 
 public class ShiroConfig {
 
-    private String shiroOpen = PropertiesUtil.getStringProperty("agent.server.shiro");;
+    private String shiroOpen = PropertiesUtil.getStringProperty("agent.server.shiro");
 
     @Bean
     @DependsOn("securityManager")
