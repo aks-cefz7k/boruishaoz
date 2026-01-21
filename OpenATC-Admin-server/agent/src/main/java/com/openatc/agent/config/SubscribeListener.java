@@ -24,7 +24,7 @@ public class SubscribeListener implements MessageListener {
      */
     @Override
     public void onMessage(Message message, byte[] bytes) {
-        logger.info("init DevIdMapService map by:" + message.toString());
+//        logger.info("init DevIdMapService map by:" + message.toString());
         devIdMapService.initMap();
     }
 }

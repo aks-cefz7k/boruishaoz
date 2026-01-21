@@ -21,14 +21,14 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
 
-import static com.openatc.core.common.IErrorEnumImplOuter.*;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.logging.Logger;
+
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 public class JwtAuthenticationFilter extends AuthenticatingFilter {
 
@@ -96,7 +96,8 @@ public class JwtAuthenticationFilter extends AuthenticatingFilter {
 
         if (AgentApplication.tokenlist != null) {
             for (String s : AgentApplication.tokenlist) {
-                if (s.equals(checktoken)) return true;
+                if (s.equals(checktoken))
+                    return true;
             }
         }
 //        //调试模式直接返回true
