@@ -60,12 +60,15 @@ public class ShiroConfig {
             filterChainDefinitionMap.put("/", "anon");
             filterChainDefinitionMap.put("/apiconfig.json", "anon");
             filterChainDefinitionMap.put("/servConfig.json", "anon");
+            filterChainDefinitionMap.put("/LRRoadConfig.json","anon");
             filterChainDefinitionMap.put("/favicon.ico", "anon");
             filterChainDefinitionMap.put("/css/**", "anon");
             filterChainDefinitionMap.put("/fonts/**", "anon");
             filterChainDefinitionMap.put("/img/**", "anon");
             filterChainDefinitionMap.put("/js/**", "anon");
+            filterChainDefinitionMap.put("/UserManual/**","anon");
             filterChainDefinitionMap.put("/auth/login", "anon");
+            filterChainDefinitionMap.put("/ws","anon");
             filterChainDefinitionMap.put("/**", "jwt");
         }
         else{

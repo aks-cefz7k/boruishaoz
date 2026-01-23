@@ -52,7 +52,7 @@ public class RedisService {
         String agentId = jsonObject.get("agentid").getAsString();
 
         log.info("receive " + type + " message: " + message);
-        if ("asc:status/pattern".equals(type)) {
+        if (type.contains("asc:status/pattern")) {
             for (Session session : patternWebSocketSet.keySet()) {
                 WebSocketServer webSocketServer = patternWebSocketSet.get(session).getWebSocketServer();
                 Set<String> agentIds = webSocketServer.getInfoAndAgentIds().get("status/pattern");
@@ -62,7 +62,7 @@ public class RedisService {
             }
         }
 
-        if ("asc:status/fault".equals(type)) {
+        if ("asc:event/agentfault".equals(type)) {
             for (Session session : faultIncidentWebSocketSet.keySet()) {
                 faultIncidentWebSocketSet.get(session).getWebSocketServer().sendMessage(message);
             }
@@ -99,6 +99,7 @@ public class RedisService {
     }
 
 
+    //订阅topic
     public void subsMessage(String message) {
         for (Session session : patternWebSocketSet.keySet()) {
             if (patternWebSocketSet.get(session).getWebSocketServer().channelTypeDataSet.contains(message))
@@ -264,7 +265,7 @@ public class RedisService {
         StringBuffer sendBuffer = new StringBuffer("[");
 
         for (String value : keySet) {
-            String strFrame = null;
+            String strFrame;
             try {
                 if (value.equals("asc:agentframe:network")) {
                     strFrame = cMap.get(value);
