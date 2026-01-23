@@ -818,7 +818,7 @@ public class AscsDao {
             isUpdate = 1;
         }
 
-        if(login_thirpartyid == null){
+        if (login_thirpartyid == null) {
             logger.warning("Report thirpartyid = null, devCover = " + devCover.toString());
             return 0;
         }
@@ -840,7 +840,7 @@ public class AscsDao {
         }
 
         //第一次上报的ocp
-        if(isUpdate == 1){
+        if (isUpdate == 1) {
             //插入
             String sql = "INSERT INTO dev(agentid, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
             rows = jdbcTemplate.update(sql,
@@ -852,7 +852,7 @@ public class AscsDao {
                     ascsModel.getGeometry().toString(),
                     ascsModel.getJsonparam().toString());
 
-        }else{
+        } else {
             //之前存在，则更新时间
             String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
             rows = jdbcTemplate.update(sql,
@@ -866,7 +866,7 @@ public class AscsDao {
 
         }
 
-        if (isUpdate == 1 && rows > 0) {
+        if (isUpdate == 1 && rows > 0 && devCover.getAgentid() != null) {
             //发送redis通道消息，更新映射表
             redisTemplate.convertAndSend(topic.getTopic(), "updateAscsByReport:" + devCover.getAgentid());
         }
