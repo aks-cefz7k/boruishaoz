@@ -23,7 +23,7 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
      * 错误信息
      * */
     E_1000("10000", "Parameter is null!"),
-    E_1001("10001", "Parameter length is not correct!"),
+    E_1001("10001", "Illegal parameter!"),
     E_1002("1002", "URL is not correct!"),
     E_2002("10002", "The record is not exit!"),
     E_2003("20003", "The id is not exit or equal 0 !"),
