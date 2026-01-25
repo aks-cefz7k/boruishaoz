@@ -48,12 +48,6 @@ public class DevController {
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
-    @Autowired
-    private ChannelTopic topic;
-
 
     private Logger log = Logger.getLogger(DevController.class.toString());
 
@@ -156,7 +150,6 @@ public class DevController {
             }
             vipRouteDao.save(vipRoute);
         }
-        redisTemplate.convertAndSend(topic.getTopic(), "DeleteDev:" + id);
         return RESTRetUtils.successObj(as);
     }
 
@@ -169,9 +162,6 @@ public class DevController {
             mDao.updateDev(ascs);
             return RESTRetUtils.successObj(ascs);
         }
-        //删除设备时，应通知所有服务更新映射
-        redisTemplate.convertAndSend(topic.getTopic(), "InsertDev:" + ascs.getAgentid());
-        logger.info("Add a dev, info = " + ascs.toString());
         return RESTRetUtils.successObj(mDao.insertDev(ascs));
     }
 
@@ -183,7 +173,6 @@ public class DevController {
         if (temp == 0) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
         } else {
-            redisTemplate.convertAndSend(topic.getTopic(), "UpdateDev:" + ascs.getAgentid());
             return RESTRetUtils.successObj(ascs);
         }
     }
@@ -203,9 +192,6 @@ public class DevController {
         String oldAgentid = jsonObject.get("oldAgentid").getAsString();
         String newAgentid = jsonObject.get("newAgentid").getAsString();
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
-        if(result) {
-            redisTemplate.convertAndSend(topic.getTopic(), "modifyAgentid:" + newAgentid);
-        }
         return RESTRetUtils.successObj(result);
     }
 }

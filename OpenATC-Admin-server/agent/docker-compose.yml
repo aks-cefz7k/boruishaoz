@@ -53,15 +53,21 @@ services:
 
   # OpenATC平台服务
   openatc:
-    image: 'docker-registry:5000/openatc:latest'
+    image: 'docker-registry:5000/openatc/admin:latest'
     ports:
-      - '10003:10003'
+      - mode: host
+        protocol: tcp
+        published: 10003
+        target: 10003
+
       - '31003:31003/udp'
       - '31002:31002/udp'
+      - '5005:5005'
     volumes:
       - /root/static:/static
-    network_mode:
-      "host"
+      - /root/token:/token
+    networks:
+      - kiss-net-17
     deploy:
       replicas: 1
       restart_policy:
@@ -75,7 +81,25 @@ services:
       - pgusername=postgres
       - pgpassword=password
       - predis=192.168.13.103
-      - predisport=6379
+      - predisport=6389
+      - predispassword=
+      - logginglevel=info
+      - shiro=true
+
+  # OpenATC数据采集服务
+  collector:
+    image: 'docker-registry:5000/openatc/collector:latest'
+    ports:
+      - '10004:10004'
+    networks:
+      - kiss-net-17
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
+    environment:
+      - predis=192.168.13.103
+      - predisport=6389
       - predispassword=
       - influxenable=true
       - influxurl=http://192.168.13.103:8086
@@ -104,10 +128,27 @@ services:
       - /data/influxdb/conf/:/etc/influxdb/
       - /data/influxdb/:/root/.influxdb/
 
+  # 状态采集器
+  cadvisor:
+    image: google/cadvisor
+    ports:
+      - "18080:8080"
+    hostname: '{{.Node.Hostname}}'
+    command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=cadvisor -storage_driver_host=influxdb:8086
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - influxdb
+    deploy:
+      mode: global
+
 
   # 监控可视化
   grafana:
-    image: grafana/grafana
+    image: grafana:latest
     container_name: grafana
     deploy:
       replicas: 1

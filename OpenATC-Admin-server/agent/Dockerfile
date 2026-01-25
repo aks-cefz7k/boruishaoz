@@ -3,7 +3,7 @@ ENV TZ=Asia/Shanghai
 RUN ln -sf /usr/share/zoneinfo/{TZ} /etc/localtime && echo "{TZ}" > /etc/timezone
 
 ADD agent-1.16.2.jar /app.jar
-ENTRYPOINT ["java","-jar","./app.jar","--spring.profiles.active=docker"]
+ENTRYPOINT ["java","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005","-jar","./app.jar","--spring.profiles.active=docker"]
 
 
 
