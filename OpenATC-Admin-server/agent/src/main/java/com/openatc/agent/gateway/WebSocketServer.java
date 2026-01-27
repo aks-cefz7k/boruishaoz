@@ -64,6 +64,14 @@ public class WebSocketServer {
      */
     private Map<String, Set<String>> infoAndAgentIds = new ConcurrentHashMap<>();
 
+    /**
+     * 保存相同的一个topic被多少个不同的客户端订阅
+     * 不同的客户端可能订阅同一topic
+     * 要保证某一客户端取消后 其他客户端依然能够收到订阅的消息
+     */
+    private final static Map<String, Set<Session>> AgentIdAndNum = new ConcurrentHashMap<>();
+
+
     public static void setWebSocketComponent(WebSocketServer webSocketComponent) {
         WebSocketServer.webSocketComponent = webSocketComponent;
     }
@@ -77,9 +85,9 @@ public class WebSocketServer {
      * 通道消息：通过Redis的Channel接收最新消息，由设备端主动发起，后台只需等待接受
      */
 
-    // 通道列表
+    // 通道列表,保存订阅的频道
     public Set<String> channelTypeDataSet = new HashSet<>();
-    // 轮询列表
+    // 轮询列表，保存订阅的频道
     public Map<String, Set<String>> pollingTypeMap = new HashMap<>();
 
     @Autowired
@@ -152,7 +160,7 @@ public class WebSocketServer {
             } else if (isPollingType(infoType)) {//messageType含有pattern就不是轮询
                 //添加监听记录映射
                 for (int i = 0; i < para.length; i++) {
-                    String subsChannel = para[i];
+                    String subsChannel = model + ":" + infoType + ":" + para[i];
                     Set<String> edgeSet = pollingTypeMap.get(infoType);
                     if (edgeSet == null) {
                         edgeSet = new HashSet<>();
@@ -178,6 +186,15 @@ public class WebSocketServer {
                         log.info("SubsMessage failed to connect to redis");
                     }
                     channelTypeDataSet.add(subsChannel);
+                    if (!AgentIdAndNum.containsKey(subsChannel)) {
+                        Set<Session> set = new HashSet<>();
+                        set.add(session);
+                        AgentIdAndNum.put(subsChannel, set);
+                    } else {
+                        Set<Session> set = AgentIdAndNum.get(subsChannel);
+                        set.add(session);
+                        AgentIdAndNum.put(subsChannel, set);
+                    }
                 }
             }
         } else if ("down".equals(subscribe)) {//结束消息订阅
@@ -197,7 +214,7 @@ public class WebSocketServer {
             // 定时器订
             if (isPollingType(infoType)) {
                 for (int i = 0; i < para.length; i++) {
-                    String subsChannel = para[i];
+                    String subsChannel = model + ":" + infoType + ":" + para[i];
                     Set<String> edgeSet = pollingTypeMap.get(infoType);
                     if (edgeSet != null) {
                         edgeSet.remove(subsChannel);
@@ -210,8 +227,15 @@ public class WebSocketServer {
             else {
                 for (int i = 0; i < para.length; i++) {
                     String subsChannel = model + ":" + infoType + ":" + para[i];
-                    webSocketComponent.redisService.unSubsMessage(subsChannel);
-                    channelTypeDataSet.remove(subsChannel);
+                    if (AgentIdAndNum.get(subsChannel).size() == 1) {
+                        webSocketComponent.redisService.unSubsMessage(subsChannel);
+                        channelTypeDataSet.remove(subsChannel);
+                        AgentIdAndNum.remove(subsChannel);
+                    } else {
+                        Set<Session> set = AgentIdAndNum.get(subsChannel);
+                        set.remove(session);
+                        AgentIdAndNum.put(subsChannel, set);
+                    }
                 }
             }
             // 打印信息
@@ -238,7 +262,10 @@ public class WebSocketServer {
         // 取消Channel订阅
         try {
             for (String subsChannel : tempSet) {
-                webSocketComponent.redisService.unSubsMessage(subsChannel);
+                //如果还有其他客户端在订阅则不取消这个topic的订阅
+                if (AgentIdAndNum.containsKey(subsChannel) && AgentIdAndNum.get(subsChannel).size() == 1 && AgentIdAndNum.get(subsChannel).contains(session)) {
+                    webSocketComponent.redisService.unSubsMessage(subsChannel);
+                }
             }
         } catch (RedisException e) {
             log.info("unSubsMessage failed to connect to redis");
