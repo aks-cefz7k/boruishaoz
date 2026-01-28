@@ -19,7 +19,6 @@ import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.comm.data.MyGeometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -213,6 +212,7 @@ public class AscsDao {
                 String devs_video = "update devs_video set agentid=? where agentid=?";
                 jdbcTemplate.update(devs_video, newAgentid, oldAgentid);
             }
+            redisTemplate.convertAndSend("updateIdMap", "UpdateDev:" + newAgentid);
             initMap();
 
         } catch (Exception e) {
