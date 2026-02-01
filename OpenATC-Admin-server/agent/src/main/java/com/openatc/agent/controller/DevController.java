@@ -95,6 +95,9 @@ public class DevController {
             AscsBaseModel device = null;
             try {
                 device = mDao.getAscsByID(routeIntersectionId);
+                if(device == null)
+                    return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_8001);
+
             } catch (EmptyResultDataAccessException e) {
                 return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_8001);
             }
