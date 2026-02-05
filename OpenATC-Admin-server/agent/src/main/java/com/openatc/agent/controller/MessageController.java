@@ -19,6 +19,7 @@ import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.core.model.RESTRet;
+import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,8 @@ import java.util.logging.Logger;
 
 import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
 import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_4001;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_8001;
 
 
 /**
@@ -88,7 +91,7 @@ public class MessageController {
         // 发送请求，并把应答返
         if (ascsBaseModel == null) {
             logger.info("GetDevById is null, request = " + requestData.toString());
-            return new RESTRet();
+            return RESTRetUtils.errorObj(false,E_8001);
         }
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
         int port = ascsBaseModel.getJsonparam().get("port").getAsInt();

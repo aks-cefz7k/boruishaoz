@@ -6,7 +6,7 @@
 
   <groupId>com.openatc</groupId>
   <artifactId>comm</artifactId>
-  <version>1.1.9</version>
+  <version>1.1.10</version>
   <packaging>jar</packaging>
 
 <!--  <parent>-->
@@ -26,39 +26,21 @@
 
 
   <dependencies>
-
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot-starter</artifactId>-->
-<!--      <exclusions>-->
-<!--        <exclusion>-->
-<!--          <groupId>org.springframework.boot</groupId>-->
-<!--          <artifactId>spring-boot-starter-logging</artifactId>-->
-<!--        </exclusion>-->
-<!--        <exclusion>-->
-<!--          <groupId>org.springframework.boot</groupId>-->
-<!--          <artifactId>spring-boot-starter-json</artifactId>-->
-<!--        </exclusion>-->
-<!--      </exclusions>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.8</version>
     </dependency>
-
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>4.0.1</version>
     </dependency>
-
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-all</artifactId>
       <version>4.1.36.Final</version>
     </dependency>
-
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -67,14 +49,7 @@
     <dependency>
       <groupId>com.openatc</groupId>
       <artifactId>core</artifactId>
-      <version>1.1.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.openatc</groupId>
-      <artifactId>core</artifactId>
-      <version>1.1.1</version>
-      <scope>compile</scope>
+      <version>1.1.2</version>
     </dependency>
 
   </dependencies>

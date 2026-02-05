@@ -19,6 +19,7 @@ import com.openatc.agent.service.RouteDao;
 import com.openatc.agent.service.RouteIntersectionDao;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
+import com.openatc.core.common.Constants;
 import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
@@ -288,15 +289,7 @@ public class RouteController {
             RESTRet<MessageData> retBase = null;
             retBase = messageController.postDevsMessage(null, messageData);
 
-            if (retBase.getMessage().equals("Device not online!")) {
-                DevCommError devCommError = RESTRetUtils.errorObj(r.getAgentid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
-                return RESTRetUtils.errorDetialObj(E_4003, devCommError);
-            }
-            if(retBase.getMessage().equals("error response!")){
-                DevCommError devCommError = RESTRetUtils.errorObj(r.getAgentid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_200);
-                return RESTRetUtils.errorDetialObj(E_4002,devCommError);
-            }
-            if (retBase.getMessage().equals("error request!")) {
+            if (! retBase.getCode().equals(Constants.SUCCESS_CODE)){
                 return retBase;
             }
 

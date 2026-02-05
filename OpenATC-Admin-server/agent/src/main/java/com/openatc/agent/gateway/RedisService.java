@@ -3,7 +3,6 @@ package com.openatc.agent.gateway;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.MyWebSocketServer;
-import com.openatc.agent.service.DevIdMapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +35,6 @@ public class RedisService {
     @Autowired
     private MessageListenerAdapter listenerAdapter;
 
-    @Autowired
-    DevIdMapService devIdMapService;
-
 
     Map<Session, MyWebSocketServer> patternWebSocketSet = WebSocketServer.getPatternWebSocketSet();
     Map<Session, MyWebSocketServer> faultIncidentWebSocketSet = WebSocketServer.getFaultIncidentWebSocketSet();
@@ -46,13 +42,6 @@ public class RedisService {
 
     // 接受Redis订阅的消息
     public void receiveSubsMessage(String message, String type) {
-
-        //收到到updateIdMap后，触发更新id映射
-        if (type.equals("updateIdMap")) {
-            log.info("init DevIdMapService map by:" + message);
-            devIdMapService.initMap();
-            return;
-        }
 
         //如果没有客户端订阅，取消Redis监听
         if (patternWebSocketSet.size() == 0) {

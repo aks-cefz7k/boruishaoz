@@ -1,6 +1,5 @@
 package com.openatc.agent.model;
 
-import com.openatc.agent.utils.JsonbType;
 import com.openatc.comm.data.MyGeometry;
 import lombok.Data;
 import org.hibernate.annotations.TypeDef;
@@ -10,7 +9,6 @@ import javax.persistence.*;
 @Data
 @Table(name = "vip_route_device", schema = "public")
 @Entity
-@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 public class VipRouteDevice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +21,6 @@ public class VipRouteDevice {
     private String name;
 
     @Transient
-//    @Column(columnDefinition = "jsonb")
-//    @Type(type = "JsonbType")
     private MyGeometry geometry;
 
     private double[] location;

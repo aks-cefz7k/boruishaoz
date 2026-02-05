@@ -102,21 +102,6 @@ public final class RESTRetUtils {
 
     /**
      * @param <T>        <T>
-     * @param returnData returnData
-     * @return RESTRet
-     * @Title: successObj
-     * @Description:
-     */
-    public static <T> RESTRet<T> successObj(ICorrectEnum correctEnum, T returnData) {
-        RESTRet<T> resultJson = new RESTRet<>();
-        resultJson.setData(returnData);
-        resultJson.setCode(correctEnum.getCorrectCode());
-        resultJson.setMessage(correctEnum.getCorrectMsg());
-        return resultJson;
-    }
-
-    /**
-     * @param <T>        <T>
      * @param returnData json里的主要内容
      * @param tookMesc   tookMesc
      * @param path       path
@@ -232,8 +217,8 @@ public final class RESTRetUtils {
         return resultJson;
     }
 
-    public static RESTRet errorObj(boolean isTrue, IErrorEnumImplOuter iErrorEnum) {
-        return new RESTRet(isTrue,iErrorEnum.getErrorCode(),iErrorEnum.getErrorCode());
+    public static RESTRet errorObj(boolean isSuccess, IErrorEnumImplOuter iErrorEnum) {
+        return new RESTRet(isSuccess,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg());
     }
 
 
