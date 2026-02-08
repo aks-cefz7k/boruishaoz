@@ -9,6 +9,7 @@ import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.PageInit;
+import com.openatc.agent.utils.TokenUtil;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +42,9 @@ public class FaultController {
 
     @Autowired
     AscsDao ascsDao;
+
+    @Autowired
+    protected TokenUtil tokenUtil;
 
     Gson gson = new Gson();
 
@@ -208,14 +213,18 @@ public class FaultController {
      * @Date 2021/10/14 16:48
      **/
     @PostMapping("fault/check")
-    public RESTRetBase checkFault(@RequestBody JsonObject jsonObject) {
+    public RESTRetBase checkFault(HttpServletRequest httpServletRequest, @RequestBody JsonObject jsonObject) {
         String enumerate = jsonObject.get("enumerate").getAsString();
         if (!enumerate.equals("0") && enumerate.equals("1") && enumerate.equals("2")) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_1001);
         }
         Long id = jsonObject.get("id").getAsLong();
         String agentId = jsonObject.get("agentid").getAsString();
-        faultDao.updateFault(enumerate, "admin", System.currentTimeMillis() / 1000, id, agentId);
+        String token = null;
+        if (httpServletRequest != null) {
+            token = httpServletRequest.getHeader("Authorization");
+        }
+        faultDao.updateFault(enumerate, tokenUtil.getUsernameFromToken(token), System.currentTimeMillis() / 1000, id, agentId);
         return RESTRetUtils.successObj();
     }
 
