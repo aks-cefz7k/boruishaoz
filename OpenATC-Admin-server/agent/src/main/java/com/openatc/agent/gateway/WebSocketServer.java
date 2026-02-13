@@ -42,7 +42,7 @@ public class WebSocketServer {
 
 
     //当前在线总数
-    private static int onlineCount = 0;
+    private volatile static int onlineCount = 0;
 
     //用户登录
     public static synchronized void Online() {
