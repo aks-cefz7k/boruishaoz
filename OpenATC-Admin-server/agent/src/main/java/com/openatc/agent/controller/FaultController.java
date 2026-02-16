@@ -132,10 +132,7 @@ public class FaultController {
         if (jsonObject == null) {
             return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
         }
-        if (jsonObject.get("agentId") == null) {
-            return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
-        }
-        String agentId = jsonObject.get("agentId").getAsString();
+        String agentId = jsonObject.get("agentId") == null ? Integer.MAX_VALUE + "" : jsonObject.get("agentId").getAsString();
         Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
         Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
         String beginTime = jsonObject.get("beginTime") == null ? "0" : jsonObject.get("beginTime").getAsString();
@@ -161,7 +158,9 @@ public class FaultController {
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
-            predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
+            if (!agentId.equals(Integer.MAX_VALUE + "")) {
+                predicateList.add(criteriaBuilder.like(root.get("agentid"), "%"+agentId+"%"));
+            }
             predicateList.add(criteriaBuilder.between(root.get("m_unFaultOccurTime"), l[0], l[1]));
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         };

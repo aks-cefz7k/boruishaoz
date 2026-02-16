@@ -11,7 +11,7 @@ import java.lang.management.ManagementFactory;
 /**
  * @author laoxia
  * @Date 2021/10/11 9:30
- * @Describetion 获取服务器性能信息
+ * @Describetion 获取服务器系统信息
  */
 @RestController
 @RequestMapping("/info/")
