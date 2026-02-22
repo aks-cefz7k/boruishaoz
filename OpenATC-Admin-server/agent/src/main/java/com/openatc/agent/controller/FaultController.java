@@ -9,6 +9,7 @@ import com.openatc.agent.service.FaultDao;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.agent.utils.PageInit;
+import com.openatc.agent.utils.TokenUtil;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -22,11 +23,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -41,6 +42,9 @@ public class FaultController {
 
     @Autowired
     AscsDao ascsDao;
+
+    @Autowired
+    protected TokenUtil tokenUtil;
 
     Gson gson = new Gson();
 
@@ -82,10 +86,13 @@ public class FaultController {
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         };
         Page<Fault> faults = faultDao.findAll(queryCondition, pageRequest);
-        return RESTRetUtils.successObj(faults);
+        PageOR<JsonObject> pageOR = new PageOR<>();
+        pageOR.setTotal(faults.getTotalElements());
+        pageOR.setContent(transformFaultList(faults.getContent()));
+        return RESTRetUtils.successObj(pageOR);
     }
 
-    // 查询单个当前故障故障
+    // 查询单个设备当前故障故障
     @GetMapping(value = "/fault/{agentid}/current")
     public RESTRetBase getCurrentFaults(@PathVariable String agentid) {
         return RESTRetUtils.successObj(transformFaultList(faultDao.selectCurrentFaults(agentid)));
@@ -104,39 +111,13 @@ public class FaultController {
     }
 
     // 删除故障
-    @DeleteMapping(value = "/fault/{id}")
-    public RESTRetBase deleteFault(@PathVariable Long id) {
-        Optional<Fault> optFault = faultDao.findById(id);
-        if (optFault.isPresent())
-            faultDao.delete(optFault.get());
+    @DeleteMapping(value = "/fault/del")
+    public RESTRetBase deleteFault(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentid").getAsString();
+        long id = jsonObject.get("id").getAsLong();
+        faultDao.deleteByMwFaultIdAndAgentId(id, agentId);
         return RESTRetUtils.successObj();
     }
-
-    public List<JsonObject> transformFaultList(List<Fault> faults) {
-        List<JsonObject> jsonObjects = new ArrayList<>();
-        for (Fault fault : faults) {
-            JsonObject jsonObject = transformFault(fault);
-            jsonObjects.add(jsonObject);
-        }
-        return jsonObjects;
-    }
-
-    private JsonObject transformFault(Fault fault) {
-        JsonObject jsonObject = gson.fromJson(gson.toJson(fault), JsonObject.class);
-        if (fault.getM_unFaultOccurTime() != 0) {
-            jsonObject.addProperty("m_unFaultOccurTime", DateUtil.longToString(fault.getM_unFaultOccurTime() * 1000));
-        } else {
-            jsonObject.addProperty("m_unFaultOccurTime", 0);
-        }
-        if (fault.getM_unFaultRenewTime() != 0) {
-            jsonObject.addProperty("m_unFaultRenewTime", DateUtil.longToString(fault.getM_unFaultRenewTime() * 1000));
-        } else {
-            jsonObject.addProperty("m_unFaultRenewTime", 0);
-        }
-        return jsonObject;
-    }
-
-
 
 
     /**
@@ -190,4 +171,85 @@ public class FaultController {
         pageOR.setTotal(faultList.getTotalElements());
         return RESTRetUtils.successObj(pageOR);
     }
+
+
+    /**
+     * @param jsonObject enumerate 0:未处理 1:已忽略 2:已处理
+     *                   pageNum
+     *                   pageRow
+     * @return RESTRetBase 返回所有未确认的故障记录
+     * @descripation 获取对应状态的故障记录
+     * @Date 2021/10/14 16:05
+     **/
+    @GetMapping("/fault/uncheck")
+    public RESTRetBase getUnCheckedList(@RequestBody JsonObject jsonObject) {
+        String enumerate = jsonObject.get("enumerate").getAsString();
+        if (!enumerate.equals("0") && enumerate.equals("1") && enumerate.equals("2")) {
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_1001);
+        }
+        Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
+        Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
+        PageOR<JsonObject> pageOR = new PageOR<>();
+        PageInit pageInit = new PageInit(pageNum, pageRow); //分页初始化
+        Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
+        Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            //添加查询条件
+            predicateList.add(criteriaBuilder.equal(root.get("enumerate"), enumerate));
+            return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+        };
+        Page<Fault> faultList = faultDao.findAll(queryCondition, pageable);
+        List<JsonObject> list = transformFaultList(faultList.getContent());
+        pageOR.setContent(list);
+        pageOR.setTotal(faultList.getTotalElements());
+        return RESTRetUtils.successObj(pageOR);
+    }
+
+
+    /**
+     * @param jsonObject id->故障id  enumerate-> 0:未处理 1:已忽略 2:已处理
+     * @return 返回操作结果 成功、失败
+     * @descripation 对操作记录进行操作 确认/忽略
+     * @Date 2021/10/14 16:48
+     **/
+    @PostMapping("fault/check")
+    public RESTRetBase checkFault(HttpServletRequest httpServletRequest, @RequestBody JsonObject jsonObject) {
+        String enumerate = jsonObject.get("enumerate").getAsString();
+        if (!enumerate.equals("0") && enumerate.equals("1") && enumerate.equals("2")) {
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_1001);
+        }
+        Long id = jsonObject.get("id").getAsLong();
+        String agentId = jsonObject.get("agentid").getAsString();
+        String token = null;
+        if (httpServletRequest != null) {
+            token = httpServletRequest.getHeader("Authorization");
+        }
+        faultDao.updateFault(enumerate, tokenUtil.getUsernameFromToken(token), System.currentTimeMillis() / 1000, id, agentId);
+        return RESTRetUtils.successObj();
+    }
+
+
+    /**
+     * 故障时间处理方法
+     */
+    public List<JsonObject> transformFaultList(List<Fault> faults) {
+        List<JsonObject> jsonObjects = new ArrayList<>();
+        for (Fault fault : faults) {
+            JsonObject jsonObject = transformFault(fault);
+            jsonObjects.add(jsonObject);
+        }
+        return jsonObjects;
+    }
+
+    private JsonObject transformFault(Fault fault) {
+        JsonObject jsonObject = gson.fromJson(gson.toJson(fault), JsonObject.class);
+        jsonObject.addProperty("m_unFaultOccurTime", fault.getM_unFaultOccurTime() == 0 ? "0" : DateUtil.longToString(fault.getM_unFaultOccurTime() * 1000));
+        jsonObject.addProperty("m_unFaultRenewTime", fault.getM_unFaultRenewTime() == 0 ? "0" : DateUtil.longToString(fault.getM_unFaultRenewTime() * 1000));
+        jsonObject.addProperty("operationTime", (fault.getOperationTime() == null || fault.getOperationTime() == 0) ? "0" : DateUtil.longToString(fault.getOperationTime() * 1000));
+        return jsonObject;
+    }
+    /**
+     * 故障时间处理方法
+     */
+
 }
