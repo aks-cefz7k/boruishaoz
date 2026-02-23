@@ -44,16 +44,6 @@ public class WebSocketServer {
     //当前在线总数
     private volatile static int onlineCount = 0;
 
-    //用户登录
-    public static synchronized void Online() {
-        WebSocketServer.onlineCount = onlineCount + 1;
-    }
-
-    //用户退出
-    public static synchronized void Offline() {
-        WebSocketServer.onlineCount = onlineCount - 1;
-    }
-
     //Session对象集合
     public final static List<WebSocketServer> webSocketSet = new CopyOnWriteArrayList();
 
@@ -119,8 +109,10 @@ public class WebSocketServer {
         this.session.setMaxIdleTimeout(5 * 60 * 1000);
         this.session.setMaxTextMessageBufferSize(5 * 1024 * 1024);
         patternWebSocketSet.put(session, new MyWebSocketServer(username, this));
-        Online();
-        log.info("onOpen URL:{},Session ID:{},OnlineCount:{}", session.getRequestURI(), session.getId(), onlineCount);
+        synchronized (WebSocketServer.class) {
+            onlineCount++;
+            log.info("onOpen URL:{},Session ID:{},OnlineCount:{}", session.getRequestURI(), session.getId(), onlineCount);
+        }
     }
 
     @OnMessage
@@ -280,8 +272,10 @@ public class WebSocketServer {
             patternWebSocketSet.remove(session);
             trafficIncidentWebSocketSet.remove(session);
             faultIncidentWebSocketSet.remove(session);
-            Offline();
-            log.info("onClose:ID: {}, {}, OnlineCount：{}", session.getId(), reason.toString(), onlineCount);
+            synchronized (WebSocketServer.class) {
+                onlineCount--;
+                log.info("onClose:ID: {}, {}, OnlineCount：{}", session.getId(), reason.toString(), onlineCount);
+            }
         }
     }
 
