@@ -147,6 +147,8 @@
     </dependencies>
 
     <build>
+        <!-- 指定package生成的文件名,以便于Docker环境打包 -->
+        <finalName>openatc-admin</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

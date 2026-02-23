@@ -102,6 +102,8 @@ public class AgentHandler extends ICommHandler {
         // 收到注册消息，更新设备信息
         if (infotype.equals("login") && operation.equals("report")) {
             DevCover ascsModel = gson.fromJson(msg.getData(), DevCover.class);
+            ascsModel.setAgentid(msg.getAgentid());
+            ascsModel.setThirdpartyid(msg.getThirdpartyid());
             ascsDao.updateAscsByReport(ascsModel);
         }
         // 收到故障消息，发布故障消息，并保存到数据库中
