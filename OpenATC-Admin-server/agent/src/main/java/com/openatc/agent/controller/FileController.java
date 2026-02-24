@@ -110,4 +110,14 @@ public class FileController {
         return gson.fromJson(json, RESTRet.class);
     }
 
+    @PostMapping(value = "/flow/history")
+    public RESTRetBase getHistoryFlow(@RequestBody JsonObject jsonObject) {
+        String agentId = jsonObject.get("agentid").getAsString();
+        AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentId);
+        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+        String url = "http://" + ip + ":8012/openatc/flow/history"; //读取流量文件
+        String json = MyHttpUtil.doPost(url,new JsonObject().toString());
+        Gson gson = new Gson();
+        return gson.fromJson(json, RESTRet.class);
+    }
 }

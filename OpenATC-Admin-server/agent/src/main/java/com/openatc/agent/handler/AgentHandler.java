@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.openatc.agent.model.DevCover;
 import com.openatc.agent.service.AscsDao;
+import com.openatc.agent.service.HistoryDataDao;
 import com.openatc.agent.service.impl.FaultServiceImpl;
 import com.openatc.agent.utils.DateUtil;
 import com.openatc.comm.data.MessageData;
@@ -48,7 +49,9 @@ public class AgentHandler extends ICommHandler {
     @Autowired
     private FaultServiceImpl faultService;
     @Autowired
-    AscsDao ascsDao;
+    private AscsDao ascsDao;
+    @Autowired
+    private HistoryDataDao historyDataDao;
 //    @Autowired
 //    DevIdMapService devIdMapService;
 
@@ -106,9 +109,17 @@ public class AgentHandler extends ICommHandler {
             ascsModel.setThirdpartyid(msg.getThirdpartyid());
             ascsDao.updateAscsByReport(ascsModel);
         }
+        // 收到方案消息，保存到数据库中
+        else if (infotype.equals("status/pattern")) {
+            historyDataDao.SavePatternData(msg);
+        }
         // 收到故障消息，发布故障消息，并保存到数据库中
         else if (infotype.equals("status/fault")) {
             faultService.processFaultMessage(msg);
+        }
+        // 收到流量消息，保存到数据库中
+        else if (infotype.equals("status/currentvolume")) {
+            historyDataDao.SaveFlowData(msg);
         }
     }
 }

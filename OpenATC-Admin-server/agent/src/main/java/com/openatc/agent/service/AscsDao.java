@@ -41,7 +41,7 @@ public class AscsDao {
 
     private static Logger logger = Logger.getLogger(AscsDao.class.toString());
 
-    @Autowired(required = false)
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
