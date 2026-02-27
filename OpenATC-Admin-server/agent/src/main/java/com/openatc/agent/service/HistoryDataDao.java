@@ -44,14 +44,14 @@ public class HistoryDataDao {
 
     // 查询历史流量数据
     public List<HistoryData> GetFlowData(String agentId, String beginTime, String endTime){
-        String sql = String.format("SELECT agentid,time,data FROM flow where agentid = '%s' and time between '%s' and '%s'", agentId,beginTime,endTime);
+        String sql = String.format("SELECT time,data FROM flow where agentid = '%s' and time between '%s' and '%s'", agentId,beginTime,endTime);
         List<Map<String, Object>> lvRet =  jdbcTemplate.queryForList(sql);
         return convertHistoryData(lvRet);
     }
 
     // 查询历史方案数据
     public List<HistoryData> GetPatternData(String agentId, String beginTime, String endTime) {
-        String sql = String.format("SELECT agentid,time,data FROM pattern where agentid = '%s' and time between '%s' and '%s'", agentId, beginTime, endTime);
+        String sql = String.format("SELECT time,data FROM pattern where agentid = '%s' and time between '%s' and '%s'", agentId, beginTime, endTime);
         List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
         return convertHistoryData(lvRet);
     }
@@ -61,7 +61,6 @@ public class HistoryDataDao {
         List<HistoryData> hdList = new ArrayList<>();
         for (Map map : lvRet) {
             HistoryData hd = new HistoryData();
-            hd.agentid = map.get("agentid").toString();
             hd.time = map.get("time").toString();
             hd.data = new JsonParser().parse(map.get("data").toString()).getAsJsonObject();
             hdList.add(hd);
@@ -70,7 +69,6 @@ public class HistoryDataDao {
     }
 
     class HistoryData {
-        public String agentid;
         public String time;
         public JsonObject data;
     }
