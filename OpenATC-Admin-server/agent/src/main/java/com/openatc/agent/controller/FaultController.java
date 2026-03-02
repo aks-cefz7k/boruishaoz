@@ -159,7 +159,7 @@ public class FaultController {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
             if (!agentId.equals(Integer.MAX_VALUE + "")) {
-                predicateList.add(criteriaBuilder.like(root.get("agentid"), "%"+agentId+"%"));
+                predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
             }
             predicateList.add(criteriaBuilder.between(root.get("m_unFaultOccurTime"), l[0], l[1]));
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
@@ -173,21 +173,21 @@ public class FaultController {
 
 
     /**
-     * @param jsonObject enumerate 0:未处理 1:已忽略 2:已处理
-     *                   pageNum
-     *                   pageRow
+     * @param enumerate 0:未处理 1:已忽略 2:已处理
+     *                  pageNum
+     *                  pageRow
      * @return RESTRetBase 返回所有未确认的故障记录
      * @descripation 获取对应状态的故障记录
      * @Date 2021/10/14 16:05
      **/
     @GetMapping("/fault/uncheck")
-    public RESTRetBase getUnCheckedList(@RequestBody JsonObject jsonObject) {
-        String enumerate = jsonObject.get("enumerate").getAsString();
+    public RESTRetBase getUnCheckedList(@RequestParam(value = "enumerate", defaultValue = "0") String enumerate,
+                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                        @RequestParam(value = "pageRow", defaultValue = "10") Integer pageRow) {
+
         if (!enumerate.equals("0") && enumerate.equals("1") && enumerate.equals("2")) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_1001);
         }
-        Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
-        Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
         PageOR<JsonObject> pageOR = new PageOR<>();
         PageInit pageInit = new PageInit(pageNum, pageRow); //分页初始化
         Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
