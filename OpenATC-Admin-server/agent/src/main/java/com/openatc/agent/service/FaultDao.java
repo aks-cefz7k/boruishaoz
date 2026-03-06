@@ -15,19 +15,19 @@ public interface FaultDao extends JpaRepository<Fault, Long> {
 
     Page<Fault> findAll(Specification<Fault> specification, Pageable pageable);
 
-    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time from fault where m_un_fault_renew_time > 0", nativeQuery = true)
+    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time,model,event_type from fault where m_un_fault_renew_time > 0", nativeQuery = true)
     List<Fault> selectHistoryFaults();
 
-    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time from fault", nativeQuery = true)
+    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time,model,event_type from fault", nativeQuery = true)
     Page<Fault> selectCurrentFaults(Specification<Fault> specification, Pageable pageRequest);
 
-    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time from fault where m_un_fault_renew_time = 0 and agentid=?1", nativeQuery = true)
+    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time,model,event_type from fault where m_un_fault_renew_time = 0 and agentid=?1", nativeQuery = true)
     List<Fault> selectCurrentFaults(String agentid);
 
-    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time from fault where m_un_fault_renew_time > 0 and agentid=?1", nativeQuery = true)
+    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time,model,event_type from fault where m_un_fault_renew_time > 0 and agentid=?1", nativeQuery = true)
     List<Fault> selectHistoryFaults(String agentid);
 
-    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time from fault", nativeQuery = true)
+    @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time,model,event_type from fault", nativeQuery = true)
     Page<Fault> findAllFault(Specification<Fault> specification, Pageable pageRequest);
 
     @Query(value = "delete from fault where m_w_faultid = ?1 and agentid = ?2", nativeQuery = true)

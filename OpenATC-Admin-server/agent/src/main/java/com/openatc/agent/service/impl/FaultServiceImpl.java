@@ -38,6 +38,8 @@ public class FaultServiceImpl {
         for (Fault fault : m_faultDeque) {
             fault.setEnumerate("0");
             fault.setAgentid(agentid);
+            fault.setModel("asc");
+            fault.setEventType("status/fault");
             faultDao.save(fault);
         }
     }

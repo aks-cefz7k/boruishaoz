@@ -13,7 +13,6 @@
 package com.openatc.agent.handler;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.openatc.agent.model.DevCover;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HistoryDataDao;
