@@ -35,7 +35,7 @@ public class WebSocketServer {
     private RedisTemplate redisTemplate;
 
 
-    private String EventAgentFault = "event/agentfault"; //设备故障消息类型
+    private String EventAgentFault = "status/fault"; //设备故障消息类型
     private String StatusPattern = "status/pattern"; //方案相位消息类型
     private String StatusChannel = "status/channel"; //设备通道信息
     private String EventTrafficData = "event/trafficdata"; //交通事件
@@ -125,7 +125,9 @@ public class WebSocketServer {
         String subscribe = wss.getSubscribe(); //开始or结束标
         String[] para = wss.getParam(); //订阅的通道
         String model = wss.getModel().trim();
-        setInfoAndAgentIds(para, infoType, subscribe);
+        if (para != null && !para[0].equals("*")) {
+            setInfoAndAgentIds(para, infoType, subscribe);
+        }
         log.info(this.infoAndAgentIds.toString());
         if (infoType.isEmpty() || subscribe.isEmpty()) {
             log.info("onMessage error: format empty");
@@ -146,14 +148,14 @@ public class WebSocketServer {
             // 拥堵事件订阅消息
             if (EventTrafficData.equals(infoType)) {
                 if (trafficIncidentWebSocketSet.size() == 0)
-                    webSocketComponent.redisService.subsMessage(model + ":" + infoType);
+                    webSocketComponent.redisService.subsMessage(model + ":" + infoType + ":" + para[0]);
                 trafficIncidentWebSocketSet.put(session, new MyWebSocketServer(username, this));
             }
             // 故障事件订阅消息
             if (EventAgentFault.equals(infoType)) {
                 //set集合不为空则表明已经订阅
                 if (faultIncidentWebSocketSet.size() == 0)
-                    webSocketComponent.redisService.subsMessage(model + ":" + infoType);
+                    webSocketComponent.redisService.subsMessage(model + ":" + infoType + ":" + para[0]);
                 faultIncidentWebSocketSet.put(session, new MyWebSocketServer(username, this));
             } else if (isPollingType(infoType)) {//messageType含有pattern就不是轮询
                 //添加监听记录映射
@@ -199,14 +201,14 @@ public class WebSocketServer {
             // 事件消息
             if (EventTrafficData.equals(infoType)) {
                 if (trafficIncidentWebSocketSet.size() == 1)
-                    webSocketComponent.redisService.unSubsMessage(model + ":" + infoType);
+                    webSocketComponent.redisService.unSubsMessage(model + ":" + infoType + ":*");
                 trafficIncidentWebSocketSet.remove(session);
             }
             //事故消息
             if (EventAgentFault.equals(infoType)) {
                 //当set集合里面没有元素时结束当前订阅
                 if (faultIncidentWebSocketSet.size() == 1)
-                    webSocketComponent.redisService.unSubsMessage(model + ":" + infoType);
+                    webSocketComponent.redisService.unSubsMessage(model + ":" + infoType + ":*");
                 faultIncidentWebSocketSet.remove(session);
             }
             // 定时器订

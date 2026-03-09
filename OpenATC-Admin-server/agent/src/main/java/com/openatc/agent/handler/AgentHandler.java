@@ -83,7 +83,7 @@ public class AgentHandler extends ICommHandler {
         // 获取操作类型
         String operation = msg.getOperation();
 
-        String agentid = msg.getAgentid();;
+        String agentid = msg.getAgentid();
         // 若Agentid为空，则是信号机上报的注册消息。对接服务上报的注册消息，都会带上agentid
         if(agentid == null){
             agentid = ascsDao.getAgentidFromThirdPartyid(msg.getThirdpartyid());

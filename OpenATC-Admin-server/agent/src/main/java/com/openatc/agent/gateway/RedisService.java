@@ -63,7 +63,7 @@ public class RedisService {
             }
         }
 
-        if ("asc:event/agentfault".equals(type)) {
+        if (type.contains("asc:status/fault")) {
             for (Session session : faultIncidentWebSocketSet.keySet()) {
                 faultIncidentWebSocketSet.get(session).getWebSocketServer().sendMessage(message);
             }
