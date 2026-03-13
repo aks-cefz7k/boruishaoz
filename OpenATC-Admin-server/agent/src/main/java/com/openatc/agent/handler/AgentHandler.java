@@ -85,20 +85,14 @@ public class AgentHandler extends ICommHandler {
 
         String agentid = msg.getAgentid();
         // 若Agentid为空，则是信号机上报的注册消息。对接服务上报的注册消息，都会带上agentid
-        if(agentid == null){
+        if (agentid == null) {
             agentid = ascsDao.getAgentidFromThirdPartyid(msg.getThirdpartyid());
             msg.setAgentid(agentid);
         }
 
         String key = agenttype + ":" + infotype + ":" + agentid;
+        msg.setModel(agenttype);
         String value = null;
-        // 如果开启Redis，则将消息存入Redis
-        if (isRedisEnable) {
-            value = gson.toJson(msg);
-            stringRedisTemplate.opsForValue().set(key, value);
-            stringRedisTemplate.convertAndSend(key, value);
-        }
-
         // ** 以下为消息的特殊处理 **
 
         // 收到注册消息，更新设备信息
@@ -119,6 +113,13 @@ public class AgentHandler extends ICommHandler {
         // 收到流量消息，保存到数据库中
         else if (infotype.equals("status/currentvolume")) {
             historyDataDao.SaveFlowData(msg);
+        }
+
+        // 如果开启Redis，则将消息存入Redis
+        if (isRedisEnable) {
+            value = gson.toJson(msg);
+            stringRedisTemplate.opsForValue().set(key, value);
+            stringRedisTemplate.convertAndSend(key, value);
         }
     }
 }
