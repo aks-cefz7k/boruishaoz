@@ -8,7 +8,6 @@ import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -31,28 +30,21 @@ public class WebSocketServer {
 
     private Logger log = LoggerFactory.getLogger(WebSocketServer.class);
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-
-
     private String EventAgentFault = "status/fault"; //设备故障消息类型
     private String StatusPattern = "status/pattern"; //方案相位消息类型
     private String StatusChannel = "status/channel"; //设备通道信息
     private String EventTrafficData = "event/trafficdata"; //交通事件
-
 
     //当前在线总数
     private volatile static int onlineCount = 0;
 
     //Session对象集合
     public final static List<WebSocketServer> webSocketSet = new CopyOnWriteArrayList();
-
     private final static Map<Session, MyWebSocketServer> patternWebSocketSet = new ConcurrentHashMap<>();
     private final static Map<Session, MyWebSocketServer> trafficIncidentWebSocketSet = new ConcurrentHashMap<>();
     private final static Map<Session, MyWebSocketServer> faultIncidentWebSocketSet = new ConcurrentHashMap<>();
 
-
-    // 此处存放Spring boot创建的RedisTemplate
+    // 此处存放Spring boot创建的redisService
     public static WebSocketServer webSocketComponent;
 
     /**
