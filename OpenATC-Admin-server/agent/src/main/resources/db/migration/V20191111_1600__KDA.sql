@@ -1,6 +1,8 @@
 -- ----------------------------
 -- Table structure for sysconfig
 -- ----------------------------
+DROP TABLE IF EXISTS "sysconfig";
+
 CREATE TABLE "sysconfig" (
 "id" int4 NOT NULL,
 "ceattime" timestamp(6),
