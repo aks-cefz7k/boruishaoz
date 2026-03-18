@@ -6,7 +6,7 @@ import com.openatc.agent.model.*;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
-import com.openatc.comm.data.AscsBaseModel;
+import com.openatc.model.model.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.model.DevCommError;

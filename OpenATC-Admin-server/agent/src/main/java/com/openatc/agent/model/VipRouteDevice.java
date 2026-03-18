@@ -1,8 +1,7 @@
 package com.openatc.agent.model;
 
-import com.openatc.comm.data.MyGeometry;
+import com.openatc.model.model.MyGeometry;
 import lombok.Data;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 

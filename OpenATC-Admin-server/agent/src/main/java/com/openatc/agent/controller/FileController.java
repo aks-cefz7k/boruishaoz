@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.utils.MyHttpUtil;
-import com.openatc.comm.data.AscsBaseModel;
+import com.openatc.model.model.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;

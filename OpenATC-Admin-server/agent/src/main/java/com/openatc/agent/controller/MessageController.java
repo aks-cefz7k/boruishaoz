@@ -16,7 +16,7 @@ import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
-import com.openatc.comm.data.AscsBaseModel;
+import com.openatc.model.model.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 
 import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
 import static com.openatc.comm.common.CommunicationType.*;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_4001;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_8001;
 
 

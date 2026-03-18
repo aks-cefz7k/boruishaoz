@@ -15,8 +15,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.*;
-import com.openatc.comm.data.AscsBaseModel;
-import com.openatc.comm.data.MyGeometry;
+import com.openatc.model.model.AscsBaseModel;
+import com.openatc.model.model.MyGeometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -491,13 +491,13 @@ public class AscsDao {
         ascsModel.setAgentid(devCover.getAgentid());
 
         //更新数据
-        String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,jsonparam=(to_json(?::json)),lastTime=LOCALTIMESTAMP where agentid = ?";
+        String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,lastTime=LOCALTIMESTAMP where agentid = ?";
         int rows = jdbcTemplate.update(sql,
                 ascsModel.getThirdplatformid(),
                 ascsModel.getType(),
                 ascsModel.getStatus(),
                 ascsModel.getProtocol(),
-                ascsModel.getJsonparam().toString(),
+//                ascsModel.getJsonparam().toString(),
                 ascsModel.getAgentid());
 
         // update失败，则说明agentid不存在，表明第一次上报，新设置agentid,并发送更新通知
