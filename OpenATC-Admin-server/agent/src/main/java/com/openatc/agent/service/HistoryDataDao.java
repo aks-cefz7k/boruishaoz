@@ -40,14 +40,14 @@ public class HistoryDataDao {
 
     // 查询历史流量数据
     public List<HistoryData> GetFlowData(String agentId, String beginTime, String endTime){
-        String sql = String.format("SELECT time,data FROM flow where agentid = '%s' and time between '%s' and '%s'", agentId,beginTime,endTime);
+        String sql = String.format("SELECT time,data FROM flow where agentid = '%s' and time between '%s' and '%s' order by time asc ", agentId,beginTime,endTime);
         List<Map<String, Object>> lvRet =  jdbcTemplate.queryForList(sql);
         return convertHistoryData(lvRet);
     }
 
     // 查询历史方案数据
     public List<HistoryData> GetPatternData(String agentId, String beginTime, String endTime) {
-        String sql = String.format("SELECT time,data FROM pattern where agentid = '%s' and time between '%s' and '%s'", agentId, beginTime, endTime);
+        String sql = String.format("SELECT time,data FROM pattern where agentid = '%s' and time between '%s' and '%s' order by time asc ", agentId, beginTime, endTime);
         List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
         return convertHistoryData(lvRet);
     }
