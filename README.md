@@ -80,10 +80,154 @@ PROJECT_FOLDER
 │  │  └─target
 │  │
 │  ├─algorithm   //算法包
-│  ├─comm        //通讯包，用于服务和设备的通讯
-│  └─core        //异常包，存放服务的错误代码和信息
-├─OpenATC-Admin-ui //前端项目
-└─uploads
+│  ├─KDComm        //通讯包，用于服务和设备的通讯
+│  └─KDCore        //异常包，存放服务的错误代码和信息
+└─OpenATC-Admin-ui // 前端项目
+    ├─OpenATC-Admin-web // 平台主项目
+    │  ├─build // 打包配置
+    │  ├─config // 项目基础配置信息
+    │  ├─src // 业务逻辑块
+    │  │  ├─api // 接口api
+    │  │  ├─assets // 静态图片块
+    │  │  │  ├─404_images
+    │  │  │  ├─gis
+    │  │  │  ├─home
+    │  │  │  └─icon
+    │  │  ├─components // 组件类
+    │  │  │  ├─HorizontalChildren
+    │  │  │  ├─Kanban
+    │  │  │  ├─MessageBox
+    │  │  │  ├─OpenATCCard
+    │  │  │  ├─PatternStatus
+    │  │  │  ├─SvgIcon
+    │  │  │  ├─TreeTable
+    │  │  │  ├─TscBottom
+    │  │  │  └─XRDDirSelector
+    │  │  ├─i18n // 国际化配置块
+    │  │  │  └─language
+    │  │  ├─icons // svg静态图片块
+    │  │  │  └─svg
+    │  │  ├─mock
+    │  │  │  └─service
+    │  │  ├─model // 基础模型块
+    │  │  │  └─tree
+    │  │  ├─router // 路由配置
+    │  │  ├─store // 存储配置
+    │  │  │  └─modules
+    │  │  ├─styles // 皮肤样式配置
+    │  │  │  └─theme
+    │  │  ├─utils // 工具类
+    │  │  └─views // 页面文件
+    │  │      ├─compose
+    │  │      │  └─components
+    │  │      ├─DeviceManage
+    │  │      │  └─DeviceDialog
+    │  │      ├─GisManager
+    │  │      │  └─components
+    │  │      ├─GreenWaveOptimize
+    │  │      │  ├─components
+    │  │      │  ├─pattern
+    │  │      │  │  └─planChart
+    │  │      │  │      └─model
+    │  │      │  └─tables
+    │  │      │      └─components
+    │  │      ├─Home
+    │  │      │  └─lottieDemo
+    │  │      ├─login
+    │  │      ├─OperationRecord
+    │  │      ├─Organization
+    │  │      │  └─components
+    │  │      ├─Service
+    │  │      │  ├─components
+    │  │      │  ├─pattern
+    │  │      │  │  └─planChart
+    │  │      │  └─tables
+    │  │      │      └─components
+    │  │      └─UserManage
+    │  │          └─UserDialog
+    │  └─static
+    │      └─lottiejson
+    └─OpenATC-Configer-web // 配置工具项目（该项目以组件的形式嵌套在平台主项目里）
+        ├─build // 打包配置
+        ├─config // 项目基础配置
+        ├─src // 业务逻辑块
+        │  ├─api // 接口api
+        │  ├─assets // 静态图片块
+        │  │  ├─404_images
+        │  │  ├─icon
+        │  │  ├─intersection_state
+        │  │  └─intersection_type
+        │  ├─components // 组件类
+        │  │  ├─Breadcrumb
+        │  │  ├─FloatImgBtn
+        │  │  ├─Hamburger
+        │  │  ├─Kanban
+        │  │  ├─MessageBox
+        │  │  ├─PatternStatus
+        │  │  ├─StageStatus
+        │  │  ├─SvgIcon
+        │  │  ├─Tankuang
+        │  │  ├─TreeTable
+        │  │  ├─TscBottom
+        │  │  └─XRDDirSelector
+        │  ├─EdgeMgr // 逻辑管理类
+        │  │  └─controller
+        │  ├─i18n // 国际化配置块
+        │  │  └─language
+        │  ├─icons // svg静态图片块
+        │  │  └─svg
+        │  ├─lib // 模板类
+        │  │  └─publicjs
+        │  │      └─KissWSSub
+        │  ├─packge // 项目打包配置
+        │  ├─router // 路由配置
+        │  ├─store // 存储配置
+        │  │  └─modules
+        │  ├─styles // 皮肤样式配置
+        │  │  └─theme
+        │  ├─ThemeStyle // element ui样式配置
+        │  ├─utils // 工具类
+        │  └─views // 页面文件
+        │      ├─channel
+        │      ├─channelLock
+        │      ├─control
+        │      ├─controlPanel
+        │      ├─dailyRecord
+        │      ├─dashboard
+        │      ├─date
+        │      ├─detector
+        │      ├─deviceInfo
+        │      ├─history
+        │      │  ├─dialog
+        │      │  └─table
+        │      ├─importTempDialog
+        │      │  └─crossDirection
+        │      │      └─baseImg
+        │      ├─layout
+        │      │  ├─components
+        │      │  │  └─Sidebar
+        │      │  └─mixin
+        │      ├─login
+        │      ├─optimize
+        │      ├─overlap
+        │      ├─overView
+        │      │  ├─crossDirection
+        │      │  │  └─baseImg
+        │      │  └─textPage
+        │      ├─pattern
+        │      ├─pedestrianDetector
+        │      ├─phase
+        │      │  └─images
+        │      ├─plan
+        │      ├─statistics
+        │      ├─system
+        │      │  ├─channelControl
+        │      │  ├─manualControl
+        │      │  └─systemDialog
+        │      ├─tree
+        │      └─user
+        │          └─UserDialog
+        └─static
 ```
 
 ---
@@ -104,9 +248,13 @@ PROJECT_FOLDER
 
     ``` bash
     # 克隆项目
-    git clone https://gitee.com/openatc/open-atc-admin.git
+    git clone https://github.com/apache/****-admin.git
+	
+	# 打包OpenATC-Config-web项目（该项目为平台主项目的组件项目，故需要提前打包，不然直接编译会出现找不到edgebase-front依赖包的情况。）
+	npm install
+	npm run package
 
-    # 安装依赖
+    # 安装OpenATC-Admin-web主项目依赖
     npm install
 
     # 建议不要用cnpm  安装有各种诡异的bug 可以通过如下操作解决npm速度慢的问题
@@ -127,6 +275,70 @@ PROJECT_FOLDER
     # 预览发布环境效果 + 静态资源分析
     npm run preview  --report
     ```
+
+#### 第三方通过url跳转配置界面说明
+
+##### 跳转url
+
+    `https://dolphin-dev.kedacom.com/openatc/#/overviewNew/index`
+
+
+##### url传参说明
+
+| 参数名 | 必选 | 类型 | 说明 | 可选项 |
+| -------- | -------- | -------- | -------- | -------- |
+| agentid    | 是 | number | 设备id | 10001 |
+| isfromatc    | 否 | boolean (default: false) | 控制国际化切换、登出、修改密码功能是否可见,传true则不可见 | true |
+| hideMenu    | 否 | boolean (default: false) | 控制左侧菜单栏以及切换到文字界面的图标是否可见，传true则不可见 | true |
+| shrink    | 否 | number | 首页主内容区域缩放比例（取值为0~1之间） | 0.8 |
+|  graphicMode  | 否 | boolean (default: false) | 控制首页只显示路口图 | true |
+
+
+##### 举例
+
+    `https://dolphin-dev.kedacom.com/openatc/#/overviewNew/index?agentid=10001&isfromatc=true&hideMenu=true`
+
+
+#### chrome浏览器下，脚本页面无法正常登陆解决方法
+
+##### 原因
+    Chrome浏览器默认限制了第三方Cookie，这将影响正常登录，需要更改浏览器的隐私设置，解除限制后重试
+
+##### 解决方法
+    chrome://flags/   把这句复制到浏览器，回车
+    SameSite by default cookies
+    Cookies without SameSite must be secure
+    找到上面这两两项设置成 Disable即可
+
+
+#### 系统配置参数
+
+##### 可用参数说明
+
+| 模块 | 名称 | 举例 | 说明 |
+| -------- | -------- | -------- | -------- |
+| theme | theme | dark | 系统默认加载的主题，dark代表深色系主题，不填默认加载浅色主题 |
+| language  | language | zh | 默认加载的语言，有两个可选值：zh代表中文，en代表英文 |
+| media  | mediaWebsocketUrl | wss://192.168.7.183/ | 视频ws流媒体地址 |
+| jupyter  | url | http://192.168.14.168:8888/tree | jupyter跳转地址 |
+| gis  | zoom | 12 | 地图默认缩放等级 |
+| gis  | maxZoom | 18 | 地图最大缩放等级 |
+| gis  | minZoom | 12 | 地图最小缩放等级 |
+| gis  | center | [31.22784056, 121.68148040] | 地图默认中心点 |
+| gis  | gisNormal | http://192.168.14.168:7080/PBS/rest/services/MyPBSService1/MapServer/tile/{z}/{y}/{x} | 2D地图本地服务资源地址 |
+| gis  | gisStatellite | http://192.168.14.168:7081/PBS/rest/services/MyPBSService2/MapServer/tile/{z}/{y}/{x} | 卫星图本地服务资源地址 |
+| gis  | gisBoundLeftTop | [31.36360615, 121.30622863] | 地图边界的左上角纬度经度 |
+| gis  | gisBoundRightBottom | [31.11040156, 121.95270538] | 地图边界的右下角纬度经度 |
+| gis  | isShowVideo | true | gis勤务路线是否显示视频 |
+
+
+#### 界面展示
+
+![avatar](http://192.168.13.103:10003/openatc/img/home.png)
+
+![avatar](http://192.168.13.103:10003/openatc/img/overview.png)
+
+![avatar](http://192.168.13.103:10003/openatc/img/gis.png)
 ---
 
 ### 后端部分

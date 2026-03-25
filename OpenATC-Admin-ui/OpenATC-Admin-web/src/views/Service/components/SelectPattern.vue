@@ -33,6 +33,7 @@
 </template>
 <script>
 import { getTscControl } from '@/api/route'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'SelectPattern',
   props: {
@@ -80,7 +81,7 @@ export default {
             this.$message.error(this.$t('openatc.common.devicenotonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         let list = res.data.data.data.patternList
@@ -130,6 +131,9 @@ export default {
           }
           break
         }
+      }
+      if (!res) {
+        return false
       }
       this.$emit('onChange', res)
     },

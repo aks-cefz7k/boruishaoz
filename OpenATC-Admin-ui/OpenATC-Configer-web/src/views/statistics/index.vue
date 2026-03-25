@@ -35,12 +35,11 @@
     <div class="two">
         <div class="flow-echarts" id="historyFlowEcharts"></div>
     </div>
-    <div class="three">
+    <div class="three" ref="three">
         <div class="statistics-table">
             <el-table
             :data="tableData"
-            height="380"
-            stripe
+            :max-height="tableHeight"
             size="small"
             style="width: 100%"
             v-loading.body="listLoading"
@@ -79,6 +78,7 @@
 
 <script>
 import { setVolumelog, getHistoryFlow } from '@/api/statistics'
+import { getMessageByCode } from '@/utils/responseMessage'
 import echart from 'echarts'
 // import Ftp from 'vinyl-ftp'
 export default {
@@ -86,6 +86,7 @@ export default {
   components: {},
   data () {
     return {
+      tableHeight: 380,
       listLoading: false,
       radio: 0,
       allFlowData: [],
@@ -104,10 +105,20 @@ export default {
   mounted () {
     this.initEcharts()
     this.getEchartsData()
+    this.setTableMaxHeight()
   },
   created () {
   },
   methods: {
+    setTableMaxHeight () {
+      var _this = this
+      _this.$nextTick(function () {
+        _this.tableHeight = _this.$refs['three'].offsetHeight
+        window.onresize = function () {
+          _this.tableHeight = _this.$refs['three'].offsetHeight
+        }
+      })
+    },
     getStatisticsData1 () {
       let param = {
         'udiskset': 1,
@@ -120,7 +131,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.software = res.data.data.software
@@ -150,7 +161,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.unlockScreen()
@@ -280,7 +291,6 @@ export default {
 //   margin-top: 8px;
 //   margin-left: 10px;
 //   height: 14px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;

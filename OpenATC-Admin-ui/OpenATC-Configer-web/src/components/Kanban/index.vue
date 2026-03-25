@@ -10,9 +10,19 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="board-column">
+  <div class="board-column" style="margin-left:40px;">
     <div class="board-column-header">
       {{headerText}}
+    </div>
+    <div class="board-table-header">
+      <el-row :gutter="13">
+        <el-col :span="4">{{this.$t('edge.overview.phase')}}
+        </el-col>
+        <el-col :span="10">{{this.$t('edge.overview.phasesplit')}}
+        </el-col>
+        <el-col :span="10">{{this.$t('edge.detector.mode')}}
+        </el-col>
+      </el-row>
     </div>
     <draggable
       class="board-column-content"
@@ -20,33 +30,23 @@
       :options="options">
       <div class="board-item" v-for="element in list" :key="element.id">
         <el-row :gutter="13">
-          <el-col :span="3">
-        <el-tooltip class="item" effect="dark" placement="left">
-          <div slot="content">{{element.name}}</div>
-          <div class="phase-description">
-            <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
-          </div>
-        </el-tooltip>
+          <el-col :span="4">
+            <el-tooltip class="item" effect="dark" placement="left">
+              <div slot="content">{{element.name}}</div>
+              <div class="phase-description">
+                <xdrdirselector Width="40px" Height="40px" :showlist="element.desc" :ISActiveMask="ISActiveMask" :MaskColor="MaskColor"></xdrdirselector>
+              </div>
+            </el-tooltip>
         </el-col>
-        <el-col :span="6">
-        <el-input-number controls-position="right" size="small" :min="0" :max="255" :step="1" v-model.number="element.value" ref="type" :disabled="element.mode === 7"></el-input-number>
+        <el-col :span="10">
+          <el-input-number :controls="false" class="col-content" size="small" :min="0" :max="255" :step="1" v-model.number="element.value" ref="type" :disabled="element.mode === 7"></el-input-number>
         </el-col>
-        <el-col :span="7">
-          <el-select v-model="element.mode" size="small" @change="doChange(element)" :placeholder="$t('edge.common.select')">
+        <el-col :span="10">
+          <el-select v-model="element.mode" class="col-content"  size="small" @change="doChange(element)" :placeholder="$t('edge.common.select')">
             <el-option
               v-for="item in modeOption"
               :key="item.value"
               :label="$t('edge.pattern.modeOption' + item.value)"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="7">
-          <el-select v-model="element.options" size="small" multiple collapse-tags :placeholder="$t('edge.common.select')">
-            <el-option
-              v-for="item in coordphaseOption"
-              :key="item.value"
-              :label="$t('edge.pattern.coordphaseOption' + item.value)"
               :value="item.value">
             </el-option>
           </el-select>
@@ -123,7 +123,7 @@ export default {
     }
   },
   created () {
-    this.addMinSplit()
+    // this.addMinSplit()
   },
   watch: {
     list: {
@@ -152,15 +152,40 @@ export default {
         let phase = phaseList.filter((item) => {
           return item.id === ls.id
         })[0]
-        let temp1 = phase.redyellow + phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
-        let temp2 = phase.phasewalk + phase.pedclear
-        if (temp1 > temp2) {
-          ls.minSplit = temp1
-        } else {
-          ls.minSplit = temp2
+        if (!phase.redyellow) {
+          phase.redyellow = 0
         }
+        if (!phase.yellow) {
+          phase.yellow = 0
+        }
+        if (!phase.redclear) {
+          phase.redclear = 0
+        }
+        if (!phase.flashgreen) {
+          phase.flashgreen = 0
+        }
+        if (!phase.phasewalk) {
+          phase.phasewalk = 0
+        }
+        if (!phase.pedclear) {
+          phase.pedclear = 0
+        }
+        // let temp1 = phase.redyellow + phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
+        // let temp2 = phase.phasewalk + phase.pedclear
+        // if (temp1 > temp2) {
+        //   ls.minSplit = temp1
+        // } else {
+        //   ls.minSplit = temp2
+        // }
+        // if (ls.mode !== 7 && ls.value < ls.minSplit) {
+        //   ls.value = ls.minSplit
+        // }
+        let temp1 = phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
+        let temp2 = phase.yellow + phase.redclear + phase.phasewalk + phase.pedclear
+        ls.minSplit = temp1 > temp2 ? temp1 : temp2
         if (ls.mode !== 7 && ls.value < ls.minSplit) {
           ls.value = ls.minSplit
+          this.$message.error(this.$t('edge.pattern.splitCheckMsg'))
         }
       }
     },
@@ -171,6 +196,9 @@ export default {
         if (ring.length === 0) continue
         let cycle = 0
         for (let r of ring) {
+          if (r.mode === 7) { // 忽略相位不计周期
+            continue
+          }
           cycle = cycle + r.value
         }
         if (cycle > maxCycle) {
@@ -180,14 +208,17 @@ export default {
       return maxCycle
     },
     doChange (val) {
-      if (val.mode === 7) {
-        val.value = 0
-      } else {
-        val.value = 30
-      }
+      // if (val.mode === 7) {
+      //   val.value = 0
+      // } else {
+      //   val.value = 30
+      // }
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.col-content {
+  width: 100%;
+}
 </style>

@@ -18,14 +18,17 @@
       height="300px"
       @close='closeFormDialog'>
       <div class="banben">
-          <span>版本：</span><span>{{version}}</span>
+          <span>{{$t('openatc.about.version')}}：</span><span>{{version}}</span>
       </div>
       <div class="banben" style="margin-top: 10px;">
-          <span>版权所有©1995-2020苏州科达科技股份有限公司</span>
+          <span>{{$t('openatc.about.copyright')}}©1995-2021 {{$t('openatc.about.company')}}</span>
+      </div>
+      <div class="banben" style="margin-top: 10px;">
+          <span>{{$t('openatc.about.packedtime')}}：{{ packedtime }}</span>
       </div>
       <div class="divider"></div>
       <div class="open-source">
-          <span class="agreement" @click="handleAgreement">开源协议</span>
+          <span class="agreement" @click="handleAgreement">{{$t('openatc.about.opensourceagreement')}}</span>
     </div>
     </el-dialog>
     <licenseinfo ref="licenseinfoChild"></licenseinfo>
@@ -33,16 +36,13 @@
 </template>
 
 <script>
-/**
-  Auth: yangdongyang
-  Created: 2020/09/10
-*/
 import licenseinfo from './licenseInfo'
 export default {
   data () {
     return {
       dialogFormVisible: false,
-      version: ''
+      version: '',
+      packedtime: '' // 打包时间
     }
   },
   name: 'versioninfo',
@@ -54,6 +54,9 @@ export default {
   created () {
     let json = require('../../../../static/version.json')
     this.version = json.version
+    if (PACKEDTIME) {
+      this.packedtime = PACKEDTIME
+    }
   },
   methods: {
     showMessage () {
@@ -71,53 +74,4 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-// .versioninfo .el-dialog__headerbtn .el-dialog__close {
-//     color: $--color-white;
-// }
-// .versioninfo .el-dialog__header {
-//     padding: 50px 30px 10px;
-//     height: 109px;
-//     background-color: $--color-primary;
-//     border-radius: 4px 4px 0px 0p
-// }
-// .versioninfo .el-dialog__title {
-//     width: 291px;
-//     height: 38px;
-//     margin-top: 40px;
-//     font-family: MicrosoftYaHei;
-//     font-size: 36px;
-//     font-weight: normal;
-//     font-stretch: normal;
-//     line-height: 14px;
-//     letter-spacing: 0px;
-//     color: $--color-white;
-// }
-// .banben {
-//     font-family: MicrosoftYaHei;
-//     font-size: 14px;
-//     font-weight: normal;
-//     font-stretch: normal;
-//     line-height: 14px;
-//     letter-spacing: 0px;
-//     color: $--color-text-regular;
-// }
-// .divider {
-//     // width: 483px;
-//     height: 1px;
-//     margin-top: 15px;
-//     background-color: #eeeeee;
-// }
-// .open-source {
-//     margin-top: 25px;
-//     font-family: MicrosoftYaHei;
-//     font-size: 14px;
-//     font-weight: normal;
-//     font-stretch: normal;
-//     line-height: 14px;
-//     letter-spacing: 0px;
-//     color: $--color-primary;
-// }
-// .agreement {
-//     cursor: pointer;
-// }
 </style>

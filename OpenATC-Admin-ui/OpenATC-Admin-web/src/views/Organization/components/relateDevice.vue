@@ -47,6 +47,7 @@ import {
 import {
   GetAllDevice
 } from '@/api/device'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'relateDevice',
   data () {
@@ -67,7 +68,7 @@ export default {
           return
         }
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('openatc.common.operationsuccess')
@@ -94,7 +95,7 @@ export default {
           return
         }
         if (data.data.success !== true) {
-          _this.$message.error(data.data.message)
+          _this.$message.error(getMessageByCode(data.data.code, _this.$i18n.locale))
           return
         }
         for (let obj of data.data.data) {
@@ -116,7 +117,7 @@ export default {
           return
         }
         if (data.data.success !== true) {
-          _this.$message.error(data.data.message)
+          _this.$message.error(getMessageByCode(data.data.code, _this.$i18n.locale))
           return
         }
         for (let obj of data.data.data) {

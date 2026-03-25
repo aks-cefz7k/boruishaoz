@@ -29,7 +29,8 @@ import channel from '../views/channel/index'
 import channelLock from '../views/channelLock/index'
 import detector from '../views/detector/index'
 import pedDetector from '../views/pedestrianDetector/index'
-import deviceInfo from '../views/deviceInfo/index'
+// import deviceInfo from '../views/deviceInfo/index'
+import adaptiveParameter from '../views/adaptiveParameter/index'
 import controlPanel from '../views/controlPanel/index'
 import en from '../i18n/language/en'
 import zh from '../i18n/language/zh'
@@ -42,9 +43,10 @@ import overview from '../views/overView/index'
 import history from '../views/history/index'
 import usermgr from '../views/user/index'
 import dailyRecord from '../views/dailyRecord/index'
+import statistics from '../views/statistics/index'
 import dashboard from '../views/dashboard/index'
-import '@/styles/common.scss'
-import '@/styles/index.scss'
+// import '@/styles/common.scss'
+// import '@/styles/index.scss'
 import '@/assets/icon/iconfont.css'
 
 const components = {
@@ -59,7 +61,8 @@ const components = {
   detector,
   channelLock,
   pedDetector,
-  deviceInfo,
+  // deviceInfo,
+  adaptiveParameter,
   controlPanel,
   Layout,
   // LoginFunc,
@@ -70,7 +73,8 @@ const components = {
   dashboard,
   overview,
   dailyRecord,
-  usermgr
+  usermgr,
+  statistics
 }
 
 const language = {
@@ -219,15 +223,6 @@ const subrouter = [
       }
     },
     {
-      path: 'channelLock',
-      name: 'ChannelLock',
-      component: channelLock,
-      meta: {
-        title: 'edge.route.channelLock',
-        icon: 'channellock'
-      }
-    },
-    {
       path: 'detector',
       name: 'Detector',
       component: detector,
@@ -245,13 +240,31 @@ const subrouter = [
         icon: 'peddetector'
       }
     },
+    // {
+    //   path: 'deviceInfo',
+    //   name: 'deviceInfo',
+    //   component: deviceInfo,
+    //   meta: {
+    //     title: 'edge.route.deviceInfo',
+    //     icon: 'deviceinfo'
+    //   }
+    // },
     {
-      path: 'deviceInfo',
-      name: 'deviceInfo',
-      component: deviceInfo,
+      path: 'adaptiveParameter',
+      name: 'adaptiveParameter',
+      component: adaptiveParameter,
       meta: {
-        title: 'edge.route.deviceInfo',
-        icon: 'deviceinfo'
+        title: 'edge.route.adaptiveParameter',
+        icon: 'adaptiveParameter'
+      }
+    },
+    {
+      path: 'channelLock',
+      name: 'ChannelLock',
+      component: channelLock,
+      meta: {
+        title: 'edge.route.channelLock',
+        icon: 'channellock'
       }
     },
     {
@@ -327,6 +340,19 @@ const subrouter = [
       meta: {
         title: 'edge.route.dailyRecord',
         icon: 'dailyrecord'
+      }
+    }]
+  },
+  {
+    path: '/statistics',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'Statistics',
+      component: statistics,
+      meta: {
+        title: 'edge.route.statistics',
+        icon: 'statistics'
       }
     }]
   }

@@ -16,10 +16,10 @@
             <el-table
             :data="dialogDetailFault"
             height="350"
-            stripe
             size="small"
             style="width: 100%"
             v-loading.body="listLoading"
+            :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
             id="footerBtn">
             <el-table-column
             type="index"

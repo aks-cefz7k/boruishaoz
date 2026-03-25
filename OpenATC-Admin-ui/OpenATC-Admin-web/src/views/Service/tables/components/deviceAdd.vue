@@ -27,7 +27,6 @@
       <div class="devs-table">
         <el-table
           ref="addDeviceTable"
-          stripe
           size="mini"
           style="width: 100%"
           v-loading.body="listLoading"
@@ -77,6 +76,7 @@
 </template>
 <script>
 import { GetAllDevice } from '@/api/device'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'deviceAdd',
   props: {
@@ -112,7 +112,7 @@ export default {
       this.listLoading = true
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false

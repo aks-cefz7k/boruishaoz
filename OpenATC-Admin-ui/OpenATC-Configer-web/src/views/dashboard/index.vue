@@ -21,9 +21,6 @@
               <div v-show="devStatus===1"><div class="yuanxing" style="background: rgba(230, 162, 60, 0.6);"></div><div class="iconfont icon-ziyuan" style="color: #e6a23c;"></div><div class="dev-status" style="color: #e6a23c; left: 30px;">联机中</div></div>
             </div>
             <div class="agent-num">
-              <!-- <div class="lianji-success" v-show="devStatus===3">在线</div>
-              <div class="lianji-fail" v-show="devStatus===2">离线</div>
-              <div class="lianji-wait" v-show="devStatus===1">联机中...</div> -->
               <div class="agent-id">IP地址</div>
               <div class="agent-number">{{ip}}</div>
               <div class="agent-port">设备端口</div>
@@ -81,7 +78,6 @@
             :span-method="objectSpanMethod"
             :cell-class-name="addClass"
             size="mini"
-            stripe
             style="width: 100%">
             <el-table-column
               align="center"
@@ -166,6 +162,7 @@
 import { getTscControl, putTscControl, getTscPattern } from '@/api/control'
 import { registerMessage } from '@/api/param'
 import { setIframdevid } from '@/utils/auth'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'overview',
   data () {
@@ -282,7 +279,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // let param = JSON.parse(data.data.data)
@@ -341,7 +338,7 @@ export default {
       putTscControl(control).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.common.download'), { type: 'success' })
@@ -356,7 +353,7 @@ export default {
       getTscPattern(this.agentId).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$message.success(this.$t('edge.common.querysucess'))
@@ -462,7 +459,7 @@ export default {
 .container-main {
   width: 100%;
   height: 880px;
-  min-width: 1250px;
+  // min-width: 1250px;
   background: #f8f8f8;
 }
 .container-left {
@@ -497,7 +494,6 @@ export default {
   height: 10px;
   margin-top: 1%;
   margin-left: 2%;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -611,7 +607,6 @@ export default {
   margin-top: 20px;
   margin-right: 30px;
   text-align: right;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -622,7 +617,6 @@ export default {
   margin-top: 10px;
   margin-right: 30px;
   text-align: right;
-  font-family: ArialMT;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -633,7 +627,6 @@ export default {
   margin-top: 20px;
   margin-right: 30px;
   text-align: right;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -644,7 +637,6 @@ export default {
   margin-top: 10px;
   margin-right: 30px;
   text-align: right;
-  font-family: ArialMT;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -654,7 +646,6 @@ export default {
 .model-name {
   float: left;
   margin-top: 32px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -674,7 +665,6 @@ export default {
   // float: left;
   text-align: center;
   margin-top: 40px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 30px;
   font-weight: normal;
   font-stretch: normal;
@@ -684,7 +674,6 @@ export default {
 }
 .curr-grade {
   margin-top: 30px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 24px;
   font-weight: normal;
   font-stretch: normal;
@@ -694,7 +683,6 @@ export default {
 }
 .curr-num {
   margin-top: 20px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -728,7 +716,6 @@ export default {
   // left: 30px;
   top: 150px;
   height: 21px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 22px;
   font-weight: normal;
   font-stretch: normal;
@@ -746,7 +733,6 @@ export default {
     padding: 0 12px 0 0;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    font-family: SourceHanSansCN-Regular;
     font-weight: normal;
     font-stretch: normal;
     letter-spacing: 0px;

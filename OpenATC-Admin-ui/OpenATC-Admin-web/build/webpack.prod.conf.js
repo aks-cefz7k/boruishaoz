@@ -22,15 +22,19 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const GenerateAssetPlugin = require('generate-asset-webpack-plugin')
+const moment = require('moment')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
 const getConfigJson = () => {
-    // return JSON.stringify(require('../static/apiconfig'))
-    return JSON.stringify(require('../servConfig.json'))
-  }
+  // return JSON.stringify(require('../static/apiconfig'))
+  return JSON.stringify(require('../servConfig.json'))
+}
+const getRoadConfigJson = () => {
+  return JSON.stringify(require('../LRRoadConfig.json'))
+}
 const env = require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
@@ -50,7 +54,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env': env
+      'process.env': env,
+      PACKEDTIME: JSON.stringify(moment().format('YYYY-MM-DD HH:mm:ss')) // 打包时间，定义全局变量
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
@@ -63,11 +68,11 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      filename: utils.assetsPath('css/[name].[contenthash].css')
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
-      allChunks: false,
+      // allChunks: false,
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
@@ -129,7 +134,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       minChunks: 3
     }),
 
-       
+
 
     // copy custom static assets
     new CopyWebpackPlugin([
@@ -143,7 +148,14 @@ const webpackConfig = merge(baseWebpackConfig, {
       // filename: './static/apiconfig.json',
       filename: './servConfig.json',
       fn: (compilation, cb) => {
-        cb(null, getConfigJson(compilation));
+        cb(null, getConfigJson(compilation))
+      },
+      extraFiles: []
+    }),
+    new GenerateAssetPlugin({
+      filename: './LRRoadConfig.json',
+      fn: (compilation, cb) => {
+        cb(null, getRoadConfigJson(compilation))
       },
       extraFiles: []
     })

@@ -22,7 +22,6 @@
         show-checkbox
         node-key="id"
         ref="tree"
-        check-strictly="true"
         default-expand-all
         @check="treeCheck"
         top="20"
@@ -46,6 +45,7 @@ import {
   GetOrganizationList
 } from '@/api/organization'
 import { elTreeModel } from '@/model/tree/eltreemodel'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'chooseOrganizationDialog',
   data () {
@@ -69,8 +69,7 @@ export default {
           return
         }
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.list = data.data.data

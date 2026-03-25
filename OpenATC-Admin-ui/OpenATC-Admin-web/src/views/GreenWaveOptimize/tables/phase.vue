@@ -12,7 +12,6 @@
 <template>
   <div class="phasePanel">
     <el-table
-      stripe
       highlight-current-row
       ref="phaseTable"
       class="phaseTable"
@@ -72,8 +71,9 @@
 </template>
 <script>
 import { getTscPhase } from '@/api/route'
-import { images } from './utils.js'
+import { images } from '@/utils/phaseList.js'
 import XRDDirSelector from '../../../components/XRDDirSelector/index'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'phase',
   props: {
@@ -147,7 +147,7 @@ export default {
             this.$message.error(this.$t('openatc.common.devicenotonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.phaseData.forEach(ele => {

@@ -49,6 +49,7 @@
   Created: 2020/10/16
 */
 import { AuthorizeToken } from '../../../api/user'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {},
   data () {
@@ -86,7 +87,7 @@ export default {
             this.$message.error(this.$t('openatc.common.authtip'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.token = res.data.data.token

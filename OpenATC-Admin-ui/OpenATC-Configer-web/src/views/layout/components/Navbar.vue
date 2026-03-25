@@ -14,6 +14,7 @@
     <Messagebox :visible="readDiologVisible" :text="`${$t('edge.main.readDevice')}${copiedAgentid} ${$t('edge.main.readPattern')}`" @cancle="cancleRead" @ok="handleRead"/>
     <ImportTempDialog ref="importTemp" v-if="importVisible" :imortVisible="importVisible" @closeImportTemp="closeImportTemp"/>
     <el-menu
+      v-if="!hideMenu && !graphicMode"
       class="navbar"
       mode="horizontal"
     >
@@ -100,6 +101,8 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
+                <el-dropdown-item command="help">{{$t('edge.main.help')}}</el-dropdown-item>
+                <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -115,6 +118,14 @@
             <el-dropdown-item command="En">English</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+      </div>
+      <div class="sloat-icon" v-show="isShowSwitchBtn">
+        <el-tooltip :content="$t('edge.main.graphics')" placement="bottom" effect="dark">
+          <el-button type="text" @click="clickSwitchIcon(true)"><i class="iconfont icon-tuxingjiemian" :class="{'choosedIcon': isShowGui, 'defaultIcon': !isShowGui}"></i></el-button>
+        </el-tooltip>
+        <el-tooltip :content="$t('edge.main.text')" placement="bottom" effect="dark">
+          <el-button type="text" @click="clickSwitchIcon(false)"><i class="iconfont icon-wenzijiemian" :class="{'choosedIcon': !isShowGui, 'defaultIcon': isShowGui}"></i></el-button>
+        </el-tooltip>
       </div>
     </el-menu>
     <el-dialog
@@ -139,6 +150,7 @@
     </el-dialog>
     <!--修改密码弹框-->
     <changePass ref="changepassChild"></changePass>
+    <versioninfo ref="versioninfoChild"></versioninfo>
   </div>
 </template>
 
@@ -153,21 +165,28 @@ import Messagebox from '@/components/MessageBox/index'
 import ImportTempDialog from '../../importTempDialog/index'
 import { getInfo } from '@/api/login'
 import changePass from './ChangePass'
+import versioninfo from './versionInfo'
+import { getErrorMesZh, getErrorMesEn } from '../../../utils/errorcode.js'
+import { getControSource, getOverLap, getTypeOptions, getEtypeOptions } from '@/utils/channeldesc.js'
 
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {
     Breadcrumb,
     Hamburger,
     Messagebox,
     ImportTempDialog,
-    changePass
+    changePass,
+    versioninfo
   },
   data () {
     return {
       dialogVisible: false,
       phaseNotZero: false, // 判断必须有一个非零相位
+      phaseExceed: false, // 判断一个环最多16个相位
       planNotZero: false, // 判断必须有一个plan
       patternNotZero: false, // 判断必须有一个pattern
+      patternCycleEqual: true, // 校验环周期时长是否相等
       dataNotZero: false, // 判断必须有一个data
       dateIsAll: false, // 判断日期必须为全年
       planDate: false, // 校验plan里的时刻是否合法
@@ -177,6 +196,7 @@ export default {
       overlapRules: false, // 判断跟随相位里的母相位是否为空
       manualpanelIsNull: false, // 判断手动面板数据是否为空
       deviceinfo: false, // 校验设备信息的规则
+      splitCheck: true,
       type: false,
       language: 'Language',
       loading: {},
@@ -204,23 +224,21 @@ export default {
         value: 'date',
         // label: '日期'
         label: '6'
-      }, {
-        value: 'channel',
-        // label: '通道'
-        label: '7'
-      }, {
-        value: 'detecter',
-        // label: '检测器'
-        label: '8'
-      }, {
-        value: 'peddetecter',
-        // label: '行人检测器'
-        label: '9'
-      }, {
-        value: 'devinfo',
-        // label: '设备信息'
-        label: '10'
-      }],
+      }
+      // {
+      //   value: 'channel',
+      //   // label: '通道'
+      //   label: '7'
+      // }, {
+      //   value: 'detecter',
+      //   // label: '检测器'
+      //   label: '8'
+      // }, {
+      //   value: 'peddetecter',
+      //   // label: '行人检测器'
+      //   label: '9'
+      // }
+      ],
       value: 'all',
       notify: undefined, // 用于判断关闭多个显示的提示框
       readDiologVisible: false,
@@ -233,8 +251,8 @@ export default {
       isShowLogout: true,
       isShowMenu: false,
       planName: '',
-      errorCodeMap: new Map([[101, '相位编号超出限值'], [102, '行人绿闪时间超出限值'], [103, '最小绿应大于行人绿灯时间'], [104, '最大绿1应大于最小绿时间'], [105, '最大绿2应大于最大绿1时间'], [106, '单位延长绿灯时间超出限值'], [107, '黄灯时间超出限值'], [108, '全红时间超出限值'], [109, '绿闪时间应小于最小绿'], [110, '环数量超出限值'], [111, '相位并发配置冲突'], [112, '所有环不能同时配一个相位'], [201, '跟随相位数量超出限值'], [202, '跟随相位的母相位为空'], [203, '跟随相位配置未知母相位'], [301, '方案数量超出限值'], [302, '相位差应小于周期时间'], [303, '环内配置未知相位'], [304, '绿信比应大于相位的最小绿+黄灯+全红'], [401, '计划数量超出限值'], [402, '控制方式不存在'], [403, '时段数量超出限值'], [404, '分钟超出限值'], [405, '小时超出限值'], [406, '时间顺序配置错误'], [407, '计划中配置未知方案'], [408, '计划中方案未配置'], [501, '调度计划数量超出限值'], [502, '月份超出限值'], [503, '星期超出限值'], [504, '日期值超出限值'], [505, '配置未知计划号'], [601, '通道数超出限值'], [602, '通道配置未知控制源'], [603, '通道控制源未配置'], [604, '通道类型未配置'], [605, '通道未知控制类型'], [701, '车辆检测器数量超出限值'], [702, '车辆检测器无响应时间超出限值'], [703, '车辆检测器最大持续时间超出限值'], [704, '车辆检测器最大车辆数超出限值'], [705, '车辆检测器失败时间超出限值'], [706, '车辆检测器配置未知请求相位'], [707, '车辆检测器请求相位未配置'], [801, '行人检测器数量超出限值'], [802, '行人检测器无响应时间超出限值'], [803, '行人检测器最大持续时间超出限值'], [804, '行人检测器最大车辆数超出限值'], [805, '行人检测器失败时间超出限值'], [806, '行人检测器配置未知请求相位'], [807, '行人检测器请求相位未配置'], [901, '手动面板配置未知通道'], [902, '手动面板参数未配置'], [903, '手动面板东西直行按键通道绿冲突'], [904, '手动面板北向通行按键通道绿冲突'], [905, '手动面板东西左转按键通道绿冲突'], [906, '手动面板西向通行按键通道绿冲突'], [907, '手动面板东向通行按键通道绿冲突'], [908, '手动面板南北直行按键通道绿冲突'], [909, '手动面板南向通行按键通道绿冲突'], [910, '手动面板南北左转按键通道绿冲突'], [911, '手动面板Y1自定义按键通道绿冲突'], [912, '手动面板Y2自定义按键通道绿冲突'], [913, '手动面板Y3自定义按键通道绿冲突'], [914, '手动面板Y4自定义按键通道绿冲突'], [1001, '地址码未配置'], [1002, '信号机两个网卡都未配置'], [1003, '信号机地址码配置错误'], [1004, 'MD5码值校验失败']]),
-      errorCodeMapEn: new Map([[101, 'Phase number exceeds limit'], [102, 'The time of pedestrian flashing green exceeds the limit'], [103, 'The minimum green time should be longer than the pedestrian green'], [104, 'The maximum green 1 should be longer than the minimum green'], [105, 'Maximum green 2 should be greater than maximum green 1'], [106, 'Unit extended green time out of limit'], [107, 'The yellow light time exceeds the limit'], [108, 'The all red time exceeds limit'], [109, 'The time of flash green should be less than the minimum green'], [110, 'Number of rings exceeds limit'], [111, 'Phase concurrency configuration conflict'], [112, 'All rings cannot be equipped with only one phase'], [201, 'The number of following phases exceeds the limit'], [202, 'The mother phase following the phase is null'], [203, 'Follow the phase configuration with an agnostic phase'], [301, 'The number of schemes exceeds the limit'], [302, 'The phase difference should be less than the cycle time'], [303, 'Unknown phase configuration in the ring'], [304, 'The green time ratio should be longer than the minimum phase green + yellow light + all red'], [401, 'The number of plans exceeds the limit'], [402, 'Control mode does not exist'], [403, 'The periods number exceeds the limit'], [404, 'The minute exceeds limit'], [405, 'The hour exceeds limit'], [406, 'Time sequence configuration error'], [407, 'Unknown scheme is configured in the plan'], [408, 'The plan is not configured'], [501, 'The number of scheduling plans exceeds the limit'], [502, 'The month exceeds the limit'], [503, 'The week exceeds the limit'], [504, 'The date value exceeds the limit'], [505, 'Configure unknown plan number'], [601, 'The number of channels exceeds the limit'], [602, 'Channel configuration unknown control source'], [603, 'Channel control source is not configured'], [604, 'Channel type not configured'], [605, 'Channel unknown control type'], [701, 'The number of vehicle detectors exceeds the limit'], [702, 'The non-response time of the vehicle detector exceeds the limit'], [703, 'The maximum duration of the vehicle detector exceeds the limit'], [704, 'The maximum number of vehicles in the vehicle detector exceeds the limit'], [705, 'The vehicle detector failure time exceeds the limit'], [706, 'Vehicle detector configuration unknown request phase'], [707, 'Vehicle detector request phase not configured'], [801, 'The number of pedestrian detectors exceeds the limit'], [802, 'The non-response time of the pedestrian detector exceeds the limit'], [803, 'The maximum duration of the pedestrian detector exceeds the limit'], [804, 'The maximum number of vehicles in the pedestrian detector exceeds the limit'], [805, 'Pedestrian detector failure time exceeds the limit'], [806, 'Pedestrian detector configuration unknown request phase'], [807, 'Pedestrian detector request phase not configured'], [901, 'Manual panel configuration unknown channel'], [902, 'Manual panel parameters are not configured'], [903, 'Manual panel east-west straight button channel green conflict'], [904, 'Manual panel northbound traffic button channel green conflict'], [905, 'Manual panel east-west turn left button channel green conflict'], [906, 'Manual panel westbound button channel green conflict'], [907, 'Manual panel eastbound button channel green conflict'], [908, 'Manual panel north-south straight button channel green conflict'], [909, 'Manual panel southbound key channel green conflict'], [910, 'Manual panel north-south turn left button channel green conflict'], [911, 'Manual panel Y1 custom button channel green conflict'], [912, 'Manual panel Y2 custom button channel green conflict'], [913, 'Manual panel Y3 custom button channel green conflict'], [914, 'Manual panel Y4 custom button channel green conflic'], [1001, ' Address code is not configured'], [1002, 'The signal is not configured with either network card'], [1003, 'Address code configuration error of signal machine'], [1004, 'MD5 code value verification failed']])
+      typeOptions: [],
+      isShowSwitchBtn: false
     }
   },
   computed: {
@@ -247,7 +265,10 @@ export default {
     ]),
     ...mapState({
       copiedTscParam: state => state.globalParam.copiedTscParam,
-      userInfo: state => state.user.userInfo
+      userInfo: state => state.user.userInfo,
+      hideMenu: state => state.globalParam.hideMenu,
+      graphicMode: state => state.globalParam.graphicMode,
+      isShowGui: state => state.globalParam.isShowGui
     }),
     userInfo: {
       get: function () {
@@ -266,6 +287,11 @@ export default {
         } else {
           this.isShowMenu = false
         }
+        if (val.path.includes('overview')) {
+          this.isShowSwitchBtn = true
+        } else {
+          this.isShowSwitchBtn = false
+        }
       },
       // 深度观察监听
       deep: true
@@ -279,12 +305,26 @@ export default {
     } else {
       this.isShowMenu = false
     }
-    // if (this.$route.query !== undefined && this.$route.query.isfromatc !== undefined && this.$route.query.isfromatc === 'true') {
-    //   this.isShowLogout = false
-    // }
+    if (path.includes('overview')) {
+      this.isShowSwitchBtn = true
+    } else {
+      this.isShowSwitchBtn = false
+    }
     if (this.$route.query.isfromatc === true || this.$route.query.isfromatc === 'true' || sessionStorage.getItem('toSingleEdge') === '1') {
       // 增加判断toSingleEdge，解决isfromatc参数丢失问题
       this.isShowLogout = false
+    }
+    if (this.$route.query.hideMenu === true || this.$route.query.hideMenu === 'true') {
+      // 如果传参hideMenu就隐藏菜单，其余情况均不隐藏
+      this.$store.dispatch('SetMenuVisible', true)
+    } else {
+      this.$store.dispatch('SetMenuVisible', false)
+    }
+    if (this.$route.query.graphicMode === true || this.$route.query.graphicMode === 'true') {
+      // 如果传参hideMenu就隐藏菜单，其余情况均不隐藏
+      this.$store.dispatch('SetGraphicMode', true)
+    } else {
+      this.$store.dispatch('SetGraphicMode', false)
     }
     // this.extendErrorCodeMap() // 扩展错误码的map集合
   },
@@ -344,22 +384,23 @@ export default {
     importtemplate () {
       this.importVisible = true
     },
-    normalData () {
-      // 去除patternList里的description对象
-      // let patternList = this.globalParamModel.getParamsByType('patternList')
-      // for (let pattern of patternList) {
-      //   for (let rings of pattern.rings) {
-      //     for (let i = 0; i < rings.length; i++) {
-      //       rings[i] = (({ name, id, value }) => ({ name, id, value }))(rings[i])
-      //     }
-      //   }
-      // }
-      // 去除channelList里的typeAndSouce
-      let channelList = this.globalParamModel.getParamsByType('channelList')
-      for (let i = 0; i < channelList.length; i++) {
-        let channel = channelList[i]
-        this.$store.getters.tscParam.channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
+    normalData (tscParam) {
+      let res = JSON.parse(JSON.stringify(tscParam))
+      if (this.value === 'all' || this.value === 'pattern') {
+        // 去除patternList里的description对象
+        let patternList = res.patternList
+        for (let pattern of patternList) {
+          for (let rings of pattern.rings) {
+            for (let i = 0; i < rings.length; i++) {
+              rings[i] = (
+                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
+                  ({ name, id, value, mode, options, minSplit, delaystart, advanceend })
+              )(rings[i])
+            }
+          }
+        }
       }
+      return res
     },
     toggleSideBar () {
       this.$store.dispatch('ToggleSideBar')
@@ -368,6 +409,58 @@ export default {
       this.$store.dispatch('LogOut').then(() => {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
+    },
+    initChannelData (overlaplList, phaseList) {
+      let phasetype = getControSource(this.$i18n.locale, phaseList)
+      let patterntype = getOverLap(this.$i18n.locale, overlaplList)
+      this.typeOptions[0].children = phasetype
+      this.typeOptions[1].children = phasetype
+      this.typeOptions[2].children = patterntype
+      this.typeOptions[3].children = patterntype
+      let channel = this.globalParamModel.getParamsByType('channelList')
+      for (let obj of channel) {
+        let list = []
+        list.push(obj.controltype)
+        // 车道灯和不启用，没有下一级菜单
+        if (obj.controltype !== 6 && obj.controltype !== 0) {
+          list.push(obj.controlsource)
+        }
+        obj.typeAndSouce = list
+      }
+    },
+    createCurrentDescMap (overlaplList, phaseList) {
+      this.typeOptions = getTypeOptions()
+      if (this.$i18n.locale === 'en') {
+        this.typeOptions = getEtypeOptions()
+      }
+      this.initChannelData(overlaplList, phaseList)
+      // 生成当前的控制类型描述，与通道id一一对应
+      let channels = this.globalParamModel.getParamsByType('channelList')
+      let desclist = new Map()
+      for (let ele of channels) {
+        if (!ele.typeAndSouce || ele.typeAndSouce.length === 0) continue
+        let source
+        let dire
+        let desc = []
+        if (ele.typeAndSouce[0] !== undefined) {
+          source = this.typeOptions.filter(type => type.value === ele.typeAndSouce[0])[0].label
+          if (source) {
+            desc[0] = source
+          }
+        }
+        if (ele.typeAndSouce[1] !== undefined) {
+          this.typeOptions.forEach(type => {
+            if (type.value === ele.typeAndSouce[0] && type.children && type.children.length) {
+              dire = type.children.filter(child => child.value === ele.typeAndSouce[1])[0].label
+            }
+          })
+          if (dire) {
+            desc[1] = dire
+          }
+        }
+        desclist.set(ele.id, desc)
+      }
+      this.$store.dispatch('SetChannelDesc', desclist)
     },
     upload () {
       this.globalParamModel.reset()
@@ -385,7 +478,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$store.state.user.route = this.$route.path
@@ -393,15 +486,41 @@ export default {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        let allTscParam = data.data.data.data
+        // let allTscParam = data.data.data.data
+        let {customInfo, ...allTscParam} = data.data.data.data
         if (allTscParam.manualpanel === undefined) {
           allTscParam.manualpanel = {}
         }
         if (allTscParam.channellock === undefined) {
           allTscParam.channellock = []
         }
+        if (allTscParam.singleoptim === undefined) {
+          allTscParam.singleoptim = []
+        }
         this.globalParamModel.setGlobalParams(allTscParam)
         this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
+        // 上载成功后就生成通道描述map
+        this.createCurrentDescMap()
+      })
+    },
+    getPhaseOverlapParam () {
+      return new Promise((resolve, reject) => {
+        uploadTscParam().then(data => {
+          if (!data.data.success) {
+            if (data.data.code === '4003') {
+              this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+              return
+            }
+            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+            return
+          }
+          if (Object.keys(data.data.data.data).length === 0) {
+            this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
+            return
+          }
+          let { phaseList, overlaplList } = data.data.data.data
+          resolve({phaseList, overlaplList})
+        })
       })
     },
     singleUpload (typeStr) {
@@ -412,40 +531,53 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
+        let allTscParam = data.data.data.data
         this.$store.state.user.route = this.$route.path
-        if (Object.keys(data.data.data.data).length === 0) {
+        if (Object.keys(allTscParam).length === 0) {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        this.globalParamModel.setGlobalParams(data.data.data.data)
+        // if (allTscParam.manualpanel === undefined) {
+        //   allTscParam.manualpanel = {}
+        // }
+        // if (allTscParam.channellock === undefined) {
+        //   allTscParam.channellock = []
+        // }
+        // if (allTscParam.singleoptim === undefined) {
+        //   allTscParam.singleoptim = []
+        // }
+        this.globalParamModel.setGlobalParams(allTscParam)
         this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
+        // 上载成功后就生成通道描述map
+        // if (typeStr === 'channel') {
+        // // 单独上载通道，需要同时获取当前设备的相位、跟随相位，不然无法正确显示控制信息的选项
+        //   this.getPhaseOverlapParam().then(res => {
+        //     this.createCurrentDescMap(res.overlaplList, res.phaseList)
+        //   })
+        // }
       })
     },
     download () {
-      // const tscParam = this.globalParamModel.getGlobalParams()
-      // this.lockScreen()
       let typeStr = this.value
-      // if (typeStr !== 'all') {
-      //   this.lockScreen()
-      //   this.singleDownload(typeStr, tscParam)
-      //   return
-      // }
-      // this.normalData() // 规范数据格式
+      if (typeStr !== 'all') {
+        this.singleDownload(typeStr)
+        return
+      }
       // 下发数据前的基本校验
       if (!this.baseCheck()) {
         return
       }
-      this.normalData() // 规范数据格式
       let tscParam = this.globalParamModel.getGlobalParams()
-      let newTscParam = this.handleTscParam(tscParam)
-      if (typeStr !== 'all') {
-        this.lockScreen()
-        this.singleDownload(typeStr, newTscParam)
-        return
-      }
+      let targetTscParam = this.normalData(tscParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
+      // if (typeStr !== 'all') {
+      //   this.lockScreen()
+      //   this.singleDownload(typeStr, newTscParam)
+      //   return
+      // }
       // const tscParam = this.globalParamModel.getGlobalParams()
       this.lockScreen()
       downloadTscParam(this.$store.state.user.user_name, newTscParam).then(data => {
@@ -457,39 +589,22 @@ export default {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return
             }
-            let errorMes = ''
+            let errorMes = this.$t('edge.common.downloaderror')
             for (let code of codeList) {
               if (this.$i18n.locale === 'en') {
-                if (code[0] === 305) {
-                  errorMes = errorMes + '</br>' + 'There is an intra-ring phase concurrency conflict in scheme' + code[1]
-                } else if (code[0] === 1005) {
-                  errorMes = errorMes + '</br>' + 'Time period' + code[1] + 'channel lock state conflict'
-                } else if (code[0] === 1006) {
-                  errorMes = errorMes + '</br>' + 'The control source of the locked channel in period' + code[1] + ' is not ignored'
-                } else {
-                  errorMes = errorMes + '</br>' + this.errorCodeMapEn.get(code[0])
-                }
+                errorMes = getErrorMesEn(errorMes, code)
               } else {
-                if (code[0] === 305) {
-                  errorMes = errorMes + '</br>' + '方案' + code[1] + '中存在环内相位并发冲突'
-                } else if (code[0] === 1005) {
-                  errorMes = errorMes + '</br>' + '时段' + code[1] + '通道状态锁定冲突'
-                } else if (code[0] === 1006) {
-                  errorMes = errorMes + '</br>' + '时段' + code[1] + '锁定通道的控制源未被忽略'
-                } else {
-                  errorMes = errorMes + '</br>' + this.errorCodeMap.get(code[0])
-                }
+                errorMes = getErrorMesZh(errorMes, code)
               }
             }
-            // this.$message.error(errorMes.substr(1))
             this.$message({
-              message: errorMes.substr(5),
+              message: errorMes,
               type: 'error',
               dangerouslyUseHTMLString: true
             })
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // downloadTscParam(this.$store.state.user.name, tscParam)
@@ -502,35 +617,58 @@ export default {
     },
     handleTscParam (tscParam) {
       let newTscParam = this.cloneObjectFn(tscParam)
-      let dateList = newTscParam.dateList
-      for (let dates of dateList) {
-        let date = dates.date
-        let day = dates.day
-        let month = dates.month
-        if (date.includes('全选')) {
-          let index = date.indexOf('全选')
-          date.splice(index, 1) // 排除全选选项
-        } else if (date.includes('All')) {
-          let index = date.indexOf('All')
-          date.splice(index, 1) // 排除全选选项
-        }
-        if (day.includes(8)) {
-          let index = day.indexOf(8)
-          day.splice(index, 1) // 排除全选选项
-        }
-        if (month.includes(0)) {
-          let index = month.indexOf(0)
-          month.splice(index, 1) // 排除全选选项
+      if (this.value === 'all' || this.value === 'date') {
+        let dateList = newTscParam.dateList
+        for (let dates of dateList) {
+          let date = dates.date
+          let day = dates.day
+          let month = dates.month
+          if (date && date.includes('全选')) {
+            let index = date.indexOf('全选')
+            date.splice(index, 1) // 排除全选选项
+          } else if (date && date.includes('All')) {
+            let index = date.indexOf('All')
+            date.splice(index, 1) // 排除全选选项
+          }
+          if (day && day.includes(8)) {
+            let index = day.indexOf(8)
+            day.splice(index, 1) // 排除全选选项
+          }
+          if (month && month.includes(0)) {
+            let index = month.indexOf(0)
+            month.splice(index, 1) // 排除全选选项
+          }
         }
       }
-      let patternList = newTscParam.patternList
-      for (let pattern of patternList) {
-        let rings = pattern.rings
-        for (let ring of rings) {
-          if (ring.length === 0) continue
-          for (let rg of ring) {
-            rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+      if (this.value === 'all' || this.value === 'pattern') {
+        let patternList = newTscParam.patternList
+        for (let pattern of patternList) {
+          let rings = pattern.rings
+          for (let ring of rings) {
+            if (ring.length === 0) continue
+            for (let rg of ring) {
+              rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+            }
           }
+        }
+      }
+      if (newTscParam.customInfo) {
+        // 删除历史数据中的设备信息
+        delete newTscParam.customInfo
+      }
+      if (newTscParam.channellock && newTscParam.channellock.length) {
+        // 删除通道锁定的通道描述字段
+        let channellock = newTscParam.channellock
+        for (let lock of channellock) {
+          lock.channellocKinfo.forEach(el => delete el.desc)
+        }
+      }
+      if (newTscParam.channelList) {
+        // 去除typeAndSouce
+        let channelList = newTscParam.channelList
+        for (let i = 0; i < channelList.length; i++) {
+          let channel = channelList[i]
+          channelList[i] = (({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }) => ({ desc, lane, controlsource, controltype, id, voltthresh, pacthresh, peakhthresh, peaklthresh }))(channel)
         }
       }
       return newTscParam
@@ -546,15 +684,19 @@ export default {
       if (list.includes(4)) arr[2] = 1
       return arr
     },
-    singleDownload (typeStr, tscParam) {
-      downloadSingleTscParam(typeStr, tscParam).then(data => {
+    singleDownload (typeStr) {
+      let tscParam = this.globalParamModel.getGlobalParams()
+      let targetTscParam = this.normalData(tscParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
+      this.lockScreen()
+      downloadSingleTscParam(typeStr, newTscParam).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         // downloadTscParam(this.$store.state.user.name, tscParam)
@@ -569,17 +711,16 @@ export default {
       this.dialogVisible = true
     },
     async leadingOut () {
-      // this.normalData() // 规范数据格式
       // 下载数据前的基本校验
       if (!this.baseCheck()) {
         return
       }
-      this.normalData() // 规范数据格式
+      let edgeParam = this.globalParamModel.getGlobalParams()
+      let targetTscParam = this.normalData(edgeParam) // 规范数据格式
+      let newTscParam = this.handleTscParam(targetTscParam)
       // 定义文件内容，类型必须为Blob 否则createObjectURL会报错
       // const tscParam = this.globalParamModel.getGlobalParams()
       const tscParam = {}
-      let edgeParam = this.globalParamModel.getGlobalParams()
-      let newTscParam = this.handleTscParam(edgeParam)
       let md5Param = await this.getMd5ByParams(newTscParam)
       tscParam.md5 = md5Param
       tscParam.data = newTscParam
@@ -605,7 +746,6 @@ export default {
           if (data.data.success) {
             resolve(data.data.data)
           } else {
-            console.log(data.data.message)
             this.$message.error(this.$t('edge.common.getmd5error'))
             reject(new Error(data.data.message))
           }
@@ -653,6 +793,7 @@ export default {
       this.planPattern = false
       this.overlapRules = true
       this.deviceinfo = true
+      this.splitCheck = true
       this.checkPhaseRules()
       if (!this.phaseNotZero) {
         this.$message.error(
@@ -661,14 +802,21 @@ export default {
         return false
       }
       this.checkPhaseRing()
-      if (!this.phaseRing) {
-        this.$message.error(this.$t('edge.errorTip.ringErrorTip'))
-        return false
-      }
+      // if (!this.phaseRing) {
+      //   this.$message.error(this.$t('edge.errorTip.ringErrorTip'))
+      //   return false
+      // }
       this.checkConcurrentRules()
-      if (!this.concurrentRules) {
+      // if (!this.concurrentRules) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.concurrentRules')
+      //   )
+      //   return false
+      // }
+      this.cheackPhaseRingNum()
+      if (this.phaseExceed) {
         this.$message.error(
-          this.$t('edge.errorTip.concurrentRules')
+          `${this.$t(`edge.errorTip.phaseExceed`)}`
         )
         return false
       }
@@ -684,6 +832,22 @@ export default {
         this.$message.error(
           this.$t('edge.errorTip.patternNotZero')
         )
+        return false
+      }
+      if (!this.patternCycleEqual) {
+        let mess = `方案${this.patternmsg.toString()}中存在环周期时长不一致`
+        if (this.$i18n.locale === 'en') {
+          mess = `The cycle of each ring is inconsistent in scheme${this.patternmsg.toString()}`
+        }
+        this.$message({
+          message: mess,
+          type: 'error',
+          dangerouslyUseHTMLString: true
+        })
+        return false
+      }
+      if (!this.splitCheck) {
+        // this.$message.error(this.$t('edge.pattern.splitCheckMsg'))
         return false
       }
       this.checkDataRules()
@@ -733,13 +897,13 @@ export default {
         this.$message.error(this.planName + this.$t('edge.errorTip.planDate'))
         return false
       }
-      this.checkPatternRing()
-      if (!this.patternRing) {
-        this.$message.error(
-          this.$t('edge.errorTip.patternRing')
-        )
-        return false
-      }
+      // this.checkPatternRing()
+      // if (!this.patternRing) {
+      //   this.$message.error(
+      //     this.$t('edge.errorTip.patternRing')
+      //   )
+      //   return false
+      // }
       this.checkManualpanelIsNull()
       if (!this.manualpanelIsNull) {
         this.$message.error(
@@ -747,11 +911,11 @@ export default {
         )
         return false
       }
-      this.checkDeviceInfo()
-      if (!this.deviceinfo) {
-        this.$message.error(this.$t('edge.errorTip.deviceinformationnotnull'))
-        return false
-      }
+      // this.checkDeviceInfo()
+      // if (!this.deviceinfo) {
+      //   this.$message.error(this.$t('edge.errorTip.deviceinformationnotnull'))
+      //   return false
+      // }
       return true
     },
     checkDeviceInfo () {
@@ -791,12 +955,36 @@ export default {
       }
       this.phaseRing = true
     },
+    cheackPhaseRingNum () {
+      // 校验单个环最大16个相位
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
+      let ringNumMap = new Map()
+      this.exceedRing = []
+      for (let i = 0; i < phaseList.length; i++) {
+        let curring = phaseList[i].ring
+        if (ringNumMap.get(curring) === undefined) {
+          ringNumMap.set(curring, 1)
+        } else {
+          let curnum = ringNumMap.get(curring) + 1
+          ringNumMap.set(curring, curnum)
+        }
+      }
+      for (let [ring, ringNum] of ringNumMap) {
+        if (ringNum > 16) {
+          // 环相位数超过限制的16个
+          this.phaseExceed = true
+          this.exceedRing.push(ring)
+        } else {
+          this.phaseExceed = false
+        }
+      }
+    },
     checkConcurrentRules () {
       let phaseList = this.globalParamModel.getParamsByType('phaseList')
       let ringList = []
       let concurrentIsNull = false
       for (let phase of phaseList) {
-        if (phase.concurrent.length === 0) {
+        if (phase.concurrent && phase.concurrent.length === 0) {
           concurrentIsNull = true
         }
         ringList.push(phase.ring)
@@ -819,12 +1007,111 @@ export default {
     },
     checkPatternRules () {
       let patternList = this.globalParamModel.getParamsByType('patternList')
+      let phaseList = this.globalParamModel.getParamsByType('phaseList')
       for (let i = 0; i < patternList.length; i++) {
         if (patternList[i].ring === 0) {
           break
+        } else {
+          this.patternNotZero = true
+          let ringsList = patternList[i].rings
+          for (let j = 0; j < ringsList.length; j++) {
+            let list = ringsList[j]
+            if (list && list.length > 0) {
+              for (let k = 0; k < list.length; k++) {
+                let ls = list[k]
+                let phase = phaseList.filter((item) => {
+                  return item.id === ls.id
+                })[0]
+                if (!phase) {
+                  continue
+                }
+                if (!phase.redyellow) {
+                  phase.redyellow = 0
+                }
+                if (!phase.yellow) {
+                  phase.yellow = 0
+                }
+                if (!phase.redclear) {
+                  phase.redclear = 0
+                }
+                if (!phase.flashgreen) {
+                  phase.flashgreen = 0
+                }
+                if (!phase.phasewalk) {
+                  phase.phasewalk = 0
+                }
+                if (!phase.pedclear) {
+                  phase.pedclear = 0
+                }
+                let temp1 = phase.yellow + phase.redclear + phase.flashgreen // 绿信比的最小值要大于最小绿+黄灯+全红+绿闪
+                let temp2 = phase.yellow + phase.redclear + phase.phasewalk + phase.pedclear
+                ls.minSplit = temp1 > temp2 ? temp1 : temp2
+                if (ls.mode !== 7 && ls.value < ls.minSplit) {
+                  // ls.value = ls.minSplit
+                  this.splitCheck = false
+                  // console.log('相位：', phase)
+                  let phaseid = phase.id
+                  let flashgreen = phase.flashgreen
+                  let yellow = phase.yellow
+                  let redclear = phase.redclear
+                  let phasewalk = phase.phasewalk
+                  let pedclear = phase.pedclear
+                  let value = ls.value
+                  let pattenid = i + 1
+                  let msg1 = `相位[${phaseid}]的 绿闪[${flashgreen}] + 黄灯[${yellow}] + 全红[${redclear}] 时间之和大于方案[${pattenid}]中的相位配时[${value}]`
+                  let msg2 = `相位[${phaseid}]的行 人过街[${phasewalk}] + 行人清空[${pedclear}] + 黄灯[${yellow}] + 全红[${redclear}]时间之和大于方案[${pattenid}]中的相位配时[${value}]`
+                  if (this.$i18n.locale === 'en') {
+                    msg1 = `In phase[${phaseid}], flashgreen[${flashgreen}] + yellow[${yellow}]+ redclear[${redclear}] is longgger than pattern[${pattenid}]'s phase config time'[${value}]`
+                    msg2 = `In phase[${phaseid}], phasewalk[${phasewalk}]+ pedclear[${pedclear}]+ yellow[${yellow}]+ redclear[${redclear}] is longgger than pattern[${pattenid}]'s phase config time[${value}]`
+                  }
+                  let msg = temp1 > temp2 ? msg1 : msg2
+                  this.$message.error(msg)
+                  break
+                }
+              }
+            }
+            if (!this.splitCheck) {
+              // console.log('环：', list)
+              break
+            }
+          }
         }
-        this.patternNotZero = true
+        if (!this.splitCheck) {
+          // console.log('方案', i)
+          break
+        }
       }
+      if (!this.isRingCycleEqual(patternList)) {
+        this.patternCycleEqual = false
+      } else {
+        this.patternCycleEqual = true
+      }
+    },
+    isRingCycleEqual (patternlist) {
+      let isequal = true
+      this.patternmsg = []
+      for (let pattern of patternlist) {
+        let rings = pattern.rings
+        let maxCycle = 0
+        for (let ring of rings) {
+          if (ring.length === 0) continue
+          let cycle = 0
+          for (let r of ring) {
+            if (r.mode === 7) { // 忽略相位不计周期
+              continue
+            }
+            cycle = cycle + r.value
+          }
+          if (cycle > maxCycle && maxCycle === 0) {
+            maxCycle = cycle
+          }
+          if (cycle !== maxCycle) {
+            this.patternmsg.push(pattern.id)
+            isequal = false
+          }
+        }
+      }
+      return isequal
     },
     checkDataRules () {
       let dateList = this.globalParamModel.getParamsByType('dateList')
@@ -1008,14 +1295,30 @@ export default {
           break
         case 'b': this.logout()
           break
+        case 'about': this.showVersion()
+          break
+        case 'help': this.showHelp()
+          break
         default: router.push({ path: '/' })
+      }
+    },
+    showVersion () {
+      let versionInfoChild = this.$refs.versioninfoChild
+      versionInfoChild.showMessage()
+    },
+    showHelp () {
+      if (this.$i18n.locale === 'zh') {
+        window.open('/UserManual/openatcConfig/zh/index.html')
+      }
+      if (this.$i18n.locale === 'en') {
+        window.open('/UserManual/openatcConfig/en/index.html')
       }
     },
     showInfo (val) {
       if (!val) return
       getInfo().then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.userInfo = data.data.data
@@ -1036,25 +1339,28 @@ export default {
         return false
       }
     },
-    extendErrorCodeMap () {
-      let patternInitCode = 3000
-      let channelInitCode = 1200
-      let mes = ''
-      let enMes = ''
-      for (let i = 1; i < 109; i++) {
-        patternInitCode++
-        mes = '方案' + i + '环内存在相位并发冲突'
-        enMes = 'There is phase concurrency conflict in pattern' + i
-        this.errorCodeMap.set(patternInitCode, mes)
-        this.errorCodeMapEn.set(patternInitCode, enMes)
-      }
-      for (let j = 1; j < 41; j++) {
-        channelInitCode++
-        mes = '时段' + j + '锁定通道的控制源未被忽略'
-        enMes = 'The control source of the locked channel in period' + j + 'is not ignored'
-        this.errorCodeMap.set(channelInitCode, mes)
-        this.errorCodeMapEn.set(channelInitCode, enMes)
-      }
+    // extendErrorCodeMap () {
+    //   let patternInitCode = 3000
+    //   let channelInitCode = 1200
+    //   let mes = ''
+    //   let enMes = ''
+    //   for (let i = 1; i < 109; i++) {
+    //     patternInitCode++
+    //     mes = '方案' + i + '环内存在相位并发冲突'
+    //     enMes = 'There is phase concurrency conflict in pattern' + i
+    //     errorCodeMap.set(patternInitCode, mes)
+    //     errorCodeMapEn.set(patternInitCode, enMes)
+    //   }
+    //   for (let j = 1; j < 41; j++) {
+    //     channelInitCode++
+    //     mes = '时段' + j + '锁定通道的控制源未被忽略'
+    //     enMes = 'The control source of the locked channel in period' + j + 'is not ignored'
+    //     errorCodeMap.set(channelInitCode, mes)
+    //     errorCodeMapEn.set(channelInitCode, enMes)
+    //   }
+    // }
+    clickSwitchIcon (isShowGUI) {
+      this.$store.dispatch('SetShowGui', isShowGUI)
     }
   }
 }
@@ -1139,7 +1445,6 @@ export default {
   width: 58px;
   height: 21px;
   margin-top: 10px;
-  font-family: MicrosoftYaHei;
   font-size: 20px;
   font-weight: normal;
   font-stretch: normal;
@@ -1157,7 +1462,6 @@ export default {
 .laber-name {
   width: 48px;
   height: 13px;
-  font-family: MicrosoftYaHei;
   font-size: 12px;
   font-weight: normal;
   font-stretch: normal;
@@ -1167,7 +1471,6 @@ export default {
 }
 .laber-value {
   margin-top: 5px;
-  font-family: MicrosoftYaHei;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -1177,7 +1480,6 @@ export default {
 }
 .pass-expire {
   margin-top: 5px;
-  font-family: MicrosoftYaHei;
   font-size: 12px;
   font-weight: normal;
   font-stretch: normal;

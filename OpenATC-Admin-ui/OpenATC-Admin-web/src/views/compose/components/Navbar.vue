@@ -15,18 +15,56 @@
     <div class="openatc-main">OpenATC-Admin</div>
     <div class="openatc-line"></div>
     <div class="openatc-menu">
-      <el-menu-item index="home" style="display:inline">{{$t('openatc.main.homepage')}}</el-menu-item>
-      <el-menu-item index="gis" style="display:inline">{{$t('openatc.main.gis')}}</el-menu-item>
-      <el-menu-item index="device" style="display:inline">{{$t('openatc.main.devicemanager')}}</el-menu-item>
-      <el-menu-item index="user" style="display:inline">{{$t('openatc.main.usermanager')}}</el-menu-item>
-      <el-menu-item index="greenwave" style="display:inline">{{$t('openatc.main.greenwaveoptimize')}}</el-menu-item>
-      <el-menu-item index="operate" style="display:inline">{{$t('openatc.main.operationrecord')}}</el-menu-item>
-      <el-menu-item index="organization" style="display:inline">{{$t('openatc.main.organization')}}</el-menu-item>
-      <el-menu-item index="dutyroute" style="display:inline">{{$t('openatc.main.dutyroute')}}</el-menu-item>
+      <el-menu-item index="home" style="display:inline">
+        <i class="iconfont icon-zhuye1"></i>{{$t('openatc.main.homepage')}}
+      </el-menu-item>
+      <el-menu-item index="device" style="display:inline">
+        <i class="iconfont icon-shebeiguanli"></i>{{$t('openatc.main.devicemanager')}}
+      </el-menu-item>
+      <el-menu-item index="dutyroute" style="display:inline">
+        <i class="iconfont icon-qinwuluxian"></i>{{$t('openatc.main.dutyroute')}}
+      </el-menu-item>
+      <el-menu-item index="greenwave" style="display:inline">
+        <i class="iconfont icon-jingtailvbo"></i>{{$t('openatc.main.greenwaveoptimize')}}
+      </el-menu-item>
+      <el-menu-item index="bottleneckcontrol" style="display:inline">
+        <i class="iconfont icon-pingjingkongzhi"></i>{{$t('openatc.main.bottleneckcontrol')}}
+      </el-menu-item>
+      <el-menu-item index="gis" style="display:inline">
+        <el-dropdown trigger="click" @command="handleSelect">
+          <span class="el-dropdown-link">
+            <i class="iconfont icon-lukou"></i>{{$t('openatc.main.gis')}}
+            <i class="el-icon-arrow-down menu-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="deviceState">{{this.$t('openatc.gis.deviceState') }}</el-dropdown-item>
+            <el-dropdown-item command="dutyRoute">{{this.$t('openatc.gis.dutyRoute') }}</el-dropdown-item>
+            <el-dropdown-item command="coordinateRoute">{{this.$t('openatc.gis.coordinateRoute') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+      <el-menu-item index="others" style="display:inline">
+        <el-dropdown trigger="click" @command="handleSelect">
+          <span class="el-dropdown-link">
+            <i class="iconfont icon-pingjia"></i>{{$t('openatc.main.other')}}
+            <i class="el-icon-arrow-down menu-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="operate">{{$t('openatc.main.operationrecord')}}</el-dropdown-item>
+            <el-dropdown-item command="organization">{{$t('openatc.main.organization')}}</el-dropdown-item>
+            <el-dropdown-item command="user">{{$t('openatc.main.usermanager')}}</el-dropdown-item>
+            <el-dropdown-item command="jupyter">{{$t('openatc.main.script')}}</el-dropdown-item>
+            <el-dropdown-item command="faultrecord">{{$t('openatc.main.faultrecord')}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
     </div>
     <div class="openatc-operate">
       <div class="admin">
-        <el-dropdown trigger="click" @command="handleCommand" @visible-change="showInfo">
+        <el-dropdown trigger="click"
+                     :hide-on-click= "false"
+                     @command="handleCommand"
+                     @visible-change="showInfo">
           <span class="el-dropdown-link">
             {{userInfo.user_name}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
@@ -59,45 +97,131 @@
                 <div class="laber-value">{{userInfo.email}}</div>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item divided command="a">{{$t('openatc.main.changepass')}}</el-dropdown-item>
-            <el-dropdown-item command="b">{{$t('openatc.main.about')}}</el-dropdown-item>
-            <el-dropdown-item command="c">{{$t('openatc.main.signout')}}</el-dropdown-item>
+            <el-dropdown-item divided command="switchTheme">
+              <el-dropdown trigger="click" @command="switchTheme">
+                <span class="el-dropdown-link">
+                  {{$t('openatc.main.skin')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="dark">{{$t('openatc.main.dark')}}</el-dropdown-item>
+                  <el-dropdown-item command="light">{{$t('openatc.main.light')}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <br/>
+              <el-dropdown trigger="click" @command="switchLanguage">
+                <span class="el-dropdown-link">
+                  {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="Ch">中文</el-dropdown-item>
+                  <el-dropdown-item command="En">English</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-dropdown-item>
+            <el-dropdown-item divided command="changepass">{{$t('openatc.main.changepass')}}</el-dropdown-item>
+            <el-dropdown-item command="systemsettings">{{$t('openatc.main.systemsettings')}}</el-dropdown-item>
+            <el-dropdown-item command="about">{{$t('openatc.main.about')}}</el-dropdown-item>
+            <el-dropdown-item command="signout">{{$t('openatc.main.signout')}}</el-dropdown-item>
+            <!-- <el-dropdown-item command="opentapd">跳转</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
-    <div class="switch-language">
-        <el-dropdown trigger="click" @command="switchLanguage">
-          <span class="el-dropdown-link">
-            {{$t('openatc.main.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="Ch">中文</el-dropdown-item>
-            <el-dropdown-item command="En">English</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
+      <el-drawer
+        title="故障列表"
+        :visible.sync="drawer"
+        :with-header="true">
+        <span>
+          <el-card v-for="(fault,index) in faultData" :key="index" class="box-card" style="margin:10px 16px">
+            <div slot="header" class="clearfix">
+              <i class="el-icon-location-outline" type="primary"></i>
+              <span>{{$t('openatc.faultrecord.deviceid')}}</span>
+              <el-button style="float: right; padding: 3px 0" type="text">
+                <i class="el-icon-close"></i>
+              </el-button>
+            </div>
+            <div class="text item">
+              <el-row :gutter="20" class="row-bg">
+                <el-col :span="12">
+                  <el-row :gutter="0">
+                    <el-col :span="10">
+                      <div class="grid-content-label">
+                        {{ $t("openatc.faultrecord.deviceid") }}:
+                      </div>
+                    </el-col>
+                    <el-col :span="14">
+                      <div class="grid-content bg-purple">
+                       {{fault.agentid}}
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20"  class="row-bg">
+                <el-col :span="12">
+                  <el-row :gutter="0">
+                    <el-col :span="10">
+                      <div class="grid-content-label">
+                        {{ $t("openatc.devicemanager.faultOccurtime") }}:
+                      </div>
+                    </el-col>
+                    <el-col :span="14">
+                      <div class="grid-content bg-purple">
+                        {{fault.m_unFaultOccurTime}}
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" class="row-bg">
+                <el-col :span="12">
+                  <el-row :gutter="0">
+                    <el-col :span="10">
+                      <div class="grid-content-label">
+                        {{ $t("openatc.faultrecord.fixdetail") }}:
+                      </div>
+                    </el-col>
+                    <el-col :span="14">
+                      <div class="grid-content bg-purple">
+                        {{fault.m_byFaultDescValue}}
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+            </div>
+          </el-card>
+        </span>
+      </el-drawer>
+    <div class="alarm-message">
+      <el-badge is-dot class="item">
+        <i class="el-icon-message-solid"></i>
+      </el-badge>
+    </div>
   </el-menu>
   <modifypasswd ref="modifypasswdChild"></modifypasswd>
   <versioninfo ref="versioninfoChild"></versioninfo>
-  <!-- <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
-    <div>123456</div>
-</el-dialog> -->
+  <SystemSettings ref="settinngChild"></SystemSettings>
   </div>
 </template>
 <script>
 import router from '@/router'
+import FaultEventData from '@/model/EventModal/faultData.js'
 import modifypasswd from './modifyPasswd'
 import versioninfo from './versionInfo'
+import SystemSettings from './SystemSettings'
 import { mapState } from 'vuex'
 import { getInfo } from '@/api/login'
-import { setLanguage } from '@/utils/auth'
+import { setLanguage, getTheme, setTheme } from '@/utils/auth'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'navbar',
-  components: { modifypasswd, versioninfo },
+  components: { modifypasswd, versioninfo, SystemSettings },
   data () {
     return {
+      faultData: [],
       activeIndex: '',
+      drawer: false,
       routerPath: {
         home: '/home',
         gis: '/gis',
@@ -106,7 +230,10 @@ export default {
         greenwave: '/greenWaveOptimize',
         operate: '/operaterecord',
         organization: '/organization',
-        dutyroute: '/dutyroute'
+        dutyroute: '/dutyroute',
+        jupyter: '/jupyter',
+        faultrecord: '/faultrecord',
+        bottleneckcontrol: '/bottleneckControl'
       },
       roleType: ['', 'success', 'warning'],
       isShow: true,
@@ -144,9 +271,31 @@ export default {
     if (this.fromKstpPath.indexOf(this.devicePath) !== -1) {
       this.isShow = false
     }
+    // this.handleFaultEventData()
+  },
+  mounted () {
+    // 订阅故障测试
+    this.FaultEventData = new FaultEventData()
+    this.FaultEventData.Init(this.handleFaultEventData)
+    if (getTheme() === 'dark') {
+      require('../../../styles/dark/theme/element-dark.scss')
+    } else {
+      require('../../../styles/light/theme/element-light.scss')
+    }
   },
   methods: {
+    handleFaultEventData (data) {
+      // debugger
+      // console.log(data, 777)
+      this.faultData = data
+    },
     handleJump (key) {
+      if (key === 'deviceState' || key === 'dutyRoute' || key === 'coordinateRoute') {
+        this.$store.dispatch('SetGisBizType', key)
+        if (this.$route.path === this.routerPath.gis) {
+          return false
+        }
+      }
       router.push({
         path: this.routerPath[key]
       })
@@ -158,15 +307,25 @@ export default {
     },
     handleCommand (command) {
       switch (command) {
-        case 'a': this.modifyPasswd()
+        case 'changepass': this.modifyPasswd()
           break
-        case 'b': this.showVersion()
+        case 'about': this.showVersion()
           break
-        case 'c': this.logout()
+        case 'signout': this.logout()
+          break
+        case 'systemsettings': this.showSettings()
+          break
+        case 'switchTheme':
+          break
+        case 'switchLanguage':
           break
         default: router.push({ path: '/' })
       }
     },
+    // opentapd () {
+    //   window.open('https://www.tapd.cn/42881942/documents/file_list/1142881942001014450')
+    //   // window.location.href = 'https://www.tapd.cn/42881942/documents/file_list/1142881942001014450'
+    // },
     showVersion () {
       let versionInfoChild = this.$refs.versioninfoChild
       versionInfoChild.showMessage()
@@ -179,6 +338,10 @@ export default {
     modifyPasswd () {
       let modifypasswdChild = this.$refs.modifypasswdChild
       modifypasswdChild.onPasswdClick(this.userInfo.user_name)
+    },
+    showSettings () {
+      let settinngChild = this.$refs.settinngChild
+      settinngChild.show()
     },
     setActive (path) {
       // 设置当前激活导航栏
@@ -200,7 +363,7 @@ export default {
       if (!val) return
       getInfo().then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.userInfo = data.data.data
@@ -219,6 +382,27 @@ export default {
           break
       }
     },
+    switchTheme (command) {
+      switch (command) {
+        case 'dark':
+          this.switchToDark()
+          break
+        case 'light':
+          this.switchToLight()
+          break
+        default:
+          console.log(command)
+          break
+      }
+    },
+    switchToDark () {
+      setTheme('dark')
+      location.reload()
+    },
+    switchToLight () {
+      setTheme('light')
+      location.reload()
+    },
     switchToChinese () {
       this.$i18n.locale = 'zh'
       setLanguage(this.$i18n.locale)
@@ -233,38 +417,9 @@ export default {
 }
 </script>
 <style lang="scss">
- @import "../../../styles/theme/element-variables.scss";
+ //  @import "../../../styles/theme/element-variables.scss";
 .el-menu-demo {
   padding: 0 18px;
-}
-.openatc-main {
-  float:left;
-  height: 50px;
-  line-height: 50px;
-  font-family: MicrosoftYaHei;
-  font-size: 22px;
-  font-weight: bold;
-  font-stretch: normal;
-  letter-spacing: 0px;
-  color: $--color-text-primary;
-}
-.openatc-line {
-  float:left;
-  margin-left: 20px;
-  margin-top: 19px;
-  width: 1px;
-  height: 14px;
-  background-color: $--color-text-placeholder;
-}
-.openatc-menu {
-  float:left;
-  font-family: MicrosoftYaHei;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-primary;
 }
 .openatc-operate {
   cursor: pointer;
@@ -275,88 +430,12 @@ export default {
     float: left;
   }
 }
-.el-menu-demo  {
-.el-dropdown-menu {
-  width: 228px;
-  .el-dropdown-menu__item {
-    color: $--color-text-regular;
-  }
-  .label {
-    font-size: 12px;
-    color: $--color-text-secondary;
-    margin-bottom: 12px;
-  }
-  .content {
-    font-size: 12px;
-    color: $--color-text-primary;
-  }
-  .user {
-    font-family: MicrosoftYaHei;
-    padding: 0 24px;
-    .name {
-      font-size: 20px;
-      color: $--color-primary;
-      margin-bottom: 14px;
-      margin-top: 13px;
-    }
-  }
-  .message {
-    font-family: MicrosoftYaHei;
-    padding: 16px 24px 0 24px;
-    margin-bottom: 10px;
-    .email {
-      margin-top: 22px;
-    }
-    .content {
-      font-size: 14px;
-    }
-  }
+</style>
+<style scoped>
+.openatc-navbar >>> .iconfont {
+    margin-right: 5px;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
 }
-}
-.user-name {
-  width: 58px;
-  height: 21px;
-  margin-top: 10px;
-  font-family: MicrosoftYaHei;
-  font-size: 20px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-primary;
-}
-.organization {
-  margin-top: 8px;
-}
-.real-name {
-  margin-top: 14px;
-  margin-bottom: 10px;
-}
-.laber-name {
-  width: 48px;
-  height: 13px;
-  font-family: MicrosoftYaHei;
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-text-secondary;
-}
-.laber-value {
-  margin-top: 5px;
-  font-family: MicrosoftYaHei;
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  line-height: 14px;
-  letter-spacing: 0px;
-  color: $--color-text-primary;
-}
-.switch-language {
-    cursor: pointer;
-    margin-top: 17px;
-    margin-right: 30px;
-    float: right;
-  }
 </style>

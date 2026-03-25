@@ -9,7 +9,8 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-export const images = [{
+import store from '../../store'
+let images = [{
   id: 1,
   // name: 'East-Straight',
   name: 'edge.phase.es',
@@ -121,3 +122,121 @@ export const images = [{
   // img: require('./images/South-Back.svg'),
   class: 'iconfont icon-icon-test1'
 }]
+
+const pedimages = [
+  {
+    id: 1,
+    name: 'edge.phase.eped',
+    img: require('../../assets/sidewalk_type/east-ped.svg')
+  // class: 'iconfont icon-donghangren'
+  },
+  {
+    id: 2,
+    name: 'edge.phase.wped',
+    img: require('../../assets/sidewalk_type/west-ped.svg')
+  // class: 'iconfont icon-xihangren'
+  },
+  {
+    id: 3,
+    name: 'edge.phase.sped',
+    img: require('../../assets/sidewalk_type/south-ped.svg')
+  // class: 'iconfont icon-nanhangren'
+  },
+  {
+    id: 4,
+    name: 'edge.phase.nped',
+    img: require('../../assets/sidewalk_type/north-ped.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 5,
+    name: 'edge.phase.etped',
+    img: require('../../assets/sidewalk_type/east-top.svg')
+  // class: 'iconfont icon-xihangren'
+  }, {
+    id: 6,
+    name: 'edge.phase.ebped',
+    img: require('../../assets/sidewalk_type/east-bottom.svg')
+  // class: 'iconfont icon-donghangren'
+  },
+  {
+    id: 7,
+    name: 'edge.phase.wtped',
+    img: require('../../assets/sidewalk_type/west-top.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 8,
+    name: 'edge.phase.wbped',
+    img: require('../../assets/sidewalk_type/west-bottom.svg')
+  // class: 'iconfont icon-nanhangren'
+  },
+  {
+    id: 9,
+    name: 'edge.phase.slped',
+    img: require('../../assets/sidewalk_type/south-left.svg')
+  // class: 'iconfont icon-xihangren'
+  }, {
+    id: 10,
+    name: 'edge.phase.srped',
+    img: require('../../assets/sidewalk_type/south-right.svg')
+  // class: 'iconfont icon-donghangren'
+  },
+  {
+    id: 11,
+    name: 'edge.phase.nlped',
+    img: require('../../assets/sidewalk_type/north-left.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 12,
+    name: 'edge.phase.nrped',
+    img: require('../../assets/sidewalk_type/north-right.svg')
+  // class: 'iconfont icon-nanhangren'
+  },
+  {
+    id: 13,
+    name: 'edge.phase.xrped',
+    img: require('../../assets/sidewalk_type/X-right.svg')
+  // class: 'iconfont icon-xihangren'
+  }, {
+    id: 14,
+    name: 'edge.phase.xlped',
+    img: require('../../assets/sidewalk_type/X-left.svg')
+  // class: 'iconfont icon-donghangren'
+  },
+  {
+    id: 15,
+    name: 'edge.phase.ewped',
+    img: require('../../assets/sidewalk_type/east-west-ped.svg')
+  // class: 'iconfont icon-beihangren'
+  },
+  {
+    id: 16,
+    name: 'edge.phase.snped',
+    img: require('../../assets/sidewalk_type/south-north-ped.svg')
+  // class: 'iconfont icon-nanhangren'
+  }]
+
+const getPhase = () => {
+  if (store.getters.roadDirection === 'left') {
+    // 左行下，掉头图标替换
+    images.forEach((img) => {
+      if (img.id === 4) {
+        img.class = 'iconfont icon-dongtiaotou-yinni'
+      }
+      if (img.id === 8) {
+        img.class = 'iconfont icon-xitiaotou-yinni'
+      }
+      if (img.id === 12) {
+        img.class = 'iconfont icon-beitiaotou-yinni'
+      }
+      if (img.id === 16) {
+        img.class = 'iconfont icon-nantiaotou-yinni'
+      }
+    })
+  }
+  return images
+}
+
+export {pedimages, getPhase}

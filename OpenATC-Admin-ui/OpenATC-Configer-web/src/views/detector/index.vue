@@ -10,15 +10,10 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container" ref="detector-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-button style="margin-bottom:10px" type="primary" @click="deleteAllData">{{$t('edge.common.deleteall')}}</el-button>
     <el-table class="tb-edit" ref="singleTable" :data="detectorList" v-loading.body="listLoading" element-loading-text="Loading" fit highlight-current-row v-clickoutside="cancelTable" :max-height="tableHeight" id="footerBtn">
-      <el-table-column align="center" label='No' min-width="40">
-        <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label='ID' min-width="40">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
@@ -207,7 +202,6 @@ export default {
   data () {
     return {
       tableHeight: 760,
-      screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false,
       CallPhaseOption: [],
       id: 1,
@@ -250,27 +244,13 @@ export default {
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
+      _this.tableHeight = _this.$refs['detector-container'].offsetHeight - 80
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['detector-container'].offsetHeight - 80
       }
     })
   },
   watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
-    },
     detectorList: function () {
       this.init()
     }
@@ -390,7 +370,7 @@ export default {
       //   )
       //   return
       // }
-      if (this.globalParamModel.getParamLength('detectorList') >= 72) {
+      if (this.globalParamModel.getParamLength('detectorList') >= 64) {
         this.$message.error(
           this.$t('edge.detector.mostdata')
         )

@@ -145,15 +145,6 @@ const subRouter = [{
     }
   },
   {
-    path: 'channelLock',
-    name: 'ChannelLock',
-    component: () => import('@/views/channelLock/index'),
-    meta: {
-      title: 'edge.route.channelLock',
-      icon: 'channellock'
-    }
-  },
-  {
     path: 'detector',
     name: 'Detector',
     component: () => import('@/views/detector/index'),
@@ -171,13 +162,31 @@ const subRouter = [{
       icon: 'peddetector'
     }
   },
+  // {
+  //   path: 'deviceInfo',
+  //   name: 'deviceInfo',
+  //   component: () => import('@/views/deviceInfo/index'),
+  //   meta: {
+  //     title: 'edge.route.deviceInfo',
+  //     icon: 'deviceinfo'
+  //   }
+  // },
   {
-    path: 'deviceInfo',
-    name: 'deviceInfo',
-    component: () => import('@/views/deviceInfo/index'),
+    path: 'adaptiveParameter',
+    name: 'adaptiveParameter',
+    component: () => import('@/views/adaptiveParameter/index'),
     meta: {
-      title: 'edge.route.deviceInfo',
-      icon: 'deviceinfo'
+      title: 'edge.route.adaptiveParameter',
+      icon: 'adaptiveParameter'
+    }
+  },
+  {
+    path: 'channelLock',
+    name: 'ChannelLock',
+    component: () => import('@/views/channelLock/index'),
+    meta: {
+      title: 'edge.route.channelLock',
+      icon: 'channellock'
     }
   },
   {
@@ -268,6 +277,11 @@ const subRouter = [{
       icon: 'statistics'
     }
   }]
+},
+{
+  path: '*',
+  redirect: '/404',
+  hidden: true
 }
 ]
 

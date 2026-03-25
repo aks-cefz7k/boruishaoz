@@ -66,6 +66,15 @@
         </el-select>
       </el-form-item>
       <el-form-item
+            :label="$t('openatc.devicemanager.IP')"
+            prop="login_ip_limit">
+            <el-input
+            type="text"
+            v-model="tempUser.login_ip_limit"
+            @keyup.enter.native="createUser">
+            </el-input>
+        </el-form-item>
+      <el-form-item
         :label="$t('openatc.usermanager.realname')"
         prop="nick_name">
         <el-input
@@ -124,9 +133,27 @@
 */
 import { AddUsr, getRoles } from '../../../api/user'
 import chooseOrganizationDialog from '@/views/Organization/components/chooseOrganizationDialog'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {chooseOrganizationDialog},
   data () {
+    var checkIp = (rule, value, callback) => {
+      // if (value === '') {
+      //   return callback(
+      //     new Error(this.$t('openatc.devicemanager.enterIp'))
+      //   )
+      // }
+      const ipReg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+      if (ipReg.test(value)) {
+        this.ip_status = true
+        callback()
+      } else {
+        this.ip_status = false
+        return callback(
+          new Error(this.$t('openatc.devicemanager.correctIp'))
+        )
+      }
+    }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('openatc.usermanager.enterpass')))
@@ -187,6 +214,7 @@ export default {
         newpass: '',
         checkpass: '',
         nick_name: '',
+        login_ip_limit: '',
         email: '',
         mobile_phone: '',
         organization: ''
@@ -194,6 +222,9 @@ export default {
       rules: {
         user_name: [
           { required: true, validator: checkName, trigger: 'blur' }
+        ],
+        login_ip_limit: [
+          { validator: checkIp, trigger: 'blur' }
         ],
         // roles: [
         //   { required: true, message: '请至少选择一个角色', trigger: 'blur' }
@@ -229,7 +260,7 @@ export default {
             this.$message.error(this.$t('openatc.common.authtip'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         let rolesData = res.data.data
@@ -271,11 +302,11 @@ export default {
         this.tempUser.mobile_phone,
         this.tempUser.newpass,
         this.roleNames,
-        this.tempUser.organization
+        this.tempUser.organization,
+        this.tempUser.login_ip_limit
       ).then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = this.$t('openatc.common.addsuccess')

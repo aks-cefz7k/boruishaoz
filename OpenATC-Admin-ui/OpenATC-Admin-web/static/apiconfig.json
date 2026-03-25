@@ -80,6 +80,11 @@
     "method": "put"
   },
   {
+    "key": "updateDeviceId",
+    "url": "/devs/agentid",
+    "method": "post"
+  },
+  {
     "key": "addDevice",
     "url": "/devs",
     "method": "post"
@@ -92,6 +97,11 @@
   {
     "key": "getSimpleRoute",
     "url": "/route/simple",
+    "method": "get"
+  },
+  {
+    "key": "GetAllRoute",
+    "url": "/route",
     "method": "get"
   },
   {
@@ -228,5 +238,130 @@
     "key": "getViprouteStatus",
     "url": "/viproute",
     "method": "get"
+  },
+  {
+    "key": "GetAllCurrentFault",
+    "url": "/fault/current",
+    "method": "get"
+  },
+  {
+    "key": "GetAllHistoryFault",
+    "url": "/fault/history",
+    "method": "get"
+  },
+  {
+    "key": "GetCurrentFaultByAgentid",
+    "url": "/fault",
+    "method": "get"
+  },
+  {
+    "key": "GetAllHistoryFaultByAgentid",
+    "url": "/fault",
+    "method": "get"
+  },
+  {
+    "key": "GetAllFaultRange",
+    "url": "/fault/range",
+    "method": "post"
+  },
+  {
+    "key": "GetAllFault",
+    "url": "/fault/all",
+    "method": "get"
+  },
+  {
+    "key": "DeleteFaultById",
+    "url": "/fault",
+    "method": "delete"
+  },
+  {
+    "key": "get_all_systemconfig",
+    "url": "/systemconfig",
+    "method": "get"
+  },
+  {
+    "key": "get_systemconfig_by_module",
+    "url": "/systemconfig",
+    "method": "get"
+  },
+  {
+    "key": "add_systemconfig",
+    "url": "/systemconfig",
+    "method": "post"
+  },
+  {
+    "key": "update_systemconfig",
+    "url": "/systemconfig",
+    "method": "put"
+  },
+  {
+    "key": "delete_systemconfig",
+    "url": "/systemconfig",
+    "method": "delete"
+  },
+  {
+    "key": "GetAllVideos",
+    "url": " /video",
+    "method": "get"
+  },
+  {
+    "key": "GetRouteVideos",
+    "url": "/video/list",
+    "method": "post"
+  },
+  {
+    "key": "GetCrossVideos",
+    "url": "/video",
+    "method": "get"
+  },
+  {
+    "key": "AddDeviceVideo",
+    "url": "/video",
+    "method": "post"
+  },
+  {
+    "key": "UpdateDeviceVideo",
+    "url": "/video",
+    "method": "put"
+  },
+  {
+    "key": "DeleteDeviceVideo",
+    "url": "/video/single",
+    "method": "delete"
+  },
+  {
+    "key": "get_overflow_detector",
+    "url": "/overflowdetector",
+    "method": "get"
+  },
+  {
+    "key": "add_overflow_detector",
+    "url": "/overflowdetector",
+    "method": "post"
+  },
+  {
+    "key": "update_overflow_detector",
+    "url": "/overflowdetector",
+    "method": "put"
+  },
+  {
+    "key": "del_overflow_detector",
+    "url": "/overflowdetector",
+    "method": "delete"
+  },
+  {
+    "key": "update_overflows",
+    "url": "/overflow",
+    "method": "put"
+  },
+  {
+    "key": "open_overflow_control",
+    "url": "/overflow/control",
+    "method": "post"
+  },
+  {
+    "key": "off_overflow_control",
+    "url": "/overflow/control",
+    "method": "post"
   }
 ]

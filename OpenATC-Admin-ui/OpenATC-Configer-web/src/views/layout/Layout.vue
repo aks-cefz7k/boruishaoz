@@ -10,12 +10,12 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-wrapper" :class="classObj">
+  <div class="app-wrapper" :class="classObj" id="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-    <sidebar class="sidebar-container"></sidebar>
-    <div class="main-container">
+    <sidebar class="sidebar-container" v-if="!hideMenu && !graphicMode"></sidebar>
+    <div class="edge-main-container" :class="{'changeMainPosition': hideMenu || graphicMode}">
       <navbar></navbar>
-      <app-main></app-main>
+      <app-main v-if="isload"></app-main>
     </div>
   </div>
 </template>
@@ -27,6 +27,8 @@ import GlobalParamsModel from '@/EdgeMgr/controller/globalParamsMgr'
 import { setIframdevid } from '@/utils/auth'
 // import { AddDevice } from '@/api/control'
 import router from '@/router'
+import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'Layout',
@@ -34,6 +36,15 @@ export default {
     Navbar,
     Sidebar,
     AppMain
+  },
+  data () {
+    return {
+      bodyDomSize: {
+        width: 1920,
+        height: 1080
+      },
+      isload: false
+    }
   },
   mixins: [ResizeMixin],
   computed: {
@@ -49,11 +60,16 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
-    }
+    },
+    ...mapState({
+      hideMenu: state => state.globalParam.hideMenu,
+      graphicMode: state => state.globalParam.graphicMode
+    })
   },
   watch: {
     $route: {
       handler: function (val, oldVal) {
+        this.getRoadConfig()
         this.$store.dispatch('SaveCurPath', val.path)
         if (this.$route.query !== undefined && this.$route.query.agentid !== undefined) {
           let agentId = this.$route.query.agentid
@@ -74,9 +90,19 @@ export default {
       },
       // 深度观察监听
       deep: true
+    },
+    bodyDomSize: {
+      handler: function (val) {
+        if (!document.getElementById('app')) {
+          this.$store.dispatch('SaveBodyDomSize', val)
+        }
+      },
+      // 深度观察监听
+      deep: true
     }
   },
   created () {
+    this.getRoadConfig()
     let globalParamsModel = new GlobalParamsModel()
     globalParamsModel.Init()
     if (this.$route.query.createdev === undefined) {
@@ -85,59 +111,58 @@ export default {
         setIframdevid(agentId)
       }
     }
-    //  else { // 单机设备情况下，需要先创建一个设备
-    //   let deviceInfo = {}
-    //   if (this.$route.query.agentid === undefined) {
-    //     deviceInfo.agentid = '0'
-    //     setIframdevid('0')
-    //   } else {
-    //     deviceInfo.agentid = this.$route.query.agentid
-    //     setIframdevid(this.$route.query.agentid)
-    //   }
-    //   // deviceInfo.agentid = '0'
-    //   deviceInfo.protocol = this.$route.query.protocol
-    //   deviceInfo.ip = this.$route.query.IP
-    //   deviceInfo.port = this.$route.query.port
-    //   deviceInfo.type = 'asc'
-    //   this.$store.dispatch('SaveDevParams', deviceInfo)
-    //   this.addDevice(deviceInfo)
-    // }
+  },
+  mounted () {
+    var _this = this
+    _this.$nextTick(function () {
+      if (!document.getElementById('app-wrapper')) {
+        this.bodyDomSize.width = document.getElementById('app-wrapper').clientWidth
+        this.bodyDomSize.height = document.getElementById('app-wrapper').clientHeight
+        this.$store.dispatch('SaveBodyDomSize', this.bodyDomSize)
+        window.addEventListener('resize', () => {
+        // 定义窗口大小变更通知事件
+          this.bodyDomSize.width = document.getElementById('app-wrapper').clientWidth
+          this.bodyDomSize.height = document.getElementById('app-wrapper').clientHeight
+        }, false)
+      }
+    })
   },
   methods: {
     handleClickOutside () {
       this.$store.dispatch('CloseSideBar', { withoutAnimation: false })
+    },
+    getRoadConfig () {
+      axios.get('./LRRoadConfig.json').then(val => {
+        // 读取左行 右行配置文件
+        let roadDir = val.data.roadDirection
+        // let roadDir = 'left'
+        this.$store.dispatch('SetRoadDirection', roadDir)
+        this.isload = true
+      })
     }
-    // addDevice (deviceInfo) {
-    //   AddDevice(deviceInfo).then(res => {
-    //     if (!res.data.success) {
-    //       console.log(new Error(res.data.message))
-    //       this.$message({
-    //         message: res.data.message,
-    //         type: 'error',
-    //         duration: 1 * 1000
-    //       })
-    //     }
-    //   })
-    // }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "src/styles/mixin.scss";
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
-  }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
+  // .app-wrapper {
+  //   @include clearfix;
+  //   position: relative;
+  //   height: 100%;
+  //   width: 100%;
+  //   background: red;
+  // }
+  // .drawer-bg {
+  //   background: red;
+  //   opacity: 0.3;
+  //   width: 100%;
+  //   top: 0;
+  //   height: 100%;
+  //   position: absolute;
+  //   z-index: 999;
+  // }
+  .changeMainPosition {
+    margin-left: 0px !important;
   }
 </style>

@@ -29,11 +29,10 @@
             <div class="current-phasetable">
               <el-table
                 :data="tableData"
+                max-height="324"
                 :span-method="objectSpanMethod"
                 :cell-class-name="addClass"
-                size="mini"
-                stripe
-                style="width: 100%">
+                size="mini">
                 <el-table-column
                   align="center"
                   prop="ring"
@@ -152,7 +151,6 @@ export default {
 //   align-items: center;
 //   justify-content: flex-start;
 //   width: 96%;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 16px;
 //   font-weight: normal;
 //   font-stretch: normal;

@@ -44,9 +44,9 @@
           class="deviceTable"
           :data="devicesTableData"
           row-key="id"
-          stripe
           v-loading.body="listLoading"
           style="width: 100%"
+          max-height="660px"
         >
           <el-table-column type="index" label="#" align="center">
           </el-table-column>
@@ -107,6 +107,7 @@ import Messagebox from '../../../components/MessageBox/index'
 import DeviceAdd from './components/deviceAdd'
 import { GetAllDevice } from '@/api/device'
 import Sortable from 'sortablejs'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'device',
   components: { Messagebox, DeviceAdd },
@@ -155,7 +156,7 @@ export default {
       GetAllDevice().then(res => {
         this.loading = false
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.allDevs = res.data.data

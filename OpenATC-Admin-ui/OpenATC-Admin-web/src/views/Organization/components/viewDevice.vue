@@ -33,7 +33,6 @@
       <div>
         <el-table
           :data="list"
-          stripe
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -127,6 +126,7 @@ import router from '@/router'
 import Messagebox from '@/components/MessageBox'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
 import { GetDevicesByOrgCode } from '@/api/relate'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'device',
   components: { Messagebox },
@@ -212,7 +212,7 @@ export default {
       this.listLoading = true
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
@@ -223,7 +223,7 @@ export default {
       this.listLoading = true
       GetDevicesByOrgCode(orgcd).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
@@ -247,7 +247,7 @@ export default {
       }
       router.push({
         path: !curPath || curPath === '/overview/index' ? '/overview/index' : curPath,
-        query: { IP: dev.jsonparam.ip, port: dev.jsonparam.port, agentid: dev.agentid, protocol: dev.protocol, isfromatc: true }
+        query: { agentid: dev.agentid, isfromatc: true }
       })
     },
     handleFilter () {
@@ -258,7 +258,7 @@ export default {
     ok () {
       DeleteDevice(this.deleteId).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           this.$message({
             message: this.$t('openatc.common.deletefailed'),
             type: 'error',
@@ -284,23 +284,23 @@ export default {
 </script>
 
 <style lang="scss">
- @import "../../../styles/theme/element-variables.scss";
-.tag-container {
-  float: left;
-  max-width: 70%;
-  overflow: hidden;
-}
-.filter-container {
-  float: right;
-  margin-top: 20px;
-  margin-right: 20px;
-}
-.devs-table {
-  position: absolute;
-  top: 134px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px $--border-color-lighter;
-  overflow: auto;
-}
+//  @import "../../../styles/theme/element-variables.scss";
+// .tag-container {
+//   float: left;
+//   max-width: 70%;
+//   overflow: hidden;
+// }
+// .filter-container {
+//   float: right;
+//   margin-top: 20px;
+//   margin-right: 20px;
+// }
+// .devs-table {
+//   position: absolute;
+//   top: 134px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+// }
 </style>

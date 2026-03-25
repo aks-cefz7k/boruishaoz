@@ -10,14 +10,31 @@
  * See the Mulan PSL v2 for more details.
  **/
 /* 改变主题色变量 */
-// $--color-text-regular: #0BE11D;
-// $--color-primary: #EE0767;
-// $--border-color-base: #0BA3E4;
-// $--color-text-placeholder: #2356BB;
-// $--color-text-primary: #E10FD7;
-// $--color-text-regular: #316ADD;
-// $--color-text-secondary: #2756B4;
-// $--color-info: #2756B4;
+// $--color-black: #f7f8fa;
+$--color-primary: #409EFF;
+$--color-white: #202940;
+$--color-black: #30384D;
+$--background-color-base: #191F34;
+$--color-text-primary: #FFFFFF;
+$--color-text-regular: #FFFFFF;
+$--color-text-secondary: #B9BABF;
+$--color-text-placeholder: #8D9498;
+$--color-info: #8D9498;
+$--border-color-base: #30384D;
+$--border-color-light: #61697B;
+$--border-color-lighter: #30384D;
+$--border-color-extra-light:#30384D;
+$--box-shadow-base: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+$--button-primary-font-color: #FFFFFF;
+$--button-info-font-color: #FFFFFF;
+$--button-warning-font-color: #FFFFFF;
+$--button-danger-font-color: #FFFFFF;
+$--button-success-font-color: #FFFFFF;
+$--radio-button-checked-font-color: #FFFFFF;
+$--radio-font-color: $--color-text-secondary;
+$--tag-info-color: $--color-text-placeholder;
+$--tooltip-color: $--color-white;
+$--checkbox-font-color: $--color-text-secondary;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';

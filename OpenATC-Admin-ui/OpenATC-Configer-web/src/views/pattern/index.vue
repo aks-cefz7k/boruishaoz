@@ -10,20 +10,88 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container" ref="pattern-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
-    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row @current-change="handleCurrentChange" @expand-change="expandChange" ref="singleTable" id="footerBtn">
+    <el-table :data="patternList" :max-height="tableHeight" highlight-current-row  @expand-change="expandChange" ref="singleTable" id="footerBtn">
       <el-table-column type="expand">
         <template slot-scope="scope">
-          <div class="components-container board">
-          <!-- <div class="components-container board" style="overflow-x:auto;"> -->
-            <Kanban v-for="n in ringCount" :key="n" class="kanban todo" :list="scope.row.rings[n-1]" :options="scope.row.options" :header-text="$t('edge.pattern.ring')+n" :index="scope.$index" @handleSplit="handleSplit"/>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="No" minWidth="40">
-        <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
+          <el-tabs v-model="activeList[scope.$index]" type="card" @tab-click="handleClick">
+            <el-tab-pane :label="$t('edge.pattern.ringConfig')" name="ring">
+              <el-row :gutter="20">
+                <el-col :span="12" >
+                  <div class="components-container board" >
+                    <Kanban v-for="n in ringCount"
+                            :key="n" class="kanban todo"
+                            :list="scope.row.rings[n-1]"
+                            :options="scope.row.options"
+                            :header-text="$t('edge.pattern.ring')+n"
+                            :index="scope.$index"
+                            @handleSplit="handleSplit"/>
+                  </div>
+                </el-col>
+                <el-col :span="12">
+                  <FollowPhase>
+
+                  </FollowPhase>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('edge.pattern.stageConfig')" name="stage">
+              <el-scrollbar :vertical="false">
+                <div class="stage-panel-contener">
+                  <StageKanban v-for="(stage,index) in stagesList"
+                    class="kanban todo"
+                    :key="index"
+                    :stage="stage"
+                    :options="scope.row.options"
+                    :header-text="$t('edge.pattern.stage') + Number(index + 1)"
+                    :rowIndex="scope.$index"
+                    :subIndex="index"
+                    @onStageSplitChange="onStageSplitChange"
+                    @onStageDelaystartChange="onStageDelaystartChange"
+                    @onStageAdvanceendChange="onStageAdvanceendChange"
+                    />
+                </div>
+              </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('edge.pattern.parameters')" name="parame">
+              <el-row :gutter="20">
+                <el-col :span="12">
+                 <div class="components-container board">
+                  <ExpendConfig class="kanban todo"
+                    v-for="(j,index) in ringCounts"
+                    :key="index"
+                    :header-text="$t('edge.pattern.ring')+j"
+                    :list="scope.row.rings[j-1]"
+                    :options="scope.row.options"
+                    />
+                </div>
+                </el-col>
+                <el-col :span="12">
+                  <div class="stage-item" style="margin: 30px 50px;">
+                    <el-row style="margin-top:10px">
+                      <el-col :span="8">
+                        {{$t('edge.pattern.forbiddenstage')}}
+                        <el-input class="stage-value" size="small" v-model="scope.row.forbiddenstage"></el-input>
+                      </el-col>
+                    </el-row>
+                    <el-row style="margin-top:10px">
+                      <el-col :span="8">
+                        {{$t('edge.pattern.screenstage')}}
+                        <el-input class="stage-value" size="small" v-model="scope.row.screenstage"></el-input>
+                      </el-col>
+                    </el-row>
+                    <el-row style="margin-top:10px">
+                      <el-col :span="8">
+                        {{$t('edge.pattern.coordinatestage')}}
+                        <el-input class="stage-value" size="small" v-model="scope.row.coordinatestage"></el-input>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-tab-pane>
+          </el-tabs>
         </template>
       </el-table-column>
       <el-table-column align="center" label="ID" minWidth="40">
@@ -43,52 +111,78 @@
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.cycle')" prop="cycle">
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.pattern.plan')" prop="plan" min-width="200px">
+        <template slot-scope="scope">
+            <div class="pattern-figure">
+              <BoardCard
+              :patternStatusList="scope.row.rings"
+              :cycles="scope.row.cycle"
+              :isPhase="false"
+              >
+              </BoardCard>
+            </div>
+         </template>
+      </el-table-column>
       <el-table-column align="center" :label="$t('edge.pattern.operation')" width="120">
         <template slot-scope="scope">
           <el-button type="text"  @click="handleDelete(scope.$index, scope.row)">{{$t('edge.common.delete')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div class="pattern-figure" v-show="isShowPatternStatus">
-      <div class="pattern-status">{{currPatternName}}</div>
-      <span class="pattern-explain">：绿信比</span>
-      <span class="pattern-explain" style="margin-right: 15px;">P相位</span>
-      <PatternStatus style="margin-top: 20px;" :patternStatusList="patternStatusList" :barrierList="barrierList"></PatternStatus>
-    </div>
   </div>
 </template>
 
 <script>
 import Kanban from '@/components/Kanban'
-import PatternStatus from '@/components/PatternStatus'
+import StageKanban from '@/views/pattern/StageKanban'
+import BoardCard from '@/components/BoardCard'
+import FollowPhase from '@/components/FollowPhase'
+import ExpendConfig from '@/components/ExpendConfig'
 import { mapState } from 'vuex'
+import { getTscControl } from '@/api/control'
+import { getIframdevid } from '@/utils/auth'
 export default {
   name: 'patterns',
   components: {
     Kanban,
-    PatternStatus
+    BoardCard,
+    FollowPhase,
+    ExpendConfig,
+    StageKanban
   },
   data () {
     return {
       tableHeight: 760,
-      screenHeight: window.innerHeight, // 屏幕高度
       ringCount: 1,
+      ringCounts: 1,
       addId: 1,
       options: {
         group: 'pattern'
       },
       id: 1,
-      patternStatusList: [],
       barrierList: [],
-      isShowPatternStatus: false,
       currPatternName: '--',
-      patternStatusIndex: -1
+      patternStatusIndex: -1,
+      // activeName: 'ring',
+      stagesList: [],
+      concurrentList: [],
+      barrId: [],
+      hideWidth: '',
+      newBarrid: [],
+      max: '',
+      stateList: [],
+      numList: [],
+      narr: [],
+      redux: ''
     }
   },
   computed: {
     ...mapState({
       patternList: state => state.globalParam.tscParam.patternList
-    })
+    }),
+    activeList () {
+      return this.patternList.map(i => 'ring')
+    }
   },
   created () {
     this.globalParamModel = this.$store.getters.globalParamModel
@@ -97,28 +191,15 @@ export default {
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                250
+      _this.tableHeight = _this.$refs['pattern-container'].offsetHeight - 80
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['pattern-container'].offsetHeight - 80
       }
     })
   },
   watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                250
-    },
     patternList: function (val) {
+      console.log(val)
       if (!val.length) return
       this.initData()
     }
@@ -137,6 +218,8 @@ export default {
       }
       this.ringCount = Array.from(new Set(rings)) // 去除数组重复的元素
       this.ringCount = this.ringCount.sort(this.sortNumbers) // 把数组中的值按照从小到大的顺序重新排序
+      this.ringCounts = Array.from(new Set(rings)) // 去除数组重复的元素
+      this.ringCounts = this.ringCounts.sort(this.sortNumbers) // 把数组中的值按照从小到大的顺序重新排序
       this.increaseId()
       this.getCycle()
       this.updatePhaseDescription()
@@ -145,13 +228,6 @@ export default {
     sortNumbers (a, b) {
       return a - b
     },
-    // increaseId () { // 实现id在之前的基础上加1
-    //   let patternList = this.globalParamModel.getParamsByType('patternList')
-    //   let i = patternList.length - 1
-    //   if (i >= 0) {
-    //     this.id = patternList[i].id + 1
-    //   }
-    // },
     increaseId () { // 实现id在之前的基础上寻找最小的
       let patternList = this.globalParamModel.getParamsByType('patternList')
       let patternIdList = patternList.map(ele => ele.id)
@@ -173,7 +249,7 @@ export default {
           type: 'warning'
         }).then(() => {
         if (value.id === this.patternStatusIndex) {
-          this.isShowPatternStatus = false
+          // this.isShowPatternStatus = false
           this.patternStatusIndex = -1
         }
         this.globalParamModel.deleteParamsByType('patternList', index, 1)
@@ -200,41 +276,22 @@ export default {
       var newPattern = JSON.parse(JSON.stringify(Pattern))
       const phaseList = JSON.parse(JSON.stringify(this.globalParamModel.getParamsByType('phaseList')))
       for (let phase of phaseList) {
+        let ring = {}
+        ring.name = 'Phase ' + phase.id
+        ring.desc = this.getPhaseDescription(phase.direction)
+        ring.id = phase.id
+        ring.value = 30
+        ring.mode = 2
+        ring.options = []
+        ring.delaystart = 0
+        ring.advanceend = 0
         if (phase.ring === 1) {
-          let ring = {}
-          ring.name = 'Phase ' + phase.id
-          ring.desc = this.getPhaseDescription(phase.direction)
-          ring.id = phase.id
-          ring.value = 30
-          ring.mode = 2
-          ring.options = []
           newPattern.rings[0].push(ring)
         } else if (phase.ring === 2) {
-          let ring = {}
-          ring.name = 'Phase ' + phase.id
-          ring.desc = this.getPhaseDescription(phase.direction)
-          ring.id = phase.id
-          ring.value = 30
-          ring.mode = 2
-          ring.options = []
           newPattern.rings[1].push(ring)
         } else if (phase.ring === 3) {
-          let ring = {}
-          ring.name = 'Phase ' + phase.id
-          ring.desc = this.getPhaseDescription(phase.direction)
-          ring.id = phase.id
-          ring.value = 30
-          ring.mode = 2
-          ring.options = []
           newPattern.rings[2].push(ring)
         } else if (phase.ring === 4) {
-          let ring = {}
-          ring.name = 'Phase ' + phase.id
-          ring.desc = this.getPhaseDescription(phase.direction)
-          ring.id = phase.id
-          ring.value = 30
-          ring.mode = 2
-          ring.options = []
           newPattern.rings[3].push(ring)
         }
         // pahseIndex++
@@ -249,7 +306,7 @@ export default {
         )
         return
       }
-      if (this.globalParamModel.getParamLength('patternList') >= 108) {
+      if (this.globalParamModel.getParamLength('patternList') >= 32) {
         this.$message.error(
           // 'There are at most 100 data !'
           this.$t('edge.pattern.mostdata')
@@ -302,7 +359,9 @@ export default {
       }
     },
     getDecimalSystem (list) {
+      if (!list) return
       let arr = []
+      // if (list === null || list === undefined || list.length === 0) return arr
       if (list[0] === 1) arr.push(1)
       if (list[1] === 1) arr.push(2)
       if (list[2] === 1) arr.push(4)
@@ -366,6 +425,7 @@ export default {
       }
     },
     getPhaseDescription (phaseList) {
+      if (!phaseList) return
       let list = []
       for (let id of phaseList) {
         let obj = {}
@@ -384,84 +444,134 @@ export default {
         this.$message.error('相位差不能大于周期！')
       }
     },
-    handleCurrentChange (val) {
-      if (val === null) return
-      this.patternStatusIndex = val.id
-      this.isShowPatternStatus = true
-      if (val.desc === '') {
-        this.currPatternName = 'pattern' + val.id
-      } else {
-        this.currPatternName = val.desc
-      }
-      let phaseList = this.globalParamModel.getParamsByType('phaseList')
-      this.patternStatusList = []
-      let cycle = val.cycle
-      for (let rings of val.rings) {
-        if (rings.length === 0) continue
-        let list = []
-        for (let ring of rings) {
-          if (ring.value === 0) continue
-          let obj = {}
-          let split = ring.value
-          obj.id = ring.id
-          obj.split = split
-          obj.direction = ring.desc.map(item => {
-            return {
-              id: item.id,
-              color: '#454545'
-            }
-          })
-          let currPhase = phaseList.filter((item) => {
-            return item.id === ring.id
-          })[0]
-          obj.redWidth = (currPhase.redclear / cycle * 100).toFixed(3) + '%'
-          obj.yellowWidth = (currPhase.yellow / cycle * 100).toFixed(3) + '%'
-          obj.greenWidth = ((split - currPhase.redclear - currPhase.yellow) / cycle * 100).toFixed(3) + '%'
-          list.push(obj)
-        }
-        this.patternStatusList.push(list)
-      }
-      this.handleBarrier(this.patternStatusList, phaseList)
-    },
-    handleBarrier (patternStatusList, phaseList) {
-      this.barrierList = []
-      if (patternStatusList.length < 2) return
-      let tempList = []
-      let barrierWidth = 0
-      let firstPatternStatus = patternStatusList[0]
-      for (let patternStatus of firstPatternStatus) {
-        let concurrent = phaseList.filter((item) => {
-          return item.id === patternStatus.id
-        })[0].concurrent
-        if (concurrent.length === 0) {
-          this.barrierList = []
-          return
-        }
-        if (!this.isEqualsForArray(tempList, concurrent)) {
-          tempList = concurrent
-          this.barrierList.push(barrierWidth)
-        }
-        barrierWidth = Number.parseFloat(barrierWidth) + Number.parseFloat(patternStatus.redWidth) + Number.parseFloat(patternStatus.yellowWidth) + Number.parseFloat(patternStatus.greenWidth) + '%'
-      }
-      this.barrierList.push(barrierWidth) // 添加末尾处的屏障
-    },
-    isEqualsForArray (listA, listB) {
-      return listA.length === listB.length && listA.every(a => listB.some(b => a === b)) && listB.every(_b => listA.some(_a => _a === _b))
-    },
     expandChange (val1, val2) {
       if (val1.desc === '') {
-        this.currPatternName = 'pattern' + val1.id
+        if (this.$i18n.locale === 'en') {
+          this.currPatternName = 'pattern' + val1.id
+        } else {
+          this.currPatternName = '方案' + val1.id
+        }
+        // this.currPatternName = 'pattern' + val1.id
       } else {
         this.currPatternName = val1.desc
       }
-      this.handleCurrentChange(val1)
-      // if (val2.length === 0) { // 此种情况为收起看板
-      //   this.handleCurrentChange(val1)
-      // }
+      // this.handleCurrentChange(val1)
+      if (val2.length > 0) { // 此种情况为收起看板
+        this.getRowStages(val1.rings)
+      }
     },
     handleSplit (index) {
       let currPattern = this.patternList[index]
-      this.handleCurrentChange(currPattern)
+      // this.handleCurrentChange(currPattern)
+      // this.currentPattern = this.patternList[index]
+      this.getRowStages(currPattern.rings)
+    },
+    handleClick (tab, event) {
+      if (tab.paneName === 'stage') {
+      }
+    },
+    getRowStages (rings) {
+      let agentId = getIframdevid()
+      // agentId = '40001'
+      if (!agentId) {
+        this.$message.warning(this.$t('edge.pattern.agentidError'))
+        return false
+      }
+      getTscControl(agentId).then((data) => {
+        this.intervalFlag = true
+        if (!data.data.success) {
+          if (data.data.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(data.data.message)
+          return
+        }
+        let TscData = JSON.parse(JSON.stringify(data.data.data.data))
+        this.handleStageData(TscData, rings) // 处理阶段（驻留）stage数据
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
+      })
+    },
+    handleStageData (data, rings) {
+      let stagesList = []
+      let stages = data.stages
+      for (let i = 0; i < stages.length; i++) {
+        let stage = stages[i]
+        let stageItem = this.getStageItem(stage, rings)
+        stagesList.push(stageItem)
+      }
+      this.stagesList = stagesList
+    },
+    getStageItem (stageArr, ringsList) {
+      let res = {
+        split: 0, // 阶段绿性比
+        stages: stageArr,
+        delaystart: 0,
+        advanceend: 0
+      }
+      let splitArr = []
+      let delaystartArr = []
+      let advanceendArr = []
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            let split = ring.value
+            let delaystart = ring.delaystart
+            let advanceend = ring.advanceend
+            splitArr.push(split)
+            delaystartArr.push(delaystart)
+            advanceendArr.push(advanceend)
+          }
+        }
+      }
+      splitArr.sort(function (a, b) { return a - b })
+      delaystartArr.sort(function (a, b) { return b - a })
+      advanceendArr.sort(function (a, b) { return a - b })
+      res.split = splitArr.length > 0 ? splitArr[0] : 0
+      res.delaystart = delaystartArr.length > 0 ? delaystartArr[0] : 0
+      res.advanceend = advanceendArr.length > 0 ? advanceendArr[0] : 0
+      return res
+    },
+    onStageSplitChange (diff, rowIndex, subIndex) {
+      let stageArr = this.stagesList[subIndex].stages
+      let row = this.patternList[rowIndex]
+      let ringsList = row.rings
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            ring.value = (ring.value ? ring.value : 0) + diff
+            continue
+          }
+        }
+      }
+    },
+    onStageDelaystartChange (diff, rowIndex, subIndex) {
+      let stageArr = this.stagesList[subIndex].stages
+      let row = this.patternList[rowIndex]
+      let ringsList = row.rings
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            ring.delaystart = (ring.delaystart ? ring.delaystart : 0) + diff
+            continue
+          }
+        }
+      }
+    },
+    onStageAdvanceendChange (diff, rowIndex, subIndex) {
+      let stageArr = this.stagesList[subIndex].stages
+      let row = this.patternList[rowIndex]
+      let ringsList = row.rings
+      for (let rings of ringsList) {
+        for (let ring of rings) {
+          if (stageArr.includes(ring.id)) {
+            ring.advanceend = (ring.advanceend ? ring.advanceend : 0) + diff
+            continue
+          }
+        }
+      }
     }
   }
 }
@@ -472,9 +582,12 @@ export default {
     width: 100%;
     margin-left: 10px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-direction: row;
     align-items: flex-start;
+  }
+  /deep/.el-table .cell {
+    overflow: unset;
   }
   .kanban {
     &.todo {
@@ -483,22 +596,9 @@ export default {
       }
     }
   }
-  // .pattern-figure {
-  //   position: fixed;
-  //   width: 88%;
-  //   bottom: 30px;
-  // }
-  // .pattern-status {
-  //   display: inline;
-  //   font-family: SourceHanSansCN-Regular;
-  //   font-size: 20px;
-  //   font-weight: normal;
-  //   font-stretch: normal;
-  //   line-height: 22px;
-  //   letter-spacing: 0px;
-  //   color: #303133;
-  // }
-  // .pattern-explain {
-  //   float: right;
-  // }
+  .stage-panel-contener {
+    display: flex;
+    flex-direction: row;
+    align-content:flex-start;
+  }
 </style>

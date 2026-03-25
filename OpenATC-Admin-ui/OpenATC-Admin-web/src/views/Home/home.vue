@@ -55,10 +55,13 @@ import DevsStateChart from './devsStateChart'
 import FaultList from './faultList'
 import router from '@/router'
 import { GetAllDevice } from '@/api/device'
+import { GetAllCurrentFault } from '@/api/fault'
 import LottieAnim from './lottieDemo/index'
 import deviceAnim from '../../../static/lottiejson/deviceManager.json'
 import userAnim from '../../../static/lottiejson/userManager.json'
 import operatAnim from '../../../static/lottiejson/operationRecord.json'
+// import FaultEventData from '../../model/EventModal/faultData.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 
 export default {
   data () {
@@ -92,16 +95,16 @@ export default {
       // faultTypeMap 故障种类，前端写死的假数据
       // faultTypeMap: new Map([[1, '检测器报警'], [2, '灯故障'], [3, '断电故障'], [4, '通讯故障']]),
       faultTypeMap: new Map([[201, '灯控板在线个数异常'], [202, '灯组红绿同亮'], [203, '所有灯组红灯全灭'], [204, '绿冲突'], [1, '检测器报警'], [2, '灯故障'], [3, '断电故障'], [4, '通讯故障']]),
-      faultList: {
-        maxValue: 0,
-        data: new Map()
-      },
+      faultList: [],
       chartData: [{
         name: '在线',
         value: 0
       },
       {
         name: '离线',
+        value: 0
+      }, {
+        name: '故障',
         value: 0
       }]
     }
@@ -134,7 +137,6 @@ export default {
       }
     },
     resetData () {
-      this.faultList.maxValue = 0
       this.chartData = [{
         name: '在线',
         value: 0
@@ -142,15 +144,17 @@ export default {
       {
         name: '离线',
         value: 0
+      }, {
+        name: '故障',
+        value: 0
       }]
     },
     getdata () {
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
-        const fault = new Map()
         this.resetData()
         res.data.data.forEach(ele => {
           if (ele.state === 'UP') {
@@ -159,19 +163,26 @@ export default {
           if (ele.state === 'DOWN') {
             this.chartData[1].value++
           }
-          if (ele.status !== 0) {
-            let key = this.faultTypeMap.get(ele.status)
-            this.faultList.maxValue++
-            if (fault.has(key)) {
-              fault.set(key, fault.get(key) + 1)
-            } else {
-              fault.set(key, 1)
-            }
+          if (ele.state === 'FAULT') {
+            this.chartData[0].value++
+            this.chartData[2].value++
           }
         })
-        this.faultList.data = fault
+      })
+      GetAllCurrentFault().then(res => {
+        let list = []
+        if (!res.data.success) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return false
+        } else {
+          list = res.data.data
+        }
+        this.faultList = list
       })
     }
+    // handleFaultEventData (data) {
+    //   console.log(data)
+    // }
   },
   mounted () {
     this.calculateHeight()
@@ -189,6 +200,9 @@ export default {
         _this.Visible = true
       })
     }
+    // 订阅故障测试
+    // this.FaultEventData = new FaultEventData()
+    // this.FaultEventData.Init(this.handleFaultEventData)
   },
   destroyed () {
     clearInterval(this.getDevsDataTimer)

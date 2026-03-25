@@ -30,6 +30,7 @@
           v-for="item in directionOptions"
           :key="item.value"
           :label="$t('openatc.greenwaveoptimize.directionOption' + item.id)"
+          :disabled="optstrategy === 'red' && item.value === 'all'"
           :value="item.value">
         </el-option>
       </el-select>
@@ -93,7 +94,7 @@
 </template>
 
 <script>
-import CDTModel from './model/coordinationModel.js'
+import CDTModel from '../../../compose/components/planChart/coordinationModel.js'
 export default {
   name: 'echartsStyle',
   components: {},
@@ -122,6 +123,10 @@ export default {
         value: 'green',
         label: '绿波优化',
         id: '1'
+      }, {
+        value: 'red',
+        label: '红波优化',
+        id: '2'
       }],
       routerData: {},
       isShowUpCard: false,
@@ -137,8 +142,9 @@ export default {
     var dom = document.getElementById('echarts')
     this.myChart = this.$echarts.init(dom)
     this.CDTModel = new CDTModel()
+    const _this = this
     window.onresize = function () {
-      this.myChart.resize()
+      _this.myChart.resize()
     }
     // window.addEventListener('resize', function () {
     //   this.myChart.resize()
@@ -237,63 +243,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .planchart-top {
-//   width: 100%;
-//   min-width: 1600px;
-// }
-// .planchart-bottom {
-//   width: 100%;
-//   min-width: 1600px;
-// }
-// .echartsStyle {
-//   float: left;
-//   width: 1300px;
-//   height: 700px;
-// }
-// .up-card {
-//   // float: left;
-//   margin-top: 400px;
-// }
-// .coordination-name {
-//   float: left;
-//   margin-top: 8px;
-//   margin-left: 10px;
-//   height: 14px;
-//   font-family: SourceHanSansCN-Regular;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: $--color-text-secondary;
-// }
-// .coordination-select {
-//   float: left;
-//   margin-left: 10px;
-// }
-// .text {
-//     font-size: 14px;
-//   }
-
-//   .item {
-//     margin-bottom: 5px;
-//   }
-
-//   .clearfix:before,
-//   .clearfix:after {
-//     display: table;
-//     content: "";
-//   }
-//   .clearfix:after {
-//     clear: both
-//   }
-//   .box-card {
-//     width: 130px;
-//     height: 141px;
-//     background-color: #fbfbfb;
-//     border-radius: 4px;
-//     border: solid 1px $--border-color-lighter;
-//   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
   .up-card .el-card__header {

@@ -19,40 +19,21 @@ const tscParam = {
   detectorList: [],
   pedestrainDetectorList: [],
   channellock: [],
-  customInfo: {
-    areaid: Number,
-    intersectionid: Number,
-    siteid: '',
-    selflearning: 0,
-    netcard: [{
-      ip: '',
-      subnetmask: '',
-      gateway: ''
-    },
-    {
-      ip: '',
-      subnetmask: '',
-      gateway: ''
-    }],
-    centerip: {
-      ip: '',
-      port: Number
-    },
-    cascade: {
-      lampboards: 0,
-      detectorboards: 0,
-      ioboards: 0,
-      joinoffset: 0
-    },
-    startsequence: {
-      startyellowflash: 6,
-      startallred: 6,
-      greenwavecycle: 5
-    }
-  },
+  // customInfo: {
+  //   areaid: Number,
+  //   intersectionid: Number,
+  //   siteid: '',
+  //   selflearning: 0,
+  //   fixintersectioninfo: '',
+  //   commuport: 0,
+  //   commutype: '',
+  //   steptype: ''
+  // },
   manualpanel: {
     mingreen: 15
-  }
+  },
+  singleoptim: [
+  ]
 }
 let defaultCopiedTscParam = null
 try {
@@ -79,16 +60,24 @@ const Global = {
     tscParam: JSON.parse(JSON.stringify(tscParam)),
     curPath: '/overview/index',
     copiedTscParam: defaultCopiedTscParam,
-    routers: []
+    routers: [],
+    curBodyWidth: 1920,
+    curBodyHeight: 1080,
+    FuncSort: 'allFunc',
+    hideMenu: false,
+    graphicMode: false, // 为true时，切换到图形界面模式，只显示路口图部分
+    roadDirection: 'right', // 当前路口行车方向：默认右行
+    channelDescMap: new Map(), // 管理实时通道描述数据
+    isShowGui: true // 总览当前是否是图形界面
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
-      let customInfo = data.customInfo
-      data.customInfo = {
-        ...tscParam.customInfo,
-        ...customInfo
-      }
-      state.tscParam = data
+      // let customInfo = data.customInfo
+      // data.customInfo = {
+      //   ...tscParam.customInfo,
+      //   ...customInfo
+      // }
+      state.tscParam = JSON.parse(JSON.stringify(data))
     },
     SAVE_SINGLE_PARAM: (state, param) => {
       state.tscParam[param.type] = param.data
@@ -106,11 +95,36 @@ const Global = {
     CLEAR_COPY: (state) => {
       state.copiedTscParam = null
       sessionStorage.removeItem('tscParam')
-    }
+    },
     // ,
     // SET_ROUTERS: (state, routers) => {
     //   state.routers = JSON.parse(JSON.stringify(routers))
     // }
+    SAVE_BODY_DOM_SIZE: (state, size) => {
+      state.curBodyWidth = size.width
+      state.curBodyHeight = size.height
+    },
+    SAVE_FUNNCTION_LEVEL: (state, FUNC) => {
+      state.FuncSort = FUNC
+    },
+    SET_MENU_VISIBLE: (state, isHideMenu) => {
+      state.hideMenu = isHideMenu
+    },
+    SET_GRAPHIC_MODE: (state, isSwitchGraphicMode) => {
+      state.graphicMode = isSwitchGraphicMode
+    },
+    SET_ROAD_RIRECTION: (state, DIR) => {
+      state.roadDirection = DIR
+    },
+    SET_CHANNEL_DESC: (state, descmap) => {
+      state.channelDescMap = descmap
+    },
+    CLEAR_MANUAL_PANEL: (state) => {
+      state.tscParam.manualpanel = tscParam.manualpanel
+    },
+    SET_SHOW_GUI: (state, isShowGui) => {
+      state.isShowGui = isShowGui
+    }
   },
   actions: {
     SaveTscParam ({ commit }, data) {
@@ -130,8 +144,7 @@ const Global = {
     },
     ClearCopy ({ commit }) {
       commit('CLEAR_COPY')
-    }
-    // ,
+    },
     // GenerateRoutes ({
     //   commit
     // }, {curRoutes, noPermission}) {
@@ -147,6 +160,30 @@ const Global = {
     //     commit('SET_ROUTERS', curRoutes)
     //   }
     // }
+    SaveBodyDomSize ({ commit }, size) {
+      commit('SAVE_BODY_DOM_SIZE', size)
+    },
+    SaveFunctionLevel ({ commit }, FUNC) {
+      commit('SAVE_FUNNCTION_LEVEL', FUNC)
+    },
+    SetMenuVisible ({ commit }, isHideMenu) {
+      commit('SET_MENU_VISIBLE', isHideMenu)
+    },
+    SetGraphicMode ({ commit }, isSwitchGraphicMode) {
+      commit('SET_GRAPHIC_MODE', isSwitchGraphicMode)
+    },
+    SetRoadDirection ({ commit }, DIR) {
+      commit('SET_ROAD_RIRECTION', DIR)
+    },
+    SetChannelDesc ({ commit }, descmap) {
+      commit('SET_CHANNEL_DESC', descmap)
+    },
+    ClearManualPanel ({ commit }) {
+      commit('CLEAR_MANUAL_PANEL')
+    },
+    SetShowGui ({ commit }, isShowGui) {
+      commit('SET_SHOW_GUI', isShowGui)
+    }
   }
 }
 export default Global

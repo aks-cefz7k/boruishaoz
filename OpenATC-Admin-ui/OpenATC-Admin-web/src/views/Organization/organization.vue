@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="openatc-organization">
     <div class="filter-container">
       <el-form>
         <el-form-item>
@@ -55,6 +55,7 @@ import {
 } from '../../api/organization'
 import { elTreeModel } from '../../model/tree/eltreemodel'
 import organizationTreeTable from './components/organizationTreeTable'
+import { getMessageByCode } from '@/utils/responseMessage'
 
 export default {
   name: 'organization',
@@ -92,7 +93,7 @@ export default {
           return
         }
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.allOrganization = data.data.data
@@ -212,18 +213,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
- @import "../../styles/theme/element-variables.scss";
-.atc-table {
-  position: absolute;
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px $--border-color-lighter;
-  overflow: auto;
-}
-.filter-container {
-  float: right;
-  margin-top: 20px;
-  margin-right: 20px;
-}
+// .atc-table {
+//   position: absolute;
+//   top: 130px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px $--border-color-lighter;
+//   overflow: auto;
+// }
+// .filter-container {
+//   float: right;
+//   margin-top: 20px;
+//   margin-right: 20px;
+// }
 </style>

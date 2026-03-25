@@ -51,7 +51,6 @@
       <div class="manual-tables-bottom">
         <el-table
           :data="manualList"
-          stripe
           size="small"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -94,6 +93,7 @@
 
 <script>
 import { getManualpanel, getChannel } from '@/api/manual'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'manualcontrol',
   components: {},
@@ -197,7 +197,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.channelList = res.data.data.channelList
@@ -214,7 +214,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         console.log(res)
@@ -302,7 +302,6 @@ export default {
   float: left;
   margin-left: 30px;
   margin-top: 30px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -314,7 +313,6 @@ export default {
   float: left;
   margin-left: 5px;
   margin-top: 30px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -391,7 +389,6 @@ export default {
   position: absolute;
   top: 24px;
   left: 32px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -405,7 +402,6 @@ export default {
   left: 24px;
   width: 32px;
   height: 36px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -419,7 +415,6 @@ export default {
   left: 20px;
   width: 32px;
   height: 36px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -433,7 +428,6 @@ export default {
   left: 35px;
   width: 18px;
   height: 12px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -447,7 +441,6 @@ export default {
   left: 31px;
   width: 18px;
   height: 12px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -472,7 +465,6 @@ export default {
   float: left;
   margin-left: 10px;
   margin-top: 22px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 18px;
   font-weight: normal;
   font-stretch: normal;
@@ -499,7 +491,6 @@ export default {
 }
 .manual-tables-qingkong {
   margin-left: 5px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

@@ -51,7 +51,6 @@
 
 /********************** dialog中相关样式 ********************/
 .el-dialog__title {
-  font-family: MicrosoftYaHei;
   font-size: 18px;
   font-weight: normal;
   font-stretch: normal;
@@ -65,12 +64,16 @@
   height: 32px;
   padding: 0;
 }
+.el-dialog__footer .change-deviceid {
+  width: 80px;
+  height: 32px;
+  padding: 0;
+}
 
 .el-dialog__body .el-form-item__label {
   text-align: right;
   font-size: 14px;
   padding: 0 24px 0 0;
-  font-family: MicrosoftYaHei;
   font-weight: normal;
   font-stretch: normal;
   letter-spacing: 0px;

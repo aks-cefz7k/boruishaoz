@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-<div class="manual-record">
+<div class="manual-record" ref="channellock-container">
   <div class="manual-top">
     <el-button style="margin-bottom:10px;" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-button style="margin-bottom:10px;" type="primary" @click="deleteAllData">{{$t('edge.common.deleteall')}}</el-button>
@@ -87,6 +87,11 @@
           <el-input-number size="small" controls-position="right" :min="0" :max="1000" :step="1" v-model.number="scope.row.yellowlamp" style="width: 100px;"></el-input-number>
         </template>
       </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.operation')" width="100">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleDelete(scope.$index,scope.row)">{{$t('edge.common.delete')}}</el-button>
+        </template>
+      </el-table-column>
       </el-table>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -94,7 +99,7 @@
         <div class="channel-status">{{$t('edge.channellock.channelstats')}}</div>
       </div>
       <div class="manual-tables-bottom">
-        <el-table :data="channelList" :max-height="tableHeight" v-loading.body="listLoading" style="width: 90%" border id="footerBtn">
+        <el-table :data="channelList" :max-height="tableHeight - 30" v-loading.body="listLoading" style="width: 90%" border id="footerBtn">
           <!-- <el-table-column align="center" label='No' width="40">
             <template slot-scope="scope">
               {{scope.$index + 1}}
@@ -135,6 +140,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { refreshChannelLockDescData } from '@/utils/channeldesc.js'
 export default {
   name: 'manualcontrol',
   components: {},
@@ -145,7 +151,7 @@ export default {
       channelList: [],
       id: 1,
       channelstatusList: [{
-        label: '通道状态不指定状态',
+        label: '默认',
         value: 0
       }, {
         label: '红灯',
@@ -420,37 +426,28 @@ export default {
         value: 59,
         label: '59'
       }],
-      typeOptions: new Map([[0, '不启用'], [2, '机动车相位'], [3, '行人相位'], [4, '跟随相位'], [5, '跟随行人相位']])
+      typeOptions: new Map([[0, '不启用'], [2, '机动车相位'], [3, '行人相位'], [4, '跟随相位'], [5, '行人跟随相位'], [6, '车道灯']])
     }
   },
   computed: {
     ...mapState({
-      channellock: state => state.globalParam.tscParam.channellock
+      channellock: state => state.globalParam.tscParam.channellock,
+      channelDescMap: state => state.globalParam.channelDescMap
     })
   },
   mounted: function () {
+    refreshChannelLockDescData()
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                150
+      _this.tableHeight = _this.$refs['channellock-container'].offsetHeight - 80
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['channellock-container'].offsetHeight - 80
       }
     })
   },
   watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                150
+    channelDescMap: function () {
+      refreshChannelLockDescData()
     }
   },
   created () {
@@ -483,18 +480,39 @@ export default {
         })
       })
     },
-    onAdd () {
-      this.increaseId()
+    handleDelete (index, row) {
+      this.$confirm(this.$t('edge.channellock.deleteOnetip'),
+        this.$t('edge.common.alarm'), {
+          confirmButtonText: this.$t('edge.common.confirm'),
+          cancelButtonText: this.$t('edge.common.cancel'),
+          type: 'warning'
+        }).then(() => {
+        this.globalParamModel.deleteParamsByType('channellock', index, 1)
+        this.$message({
+          type: 'success',
+          message: this.$t('edge.common.deletesucess')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('edge.common.deletecancel')
+        })
+      })
+    },
+    getChannelInfo () {
       let channel = this.globalParamModel.getParamsByType('channelList')
       let channellocKinfoList = []
       for (let chan of channel) {
         let obj = {}
-        let type = chan.controltype
         obj.channelid = chan.id
-        obj.desc = chan.desc + this.typeOptions.get(type)
+        obj.desc = this.channelDescMap.get(chan.id)
         obj.lockstatus = 0
         channellocKinfoList.push(obj)
       }
+      return channellocKinfoList
+    },
+    onAdd () {
+      this.increaseId()
       var channellockInitData = {
         id: this.id,
         starthour: 0,
@@ -505,7 +523,7 @@ export default {
         endsec: 0,
         greenflash: 3,
         yellowlamp: 2,
-        channellocKinfo: channellocKinfoList
+        channellocKinfo: this.getChannelInfo()
       }
       this.globalParamModel.addParamsByType('channellock', channellockInitData)
       // this.id++
@@ -565,7 +583,6 @@ export default {
 //   margin-top: 10px;
 // }
 // .channel-status {
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -577,13 +594,13 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .control-model .el-input__inner {
   -webkit-appearance: none;
-  background-color: #fff;
+  // background-color: #fff;
   background-image: none;
   border-radius: 4px;
-  border: 1px solid #dcdfe6;
+  // border: 1px solid #dcdfe6;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  color: #606266;
+  // color: #606266;
   display: inline-block;
   font-size: inherit;
   height: 34px;

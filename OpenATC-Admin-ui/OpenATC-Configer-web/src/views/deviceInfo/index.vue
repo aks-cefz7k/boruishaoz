@@ -11,233 +11,128 @@
  **/
 <template>
   <div class="app-container">
-        <div class="device-info">{{$t('edge.deviceinfo.deviceinfo')}}</div>
-        <div class="device-message" style="height: 170px;">
-            <div style="margin-left: 10px;">
-              <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.addresscode')}}</div><div class="device-value" :style="$t('edge.deviceinfo.deviceinfostyle')"><el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small"></el-input></div></div>
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.areaid')}}</div><div class="device-value" :style="$t('edge.deviceinfo.deviceinfostyle')"><el-input v-model.number="customInfo.areaid" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" oninput="this.value=this.value.replace(/[^\.\d]/g,'')"></el-input></div></div>
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.crossid')}}</div><div class="device-value" :style="$t('edge.deviceinfo.deviceinfostyle')"><el-input v-model.number="customInfo.intersectionid" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" oninput="this.value=this.value.replace(/[^\.\d]/g,'')"></el-input></div></div>
-                <div class="device-content">
-                  <div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.selflearning')}}</div>
-                  <div class="device-value" :style="$t('edge.deviceinfo.deviceselflearningstyle')">
-                    <el-switch
-                      v-model="customInfo.selflearning"
-                      active-color="#409EFF"
-                      :active-value="1"
-                      :inactive-value="0">
-                    </el-switch>
-                  </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="device-info" style="margin-top: 20px;">{{$t('edge.deviceinfo.deviceparam')}}</div>
-        <div class="device-message" style="height: 150px;">
-            <div style="margin-left: 10px;">
-              <div class="device-content">
-                <div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.startyellowflashtime')}}</div>
-                <div class="device-value" :style="$t('edge.deviceinfo.deviceparamstyle')">
-                  <!-- <el-input v-model="customInfo.startsequence.startyellowflash" placeholder="请输入内容" style="width:30%" size="small"></el-input> -->
-                  <el-select v-model="customInfo.startsequence.startyellowflash" :placeholder="$t('edge.common.select')" style="width:30%" size="small">
-                    <el-option
-                      v-for="item in startyellowflashOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
-                </div>
+        <div class="device-message">
+          <div class="device-info">{{$t('edge.deviceinfo.deviceinfo')}}</div>
+          <el-row class="demo-autocomplete" :gutter="30">
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.addresscode')}}
+                <el-button type="text"
+                           class="see-cut"
+                           :disabled="isSeeCutDisabled"
+                           @click="onSeeCutClick">{{$t('edge.deviceinfo.seeCutEffect')}}</el-button>
               </div>
-              <div class="device-content">
-                <div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.startredtime')}}</div>
-                <div class="device-value" :style="$t('edge.deviceinfo.deviceparamstyle')">
-                  <!-- <el-input v-model="customInfo.startsequence.startallred" placeholder="请输入内容" style="width:30%" size="small"></el-input> -->
-                  <el-select v-model="customInfo.startsequence.startallred" :placeholder="$t('edge.common.select')" style="width:30%" size="small">
-                    <el-option
-                      v-for="item in startallredOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
-                </div>
+              <el-input v-model="customInfo.siteid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.areaid')}}</div>
+              <el-input v-model="customInfo.areaid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.crossid')}}</div>
+              <el-input v-model="customInfo.intersectionid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.overview.crossname')}}:</div>
+              <el-input v-model="customInfo.fixintersectioninfo" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.port')}}</div>
+              <el-input v-model="customInfo.commuport" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.overview.type')}}:</div>
+              <el-select v-model="customInfo.commutype" :placeholder="$t('edge.common.select')" size="small">
+                <el-option
+                  v-for="item in commutypeOptions"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row class="demo-autocomplete" :gutter="30">
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.stepType')}}:</div>
+              <el-select v-model="customInfo.steptype" :placeholder="$t('edge.common.select')" size="small">
+                <el-option
+                  v-for="item in stepTypeOptions"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row class="demo-autocomplete" :gutter="30">
+            <el-col :span="4">
+              <div class="sub-title">{{$t('edge.deviceinfo.selflearning')}}
+                <el-switch
+                  style="padding-left: 5px;"
+                  v-model="customInfo.selflearning"
+                  active-color="#409EFF"
+                  :active-value="1"
+                  :inactive-value="0">
+                </el-switch>
               </div>
-              <div class="device-content">
-                <div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.greenwavetransitionperiod')}}</div>
-                <div class="device-value" :style="$t('edge.deviceinfo.deviceparamstyle')">
-                  <!-- <el-input v-model="customInfo.startsequence.greenwavecycle" placeholder="请输入内容" style="width:30%" size="small"></el-input> -->
-                  <el-select v-model="customInfo.startsequence.greenwavecycle" :placeholder="$t('edge.common.select')" style="width:30%" size="small">
-                    <el-option
-                      v-for="item in greenwavecycleOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
-                </div>
-              </div>
-            </div>
+            </el-col>
+          </el-row>
         </div>
-
-        <div class="device-message" style="height: 160px;" v-for="(item, index) in customInfo.netcard" :key="index">
-            <div class="device-header">IP{{index + 1}}</div>
-            <div style="margin-left: 10px;">
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.ip')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="device-value" :style="$t('edge.deviceinfo.deviceinfostyle')"><el-input v-model="item.ip" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" @blur="checkIp(item.ip)"></el-input></div></div>
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.subnetmask')}}&nbsp;&nbsp;</div><div class="device-value" style="margin-left: 50px; top: 10px;"><el-input v-model="item.subnetmask" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" @blur="checkIp(item.subnetmask)"></el-input></div></div>
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.gateway')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="device-value" style="margin-left: 50px; top: 10px;"><el-input v-model="item.gateway" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" @blur="checkIp(item.gateway)"></el-input></div></div>
-            </div>
-        </div>
-        <div class="device-message" style="height: 130px;">
-            <div class="device-header">{{$t('edge.deviceinfo.centercommunicationip')}}</div>
-            <div style="margin-left: 10px;">
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.ip')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="device-value" style="margin-left: 50px; top: 10px;"><el-input v-model="customInfo.centerip.ip" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" @blur="checkIp(customInfo.centerip.ip)"></el-input></div></div>
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.port')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="device-value" style="margin-left: 50px; top: 10px;"><el-input v-model.number="customInfo.centerip.port" :placeholder="$t('edge.common.entercontent')" style="width:30%" size="small" oninput="this.value=this.value.replace(/[^\.\d]/g,'')" @blur="checkPort(customInfo.centerip.port)"></el-input></div></div>
-            </div>
-        </div>
-        <div class="device-message" style="height: 200px;">
-            <div class="device-header">{{$t('edge.deviceinfo.cascade')}}</div>
-            <div style="margin-left: 10px;">
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.lampcontrolpanel')}}&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="device-value" style="margin-left: 50px; top: 10px;">
-                  <!-- <el-input v-model="customInfo.centerip.ip" placeholder="请输入内容" style="width:30%" size="small" @blur="checkIp(customInfo.centerip.ip)"></el-input> -->
-                  <el-select v-model="customInfo.cascade.lampboards" :placeholder="$t('edge.common.select')" style="width:30%" size="small">
-                    <el-option
-                      v-for="item in lampboardsOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
-                </div></div>
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.boardsformainengine')}}&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="device-value" style="margin-left: 50px; top: 10px;">
-                  <!-- <el-input v-model.number="customInfo.centerip.port" placeholder="请输入内容" style="width:30%" size="small" oninput="this.value=this.value.replace(/[^\.\d]/g,'')" @blur="checkPort(customInfo.centerip.port)"></el-input> -->
-                  <el-select v-model="customInfo.cascade.detectorboards" :placeholder="$t('edge.common.select')" style="width:30%" size="small">
-                    <el-option
-                      v-for="item in detectorboardsOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
-                </div></div>
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.ioboards')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="device-value" style="margin-left: 50px; top: 10px;">
-                  <!-- <el-input v-model.number="customInfo.centerip.port" placeholder="请输入内容" style="width:30%" size="small" oninput="this.value=this.value.replace(/[^\.\d]/g,'')" @blur="checkPort(customInfo.centerip.port)"></el-input> -->
-                  <el-select v-model="customInfo.cascade.ioboards" :placeholder="$t('edge.common.select')" style="width:30%" size="small">
-                    <el-option
-                      v-for="item in ioboardsOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
-                </div></div>
-                <div class="device-content"><div style="float: left; margin-top:17px;">{{$t('edge.deviceinfo.slavecascadeoffset')}}&nbsp;&nbsp;&nbsp;&nbsp;</div><div class="device-value" style="margin-left: 50px; top: 10px;"><el-input v-model.number="customInfo.cascade.joinoffset" placeholder="" style="width:30%" size="small" oninput="this.value=this.value.replace(/[^\.\d]/g,'')" @blur="checkJoinoffset(customInfo.cascade.joinoffset)"></el-input></div></div>
-            </div>
-        </div>
+        <seeCutEffect ref="seeCutEffect"></seeCutEffect>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import seeCutEffect from './components/seeCutEffect'
 export default {
   name: 'deviceinfo',
-  components: {},
+  components: {seeCutEffect},
   data () {
     return {
-      lampboardsOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      detectorboardsOptions: [0, 1, 2],
-      ioboardsOptions: [0, 1, 2],
-      startyellowflashOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-      startallredOptions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-      greenwavecycleOptions: [0, 1, 2, 3, 4, 5]
+      commutypeOptions: [{label: 'TCP', value: 1}, {label: 'UDP', value: 2}, {label: 'RS232', value: 3}],
+      stepTypeOptions: [{label: '阶段', value: 0}, {label: '色步', value: 1}]
+      // customInfo: {
+      //   areaid: '',
+      //   intersectionid: '',
+      //   siteid: '',
+      //   selflearning: 0,
+      //   fixintersectioninfo: '',
+      //   commuport: 0,
+      //   commutype: '',
+      //   steptype: ''
+      // },
     }
   },
   computed: {
     ...mapState({
       customInfo: state => state.globalParam.tscParam.customInfo
-    })
+    }),
+    isSeeCutDisabled () {
+      let res = false
+      if (this.customInfo.siteid) {
+        res = false
+      } else {
+        res = true
+      }
+      return res
+    }
   },
   created () {
-    // this.globalParamModel = this.$store.getters.globalParamModel
-    // this.init()
+    this.globalParamModel = this.$store.getters.globalParamModel
   },
-  //   watch: {
-  //     customInfo: function () {
-  //       this.init()
-  //     }
-  //   },
   methods: {
-    init () {
-      let channelList = this.globalParamModel.getParamsByType('channelList')
-      let detectorList = this.globalParamModel.getParamsByType('detectorList')
-      let pedestrainDetectorList = this.globalParamModel.getParamsByType('pedestrainDetectorList')
-      let customInfo = this.globalParamModel.getParamsByType('customInfo')
-      customInfo.cascade.lampboards = Math.ceil(channelList.length / 4)
-      customInfo.cascade.detectorboards = Math.ceil(detectorList.length / 16)
-      customInfo.cascade.ioboards = Math.ceil(pedestrainDetectorList.length / 16)
-    },
-    checkIp (ip) {
-      var ipReg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
-      if (!ipReg.test(ip)) {
-        this.$message.error('请输入合法的IP！')
+    onSeeCutClick () {
+      let num = Number(this.customInfo.siteid)
+      if (!num || num <= 0 || num >= 99999) {
+        this.$message.error(this.$t('edge.deviceinfo.siteIdLimit'))
+        return false
       }
-    },
-    checkPort (port) {
-      var portReg = /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/
-      if (!portReg.test(port)) {
-        this.$message.error('请输入合法的端口！')
-      }
-    },
-    checkJoinoffset (joinoffset) {
-      if (joinoffset > 255) {
-        this.customInfo.cascade.joinoffset = 255
-        this.$message.error('级联偏移量不能超过255！')
-      }
+      this.$refs.seeCutEffect.show(this.customInfo.siteid)
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-// .device-info {
-//   margin-top: 10px;
-//   height: 18px;
-//   font-family: SourceHanSansCN-Regular;
-//   font-size: 18px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: #666666;
-// }
-// .device-message {
-//   margin-top: 15px;
-//   height: 100px;
-//   background-color: rgba(236, 245, 255, 0.3);
-// //   background-color: #ecf5ff;
-// //   opacity: 0.3;
-// }
-// .device-content {
-//   // position: relative;
-//   margin-top: 10px;
-//   left: 20px;
-//   font-family: SourceHanSansCN-Regular;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: #303133;
-// }
-// .device-value {
-//   position: relative;
-// }
-// .device-header {
-//   font-family: SourceHanSansCN-Regular;
-//   font-size: 14px;
-//   font-weight: normal;
-//   font-stretch: normal;
-//   line-height: 14px;
-//   letter-spacing: 0px;
-//   color: #303133;
-// }
 </style>

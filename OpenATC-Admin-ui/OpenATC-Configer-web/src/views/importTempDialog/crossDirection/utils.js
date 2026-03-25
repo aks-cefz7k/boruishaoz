@@ -9,13 +9,17 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
+import store from '../../../store'
 export default class PhaseDataModel {
   constructor () {
     this.PhasePosMap = new Map()
     this.Init()
   }
   Init () {
-    const phaseJson = require('./phasePos.json')
+    let phaseJson = require('./phasePos.json')
+    if (store.getters.roadDirection === 'left') {
+      phaseJson = require('./phasePos.left.json')
+    }
     phaseJson.phaseList.forEach(phase => {
       let value = {
         name: phase.name,

@@ -10,16 +10,16 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div>
+  <div class="history-table" ref="history-table">
     <!-- <el-button type="primary" @click="refreshData" size="small" style="margin-bottom: 10px;">刷新</el-button> -->
     <div class="atc-table">
     <el-table
         :data="tableData"
-        stripe
         size="small"
         :max-height="tableHeight"
         style="width: 100%"
         v-loading.body="listLoading"
+        :default-sort = "{prop: 'm_unFaultOccurTime', order: 'descending'}"
         id="footerBtn">
         <el-table-column
         type="index"
@@ -68,6 +68,8 @@
 
 <script>
 // import { getFault } from '@/api/fault'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   name: 'bordertable',
   props: {
@@ -81,34 +83,17 @@ export default {
   data () {
     return {
       tableHeight: 700,
-      screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false
     }
   },
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
+      _this.tableHeight = _this.$refs['history-table'].offsetHeight - 117
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['history-table'].offsetHeight - 117
       }
     })
-  },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-    }
   },
   created () {
     // this.update()
@@ -120,6 +105,22 @@ export default {
     },
     stateFormat (row, column) {
       return row.m_byFaultDescValue + ''
+    },
+    exportExcel () {
+      /* generate workbook object from table */
+      var xlsxParam = { raw: true } // 导出的内容只做解析，不进行格式转换
+      var wb = XLSX.utils.table_to_book(document.querySelector('#footerBtn'), xlsxParam)
+
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'fault.xlsx')
+      } catch (e) {
+        if (typeof console !== 'undefined') {
+          console.log(e, wbout)
+        }
+      }
+      return wbout
     }
     // handlerFaultData () {
     //   let filterId = Number(this.activeName)
@@ -151,13 +152,13 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-.atc-table {
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  border: solid 1px #e6e6e6;
-  overflow: auto;
-}
+// .atc-table {
+//   top: 150px;
+//   left: 20px;
+//   right: 20px;
+//   border: solid 1px #e6e6e6;
+//   overflow: auto;
+// }
 .edit-button {
   float: left;
   // margin-left: 10px;

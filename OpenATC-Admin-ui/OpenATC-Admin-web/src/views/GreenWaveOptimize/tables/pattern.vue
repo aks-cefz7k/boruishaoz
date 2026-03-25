@@ -12,7 +12,6 @@
 <template>
   <div class="patternPanel">
     <el-table
-      stripe
       highlight-current-row
       ref="patternTable"
       class="patternTable"
@@ -50,6 +49,7 @@
 </template>
 <script>
 import { getTscControl } from '@/api/route'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'patterns',
   props: {
@@ -100,7 +100,7 @@ export default {
             this.$message.error(this.$t('openatc.common.devicenotonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.patternData.forEach(ele => {

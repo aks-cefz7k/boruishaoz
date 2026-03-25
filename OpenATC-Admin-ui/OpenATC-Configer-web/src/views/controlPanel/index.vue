@@ -38,6 +38,7 @@
       </div>
       <div class="manual-control-button">
         <el-button type="primary" @click="resetDefaultManualpanel">{{$t('edge.controlpanel.defaultsettings')}}</el-button>
+        <el-button type="primary" @click="allclear">{{$t('edge.controlpanel.allclear')}}</el-button>
       </div>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -52,7 +53,6 @@
       <div class="manual-tables-bottom">
         <el-table
           :data="manualList"
-          stripe
           size="small"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -96,6 +96,7 @@
 <script>
 import { mapState } from 'vuex'
 import { getManualpanel, getChannel, getDefaultManualpanel } from '@/api/manual'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'manualcontrol',
   components: {},
@@ -184,7 +185,8 @@ export default {
   },
   computed: {
     ...mapState({
-      manualpanel: state => state.globalParam.tscParam.manualpanel
+      manualpanel: state => state.globalParam.tscParam.manualpanel,
+      channelDescMap: state => state.globalParam.channelDescMap
     })
   },
   watch: {
@@ -216,7 +218,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.channelList = res.data.data.channelList
@@ -233,7 +235,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         console.log(res)
@@ -261,9 +263,7 @@ export default {
         }
         this.manualList = currKeyconfig[0].channel
         for (let manual of this.manualList) {
-          manual.desc = this.channelList.filter((item) => {
-            return item.id === manual.channelid
-          })[0].desc
+          manual.desc = this.channelDescMap.get(manual.channelid)
         }
       }
     },
@@ -336,7 +336,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('edge.controlpanel.getdefaultmanualpaneltips'), { type: 'success' })
@@ -365,6 +365,9 @@ export default {
       } else {
         return name.substring(0, 10) + '...'
       }
+    },
+    allclear () {
+      this.$store.dispatch('ClearManualPanel')
     }
   }
 }
@@ -396,7 +399,6 @@ export default {
 //   float: left;
 //   margin-left: 30px;
 //   margin-top: 30px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -408,7 +410,6 @@ export default {
 //   float: left;
 //   margin-left: 5px;
 //   margin-top: 30px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -427,7 +428,7 @@ export default {
   height: 600px;
   margin-left: 30px;
   margin-top: 30px;
-  background-color: #eff7ff;
+  // background-color: #eff7ff;
 }
 .manualControl-kanban {
   width: 100%;
@@ -485,7 +486,6 @@ export default {
   position: absolute;
   top: 24px;
   left: 32px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -499,7 +499,6 @@ export default {
   left: 24px;
   width: 32px;
   height: 36px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -513,7 +512,6 @@ export default {
   left: 20px;
   width: 32px;
   height: 36px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -527,7 +525,6 @@ export default {
   left: 35px;
   width: 18px;
   height: 12px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -541,7 +538,6 @@ export default {
   left: 31px;
   width: 18px;
   height: 12px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -566,7 +562,6 @@ export default {
 //   float: left;
 //   margin-left: 10px;
 //   margin-top: 22px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -593,7 +588,6 @@ export default {
 }
 .manual-tables-qingkong {
   margin-left: 5px;
-  font-family: SourceHanSansCN-Regular;
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;

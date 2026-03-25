@@ -100,6 +100,7 @@
 
 <script>
 import { AddUsr, getRoles } from '../../../api/user'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   data () {
     var checkPhone = (rule, value, callback) => {
@@ -192,11 +193,7 @@ export default {
     getAllRoles () {
       getRoles().then(res => {
         if (!res.data.success) {
-          if (res.data.code === '3008') {
-            this.$message.error('没有权限访问!')
-            return
-          }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         let rolesData = res.data.data
@@ -238,8 +235,7 @@ export default {
             this.$message.error('用户名已存在！')
             return
           }
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = '新增成功！'

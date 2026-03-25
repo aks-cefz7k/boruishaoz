@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<HTML>
+ 
+<HEAD>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+<TITLE></TITLE>
+ 
+<STYLE TYPE="TEXT/CSS">
+ 
+</STYLE>
+ 
+<SCRIPT TYPE="TEXT/JAVASCRIPT">
+ 
+</SCRIPT>
+ 
+</HEAD>
+ 
+<BODY>	
+	<script>
+		
+		//通过createElementNS创建svg元素并设置属性
+		var svg=document.createElementNS('http://www.w3.org/2000/svg','svg'); 	
+		svg.setAttribute("style","width:100%;height:100%;");
+		svg.setAttribute("viewBox","0 0 100 100");				
+		
+		//创建矩形元素并设置属性
+		var rect=document.createElementNS('http://www.w3.org/2000/svg','rect'); 
+		rect.setAttribute("x","10");
+		rect.setAttribute("y","10");
+		rect.setAttribute("width","20");
+		rect.setAttribute("height","20");
+		rect.setAttribute("style","fill:#ff6666;stroke-width:1;stroke:rgb(255,0,0)");
+		
+		//矩形元素绑定鼠标事件实现动态效果
+		rect.οnmοuseοver=function(){
+			this.setAttribute("style","fill:rgb(225,0,0);stroke-width:1;stroke:rgb(255,102,102)");
+		}
+		rect.οnmοuseοut=function(){
+			this.setAttribute("style","fill:#ff6666;stroke-width:1;stroke:rgb(255,0,0)");
+		}
+		
+		//使用path创建扇形元素
+		var fan=document.createElementNS('http://www.w3.org/2000/svg','path'); 
+		fan.setAttribute("d","M0 0 L10 0 A10 10 90 0 1 0 10");
+		fan.setAttribute("style","fill:green;");
+		
+		//扇形元素绑定鼠标事件实现动态效果
+		fan.οnmοuseοver=function(){
+			this.setAttribute("style","fill:yellow;");
+		}
+		fan.οnmοuseοut=function(){
+			this.setAttribute("style","fill:green;");
+		}
+		
+		//将矩形和扇形元素添加到SVG元素内
+		svg.appendChild(rect);
+		svg.appendChild(fan);
+		
+		//SVG元素添加到页面内显示
+		document.body.appendChild(svg);
+		
+	</script>
+ 
+	
+</BODY>
+ 
+</HTML>

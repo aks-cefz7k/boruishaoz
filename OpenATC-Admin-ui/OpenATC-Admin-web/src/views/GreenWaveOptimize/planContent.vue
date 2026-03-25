@@ -49,6 +49,7 @@ import PatternTable from './pattern/patternTable'
 import PlanChart from './pattern/planChart/index'
 import { GetRouteInfo, getAllPatternOfRoute, getAllPhaseOfRoute, generateRoute, putAllPatternOfRoute } from '@/api/route'
 import Messagebox from '../../components/MessageBox/index'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'PlanContent',
   data () {
@@ -154,7 +155,7 @@ export default {
             this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.routeData = res.data.data
@@ -182,7 +183,7 @@ export default {
       param.devs = this.patternList
       putAllPatternOfRoute(param).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.$alert(this.$t('openatc.greenwaveoptimize.planissuedsucc'), { type: 'success' })
@@ -225,7 +226,7 @@ export default {
       }
       generateRoute(param).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.greenwave = res.data.data.greenwave
@@ -252,7 +253,7 @@ export default {
             this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.patternList = res.data.data.devs
@@ -269,7 +270,7 @@ export default {
             this.$message.error(this.$t('openatc.greenwaveoptimize.device') + agentid + this.$t('openatc.greenwaveoptimize.notonline'))
             return
           }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.phaseList = res.data.data.devs
@@ -301,163 +302,161 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- @import "../../styles/theme/element-variables.scss";
-.planContent {
-  position: relative;
-}
-.btnGroup {
-  overflow: hidden;
-  float: right;
-  width: 150px;
-  /* width: 230px; */
-}
-/* 蒙层样式 */
-.mask {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: 0.5;
-  z-index: 98;
-}
-/* 原生按钮样式修改 */
-.btnGroup button {
-    width: 70px;
-    height: 40px;
-    padding: 0;
-    line-height: 40px;
-    border: 1px solid #dcdfe6;
-    white-space: nowrap;
-    outline: 0;
-    transition: .1s;
-    font-size: 14px;
-    border-radius: 4px;
-    color: $--color-white;
-    background-color: $--color-primary;
-    border-color: $--color-primary;
-    cursor: pointer;
-}
-.btnGroup button:hover {
-    color: $--color-white;
-    background-color: $--color-primary;
-    border-color: $--color-primary;
-    opacity: 0.8;
-}
-.btnGroup > button {
-  float: left;
-  position: relative;
-  z-index: 10;
-}
-.btnGroup button {
-  height: 32px;
-  line-height: 32px;
-}
-.btnGroup .editbtn{
-    float: left;
-    position: relative;
-    /* z-index: 98; */
-    margin-left: 10px;
-}
-.btnGroup .editbtn button {
-  font-weight: 500;
-}
-/* 提示框相关 */
-.tipContent > div{
-    float: left;
-}
-.tipContent div i {
-  color: $--color-primary;
-  font-size: 30px;
-}
-.tipContent .text {
-    font-family: SourceHanSansCN-Regular;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 14px;
-    letter-spacing: 1px;
-    color: $--color-primary;
-    margin-left: 7px;
-    line-height: 42px;
-}.planContent {
-  position: relative;
-}
-.btnGroup {
-  overflow: hidden;
-  float: right;
-  width: 150px;
-  /* width: 230px; */
-}
-/* 蒙层样式 */
-.mask {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: 0.5;
-  z-index: 98;
-}
-/* 原生按钮样式修改 */
-.btnGroup button {
-    width: 70px;
-    height: 40px;
-    padding: 0;
-    line-height: 40px;
-    border: 1px solid #dcdfe6;
-    white-space: nowrap;
-    outline: 0;
-    transition: .1s;
-    font-size: 14px;
-    border-radius: 4px;
-    color: $--color-white;
-    background-color: $--color-primary;
-    border-color: $--color-primary;
-    cursor: pointer;
-}
-// .btnGroup button:hover {
-//     color: $--color-white;
-//     background-color: #66b1ff;
-//     border-color: #66b1ff;
+//  @import "../../styles/theme/element-variables.scss";
+// .planContent {
+//   position: relative;
 // }
-.btnGroup > button {
-  float: left;
-  position: relative;
-  z-index: 10;
-}
-.btnGroup button {
-  height: 32px;
-  line-height: 32px;
-}
-.btnGroup .editbtn{
-    float: left;
-    position: relative;
-    /* z-index: 98; */
-    margin-left: 10px;
-}
-.btnGroup .editbtn button {
-  font-weight: 500;
-}
-/* 提示框相关 */
-.tipContent > div{
-    float: left;
-}
-.tipContent div i {
-  color: $--color-primary;
-  font-size: 30px;
-}
-.tipContent .text {
-    font-family: SourceHanSansCN-Regular;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 14px;
-    letter-spacing: 1px;
-    color: $--color-primary;
-    margin-left: 7px;
-    line-height: 42px;
-}
+// .btnGroup {
+//   overflow: hidden;
+//   float: right;
+//   width: 150px;
+//   /* width: 230px; */
+// }
+// /* 蒙层样式 */
+// .mask {
+//   position: fixed;
+//   left: 0;
+//   top: 0;
+//   width: 100%;
+//   height: 100%;
+//   background: #000;
+//   opacity: 0.5;
+//   z-index: 98;
+// }
+// /* 原生按钮样式修改 */
+// .btnGroup button {
+//     width: 70px;
+//     height: 40px;
+//     padding: 0;
+//     line-height: 40px;
+//     border: 1px solid #dcdfe6;
+//     white-space: nowrap;
+//     outline: 0;
+//     transition: .1s;
+//     font-size: 14px;
+//     border-radius: 4px;
+//     color: $--button-primary-font-color;
+//     background-color: $--color-primary;
+//     border-color: $--color-primary;
+//     cursor: pointer;
+// }
+// .btnGroup button:hover {
+//     color: $--button-primary-font-color;
+//     background-color: $--color-primary;
+//     border-color: $--color-primary;
+//     opacity: 0.8;
+// }
+// .btnGroup > button {
+//   float: left;
+//   position: relative;
+//   z-index: 10;
+// }
+// .btnGroup button {
+//   height: 32px;
+//   line-height: 32px;
+// }
+// .btnGroup .editbtn{
+//     float: left;
+//     position: relative;
+//     /* z-index: 98; */
+//     margin-left: 10px;
+// }
+// .btnGroup .editbtn button {
+//   font-weight: 500;
+// }
+// /* 提示框相关 */
+// .tipContent > div{
+//     float: left;
+// }
+// .tipContent div i {
+//   color: $--color-primary;
+//   font-size: 30px;
+// }
+// .tipContent .text {
+//     font-size: 14px;
+//     font-weight: normal;
+//     font-stretch: normal;
+//     line-height: 14px;
+//     letter-spacing: 1px;
+//     color: $--color-primary;
+//     margin-left: 7px;
+//     line-height: 42px;
+// }.planContent {
+//   position: relative;
+// }
+// .btnGroup {
+//   overflow: hidden;
+//   float: right;
+//   width: 150px;
+//   /* width: 230px; */
+// }
+// /* 蒙层样式 */
+// .mask {
+//   position: fixed;
+//   left: 0;
+//   top: 0;
+//   width: 100%;
+//   height: 100%;
+//   background: #000;
+//   opacity: 0.5;
+//   z-index: 98;
+// }
+// /* 原生按钮样式修改 */
+// .btnGroup button {
+//     width: 70px;
+//     height: 40px;
+//     padding: 0;
+//     line-height: 40px;
+//     border: 1px solid #dcdfe6;
+//     white-space: nowrap;
+//     outline: 0;
+//     transition: .1s;
+//     font-size: 14px;
+//     border-radius: 4px;
+//     color: $--button-primary-font-color;
+//     background-color: $--color-primary;
+//     border-color: $--color-primary;
+//     cursor: pointer;
+// }
+// // .btnGroup button:hover {
+// //     color: $--color-white;
+// //     background-color: #66b1ff;
+// //     border-color: #66b1ff;
+// // }
+// .btnGroup > button {
+//   float: left;
+//   position: relative;
+//   z-index: 10;
+// }
+// .btnGroup button {
+//   height: 32px;
+//   line-height: 32px;
+// }
+// .btnGroup .editbtn{
+//     float: left;
+//     position: relative;
+//     /* z-index: 98; */
+//     margin-left: 10px;
+// }
+// .btnGroup .editbtn button {
+//   font-weight: 500;
+// }
+// /* 提示框相关 */
+// .tipContent > div{
+//     float: left;
+// }
+// .tipContent div i {
+//   color: $--color-primary;
+//   font-size: 30px;
+// }
+// .tipContent .text {
+//     font-size: 14px;
+//     font-weight: normal;
+//     font-stretch: normal;
+//     line-height: 14px;
+//     letter-spacing: 1px;
+//     color: $--color-primary;
+//     margin-left: 7px;
+//     line-height: 42px;
+// }
 </style>

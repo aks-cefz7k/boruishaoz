@@ -10,15 +10,10 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container" ref="channel-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-button style="margin-bottom:10px" type="primary" @click="deleteAllData">{{$t('edge.common.deleteall')}}</el-button>
     <el-table :data="channelList" v-loading.body="listLoading" element-loading-text="Loading" fit highlight-current-row :max-height="tableHeight" id="footerBtn">
-      <el-table-column align="center" label='No' min-width="40">
-        <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label='ID' min-width="40">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
@@ -81,7 +76,7 @@
       <el-table-column align="center" :label="$t('edge.channel.operation')">
         <template slot-scope="scope">
           <el-button type="text" @click="handleClone(scope.$index,scope.row)">{{$t('edge.common.clone')}}</el-button>
-          <el-button type="text"  @click="handleDelete(scope.$index)">{{$t('edge.common.delete')}}</el-button>
+          <el-button type="text"  @click="handleDelete(scope.$index,scope.row)">{{$t('edge.common.delete')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -89,8 +84,8 @@
 </template>
 
 <script>
-import { getPhaseDesc } from '@/utils/phasedesc.js'
 import { mapState } from 'vuex'
+import { getControSource, getOverLap, refreshChannelLockDescData, refreshControlPanelDescData, getTypeOptions, getEtypeOptions } from '@/utils/channeldesc.js'
 const TypeOptions = [{
   value: 1,
   // label: 'other'
@@ -114,39 +109,11 @@ export default {
   data () {
     return {
       tableHeight: 760,
-      screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false,
       id: 1,
-      typeOptions: [{
-        value: 2,
-        label: '机动车相位'
-      }, {
-        value: 3,
-        label: '行人相位'
-      }, {
-        value: 4,
-        label: '跟随相位'
-      }, {
-        value: 5,
-        label: '跟随行人相位'
-      }, {
-        value: 0,
-        label: '不启用'
-      }],
-      etypeOptions: [{
-        value: 2,
-        label: 'phaseVehicle'
-        // label: '机动车相位'
-      }, {
-        value: 3,
-        label: 'phasePedestrian'
-        // label: '行人相位'
-      }, {
-        value: 4,
-        label: 'overlap'
-        // label: '跟随相位'
-      }],
-      signLocationList: ['东', '南', '西', '北', '东北', '东南', '西南', '西北']
+      typeOptions: [],
+      signLocationList: ['东', '南', '西', '北', '东北', '东南', '西南', '西北'],
+      desclist: [] // 当前控制类型描述map
     }
   },
   filters: {
@@ -170,7 +137,8 @@ export default {
       return arrays
     },
     ...mapState({
-      channelList: state => state.globalParam.tscParam.channelList
+      channelList: state => state.globalParam.tscParam.channelList,
+      channelDescMap: state => state.globalParam.channelDescMap
     })
   },
   created () {
@@ -180,29 +148,20 @@ export default {
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
+      _this.tableHeight = _this.$refs['channel-container'].offsetHeight - 80
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['channel-container'].offsetHeight - 80
       }
     })
   },
   watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
-    },
     channelList: function () {
       this.init()
+      this.createCurrentDescMap()
+    },
+    channelDescMap: function () {
+      refreshChannelLockDescData()
+      refreshControlPanelDescData()
     }
   },
   methods: {
@@ -211,72 +170,62 @@ export default {
       this.increaseId()
     },
     initData () {
-      let phasetype = this.getControSource()
-      let patterntype = this.getOverLap()
+      let phasetype = getControSource(this.$i18n.locale)
+      let patterntype = getOverLap(this.$i18n.locale)
+      this.typeOptions = getTypeOptions()
       if (this.$i18n.locale === 'en') {
-        this.typeOptions = this.etypeOptions
+        this.typeOptions = getEtypeOptions()
       }
       this.typeOptions[0].children = phasetype
       this.typeOptions[1].children = phasetype
       this.typeOptions[2].children = patterntype
+      this.typeOptions[3].children = patterntype
       let channel = this.globalParamModel.getParamsByType('channelList')
       for (let obj of channel) {
         let list = []
         list.push(obj.controltype)
-        list.push(obj.controlsource)
+        // 车道灯和不启用，没有下一级菜单
+        if (obj.controltype !== 6 && obj.controltype !== 0) {
+          list.push(obj.controlsource)
+        }
         obj.typeAndSouce = list
       }
     },
     handleChange (value, index) {
       let channel = this.globalParamModel.getParamsByType('channelList')
       channel[index].controltype = value[0]
-      channel[index].controlsource = value[1]
-    },
-    getControSource () {
-      let controlSources = []
-      const phaseList = this.globalParamModel.getParamsByType('phaseList')
-      for (let i = 0; i < phaseList.length; i++) {
-      // var patternNum = i + 1
-        let pattern = {}
-        var patternNum = phaseList[i].id
-        var patternDescription
-        if (phaseList[i].direction.length > 0 && phaseList[i].direction !== undefined) {
-          patternDescription = patternNum + '-' + getPhaseDesc(phaseList[i].direction, this.$i18n.locale)
-        } else {
-          patternDescription = patternNum
-        }
-        pattern.value = patternNum
-        pattern.label = patternDescription
-        controlSources.push(pattern)
+      if (value[1]) {
+        channel[index].controlsource = value[1]
       }
-      return controlSources
+      this.createCurrentDescMap()
     },
-    getOverLap () {
-      let controlTypes = []
-      const overlaplList = this.globalParamModel.getParamsByType('overlaplList')
-      for (let i = 0; i < overlaplList.length; i++) {
-        // var patternNum = i + 1
-        let overlap = {}
-        var overlapNum = overlaplList[i].id
-        var overlapDescription
-        if (overlaplList[i].desc !== '' && overlaplList[i].desc !== undefined) {
-          overlapDescription = overlapNum + '-' + overlaplList[i].desc
-        } else {
-          overlapDescription = overlapNum
+    createCurrentDescMap () {
+      // 生成当前的控制类型描述，与通道id一一对应
+      let channels = this.globalParamModel.getParamsByType('channelList')
+      let desclist = new Map()
+      for (let ele of channels) {
+        if (!ele.typeAndSouce || ele.typeAndSouce.length === 0) continue
+        let source
+        let dire
+        let desc = []
+        if (ele.typeAndSouce[0] !== undefined) {
+          source = this.typeOptions.filter(type => type.value === ele.typeAndSouce[0])[0].label
+          desc[0] = source
         }
-        overlap.value = overlapNum
-        overlap.label = overlapDescription
-        controlTypes.push(overlap)
+        if (ele.typeAndSouce[1] !== undefined) {
+          this.typeOptions.forEach(type => {
+            if (type.value === ele.typeAndSouce[0] && type.children && type.children.length) {
+              dire = type.children.filter(child => child.value === ele.typeAndSouce[1])[0].label
+            }
+          })
+          desc[1] = dire
+        }
+        desclist.set(ele.id, desc)
       }
-      return controlTypes
+      console.log(desclist)
+      this.desclist = desclist
+      this.$store.dispatch('SetChannelDesc', desclist)
     },
-    // increaseId () { // 实现id在之前的基础上加1
-    //   let channelList = this.globalParamModel.getParamsByType('channelList')
-    //   let i = channelList.length - 1
-    //   if (i >= 0) {
-    //     this.id = channelList[i].id + 1
-    //   }
-    // },
     increaseId () { // 实现id在之前的基础上寻找最小的
       let channelList = this.globalParamModel.getParamsByType('channelList')
       let channelIdList = channelList.map(ele => ele.id)
@@ -293,7 +242,7 @@ export default {
     handleEdit (index, row) {
 
     },
-    handleDelete (index) {
+    handleDelete (index, row) {
       this.$confirm(this.$t('edge.channel.deletetip'),
         this.$t('edge.common.alarm'), {
           confirmButtonText: this.$t('edge.common.confirm'),
@@ -301,6 +250,9 @@ export default {
           type: 'warning'
         }).then(() => {
         this.globalParamModel.deleteParamsByType('channelList', index, 1)
+        // 删除对应的通道描述，以供通道锁定和手动面板更新
+        delete this.desclist[row.id]
+        this.$store.dispatch('SetChannelDesc', this.desclist)
         this.$message({
           type: 'success',
           message: this.$t('edge.common.deletesucess')

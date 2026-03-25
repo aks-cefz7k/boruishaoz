@@ -30,7 +30,6 @@
   <div class="atc-table">
     <el-table
         :data="tableData.filter(data => !schfilter || (data.user_name !== undefined && data.user_name.toLowerCase().includes(schfilter.toLowerCase())) || (data.nick_name !== undefined && data.nick_name.toLowerCase().includes(schfilter.toLowerCase())))"
-        stripe
         size="mini"
         :max-height="tableHeight"
         v-loading.body="listLoading"
@@ -102,6 +101,7 @@ import update from './UserDialog/update'
 import authorize from './UserDialog/authorize'
 import Messagebox from '../../components/MessageBox'
 import { GetUsrInfoList, DeleteUsr } from '../../api/user'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'user',
   components: { add, update, Messagebox, authorize },
@@ -152,11 +152,9 @@ export default {
           this.listLoading = false
           if (data.data.code === '3008') {
             this.$message.error(this.$t('openatc.common.authtip'))
-            console.log(data.data.message)
             return
           }
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
@@ -190,7 +188,7 @@ export default {
             _vue.$message.error(this.$t('openatc.common.authtip'))
             return
           }
-          _vue.$message.error(data.data.message)
+          _vue.$message.error(getMessageByCode(data.data.code, _vue.$i18n.locale))
           return
         }
         this.messageboxVisible = false

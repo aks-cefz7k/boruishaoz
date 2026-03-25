@@ -161,11 +161,35 @@ export const constantRouterMapOfLogin = [{
   }]
 },
 {
+  path: '/faultrecord',
+  component: compose,
+  children: [{
+    path: '',
+    component: () => import('@/views/FaultRecord/index')
+  }]
+},
+{
   path: '/dutyroute',
   component: compose,
   children: [{
     path: '',
     component: () => import('@/views/Service/service')
+  }]
+},
+{
+  path: '/jupyter',
+  component: compose,
+  children: [{
+    path: '',
+    component: () => import('@/views/Jupyter/index')
+  }]
+},
+{
+  path: '/bottleneckControl',
+  component: compose,
+  children: [{
+    path: '',
+    component: () => import('@/views/bottleneckControl/index')
   }]
 },
 {

@@ -12,13 +12,13 @@
 <template>
   <div class="serviceroute-pattern">
     <el-table
-      stripe
       highlight-current-row
       ref="patternTable"
       class="patternTable"
       :data="patternTableData"
       style="width: 100%"
       @current-change="handleCurrentChange"
+      max-height="700px"
     >
       <el-table-column type="index" label="#" align="center"> </el-table-column>
       <el-table-column
@@ -104,6 +104,7 @@ import SelectControl from '@/views/Service/components/SelectControl'
 import SelectPattern from '@/views/Service/components/SelectPattern'
 import PatternStatus from '@/components/PatternStatus'
 import { getTscPhase } from '@/api/route'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'patterns',
   components: {
@@ -189,7 +190,7 @@ export default {
               this.$message.error(this.$t('openatc.common.devicenotonline'))
               return
             }
-            this.$message.error(res.data.message)
+            this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
             return
           }
           this.phaseList = res.data.data.data.phaseList
@@ -299,7 +300,6 @@ export default {
 // }
 // .pattern-status {
 //   display: inline;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 20px;
 //   font-weight: normal;
 //   font-stretch: normal;

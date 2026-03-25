@@ -16,9 +16,10 @@ const en = {
       'delete': 'Delete',
       'edit': 'Edit',
       'detail': 'Detail',
+      'searchdeviceid': 'Enter deviceid search',
       'searchplaceholder': 'Enter keyword search',
-      'addfailed': 'Add Success!',
-      'addsuccess': 'Add Failed!',
+      'addfailed': 'Add Failed!',
+      'addsuccess': 'Add Success!',
       'addcancel': 'Add Canceled!',
       'deletefailed': 'Delete Failed!',
       'deletesuccess': 'Delete Success!',
@@ -31,7 +32,10 @@ const en = {
       'placeholder': 'Select',
       'operation': 'Operation',
       'operationsuccess': 'Operation Success !',
-      'authtip': 'No access !'
+      'authtip': 'No access !',
+      'nodata': 'No Data !',
+      'canceloperate': 'Operation cancelled！',
+      'submitsuccess': 'Submit Success!'
     },
     'button': {
       'OK': 'OK',
@@ -39,7 +43,10 @@ const en = {
       'expandall': 'Expand All',
       'collapseall': 'Collapse All',
       'search': 'Search',
-      'location': 'Location'
+      'location': 'Location',
+      'ignore': 'Ignore',
+      'modify': 'Modify',
+      'submit': 'Submit'
     },
     'login': {
       'username': 'user_name',
@@ -58,14 +65,23 @@ const en = {
       'greenwaveoptimize': 'Greenwave Optimize',
       'operationrecord': 'Operation Record',
       'organization': 'Organization',
+      'bottleneckcontrol': 'Overflow Detector',
+      'script': 'Script',
+      'faultrecord': 'Fault Record',
       'dutyroute': 'Duty Route',
       'realname': 'RealName',
       'telno': 'Telno',
       'email': 'Email',
       'changepass': 'Changepass',
+      'systemsettings': 'System Settings',
       'about': 'About',
       'signout': 'Sign Out',
-      'language': 'Language'
+      'language': 'Language',
+      'skin': 'Skin',
+      'dark': 'Dark',
+      'light': 'Light',
+      'other': 'Other',
+      'help': 'Help'
     },
     'home': {
       'devicestatus': 'Device Status',
@@ -78,12 +94,28 @@ const en = {
       'quantity': 'Quantity',
       'devicemaneger': 'Device Maneger',
       'usermanager': 'User Manager',
-      'operationrecord': 'Operation Record'
+      'operationrecord': 'Operation Record',
+      'faultOrOffLine': 'Fault / Online'
+    },
+    'faultrecord': {
+      'fixdetail': 'Fix Detail',
+      'deviceid': 'Device Id',
+      'faultid': 'Fault Id',
+      'boardcardtype': 'Board Card Type',
+      'faultbegintime': 'Fault Begin Time',
+      'faultendtime': 'Fault End Time',
+      'faulttype': 'Fault Type',
+      'faultchild': 'Fault Child',
+      'faultgrade': 'Fault Grade',
+      'operation': 'Operation',
+      'faultvaluedetail': 'Fault Value Detail'
     },
     'devicemanager': {
       'devicelist': 'Device List',
       'deviceid': 'Device Id',
       'devicename': 'Device Name',
+      'firm': 'Firm',
+      'platform': 'Platform',
       'type': 'Type',
       'IP': 'IP',
       'port': 'Port',
@@ -97,6 +129,7 @@ const en = {
       'operation': 'Operation',
       'longitude': 'Longitude',
       'latitude': 'Latitude',
+      'layerLevel': 'Level',
       'adddevice': 'Add Device',
       'editdevice': 'Edit Device',
       'enterIp': 'Please enter IP',
@@ -105,10 +138,26 @@ const en = {
       'correctport': 'Please fill in the legal port!',
       'choosetype': 'Please select type',
       'chooseprotocol': 'Please select protocol',
+      'chooseplatform': 'Please select platform',
       'enterId': 'Please enter device ID',
       'entername': 'Please enter device name',
       'enterrequired': 'Please fill in the required items!',
-      'deletedevice': 'Do you want to delete this device?'
+      'deletedevice': 'Do you want to delete this device?',
+      'faultDetail': 'FaultDetail',
+      'faultMaintype': 'Main Type',
+      'faultSubtype': 'Sub Type',
+      'faultOccurtime': 'Occur Time',
+      'boardCardType': 'BoardCard Type',
+      'faultGrade': 'Grade',
+      'faultValue': 'Value',
+      'crowsid': 'Crows ID',
+      'updateDeviceId': 'Modify ID',
+      'deviceNotNull': 'Device ID cannot be empty!',
+      'oldIdNotConsistentNewId': 'New device ID cannot be consistent with old device ID!',
+      'thirdplatformid': 'Third party ID',
+      'timeSpaceGraph': 'Time space graph',
+      'keyintersection': 'Key Intersection：',
+      'sockettype': 'Socket Type'
     },
     'usermanager': {
       'username': 'Username',
@@ -206,6 +255,7 @@ const en = {
       'up': 'Up',
       'down': 'Down',
       'optstrategyoption1': 'Green wave optimization',
+      'optstrategyoption2': 'Red wave optimization',
       'directionOption1': 'Up',
       'directionOption2': 'Down',
       'directionOption3': 'All',
@@ -255,7 +305,7 @@ const en = {
       'clickaddroute': 'Click to add a new route',
       'nochooseplan': 'No chosen plan！',
       'routePreview': 'Route Preview',
-      'routeState': 'Route State',
+      'routeState': 'Route Control',
       'dutyrouteconfig': 'Dutyroute Config',
       'node': 'Node',
       'plan': 'Plan',
@@ -289,10 +339,83 @@ const en = {
       'channellock': 'Channel Lock',
       'phaselock': 'Phase Lock',
       'programIntervention': 'Program Intervention',
-      'channelDetection': 'Channel Detection'
+      'channelDetection': 'Channel Detection',
+      'emptyRouteName': 'Empty Route Name !',
+      'namerepeat': 'Name Repeat !',
+      'notAllowedToEdit': 'Not allowed to edit processing data !'
     },
     'gis': {
-      'chooseLocationInfo': 'Click the map to choose a location !'
+      'chooseLocationInfo': 'Click the map to choose a location !',
+      'clickToChooseLocationInfo': 'Click to choose locationInfo on the map!',
+      'crossRoad': 'Cross Road',
+      'gisNormal': 'Map',
+      'gisStatellite': 'Statellite',
+      'deviceState': 'Device State',
+      'dutyRoute': 'Duty Route',
+      'coordinateRoute': 'Coordinate Route',
+      'routeLength': 'Route Length'
+    },
+    'systemsettings': {
+      'id': 'ID',
+      'module': 'Module',
+      'name': 'Name',
+      'content': 'Content',
+      'desc': 'Desc',
+      'operate': 'Operate',
+      'addconfig': 'Add Config',
+      'updateconfig': 'Update Config',
+      'deleteconfig': 'Do you want to delete this config?'
+    },
+    'bottleneckcontrol': {
+      'detector': 'Detector',
+      'open': 'Open',
+      'off': 'Off',
+      'isoffcontrol': 'Is cancel overflows control',
+      'isopencontrol': 'Is open overflows control',
+      'opensuccess': 'Open overflows control success!',
+      'offsuccess': 'Cancel overflows control success!',
+      'switchsavereminder': 'Switching detector control list will not save the current configuration. Are you sure you want to switch?',
+      'bottlenecklist': 'Detector control list',
+      'detectorid': 'Scheme ID',
+      'desc': 'Describe',
+      'type': 'Type',
+      'status': 'Status',
+      'port': 'Port',
+      'name': 'Name',
+      'deviceid': 'Device ID',
+      'phaseid': 'Phase ID',
+      'controllevel': 'Control Level',
+      'controltype': 'Control Type',
+      'controltime': 'Controltime（s）',
+      'choosedev': 'Choose Device',
+      'phase': 'phase',
+      'one-level': 'one-level',
+      'two-level': 'two-level',
+      'three-level': 'three-level',
+      'queue': 'queue',
+      'overflow': 'overflow',
+      'triggering': 'triggering',
+      'nottriggered': 'not triggered',
+      'greenextension': 'Green Extension',
+      'greenreduction': 'Green Reduction',
+      'bottleneckinfo': ' detector control info',
+      'isdeletedetector': 'Are you sure delete the detector'
+    },
+    'about': {
+      'version': 'Version',
+      'copyright': 'Copyright',
+      'company': 'KEDACOM',
+      'packedtime': 'Packed time',
+      'opensourceagreement': 'Opensource Agreement'
+    },
+    'message': {
+      // 协调路线错误
+      '5001': '重复的协调路线名称',
+      // 勤务路线错误
+      '6001': '重复的勤务路线名称',
+      '6002': '勤务路线正在执行中',
+      // 流量错误
+      '7001': 'ftp客户端连接失败'
     }
   }
 }

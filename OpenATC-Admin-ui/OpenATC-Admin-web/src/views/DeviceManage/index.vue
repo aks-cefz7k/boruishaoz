@@ -34,8 +34,7 @@
       </div>
     <div class="devs-table">
       <el-table
-          :data="tableData.filter(data => !devsfilter || (data.agentid !== undefined && data.agentid.toLowerCase().includes(devsfilter.toLowerCase())) || (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(devsfilter.toLowerCase())) || (data.name !== undefined && data.name.toLowerCase().includes(devsfilter.toLowerCase())))"
-          stripe
+          :data="computedTable"
           size="mini"
           :max-height="tableHeight"
           v-loading.body="listLoading"
@@ -75,6 +74,23 @@
           align="center">
           </el-table-column>
           <el-table-column
+            prop="thirdplatformid"
+            :label="$t('openatc.devicemanager.thirdplatformid')"
+            align="center">
+          </el-table-column>
+          <el-table-column
+          prop="platform"
+          :label="$t('openatc.devicemanager.platform')"
+          sortable
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="firm"
+          :label="$t('openatc.devicemanager.firm')"
+          sortable
+          align="center">
+          </el-table-column>
+          <el-table-column
           prop="descs"
           :label="$t('openatc.devicemanager.describe')"
           align="center">
@@ -85,14 +101,30 @@
           align="center">
           </el-table-column>
           <el-table-column
-          prop="roles"
-          :label="$t('openatc.devicemanager.state')"
-          align="center">
-            <template slot-scope="scope">
-              <div>
-                  <el-tag size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
-              </div>
-            </template>
+            prop="roles"
+            :label="$t('openatc.devicemanager.state')"
+            align="center">
+              <template slot="header">
+                <el-popover
+                  placement="bottom"
+                  trigger="click">
+                  <div>
+                    <template>
+                      <el-checkbox @change="onOnlineChange" :checked="true" :label="$t('openatc.devicemanager.online')"></el-checkbox>
+                      <el-checkbox @change="onFaultChange" :checked="true" :label="$t('openatc.devicemanager.fault')"></el-checkbox>
+                      <el-checkbox @change="onOfflineChange" :checked="true" :label="$t('openatc.devicemanager.offline')"></el-checkbox>
+                    </template>
+                  </div>
+                  <el-row type="text" slot="reference">
+                    {{$t('openatc.devicemanager.state')}}<i class="el-icon-caret-bottom state-search"></i>
+                  </el-row>
+                </el-popover>
+              </template>
+              <template  slot-scope="scope">
+                <div>
+                    <el-tag size="medium" effect="plain" :type="getTag(scope.row).type">{{ getTag(scope.row).label }}</el-tag>
+                </div>
+              </template>
           </el-table-column>
           <el-table-column
           prop="lastTime"
@@ -101,16 +133,18 @@
           sortable
           align="center">
           </el-table-column>
-          <el-table-column :label="$t('openatc.devicemanager.operation')" align="center" width="180">
+          <el-table-column :label="$t('openatc.devicemanager.operation')" align="center" width="240">
           <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">{{$t('openatc.common.edit')}}</el-button>
               <el-button type="text" @click="handleToDetail(scope.row)">{{$t('openatc.common.detail')}}</el-button>
               <el-button type="text" @click="handleDelete(scope.row)">{{$t('openatc.common.delete')}}</el-button>
+              <el-button type="text" @click="handleFault(scope.row)">{{$t('openatc.devicemanager.faultDetail')}}</el-button>
           </template>
           </el-table-column>
       </el-table>
     </div>
     <Update ref="updateChild" :childTitle="childTitle"></Update>
+    <Fault-detail ref="faultDetail" :childTitle="childTitle"></Fault-detail>
   </div>
   <router-view></router-view>
 </div>
@@ -120,60 +154,100 @@ import router from '@/router'
 import { mapState } from 'vuex'
 import Messagebox from '../../components/MessageBox'
 import Update from './DeviceDialog/update'
+import FaultDetail from './DeviceDialog/FaultDetail'
 import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
+import { GetCurrentFaultByAgentid } from '@/api/fault'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'device',
-  components: { Update, Messagebox, DeviceTags },
+  components: { Update, Messagebox, DeviceTags, FaultDetail },
   data () {
     return {
+      stateList: [],
+      isOnlineChecked: true,
+      isFaultChecked: true,
+      isOfflineChecked: true,
       tableHeight: 700,
       devsfilter: '',
       childTitle: 'adddevice',
       messageboxVisible: false,
       tableData: [],
-      listLoading: false // 数据加载等待动画
+      listLoading: false, // 数据加载等待动画
+      firmMap: new Map([['Kedacom', '科达'], ['Tyco', '泰科'], ['Huatong', '华通']])
     }
   },
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
       // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-      window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
-      }
+      _this.tableHeight = window.innerHeight * 0.8
     })
-  },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-    }
   },
   computed: {
     ...mapState({
       tags: state => state.globalVariable.deviceTags
-    })
+    }),
+    computedTable () {
+      let list = []
+      list = this.tableData.filter(data =>
+        !this.devsfilter ||
+        (data.agentid !== undefined && data.agentid.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
+        (data.jsonparam.ip !== undefined && data.jsonparam.ip.toLowerCase().includes(this.devsfilter.toLowerCase())) ||
+        (data.name !== undefined && data.name.toLowerCase().includes(this.devsfilter.toLowerCase()))
+      )
+      let stateList = this.stateList
+      if (stateList && stateList.length > 0) {
+        list = list.filter(dev => {
+          return stateList.includes(dev.state)
+        })
+      }
+      for (let dev of list) {
+        dev.platform = dev.platform ? dev.platform : ''
+        dev.lastTime = dev.lastTime ? dev.lastTime : ''
+      }
+      return list
+    }
   },
   created () {
     this.getList()
   },
   methods: {
+    onOnlineChange (val) {
+      this.isOnlineChecked = val
+      this.onStateChange()
+    },
+    onFaultChange (val) {
+      this.isFaultChecked = val
+      this.onStateChange()
+    },
+    onOfflineChange (val) {
+      this.isOfflineChecked = val
+      this.onStateChange()
+    },
+    onStateChange () {
+      let stateList = []
+      if (this.isOnlineChecked) {
+        stateList.push('UP')
+      }
+      if (this.isFaultChecked) {
+        stateList.push('FAULT')
+      }
+      if (this.isOfflineChecked) {
+        stateList.push('DOWN')
+      }
+      this.stateList = stateList
+    },
     getTag (row) {
       if (row.state === 'DOWN') {
         return {
           label: this.$t('openatc.devicemanager.offline'),
           type: 'info'
+        }
+      } else if (row.state === 'FAULT') {
+        return {
+          label: this.$t('openatc.devicemanager.fault'),
+          type: 'danger'
         }
       } else {
         if (row.status === 0) {
@@ -194,11 +268,14 @@ export default {
       this.listLoading = true
       GetAllDevice().then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
-        this.tableData = res.data.data
+        this.tableData = res.data.data.map(data => ({
+          ...data,
+          firm: this.firmMap.get(data.firm)
+        }))
       })
     },
     handleToDetail (row) {
@@ -218,7 +295,7 @@ export default {
       }
       router.push({
         path: !curPath || curPath === '/overview/index' ? '/overview/index' : curPath,
-        query: {IP: dev.jsonparam.ip, port: dev.jsonparam.port, agentid: dev.agentid, protocol: dev.protocol, isfromatc: true}
+        query: {agentid: dev.agentid, isfromatc: true}
       })
     },
     handleFilter () {
@@ -235,9 +312,28 @@ export default {
       updateChild.onUpdateClick(dev)
     },
     handleDelete (row) {
+      this.childTitle = 'faultDetail'
       let dev = row
       this.deleteId = dev.agentid
       this.messageboxVisible = true
+    },
+    handleFault (row) {
+      let _this = this
+      GetCurrentFaultByAgentid(row.agentid).then(res => {
+        if (!res.data.success) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return false
+        } else {
+          let list = res.data.data
+          if (list && list.length > 0) {
+            this.childTitle = 'faultDetail'
+            let component = _this.$refs.faultDetail
+            component.onViewFaultClick(list)
+          } else {
+            this.$message.info(this.$t('openatc.common.nodata'))
+          }
+        }
+      })
     },
     cancle () {
       this.messageboxVisible = false
@@ -245,16 +341,16 @@ export default {
     ok () {
       DeleteDevice(this.deleteId).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           this.$message({
-            message: '删除失败!',
+            message: this.$t('openatc.common.deletefailed'),
             type: 'error',
             duration: 1 * 1000
           })
           return
         }
         this.$message({
-          message: '删除成功！',
+          message: this.$t('openatc.common.deletesuccess'),
           type: 'success'
         })
         this.messageboxVisible = false
@@ -265,6 +361,16 @@ export default {
       let val1 = obj1.agentid
       let val2 = obj2.agentid
       return val1 - val2
+    },
+    formatterSockettype (row, column) {
+      let sockettype = row.sockettype
+      let res = ''
+      if (sockettype === 0) {
+        res = 'UDP'
+      } else if (sockettype === 1) {
+        res = 'TCP'
+      }
+      return res
     }
   }
 }

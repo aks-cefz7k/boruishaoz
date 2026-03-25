@@ -102,6 +102,7 @@
 import {
   UpdateUsr, getRoles
 } from '../../../api/user'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   components: {
   },
@@ -218,17 +219,7 @@ export default {
         params
       ).then(data => {
         if (!data.data.success) {
-          if (data.data.code === '3010') {
-            this.$message.error('超级管理员角色不能被修改！')
-            console.log(data.data.message)
-            return
-          }
-          if (data.data.code === '3003') {
-            this.$message.error('用户名已存在！')
-            return
-          }
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = '编辑成功！'
@@ -284,11 +275,7 @@ export default {
     getAllRoles () {
       getRoles().then(res => {
         if (!res.data.success) {
-          if (res.data.code === '3008') {
-            this.$message.error('没有权限访问!')
-            return
-          }
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         let rolesData = res.data.data

@@ -18,13 +18,14 @@
             <div class="main" v-for="(item, index) in imgs" v-if="index < sum" :key="index">
                 <!-- <div class="box" :class="status[index] ? 'Selected' : 'noSelected'" @click="boxShow(index)"><img :src="item.img"></div> -->
                 <div :style="tankuangSize" :class="status[index] ? 'phaseSelected' : 'phaseNoSelected'" @click="boxShow(index)">
-                  <div :class="item.class" style="border:0px"></div>
+                  <div v-if="item.class" :class="item.class" style="border:0px"></div>
+                  <div v-if="item.img" :style="{'backgroundImage': `url(${item.img})`, 'border':'0px', 'background-size': '43px', 'width': '100%', 'height': '56px', 'background-repeat': 'no-repeat','background-position': 'center'}"></div>
                 </div>
             </div>
             <span v-text="name" :class="showBottomName ? 'showSpan' : 'hiddenSpan'"></span>
             <el-input slot="reference" size="small" v-model="name" :readonly="true"></el-input>
           </el-popover>
-          <span v-text="name" class="showSpan"></span>
+          <span v-text="name" class="showSpan" v-show="showSpan"></span>
     </div>
 </template>
 <script>
@@ -62,6 +63,10 @@ export default {
     },
     rows: {
       type: Number
+    },
+    showSpan: {
+      type: Boolean,
+      default: true
     }
   },
   created () {
@@ -124,7 +129,7 @@ export default {
   width: 100%;
   // padding-bottom: 100%;
   padding-left: 0.5%;
-  padding-top: 0.5%;
+  // padding-top: 0.5%;
 }
 
 // .main>div{

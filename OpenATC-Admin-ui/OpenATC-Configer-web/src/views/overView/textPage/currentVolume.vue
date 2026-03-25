@@ -23,8 +23,7 @@
             <el-table
               :data="tableData"
               size="mini"
-              max-height="300"
-              stripe
+              max-height="324"
               style="width: 100%">
               <el-table-column
                 align="center"
@@ -100,16 +99,15 @@ export default {
 }
 </script>
 <style scoped>
-.volume-part {
+/* .volume-part {
   padding: 33px 30px;
   box-sizing: border-box;
 }
 .current-volume {
-  display: flex; /*所有子元素block或inline都变成行内块元素的样式*/
+  display: flex;
   align-items: center;
   justify-content: flex-start;
   width: 96%;
-  font-family: SourceHanSansCN-Regular;
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -129,7 +127,6 @@ export default {
 }
 .current-volumetable {
   width: 96%;
-  /* height: 380px; */
   margin-top: 40px;
-}
+} */
 </style>

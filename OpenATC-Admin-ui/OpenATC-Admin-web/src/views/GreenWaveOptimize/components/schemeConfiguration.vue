@@ -53,6 +53,7 @@ import PatternPanel from '../tables/pattern'
 import PhasePanel from '../tables/phase'
 import { GetDeviceByIds } from '@/api/device'
 import { UpdateRoute } from '@/api/route'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'schemeConfiguration',
   data () {
@@ -177,7 +178,7 @@ export default {
       })
       UpdateRoute(this.configData).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.$message({
@@ -204,7 +205,7 @@ export default {
       this.deviceIds = this.configData.devs.map(ele => ele.agentid)
       GetDeviceByIds(this.deviceIds).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.devicesData = res.data.data
@@ -296,14 +297,13 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
- @import "../../../styles/theme/element-variables.scss";
-.configDrawer .el-drawer__header {
-  text-align: left;
-  color: $--color-text-regular;
-}
-.configDrawer .el-drawer__body {
-  padding: 0 16px 30px 16px;
-}
+// .configDrawer .el-drawer__header {
+//   text-align: left;
+//   color: $--color-text-regular;
+// }
+// .configDrawer .el-drawer__body {
+//   padding: 0 16px 30px 16px;
+// }
 </style>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .configDrawer {

@@ -84,6 +84,7 @@
   Created: 2019/12/11
 */
 import { setSerialPort } from '@/api/system'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   data () {
     return {
@@ -191,7 +192,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = '设置成功！'
@@ -218,7 +219,6 @@ export default {
     padding: 0 12px 0 0;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    font-family: SourceHanSansCN-Regular;
     font-weight: normal;
     font-stretch: normal;
     line-height: 40px;

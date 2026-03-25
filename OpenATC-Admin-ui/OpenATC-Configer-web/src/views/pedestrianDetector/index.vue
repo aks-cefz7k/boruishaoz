@@ -10,14 +10,9 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container" ref="peddetector-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-table class="tb-edit" ref="singleTable" :data="pedestrainDetectorList" v-loading.body="listLoading" element-loading-text="Loading" fit highlight-current-row v-clickoutside="cancelTable" :max-height="tableHeight" id="footerBtn">
-      <el-table-column align="center" label='No' min-width="40">
-        <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label='ID' min-width="40">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
@@ -27,6 +22,32 @@
         <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.desc"  @change="handleEdit(scope.$index, scope.row)"></el-input>
           <span>{{scope.row.desc}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('edge.pedestrianDetector.type')" min-width="100" align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.type" size="small">
+            <el-option
+              v-for="item in typeOption"
+              :key="item.value"
+              :label="$t('edge.pedestrianDetector.typeOption' + item.value)"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span>{{$t('edge.pedestrianDetector.typeOption' + scope.row.type)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('edge.pedestrianDetector.region')" min-width="100" align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.region" size="small">
+            <el-option
+              v-for="item in regionOption"
+              :key="item.value"
+              :label="$t('edge.pedestrianDetector.regionOption' + item.value)"
+              :value="item.value">
+            </el-option>
+          </el-select>
+           <span>{{$t('edge.pedestrianDetector.regionOption' + scope.row.region)}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.pedestrianDetector.callPhase')">
@@ -104,10 +125,23 @@ export default {
   data () {
     return {
       tableHeight: 760,
-      screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false,
       CallPhaseOption: [],
-      id: 1
+      id: 1,
+      typeOption: [{
+        value: 0
+      }, {
+        value: 1
+      }, {
+        value: 2
+      }],
+      regionOption: [{
+        value: 0
+      }, {
+        value: 1
+      }, {
+        value: 2
+      }]
     }
   },
   directives: { clickoutside },
@@ -133,27 +167,13 @@ export default {
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
+      _this.tableHeight = _this.$refs['peddetector-container'].offsetHeight - 80
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['peddetector-container'].offsetHeight - 80
       }
     })
   },
   watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
-    },
     pedestrainDetectorList: function () {
       this.init()
     }
@@ -237,6 +257,8 @@ export default {
       }
       var pedDetectorInitData = {
         id: this.id,
+        type: 0,
+        region: 0,
         callphase: '',
         noactivity: 30,
         maxpresence: 45,

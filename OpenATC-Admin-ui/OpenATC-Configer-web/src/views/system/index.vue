@@ -10,7 +10,7 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container system-container">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane :label="$t('edge.system.information')" name="information">
       <div class="system-information">
@@ -56,103 +56,77 @@
               <el-button type="primary" @click="editSignCode" size="mini">设置</el-button>
             </div> -->
         </div>
-        <div class="identification-code" style="margin-top: 50px;">
-            <div class="signal-version-name">{{$t('edge.system.remotedebugging')}}：</div>
-            <div class="signal-version-value" style="height: 95px;">
-              <el-form
-                ref="template"
-                :model="remoteDebugInfo"
-                label-width="80px">
-                    <el-form-item
-                        :label="$t('edge.system.openornot')"
-                        prop="status"
-                        style="margin-bottom: 5px;">
-                      <el-switch
-                        v-model="remoteDebugInfo.status"
-                        active-color="#409EFF"
-                        :active-value="1"
-                        :inactive-value="0">
-                      </el-switch>
-                    </el-form-item>
-                    <el-form-item
-                        :label="$t('edge.system.automaticshutdown')"
-                        prop=".duration">
-                        <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
-                            <el-option v-for="item in durationList" :key="item.value" :label="$t('edge.system.duration' + item.id)" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-            </div>
-            <div class="signal-version-bottom">
-              <el-button type="primary" @click="editRemoteDebug" size="mini">{{$t('edge.system.sure')}}</el-button>
-            </div>
-        </div>
       </div>
     </el-tab-pane>
-    <!-- <el-tab-pane label="IP" name="ip">
-        <div class="system-information">
-            <div class="currsystemtime">
-                <div class="signal-version-name">IP数据设置：</div>
-                <div class="signal-version-value" style="height: 110px;">
-                    <div>
-                        <div class="software" style="top: 20px;"><div style="float: left;">IP：</div><div style="margin-left: 70px;">{{ip}}</div></div>
-                        <div class="software" style="top: 30px;"><div style="float: left;">子网掩码：</div><div style="margin-left: 70px;">{{subnetmask}}</div></div>
-                        <div class="software" style="top: 40px;"><div style="float: left;">网关：</div><div style="margin-left: 70px;">{{gateway}}</div></div>
-                    </div>
-                </div>
-                <div class="signal-version-bottom">
-                    <el-button type="primary" @click="editSignIp" size="mini">设置</el-button>
-                </div>
-            </div>
-      </div>
-    </el-tab-pane> -->
-    <!-- <el-tab-pane label="串口" name="serialPort">
-        <div class="system-information">
-            <div class="currsystemtime">
-                <div class="signal-version-name">串口数据：</div>
-                <div class="signal-version-value" style="height: 140px;">
-                    <div>
-                        <div class="software" style="top: 30px;"><div style="float: left;">波特率：</div><div style="margin-left: 85px;">{{Baudrate}}</div></div>
-                        <div class="software" style="top: 40px;"><div style="float: left;">数据位：</div><div style="margin-left: 85px;">{{databit}}</div></div>
-                        <div class="software" style="top: 50px;"><div style="float: left;">停止位：</div><div style="margin-left: 85px;">{{stopbit}}</div></div>
-                        <div class="software" style="top: 60px;"><div style="float: left;">奇偶校验位：</div><div style="margin-left: 85px;">{{paritybit}}</div></div>
-                    </div>
-                </div>
-                <div class="signal-version-bottom">
-                    <el-button type="primary" @click="editSerialPort" size="mini">设置</el-button>
-                </div>
-            </div>
-      </div>
-    </el-tab-pane> -->
     <el-tab-pane :label="$t('edge.system.remotecontrol')" name="remote">
-        <div class="system-information">
+          <div class="system-information">
             <div class="currsystemtime">
-                <div class="signal-version-name">{{$t('edge.system.remotecontrol')}}：</div>
-                <div class="signal-version-value" style="height: 70px;">
-                    <div>
-                        <div class="software"><div style="float: left; margin-top: 30px;">{{$t('edge.system.oper')}}</div>
-                          <div class="remote-select">
-                            <el-select v-model="remoteControl" placeholder="请选择" size="small">
-                              <el-option
-                                v-for="item in remoteOptions"
-                                :key="item.value"
-                                :label="$t('edge.system.remote' + item.id)"
-                                :value="item.value">
-                              </el-option>
-                            </el-select>
-                          </div>
-                        </div>
+              <div class="signal-version-name">{{$t('edge.system.remotecontrol')}}：</div>
+              <div class="signal-version-value" style="height: 70px;">
+                <div>
+                    <div class="software"><div style="float: left; margin-top: 30px;">{{$t('edge.system.oper')}}</div>
+                      <div class="remote-select">
+                        <el-select v-model="remoteControl" placeholder="请选择" size="small">
+                          <el-option
+                            v-for="item in remoteOptions"
+                            :key="item.value"
+                            :label="$t('edge.system.remote' + item.id)"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
+                      </div>
                     </div>
                 </div>
-                <div class="signal-version-bottom">
-                    <el-button type="primary" @click="editRemoteControl" size="mini">{{$t('edge.system.sure')}}</el-button>
-                </div>
+              </div>
+              <div class="signal-version-bottom">
+                  <el-button type="primary" @click="editRemoteControl" size="mini">{{$t('edge.system.sure')}}</el-button>
+              </div>
+            </div>
+            <div class="identification-code" style="margin-top: 50px;">
+              <div class="signal-version-name">{{$t('edge.system.remotedebugging')}}：</div>
+              <div class="signal-version-value" style="height: 95px;">
+                <el-form
+                  ref="template"
+                  :model="remoteDebugInfo"
+                  label-width="80px">
+                      <el-form-item
+                          :label="$t('edge.system.openornot')"
+                          prop="status"
+                          style="margin-bottom: 5px;">
+                        <el-switch
+                          v-model="remoteDebugInfo.status"
+                          active-color="#409EFF"
+                          :active-value="1"
+                          :inactive-value="0">
+                        </el-switch>
+                      </el-form-item>
+                      <el-form-item
+                          :label="$t('edge.system.automaticshutdown')"
+                          prop=".duration">
+                          <el-select size="small" v-model="remoteDebugInfo.duration" placeholder="" style="width: 160px">
+                              <el-option v-for="item in durationList" :key="item.value" :label="$t('edge.system.duration' + item.id)" :value="item.value"></el-option>
+                          </el-select>
+                      </el-form-item>
+                  </el-form>
+              </div>
+              <div class="signal-version-bottom">
+                <el-button type="primary" @click="editRemoteDebug" size="mini">{{$t('edge.system.sure')}}</el-button>
+              </div>
             </div>
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
                 <div class="signal-version-name">{{$t('edge.system.systemupdate')}}：</div>
                 <div class="signal-version-bottom">
-                    <el-button type="primary" @click="chooseFile" size="mini">{{$t('edge.system.selectfile')}}</el-button>
+                    <!-- <el-button type="primary" @click="chooseFile" size="mini">{{$t('edge.system.selectfile')}}</el-button> -->
+                    <div class="statistics-name">{{$t('edge.statistics.username')}}</div>
+                    <div class="statistics-input">
+                      <el-input v-model="userName" :placeholder="$t('edge.statistics.usernameplaceholder')" size="small"></el-input>
+                    </div>
+                    <div class="statistics-name">{{$t('edge.statistics.pass')}}</div>
+                    <div class="statistics-input">
+                      <el-input v-model="password" :placeholder="$t('edge.statistics.passplaceholder')" size="small" show-password></el-input>
+                    </div>
                 </div>
+                <el-button type="primary" @click="chooseFile" size="mini" style="margin-left: 20px;">{{$t('edge.system.selectfile')}}</el-button>
             </div>
             <div class="currsystemtime" style="float: left; margin-top: 50px;">
                 <div class="signal-version-name">{{$t('edge.system.dataupdate')}}：</div>
@@ -163,7 +137,13 @@
       </div>
     </el-tab-pane>
     <el-tab-pane :label="$t('edge.system.channeldetection')" name="channel">
-      <channelControl />
+      <channelControl :channelList="channelList" />
+    </el-tab-pane>
+    <el-tab-pane :label="$t('edge.system.realTimeChannel')" name="realTimeChannel">
+      <realTimeChannel ref="realTimeChannel" :channelList="channelList"></realTimeChannel>
+    </el-tab-pane>
+    <el-tab-pane :label="$t('edge.route.deviceInfo')" name="deviceinfo">
+      <deviceInfo ref="deviceinfo"></deviceInfo>
     </el-tab-pane>
     <!-- <el-tab-pane label="手动控制" name="manual">
       <manualControl></manualControl>
@@ -187,10 +167,14 @@ import signip from './systemDialog/signIp'
 import updatefile from './systemDialog/updateFile'
 import manualControl from './manualControl'
 import channelControl from './channelControl'
+import realTimeChannel from './realTimeChannel'
+import deviceInfo from '../deviceInfo/systemInfo'
 import { getSignVersion, getSystemTime, getParamVersion, getCode, getSignIp, getSerialPort, setRemoteControl, getRemoteDebug, setRemoteDebug, udiskupdate } from '@/api/system'
+import { getChannel } from '@/api/manual'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'system',
-  components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl },
+  components: { systemtime, paramversion, serialport, signcode, signip, updatefile, manualControl, channelControl, realTimeChannel, deviceInfo },
   data () {
     return {
       activeName: 'information',
@@ -236,7 +220,10 @@ export default {
         // label: '无限制',
         value: 0,
         id: '3'
-      }]
+      }],
+      userName: '',
+      password: '',
+      channelList: [] // 上载获取的通道信息
     }
   },
   watch: {
@@ -249,8 +236,8 @@ export default {
           this.getSystemTime() // 获取当前时间
           this.getParamVersion() // 获取特征参数版本
           this.getCode() // 获取识别码
-          this.getSignIp() // 获取ip数据
-          this.getSerialPort() // 获取串口数据
+          // this.getSignIp() // 获取ip数据
+          // this.getSerialPort() // 获取串口数据
           // this.getRemoteDebug() // 获取远程调试信息
         }
       },
@@ -263,13 +250,20 @@ export default {
     this.getSystemTime() // 获取当前时间
     this.getParamVersion() // 获取特征参数版本
     this.getCode() // 获取识别码
-    this.getSignIp() // 获取ip数据
-    this.getSerialPort() // 获取串口数据
+    // this.getSignIp() // 获取ip数据
+    // this.getSerialPort() // 获取串口数据
     // this.getRemoteDebug() // 获取远程调试信息
+    this.getChannelList() // 自动上载通道
   },
   methods: {
     handleClick (tab, event) {
-      console.log(tab, event)
+      if (tab.name === 'realTimeChannel') {
+        let realTimeChannel = this.$refs.realTimeChannel
+        realTimeChannel.initData()
+      } else {
+        let realTimeChannel = this.$refs.realTimeChannel
+        realTimeChannel.clearChannelInterval() // 切换tab标签的时候清除实时通道的定时器
+      }
     },
     getSignVersion () {
       getSignVersion().then((data) => {
@@ -279,7 +273,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.software = res.data.data.software
@@ -297,7 +291,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.systemTime = res.data.data.time
@@ -314,7 +308,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.paramVersion = res.data.data.version
@@ -331,7 +325,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.code = res.data.data.code
@@ -348,7 +342,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.ip = res.data.data.ip
@@ -367,7 +361,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.Baudrate = res.data.data.Baudrate
@@ -387,7 +381,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         if (res.data.data) {
@@ -407,7 +401,7 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = '设置成功！'
@@ -442,8 +436,14 @@ export default {
       editSerialport.onEditSerialPort(this.Baudrate, this.databit, this.stopbit, this.paritybit)
     },
     chooseFile () {
+      let username = this.userName
+      let password = this.password
+      // if (username === '' || password === '') {
+      //   this.$message.error(this.$t('edge.statistics.userpassnotnull'))
+      //   return
+      // }
       let updateFile = this.$refs.updateFile
-      updateFile.onUpdateFile()
+      updateFile.onUpdateFile(username, password)
     },
     editRemoteDebug () {
       setRemoteDebug(this.remoteDebugInfo).then(data => {
@@ -453,10 +453,10 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        let msg = '设置成功！'
+        let msg = this.$t('edge.system.resetSuccess')
         this.$message({
           message: msg,
           type: 'success',
@@ -472,15 +472,32 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
-        let msg = '更新成功！'
+        let msg = this.$t('edge.common.updatesucess')
         this.$message({
           message: msg,
           type: 'success',
           duration: 1 * 1000
         })
+      })
+    },
+    getChannelList () {
+      getChannel().then((data) => {
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        }
+        this.channelList = res.data.data.channelList
+      }).catch(error => {
+        this.$message.error(error)
+        console.log(error)
       })
     }
   }
@@ -488,14 +505,13 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.app-container {
-  min-width: 1730px;
-}
+// .app-container {
+//   min-width: 1730px;
+// }
 // .signal-version-name {
 //   margin-top: 20px;
 //   margin-left: 30px;
 //   height: 18px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 18px;
 //   font-weight: normal;
 //   font-stretch: normal;
@@ -515,7 +531,6 @@ export default {
 // .software {
 //   position: relative;
 //   left: 20px;
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;

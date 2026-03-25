@@ -55,6 +55,7 @@
 import Messagebox from '../../../components/MessageBox/index'
 import DevicePanel from '../tables/device'
 import PatternPanel from '../tables/pattern'
+import { getMessageByCode } from '@/utils/responseMessage'
 import {
   UpdateViproute
 } from '@/api/service'
@@ -139,7 +140,7 @@ export default {
       }
       UpdateViproute(reqData).then(res => {
         if (!res.data.success) {
-          this.$message.error(res.data.message)
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
           return
         }
         this.$message({
@@ -203,7 +204,7 @@ export default {
         }
         let geometry = dev.geometry
         let location = dev.location
-        if (geometry && geometry.length > 0) {
+        if (geometry && geometry.coordinates && geometry.coordinates.length > 0) {
           item.geometry = geometry
         }
         if (location && location.length > 0) {
@@ -277,14 +278,13 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
- @import "../../../styles/theme/element-variables.scss";
-.configDrawer .el-drawer__header {
-  text-align: left;
-  color: $--color-text-regular;
-}
-.configDrawer .el-drawer__body {
-  padding: 0 16px 30px 16px;
-}
+// .configDrawer .el-drawer__header {
+//   text-align: left;
+//   color: $--color-text-regular;
+// }
+// .configDrawer .el-drawer__body {
+//   padding: 0 16px 30px 16px;
+// }
 </style>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .configDrawer {

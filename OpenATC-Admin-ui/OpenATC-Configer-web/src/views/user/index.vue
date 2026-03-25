@@ -30,7 +30,6 @@
   <div>
     <el-table
         :data="tableData.filter(data => !schfilter || (data.user_name !== undefined && data.user_name.toLowerCase().includes(schfilter.toLowerCase())) || (data.nick_name !== undefined && data.nick_name.toLowerCase().includes(schfilter.toLowerCase())))"
-        stripe
         size="mini"
         :max-height="tableHeight"
         v-loading.body="listLoading"
@@ -101,6 +100,7 @@ import { GetUsrInfoList, DeleteUsr, UpdateUsr, ResetUsr } from '../../api/user'
 import {
   dateToString
 } from '@/utils/dateFormat.js'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'user',
   components: { add, update, Messagebox },
@@ -154,13 +154,7 @@ export default {
       GetUsrInfoList().then(data => {
         if (data.data.success !== true) {
           this.listLoading = false
-          if (data.data.code === '3008') {
-            this.$message.error('没有权限访问！')
-            console.log(data.data.message)
-            return
-          }
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         this.listLoading = false
@@ -197,7 +191,7 @@ export default {
             _vue.$message.error('没有权限访问!')
             return
           }
-          _vue.$message.error(data.data.message)
+          _vue.$message.error(getMessageByCode(data.data.code, _vue.$i18n.locale))
           return
         }
         this.messageboxVisible = false
@@ -230,8 +224,7 @@ export default {
         param
       ).then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = `${this.usingOrStopedUser.status === 1 ? '停用' : '启用'}成功！`
@@ -260,8 +253,7 @@ export default {
         this.resetUser.user_name
       ).then(data => {
         if (data.data.success !== true) {
-          this.$message.error(data.data.message)
-          console.log(data.data.message)
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
         }
         let msg = '重置密码成功！'

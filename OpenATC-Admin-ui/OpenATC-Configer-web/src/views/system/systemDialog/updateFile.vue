@@ -25,29 +25,48 @@
           <el-button @click="resetForm()">{{$t('edge.common.cancel')}}</el-button>
           <el-button type="primary" @click="submitForm($event)">{{$t('edge.system.update')}}</el-button>
       </div>
+      <div class="progressmask" v-if="animvisible"></div>
+      <div style="margin-top: 18px;">
+        <ProgressAnim v-if="animvisible"/>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-/**
-  Auth: yangdongyang
-  Created: 2019/12/11
-*/
 import { updateFile } from '@/api/param'
+import { setRemoteControl } from '@/api/system'
+import ProgressAnim from './progressAnim'
+import { getMessageByCode } from '@/utils/responseMessage'
+import {
+  getIframdevid
+} from '../../../utils/auth'
 export default {
   data () {
     return {
       dialogFormVisible: false,
-      file: ''
+      file: '',
+      username: '',
+      password: '',
+      animvisible: false
     }
   },
   name: 'updatefile',
   props: {},
+  components: {
+    ProgressAnim
+  },
   created () {
   },
+  destroyed () {
+    if (this.updateTimeoutTimer) {
+      clearTimeout(this.updateTimeoutTimer)
+    }
+  },
   methods: {
-    onUpdateFile () {
+    onUpdateFile (username, password) {
+      this.username = username
+      this.password = password
       this.dialogFormVisible = !this.dialogFormVisible
     },
     closeFormDialog () {
@@ -64,33 +83,101 @@ export default {
     },
     submitForm (event) {
       event.preventDefault()
+      if (this.file === '') {
+        this.$message.error(this.$t('edge.system.noselectfile'))
+        return
+      }
       let formData = new FormData()
+      let iframdevid = getIframdevid()
       formData.append('file', this.file)
+      formData.append('agentid', iframdevid)
+      formData.append('username', this.username)
+      formData.append('password', this.password)
+      this.animvisible = true
+      this.updateTimeoutTimer = setTimeout(() => {
+        this.$message.error(this.$t('edge.system.updateovertime'))
+        this.animvisible = false
+      }, 60000)
       updateFile(formData).then((data) => {
         let res = data.data
+        if (this.updateTimeoutTimer) {
+          clearTimeout(this.updateTimeoutTimer)
+        }
+        this.animvisible = false
         if (!res.success) {
+          let errormsg = this.$t('edge.system.filefailed')
           if (res.code === '4003') {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          this.$message.error(data.data.message)
+          this.$message.error(errormsg)
           return
         }
-        let msg = '更新成功！'
+        let msg = this.$t('edge.system.filesuccess')
         this.closeFormDialog()
         this.$message({
           message: msg,
           type: 'success',
           duration: 1 * 1000
         })
+        this.$confirm(this.$t('edge.system.isReboot'),
+          this.$t('edge.common.alarm'), {
+            confirmButtonText: this.$t('edge.common.confirm'),
+            cancelButtonText: this.$t('edge.common.cancel'),
+            type: 'warning'
+          }).then(() => {
+          this.setRemoteControl()
+          // this.$message({
+          //   type: 'success',
+          //   message: this.$t('edge.system.rebootSuccess')
+          // })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: this.$t('edge.system.rebootFaile')
+          })
+        })
       }).catch(error => {
         this.$message.error(error)
         console.log(error)
+      })
+    },
+    setRemoteControl () {
+      setRemoteControl('reboot').then(data => {
+        let res = data.data
+        if (!res.success) {
+          if (res.code === '4003') {
+            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+            return
+          }
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        }
+        let msg = this.$t('edge.system.rebootSuccess')
+        this.$message({
+          message: msg,
+          type: 'success',
+          duration: 1 * 1000
+          // onClose: () => {
+          //   this.$parent.getCode()
+          // }
+        })
       })
     }
   }
 }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
+.progressmask{
+    // 进度条蒙层
+    width: 100%;
+    height: 100%;
+    // background-color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
 </style>

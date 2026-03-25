@@ -12,7 +12,7 @@
 <template>
   <div class="licenseInfo">
     <el-dialog
-      title="开源协议"
+      :title="$t('openatc.about.opensourceagreement')"
       :visible.sync="licenseInfoVisible"
       width="60%"
       height="914px"
@@ -150,46 +150,44 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
- @import "../../../styles/theme/element-variables.scss";
-.licenseInfo {
-    display: flex;
-    justify-content: center;
-    align-items: Center;
-    overflow: hidden;
-    .el-dialog {
-        height: 70%;
-        overflow: hidden;
-        .el-dialog__body {
-            padding: 30px 20px;
-            color: $--color-text-regular;
-            font-size: 14px;
-            word-break: break-all;
-            position: absolute;
-            left: 0;
-            top: 70px;
-            bottom: 30px;
-            z-index: 1;
-            overflow: hidden;
-            overflow-y: auto;
-        }
-    }
-}
-.licenseInfo .el-dialog__headerbtn .el-dialog__close {
-    color: $--color-white;
-}
-.licenseInfo .el-dialog__header {
-    padding: 30px 10px 10px;
-    height: 69px;
-    background-color: $--color-primary;
-    border-radius: 4px 4px 0px 0p
-}
-.licenseInfo .el-dialog__title {
-    font-family: MicrosoftYaHei;
-    font-size: 20px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 14px;
-    letter-spacing: 0px;
-    color: $--color-white;
-}
+// .licenseInfo {
+//     display: flex;
+//     justify-content: center;
+//     align-items: Center;
+//     overflow: hidden;
+//     .el-dialog {
+//         height: 70%;
+//         overflow: hidden;
+//         .el-dialog__body {
+//             padding: 30px 20px;
+//             color: $--color-text-regular;
+//             font-size: 14px;
+//             word-break: break-all;
+//             position: absolute;
+//             left: 0;
+//             top: 70px;
+//             bottom: 30px;
+//             z-index: 1;
+//             overflow: hidden;
+//             overflow-y: auto;
+//         }
+//     }
+// }
+// .licenseInfo .el-dialog__headerbtn .el-dialog__close {
+//     color: $--color-white;
+// }
+// .licenseInfo .el-dialog__header {
+//     padding: 30px 10px 10px;
+//     height: 69px;
+//     background-color: $--color-primary;
+//     border-radius: 4px 4px 0px 0p
+// }
+// .licenseInfo .el-dialog__title {
+//     font-size: 20px;
+//     font-weight: normal;
+//     font-stretch: normal;
+//     line-height: 14px;
+//     letter-spacing: 0px;
+//     color: $--color-white;
+// }
 </style>

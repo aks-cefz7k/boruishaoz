@@ -10,15 +10,10 @@
  * See the Mulan PSL v2 for more details.
  **/
 <template>
-  <div class="app-container">
+  <div class="app-container" ref="phase-container">
     <el-button style="margin-bottom:10px" type="primary" @click="onAdd">{{$t('edge.common.add')}}</el-button>
     <el-button style="margin-bottom:10px" type="primary" @click="deleteAllData">{{$t('edge.common.deleteall')}}</el-button>
     <el-table class="tb-edit" ref="singleTable" row-key="id" :data="list" v-loading.body="listLoading" element-loading-text="Loading" fit highlight-current-row v-clickoutside="cancelTable" :max-height="tableHeight" id="footerBtn">
-      <el-table-column align="center" label='No' min-width="40">
-        <template slot-scope="scope">
-          <span>{{scope.$index+1}}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label='ID' min-width="40">
         <template slot-scope="scope">
           <span>{{scope.row.id}}</span>
@@ -27,6 +22,35 @@
       <el-table-column class="table-column" :label="$t('edge.phase.desc')" min-width="150" align="center">
         <template slot-scope="scope">
           <Tankuang :list="scope.row.direction" :imgs="imgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" @finsh="handlefinsh"/>
+        </template>
+      </el-table-column>
+      <el-table-column class="table-column" :label="$t('edge.phase.peddesc')" min-width="150" align="center">
+        <template slot-scope="scope">
+          <PedTankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" @finsh="handlefinshped"/>
+        </template>
+      </el-table-column>
+      <el-table-column class="table-column" :label="$t('edge.phase.controltype')" min-width="150" align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.controltype" size="small">
+            <el-option v-for="item in controlTypeList" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+           <span v-text="getControlTypestr(scope.row)"></span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.ring')" min-width="100">
+        <template slot-scope="scope">
+          <el-input-number size="small" controls-position="right" :min="1" :max="4" :step="1" v-model.number="scope.row.ring" @change="handleRingEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.ring}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.concurrent')" min-width="100">
+        <template slot-scope="scope">
+          <el-select multiple v-model="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small">
+            <el-option v-for="item in ConcurrentList" :key="item" :label="item" :value="item">
+            </el-option>
+          </el-select>
+          <span v-text="getConcurrentstr(scope.row)"></span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.mingreen')" min-width="100">
@@ -104,20 +128,30 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" :label="$t('edge.phase.ring')" min-width="100">
+      <el-table-column align="center" prop="created_at" :label="$t('edge.phase.vehiclethresh')" min-width="100">
         <template slot-scope="scope">
-          <el-input-number size="small" controls-position="right" :min="1" :max="4" :step="1" v-model.number="scope.row.ring" @change="handleRingEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
-          <span>{{scope.row.ring}}</span>
+          <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.vehiclethresh" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.vehiclethresh}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" :label="$t('edge.phase.concurrent')" min-width="100">
+      <el-table-column align="center" prop="created_at" :label="$t('edge.phase.pedestrianthresh')" min-width="100">
         <template slot-scope="scope">
-          <el-select multiple v-model="scope.row.concurrent" @visible-change="getConcurrent(scope.row,$event)" size="small">
-            <el-option v-for="item in ConcurrentList" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-          <span v-text="getConcurrentstr(scope.row)"></span>
+          <el-input-number size="small" controls-position="right" :min="0" :max="255" :step="1" v-model.number="scope.row.pedestrianthresh" @change="handleEdit(scope.$index, scope.row)" style="width: 100px;"></el-input-number>
+          <span>{{scope.row.pedestrianthresh}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('edge.phase.pulsetype')" min-width="100">
+        <template slot-scope="scope">
+            <el-select v-model="scope.row.pulsetype" :placeholder="$t('edge.common.select')" size="small">
+              <el-option
+                v-for="item in pulseTypeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <span>{{getPulsetypestr(scope.row.pulsetype)}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.phase.operation')" width="100">
@@ -132,8 +166,10 @@
 
 <script>
 import Tankuang from '@/components/Tankuang'
+import PedTankuang from '@/components/PedTankuang'
 import { mapState } from 'vuex'
-import { images } from './utils.js'
+import { getPhase, pedimages } from './utils.js'
+
 const clickoutside = {
   // 初始化指令
   bind (el, binding, vnode) {
@@ -163,12 +199,12 @@ const clickoutside = {
 export default {
   name: 'phase',
   components: {
-    Tankuang
+    Tankuang,
+    PedTankuang
   },
   data () {
     return {
       tableHeight: 760,
-      screenHeight: window.innerHeight, // 屏幕高度
       listLoading: false,
       // descriptionOption: ['North-Straight','North-Left','North-Right','North-Back','South-Straight','South-Left','South-Right','South-Back','West-Straight','West-Left','West-Right','West-Back','East-Straight','East-Left','East-Right','East-Back'],
       ConcurrentList: [],
@@ -177,7 +213,42 @@ export default {
       // imgs: images,
       showBottomName: false, // 用于控制弹框里是否在底部显示文字描述。
       lines: 4, // 弹框的行数
-      rows: 4 // 弹框的列数
+      rows: 4, // 弹框的列数
+      controlTypeList: [{
+        label: this.$t('edge.phase.mainroad'),
+        value: 0
+      }, {
+        label: this.$t('edge.phase.bypass'),
+        value: 1
+      }, {
+        label: this.$t('edge.phase.pedestrianonly'),
+        value: 2
+      }, {
+        label: this.$t('edge.phase.busonly'),
+        value: 3
+      }, {
+        label: this.$t('edge.phase.BRTonly'),
+        value: 4
+      }, {
+        label: this.$t('edge.phase.tramonly'),
+        value: 5
+      }, {
+        label: this.$t('edge.phase.virtualphase'),
+        value: 99
+      }],
+      pulseTypeList: [{
+        label: this.$t('edge.phase.sendpedestriansvehiclepulse'),
+        value: 0
+      }, {
+        label: this.$t('edge.phase.sendvehiclepulse'),
+        value: 1
+      }, {
+        label: this.$t('edge.phase.sendpedestrianpulse'),
+        value: 2
+      }, {
+        label: this.$t('edge.phase.offpulse'),
+        value: 3
+      }]
     }
   },
   directives: { clickoutside },
@@ -194,7 +265,17 @@ export default {
   computed: {
     imgs () {
       let arrays = []
+      let images = getPhase()
       images.forEach(v => {
+        let obj = Object.assign({}, v)
+        obj.name = this.$t(obj.name)
+        arrays.push(obj)
+      })
+      return arrays
+    },
+    pedimgs () {
+      let arrays = []
+      pedimages.forEach(v => {
         let obj = Object.assign({}, v)
         obj.name = this.$t(obj.name)
         arrays.push(obj)
@@ -212,27 +293,11 @@ export default {
   mounted: function () {
     var _this = this
     _this.$nextTick(function () {
-      // window.innerHeight:浏览器的可用高度
-      // this.$refs.table.$el.offsetTop：表格距离浏览器的高度
-      // 后面的50：根据需求空出的高度，自行调整
-      _this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
+      _this.tableHeight = _this.$refs['phase-container'].offsetHeight - 80
       window.onresize = function () {
-        // 定义窗口大小变更通知事件
-        _this.screenHeight = window.innerHeight // 窗口高度
+        _this.tableHeight = _this.$refs['phase-container'].offsetHeight - 80
       }
     })
-  },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                50
-    }
   },
   methods: {
     // increaseId () { // 实现id在之前的基础上加1
@@ -330,6 +395,7 @@ export default {
       var phaseInitData = {
         id: this.id,
         direction: [],
+        peddirection: [], // 行人方向
         mingreen: 15,
         max1: 30,
         max2: 45,
@@ -342,7 +408,10 @@ export default {
         redyellow: 0,
         ring: 1,
         greenpulse: 5,
-        redpulse: 10
+        redpulse: 10,
+        vehiclethresh: 30,
+        pedestrianthresh: 30,
+        controltype: 0 // 控制类型
       }
       this.globalParamModel.addParamsByType('phaseList', phaseInitData)
       // this.id++
@@ -384,6 +453,21 @@ export default {
           }
           return str.substr(1)
         }
+      }
+      return ''
+    },
+    getPulsetypestr (val) {
+      if (val !== undefined) {
+        let choosed = this.pulseTypeList.filter(ele => ele.value === val)
+        if (choosed.length) {
+          return choosed[0].label
+        }
+      }
+      return ''
+    },
+    getControlTypestr (val) {
+      if (val.controltype !== undefined) {
+        return this.controlTypeList.filter(ele => ele.value === val.controltype)[0].label
       }
       return ''
     },
@@ -457,6 +541,16 @@ export default {
         list.push(this.imgs[i].id)
       }
       this.$store.getters.tscParam.phaseList[index].direction = list
+    },
+    handlefinshped (value) {
+      let index = value.index
+      let status = value.status
+      let list = []
+      for (let i = 0; i < status.length; i++) {
+        if (!status[i]) continue
+        list.push(this.pedimgs[i].id)
+      }
+      this.$store.getters.tscParam.phaseList[index].peddirection = list
     }
   }
 }
@@ -553,9 +647,9 @@ body {
 .tb-edit .current-row .el-popover {
     display: block;
 }
-.tb-edit .current-row .el-popover + span {
+/* .tb-edit .current-row .el-popover + span {
     display: none;
-}
+} */
 .showSpan {
   display: block;
 }

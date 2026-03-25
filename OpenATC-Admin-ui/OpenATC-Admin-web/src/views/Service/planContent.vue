@@ -72,6 +72,7 @@ import {
 } from '@/api/service'
 import { GetDeviceByIds } from '@/api/device'
 import SelectControl from '@/views/Service/components/SelectControl'
+import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'PlanContent',
   components: {
@@ -128,7 +129,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetSingleViproute(_this.chooseId).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             return
           }
           _this.routeData = res.data.data
@@ -146,7 +147,7 @@ export default {
       return new Promise((resolve, reject) => {
         GetViprouteStatus(_this.chooseId).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             resolve()
           }
           let stateList = res.data.data
@@ -163,7 +164,7 @@ export default {
         _this.deviceIds = _this.routeData.devs.map(ele => ele.agentid)
         GetDeviceByIds(_this.deviceIds).then(res => {
           if (!res.data.success) {
-            _this.$message.error(res.data.message)
+            _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
             resolve()
           }
           _this.devicesData = res.data.data
@@ -187,9 +188,11 @@ export default {
             item.controlName = controlName
             for (let dev of this.devicesData) {
               if (item.agentid === dev.agentid) {
-                item = Object.assign(item, dev)
+                item.stateName = dev.state
+                break
               }
             }
+            break
           }
         }
       }
@@ -203,12 +206,30 @@ export default {
     handleClick (tab, event) {
       this.activeName = tab.name
     },
+    checkEdit () {
+      let res = true
+      for (let item of this.route.devs) {
+        if (item.state === 1) {
+          res = false
+          this.$message.warning(this.$t('openatc.dutyroute.notAllowedToEdit'))
+          break
+        }
+      }
+      return res
+    },
     handleEdit () {
+      if (!this.checkEdit()) {
+        return false
+      }
       if (this.maskVisible && this.addNum <= 1) {
         if (this.addNum === 1) {
           this.maskVisible = false
         }
         this.addNum++
+      } else {
+        if (this.maskVisible) {
+          this.addNum = 1
+        }
       }
       if (!this.maskVisible) {
         // 获取单个协调路线的全部信息
@@ -317,7 +338,6 @@ export default {
 //   font-size: 30px;
 // }
 // .tipContent .text {
-//   font-family: SourceHanSansCN-Regular;
 //   font-size: 14px;
 //   font-weight: normal;
 //   font-stretch: normal;
