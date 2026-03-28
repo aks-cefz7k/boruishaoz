@@ -41,7 +41,7 @@
         :rules="rules"
         label-width="15%">
         <el-form-item
-            :label="$t('openatc.devicemanager.deviceid')"
+            :label="$t('openatc.devicemanager.crossid')"
             prop="agentid">
             <el-input
             type="text"
@@ -51,7 +51,7 @@
             </el-input>
         </el-form-item>
         <el-form-item
-            :label="$t('openatc.devicemanager.thirdplatformid')"
+            :label="$t('openatc.devicemanager.deviceid')"
             prop="thirdplatformid">
             <el-input
             type="text"
