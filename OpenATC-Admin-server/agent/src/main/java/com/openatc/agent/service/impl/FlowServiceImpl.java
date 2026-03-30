@@ -1,14 +1,11 @@
 package com.openatc.agent.service.impl;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.openatc.agent.controller.DevController;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.FlowService;
 import com.openatc.agent.utils.FtpFileSystemUtil;
-import com.openatc.comm.data.AscsBaseModel;
+import com.openatc.model.model.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
-import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.apache.commons.net.ftp.FTPClient;
@@ -18,8 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Repository
 public class FlowServiceImpl implements FlowService {

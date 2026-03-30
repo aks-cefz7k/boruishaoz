@@ -1,4 +1,5 @@
 
+DROP TABLE IF EXISTS "t_permission" CASCADE;
 
 create table t_permission
 (
@@ -28,6 +29,7 @@ comment on column t_permission.description is '本权限的中文释义'
 comment on column t_permission.status is '状态 0无效，1有效'
 ;
 
+DROP TABLE IF EXISTS "t_role" CASCADE;
 create table t_role
 (
 	id serial not null constraint t_role_pkey primary key,
@@ -53,6 +55,7 @@ comment on column t_role.description is '描述'
 comment on column t_role.status is '状态，1为有效，0为无效'
 ;
 
+DROP TABLE IF EXISTS "t_role_permission";
 create table t_role_permission
 (
 	id serial not null constraint t_role_permission_pkey primary key,
@@ -76,6 +79,7 @@ comment on column t_role_permission.role_id is '角色id'
 comment on column t_role_permission.permission_id is '权限id'
 ;
 
+DROP TABLE IF EXISTS "t_user" CASCADE;
 create table t_user
 (
 	id serial not null constraint t_user_pkey primary key,
@@ -134,6 +138,7 @@ create unique index t_user_name__index
 	on t_user (user_name)
 ;
 
+DROP TABLE IF EXISTS "t_user_role";
 create table t_user_role
 (
 	id serial not null

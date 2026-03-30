@@ -11,22 +11,23 @@
  **/
 package com.openatc.agent.controller;
 
+import algorithm.Greenwave;
+import algorithm.Kdalgorithm;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.openatc.agent.model.*;
 import com.openatc.agent.resmodel.DevList;
 import com.openatc.agent.service.RouteDao;
 import com.openatc.agent.service.RouteIntersectionDao;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
+import com.openatc.core.common.Constants;
 import com.openatc.core.common.IErrorEnumImplInner;
+import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
-import com.openatc.core.model.DevCommError;
 import com.openatc.core.util.RESTRetUtils;
-import com.openatc.agent.model.*;
-import algorithm.Greenwave;
-import algorithm.Kdalgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import static com.openatc.core.common.IErrorEnumImplOuter.E_4002;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_4003;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
 
@@ -288,15 +288,7 @@ public class RouteController {
             RESTRet<MessageData> retBase = null;
             retBase = messageController.postDevsMessage(null, messageData);
 
-            if (retBase.getMessage().equals("Device not online!")) {
-                DevCommError devCommError = RESTRetUtils.errorObj(r.getAgentid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
-                return RESTRetUtils.errorDetialObj(E_4003, devCommError);
-            }
-            if(retBase.getMessage().equals("error response!")){
-                DevCommError devCommError = RESTRetUtils.errorObj(r.getAgentid(), CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_200);
-                return RESTRetUtils.errorDetialObj(E_4002,devCommError);
-            }
-            if (retBase.getMessage().equals("error request!")) {
+            if (!retBase.getCode().equals(Constants.SUCCESS_CODE)) {
                 return retBase;
             }
 

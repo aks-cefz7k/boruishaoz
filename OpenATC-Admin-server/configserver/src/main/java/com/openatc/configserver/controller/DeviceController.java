@@ -14,10 +14,10 @@ package com.openatc.configserver.controller;
 import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.data.AscsBaseModel;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

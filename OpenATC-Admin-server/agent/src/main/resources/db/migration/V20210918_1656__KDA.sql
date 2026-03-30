@@ -1,4 +1,4 @@
-DROP TABLE fault;
+DROP TABLE IF EXISTS fault;
 
 CREATE TABLE fault (
 	agentid varchar(255) NOT NULL,
@@ -12,5 +12,3 @@ CREATE TABLE fault (
 	m_w_sub_fault_type int4 NULL,
 	CONSTRAINT fault_pkey PRIMARY KEY (agentid,m_w_faultid)
 );
-
-TRUNCATE "t_orgnization";

@@ -42,6 +42,7 @@ public class RedisService {
 
     // 接受Redis订阅的消息
     public void receiveSubsMessage(String message, String type) {
+
         //如果没有客户端订阅，取消Redis监听
         if (patternWebSocketSet.size() == 0) {
             unSubsMessage(null);
@@ -52,7 +53,7 @@ public class RedisService {
         String agentId = jsonObject.get("agentid").getAsString();
 
         log.info("receive " + type + " message: " + message);
-        if ("asc:status/pattern".equals(type)) {
+        if (type.contains("asc:status/pattern")) {
             for (Session session : patternWebSocketSet.keySet()) {
                 WebSocketServer webSocketServer = patternWebSocketSet.get(session).getWebSocketServer();
                 Set<String> agentIds = webSocketServer.getInfoAndAgentIds().get("status/pattern");
@@ -62,7 +63,7 @@ public class RedisService {
             }
         }
 
-        if ("asc:status/fault".equals(type)) {
+        if (type.contains("asc:status/fault")) {
             for (Session session : faultIncidentWebSocketSet.keySet()) {
                 faultIncidentWebSocketSet.get(session).getWebSocketServer().sendMessage(message);
             }
@@ -99,6 +100,7 @@ public class RedisService {
     }
 
 
+    //订阅topic
     public void subsMessage(String message) {
         for (Session session : patternWebSocketSet.keySet()) {
             if (patternWebSocketSet.get(session).getWebSocketServer().channelTypeDataSet.contains(message))
@@ -259,12 +261,11 @@ public class RedisService {
     // 把Redis中的value组合成一个json的字符串
     private StringBuffer appendAllValueFromRedis(Collection<String> keySet) {
         int i = 0;// 当前计数器
-//        int count = keySet.size();
         keySet.size();
         StringBuffer sendBuffer = new StringBuffer("[");
 
         for (String value : keySet) {
-            String strFrame = null;
+            String strFrame;
             try {
                 if (value.equals("asc:agentframe:network")) {
                     strFrame = cMap.get(value);

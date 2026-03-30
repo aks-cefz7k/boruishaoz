@@ -217,7 +217,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     }
                     //收到主动上报的消息
                     if (responceData.getOperation().equals(OPERATOER_TYPE_REPORT)) {
-                        logger.info("Udp Receive Report Data: " + addressStr + " : " + port + " Length: " + recvPacket.getLength() + " Data:" + responceData);
+                        logger.info("Udp Receive Report Data: " + addressStr + " : " + port + " Length: " + recvPacket.getLength() + " id:" + responceData.getAgentid() + " - " + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
                         // 收到信号机的注册消息并应答
                         if (responceData.getInfotype().equals("login")) {
                             DataSchedulePackUpPack dataSchedulePackUpPack = new DataSchedulePackUpPack();
@@ -241,7 +241,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     }
                     //收到请求的应答消息
                     else {
-                        logger.info("Udp Receive Response Data: " + addressStr + " : " + port + " Length: " + recvPacket.getLength() + " Data:" + responceData);
+                        logger.info("Udp Receive Response Data: " + addressStr + " : " + port + " Length: " + recvPacket.getLength() + " id:" + responceData.getAgentid() + " - " + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
 
                         String messageKey = null;
                         int exangeType = message.geyExangeType();

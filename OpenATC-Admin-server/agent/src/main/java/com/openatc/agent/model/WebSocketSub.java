@@ -9,7 +9,8 @@ import lombok.Data;
  */
 @Data
 public class WebSocketSub {
-    private String messagetype;
+    private String model;
+    private String infotype;
     private String[] param;
     private String subscribe;
 

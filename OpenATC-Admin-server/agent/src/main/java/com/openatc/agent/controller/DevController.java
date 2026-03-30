@@ -16,14 +16,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
-import com.openatc.comm.data.AscsBaseModel;
+import com.openatc.model.model.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -48,12 +46,6 @@ public class DevController {
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
-    @Autowired
-    private ChannelTopic topic;
-
 
     private Logger log = Logger.getLogger(DevController.class.toString());
 
@@ -101,6 +93,9 @@ public class DevController {
             AscsBaseModel device = null;
             try {
                 device = mDao.getAscsByID(routeIntersectionId);
+                if(device == null)
+                    return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_8001);
+
             } catch (EmptyResultDataAccessException e) {
                 return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_8001);
             }
@@ -156,7 +151,6 @@ public class DevController {
             }
             vipRouteDao.save(vipRoute);
         }
-        redisTemplate.convertAndSend(topic.getTopic(), "DeleteDev:" + id);
         return RESTRetUtils.successObj(as);
     }
 
@@ -169,9 +163,6 @@ public class DevController {
             mDao.updateDev(ascs);
             return RESTRetUtils.successObj(ascs);
         }
-        //删除设备时，应通知所有服务更新映射
-        redisTemplate.convertAndSend(topic.getTopic(), "InsertDev:" + ascs.getAgentid());
-        logger.info("Add a dev, info = " + ascs.toString());
         return RESTRetUtils.successObj(mDao.insertDev(ascs));
     }
 
@@ -183,7 +174,6 @@ public class DevController {
         if (temp == 0) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
         } else {
-            redisTemplate.convertAndSend(topic.getTopic(), "UpdateDev:" + ascs.getAgentid());
             return RESTRetUtils.successObj(ascs);
         }
     }
@@ -203,9 +193,6 @@ public class DevController {
         String oldAgentid = jsonObject.get("oldAgentid").getAsString();
         String newAgentid = jsonObject.get("newAgentid").getAsString();
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
-        if(result) {
-            redisTemplate.convertAndSend(topic.getTopic(), "modifyAgentid:" + newAgentid);
-        }
         return RESTRetUtils.successObj(result);
     }
 }

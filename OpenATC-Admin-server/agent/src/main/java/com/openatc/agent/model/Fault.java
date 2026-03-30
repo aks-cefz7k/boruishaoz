@@ -21,12 +21,16 @@ public class Fault {
     private Integer m_wSubFaultType;
     private int[] m_byFaultDescValue;
     private Integer m_byFaultLevel;
-
+    private String model; //上报模块
+    private String eventType;//时间类型
+    private String operator; //故障记录操作者
+    private Long operationTime; //操作事件
+    private String enumerate;  //0:未处理 1:已忽略 2:已处理
 
 }
 
 @Data
-class FaultKey implements Serializable  {
+class FaultKey implements Serializable {
     private String agentid;
     private Long m_wFaultID;
 }
