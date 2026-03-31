@@ -133,6 +133,9 @@ public class FaultController {
             return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
         }
         String agentId = jsonObject.get("agentId") == null ? Integer.MAX_VALUE + "" : jsonObject.get("agentId").getAsString();
+        String enumerate = jsonObject.get("enumerate") == null ? Integer.MAX_VALUE + "" : jsonObject.get("enumerate").getAsString();
+        int m_byFaultBoardType = jsonObject.get("m_byFaultBoardType") == null ? 0 : jsonObject.get("m_byFaultBoardType").getAsInt();
+        int m_wFaultType = jsonObject.get("m_wFaultType") == null ? 0 : jsonObject.get("m_wFaultType").getAsInt();
         Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
         Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
         String beginTime = jsonObject.get("beginTime") == null ? "0" : jsonObject.get("beginTime").getAsString();
@@ -160,6 +163,18 @@ public class FaultController {
             //添加查询条件
             if (!agentId.equals(Integer.MAX_VALUE + "")) {
                 predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
+            }
+            // 确认结果
+            if (!enumerate.equals(Integer.MAX_VALUE + "")) {
+                predicateList.add(criteriaBuilder.equal(root.get("enumerate"), enumerate));
+            }
+            // 板卡类型
+            if (m_byFaultBoardType != 0) {
+                predicateList.add(criteriaBuilder.equal(root.get("m_byFaultBoardType"), m_byFaultBoardType));
+            }
+            // 主故障类型
+            if (m_wFaultType != 0) {
+                predicateList.add(criteriaBuilder.equal(root.get("m_wFaultType"), m_wFaultType));
             }
             predicateList.add(criteriaBuilder.between(root.get("m_unFaultOccurTime"), l[0], l[1]));
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));

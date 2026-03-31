@@ -14,12 +14,15 @@ package com.openatc.agent.service;
 import com.openatc.agent.model.THisParams;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface THisParamsDao extends JpaRepository<THisParams, Integer> {
+
+    Page<THisParams> findAll(Specification<THisParams> specification, Pageable pageable);
 
     @Query("select new THisParams(t.id, t.operator, t.opertime, t.source, t.agentid, t.infotype, t.status) from THisParams t")
     List<THisParams> findAllThisParams();
