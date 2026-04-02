@@ -489,6 +489,7 @@ public class AscsDao {
         ascsModel.setThirdplatformid(login_thirpartyid);
 
         ascsModel.setAgentid(devCover.getAgentid());
+        ascsModel.setName(devCover.getAgentid());
 
         //更新数据
         String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,lastTime=LOCALTIMESTAMP where agentid = ?";
@@ -502,9 +503,10 @@ public class AscsDao {
 
         // update失败，则说明agentid不存在，表明第一次上报，新设置agentid,并发送更新通知
         if (rows == 0) {
-            sql = "INSERT INTO dev(agentid, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+            sql = "INSERT INTO dev(agentid, name, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
             rows = jdbcTemplate.update(sql,
                     ascsModel.getAgentid(),
+                    ascsModel.getName(),
                     ascsModel.getThirdplatformid(),
                     ascsModel.getType(),
                     ascsModel.getStatus(),
