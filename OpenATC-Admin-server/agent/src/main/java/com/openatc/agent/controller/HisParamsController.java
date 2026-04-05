@@ -21,6 +21,7 @@ import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.service.THisParamsDao;
 import com.openatc.agent.utils.PageInit;
+import com.openatc.agent.vo.THisParamsVO;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.DateUtil;
@@ -157,26 +158,40 @@ public class HisParamsController {
         PageOR pageOR = new PageOR();
         pageOR.setTotal(tHisParams.getTotalElements());
         List<THisParams> content = tHisParams.getContent();
-        List<THisParams> targetList = new ArrayList<THisParams>();
-        //  路口名称
-        if (!name.equals("")) {
-            List<AscsBaseModel> deviceList = getDeviceListByName(name);
-            for (AscsBaseModel dev : deviceList) {
-                String dAgentid = dev.getAgentid();
-                for (THisParams param: content) {
-                    String cAgentid = param.getAgentid();
-                    if (dAgentid.equals(cAgentid)) {
-                        targetList.add(param);
-                    }
-                }
+        List<THisParamsVO> targetList = new ArrayList<THisParamsVO>();
+//        //  路口名称
+//        if (!name.equals("")) {
+//            List<AscsBaseModel> deviceList = getDeviceListByName(name);
+//            for (AscsBaseModel dev : deviceList) {
+//                String dAgentid = dev.getAgentid();
+//                for (THisParams param: content) {
+//                    String cAgentid = param.getAgentid();
+//                    if (dAgentid.equals(cAgentid)) {
+//                        targetList.add(param);
+//                    }
+//                }
+//            }
+//        } else {
+//            targetList = content;
+//        }
+        for (THisParams param: content) {
+            AscsBaseModel ascsBaseModel = mDao.getAscsByID(param.getAgentid());
+            String agentName = ascsBaseModel.getAgentid();
+            if (ascsBaseModel != null) {
+                agentName = ascsBaseModel.getName();
             }
-        } else {
-            targetList = content;
+            THisParamsVO vo = new THisParamsVO(param, agentName);
+            targetList.add(vo);
         }
         pageOR.setContent(targetList);
         return RESTRetUtils.successObj(pageOR);
     }
 
+    /**
+     * @Author: yangyi
+     * @Date: 2021/11/19 13:38
+     * @Description: 根据路口名获取路口列表
+     */
     public List<AscsBaseModel> getDeviceListByName (String name) {
         List<AscsBaseModel> ascsBaseModels = new ArrayList<>();
         String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev where name like '%" + name+ "%' ORDER BY agentid";
