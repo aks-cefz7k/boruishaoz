@@ -21,7 +21,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "t_role", schema = "public")
+@Table(name = "t_role")
 //@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 public class Role {
 

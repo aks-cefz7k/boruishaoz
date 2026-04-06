@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Data
-@Table(name = "vip_route_device", schema = "public")
+@Table(name = "vip_route_device")
 @Entity
 public class VipRouteDevice {
     @Id

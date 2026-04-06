@@ -12,7 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "overflow", schema = "public")
+@Table(name = "overflow")
 public class Overflow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

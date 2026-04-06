@@ -20,7 +20,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "t_permission", schema = "public")
+@Table(name = "t_permission")
 //@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 public class Permission {
 

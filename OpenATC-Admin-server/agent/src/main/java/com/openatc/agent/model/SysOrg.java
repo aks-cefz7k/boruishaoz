@@ -21,7 +21,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "t_orgnization", schema = "public")
+@Table(name = "t_orgnization")
 public class SysOrg {
 
     @Id

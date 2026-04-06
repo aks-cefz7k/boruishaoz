@@ -11,7 +11,6 @@
  **/
 package com.openatc.agent.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -21,7 +20,7 @@ import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.service.THisParamsDao;
 import com.openatc.agent.utils.PageInit;
-import com.openatc.agent.vo.THisParamsVO;
+import com.openatc.agent.model.THisParamsVO;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.DateUtil;
@@ -30,7 +29,6 @@ import com.openatc.model.model.AscsBaseModel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import javax.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

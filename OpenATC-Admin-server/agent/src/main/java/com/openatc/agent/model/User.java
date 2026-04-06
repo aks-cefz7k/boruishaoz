@@ -28,7 +28,7 @@ import org.springframework.boot.jackson.JsonObjectSerializer;
 
 @Data
 @Entity
-@Table(name = "t_user", schema = "public")
+@Table(name = "t_user")
 //@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 public class User {
 

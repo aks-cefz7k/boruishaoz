@@ -25,7 +25,7 @@ import java.util.Date;
 */
 @Data
 @Entity
-@Table(name = "operation_record", schema = "public")
+@Table(name = "operation_record")
 public class THisParams {
 	@Id
 	@GeneratedValue

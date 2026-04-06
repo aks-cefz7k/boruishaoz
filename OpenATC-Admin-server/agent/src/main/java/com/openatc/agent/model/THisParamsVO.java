@@ -1,9 +1,10 @@
-package com.openatc.agent.vo;
+package com.openatc.agent.model;
 
 import com.openatc.agent.model.THisParams;
 import java.util.Date;
 import lombok.Data;
 
+// todo 这个类型的作用是什么？和THisParams有什么区别 - zhangwenchao
 @Data
 public class THisParamsVO {
     private int id;

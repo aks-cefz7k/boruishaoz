@@ -19,7 +19,7 @@ import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper=false)
 @Data
-@Table(name = "static_route_intersection", schema = "public")
+@Table(name = "static_route_intersection")
 @Entity
 public class RouteIntersection extends RouteIntersectionBase{
     @Id

@@ -18,7 +18,7 @@ import javax.validation.constraints.Null;
 import java.util.Set;
 
 @Data
-@Table(name = "static_route", schema = "public")
+@Table(name = "static_route")
 @Entity
 public class Route {
     @Id
