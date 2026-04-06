@@ -25,5 +25,5 @@ public class RoutePara {
     private  String keyintsid;
     private int upspeed;
     private int downspeed;
-    private List<Device> devs;
+    private List<RouteIntsection> devs;
 }

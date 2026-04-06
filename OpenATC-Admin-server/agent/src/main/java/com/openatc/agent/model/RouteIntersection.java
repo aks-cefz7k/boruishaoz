@@ -13,8 +13,11 @@ package com.openatc.agent.model;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper=false)
 @Data
 @Table(name = "static_route_intersection", schema = "public")
 @Entity

@@ -11,10 +11,11 @@
  **/
 package com.openatc.agent.model;
 
+import com.openatc.model.model.Feature;
 import lombok.Data;
 
 @Data
-public class Device {
+public class RouteIntsection {
     private int id;
     private String name;
     private String agentid;

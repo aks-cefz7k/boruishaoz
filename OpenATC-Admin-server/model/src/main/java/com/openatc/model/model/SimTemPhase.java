@@ -9,31 +9,30 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.configserver.model;
+package com.openatc.model.model;
 
 import lombok.Data;
 
 @Data
-public class TemDate {
+public class SimTemPhase {
     private int id;
-    private String desc;
-    private int[] month;
-    private int[] day;
-    private int plan;
+    private int[] direction;
+    private int[] peddirection;
 
-    public int[] getMonth() {
-        return month.clone();
+    public int[] getDirection() {
+        return direction.clone();
     }
 
-    public void setMonth(int[] month) {
-        this.month = month.clone();
+    public void setDirection(int[] direction) {
+        this.direction = direction.clone();
     }
 
-    public int[] getDay() {
-        return day.clone();
+    public SimTemPhase(int id, int[] direction, int[] peddirection) {
+        this.id = id;
+        this.direction = direction.clone();
+        this.peddirection = direction.clone();
     }
 
-    public void setDay(int[] day) {
-        this.day = day.clone();
+    public SimTemPhase() {
     }
 }

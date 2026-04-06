@@ -3,9 +3,8 @@ package com.openatc.agent.service;
 import com.alibaba.fastjson.JSONObject;
 import com.openatc.agent.model.*;
 import com.openatc.core.model.RESTRet;
-import com.openatc.model.model.AscPattern;
-import com.openatc.model.model.AscPhase;
-import com.openatc.model.model.OptRings;
+import com.openatc.agent.model.OptRings;
+import com.openatc.model.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -29,15 +28,15 @@ public class OptService {
     private String devsuri;
 
 
-    public OptDev<ControlMsg> AutoControl(String agentid) {
+    public OptDev<ControlPattern> AutoControl(String agentid) {
         //定周期是用于切方案，恢复自主控制无法切换方案，恢复信号机本来运行的方案
-        OptDev<ControlMsg> controlMsgOptDev = new OptDev<>();
+        OptDev<ControlPattern> controlMsgOptDev = new OptDev<>();
         controlMsgOptDev.setAgentid(agentid);
         controlMsgOptDev.setInfotype("control/pattern");
         controlMsgOptDev.setOperation("set-request");
         controlMsgOptDev.setUser("admin");
         controlMsgOptDev.setSource("center");
-        ControlMsg controlMsg = new ControlMsg();
+        ControlPattern controlMsg = new ControlPattern();
         controlMsg.setControl(0);
         controlMsg.setTerminal(1);
         controlMsg.setValue(0);
@@ -47,11 +46,11 @@ public class OptService {
 
     //@brief 根据pattern对象得到干预对象方案
     //@overflowList：一组待优化路口相位
-    public OptDev<OptProgram> GetInterruptPattern(AscPattern pattern, String agentid)
+    public OptDev<OptProgram> GetInterruptPattern(StatusPattern pattern, String agentid)
     {
         //String agentid = pattern.getAgentid();
-        List<OptRings> rings = pattern.getRings();
-        List<AscPhase> phases = pattern.getPhase();
+        List<StatusRing> rings = pattern.getRings();
+        List<StatusPatternPhase> phases = pattern.getPhase();
         int cycle = pattern.getCycle();
         OptDev optDev = new OptDev();
         optDev.setAgentid(agentid);
@@ -63,7 +62,7 @@ public class OptService {
 
         List<List<OptRing>> ringlst = new ArrayList<>();
 
-        for(OptRings r: rings)
+        for(StatusRing r: rings)
         {
             List<OptRing> ring = new ArrayList<>();
             List<Integer> seq = r.getSequence();
@@ -86,17 +85,17 @@ public class OptService {
 
 
 
-    public AscPattern OptPattern(Overflow overflow)
+    public StatusPattern OptStatusPattern(Overflow overflow)
     {
         String agentid = overflow.getIntersectionid().toString();   //设备id
         Integer phaseid = Integer.valueOf(overflow.getPhaseid());   //相位id
         int controltime = overflow.getControltime();                //相位控制时间
-        AscPattern tempPattern = GetPattern(agentid);
+        StatusPattern tempPattern = GetStatusPattern(agentid);
         if(tempPattern == null){
             return null;
         }
         List<List<Integer>> stages = tempPattern.getStages();
-        List<AscPhase> phases = tempPattern.getPhase();
+        List<StatusPatternPhase> phases = tempPattern.getPhase();
         double factor = 1.0;
         double param = 0.0;
 
@@ -128,7 +127,7 @@ public class OptService {
         }
         tempPattern.setCycle(optCycle);
 
-        for(AscPhase p : phases) {
+        for(StatusPatternPhase p : phases) {
             int id = p.getId();
             if(phasesAddTime.containsKey(id))
             {
@@ -147,13 +146,13 @@ public class OptService {
         for(int i = 0; i < overflowList.size(); i++)
         {
             Overflow temp = overflowList.get(i);
-            OptPattern(temp);
+            OptStatusPattern(temp);
         }
     }
 
 
 
-    public AscPattern GetPattern(String devid)
+    public StatusPattern GetStatusPattern(String devid)
     {
         JSONObject js = new JSONObject();
         js.put("agentid", devid);
@@ -165,7 +164,7 @@ public class OptService {
             return null;
         Map data = (Map) ((Map) response.getData()).get("data");
 
-        return JSONObject.toJavaObject(new JSONObject(data), AscPattern.class);
+        return JSONObject.toJavaObject(new JSONObject(data), StatusPattern.class);
     }
 
 

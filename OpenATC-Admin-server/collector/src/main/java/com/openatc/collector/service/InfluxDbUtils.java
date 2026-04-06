@@ -106,7 +106,7 @@ public class InfluxDbUtils {
     // 记录上报方案
     public int insertPattern(MessageData md){
         try{
-            AscPattern ascPattern = gson.fromJson(md.getData().getAsJsonObject(),AscPattern.class);
+            StatusPattern ascPattern = gson.fromJson(md.getData().getAsJsonObject(),StatusPattern.class);
 
             if(ascPattern == null)
                 return 2;
@@ -115,7 +115,7 @@ public class InfluxDbUtils {
             String phase = "";
             String countdown = "";
             String stages = "";
-            for (AscPhase ascPhase : ascPattern.getPhase()) {
+            for (StatusPatternPhase ascPhase : ascPattern.getPhase()) {
                 phase += "P" + ascPhase.getId() + ":" + ascPhase.getSplit() + ", ";
                 countdown += "P" + ascPhase.getId() + ":" + ascPhase.getType() + "-" + ascPhase.getCountdown() + ", ";
             }

@@ -2,7 +2,6 @@ package com.openatc.agent.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.openatc.agent.model.ControlMsg;
 import com.openatc.agent.model.OptDev;
 import com.openatc.agent.model.Overflow;
 import com.openatc.agent.service.OptService;
@@ -13,7 +12,8 @@ import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
-import com.openatc.model.model.AscPattern;
+import com.openatc.model.model.ControlPattern;
+import com.openatc.model.model.StatusPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,15 +63,15 @@ public class OverflowoptController {
         for(Overflow ov: overflowList)
         {
             String agentid = String.valueOf(ov.getIntersectionid());
-            AscPattern ascPattern = optService.OptPattern(ov);
-            if(ascPattern == null){
+            StatusPattern statusPattern = optService.OptStatusPattern(ov);
+            if(statusPattern == null){
                 //没有取到方案
                 error_offlines.add(agentid);
                 logger.warn("Device not on line, agentid = " + agentid);
                 continue;
             }
 
-            OptDev optDev = optService.GetInterruptPattern(ascPattern, agentid);
+            OptDev optDev = optService.GetInterruptPattern(statusPattern, agentid);
             JSONObject jsonObject = (JSONObject) JSON.toJSON(optDev);
             //System.out.println(jsonObject);
             RESTRet restRet = optService.HttpPost(devUri, jsonObject);
@@ -132,7 +132,7 @@ public class OverflowoptController {
         for(Overflow ov: overflowList)
         {
             String agentid = String.valueOf(ov.getIntersectionid());
-            OptDev<ControlMsg> controlMsgOptDev = optService.AutoControl(agentid);
+            OptDev<ControlPattern> controlMsgOptDev = optService.AutoControl(agentid);
             JSONObject jsonObject = (JSONObject) JSON.toJSON(controlMsgOptDev);
 
             RESTRet restRet = optService.HttpPost(devUri, jsonObject);

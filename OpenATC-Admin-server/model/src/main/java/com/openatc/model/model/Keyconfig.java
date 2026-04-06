@@ -9,19 +9,23 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.configserver.model;
+package com.openatc.model.model;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class Manualpanel {
-    private short controlmode = 0;
-    private int duration = 600;
-    private short greenflash = 3;
-    private short yellow = 3;
-    private short redclear = 1;
-    private short mingreen = 15;
-    private List<Keyconfig> keyconfig;
+public class Keyconfig {
+    private int keynum;
+    private String desc;
+    private List<ChannelLock> channel;
+
+    public Keyconfig(int keynum, String desc, List<ChannelLock> channelLock) {
+        this.keynum = keynum;
+        this.desc = desc;
+        this.channel = channelLock;
+    }
+
+    public Keyconfig(){}
 }

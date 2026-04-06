@@ -9,15 +9,19 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.agent.model;
+package com.openatc.model.model;
 
+import com.openatc.model.model.DateParam;
+import com.openatc.model.model.Pattern;
+import com.openatc.model.model.Phase;
+import com.openatc.model.model.Plan;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class TemPlan {
-    private int id;
-    private String desc;
-    private List<Plan> plan;
+public class Template {
+    private Phase[] phaseList;
+    private Pattern[] patternList;
+    private Plan[] planList;
+    private DateParam[] dateList;
+
 }

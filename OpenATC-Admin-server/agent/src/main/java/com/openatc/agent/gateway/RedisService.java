@@ -35,6 +35,8 @@ public class RedisService {
     @Autowired
     private MessageListenerAdapter listenerAdapter;
 
+    Gson gson = new Gson();
+
 
     Map<Session, MyWebSocketServer> patternWebSocketSet = WebSocketServer.getPatternWebSocketSet();
     Map<Session, MyWebSocketServer> faultIncidentWebSocketSet = WebSocketServer.getFaultIncidentWebSocketSet();
@@ -49,7 +51,7 @@ public class RedisService {
             return;
         }
 
-        JsonObject jsonObject = new Gson().fromJson(message, JsonObject.class);
+        JsonObject jsonObject = gson.fromJson(message, JsonObject.class);
         String agentId = jsonObject.get("agentid").getAsString();
 
         log.info("receive " + type + " message: " + message);

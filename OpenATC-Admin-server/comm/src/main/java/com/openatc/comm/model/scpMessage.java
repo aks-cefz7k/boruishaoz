@@ -25,11 +25,12 @@ import static com.openatc.comm.common.CommunicationType.*;
 
 public class scpMessage implements Message {
 //    private static Logger logger = Logger.getLogger(KedacomMessage.class.toString());
+    Gson gson = new Gson();
+
 
     @Override
     public PackData pack(MessageData sendMsg) throws UnsupportedEncodingException {
         PackData packData = new PackData();
-        Gson gson = new Gson();
         String datastr = "";
         JsonElement data = sendMsg.getData();
         if (data != null) {
@@ -52,7 +53,6 @@ public class scpMessage implements Message {
 
     @Override
     public MessageData uppack(byte[] dataSource, int length) throws UnsupportedEncodingException {
-        Gson gson = new Gson();
 //        int len = 0;
 //        for(int i = 0; i < dataSource.length; i++)
 //        {

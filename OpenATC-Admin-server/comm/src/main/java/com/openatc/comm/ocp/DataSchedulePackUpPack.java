@@ -27,6 +27,8 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
 
     byte[] dataSchdule = new byte[MAX_DATA_SCHEDULE];
 
+    Gson gson = new Gson();
+
     public void DataSchedulePackUpPack() {
 
     }
@@ -527,7 +529,6 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                         //数据内容
                         byte[] dataSizeFlag = new byte[4];
                         int dataSendCount = 0;
-                        Gson gson = new Gson();
                         String dataSetAllParam = gson.toJson(sendData);
                         MessageData messageData = gson.fromJson(dataSetAllParam, MessageData.class);
                         String datastr = null;
@@ -733,16 +734,16 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
      * @param recvData 还上位机参数
      * @param tempData
      */
-    public void SetDataTorecvData(MessageData recvData, String tempData, Gson recvDataJson) {
+    public void SetDataTorecvData(MessageData recvData, String tempData ) {
         if (tempData != null) {
-            JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+            JsonElement obj = gson.fromJson(tempData, JsonElement.class);
             recvData.setData(obj);
         }
         if (tempData == null) {
             tempData = "{\n" +
                     "\t\"sucess\": 1\n" +
                     "}";
-            JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+            JsonElement obj = gson.fromJson(tempData, JsonElement.class);
             recvData.setData(obj);
         }
     }
@@ -753,7 +754,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
      * @Description 数据检查
      * @Date 2021/8/23 15:27
      */
-    private int checkDataLink(byte chDataLink, byte chOperateType, byte chInfoType, Gson recvDataJson, String tempData, MessageData recvData) {
+    private int checkDataLink(byte chDataLink, byte chOperateType, byte chInfoType, String tempData, MessageData recvData) {
         if (chDataLink == DATA_LINK_CONTROL)//配置软件和信号的命令链路
         {
             //信号机应答联机kedacom
@@ -848,7 +849,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //交通流信息主动上传
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_TRAFFIC_FLOW)) {
                 if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    JsonElement obj = gson.fromJson(tempData, JsonElement.class);
                     recvData.setData(obj);
                 }
                 return ReadDataScheduleSuccess;
@@ -856,7 +857,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机工作状态主动上传
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_WORK_STATE)) {
                 if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    JsonElement obj = gson.fromJson(tempData, JsonElement.class);
                     recvData.setData(obj);
                 }
                 return ReadDataScheduleSuccess;
@@ -864,7 +865,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //灯色状态主动上传
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_LAMP_COLOR)) {
                 if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    JsonElement obj = gson.fromJson(tempData, JsonElement.class);
                     recvData.setData(obj);
                 }
                 return ReadDataScheduleSuccess;
@@ -892,7 +893,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机故障主动上传
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_SIGNAL_ERROR)) {
                 if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    JsonElement obj = gson.fromJson(tempData, JsonElement.class);
                     recvData.setData(obj);
                 }
                 return ReadDataScheduleSuccess;
@@ -904,7 +905,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             //信号机版本主动上传
             if ((chOperateType == OPERATE_TYPE_REPORT) && (chInfoType == INFO_TYPE_ATC_VERSION)) {
                 if (tempData != null) {
-                    JsonElement obj = recvDataJson.fromJson(tempData, JsonElement.class);
+                    JsonElement obj = gson.fromJson(tempData, JsonElement.class);
                     recvData.setData(obj);
                 }
                 return ReadDataScheduleSuccess;
@@ -1031,10 +1032,9 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         recvData.setOperation(StringOperatorType(chOperateType));
         recvData.setThirdpartyid(roadID);
         recvData.setInfotype(StringOperatorObj(chInfoType));
-        Gson recvDataJson = new Gson();
-        SetDataTorecvData(recvData, tempData, recvDataJson);
+        SetDataTorecvData(recvData, tempData);
 
-        return checkDataLink(chDataLink, chOperateType, chInfoType, recvDataJson, tempData, recvData);
+        return checkDataLink(chDataLink, chOperateType, chInfoType, tempData, recvData);
     }
 
     public boolean isZero(byte[] dataSchedule) {

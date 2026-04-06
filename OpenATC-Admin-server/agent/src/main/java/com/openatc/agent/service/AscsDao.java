@@ -49,6 +49,8 @@ public class AscsDao {
 
     private Map<String, String> thirdidToAgentidOcp = new HashMap<>();
 
+    Gson gson = new Gson();
+
     /**
      * 初始化OCP设备的真实ID和平台ID的映射关系
      * 此处不映射SCP设备的真实ID和平台ID的映射关系，由各个对接服务负责
@@ -101,7 +103,6 @@ public class AscsDao {
 
     public List<AscsBaseModel> convertAscs(List<Map<String, Object>> lvRet) {
         List<AscsBaseModel> pl = new ArrayList<>();
-        Gson gs = new Gson();
         for (Map map : lvRet) {
 
             AscsBaseModel ascBase = new AscsBaseModel();
@@ -115,7 +116,7 @@ public class AscsDao {
             ascBase.setLastTime((Date) map.get("lastTime"));
             ascBase.setCode((String) map.get("code"));
             String geometry = (String) map.get("geometry");
-            ascBase.setGeometry(gs.fromJson(geometry, MyGeometry.class));
+            ascBase.setGeometry(gson.fromJson(geometry, MyGeometry.class));
             JsonObject jsonparam = new JsonParser().parse(map.get("jsonparam").toString()).getAsJsonObject();
             ascBase.setJsonparam(jsonparam);
             pl.add(ascBase);
@@ -243,49 +244,29 @@ public class AscsDao {
     }
 
 
-    public int updatePattern(Params ps) {
-        //判断是否存在该agentid的记录
-        String sql = "SELECT count(id) FROM parameters where agentid = ?";
-        long count = jdbcTemplate.queryForObject(sql, Long.class, ps.getAgentid());
-        if (count != 0) {
-            sql = "update parameters set name=?,operator=?,params=(to_json(?::json)),opertime=LOCALTIMESTAMP where agentid=?";
-            int rows = jdbcTemplate.update(sql,
-                    ps.getName(),
-                    ps.getOperator(),
-                    ps.getParams().toString(),
-                    ps.getAgentid());
-            return rows;
-
-        } else {
-            sql = "INSERT INTO parameters(name,agentid,operator,params,opertime) VALUES (?,?,?,to_json(?::json),LOCALTIMESTAMP)";
-            int rows = jdbcTemplate.update(sql,
-                    ps.getName(),
-                    ps.getAgentid(),
-                    ps.getOperator(),
-                    ps.getParams().toString());
-            return rows;
-        }
-    }
-
-    public List<Params> getDevPatternByPara(String sql) {
-
-        List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
-        List<Params> abm = new ArrayList<>();
-        for (Map map : lvRet) {
-            Params tt = new Params();
-            tt.setId((int) map.get("id"));
-            tt.setName((String) map.get("name"));
-            tt.setAgentid((int) map.get("agentid"));
-            DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            String str = sdf.format(map.get("opertime"));
-            tt.setOpertime(str);
-            tt.setOperator((String) map.get("operator"));
-            JsonObject param = new JsonParser().parse(map.get("params").toString()).getAsJsonObject();
-            tt.setParams(param);
-            abm.add(tt);
-        }
-        return abm;
-    }
+//    public int updatePattern(Params ps) {
+//        //判断是否存在该agentid的记录
+//        String sql = "SELECT count(id) FROM parameters where agentid = ?";
+//        long count = jdbcTemplate.queryForObject(sql, Long.class, ps.getAgentid());
+//        if (count != 0) {
+//            sql = "update parameters set name=?,operator=?,params=(to_json(?::json)),opertime=LOCALTIMESTAMP where agentid=?";
+//            int rows = jdbcTemplate.update(sql,
+//                    ps.getName(),
+//                    ps.getOperator(),
+//                    ps.getParams().toString(),
+//                    ps.getAgentid());
+//            return rows;
+//
+//        } else {
+//            sql = "INSERT INTO parameters(name,agentid,operator,params,opertime) VALUES (?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+//            int rows = jdbcTemplate.update(sql,
+//                    ps.getName(),
+//                    ps.getAgentid(),
+//                    ps.getOperator(),
+//                    ps.getParams().toString());
+//            return rows;
+//        }
+//    }
 
     public List<String> getFaultDev() {
         String sql = "select DISTINCT(agentid) from fault where m_un_fault_renew_time = 0";
@@ -298,7 +279,6 @@ public class AscsDao {
         //使用Sqlite数据库时，两个请求同时访问会将数据库锁定，因此添加此处添加一个锁
         List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
         List<AscsBaseModel> abm = new ArrayList<>();
-        Gson gs = new Gson();
         for (Map map : lvRet) {
             AscsBaseModel tt = new AscsBaseModel();
             tt.setId((int) map.get("id"));
@@ -313,7 +293,7 @@ public class AscsDao {
             tt.setStatus((int) map.get("status"));
             String geometry = (String) map.get("geometry");
             tt.setCode((String) map.get("code"));
-            tt.setGeometry(gs.fromJson(geometry, MyGeometry.class));
+            tt.setGeometry(gson.fromJson(geometry, MyGeometry.class));
             tt.setState((String) map.get("state"));
             if (map.get("lastTime") != null) {
                 tt.setLastTime(sdf.parse(map.get("lastTime").toString()));

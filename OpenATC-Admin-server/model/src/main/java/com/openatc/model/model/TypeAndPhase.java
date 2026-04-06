@@ -9,25 +9,13 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.agent.model;
+package com.openatc.model.model;
 
 import lombok.Data;
+import java.util.List;
 
 @Data
-public class Ring {
-    private int id;
-    private String name;
-    private int value;
-    private int minSplit;
-    private int mode;
-    public Ring(int id, String name, int value,int  minSplit,int mode) {
-        this.id = id;
-        this.name = name;
-        this.value = value;
-        this.minSplit=minSplit;
-        this.mode=mode;
-    }
-
-    public Ring() {
-    }
+public class TypeAndPhase {
+    private String type;
+    private List<SimTemPhase> phaseList;
 }

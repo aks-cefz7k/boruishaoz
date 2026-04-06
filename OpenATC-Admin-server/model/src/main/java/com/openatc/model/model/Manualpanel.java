@@ -9,26 +9,19 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.agent.model;
+package com.openatc.model.model;
 
 import lombok.Data;
-import org.springframework.lang.Nullable;
 
 import java.util.List;
 
 @Data
-public class Pattern {
-    private int id;
-    private String desc;
-    private Integer offset;
-    private int cycle;
-    private List<Ring>[] rings;
-
-    public List<Ring>[] getRings() {
-        return rings.clone();
-    }
-
-    public void setRings(List<Ring>[] rings) {
-        this.rings = rings.clone();
-    }
+public class Manualpanel {
+    private short controlmode = 0;
+    private int duration = 600;
+    private short greenflash = 3;
+    private short yellow = 3;
+    private short redclear = 1;
+    private short mingreen = 15;
+    private List<Keyconfig> keyconfig;
 }
