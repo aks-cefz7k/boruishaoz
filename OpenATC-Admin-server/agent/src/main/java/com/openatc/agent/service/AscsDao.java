@@ -442,8 +442,8 @@ public class AscsDao {
 
     public int updateAscsByReport(DevCover devCover) {
 
-        String login_thirpartyid = devCover.getThirdpartyid(); // 设备上报的真实id
-        if(login_thirpartyid == null){
+        String devsid = devCover.getThirdpartyid(); // 设备上报的真实id
+        if(devsid == null){
             logger.warning("Report thirpartyid = null, devCover = " + devCover.toString());
             return 0;
         }
@@ -466,10 +466,10 @@ public class AscsDao {
             jo.addProperty("model", devCover.getModel());
         ascsModel.setJsonparam(jo);
         ascsModel.setProtocol(devCover.getProtocol());
-        ascsModel.setThirdplatformid(login_thirpartyid);
+        ascsModel.setThirdplatformid(devsid);
 
         ascsModel.setAgentid(devCover.getAgentid());
-        ascsModel.setName(devCover.getAgentid());
+        ascsModel.setName(devsid);
 
         //更新数据
         String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,lastTime=LOCALTIMESTAMP where agentid = ?";
