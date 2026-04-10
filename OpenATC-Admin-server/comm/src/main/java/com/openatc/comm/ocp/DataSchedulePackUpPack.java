@@ -85,7 +85,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
             return scheduleplan;
         }
         if (operatorObj == 0x0A) {
-            return workmode;
+            return ControlPattern;
         }
         if (operatorObj == 0x0B) {
             return falut;
@@ -189,7 +189,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     case scheduleplan://查询方案调度计划
                         eight = INFO_TYPE_SCHEDUL_PLAN;
                         break;
-                    case workmode://查询工作方式
+                    case ControlPattern://查询工作方式
                         eight = INFO_TYPE_WORK_MODE;
                         break;
                     case falut://查询信号机故障
@@ -248,7 +248,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     case scheduleplan://方案调度计划
                         eight = INFO_TYPE_SCHEDUL_PLAN;
                         break;
-                    case workmode://工作方式设置
+                    case ControlPattern://工作方式设置
                         eight = INFO_TYPE_WORK_MODE;
                         break;
                     case paramversion://特征参数版本设置
@@ -375,7 +375,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     case scheduleplan://查询方案调度计划
                         three = DATA_LINK_PARAM_TRAMFER;
                         break;
-                    case workmode://查询工作方式
+                    case ControlPattern://查询工作方式
                         three = DATA_LINK_INTER_ORDER;
                         break;
                     case falut://查询信号机故障
@@ -434,7 +434,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     case scheduleplan://方案调度计划
                         three = DATA_LINK_PARAM_TRAMFER;
                         break;
-                    case workmode://工作方式设置
+                    case ControlPattern://工作方式设置
                         three = DATA_LINK_INTER_ORDER;
                         break;
                     case paramversion://特征参数版本设置
@@ -513,7 +513,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     case scheduleplan://方案调度计划
                         AddMsgToData(sendData);
                         break;
-                    case workmode://工作方式设置
+                    case ControlPattern://工作方式设置
                         AddMsgToData(sendData);
                         break;
                     case paramversion://特征参数版本设置

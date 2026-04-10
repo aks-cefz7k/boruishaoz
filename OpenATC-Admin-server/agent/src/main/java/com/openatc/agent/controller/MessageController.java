@@ -75,7 +75,7 @@ public class MessageController {
      * @Description: TODO
      */
     @PostMapping(value = "/devs/message")
-    public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
+    public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) {
 
         AscsBaseModel ascsBaseModel = mDao.getAscsByID(requestData.getAgentid());
 

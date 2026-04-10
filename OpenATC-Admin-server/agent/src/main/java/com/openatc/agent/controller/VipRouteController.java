@@ -187,7 +187,7 @@ public class VipRouteController {
             if (cowlist.contains(agentid)) return RESTRetUtils.errorObj(E_6002);
             cowlist.add(agentid);
             AtomicInteger totaltime = new AtomicInteger(vrDevice.getTotaltime());
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, data);
+            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
             log.info("******restRet:  " + restRet);
             if (restRet.getData() instanceof DevCommError) {
@@ -234,7 +234,7 @@ public class VipRouteController {
         // 取消勤务路线
         if (operation == 0) {
             data.addProperty("control", 0);
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, data);
+            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
             if (restRet.getData() instanceof DevCommError) return restRet;
             cowlist.remove(agentid);
@@ -249,7 +249,7 @@ public class VipRouteController {
     private void backSelfControl(String agentid) throws SocketException, ParseException {
         JsonObject selfControl = new JsonObject();
         selfControl.addProperty("control", 0);
-        MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, selfControl);
+        MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, selfControl);
         messageController.postDevsMessage(null, selfMessage);
     }
 

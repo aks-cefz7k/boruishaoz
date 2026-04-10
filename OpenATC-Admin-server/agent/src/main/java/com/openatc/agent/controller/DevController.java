@@ -16,10 +16,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
+import com.openatc.comm.data.MessageData;
+import com.openatc.comm.ocp.CosntDataDefine;
+import com.openatc.core.model.RESTRet;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.ControlPattern;
+import com.openatc.model.model.LockDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +51,10 @@ public class DevController {
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
+    @Autowired
+    private MessageController messageController;
 
+    private Gson gson = new Gson();
     private Logger log = Logger.getLogger(DevController.class.toString());
 
     @GetMapping(value = "/devs/user/{username}")
@@ -194,5 +202,23 @@ public class DevController {
         String newAgentid = jsonObject.get("newAgentid").getAsString();
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
         return RESTRetUtils.successObj(result);
+    }
+
+    // 锁定交通流
+    @PostMapping(value = "/devs/{agentid}/lockdirection")
+    public RESTRetBase DevAscsDiscovery(@PathVariable String agentid, @RequestBody LockDirection lockDirection){
+
+        ControlPattern data = LockDirection2Workmode(agentid,lockDirection);
+
+
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, gson.toJsonTree(data));
+        RESTRet restRet = messageController.postDevsMessage(null, messageData);
+
+        return restRet;
+    }
+
+    // 将路口的交通流锁定消息转换为信号机的方向锁定控制
+    private ControlPattern LockDirection2Workmode(String agentid, LockDirection lockDirection) {
+        return null;
     }
 }
