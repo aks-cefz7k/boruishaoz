@@ -9,15 +9,20 @@
  * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
  * See the Mulan PSL v2 for more details.
  **/
-package com.openatc.configserver.utils;
+package com.openatc.core.util;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.RESTRetBase;
 
 import java.io.*;
 import java.util.Properties;
 
-public class SerializeUtil {
+public class FileUtil {
     public static String getUserFilePath(){
         Properties properties = new Properties();
-        InputStream in = SerializeUtil.class.getClassLoader().getResourceAsStream("application.properties");
+        InputStream in = FileUtil.class.getClassLoader().getResourceAsStream("application.properties");
         try {
             properties.load(in);
         } catch (IOException e) {
@@ -26,9 +31,7 @@ public class SerializeUtil {
         return properties.getProperty("user.filepath");
     }
 
-    public static void writeObject(Object object){
-
-        String filePath = getUserFilePath();
+    public static void writeObject(String filePath, Object object){
 
         ObjectOutputStream objectOutputStream = null;
         try {
@@ -50,8 +53,7 @@ public class SerializeUtil {
         }
     }
 
-    public static Object readObject(){
-        String filePath = getUserFilePath();
+    public static Object readObject(String filePath){
         File file = new File(filePath);
         FileInputStream fs = null;
 
@@ -77,16 +79,45 @@ public class SerializeUtil {
         return object;
     }
 
-//    public static void main(String[] args) {
-//        User user1 = new User();
-//        user1.setUser_name("admin");
-//        String dbPassword = Base64.getEncoder().encodeToString(DigestUtils.md5("admin" + "123456"));
-//        user1.setPassword(dbPassword);
-//        SerializeUtil.writeObject("user",user1);
-//
-//
-//        User user = (User) SerializeUtil.readObject("user");
-//        System.out.println(user.getPassword());
-//        System.out.println(user.getUser_name());
-//    }
+    /**
+     * @return
+     * @Date 2021/9/3 16:21
+     * 读取指定文件
+     */
+    public static RESTRetBase readFile(String filename) {
+        File file = new File(filename);
+        FileInputStream fs;
+        try {
+            fs = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2009);
+        }
+        String result;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();//捕获内存
+            //文件读取
+            int i;
+            byte[] bytes = new byte[1024];
+            while ((i = fs.read(bytes)) != -1) {
+                bos.write(bytes, 0, i);
+            }
+            result = new String(bos.toByteArray());
+        } catch (Exception e) {
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2008);
+        } finally {
+            try {
+                if (fs != null) fs.close();
+            } catch (IOException e) {
+                return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2006);
+            }
+        }
+        JsonObject jsonFile;
+        try {
+            Gson gson = new Gson();
+            jsonFile = gson.fromJson(result, JsonObject.class);
+        } catch (Exception e) {
+            return RESTRetUtils.successObj(IErrorEnumImplOuter.E_2007);
+        }
+        return RESTRetUtils.successObj(jsonFile);
+    }
 }

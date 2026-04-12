@@ -208,7 +208,7 @@ public class DevController {
     @PostMapping(value = "/devs/{agentid}/lockdirection")
     public RESTRetBase DevAscsDiscovery(@PathVariable String agentid, @RequestBody LockDirection lockDirection){
 
-        ControlPattern data = LockDirection2Workmode(agentid,lockDirection);
+        ControlPattern data = LockDirection2ControlPattern(agentid,lockDirection);
 
 
         MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, gson.toJsonTree(data));
@@ -218,7 +218,7 @@ public class DevController {
     }
 
     // 将路口的交通流锁定消息转换为信号机的方向锁定控制
-    private ControlPattern LockDirection2Workmode(String agentid, LockDirection lockDirection) {
+    private ControlPattern LockDirection2ControlPattern(String agentid, LockDirection lockDirection) {
         return null;
     }
 }

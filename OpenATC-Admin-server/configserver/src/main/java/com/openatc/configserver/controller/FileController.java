@@ -1,12 +1,10 @@
 package com.openatc.configserver.controller;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
-import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
-import com.openatc.core.util.RESTRetUtils;
+import com.openatc.core.util.FileUtil;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -25,7 +23,6 @@ import static com.openatc.configserver.controller.DeviceController.ascsBaseModel
 @Path("/")
 @Singleton
 public class FileController {
-
 
     @Path("system/update")
     @POST
@@ -59,6 +56,16 @@ public class FileController {
         return new CommClient().devMessage(md,ascsBaseModel);
     }
 
+    /**
+     * @return RESTRetBase
+     * @descripation 获取左右行配置
+     * @Date 2021/9/16 13:57
+     **/
+    @Path("platform/LRRoadConfig")
+    @POST
+    public RESTRetBase getLRRoadConfig() throws IOException {
+        return FileUtil.readFile("/usr/config/LRRoadConfig.json");
+    }
 
     /**
      * @return
@@ -69,7 +76,7 @@ public class FileController {
     @Path("flow/history")
     @POST
     public RESTRetBase getFlowHistory(JsonObject jsonObject) {
-        return readFile("/usr/log/TRAFFICFLOW.json");
+        return FileUtil.readFile("/usr/log/TRAFFICFLOW.json");
     }
 
     /**
@@ -81,7 +88,7 @@ public class FileController {
     @Path("fault/history")
     @POST
     public RESTRetBase getFaultHistory(JsonObject jsonObject) {
-        return readFile("/usr/log/FAULT.json");
+        return FileUtil.readFile("/usr/log/FAULT.json");
     }
 
 
@@ -94,49 +101,7 @@ public class FileController {
     @Path("operation/history")
     @POST
     public RESTRetBase getOperationHistory(JsonObject jsonObject) {
-        return readFile("/usr/log/OPERATIONRECORD.json");
-    }
-
-    /**
-     * @return
-     * @Date 2021/9/3 16:21
-     * @deprecated 读取指定文件
-     */
-    public RESTRetBase readFile(String filename) {
-        File file = new File(filename);
-        FileInputStream fs;
-        try {
-            fs = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2009);
-        }
-        String result;
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();//捕获内存
-            //文件读取
-            int i;
-            byte[] bytes = new byte[1024];
-            while ((i = fs.read(bytes)) != -1) {
-                bos.write(bytes, 0, i);
-            }
-            result = new String(bos.toByteArray());
-        } catch (Exception e) {
-            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2008);
-        } finally {
-            try {
-                if (fs != null) fs.close();
-            } catch (IOException e) {
-                return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2006);
-            }
-        }
-        JsonObject jsonFile;
-        try {
-            Gson gson = new Gson();
-            jsonFile = gson.fromJson(result, JsonObject.class);
-        } catch (Exception e) {
-            return RESTRetUtils.successObj(IErrorEnumImplOuter.E_2007);
-        }
-        return RESTRetUtils.successObj(jsonFile);
+        return FileUtil.readFile("/usr/log/OPERATIONRECORD.json");
     }
 
 }
