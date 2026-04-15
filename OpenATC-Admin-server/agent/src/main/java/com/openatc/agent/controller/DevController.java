@@ -12,17 +12,16 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
-
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
-import com.openatc.core.model.RESTRet;
-import com.openatc.model.model.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.ControlPattern;
 import com.openatc.model.model.LockDirection;
 import org.springframework.beans.factory.annotation.Autowired;

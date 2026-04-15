@@ -11,13 +11,9 @@
  **/
 package com.openatc.configserver.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
-import com.openatc.configserver.model.*;
 import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
@@ -29,8 +25,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.net.SocketException;
 import java.text.ParseException;
-import java.util.*;
-import java.util.logging.Logger;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
 

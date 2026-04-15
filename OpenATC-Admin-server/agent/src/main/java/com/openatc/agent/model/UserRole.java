@@ -12,6 +12,7 @@
 package com.openatc.agent.model;
 
 import lombok.Data;
+
 import javax.persistence.*;
 
 @Data

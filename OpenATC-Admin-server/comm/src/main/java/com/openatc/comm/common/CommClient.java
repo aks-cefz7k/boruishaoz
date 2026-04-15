@@ -25,9 +25,7 @@ import static com.openatc.comm.common.CommunicationType.*;
 import static com.openatc.comm.common.LogUtil.CreateErrorRequestData;
 import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
 import static com.openatc.core.common.IErrorEnumImplInner.*;
-import static com.openatc.core.common.IErrorEnumImplInner.E_301;
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_4002;
 
 
 public class CommClient {

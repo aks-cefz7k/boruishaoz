@@ -11,14 +11,15 @@
  **/
 package com.openatc.agent.realm;
 
-import java.util.List;
-
 import com.openatc.agent.model.Permission;
 import com.openatc.agent.model.User;
 import com.openatc.agent.service.PermissionDao;
 import com.openatc.agent.service.UserDao;
 import com.openatc.agent.utils.TokenUtil;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -27,6 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+
+import java.util.List;
 
 
 public class MyRealm extends AuthorizingRealm {

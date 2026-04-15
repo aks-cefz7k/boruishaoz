@@ -11,10 +11,6 @@
  **/
 package com.openatc.model.model;
 
-import com.openatc.model.model.DateParam;
-import com.openatc.model.model.Pattern;
-import com.openatc.model.model.Phase;
-import com.openatc.model.model.Plan;
 import lombok.Data;
 
 @Data

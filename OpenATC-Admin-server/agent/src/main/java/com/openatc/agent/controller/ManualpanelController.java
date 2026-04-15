@@ -11,19 +11,15 @@
  **/
 package com.openatc.agent.controller;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.openatc.model.model.ChannelLock;
-import com.openatc.model.model.LSCheck;
-import com.openatc.model.model.Manualpanel;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.Manualpanel;
 import com.openatc.model.service.ManualpanelService;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ManualpanelController {

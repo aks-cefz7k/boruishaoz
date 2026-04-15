@@ -14,10 +14,13 @@ package com.openatc.core.util;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.openatc.core.common.*;
+import com.openatc.core.common.Constants;
+import com.openatc.core.common.IErrorEnum;
+import com.openatc.core.common.IErrorEnumImplInner;
+import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
-import com.openatc.core.model.DevCommError;
 
 import java.time.Instant;
 import java.util.HashMap;

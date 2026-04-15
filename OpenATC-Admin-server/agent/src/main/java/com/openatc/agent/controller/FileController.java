@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.utils.MyHttpUtil;
-import com.openatc.core.util.FileUtil;
-import com.openatc.model.model.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
+import com.openatc.core.util.FileUtil;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 

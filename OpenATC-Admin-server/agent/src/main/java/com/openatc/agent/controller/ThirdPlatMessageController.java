@@ -1,15 +1,12 @@
 package com.openatc.agent.controller;
 
 
-
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -12,6 +12,7 @@
 package com.openatc.configserver.controller;
 
 import com.google.gson.Gson;
+
 import javax.inject.Singleton;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;

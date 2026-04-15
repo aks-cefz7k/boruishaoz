@@ -14,7 +14,7 @@ package com.openatc.agent.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.openatc.agent.model.*;
+import com.openatc.agent.model.DevCover;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.MyGeometry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.sql.*;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.Date;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Repository

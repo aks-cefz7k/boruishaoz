@@ -17,7 +17,6 @@ import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import com.openatc.comm.ocp.DataPackUpPack;
 import com.openatc.comm.ocp.DataSchedulePackUpPack;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.*;
