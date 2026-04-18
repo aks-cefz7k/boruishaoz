@@ -12,6 +12,7 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
@@ -24,6 +25,7 @@ import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.ControlPattern;
 import com.openatc.model.model.LockDirection;
+import com.openatc.model.service.ManualpanelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -187,7 +189,7 @@ public class DevController {
 
     // 注册设备消息处理
     @PutMapping(value = "/devs/discovery")
-    public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel) throws ParseException {
+    public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel){
         mDao.updateAscsByReport(ascsModel);
 //        mDao.updateAscs(ascsModel);
         return RESTRetUtils.successObj(ascsModel);
@@ -207,17 +209,23 @@ public class DevController {
     @PostMapping(value = "/devs/{agentid}/lockdirection")
     public RESTRetBase DevAscsDiscovery(@PathVariable String agentid, @RequestBody LockDirection lockDirection){
 
-        ControlPattern data = LockDirection2ControlPattern(agentid,lockDirection);
+        // 获取路口相位和通道参数
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
+        RESTRet<MessageData> restRet = messageController.postDevsMessage(null, messageData);
+        if(restRet.isSuccess()){
 
+            JsonObject feature = restRet.getData().getData().getAsJsonObject();
+            JsonArray phaseArray = feature.get("phaseList").getAsJsonArray();
+            JsonArray channelArray = feature.get("channelList").getAsJsonArray();
 
-        MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, gson.toJsonTree(data));
-        RESTRet restRet = messageController.postDevsMessage(null, messageData);
+            // 将锁定交通流参数转换为设备方向锁定消息
+            ManualpanelService manualpanelService = new ManualpanelService();
+            ControlPattern data = manualpanelService.LockDirection2ControlPattern(phaseArray,channelArray,lockDirection);
+            messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, gson.toJsonTree(data));
+            String str = gson.toJson(messageData);
+            restRet = messageController.postDevsMessage(null, messageData);
+        }
 
         return restRet;
-    }
-
-    // 将路口的交通流锁定消息转换为信号机的方向锁定控制
-    private ControlPattern LockDirection2ControlPattern(String agentid, LockDirection lockDirection) {
-        return null;
     }
 }

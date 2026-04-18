@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author ：zhangwenchao
  * @date ：Created in 2021/11/22 9:28
- * @description：锁定交通流
+ * @description：锁定交通流,对应平台的API消息结构
  * @modified By：
  * @version: $
  */

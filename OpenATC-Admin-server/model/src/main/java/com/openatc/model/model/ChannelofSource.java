@@ -16,16 +16,16 @@ import lombok.Data;
 /**
  * @author
  * @ClassName: LSCheckList
- * @Description: 手动控制面板中，灯状态检索对应表
+ * @Description: 通道对应的相位方向和类型新信息
  * @date 2019年10月19日 下午5:15:09
  */
 @Data
-public class LSCheck {
+public class ChannelofSource {
     private int id;
     private int controlsource;
     private int[] direction;
 
-    public LSCheck(int id, int controlsource, int[] direction) {
+    public ChannelofSource(int id, int controlsource, int[] direction) {
         this.id = id;
         this.controlsource = controlsource;
         this.direction = direction.clone();
@@ -39,6 +39,6 @@ public class LSCheck {
         this.direction = direction.clone();
     }
 
-    public LSCheck() {
+    public ChannelofSource() {
     }
 }
