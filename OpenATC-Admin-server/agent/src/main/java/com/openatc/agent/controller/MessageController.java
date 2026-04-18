@@ -106,7 +106,7 @@ public class MessageController {
             if (token == null) {
                 logger.warning("token of set-request is null;");
             }
-            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
+//            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
             try {
                 hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
             } catch (Exception e) {

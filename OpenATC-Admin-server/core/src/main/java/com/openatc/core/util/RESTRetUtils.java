@@ -245,12 +245,12 @@ public final class RESTRetUtils {
         return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommError, delay);
     }
 
-    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, JsonElement jsonElement) {
-        return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),jsonElement);
-    }
+//    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, JsonElement jsonElement) {
+//        return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),jsonElement);
+//    }
 
     //返回被包含的具体类型的错误信息，e.g. 101
-    public static DevCommError errorObj(String agentid, String operation, String infortype, IErrorEnumImplInner iErrorEnumImplInner) {
+    public static DevCommError errorDevCommObj(String agentid, String operation, String infortype, IErrorEnumImplInner iErrorEnumImplInner) {
         Map<String, Object> data = new HashMap<>();
         data.put("code", iErrorEnumImplInner.getErrorCode());
         data.put("message", iErrorEnumImplInner.getErrorMsg());

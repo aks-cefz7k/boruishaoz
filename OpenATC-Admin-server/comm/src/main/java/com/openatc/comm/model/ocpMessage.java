@@ -12,8 +12,8 @@
 package com.openatc.comm.model;
 
 import com.openatc.comm.data.MessageData;
-import com.openatc.comm.ocp.DataPackUpPack;
-import com.openatc.comm.ocp.DataSchedulePackUpPack;
+import com.openatc.comm.ocp.OcpDataEscape;
+import com.openatc.comm.ocp.OcpDataPackUpPack;
 
 import java.io.UnsupportedEncodingException;
 
@@ -23,16 +23,18 @@ public class ocpMessage implements Message {
     private static final int RECVBUFFER = 64 * 1024;
     @Override
     public PackData pack(MessageData sendMsg) throws UnsupportedEncodingException {
-        DataSchedulePackUpPack dataSchedulePackUpPack = new DataSchedulePackUpPack();
         PackData packData;
-        byte[] m_dataSchedule = dataSchedulePackUpPack.PackDataSchedule(sendMsg);
-        if (dataSchedulePackUpPack.isZero(m_dataSchedule)) {
+        // 将OpenATC消息转换为OCP协议
+        OcpDataPackUpPack ocpDataPackUpPack = new OcpDataPackUpPack();
+        byte[] dataSchedule = ocpDataPackUpPack.PackDataSchedule(sendMsg);
+        if (ocpDataPackUpPack.isZero(dataSchedule)) {
             packData = null;
         } else {
-            DataPackUpPack m_dataPackUpPack = new DataPackUpPack();
-            byte[] m_packData = new byte[RECVBUFFER];
-            int m_packDataSize = m_dataPackUpPack.packBuff(m_dataSchedule, m_packData);
-            packData = new PackData(m_packData, m_packDataSize);
+            // 进行OCP协议字符转义
+            OcpDataEscape ocpDataEscape = new OcpDataEscape();
+            byte[] packDataBuff = new byte[RECVBUFFER];
+            int packBuffLen = ocpDataEscape.packBuff(dataSchedule, packDataBuff);
+            packData = new PackData(packDataBuff, packBuffLen);
         }
         return packData;
     }
@@ -46,12 +48,12 @@ public class ocpMessage implements Message {
             return null;
         }
         MessageData responseData = new MessageData();
-        byte[] m_dataSchedule = new byte[RECVBUFFER];
-        DataPackUpPack m_readDataPackUpPack = new DataPackUpPack();
-        int m_dataScheduleSize = m_readDataPackUpPack.upPackBuff(dataSource, m_dataSchedule);
-        if (m_dataScheduleSize != 0) {
-            DataSchedulePackUpPack m_readDataReceive = new DataSchedulePackUpPack();
-            m_readDataReceive.ReadDataSchedule(responseData, m_dataSchedule, m_dataScheduleSize);
+        byte[] dataSchedule = new byte[RECVBUFFER];
+        OcpDataEscape ocpDataEscape = new OcpDataEscape();
+        int upPackBuffLen = ocpDataEscape.upPackBuff(dataSource, dataSchedule);
+        if (upPackBuffLen != 0) {
+            OcpDataPackUpPack ocpDataPackUpPack = new OcpDataPackUpPack();
+            ocpDataPackUpPack.ReadDataSchedule(responseData, dataSchedule, upPackBuffLen);
         }
         return responseData;
     }

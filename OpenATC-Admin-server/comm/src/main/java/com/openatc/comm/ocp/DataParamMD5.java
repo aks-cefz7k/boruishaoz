@@ -15,12 +15,30 @@ import java.security.NoSuchAlgorithmException;
  */
 public class DataParamMD5 {
 
-    public static String getMD5(String str) throws UnsupportedEncodingException {
+    public static String getMD5(String datastr1) throws UnsupportedEncodingException {
+        String datastr = null;
+        if (datastr1 != null) {
+            char stchar = '"';
+            char stchar1 =' ';
+            char stchar2= '\0';
+            char stchar3= '\t';
+            char stchar4= '\r';
+            char stchar5= '\n';
+            char stchar6= '\b';
+            StringBuffer stringBuffer = new StringBuffer("");
+            for (int i = 0; i < datastr1.length(); i++) {
+                if (datastr1.charAt(i) != stchar&&datastr1.charAt(i) != stchar1&&datastr1.charAt(i) != stchar2&&datastr1.charAt(i) != stchar3&&datastr1.charAt(i) != stchar4&&datastr1.charAt(i) != stchar5&&datastr1.charAt(i) != stchar6) {
+                    stringBuffer.append(datastr1.charAt(i));
+                }
+            }
+            datastr = stringBuffer.toString();
+        }
+
 //        String md5 = DigestUtils.md5DigestAsHex(str.getBytes("UTF-8"));
         byte[] secretBytes = null;
         try {
             secretBytes = MessageDigest.getInstance("md5").digest(
-                    str.getBytes("UTF-8"));
+                    datastr.getBytes("UTF-8"));
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("没有这个md5算法！");
         }

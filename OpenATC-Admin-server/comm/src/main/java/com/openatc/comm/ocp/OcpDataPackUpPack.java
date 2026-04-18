@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import static com.openatc.comm.ocp.CosntDataDefine.*;
 
-public class DataSchedulePackUpPack { //数据表内容宏定义
+public class OcpDataPackUpPack { //数据表内容宏定义
 
 
     private static final int MAX_DATA_SCHEDULE = 14;         //数据表大小
@@ -105,6 +105,12 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         if (operatorObj == 0x10) {
             return detector;
         }
+        if (operatorObj == 0x11) {
+            return overlap;
+        }
+        if (operatorObj == 0x12) {
+            return scheduledate;
+        }
         if (operatorObj == 0x24 || operatorObj == 0x23 || operatorObj == 0x18) {
             return allfeature;
         }
@@ -158,143 +164,93 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
     private byte dataScheduleEight(String operationType, String infoType) {
         byte eight = (byte) 0x00;
         switch (operationType) {
-            case getrequest:
-                switch (infoType) {
-                    case login: //上位机发login请求
-                        eight = INFO_TYPE_LOGIN;
-                        //数据内容:上位机联机请求
-                        break;
-                    case volume: //上位机查询交通流请求
-                        eight = INFO_TYPE_TRAFFIC_FLOW;
-                        //数据内容:上位机查询交通流
-                        break;
-                    case workstatus://工作状态查询
-                        eight = INFO_TYPE_WORK_STATE;
-                        break;
-                    case lampcolor://灯色状态查询
-                        eight = INFO_TYPE_LAMP_COLOR;
-                        break;
-                    case time://查询信号机时间
-                        eight = INFO_TYPE_CURRENT_TIME;
-                        break;
-                    case signalgroup://查询信号灯组信息
-                        eight = INFO_TYPE_SIGNAL_GROUP;
-                        break;
-                    case phase://查询相位信息
-                        eight = INFO_TYPE_PHASE;
-                        break;
-                    case timepattern://查询信号配时方案
-                        eight = INFO_TYPE_SCHEME_PARTTERN;
-                        break;
-                    case scheduleplan://查询方案调度计划
-                        eight = INFO_TYPE_SCHEDUL_PLAN;
-                        break;
-                    case ControlPattern://查询工作方式
-                        eight = INFO_TYPE_WORK_MODE;
-                        break;
-                    case falut://查询信号机故障
-                        eight = INFO_TYPE_SIGNAL_ERROR;
-                        break;
-                    case atcversion://查询信号机版本
-                        eight = INFO_TYPE_ATC_VERSION;
-                        break;
-                    case paramversion://查询特征参数版本
-                        eight = INFO_TYPE_PARAM_VERSION;
-                        break;
-                    case code://信号机识别码
-                        eight = INFO_TYPE_IDENTIFY_CODE;
-                        break;
-                    case detector://检测器
-                        eight = INFO_TYPE_DETECTOR;
-                        break;
-                    case allfeature://查询整体参数feature/all
-                        eight = CFG_ASK_ASKREAD;
-                        break;
-                    case manualpanel:// 查询手动面板
-                        eight = INFO_TYPE_MANUALPANEL;
-                        break;
-                    case systemremote:// 查询远程调试
-                        eight = INFO_TYPE_SYSTEM_REMOTE;
-                        break;
-                    case systemlog:// 查询操作日志
-                        eight = INFO_TYPE_SYSTEM_LOG;
-                        break;
-                    case channelstatus:// 查询通道状态（电压电流）
-                        eight = INFO_TYPE_CHANNEL_STATUS;
-                        break;
-                    case channellampstatus:// 查询通道灯色状态
-                        eight = INFO_TYPE_CHANNEL_LAMP_STATUS;
-                        break;
-                    case systemcustom:// 查询设备参数
-                        eight = INFO_TYPE_SYSTEM_CUSTOM;
-                        break;
-                    default:
-                }
-                break;
-            case setrequest:
-                switch (infoType) {
-                    case time://设置时间
-                        eight = INFO_TYPE_CURRENT_TIME;
-                        break;
-                    case signalgroup://设置信号灯组
-                        eight = INFO_TYPE_SIGNAL_GROUP;
-                        break;
-                    case phase://相位设置
-                        eight = INFO_TYPE_PHASE;
-                        break;
-                    case timepattern://配时方案设置
-                        eight = INFO_TYPE_SCHEME_PARTTERN;
-                        break;
-                    case scheduleplan://方案调度计划
-                        eight = INFO_TYPE_SCHEDUL_PLAN;
-                        break;
-                    case ControlPattern://工作方式设置
-                        eight = INFO_TYPE_WORK_MODE;
-                        break;
-                    case paramversion://特征参数版本设置
-                        eight = INFO_TYPE_PARAM_VERSION;
-                        break;
-                    case remote://远程控制设置
-                        eight = INFO_TYPE_REMOTE_CONTROL;
-                        break;
-                    case detector://检测器设置
-                        eight = INFO_TYPE_DETECTOR;
-                        break;
-                    case allfeature://下载整体参数
-                        eight = CFG_ASK_SENDDATA;
-                        break;
-                    case manualpanel://手动面板设置
-                        eight = INFO_TYPE_MANUALPANEL;
-                        break;
-                    case updatedisk://U盘更新
-                        eight = INFO_TYPE_UPDATEUDISK;
-                        break;
-                    case systemremote://远程调试
-                        eight = INFO_TYPE_SYSTEM_REMOTE;
-                        break;
-                    case channelcheck://通道检测
-                        eight = INFO_TYPE_SYSTEM_CHANNEL_CHECK;
-                        break;
-                    case volumelog://流量日志获取
-                        eight = INFO_TYPE_VOLUMELOG;
-                        break;
-                    case interrupt://方案干预
-                        eight = INFO_TYPE_PATTERN_INTERRUPT;
-                        break;
-                    case systemcustom://下载设备参数
-                        eight = INFO_TYPE_SYSTEM_CUSTOM;
-                        break;
-                    case systemupdate://设备更新
-                        eight = INFO_TYPE_SYSTEM_UPDATE;
-                        break;
-                    default:
-                }
-                break;
             case getresponse://设置应答
                 eight = INFO_TYPE_ONLINE;
                 break;
             case setresponse://查询应答
                 eight = INFO_TYPE_ONLINE;
+                break;
+            default:
+        }
+
+        // 如果是应答操作，返回对象标识；否则则是查询操作，继续执行
+        if(eight == INFO_TYPE_ONLINE )
+            return eight;
+
+        switch (infoType) {
+            case login: //上位机发login请求
+                eight = INFO_TYPE_LOGIN;
+                //数据内容:上位机联机请求
+                break;
+            case volume: //上位机查询交通流请求
+                eight = INFO_TYPE_TRAFFIC_FLOW;
+                //数据内容:上位机查询交通流
+                break;
+            case workstatus://工作状态查询
+                eight = INFO_TYPE_WORK_STATE;
+                break;
+            case lampcolor://灯色状态查询
+                eight = INFO_TYPE_LAMP_COLOR;
+                break;
+            case time://查询信号机时间
+                eight = INFO_TYPE_CURRENT_TIME;
+                break;
+            case signalgroup://查询信号灯组信息
+                eight = INFO_TYPE_SIGNAL_GROUP;
+                break;
+            case phase://查询相位信息
+                eight = INFO_TYPE_PHASE;
+                break;
+            case overlap://查询跟随相位信息
+                eight = INFO_TYPE_OVERLAP;
+                break;
+            case timepattern://查询信号配时方案
+                eight = INFO_TYPE_SCHEME_PARTTERN;
+                break;
+            case scheduleplan://查询方案调度计划
+                eight = INFO_TYPE_SCHEDUL_PLAN;
+                break;
+            case scheduledate://查询方案调度计划
+                eight = INFO_TYPE_SCHEDUL_DATE;
+                break;
+            case ControlPattern://查询工作方式
+                eight = INFO_TYPE_WORK_MODE;
+                break;
+            case falut://查询信号机故障
+                eight = INFO_TYPE_SIGNAL_ERROR;
+                break;
+            case atcversion://查询信号机版本
+                eight = INFO_TYPE_ATC_VERSION;
+                break;
+            case paramversion://查询特征参数版本
+                eight = INFO_TYPE_PARAM_VERSION;
+                break;
+            case code://信号机识别码
+                eight = INFO_TYPE_IDENTIFY_CODE;
+                break;
+            case detector://检测器
+                eight = INFO_TYPE_DETECTOR;
+                break;
+            case allfeature://查询整体参数feature/all
+                eight = CFG_ASK_ASKREAD;
+                break;
+            case manualpanel:// 查询手动面板
+                eight = INFO_TYPE_MANUALPANEL;
+                break;
+            case systemremote:// 查询远程调试
+                eight = INFO_TYPE_SYSTEM_REMOTE;
+                break;
+            case systemlog:// 查询操作日志
+                eight = INFO_TYPE_SYSTEM_LOG;
+                break;
+            case channelstatus:// 查询通道状态（电压电流）
+                eight = INFO_TYPE_CHANNEL_STATUS;
+                break;
+            case channellampstatus:// 查询通道灯色状态
+                eight = INFO_TYPE_CHANNEL_LAMP_STATUS;
+                break;
+            case systemcustom:// 查询设备参数
+                eight = INFO_TYPE_SYSTEM_CUSTOM;
                 break;
             default:
         }
@@ -344,138 +300,6 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
     private byte dataScheduleThree(String operationType, String infoType) {
         byte three = (byte) 0x00;
         switch (operationType) {
-            case getrequest:
-                switch (infoType) {
-                    case login: //上位机发login请求
-                        three = DATA_LINK_CONTROL;
-                        //数据内容:上位机联机请求
-                        break;
-                    case volume: //上位机查询交通流请求
-                        three = DATA_LINK_CONTROL;//链路5
-                        //数据内容:上位机查询交通流
-                        break;
-                    case workstatus://工作状态查询
-                        three = DATA_LINK_BASIC_INFO;
-                        break;
-                    case lampcolor://灯色状态查询
-                        three = DATA_LINK_BASIC_INFO;
-                        break;
-                    case time://查询信号机时间
-                        three = DATA_LINK_BASIC_INFO;
-                        break;
-                    case signalgroup://查询信号灯组信息
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case phase://查询相位信息
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case timepattern://查询信号配时方案
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case scheduleplan://查询方案调度计划
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case ControlPattern://查询工作方式
-                        three = DATA_LINK_INTER_ORDER;
-                        break;
-                    case falut://查询信号机故障
-                        three = DATA_LINK_BASIC_INFO;
-                        break;
-                    case atcversion://查询信号机版本
-                        three = DATA_LINK_BASIC_INFO;
-                        break;
-                    case paramversion://查询特征参数版本
-                        three = DATA_LINK_INTER_ORDER;
-                        break;
-                    case code://信号机识别码
-                        three = DATA_LINK_INTER_ORDER;
-                        break;
-                    case detector://检测器
-                        three = DATA_LINK_INTER_ORDER;
-                        break;
-                    case allfeature://查询整体参数feature/all
-                        three = DATA_LINK_CONFIG;//配置软件和信号机的参数命令
-                        break;
-                    case manualpanel:// 查询手动面板
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case systemremote:// 查询远程调试
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case systemlog:// 查询操作日志
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case channelstatus:// 查询通道状态（电压电流）
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case channellampstatus:// 查询通道灯色状态
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case systemcustom:// 查询设备参数
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    default:
-                }
-                break;
-            case setrequest:
-                switch (infoType) {
-                    case time://设置时间
-                        three = DATA_LINK_BASIC_INFO;
-                        break;
-                    case signalgroup://设置信号灯组
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case phase://相位设置
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case timepattern://配时方案设置
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case scheduleplan://方案调度计划
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case ControlPattern://工作方式设置
-                        three = DATA_LINK_INTER_ORDER;
-                        break;
-                    case paramversion://特征参数版本设置
-                        three = DATA_LINK_INTER_ORDER;
-                        break;
-                    case remote://远程控制设置
-                        three = DATA_LINK_INTER_ORDER;
-                        break;
-                    case detector://检测器设置
-                        three = DATA_LINK_INTER_ORDER;
-                        break;
-                    case allfeature://下载整体参数
-                        three = DATA_LINK_CONFIG;
-                        break;
-                    case manualpanel://手动面板设置
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case updatedisk://U盘更新
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case systemremote://远程调试
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case channelcheck://通道检测
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case volumelog://流量日志获取
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case interrupt://方案干预
-                        three = DATA_LINK_CONTROL;
-                        break;
-                    case systemcustom://下载设备参数
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    case systemupdate://设备更新
-                        three = DATA_LINK_PARAM_TRAMFER;
-                        break;
-                    default:
-                }
-                break;
             case getresponse://设置应答
                 three = DATA_LINK_COMMU_SPE;
                 break;
@@ -484,11 +308,93 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 break;
             default:
         }
+
+        // 如果是应答操作，返回链路码；否则则是查询操作，继续执行
+        if(three == DATA_LINK_COMMU_SPE )
+            return three;
+
+        switch (infoType) {
+            case login: //上位机发login请求
+                three = DATA_LINK_CONTROL;
+                //数据内容:上位机联机请求
+                break;
+            case volume: //上位机查询交通流请求
+                three = DATA_LINK_CONTROL;//链路5
+                //数据内容:上位机查询交通流
+                break;
+            case workstatus://工作状态查询
+                three = DATA_LINK_BASIC_INFO;
+                break;
+            case lampcolor://灯色状态查询
+                three = DATA_LINK_BASIC_INFO;
+                break;
+            case time://查询信号机时间
+                three = DATA_LINK_BASIC_INFO;
+                break;
+            case signalgroup://查询信号灯组信息
+                three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            case phase://查询相位信息
+                three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            case overlap://查询跟随相位信息
+                three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            case timepattern://查询信号配时方案
+                three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            case scheduleplan://查询方案调度计划
+                three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            case scheduledate://查询日期
+                three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            case ControlPattern://查询工作方式
+                three = DATA_LINK_INTER_ORDER;
+                break;
+            case falut://查询信号机故障
+                three = DATA_LINK_BASIC_INFO;
+                break;
+            case atcversion://查询信号机版本
+                three = DATA_LINK_BASIC_INFO;
+                break;
+            case paramversion://查询特征参数版本
+                three = DATA_LINK_INTER_ORDER;
+                break;
+            case code://信号机识别码
+                three = DATA_LINK_INTER_ORDER;
+                break;
+            case detector://检测器
+                three = DATA_LINK_INTER_ORDER;
+                break;
+            case allfeature://查询整体参数feature/all
+                three = DATA_LINK_CONFIG;//配置软件和信号机的参数命令
+                break;
+            case manualpanel:// 查询手动面板
+                three = DATA_LINK_CONTROL;
+                break;
+            case systemremote:// 查询远程调试
+                three = DATA_LINK_CONTROL;
+                break;
+            case systemlog:// 查询操作日志
+                three = DATA_LINK_CONTROL;
+                break;
+            case channelstatus:// 查询通道状态（电压电流）
+                three = DATA_LINK_CONTROL;
+                break;
+            case channellampstatus:// 查询通道灯色状态
+                three = DATA_LINK_CONTROL;
+                break;
+            case systemcustom:// 查询设备参数
+                three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            default:
+        }
         return three;
     }
 
 
-    private void operationType(MessageData sendData) throws UnsupportedEncodingException {
+    private void PackDataContent(MessageData sendData) throws UnsupportedEncodingException {
         String operationType = sendData.getOperation();
         String infoType = sendData.getInfotype();
         switch (operationType) {
@@ -497,96 +403,32 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                 break;
             case setrequest://设置请求
                 switch (infoType) {
-                    case time://设置时间
-                        //数据内容:据格林尼治时间
-                        AddMsgToData(sendData);
-                        break;
-                    case signalgroup://设置信号灯组
-                        AddMsgToData(sendData);
-                        break;
-                    case phase://相位设置
-                        AddMsgToData(sendData);
-                        break;
-                    case timepattern://配时方案设置
-                        AddMsgToData(sendData);
-                        break;
-                    case scheduleplan://方案调度计划
-                        AddMsgToData(sendData);
-                        break;
-                    case ControlPattern://工作方式设置
-                        AddMsgToData(sendData);
-                        break;
-                    case paramversion://特征参数版本设置
-                        AddMsgToData(sendData);
-                        break;
-                    case remote://远程控制设置
-                        AddMsgToData(sendData);
-                        break;
-                    case detector://检测器设置
-                        AddMsgToData(sendData);
-                        break;
                     case allfeature://下载整体参数
                         //数据内容
-                        byte[] dataSizeFlag = new byte[4];
                         int dataSendCount = 0;
-                        String dataSetAllParam = gson.toJson(sendData);
-                        MessageData messageData = gson.fromJson(dataSetAllParam, MessageData.class);
-                        String datastr = null;
-                        JsonElement data = messageData.getData();
+                        JsonElement data = sendData.getData();
+                        String datamd5value = null;
                         if (data != null) {
-                            String datastr1 = data.toString();
-                            char stchar = '"';
-                            char stchar1 = ' ';
-                            char stchar2 = '\0';
-                            char stchar3 = '\t';
-                            char stchar4 = '\r';
-                            char stchar5 = '\n';
-                            char stchar6 = '\b';
-                            StringBuffer stringBuffer = new StringBuffer();
-                            for (int i = 0; i < datastr1.length(); i++) {
-                                if (datastr1.charAt(i) != stchar && datastr1.charAt(i) != stchar1 && datastr1.charAt(i) != stchar2 && datastr1.charAt(i) != stchar3 && datastr1.charAt(i) != stchar4 && datastr1.charAt(i) != stchar5 && datastr1.charAt(i) != stchar6) {
-                                    stringBuffer.append(datastr1.charAt(i));
-                                }
-                            }
-                            datastr = stringBuffer.toString();
+                            DataParamMD5 dataMD5 = new DataParamMD5();
+                            datamd5value = dataMD5.getMD5(data.toString());
                         }
-                        DataParamMD5 dataMD5 = new DataParamMD5();
-                        String datamd5value = dataMD5.getMD5(datastr);
-                        MessageDataMD5 md5data = new MessageDataMD5(messageData);
+                        MessageDataMD5 md5data = new MessageDataMD5(sendData);
                         md5data.setMd5(datamd5value);
-                        dataSetAllParam = gson.toJson(md5data);
+                        String dataSetAllParam = gson.toJson(md5data);
                         if (dataSetAllParam != null) {
                             byte[] dataSend = dataSetAllParam.getBytes("UTF-8");
                             dataSendCount = dataSend.length;
                             dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
                             System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
                         }
+                        byte[] dataSizeFlag = new byte[4];
                         for (int i = 0; i < 4; i++) {
                             dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
                             dataSchdule[i + 10] = dataSizeFlag[i];
                         }
                         break;
-                    case manualpanel://手动面板设置
-                        AddMsgToData(sendData);
-                        break;
-                    case updatedisk://U盘更新
-                        AddMsgToData(sendData);
-                        break;
-                    case systemremote://远程调试
-                        AddMsgToData(sendData);
-                        break;
-                    case channelcheck://通道检测
-                        AddMsgToData(sendData);
-                        break;
-                    case volumelog://流量日志获取
-                        AddMsgToData(sendData);
-                        break;
-                    case interrupt://方案干预
-                        AddMsgToData(sendData);
-                        break;
                     case systemcustom://下载设备参数
                         String dataSetSystemCustomParam = null;
-                        dataSizeFlag = new byte[4];
                         dataSendCount = 0;
                         JsonElement strSetSystemCustomParam = sendData.getData();
                         if (strSetSystemCustomParam != null) {
@@ -597,6 +439,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                                 dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
                                 System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
                             }
+                            dataSizeFlag = new byte[4];
                             for (int i = 0; i < 4; i++) {
                                 dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
                                 dataSchdule[i + 10] = dataSizeFlag[i];
@@ -606,7 +449,6 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                     case systemupdate://设备更新
                         //数据内容
                         String systemupdateStr = null;
-                        dataSizeFlag = new byte[4];
                         dataSendCount = 0;
                         JsonElement systemupdateJson = sendData.getData();
                         if (systemupdateJson != null) {
@@ -617,6 +459,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                                 dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
                                 System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
                             }
+                            dataSizeFlag = new byte[4];
                             for (int i = 0; i < 4; i++) {
                                 dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
                                 dataSchdule[i + 10] = dataSizeFlag[i];
@@ -624,6 +467,7 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
                         }
                         break;
                     default:
+                        AddMsgToData(sendData);
                 }
                 break;
             case getresponse://设置应答
@@ -679,15 +523,15 @@ public class DataSchedulePackUpPack { //数据表内容宏定义
         dataSchdule[0] = CB_VERSION_FLAG;
         dataSchdule[1] = CB_RECEIVE_FLAG;
         dataSchdule[2] = CB_SEND_FLAG;
-        dataSchdule[3] = dataScheduleThree(operationType, infoType);
-        dataSchdule[7] = dataScheduleSeven(operationType, infoType);
-        dataSchdule[8] = dataScheduleEight(operationType, infoType);
+        dataSchdule[3] = dataScheduleThree(operationType, infoType);// 数据链路码
+        dataSchdule[7] = dataScheduleSeven(operationType, infoType);// 操作类型
+        dataSchdule[8] = dataScheduleEight(operationType, infoType);// 对象标识
         dataSchdule[9] = RESERVE_FLAG;
         dataSchdule[10] = 0x00;
         dataSchdule[11] = 0x00;
         dataSchdule[12] = 0x00;
         dataSchdule[13] = 0x00;
-        operationType(sendData);
+        PackDataContent(sendData);
         return dataSchdule.clone();
     }
 

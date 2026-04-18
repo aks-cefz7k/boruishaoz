@@ -85,15 +85,15 @@ public class TemplateController {
         RESTRet<MessageData> retBase = null;
         retBase = deviceController.postDevsMessage(messageData);
         if (retBase.getCode().equals(E_4002.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
             return RESTRetUtils.errorDetialObj(E_4002, devCommError);
         }
         if (retBase.getCode().equals(E_4003.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_301);
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_301);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
         if (retBase.getCode().equals(E_4005.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
             return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
         if (retBase.getData() == null) {

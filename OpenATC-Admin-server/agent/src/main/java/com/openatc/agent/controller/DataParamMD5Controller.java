@@ -29,26 +29,11 @@ public class DataParamMD5Controller {
     @PostMapping(value = "/md5")
     public RESTRet postDevsMessage(@RequestBody MessageData messageData) throws UnsupportedEncodingException {
         JsonElement data = messageData.getData();
-        String datastr = null;
         DataParamMD5 dataMD5 = new DataParamMD5();
+        String datamd5value = null;
         if (data != null) {
-            String datastr1 = data.toString();
-            char stchar = '"';
-            char stchar1 =' ';
-            char stchar2= '\0';
-            char stchar3= '\t';
-            char stchar4= '\r';
-            char stchar5= '\n';
-            char stchar6= '\b';
-            StringBuffer stringBuffer = new StringBuffer("");
-            for (int i = 0; i < datastr1.length(); i++) {
-                if (datastr1.charAt(i) != stchar&&datastr1.charAt(i) != stchar1&&datastr1.charAt(i) != stchar2&&datastr1.charAt(i) != stchar3&&datastr1.charAt(i) != stchar4&&datastr1.charAt(i) != stchar5&&datastr1.charAt(i) != stchar6) {
-                    stringBuffer.append(datastr1.charAt(i));
-                }
-            }
-            datastr = stringBuffer.toString();
+            datamd5value = dataMD5.getMD5(data.toString());
         }
-        String datamd5value = dataMD5.getMD5(datastr);
         return RESTRetUtils.successObj(datamd5value);
     }
 }

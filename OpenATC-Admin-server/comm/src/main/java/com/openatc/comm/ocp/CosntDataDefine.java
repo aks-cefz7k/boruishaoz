@@ -50,6 +50,8 @@ public final class CosntDataDefine {
     public static final byte                INFO_TYPE_IDENTIFY_CODE     = 0x0E;           //信号机识别码
     public static final byte                INFO_TYPE_REMOTE_CONTROL    = 0x0F;           //远程控制
     public static final byte                INFO_TYPE_DETECTOR          = 0x10;           //检测器
+    public static final byte                INFO_TYPE_OVERLAP           = 0x11;           //跟随相位
+    public static final byte                INFO_TYPE_SCHEDUL_DATE      = 0x12;           //日期
     public static final byte                INFO_TYPE_ALL_FEATURE       = -96;            //整体参数0xA0
     public static final byte                INFO_TYPE_FEATURE_STATUS    = -95;            //方案状态0xA1
     public static final byte                INFO_TYPE_IP                = -94;            //IP 0xA2
@@ -111,11 +113,12 @@ public final class CosntDataDefine {
     // 参数对象
     public static final         String      signalgroup     = "feature/channel";        //信号灯组
     public static final         String      phase           = "feature/phase";          //相位
+    public static final         String      overlap           = "feature/overlap";      //跟随相位
     public static final         String      timepattern     = "feature/pattern";        //方案
     public static final         String      scheduleplan    = "feature/plan";           //时段
+    public static final         String      scheduledate    = "feature/date";           //日期
     public static final         String      detector        = "feature/detecter";       //检测器
     public static final         String      allfeature      = "feature/all";            //整体参数
-    public static final         String      channel         = "feature/channel";
     // 控制对象
     public static final         String      ControlPattern  = "control/pattern";        //控制方式
     public static final         String      remote          = "control/remote";         //远程控制

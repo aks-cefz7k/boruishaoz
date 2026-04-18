@@ -112,8 +112,9 @@ public class OverflowoptController {
                 devCommError.setData(data);
                 errors.add(devCommError);
             }
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9001);
 
-            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_9001, errors);
+//            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_9001, devCommError);
         }
         //optService.OptPatterns(overflowList);
         //optService.GetPattern("10095");

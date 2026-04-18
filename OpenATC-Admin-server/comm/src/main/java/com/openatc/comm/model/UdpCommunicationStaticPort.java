@@ -15,8 +15,9 @@ import com.openatc.comm.common.LogUtil;
 import com.openatc.comm.common.PropertiesUtil;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
-import com.openatc.comm.ocp.DataPackUpPack;
-import com.openatc.comm.ocp.DataSchedulePackUpPack;
+import com.openatc.comm.ocp.OcpDataEscape;
+import com.openatc.comm.ocp.OcpDataPackUpPack;
+import com.openatc.core.model.DevCommError;
 
 import java.io.IOException;
 import java.net.*;
@@ -148,7 +149,7 @@ public class UdpCommunicationStaticPort implements Communication {
         }
         thread = Thread.currentThread();
         messageMap.put(messageKey, this);
-        logger.info("Udp Send Data Thread#" + thread.getId() + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype + " KEY:" + messageKey);
+        logger.info("Udp Send Data Thread#" + thread.getId() + " KEY:" + messageKey + " AgentID:" + agentid + " IP:" + ip + " Port:" + port + " Length：" + sendPacket.getLength() + " MsgType：" + sendmsgtype);
 
 
         return 0;
@@ -159,10 +160,12 @@ public class UdpCommunicationStaticPort implements Communication {
         // 此处等待消息返回
         try {
             Thread.sleep(TIMEOUT);
-            responceData = CreateErrorResponceData(agentid, "Receive Time Out or Receive Incorrect Data!");
+//            responceData = CreateErrorResponceData(agentid, "Receive Time Out or Receive Incorrect Data!");
+            responceData = CreateErrorResponceData(agentid, new DevCommError());
+
             logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
         } catch (InterruptedException e) {
-            logger.info("Exange Msg Succeed! Thread#" + thread.getId() + " KEY:" + messageKey);
+            logger.info("Udp Receive Response Thread#" + thread.getId() + " KEY:" + messageKey + " Agentid:" + responceData.getAgentid() + " Devid:" + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
         }
 
         messageMap.remove(messageKey);
@@ -216,11 +219,11 @@ public class UdpCommunicationStaticPort implements Communication {
                         logger.info("Udp Receive Report Data: " + addressStr + " : " + port + " Length: " + recvPacket.getLength() + " id:" + responceData.getAgentid() + " - " + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
                         // 收到信号机的注册消息并应答
                         if (responceData.getInfotype().equals("login")) {
-                            DataSchedulePackUpPack dataSchedulePackUpPack = new DataSchedulePackUpPack();
-                            DataPackUpPack askReadDataPackUpPack = new DataPackUpPack();
-                            byte[] askDataSchedule = dataSchedulePackUpPack.AskPackDataSchedule(responceData);//打包成数据表
+                            OcpDataPackUpPack ocpDataPackUpPack = new OcpDataPackUpPack();
+                            OcpDataEscape askReadOcpDataEscape = new OcpDataEscape();
+                            byte[] askDataSchedule = ocpDataPackUpPack.AskPackDataSchedule(responceData);//打包成数据表
                             byte[] packData = new byte[1024];
-                            int askPackDataSize = askReadDataPackUpPack.packBuff(askDataSchedule, packData);
+                            int askPackDataSize = askReadOcpDataEscape.packBuff(askDataSchedule, packData);
                             packData = Arrays.copyOfRange(packData, 0, askPackDataSize);
 
                             //生成发送包
@@ -237,7 +240,7 @@ public class UdpCommunicationStaticPort implements Communication {
                     }
                     //收到请求的应答消息
                     else {
-                        logger.info("Udp Receive Response Data: " + addressStr + " : " + port + " Length: " + recvPacket.getLength() + " id:" + responceData.getAgentid() + " - " + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
+//                        logger.info("Udp Receive Response Data: " + addressStr + ":" + port + " Length:" + recvPacket.getLength() + " Agentid:" + responceData.getAgentid() + " Devid:" + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
 
                         String messageKey = null;
                         int exangeType = message.geyExangeType();
@@ -256,11 +259,15 @@ public class UdpCommunicationStaticPort implements Communication {
                                 comm.responceData = responceData;
                                 comm.thread.interrupt();
                             } else {
-                                comm.responceData = CreateErrorResponceData(comm.agentid, "Udp Receive InfoType error:" + responceInfoType);
-                                logger.warning("Udp Receive InfoType error:" + responceInfoType);
+                                String errorStr = "Udp Receive InfoType error:" + responceInfoType + " by Send InfoType:" + comm.sendmsgtype;
+//                                comm.responceData = CreateErrorResponceData(comm.agentid, errorStr);
+                                comm.responceData = CreateErrorResponceData(comm.agentid, new DevCommError());
+                                logger.warning(errorStr);
+                                comm.thread.interrupt();
                             }
                         } else {
-                            comm.responceData = CreateErrorResponceData(comm.agentid, "Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
+                            comm.responceData = CreateErrorResponceData(comm.agentid,  new DevCommError());
+//                            comm.responceData = CreateErrorResponceData(comm.agentid, "Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
                             logger.warning("Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
                         }
                     }

@@ -328,7 +328,7 @@ public class RouteController {
             RESTRet<MessageData> retBase = null;
             retBase = messageController.postDevsMessage(null, messageData);
             if (retBase.getMessage().equals("Device not online!")) {
-                DevCommError devCommError = RESTRetUtils.errorObj(intersectionid, CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
+                DevCommError devCommError = RESTRetUtils.errorDevCommObj(intersectionid, CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
                 return RESTRetUtils.errorDetialObj(E_4003, devCommError);
             }
         }
