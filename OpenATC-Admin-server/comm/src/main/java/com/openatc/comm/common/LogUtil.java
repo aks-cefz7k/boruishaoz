@@ -29,7 +29,6 @@ public class LogUtil {
         }
     }
 
-    // todo 完善依赖的错误处理
     public static MessageData CreateErrorResponceData(String agentId, DevCommError devCommError) {
         MessageData responceData = new MessageData();
         responceData.setAgentid(agentId);
@@ -37,7 +36,7 @@ public class LogUtil {
         responceData.setData(gson.toJsonTree(devCommError));
         return responceData;
     }
-    // todo 完善依赖的错误处理
+
     public static MessageData CreateErrorRequestData(String agentId, DevCommError devCommError) {
         MessageData responceData = new MessageData();
         responceData.setAgentid(agentId);

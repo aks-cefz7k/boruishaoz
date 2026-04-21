@@ -18,6 +18,7 @@ import com.openatc.comm.handler.ICommHandler;
 import com.openatc.comm.ocp.OcpDataEscape;
 import com.openatc.comm.ocp.OcpDataPackUpPack;
 import com.openatc.core.model.DevCommError;
+import com.openatc.core.util.RESTRetUtils;
 
 import java.io.IOException;
 import java.net.*;
@@ -29,6 +30,7 @@ import java.util.logging.Logger;
 
 import static com.openatc.comm.common.CommunicationType.*;
 import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
+import static com.openatc.core.common.IErrorEnumImplInner.*;
 
 // 使用固定端口发送和监听UDP数据，适用于平台的端口映射网络
 public class UdpCommunicationStaticPort implements Communication {
@@ -160,8 +162,8 @@ public class UdpCommunicationStaticPort implements Communication {
         // 此处等待消息返回
         try {
             Thread.sleep(TIMEOUT);
-//            responceData = CreateErrorResponceData(agentid, "Receive Time Out or Receive Incorrect Data!");
-            responceData = CreateErrorResponceData(agentid, new DevCommError());
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid,E_109,null);
+            responceData = CreateErrorResponceData(agentid, devCommError);
 
             logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
         } catch (InterruptedException e) {
@@ -259,15 +261,14 @@ public class UdpCommunicationStaticPort implements Communication {
                                 comm.responceData = responceData;
                                 comm.thread.interrupt();
                             } else {
-                                String errorStr = "Udp Receive InfoType error:" + responceInfoType + " by Send InfoType:" + comm.sendmsgtype;
-//                                comm.responceData = CreateErrorResponceData(comm.agentid, errorStr);
-                                comm.responceData = CreateErrorResponceData(comm.agentid, new DevCommError());
-                                logger.warning(errorStr);
+                                DevCommError devCommError = RESTRetUtils.errorDevCommObj(comm.agentid,E_205,null);
+                                comm.responceData = CreateErrorResponceData(comm.agentid, devCommError);
+                                logger.warning("Udp Receive InfoType error:" + responceInfoType + " by Send InfoType:" + comm.sendmsgtype);
                                 comm.thread.interrupt();
                             }
                         } else {
-                            comm.responceData = CreateErrorResponceData(comm.agentid,  new DevCommError());
-//                            comm.responceData = CreateErrorResponceData(comm.agentid, "Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
+                            DevCommError devCommError = RESTRetUtils.errorDevCommObj(comm.agentid,E_206,null );
+                            comm.responceData = CreateErrorResponceData(comm.agentid,  devCommError);
                             logger.warning("Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
                         }
                     }

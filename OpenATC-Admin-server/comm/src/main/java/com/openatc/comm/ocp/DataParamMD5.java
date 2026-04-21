@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * @ClassName: DataParamMD5
- * @Description: TODO MD5加密相关处理类
+ * @Description:  MD5加密相关处理类
  * @author  liangting
  * @date 2020年5月30日 上午10:16:06
  *
@@ -107,7 +107,6 @@ public class DataParamMD5 {
             xmlUTF8 = URLEncoder.encode(xmString, "UTF-8");
             //System.out.println("utf-8 编码：" + xmlUTF8) ;
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         // return to String Formed

@@ -47,7 +47,7 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
 /**
  * @author kedacom
  * @ClassName: RouteController
- * @Description: TODO
+ * @Description:
  * @date 2019年12月4日 下午16:34:17
  */
 @RestController
@@ -325,10 +325,10 @@ public class RouteController {
             //featureList就是要发送的patternList
             featureList = device.getAsJsonObject().get("feature").getAsJsonObject();
             MessageData messageData = new MessageData(intersectionid, CosntDataDefine.setrequest, "feature/" + feature, featureList);
-            RESTRet<MessageData> retBase = null;
-            retBase = messageController.postDevsMessage(null, messageData);
+
+            RESTRet<MessageData> retBase = messageController.postDevsMessage(null, messageData);
             if (retBase.getMessage().equals("Device not online!")) {
-                DevCommError devCommError = RESTRetUtils.errorDevCommObj(intersectionid, CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
+                DevCommError devCommError = RESTRetUtils.errorDevCommObj(intersectionid, IErrorEnumImplInner.E_301, retBase.getData());
                 return RESTRetUtils.errorDetialObj(E_4003, devCommError);
             }
         }

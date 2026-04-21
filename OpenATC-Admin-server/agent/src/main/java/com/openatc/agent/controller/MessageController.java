@@ -70,7 +70,7 @@ public class MessageController {
      * @param requestData 发送给设备的请求消息
      * @return RESTRetBase
      * @Title: postDevsMessage
-     * @Description: TODO
+     * @Description:
      */
     @PostMapping(value = "/devs/message")
     public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) {
@@ -90,9 +90,9 @@ public class MessageController {
             logger.info("GetDevById is null, request = " + requestData.toString());
             return RESTRetUtils.errorObj(false,E_8001);
         }
-        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
-        String protocol = ascsBaseModel.getProtocol();
+//        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+//        int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
+//        String protocol = ascsBaseModel.getProtocol();
 
         RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
 

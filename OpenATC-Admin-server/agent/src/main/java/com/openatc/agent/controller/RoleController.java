@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @author kedacom
  * @ClassName: UserController
- * @Description: TODO
+ * @Description:
  * @date 2019年11月3日 下午9:00:48
  */
 @RestController
@@ -44,7 +44,7 @@ public class RoleController {
      * @return RESTRetBase
      * @throws
      * @Title: getRoles
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:role:view"})
     @GetMapping(value = "/auth/role")    //查询所有角色

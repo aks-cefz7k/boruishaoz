@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * @author
  * @ClassName: RESTRetUtils
- * @Description: TODO
+ * @Description:
  * @date 2019年10月19日 下午6:35:06
  */
 public final class RESTRetUtils {
@@ -250,15 +250,11 @@ public final class RESTRetUtils {
 //    }
 
     //返回被包含的具体类型的错误信息，e.g. 101
-    public static DevCommError errorDevCommObj(String agentid, String operation, String infortype, IErrorEnumImplInner iErrorEnumImplInner) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("code", iErrorEnumImplInner.getErrorCode());
-        data.put("message", iErrorEnumImplInner.getErrorMsg());
+    public static DevCommError errorDevCommObj(String agentid, IErrorEnumImplInner iErrorEnumImplInner, Object content) {
         return DevCommError.builder()
                 .agentid(agentid)
-                .operation(operation)
-                .infortype(infortype)
-                .data(data)
+                .data(iErrorEnumImplInner)
+                .content(content)
                 .build();
     }
 }

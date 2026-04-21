@@ -54,7 +54,6 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 		try {
 			return sdfNormal.parse(strDate);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

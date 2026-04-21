@@ -14,7 +14,7 @@ package com.openatc.core.common;
 public interface ICorrectEnum {
     /**
      * @Title: getCorrectCode
-     * @Description: TODO
+     * @Description:
      * @param
      * @return String
      * @throws
@@ -23,7 +23,7 @@ public interface ICorrectEnum {
 
     /**
      * @Title: getCorrectCode
-     * @Description: TODO
+     * @Description:
      * @param
      * @return String
      * @throws

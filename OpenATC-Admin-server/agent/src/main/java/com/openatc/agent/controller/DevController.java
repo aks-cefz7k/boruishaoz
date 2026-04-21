@@ -92,7 +92,6 @@ public class DevController {
         return RESTRetUtils.successObj(ascsBaseModels);
     }
 
-    // todo: 改造获取方式，按照列表获取设备
     @PostMapping(value = "/devs/list")
     public RESTRetBase getDevList(@RequestBody JsonObject jsonObject) {
         Gson gson = new Gson();

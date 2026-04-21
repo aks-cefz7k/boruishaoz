@@ -11,6 +11,7 @@
  **/
 package com.openatc.core.model;
 
+import com.openatc.core.common.IErrorEnumImplInner;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +26,6 @@ import java.util.Map;
 public class DevCommError {
 
     private String agentid;
-    private String operation;
-    private String infortype;
-    private Map<String, Object> data;
-
+    private IErrorEnumImplInner data;
+    private Object content;
 }

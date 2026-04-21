@@ -1,7 +1,7 @@
 package com.openatc.comm.ocp;
 /**
  * @ClassName: DataSchedulePackUpPack
- * @Description: TODO
+ * @Description:
  * @author liangting
  * @date 2019年10月30日 上午10:16:06
  */
@@ -427,47 +427,9 @@ public class OcpDataPackUpPack { //数据表内容宏定义
                             dataSchdule[i + 10] = dataSizeFlag[i];
                         }
                         break;
-                    case systemcustom://下载设备参数
-                        String dataSetSystemCustomParam = null;
-                        dataSendCount = 0;
-                        JsonElement strSetSystemCustomParam = sendData.getData();
-                        if (strSetSystemCustomParam != null) {
-                            dataSetSystemCustomParam = strSetSystemCustomParam.toString();
-                            if (dataSetSystemCustomParam != null) {
-                                byte[] dataSend = dataSetSystemCustomParam.getBytes("UTF-8");
-                                dataSendCount = dataSend.length;
-                                dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                                System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                            }
-                            dataSizeFlag = new byte[4];
-                            for (int i = 0; i < 4; i++) {
-                                dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
-                                dataSchdule[i + 10] = dataSizeFlag[i];
-                            }
-                        }
-                        break;
-                    case systemupdate://设备更新
-                        //数据内容
-                        String systemupdateStr = null;
-                        dataSendCount = 0;
-                        JsonElement systemupdateJson = sendData.getData();
-                        if (systemupdateJson != null) {
-                            systemupdateStr = systemupdateJson.toString();
-                            if (systemupdateStr != null) {
-                                byte[] dataSend = systemupdateStr.getBytes("UTF-8");
-                                dataSendCount = dataSend.length;
-                                dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
-                                System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
-                            }
-                            dataSizeFlag = new byte[4];
-                            for (int i = 0; i < 4; i++) {
-                                dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
-                                dataSchdule[i + 10] = dataSizeFlag[i];
-                            }
-                        }
-                        break;
                     default:
-                        AddMsgToData(sendData);
+                        // 参数下载时，需填充data长度
+                        AddMsgToDatafillwithLength(sendData);
                 }
                 break;
             case getresponse://设置应答
@@ -493,7 +455,7 @@ public class OcpDataPackUpPack { //数据表内容宏定义
     }
 
     /**
-     * 重复代码提取
+     *
      * 将数据填充到dataSchdule
      *
      * @param sendData
@@ -507,6 +469,31 @@ public class OcpDataPackUpPack { //数据表内容宏定义
             int dataSendCount = dataSend.length;
             dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
             System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
+        }
+    }
+
+    /**
+     *
+     * 将数据填充到dataSchdule
+     * 用于参数下载消息
+     * @param sendData
+     */
+    public void AddMsgToDatafillwithLength(MessageData sendData) throws UnsupportedEncodingException {
+        int dataSendCount = 0;
+        JsonElement messageDataContent = sendData.getData();
+        if (messageDataContent != null) {
+            String strSend = messageDataContent.toString();
+            if (strSend != null) {
+                byte[] dataSend = strSend.getBytes("UTF-8");
+                dataSendCount = dataSend.length;
+                dataSchdule = Arrays.copyOf(dataSchdule, dataSendCount + 14);
+                System.arraycopy(dataSend, 0, dataSchdule, 14, dataSendCount);
+            }
+            byte[] dataSizeFlag = new byte[4];
+            for (int i = 0; i < 4; i++) {
+                dataSizeFlag[i] = (byte) ((dataSendCount >> (i * 8)) & 0xFF);
+                dataSchdule[i + 10] = dataSizeFlag[i];
+            }
         }
     }
 

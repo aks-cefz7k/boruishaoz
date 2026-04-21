@@ -18,7 +18,7 @@ import java.util.Date;
 
 /** 
 * @ClassName: DateUtil 
-* @Description: TODO
+* @Description:
 * @author 
 * @date 2019年10月19日 下午6:29:30 
 *  
@@ -34,7 +34,7 @@ private DateUtil() {
 	 * */
 	/** 
 	* @Title: compareDate 
-	* @Description: TODO
+	* @Description:
 	* @param base base
 	* @param compare compare
 	* @return boolean 
@@ -59,7 +59,7 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	
 	/** 
 	* @Title: date2str 
-	* @Description: TODO
+	* @Description:
 	* @param date date
 	* @return String 
 	* @throws 
@@ -70,7 +70,7 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	
 	/** 
 	* @Title: date2esstr 
-	* @Description: TODO
+	* @Description:
 	* @param date date
 	* @return String 
 	* @throws 
@@ -80,7 +80,7 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	}
 	/** 
 	* @Title: date2esstr 
-	* @Description: TODO
+	* @Description:
 	* @param date date
 	* @return String 
 	* @throws 
@@ -90,7 +90,7 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	}
 	/** 
 	* @Title: date2esstr 
-	* @Description: TODO
+	* @Description:
 	* @param d1 d1
 	* @param d2 d2
 	* @return double 
@@ -102,7 +102,7 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	}
 	/** 
 	* @Title: date2esstr 
-	* @Description: TODO
+	* @Description:
 	* @param strDate strDate
 	* @return Date 
 	* @throws 
@@ -118,7 +118,7 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	}
 	/** 
 	* @Title: date2esstr 
-	* @Description: TODO
+	* @Description:
 	* @param date date
 	* @return String 
 	* @throws 
@@ -128,7 +128,7 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	}
 	/** 
 	* @Title: date2esstr 
-	* @Description: TODO
+	* @Description:
 	* @param nDays nDays
 	* @return Date 
 	* @throws 
@@ -142,7 +142,7 @@ private static SimpleDateFormat sdfES = new SimpleDateFormat("yyyy-MM-dd HH:mm:s
 	
 	/** 
 	* @Title: date2esstr 
-	* @Description: TODO
+	* @Description:
 	* @param date1 date1
 	* @param date2 date2
 	* @return int 
