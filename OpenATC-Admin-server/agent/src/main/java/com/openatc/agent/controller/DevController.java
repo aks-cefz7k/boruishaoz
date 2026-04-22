@@ -222,6 +222,7 @@ public class DevController {
             ControlPattern data = manualpanelService.LockDirection2ControlPattern(phaseArray,channelArray,lockDirection);
             messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, gson.toJsonTree(data));
             String str = gson.toJson(messageData);
+            log.info("Lock Direction AgentID:" + agentid + " " + str);
             restRet = messageController.postDevsMessage(null, messageData);
         }
 
