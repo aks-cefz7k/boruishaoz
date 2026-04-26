@@ -111,7 +111,7 @@ public class HisParamsController {
             return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
         }
         Object agentId = jsonObject.get("agentId") == null ? "" : jsonObject.get("agentId").getAsString();
-        String name = jsonObject.get("name") == null ? "" : jsonObject.get("name").getAsString();
+        String source = jsonObject.get("source") == null ? "" : jsonObject.get("source").getAsString();
         String infotype = jsonObject.get("infotype") == null ? "" : jsonObject.get("infotype").getAsString();
         String operator = jsonObject.get("operator") == null ? "" : jsonObject.get("operator").getAsString();
         String status = jsonObject.get("status") == null ? "" : jsonObject.get("status").getAsString();
@@ -127,6 +127,10 @@ public class HisParamsController {
             //添加查询条件
             if (!agentId.equals("")) {
                 predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
+            }
+            // 源地址
+            if (!source.equals("")) {
+                predicateList.add(criteriaBuilder.like(root.get("source"), "%" + source + "%"));
             }
             // 用户名
             if (!operator.equals("")) {
@@ -157,21 +161,6 @@ public class HisParamsController {
         pageOR.setTotal(tHisParams.getTotalElements());
         List<THisParams> content = tHisParams.getContent();
         List<THisParamsVO> targetList = new ArrayList<THisParamsVO>();
-//        //  路口名称
-//        if (!name.equals("")) {
-//            List<AscsBaseModel> deviceList = getDeviceListByName(name);
-//            for (AscsBaseModel dev : deviceList) {
-//                String dAgentid = dev.getAgentid();
-//                for (THisParams param: content) {
-//                    String cAgentid = param.getAgentid();
-//                    if (dAgentid.equals(cAgentid)) {
-//                        targetList.add(param);
-//                    }
-//                }
-//            }
-//        } else {
-//            targetList = content;
-//        }
         for (THisParams param: content) {
             AscsBaseModel ascsBaseModel = mDao.getAscsByID(param.getAgentid());
             String agentName = ascsBaseModel.getAgentid();
