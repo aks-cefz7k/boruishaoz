@@ -15,7 +15,7 @@ import java.util.UUID;
 
 /** 
 * @ClassName: UUIDUtil 
-* @Description: TODO
+* @Description:
 * @author 
 * @date 2019年10月19日 下午6:47:09 
 *  
@@ -37,7 +37,7 @@ public final class UUIDUtil {
 	}
     /** 
     * @Title: getUUID 
-    * @Description: TODO
+    * @Description:
     * @return String 
     * @throws 
     */

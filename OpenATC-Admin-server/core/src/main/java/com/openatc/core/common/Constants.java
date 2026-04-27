@@ -13,7 +13,7 @@ package com.openatc.core.common;
 
 /** 
 * @ClassName: Constants 
-* @Description: TODO
+* @Description:
 * @author kedacom
 * @date 2019年10月19日 下午5:02:32 
 *  

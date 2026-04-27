@@ -21,7 +21,7 @@ import java.time.Instant;
 
 /** 
 * @ClassName: RESTRetBase 
-* @Description: TODO
+* @Description:
 * @author 
 * @date 2019年10月19日 下午5:53:54 
 *  
@@ -47,7 +47,7 @@ public class RESTRetBase {
 
     /**
     * @Title: setErrorInfo 
-    * @Description: TODO
+    * @Description:
     * @param err err
     * @throws 
     */

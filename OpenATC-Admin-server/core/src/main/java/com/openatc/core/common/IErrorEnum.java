@@ -13,7 +13,7 @@ package com.openatc.core.common;
 
 /**
 * @ClassName: IErrorEnum 
-* @Description: TODO
+* @Description:
 * @author kedacom
 * @date 2019年10月19日 下午5:01:26 
 *  
@@ -22,7 +22,7 @@ public interface IErrorEnum {
 
     /** 
     * @Title: getErrorCode 
-    * @Description: TODO
+    * @Description:
     * @param 
     * @return String 
     * @throws 
@@ -31,7 +31,7 @@ public interface IErrorEnum {
 
     /** 
     * @Title: getErrorMsg 
-    * @Description: TODO
+    * @Description:
     * @param 
     * @return String 
     * @throws 

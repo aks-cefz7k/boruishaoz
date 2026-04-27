@@ -13,9 +13,9 @@ package com.openatc.configserver.controller;
 
 import com.google.gson.JsonObject;
 import com.openatc.configserver.model.User;
-import com.openatc.configserver.utils.SerializeUtil;
 import com.openatc.configserver.utils.TokenUtil;
 import com.openatc.core.model.RESTRetBase;
+import com.openatc.core.util.FileUtil;
 import com.openatc.core.util.RESTRetUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -32,7 +32,7 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_3011;
 public class UserController {
     private static final String TOKEN = "token";
     private static final String EXPIRE = "expire";
-    private static User user= (User)SerializeUtil.readObject();
+    private static User user= (User) FileUtil.readObject(FileUtil.getUserFilePath());
 
     /**
      * 登录
@@ -107,7 +107,7 @@ public class UserController {
     @Path("auth/user/{userName}")
     @PUT
     public RESTRetBase updateUserInfo(@PathParam("userName") String userName, User user) {
-        SerializeUtil.writeObject(user);
+        FileUtil.writeObject(FileUtil.getUserFilePath(),user);
         return RESTRetUtils.successObj(user);
     }
 }

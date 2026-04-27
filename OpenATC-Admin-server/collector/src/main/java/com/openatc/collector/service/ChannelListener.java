@@ -1,7 +1,6 @@
 package com.openatc.collector.service;
 
 import com.google.gson.Gson;
-import com.openatc.collector.CollectorApplication;
 import com.openatc.comm.data.MessageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

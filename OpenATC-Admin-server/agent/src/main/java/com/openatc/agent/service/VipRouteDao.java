@@ -1,6 +1,5 @@
 package com.openatc.agent.service;
 
-import com.openatc.agent.model.Route;
 import com.openatc.agent.model.VipRoute;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -14,11 +14,6 @@ package com.openatc.comm.model;
 
 import com.openatc.comm.data.MessageData;
 
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-
 public interface Communication {
 //    public DatagramPacket exange( PackData packData, String ip, int port) ;
     int sendData(String agentid, PackData packData, String ip, int port, String sendmsgtype);

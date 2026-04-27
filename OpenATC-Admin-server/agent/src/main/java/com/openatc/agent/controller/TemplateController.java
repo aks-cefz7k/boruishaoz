@@ -11,9 +11,6 @@
  **/
 package com.openatc.agent.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
@@ -22,21 +19,19 @@ import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
-import com.openatc.model.model.*;
 import com.openatc.model.service.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.SocketException;
 import java.text.ParseException;
-import java.util.*;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 /**
  * @author kedacom
  * @ClassName: TemplateController
- * @Description: TODO
+ * @Description:
  * @date 2019年12月4日 下午16:34:17
  */
 
@@ -81,15 +76,15 @@ public class TemplateController {
         RESTRet<MessageData> retBase = null;
         retBase = messageController.postDevsMessage(null, messageData);
         if (retBase.getCode().equals(E_4002.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_200, retBase.getData());
             return RESTRetUtils.errorDetialObj(E_4002, devCommError);
         }
         if (retBase.getCode().equals(E_4003.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_301);
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_301, retBase.getData());
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
         if (retBase.getCode().equals(E_4005.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorObj(agentid, CosntDataDefine.errorrequest, CosntDataDefine.allfeature, IErrorEnumImplInner.E_200);
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_200, retBase.getData());
             return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
         if (retBase.getData() == null) {

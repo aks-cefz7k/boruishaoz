@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.model.model.*;
+import com.openatc.model.util.MyArrayUtil;
 
 import java.util.*;
 
@@ -430,22 +431,12 @@ public class TemplateService {
                     controltype = 2;
                 }
             }
-            List<Integer> phaseDir = intArray2List(direction[i]);
-            List<Integer> pedphaseDir = intArray2List(peddirection[i]);
+            List<Integer> phaseDir = MyArrayUtil.intArray2List(direction[i]);
+            List<Integer> pedphaseDir = MyArrayUtil.intArray2List(peddirection[i]);
 
             temPhase = setTemPhase(temPhaseArray[i], phaseDir, i, flashgreen, yellow, redclear, phaseCount, controltype);
             temPhase.setPeddirection(pedphaseDir);
         }
-    }
-
-    private List<Integer> intArray2List(int[] ints){
-
-        List<Integer> integerList  = new ArrayList<>();
-        for(int i : ints){
-            integerList.add(i);
-        }
-
-        return integerList;
     }
 
     private Phase setTemPhase(Phase temPhase, List<Integer> direction, int id, int flashgreen, int yellow, int redclear, int phaseCount, int controltype) {
@@ -552,9 +543,9 @@ public class TemplateService {
             // 确定为人行横道
             if (phase.getAsJsonObject().get("controltype").getAsInt() == 2) {
                 for (Integer direction : peddirection) {
-                    if (direction == 15) return type = "104-005-" + phaseCountString;
-                    else if (direction == 16) return type = "104-006-" + phaseCountString;
-                    else return type = "999-000-00" ;
+                    if (direction == 15) return "104-005-" + phaseCountString;
+                    else if (direction == 16) return "104-006-" + phaseCountString;
+                    else return "999-000-00" ;
                 }
             }
         }

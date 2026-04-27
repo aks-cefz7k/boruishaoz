@@ -2,14 +2,14 @@ package com.openatc.comm.ocp;
 import static com.openatc.comm.ocp.CosntDataDefine.*;
 /**
  * @ClassName: DataPackUpPack
- * @Description: TODO
+ * @Description: 根据GB25280转义定义处理数据
  * @author  liangting
  * @date 2019年10月30日 上午10:16:06
  *
 // */
-public class DataPackUpPack{
+public class OcpDataEscape {
 
-    public DataPackUpPack(){
+    public OcpDataEscape(){
     }
 
     /**

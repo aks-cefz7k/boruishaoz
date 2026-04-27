@@ -55,7 +55,7 @@ import static com.openatc.core.common.IErrorEnumImplOuter.*;
 /**
  * @author kedacom
  * @ClassName: UserController
- * @Description: TODO
+ * @Description:
  * @date 2019年10月19日 下午5:27:48
  */
 @RestController
@@ -150,7 +150,7 @@ public class UserController {
     /**
      * @return RESTRetBase
      * @Title: edgeInfo
-     * @Description: TODO
+     * @Description:
      */
     @GetMapping(value = "/auth/info")  //获取登录用户信息
     public RESTRetBase edgeInfo(@RequestHeader("Authorization") String token) {
@@ -173,7 +173,7 @@ public class UserController {
     /**
      * @return RESTRetBase
      * @Title: edgeLogout
-     * @Description: TODO
+     * @Description:
      */
     @GetMapping(value = "/auth/logout")  //登出
     public RESTRetBase edgeLogout() {
@@ -187,7 +187,7 @@ public class UserController {
      * @param pageRow pageRow
      * @return RESTRetBase
      * @Title: getUsers
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:user:view"})  //获取所有用户信息
     @GetMapping(value = "/auth/user")
@@ -221,7 +221,7 @@ public class UserController {
      * @param userName userName
      * @return RESTRetBase
      * @Title: getSingleUser
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:user:view"})  //获取单个用户信息
     @GetMapping(value = "/auth/user/{userName}")
@@ -240,7 +240,7 @@ public class UserController {
      * @param joinUser joinUser
      * @return RESTRetBase
      * @Title: addUser
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:user:modify"})  //添加用户
     @PostMapping(value = "/auth/user")
@@ -271,7 +271,7 @@ public class UserController {
     /**
      * @return RESTRetBase
      * @Title: addUser
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:user:modify"})  //重置密码
     @PutMapping(value = "/auth/user/reset/{userName}")
@@ -289,7 +289,7 @@ public class UserController {
      * @param userName userName
      * @return RESTRetBase
      * @Title: updateUserInfo
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:user:modify"})       //修改用户
     @PutMapping(value = "/auth/user/{userName}")
@@ -370,7 +370,7 @@ public class UserController {
      * @param userName userName
      * @return RESTRetBase
      * @Title: deleteUser
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:user:modify"})  //删除用户
     @DeleteMapping(value = "/auth/user/{userName}")
@@ -394,7 +394,7 @@ public class UserController {
      * @param jsonObject
      * @return RESTRetBase
      * @Title: updatePassword
-     * @Description: TODO
+     * @Description:
      */
     @PostMapping(value = "/auth/password")    //修改密码
     public RESTRetBase updatePassword(@RequestBody JsonObject jsonObject) {
@@ -427,7 +427,7 @@ public class UserController {
      * @param userName userName
      * @return RESTRetBase
      * @Title: updateUserRole
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:user:modify"})
     @PutMapping(value = "/auth/user/{userName}/roles")   //修改用户的所有角色
@@ -459,7 +459,7 @@ public class UserController {
      * @param userName userName
      * @return RESTRetBase
      * @Title: getUserRole
-     * @Description: TODO
+     * @Description:
      */
     @RequiresPermissions({"sys:auth:user:view"})
     @GetMapping(value = "/auth/user/{userName}/roles")    //获取用户的所有角色

@@ -2,17 +2,19 @@ package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.*;
+import com.openatc.agent.model.VipRoute;
+import com.openatc.agent.model.VipRouteDevice;
+import com.openatc.agent.model.VipRouteDeviceStatus;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
-import com.openatc.model.model.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -21,13 +23,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.SocketException;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_6001;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_6002;
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 @Slf4j
 @RestController
@@ -187,7 +189,7 @@ public class VipRouteController {
             if (cowlist.contains(agentid)) return RESTRetUtils.errorObj(E_6002);
             cowlist.add(agentid);
             AtomicInteger totaltime = new AtomicInteger(vrDevice.getTotaltime());
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, data);
+            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
             log.info("******restRet:  " + restRet);
             if (restRet.getData() instanceof DevCommError) {
@@ -234,7 +236,7 @@ public class VipRouteController {
         // 取消勤务路线
         if (operation == 0) {
             data.addProperty("control", 0);
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, data);
+            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
             if (restRet.getData() instanceof DevCommError) return restRet;
             cowlist.remove(agentid);
@@ -249,7 +251,7 @@ public class VipRouteController {
     private void backSelfControl(String agentid) throws SocketException, ParseException {
         JsonObject selfControl = new JsonObject();
         selfControl.addProperty("control", 0);
-        MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, selfControl);
+        MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, selfControl);
         messageController.postDevsMessage(null, selfMessage);
     }
 

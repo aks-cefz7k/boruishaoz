@@ -13,6 +13,7 @@ package com.openatc.agent.model;
 
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 

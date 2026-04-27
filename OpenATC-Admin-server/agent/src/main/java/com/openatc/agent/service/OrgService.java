@@ -12,8 +12,6 @@
 package com.openatc.agent.service;
 
 
-import com.openatc.agent.model.Role;
-import com.openatc.agent.model.Route;
 import com.openatc.agent.model.SysOrg;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

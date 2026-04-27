@@ -13,7 +13,7 @@ package com.openatc.agent.data;
 
 /** 
 * @ClassName: TokenData 
-* @Description: TODO
+* @Description:
 * @author 
 * @date 2019年10月19日 下午5:39:59 
 *  

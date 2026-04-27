@@ -12,6 +12,7 @@
 package com.openatc.model.model;
 
 import lombok.Data;
+
 import java.util.List;
 
 @Data

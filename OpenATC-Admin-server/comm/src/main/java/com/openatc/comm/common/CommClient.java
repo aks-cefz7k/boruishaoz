@@ -11,6 +11,7 @@
  **/
 package com.openatc.comm.common;
 
+import com.google.gson.Gson;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
 import com.openatc.core.model.DevCommError;
@@ -25,9 +26,7 @@ import static com.openatc.comm.common.CommunicationType.*;
 import static com.openatc.comm.common.LogUtil.CreateErrorRequestData;
 import static com.openatc.comm.common.LogUtil.CreateErrorResponceData;
 import static com.openatc.core.common.IErrorEnumImplInner.*;
-import static com.openatc.core.common.IErrorEnumImplInner.E_301;
 import static com.openatc.core.common.IErrorEnumImplOuter.*;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_4002;
 
 
 public class CommClient {
@@ -37,6 +36,7 @@ public class CommClient {
 
     private static Logger log = Logger.getLogger(CommClient.class.toString());
 
+    private Gson gson = new Gson();
     static{
         LogUtil.SetLogLevelfromProp(log);
     }
@@ -61,19 +61,19 @@ public class CommClient {
 
         //判断操作类型是否为空
         if (requestData.getOperation() == null) {
-            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_101);
+            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_101, requestData);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
         //判断消息类型是否为空
         if (requestData.getInfotype() == null) {
-            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_102);
+            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_102, requestData);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
         //判断协议是否为空
         if (protocal == null) {
-            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_108);
+            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_108, requestData );
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
@@ -96,33 +96,31 @@ public class CommClient {
         }
 
         if (responceData == null){
-            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_200);
-            return RESTRetUtils.errorDetialObj(E_4005, devCommError);
-        }
-
-        if (responceData == null) {
+            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_200, null);
             return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
 
         if (responceData.getOperation() == null){
-            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_REQUEST, infotype, E_101);
+            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_101, responceData );
             return RESTRetUtils.errorDetialObj(E_4006, devCommError);
         }
 
         //判断设备是否在线
         if (responceData.getOperation().equals("Communication Error!")) {
-            devCommError = RESTRetUtils.errorObj(agentid, OPERATOER_TYPE_ERROR_RESPONSE, infotype, E_301);
+            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_301, responceData);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError, responceData.getDelay());
         }
 
         //判断请求消息是否正确
         if (responceData.getOperation().equals(OPERATOER_TYPE_ERROR_REQUEST)) {
-            return RESTRetUtils.errorDetialObj(E_4001, responceData.getData());
+            devCommError = gson.fromJson(responceData.getData(),DevCommError.class);
+            return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
         //判断应答是否成功
         if (responceData.getOperation().equals(OPERATOER_TYPE_ERROR_RESPONSE)) {
-            return RESTRetUtils.errorDetialObj(E_4002, responceData.getData());
+            devCommError = gson.fromJson(responceData.getData(),DevCommError.class);
+            return RESTRetUtils.errorDetialObj(E_4002, devCommError);
         }
 
         responceData.setAgentid(requestData.getAgentid());
@@ -156,7 +154,8 @@ public class CommClient {
         PackData packData = message.pack(sendMsg);
         // packData为空，则返回消息不支持
         if (packData == null) {
-            return CreateErrorRequestData(agentId,"sendMsg not support");
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentId, E_107, null);
+            return CreateErrorRequestData(agentId,new DevCommError());
         }
 
         // 设置通讯类型
@@ -192,8 +191,9 @@ public class CommClient {
         sendrev = communication.sendData(agentId,packData, ip, port,sendmsgtype);
 
         if(sendrev != 0){
-            log.warning("exange send error!" + sendMsg);
-            return CreateErrorResponceData(agentId,"exange send error!");
+            log.warning("Comm Send Data error!" + sendMsg);
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentId,E_204,null );
+            return CreateErrorResponceData(agentId,devCommError);
         }
 
         // 接收-解析
@@ -202,7 +202,8 @@ public class CommClient {
 
         // 没有收到消息
         if(responceData == null){
-            responceData = CreateErrorResponceData(agentId,"Responce Data is null");
+            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentId,E_200,null );;
+            responceData = CreateErrorResponceData(agentId,devCommError);
         }
 
 //        log.info("receive responceData: " + responceData);

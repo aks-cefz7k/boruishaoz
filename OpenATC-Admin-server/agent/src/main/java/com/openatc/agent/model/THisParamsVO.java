@@ -1,8 +1,8 @@
 package com.openatc.agent.model;
 
-import com.openatc.agent.model.THisParams;
-import java.util.Date;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class THisParamsVO {

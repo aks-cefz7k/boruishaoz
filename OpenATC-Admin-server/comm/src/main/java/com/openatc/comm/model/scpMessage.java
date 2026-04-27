@@ -20,8 +20,7 @@ import com.openatc.comm.ocp.DataParamMD5;
 
 import java.io.UnsupportedEncodingException;
 
-
-import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.CommunicationType.EXANGE_TYPE_CENTER;
 
 public class scpMessage implements Message {
 //    private static Logger logger = Logger.getLogger(KedacomMessage.class.toString());

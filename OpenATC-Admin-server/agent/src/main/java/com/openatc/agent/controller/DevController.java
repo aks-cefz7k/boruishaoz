@@ -12,14 +12,20 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
-
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
-import com.openatc.model.model.AscsBaseModel;
+import com.openatc.comm.data.MessageData;
+import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
+import com.openatc.model.model.ControlPattern;
+import com.openatc.model.model.LockDirection;
+import com.openatc.model.service.ManualpanelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +52,10 @@ public class DevController {
     private UserDao userDao;
     @Autowired(required = false)
     private OrgService orgService;
+    @Autowired
+    private MessageController messageController;
 
+    private Gson gson = new Gson();
     private Logger log = Logger.getLogger(DevController.class.toString());
 
     @GetMapping(value = "/devs/user/{username}")
@@ -83,7 +92,6 @@ public class DevController {
         return RESTRetUtils.successObj(ascsBaseModels);
     }
 
-    // todo: 改造获取方式，按照列表获取设备
     @PostMapping(value = "/devs/list")
     public RESTRetBase getDevList(@RequestBody JsonObject jsonObject) {
         Gson gson = new Gson();
@@ -180,7 +188,7 @@ public class DevController {
 
     // 注册设备消息处理
     @PutMapping(value = "/devs/discovery")
-    public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel) throws ParseException {
+    public RESTRetBase DevAscsDiscovery(@RequestBody DevCover ascsModel){
         mDao.updateAscsByReport(ascsModel);
 //        mDao.updateAscs(ascsModel);
         return RESTRetUtils.successObj(ascsModel);
@@ -194,5 +202,29 @@ public class DevController {
         String newAgentid = jsonObject.get("newAgentid").getAsString();
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
         return RESTRetUtils.successObj(result);
+    }
+
+    // 锁定交通流
+    @PostMapping(value = "/devs/{agentid}/lockdirection")
+    public RESTRetBase DevAscsDiscovery(@PathVariable String agentid, @RequestBody LockDirection lockDirection){
+
+        // 获取路口相位和通道参数
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.allfeature);
+        RESTRet<MessageData> restRet = messageController.postDevsMessage(null, messageData);
+        if(restRet.isSuccess()){
+
+            JsonObject feature = restRet.getData().getData().getAsJsonObject();
+            JsonArray phaseArray = feature.get("phaseList").getAsJsonArray();
+            JsonArray channelArray = feature.get("channelList").getAsJsonArray();
+
+            // 将锁定交通流参数转换为设备方向锁定消息
+            ManualpanelService manualpanelService = new ManualpanelService();
+            ControlPattern data = manualpanelService.LockDirection2ControlPattern(phaseArray,channelArray,lockDirection);
+            messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, gson.toJsonTree(data));
+            String str = gson.toJson(messageData);
+            restRet = messageController.postDevsMessage(null, messageData);
+        }
+
+        return restRet;
     }
 }

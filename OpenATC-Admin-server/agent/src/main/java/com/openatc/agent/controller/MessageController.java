@@ -16,10 +16,10 @@ import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
-import com.openatc.model.model.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.net.SocketException;
-import java.text.ParseException;
 import java.util.logging.Logger;
 
 import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
-import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.CommunicationType.COMM_SERVER_TYPE_CENTER;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_8001;
 
 
@@ -72,10 +70,10 @@ public class MessageController {
      * @param requestData 发送给设备的请求消息
      * @return RESTRetBase
      * @Title: postDevsMessage
-     * @Description: TODO
+     * @Description:
      */
     @PostMapping(value = "/devs/message")
-    public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
+    public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) {
 
         AscsBaseModel ascsBaseModel = mDao.getAscsByID(requestData.getAgentid());
 
@@ -92,9 +90,9 @@ public class MessageController {
             logger.info("GetDevById is null, request = " + requestData.toString());
             return RESTRetUtils.errorObj(false,E_8001);
         }
-        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
-        String protocol = ascsBaseModel.getProtocol();
+//        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+//        int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
+//        String protocol = ascsBaseModel.getProtocol();
 
         RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
 
@@ -108,7 +106,7 @@ public class MessageController {
             if (token == null) {
                 logger.warning("token of set-request is null;");
             }
-            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
+//            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
             try {
                 THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, token);
                 hisParamService.insertHisParam(tParams);

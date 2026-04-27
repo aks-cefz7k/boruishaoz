@@ -7,6 +7,7 @@ import com.openatc.agent.model.Overflow;
 import com.openatc.agent.service.OptService;
 import com.openatc.agent.service.OverflowDetectorRepository;
 import com.openatc.agent.service.OverflowRepository;
+import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.DevCommError;
 import com.openatc.core.model.RESTRet;
@@ -85,36 +86,33 @@ public class OverflowoptController {
 
         }
 
-        List<DevCommError> errors = new ArrayList<>();
-        if(error_offlines.isEmpty() && error_fails.isEmpty()){
-            overflowDetectorRepository.updateStatusById(Long.valueOf(id),"1");
-            return RESTRetUtils.successObj();
-        }else{
-            for(String agentid : error_offlines){
-                DevCommError devCommError = new DevCommError();
-                devCommError.setAgentid(agentid);
-                devCommError.setInfortype("status/pattern");
-                devCommError.setOperation("get-request");
-                Map<String, Object> data = new HashMap<>();
-                data.put("code","301");
-                data.put("message", "Device not online!");
-                devCommError.setData(data);
-                errors.add(devCommError);
-            }
+        // todo 设备控制需要重构为单路口方式
+//        List<DevCommError> errors = new ArrayList<>();
+//        if(error_offlines.isEmpty() && error_fails.isEmpty()){
+//            overflowDetectorRepository.updateStatusById(Long.valueOf(id),"1");
+//            return RESTRetUtils.successObj();
+//        }else{
+//            for(String agentid : error_offlines){
+//                DevCommError devCommError = new DevCommError();
+//                devCommError.setAgentid(agentid);
+//                devCommError.setData(IErrorEnumImplInner.E301);
+//                errors.add(devCommError);
+//            }
+//
+//            for(String agentid : error_fails){
+//                DevCommError devCommError = new DevCommError();
+//                devCommError.setAgentid(agentid);
+//                devCommError.setInfortype("control/interrupt");
+//                devCommError.setOperation("set-request");
+//                Map<String, Object> data = new HashMap<>();
+//                data.put("message","interrupt control failed!");
+//                devCommError.setData(data);
+//                errors.add(devCommError);
+//            }
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9001);
 
-            for(String agentid : error_fails){
-                DevCommError devCommError = new DevCommError();
-                devCommError.setAgentid(agentid);
-                devCommError.setInfortype("control/interrupt");
-                devCommError.setOperation("set-request");
-                Map<String, Object> data = new HashMap<>();
-                data.put("message","interrupt control failed!");
-                devCommError.setData(data);
-                errors.add(devCommError);
-            }
-
-            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_9001, errors);
-        }
+//            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_9001, devCommError);
+//        }
         //optService.OptPatterns(overflowList);
         //optService.GetPattern("10095");
         //return RESTRetUtils.successObj(overflowList);
@@ -141,25 +139,26 @@ public class OverflowoptController {
             }
         }
 
-        List<DevCommError> errors = new ArrayList<>();
-        if(!error_fails.isEmpty()){
-            for(String agentid : error_fails) {
-                DevCommError devCommError = new DevCommError();
-                devCommError.setAgentid(agentid);
-                devCommError.setInfortype("control/interrupt");
-                devCommError.setOperation("set-request");
-                Map<String, Object> data = new HashMap<>();
-                data.put("message", "auto control failed!");
-                devCommError.setData(data);
-                errors.add(devCommError);
-            }
-            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_9002,errors);
-        }else{
-            //全部恢复自主控制，则返回成功，并修改状态
-            overflowDetectorRepository.updateStatusById(Long.valueOf(id),"2");
+        // todo 设备控制需要重构为单路口方式
+//        List<DevCommError> errors = new ArrayList<>();
+//        if(!error_fails.isEmpty()){
+//            for(String agentid : error_fails) {
+//                DevCommError devCommError = new DevCommError();
+//                devCommError.setAgentid(agentid);
+//                devCommError.setInfortype("control/interrupt");
+//                devCommError.setOperation("set-request");
+//                Map<String, Object> data = new HashMap<>();
+//                data.put("message", "auto control failed!");
+//                devCommError.setData(data);
+//                errors.add(devCommError);
+//            }
+//            return RESTRetUtils.errorDetialObj(IErrorEnumImplOuter.E_9002,errors);
+//        }else{
+//            //全部恢复自主控制，则返回成功，并修改状态
+//            overflowDetectorRepository.updateStatusById(Long.valueOf(id),"2");
 
             return RESTRetUtils.successObj();
-        }
+//        }
 
     }
 }

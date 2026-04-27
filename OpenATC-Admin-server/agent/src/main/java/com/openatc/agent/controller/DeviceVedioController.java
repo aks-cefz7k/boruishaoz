@@ -2,14 +2,12 @@ package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import com.openatc.agent.model.DeviceVedio;
 import com.openatc.agent.service.DeviceVedioDao;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
