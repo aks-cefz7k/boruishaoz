@@ -51,7 +51,7 @@ public class FaultServiceImpl {
     /**
      * @Author: yangyi
      * @Date: 2021/11/23 10:56
-     * @Description: 去掉不需要的msg部分
+     * @Description: 重组msg,去掉不需要的msg部分
      */
     public MessageData filterMsg(MessageData msg) {
         String agentid = msg.getAgentid();
@@ -63,7 +63,7 @@ public class FaultServiceImpl {
             if (list != null && list.size() > 0) { // 记录已存在
                 Fault fa = list.get(0);
                 String enuneRate = fa.getEnumerate(); //
-                if (enuneRate.equals('1') || enuneRate.equals('2')) { //已处理、已忽略
+                if (enuneRate.equals("1") || enuneRate.equals("2")) { //已处理、已忽略
                     continue;
                 } else {
                     faultList.add(fault);
@@ -73,9 +73,11 @@ public class FaultServiceImpl {
             }
         }
         Fault[] targetFaultList = faultList.toArray(new Fault[0]);
-        JsonObject jb = msg.getData().getAsJsonObject();
-        m_faultDeque = targetFaultList;
         // 重新组装msg
+        JsonElement jeData = msg.getData().deepCopy();
+        jeData.getAsJsonObject().remove("m_FaultDeque");
+        jeData.getAsJsonObject().add("m_FaultDeque", gson.toJsonTree(targetFaultList, Fault[].class));
+        msg.setData(jeData);
         return msg;
     }
 }

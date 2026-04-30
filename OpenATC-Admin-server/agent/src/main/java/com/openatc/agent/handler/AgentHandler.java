@@ -109,7 +109,7 @@ public class AgentHandler extends ICommHandler {
         // 收到故障消息，发布故障消息，并保存到数据库中
         else if (infotype.equals("status/fault")) {
             // todo: 写入数据前，判断故障是否已处理或者已忽略，若是则不写入Redis,直接从MSg对象中删除这部分数据
-            // msg = faultService.filter(msg);
+            msg = faultService.filterMsg(msg);
             faultService.processFaultMessage(msg);
         }
         // 收到流量消息，保存到数据库中
