@@ -30,6 +30,12 @@ public class THisParamsVO {
 
     private String name; //路口名
 
+    private Integer subInfoType; //消息子类型
+
+    private String responseCode; //请求错误码
+
+    private Integer deviceErrorCode; //设备错误码
+
     public THisParamsVO(THisParams tHisParams, String name) {
         this.id = tHisParams.getId();
         this.operator = tHisParams.getOperator();
@@ -37,6 +43,9 @@ public class THisParamsVO {
         this.source = tHisParams.getSource();
         this.agentid = tHisParams.getAgentid();
         this.infotype = tHisParams.getInfotype();
+        this.subInfoType = tHisParams.getSubInfoType();
+        this.responseCode = tHisParams.getResponseCode();
+        this.deviceErrorCode = tHisParams.getDeviceErrorCode();
         this.status = tHisParams.getStatus();
         this.name = name;
     }

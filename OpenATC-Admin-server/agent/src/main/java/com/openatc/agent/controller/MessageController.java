@@ -108,7 +108,8 @@ public class MessageController {
             }
 //            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
             try {
-                hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
+                THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, token);
+                hisParamService.insertHisParam(tParams);
             } catch (Exception e) {
                 logger.warning(e.toString());
                 return responceData;
@@ -118,13 +119,13 @@ public class MessageController {
     }
     /**
      * @param requestData  请求消息
-     * @param responceData 应答消息
+     * @param res 应答消息
      * @return THisParams 操作记录
      * @Title: CreateHisParam
      * @Description: 生成一条操作记录
      */
-    private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip, String token) {
-
+    private THisParams CreateHisParam(MessageData requestData, RESTRet res, String ip, String token) {
+        MessageData responceData = (MessageData)res.getData();
         logger.info( "Create History Param - requestData： " + requestData + " token：" + token);
 
         THisParams hisParams = new THisParams();
@@ -152,9 +153,25 @@ public class MessageController {
         }
         if(responceData != null){
             //消息描述
-            hisParams.setStatus(responceData.getOperation());
+            String operation = responceData.getOperation();
+            hisParams.setStatus(operation);
             //响应内容
             hisParams.setResponsebody(responceData.getData().toString());
+            //消息子类型
+            int subInfoType = 0;
+            if (operation.equals("set-response")) {//控制消息
+                subInfoType = responceData.getData().getAsJsonObject().get("control").getAsInt();
+            }
+            hisParams.setSubInfoType(subInfoType);
+            //请求错误码
+            String responseCode = res.getCode();
+            hisParams.setResponseCode(responseCode);
+            //特征参数错误码
+            int deviceErrorCode = 0;
+            if (operation.equals("error-response")) {
+                deviceErrorCode = responceData.getData().getAsJsonObject().get("code").getAsInt();
+            }
+            hisParams.setDeviceErrorCode(deviceErrorCode);
         }
         return hisParams;
     }
