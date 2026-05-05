@@ -12,20 +12,17 @@
 package com.openatc.core.util;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.core.common.Constants;
 import com.openatc.core.common.IErrorEnum;
 import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.common.IErrorEnumImplOuter;
-import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author
@@ -233,15 +230,15 @@ public final class RESTRetUtils {
                 .success(false)
                 .build();
     }
-    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, List<DevCommError> devCommErrors) {
+    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, List<InnerError> devCommErrors) {
         return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommErrors);
     }
 
-    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, DevCommError devCommError) {
+    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, InnerError devCommError) {
         return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommError);
     }
 
-    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, DevCommError devCommError, Long delay) {
+    public static RESTRet errorDetialObj(IErrorEnumImplOuter iErrorEnum, InnerError devCommError, Long delay) {
         return new RESTRet(false,iErrorEnum.getErrorCode(),iErrorEnum.getErrorMsg(),devCommError, delay);
     }
 
@@ -250,11 +247,12 @@ public final class RESTRetUtils {
 //    }
 
     //返回被包含的具体类型的错误信息，e.g. 101
-    public static DevCommError errorDevCommObj(String agentid, IErrorEnumImplInner iErrorEnumImplInner, Object content) {
-        return DevCommError.builder()
+    public static InnerError errorDevCommObj(String agentid, IErrorEnumImplInner iErrorEnumImplInner, Object content) {
+        return InnerError.builder()
                 .agentid(agentid)
-                .data(iErrorEnumImplInner)
                 .content(content)
+                .errorCode(iErrorEnumImplInner.getErrorCode())
+                .errorMsg(iErrorEnumImplInner.getErrorMsg())
                 .build();
     }
 }

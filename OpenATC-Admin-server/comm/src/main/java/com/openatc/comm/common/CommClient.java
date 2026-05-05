@@ -14,7 +14,7 @@ package com.openatc.comm.common;
 import com.google.gson.Gson;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.model.*;
-import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
@@ -51,7 +51,7 @@ public class CommClient {
     // 设备通讯封装接口，根据OpenATC设备结构，发送和接收OpenATC通讯消息
     public RESTRet devMessage(MessageData requestData, AscsBaseModel ascsBaseModel){
 
-        DevCommError devCommError = null;
+        InnerError devCommError = null;
         String agentid = requestData.getAgentid();
         String infotype = requestData.getInfotype();
         String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
@@ -113,13 +113,13 @@ public class CommClient {
 
         //判断请求消息是否正确
         if (responceData.getOperation().equals(OPERATOER_TYPE_ERROR_REQUEST)) {
-            devCommError = gson.fromJson(responceData.getData(),DevCommError.class);
+            devCommError = gson.fromJson(responceData.getData(), InnerError.class);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
         //判断应答是否成功
         if (responceData.getOperation().equals(OPERATOER_TYPE_ERROR_RESPONSE)) {
-            devCommError = gson.fromJson(responceData.getData(),DevCommError.class);
+            devCommError = gson.fromJson(responceData.getData(), InnerError.class);
             return RESTRetUtils.errorDetialObj(E_4002, devCommError);
         }
 
@@ -154,8 +154,8 @@ public class CommClient {
         PackData packData = message.pack(sendMsg);
         // packData为空，则返回消息不支持
         if (packData == null) {
-            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentId, E_107, null);
-            return CreateErrorRequestData(agentId,new DevCommError());
+            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentId, E_107, null);
+            return CreateErrorRequestData(agentId,new InnerError());
         }
 
         // 设置通讯类型
@@ -192,7 +192,7 @@ public class CommClient {
 
         if(sendrev != 0){
             log.warning("Comm Send Data error!" + sendMsg);
-            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentId,E_204,null );
+            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentId,E_204,null );
             return CreateErrorResponceData(agentId,devCommError);
         }
 
@@ -202,7 +202,7 @@ public class CommClient {
 
         // 没有收到消息
         if(responceData == null){
-            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentId,E_200,null );;
+            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentId,E_200,null );;
             responceData = CreateErrorResponceData(agentId,devCommError);
         }
 

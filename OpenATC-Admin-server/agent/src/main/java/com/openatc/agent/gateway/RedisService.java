@@ -54,7 +54,7 @@ public class RedisService {
         JsonObject jsonObject = gson.fromJson(message, JsonObject.class);
         String agentId = jsonObject.get("agentid").getAsString();
 
-        log.info("receive " + type + " message: " + message);
+//        log.info("receive " + type + " message: " + message);
         if (type.contains("asc:status/pattern")) {
             for (Session session : patternWebSocketSet.keySet()) {
                 WebSocketServer webSocketServer = patternWebSocketSet.get(session).getWebSocketServer();

@@ -10,7 +10,7 @@ import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
-import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -192,7 +192,7 @@ public class VipRouteController {
             MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
             log.info("******restRet:  " + restRet);
-            if (restRet.getData() instanceof DevCommError) {
+            if (restRet.getData() instanceof InnerError) {
                 cowlist.remove(agentid);
                 return restRet;
             }
@@ -238,7 +238,7 @@ public class VipRouteController {
             data.addProperty("control", 0);
             MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
-            if (restRet.getData() instanceof DevCommError) return restRet;
+            if (restRet.getData() instanceof InnerError) return restRet;
             cowlist.remove(agentid);
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));

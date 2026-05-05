@@ -23,9 +23,10 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DevCommError {
+public class InnerError {
 
     private String agentid;
-    private IErrorEnumImplInner data;
     private Object content;
+    private String errorCode;
+    private String errorMsg;
 }

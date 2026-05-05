@@ -15,7 +15,7 @@ import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.IErrorEnumImplInner;
-import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -85,22 +85,22 @@ public class TemplateController {
         RESTRet<MessageData> retBase = null;
         retBase = deviceController.postDevsMessage(messageData);
         if (retBase.getCode().equals(E_4002.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_200, retBase.getData() );
+            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_200, retBase.getData() );
             return RESTRetUtils.errorDetialObj(E_4002, devCommError);
         }
         if (retBase.getCode().equals(E_4003.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_301, retBase.getData());
+            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_301, retBase.getData());
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
         if (retBase.getCode().equals(E_4005.getErrorCode())) {
-            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_200, retBase.getData());
+            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_200, retBase.getData());
             return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
         if (retBase.getData() == null) {
-            return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
+            return RESTRetUtils.errorDetialObj(E_4005, new InnerError());
         }
         if (retBase.getData().getData() == null) {
-            return RESTRetUtils.errorDetialObj(E_4005, new DevCommError());
+            return RESTRetUtils.errorDetialObj(E_4005, new InnerError());
         }
 
         //返回获取路口类型和相位

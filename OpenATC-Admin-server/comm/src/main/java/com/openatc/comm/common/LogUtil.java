@@ -1,9 +1,8 @@
 package com.openatc.comm.common;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.openatc.comm.data.MessageData;
-import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.InnerError;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +28,7 @@ public class LogUtil {
         }
     }
 
-    public static MessageData CreateErrorResponceData(String agentId, DevCommError devCommError) {
+    public static MessageData CreateErrorResponceData(String agentId, InnerError devCommError) {
         MessageData responceData = new MessageData();
         responceData.setAgentid(agentId);
         responceData.setOperation(OPERATOER_TYPE_ERROR_RESPONSE);
@@ -37,7 +36,7 @@ public class LogUtil {
         return responceData;
     }
 
-    public static MessageData CreateErrorRequestData(String agentId, DevCommError devCommError) {
+    public static MessageData CreateErrorRequestData(String agentId, InnerError devCommError) {
         MessageData responceData = new MessageData();
         responceData.setAgentid(agentId);
         responceData.setOperation(OPERATOER_TYPE_ERROR_REQUEST);

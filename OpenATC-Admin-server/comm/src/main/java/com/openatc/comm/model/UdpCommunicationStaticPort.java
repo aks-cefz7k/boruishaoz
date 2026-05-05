@@ -17,7 +17,7 @@ import com.openatc.comm.data.MessageData;
 import com.openatc.comm.handler.ICommHandler;
 import com.openatc.comm.ocp.OcpDataEscape;
 import com.openatc.comm.ocp.OcpDataPackUpPack;
-import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.util.RESTRetUtils;
 
 import java.io.IOException;
@@ -162,7 +162,7 @@ public class UdpCommunicationStaticPort implements Communication {
         // 此处等待消息返回
         try {
             Thread.sleep(TIMEOUT);
-            DevCommError devCommError = RESTRetUtils.errorDevCommObj(agentid,E_109,null);
+            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid,E_109,null);
             responceData = CreateErrorResponceData(agentid, devCommError);
 
             logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
@@ -261,13 +261,13 @@ public class UdpCommunicationStaticPort implements Communication {
                                 comm.responceData = responceData;
                                 comm.thread.interrupt();
                             } else {
-                                DevCommError devCommError = RESTRetUtils.errorDevCommObj(comm.agentid,E_205,null);
+                                InnerError devCommError = RESTRetUtils.errorDevCommObj(comm.agentid,E_205,null);
                                 comm.responceData = CreateErrorResponceData(comm.agentid, devCommError);
                                 logger.warning("Udp Receive InfoType error:" + responceInfoType + " by Send InfoType:" + comm.sendmsgtype);
                                 comm.thread.interrupt();
                             }
                         } else {
-                            DevCommError devCommError = RESTRetUtils.errorDevCommObj(comm.agentid,E_206,null );
+                            InnerError devCommError = RESTRetUtils.errorDevCommObj(comm.agentid,E_206,null );
                             comm.responceData = CreateErrorResponceData(comm.agentid,  devCommError);
                             logger.warning("Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
                         }
