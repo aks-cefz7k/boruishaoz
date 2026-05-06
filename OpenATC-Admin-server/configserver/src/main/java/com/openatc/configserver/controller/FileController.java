@@ -10,6 +10,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
@@ -64,7 +65,7 @@ public class FileController {
      * @Date 2021/9/16 13:57
      **/
     @Path("platform/LRRoadConfig")
-    @POST
+    @GET
     public RESTRetBase getLRRoadConfig() throws IOException {
         return FileUtil.readFile("/usr/config/LRRoadConfig.json");
     }

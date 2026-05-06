@@ -39,6 +39,7 @@ public enum IErrorEnumImplInner implements IErrorEnum {
     E_204("4204","Comm Send Data error!"),
     E_205("4205","Udp Receive InfoType error by Send InfoType"),
     E_206("4206","Can not find UdpCommunication for Receive Msg"),
+    E_207("4207","Error response from feature download"),
 
     //device not online
     E_301("4301","Device not online!")

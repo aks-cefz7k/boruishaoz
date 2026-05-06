@@ -11,11 +11,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.data.MessageDataMD5;
+import com.openatc.core.model.InnerError;
+import com.openatc.core.util.RESTRetUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import static com.openatc.comm.ocp.CosntDataDefine.*;
+import static com.openatc.core.common.IErrorEnumImplInner.E_207;
 
 public class OcpDataPackUpPack { //数据表内容宏定义
 
@@ -178,6 +181,13 @@ public class OcpDataPackUpPack { //数据表内容宏定义
             return eight;
 
         switch (infoType) {
+            case allfeature:
+                // 全部参数上下载需要特殊处理
+                if (operationType.equals(getrequest))
+                    eight = CFG_ASK_ASKREAD;
+                if (operationType.equals(setrequest))
+                    eight = CFG_ASK_SENDDATA;
+                break;
             case login: //上位机发login请求
                 eight = INFO_TYPE_LOGIN;
                 //数据内容:上位机联机请求
@@ -192,37 +202,37 @@ public class OcpDataPackUpPack { //数据表内容宏定义
             case lampcolor://灯色状态查询
                 eight = INFO_TYPE_LAMP_COLOR;
                 break;
-            case time://查询信号机时间
+            case time://信号机时间
                 eight = INFO_TYPE_CURRENT_TIME;
                 break;
-            case signalgroup://查询信号灯组信息
+            case signalgroup://信号灯组信息
                 eight = INFO_TYPE_SIGNAL_GROUP;
                 break;
-            case phase://查询相位信息
+            case phase://相位信息
                 eight = INFO_TYPE_PHASE;
                 break;
-            case overlap://查询跟随相位信息
+            case overlap://跟随相位信息
                 eight = INFO_TYPE_OVERLAP;
                 break;
-            case timepattern://查询信号配时方案
+            case timepattern://信号配时方案
                 eight = INFO_TYPE_SCHEME_PARTTERN;
                 break;
-            case scheduleplan://查询方案调度计划
+            case scheduleplan://方案调度计划
                 eight = INFO_TYPE_SCHEDUL_PLAN;
                 break;
-            case scheduledate://查询方案调度计划
+            case scheduledate://方案调度计划
                 eight = INFO_TYPE_SCHEDUL_DATE;
                 break;
-            case ControlPattern://查询工作方式
+            case ControlPattern://工作方式
                 eight = INFO_TYPE_WORK_MODE;
                 break;
-            case falut://查询信号机故障
+            case falut://信号机故障
                 eight = INFO_TYPE_SIGNAL_ERROR;
                 break;
-            case atcversion://查询信号机版本
+            case atcversion://信号机版本
                 eight = INFO_TYPE_ATC_VERSION;
                 break;
-            case paramversion://查询特征参数版本
+            case paramversion://特征参数版本
                 eight = INFO_TYPE_PARAM_VERSION;
                 break;
             case code://信号机识别码
@@ -231,25 +241,22 @@ public class OcpDataPackUpPack { //数据表内容宏定义
             case detector://检测器
                 eight = INFO_TYPE_DETECTOR;
                 break;
-            case allfeature://查询整体参数feature/all
-                eight = CFG_ASK_ASKREAD;
-                break;
-            case manualpanel:// 查询手动面板
+            case manualpanel:// 手动面板
                 eight = INFO_TYPE_MANUALPANEL;
                 break;
-            case systemremote:// 查询远程调试
+            case systemremote:// 远程调试
                 eight = INFO_TYPE_SYSTEM_REMOTE;
                 break;
-            case systemlog:// 查询操作日志
+            case systemlog:// 操作日志
                 eight = INFO_TYPE_SYSTEM_LOG;
                 break;
-            case channelstatus:// 查询通道状态（电压电流）
+            case channelstatus:// 通道状态（电压电流）
                 eight = INFO_TYPE_CHANNEL_STATUS;
                 break;
-            case channellampstatus:// 查询通道灯色状态
+            case channellampstatus:// 通道灯色状态
                 eight = INFO_TYPE_CHANNEL_LAMP_STATUS;
                 break;
-            case systemcustom:// 查询设备参数
+            case systemcustom:// 设备参数
                 eight = INFO_TYPE_SYSTEM_CUSTOM;
                 break;
             default:
@@ -561,24 +568,6 @@ public class OcpDataPackUpPack { //数据表内容宏定义
         return dataSchdule.clone();//待思考
     }
 
-    /**
-     * @param recvData 还上位机参数
-     * @param tempData
-     */
-    public void SetDataTorecvData(MessageData recvData, String tempData ) {
-        if (tempData != null) {
-            JsonElement obj = gson.fromJson(tempData, JsonElement.class);
-            recvData.setData(obj);
-        }
-        if (tempData == null) {
-            tempData = "{\n" +
-                    "\t\"sucess\": 1\n" +
-                    "}";
-            JsonElement obj = gson.fromJson(tempData, JsonElement.class);
-            recvData.setData(obj);
-        }
-    }
-
 
     /**
      * @return 1->成功  3->失败
@@ -863,7 +852,21 @@ public class OcpDataPackUpPack { //数据表内容宏定义
         recvData.setOperation(StringOperatorType(chOperateType));
         recvData.setThirdpartyid(roadID);
         recvData.setInfotype(StringOperatorObj(chInfoType));
-        SetDataTorecvData(recvData, tempData);
+
+        // 错误应答和下载全部参数错误，需要加上错误包装类
+        if(recvData.getOperation().equals(erroresponse) || chInfoType == CFG_ACK_SENDDATA_FAILED){
+            InnerError innerError = RESTRetUtils.errorDevCommObj(null,E_207,gson.fromJson(tempData, JsonElement.class));
+            recvData.setData(gson.toJsonTree(innerError));
+        } else if (tempData != null) {
+            JsonElement obj = gson.fromJson(tempData, JsonElement.class);
+            recvData.setData(obj);
+        } else {
+            tempData = "{\n" +
+                    "\t\"sucess\": 1\n" +
+                    "}";
+            JsonElement obj = gson.fromJson(tempData, JsonElement.class);
+            recvData.setData(obj);
+        }
 
         return checkDataLink(chDataLink, chOperateType, chInfoType, tempData, recvData);
     }
