@@ -42,7 +42,9 @@ public enum IErrorEnumImplInner implements IErrorEnum {
     E_207("4207","Error response from feature download"),
 
     //device not online
-    E_301("4301","Device not online!")
+    E_301("4301","Device not online!"),
+
+    E_8101("8101","Device can not delete!"),
     ;
 
 
