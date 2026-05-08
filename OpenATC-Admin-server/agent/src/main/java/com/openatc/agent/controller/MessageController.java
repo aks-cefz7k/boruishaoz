@@ -11,12 +11,14 @@
  **/
 package com.openatc.agent.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
@@ -125,7 +127,6 @@ public class MessageController {
      * @Description: 生成一条操作记录
      */
     private THisParams CreateHisParam(MessageData requestData, RESTRet res, String ip, String token) {
-        MessageData responceData = (MessageData)res.getData();
         logger.info( "Create History Param - requestData： " + requestData + " token：" + token);
 
         THisParams hisParams = new THisParams();
@@ -134,8 +135,7 @@ public class MessageController {
         //操作者
         if(username == null){
             hisParams.setOperator("");
-        }
-        else{
+        } else {
             hisParams.setOperator(username);
         }
         //操作时间自动生成
@@ -151,27 +151,52 @@ public class MessageController {
         } catch (Exception e) {
             hisParams.setRequestbody("{}");
         }
-        if(responceData != null){
-            //消息描述
-            String operation = responceData.getOperation();
-            hisParams.setStatus(operation);
-            //响应内容
-            hisParams.setResponsebody(responceData.getData().toString());
-            //消息子类型
-            int subInfoType = 0;
-            if (operation.equals("set-response")) {//控制消息
-                subInfoType = responceData.getData().getAsJsonObject().get("control").getAsInt();
+        if (res.isSuccess()) {
+            MessageData responceData = (MessageData)res.getData();
+            if(responceData != null){
+                //消息描述
+                String operation = responceData.getOperation();
+                hisParams.setStatus(operation);
+                //响应内容
+                hisParams.setResponsebody(responceData.getData().toString());
+                //消息子类型
+                int subInfoType = 0;
+                if (operation.equals("set-response")) {//控制消息
+                    subInfoType = responceData.getData().getAsJsonObject().get("control").getAsInt();
+                }
+                hisParams.setSubInfoType(subInfoType);
+                //请求错误码
+                String responseCode = res.getCode();
+                hisParams.setResponseCode(responseCode);
+                //特征参数错误码
+                int deviceErrorCode = 0;
+                if (operation.equals("error-response")) {
+                    deviceErrorCode = responceData.getData().getAsJsonObject().get("code").getAsInt();
+                }
+                hisParams.setDeviceErrorCode(deviceErrorCode);
             }
-            hisParams.setSubInfoType(subInfoType);
-            //请求错误码
-            String responseCode = res.getCode();
-            hisParams.setResponseCode(responseCode);
-            //特征参数错误码
-            int deviceErrorCode = 0;
-            if (operation.equals("error-response")) {
-                deviceErrorCode = responceData.getData().getAsJsonObject().get("code").getAsInt();
+        } else {
+            InnerError innerError = (InnerError)res.getData();
+            if(innerError != null){
+                //消息描述
+                String operation = requestData.getOperation();
+                hisParams.setStatus(operation);
+                //响应内容
+                String responseBodey = JSONObject.toJSONString(innerError.getContent());
+                hisParams.setResponsebody(responseBodey);
+                //消息子类型
+                int subInfoType = 0;
+                hisParams.setSubInfoType(subInfoType);
+                //请求错误码
+                String responseCode = res.getCode();
+                hisParams.setResponseCode(responseCode);
+                //请求内部错误码
+                String innerErrorCode = innerError.getErrorCode();
+                hisParams.setInnerErrorCode(innerErrorCode);
+                //特征参数错误码
+                int deviceErrorCode = 0;
+                hisParams.setDeviceErrorCode(deviceErrorCode);
             }
-            hisParams.setDeviceErrorCode(deviceErrorCode);
         }
         return hisParams;
     }
