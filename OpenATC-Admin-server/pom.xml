@@ -25,6 +25,7 @@
         <module>core</module>
         <module>model</module>
         <module>algorithm</module>
+		<module>optimize</module>
         <module>comm</module>
         <module>collector</module>
         <module>agent</module>
