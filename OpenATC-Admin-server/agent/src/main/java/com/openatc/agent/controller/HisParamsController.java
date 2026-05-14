@@ -163,9 +163,12 @@ public class HisParamsController {
         List<THisParamsVO> targetList = new ArrayList<THisParamsVO>();
         for (THisParams param: content) {
             AscsBaseModel ascsBaseModel = mDao.getAscsByID(param.getAgentid());
-            String agentName = ascsBaseModel.getAgentid();
+            String agentName = "";
             if (ascsBaseModel != null) {
                 agentName = ascsBaseModel.getName();
+                if (agentName.equals("")) {
+                    agentName = ascsBaseModel.getAgentid();
+                }
             }
             THisParamsVO vo = new THisParamsVO(param, agentName);
             targetList.add(vo);
