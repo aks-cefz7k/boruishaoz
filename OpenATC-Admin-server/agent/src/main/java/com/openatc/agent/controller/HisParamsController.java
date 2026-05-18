@@ -120,8 +120,9 @@ public class HisParamsController {
         String beginTime = jsonObject.get("beginTime") == null ? "" : jsonObject.get("beginTime").getAsString();
         String endTime = jsonObject.get("endTime") == null ? "" : jsonObject.get("endTime").getAsString();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Sort sort = new Sort(Sort.Direction.DESC, "opertime"); //排序
         PageInit pageInit = new PageInit(pageNum, pageRow); //分页初始化
-        Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
+        Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow(), sort);
         Specification<THisParams> queryCondition = (Specification<THisParams>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
