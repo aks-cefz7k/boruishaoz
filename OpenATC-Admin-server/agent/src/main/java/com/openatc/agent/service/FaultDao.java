@@ -33,6 +33,8 @@ public interface FaultDao extends JpaRepository<Fault, Long> {
     @Query(value = "select agentid, m_w_faultid, m_by_fault_board_type,m_by_fault_desc_value,m_by_fault_level,m_un_fault_occur_time,m_un_fault_renew_time,m_w_fault_type,m_w_sub_fault_type,operator,enumerate,operation_time,model,event_type,delete_flag from fault where delete_flag <> '1'", nativeQuery = true)
     Page<Fault> findAllFault(Specification<Fault> specification, Pageable pageRequest);
 
+    @Transactional
+    @Modifying
     @Query(value = "update fault set delete_flag = '1' where m_w_faultid = ?1 and agentid = ?2", nativeQuery = true)
     void deleteByMwFaultIdAndAgentId(Long faultId, String agentId);
 
