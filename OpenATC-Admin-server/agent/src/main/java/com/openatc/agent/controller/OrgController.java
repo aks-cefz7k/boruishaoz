@@ -16,6 +16,7 @@ import com.openatc.agent.model.User;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.OrgService;
 import com.openatc.agent.service.UserDao;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
@@ -97,6 +98,10 @@ OrgController {
 
     @PostMapping("")
     public RESTRetBase addOrgnization(@RequestBody SysOrg sysOrg) {
+        List<SysOrg> list = orgService.findByOrgnization_codeEquals(sysOrg.getOrgnization_code());
+        if (list != null && list.size() > 0) {
+            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_11001);
+        }
         SysOrg org = orgService.save(sysOrg);
         return RESTRetUtils.successObj(org);
     }

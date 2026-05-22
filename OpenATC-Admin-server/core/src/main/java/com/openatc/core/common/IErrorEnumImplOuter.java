@@ -81,6 +81,8 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_9001("9001", "Overflow control failed"),
     E_9002("9002", "Auto control failed"),
 
+    //组织机构错误
+    E_11001("11001", "Repeat Name!"),
 
     //全局异常错误
     E_0001("0001", "NullPointerException"),

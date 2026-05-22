@@ -32,6 +32,9 @@ public interface OrgService extends JpaRepository<SysOrg, Integer> {
     @Query(value="select  orgnization_code from t_orgnization where id = ?1",nativeQuery=true)
     String findOrgNameById(int id);
 
+    //根据组织code查询
+    @Query(value="select * from t_orgnization where orgnization_code = ?1",nativeQuery=true)
+    List<SysOrg> findByOrgnization_codeEquals(String code);
 
     //    public RESTRetBase getUsersByOrganization(String permPath) {
 //
