@@ -76,6 +76,7 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
 
     //设备管理错误
     E_8001("8001", "device not found By Agentid"),
+    E_8002("8002", "Agentid already exists !"),
 
     //控制相关
     E_9001("9001", "Overflow control failed"),

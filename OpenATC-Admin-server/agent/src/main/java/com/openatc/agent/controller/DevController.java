@@ -197,9 +197,12 @@ public class DevController {
     // 修改设备ID
     @PostMapping(value = "/devs/agentid")
     public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
-
         String oldAgentid = jsonObject.get("oldAgentid").getAsString();
         String newAgentid = jsonObject.get("newAgentid").getAsString();
+        AscsBaseModel dev = mDao.getAscsByID(newAgentid);
+        if (dev != null) {
+            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_8002);
+        }
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
         return RESTRetUtils.successObj(result);
     }
