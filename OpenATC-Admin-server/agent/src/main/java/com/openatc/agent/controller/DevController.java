@@ -165,7 +165,11 @@ public class DevController {
     //添加设备
     @PostMapping(value = "/devs")
     public RESTRetBase InsertDev(@RequestBody AscsBaseModel ascs) {
-
+        //check name
+        String name = ascs.getName();
+        if (name == null || name.equals("")) {
+            ascs.setName(ascs.getAgentid());
+        }
         int count = mDao.getDevByAgentid(ascs.getAgentid());
         if (count != 0) {
             mDao.updateDev(ascs);
@@ -178,7 +182,11 @@ public class DevController {
     @PutMapping(value = "/devs")
     public RESTRetBase UpdateDev(@RequestBody AscsBaseModel ascs) {
         int temp = mDao.updateDev(ascs);
-
+        //check name
+        String name = ascs.getName();
+        if (name == null || name.equals("")) {
+            ascs.setName(ascs.getAgentid());
+        }
         if (temp == 0) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
         } else {
