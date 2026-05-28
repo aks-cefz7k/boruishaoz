@@ -73,7 +73,10 @@ public class THisParams {
 	@Column
 	private Integer deviceErrorCode; //特征参数错误码
 
-	public THisParams(int id, String operator, Date opertime, String source, String agentid, String infotype, String status, Integer subInfoType, String responseCode,Integer deviceErrorCode) {
+	@Column
+	private String innerErrorCode; //内部错误码
+
+	public THisParams(int id, String operator, Date opertime, String source, String agentid, String infotype, String status, Integer subInfoType, String responseCode, Integer deviceErrorCode, String innerErrorCode) {
 		this.id = id;
 		this.operator = operator;
 		this.opertime = (Date)opertime.clone();
@@ -84,6 +87,7 @@ public class THisParams {
 		this.subInfoType = subInfoType;
 		this.responseCode = responseCode;
 		this.deviceErrorCode = deviceErrorCode;
+		this.innerErrorCode = innerErrorCode;
 	}
 
 	public THisParams() {

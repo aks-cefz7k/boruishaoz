@@ -24,7 +24,7 @@ public interface THisParamsDao extends JpaRepository<THisParams, Integer> {
 
     Page<THisParams> findAll(Specification<THisParams> specification, Pageable pageable);
 
-    @Query("select new THisParams(t.id, t.operator, t.opertime, t.source, t.agentid, t.infotype, t.status, t.subInfoType, t.responseCode, t.deviceErrorCode) from THisParams t")
+    @Query("select new THisParams(t.id, t.operator, t.opertime, t.source, t.agentid, t.infotype, t.status, t.subInfoType, t.responseCode, t.deviceErrorCode, t.innerErrorCode) from THisParams t")
     List<THisParams> findAllThisParams();
 
     //根据id获取requestBody
@@ -35,9 +35,9 @@ public interface THisParamsDao extends JpaRepository<THisParams, Integer> {
     @Query("select t.responsebody from THisParams t where t.id = ?1")
     String getResponseBodyById(int id);
 
-    @Query("select new THisParams(t.id, t.operator, t.opertime, t.source, t.agentid, t.infotype, t.status, t.subInfoType, t.responseCode, t.deviceErrorCode) from THisParams t where t.id = ?1")
+    @Query("select new THisParams(t.id, t.operator, t.opertime, t.source, t.agentid, t.infotype, t.status, t.subInfoType, t.responseCode, t.deviceErrorCode, t.innerErrorCode) from THisParams t where t.id = ?1")
     THisParams getPartThisParamsById(int id);
 
-    @Query("select new THisParams(t.id, t.operator, t.opertime, t.source, t.agentid, t.infotype, t.status, t.subInfoType, t.responseCode, t.deviceErrorCode) from THisParams t")
+    @Query("select new THisParams(t.id, t.operator, t.opertime, t.source, t.agentid, t.infotype, t.status, t.subInfoType, t.responseCode, t.deviceErrorCode, t.innerErrorCode) from THisParams t")
     Page<THisParams> findPageThisParams(Pageable pageable);
 }

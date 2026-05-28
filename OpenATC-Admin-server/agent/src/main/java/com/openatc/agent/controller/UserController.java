@@ -336,6 +336,10 @@ public class UserController {
         if (set.contains("organization")) {
             olduser.setOrganization(jsonObject.get("organization").getAsString());
         }
+        //登陆ip限制
+        if (set.contains("login_ip_limit")) {
+            olduser.setLogin_ip_limit(jsonObject.get("login_ip_limit").getAsString());
+        }
         if (set.contains("roleNames")) {
             //先查看该用户用否有超级管理远角色，如果有不允许修改
             List<String> currentUserRoleNames = userDao.getRoleNamesByUsername(olduser.getUser_name());

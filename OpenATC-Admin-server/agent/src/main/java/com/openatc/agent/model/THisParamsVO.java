@@ -36,6 +36,8 @@ public class THisParamsVO {
 
     private Integer deviceErrorCode; //设备错误码
 
+    private String innerErrorCode; //内部错误码
+
     public THisParamsVO(THisParams tHisParams, String name) {
         this.id = tHisParams.getId();
         this.operator = tHisParams.getOperator();
@@ -46,6 +48,7 @@ public class THisParamsVO {
         this.subInfoType = tHisParams.getSubInfoType();
         this.responseCode = tHisParams.getResponseCode();
         this.deviceErrorCode = tHisParams.getDeviceErrorCode();
+        this.innerErrorCode = tHisParams.getInnerErrorCode();
         this.status = tHisParams.getStatus();
         this.name = name;
     }

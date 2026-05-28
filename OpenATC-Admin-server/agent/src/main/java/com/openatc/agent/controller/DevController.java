@@ -175,7 +175,11 @@ public class DevController {
     //添加设备
     @PostMapping(value = "/devs")
     public RESTRetBase InsertDev(@RequestBody AscsBaseModel ascs) {
-
+        //check name
+        String name = ascs.getName();
+        if (name == null || name.equals("")) {
+            ascs.setName(ascs.getAgentid());
+        }
         int count = mDao.getDevByAgentid(ascs.getAgentid());
         if (count != 0) {
             return RESTRetUtils.errorObj(E_8004);
@@ -187,7 +191,11 @@ public class DevController {
     @PutMapping(value = "/devs")
     public RESTRetBase UpdateDev(@RequestBody AscsBaseModel ascs) {
         int temp = mDao.updateDev(ascs);
-
+        //check name
+        String name = ascs.getName();
+        if (name == null || name.equals("")) {
+            ascs.setName(ascs.getAgentid());
+        }
         if (temp == 0) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_2002);
         } else {
@@ -206,9 +214,12 @@ public class DevController {
     // 修改设备ID
     @PostMapping(value = "/devs/agentid")
     public RESTRetBase modifyAgentid(@RequestBody JsonObject jsonObject) {
-
         String oldAgentid = jsonObject.get("oldAgentid").getAsString();
         String newAgentid = jsonObject.get("newAgentid").getAsString();
+        AscsBaseModel dev = mDao.getAscsByID(newAgentid);
+        if (dev != null) {
+            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_8002);
+        }
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
         return RESTRetUtils.successObj(result);
     }

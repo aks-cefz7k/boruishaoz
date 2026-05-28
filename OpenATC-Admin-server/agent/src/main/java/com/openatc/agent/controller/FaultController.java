@@ -132,8 +132,8 @@ public class FaultController {
         if (jsonObject == null) {
             return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
         }
-        String agentId = jsonObject.get("agentId") == null ? Integer.MAX_VALUE + "" : jsonObject.get("agentId").getAsString();
-        String enumerate = jsonObject.get("enumerate") == null ? Integer.MAX_VALUE + "" : jsonObject.get("enumerate").getAsString();
+        String agentId = jsonObject.get("agentId") == null ? "" : jsonObject.get("agentId").getAsString();
+        String enumerate = jsonObject.get("enumerate") == null ? "" : jsonObject.get("enumerate").getAsString();
         int m_byFaultBoardType = jsonObject.get("m_byFaultBoardType") == null ? 0 : jsonObject.get("m_byFaultBoardType").getAsInt();
         int m_wFaultType = jsonObject.get("m_wFaultType") == null ? 0 : jsonObject.get("m_wFaultType").getAsInt();
         Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
@@ -161,11 +161,11 @@ public class FaultController {
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
-            if (!agentId.equals(Integer.MAX_VALUE + "")) {
+            if (!agentId.equals("")) {
                 predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
             }
             // 确认结果
-            if (!enumerate.equals(Integer.MAX_VALUE + "")) {
+            if (!enumerate.equals("")) {
                 predicateList.add(criteriaBuilder.equal(root.get("enumerate"), enumerate));
             }
             // 板卡类型
@@ -176,6 +176,7 @@ public class FaultController {
             if (m_wFaultType != 0) {
                 predicateList.add(criteriaBuilder.equal(root.get("m_wFaultType"), m_wFaultType));
             }
+            predicateList.add(criteriaBuilder.equal(root.get("deleteFlag"), "0"));
             predicateList.add(criteriaBuilder.between(root.get("m_unFaultOccurTime"), l[0], l[1]));
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         };
