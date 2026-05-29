@@ -218,7 +218,7 @@ public class DevController {
         String newAgentid = jsonObject.get("newAgentid").getAsString();
         AscsBaseModel dev = mDao.getAscsByID(newAgentid);
         if (dev != null) {
-            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_8002);
+            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_8004);
         }
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
         return RESTRetUtils.successObj(result);

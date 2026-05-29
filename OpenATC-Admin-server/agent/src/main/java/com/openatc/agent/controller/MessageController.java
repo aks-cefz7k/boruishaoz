@@ -33,6 +33,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
+import com.alibaba.fastjson.JSONObject;
 
 import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
 import static com.openatc.comm.common.CommunicationType.COMM_SERVER_TYPE_CENTER;
