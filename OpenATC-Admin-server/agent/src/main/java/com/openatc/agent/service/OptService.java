@@ -1,8 +1,8 @@
 package com.openatc.agent.service;
 
-import com.alibaba.fastjson.JSONObject;
+import com.openatc.agent.controller.MessageController;
 import com.openatc.agent.model.OptDev;
-import com.openatc.agent.model.OptProgram;
+import com.openatc.agent.model.ControlInterrupt;
 import com.openatc.agent.model.OptRing;
 import com.openatc.agent.model.Overflow;
 import com.openatc.core.model.RESTRet;
@@ -11,12 +11,7 @@ import com.openatc.model.model.StatusPattern;
 import com.openatc.model.model.StatusPatternPhase;
 import com.openatc.model.model.StatusRing;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,43 +22,27 @@ import java.util.Map;
 public class OptService {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private MessageController messageController;
 
-    @Value("${server.port}")
-    private String devsuri;
-
-
-    public OptDev<ControlPattern> AutoControl(String agentid) {
+    // 执行瓶颈恢复控制
+    public RESTRet AutoControl(String agentid) {
         //定周期是用于切方案，恢复自主控制无法切换方案，恢复信号机本来运行的方案
-        OptDev<ControlPattern> controlMsgOptDev = new OptDev<>();
-        controlMsgOptDev.setAgentid(agentid);
-        controlMsgOptDev.setInfotype("control/pattern");
-        controlMsgOptDev.setOperation("set-request");
-        controlMsgOptDev.setUser("admin");
-        controlMsgOptDev.setSource("center");
         ControlPattern controlMsg = new ControlPattern();
         controlMsg.setControl(0);
         controlMsg.setTerminal(1);
         controlMsg.setValue(0);
-        controlMsgOptDev.setData(controlMsg);
-        return controlMsgOptDev;
+        return messageController.SetControlPattern(agentid,controlMsg);
     }
 
-    //@brief 根据pattern对象得到干预对象方案
-    //@overflowList：一组待优化路口相位
-    public OptDev<OptProgram> GetInterruptPattern(StatusPattern pattern, String agentid)
+    // 根据pattern对象得到干预对象方案
+    // overflowList：一组待优化路口相位
+    public RESTRet InterruptPattern(StatusPattern pattern, String agentid)
     {
-        //String agentid = pattern.getAgentid();
         List<StatusRing> rings = pattern.getRings();
         List<StatusPatternPhase> phases = pattern.getPhase();
         int cycle = pattern.getCycle();
-        OptDev optDev = new OptDev();
-        optDev.setAgentid(agentid);
-        optDev.setUser("admin");
-        optDev.setInfotype("control/interrupt");
-        optDev.setSource("center");
-        optDev.setOperation("set-request");
-        OptProgram optProgram = new OptProgram();
+
+        ControlInterrupt controlInterrupt = new ControlInterrupt();
 
         List<List<OptRing>> ringlst = new ArrayList<>();
 
@@ -81,11 +60,11 @@ public class OptService {
             }
             ringlst.add(ring);
         }
-        optProgram.setCycle(cycle);
-        optProgram.setOffset(0);
-        optProgram.setRings(ringlst);
-        optDev.setData(optProgram);
-        return optDev;
+        controlInterrupt.setCycle(cycle);
+        controlInterrupt.setOffset(0);
+        controlInterrupt.setRings(ringlst);
+
+        return messageController.SetControlInterrupt(agentid,controlInterrupt);
     }
 
 
@@ -95,10 +74,13 @@ public class OptService {
         String agentid = overflow.getIntersectionid().toString();   //设备id
         Integer phaseid = Integer.valueOf(overflow.getPhaseid());   //相位id
         int controltime = overflow.getControltime();                //相位控制时间
-        StatusPattern tempPattern = GetStatusPattern(agentid);
+
+
+        StatusPattern tempPattern = messageController.GetStatusPattern(agentid) ;
         if(tempPattern == null){
             return null;
         }
+
         List<List<Integer>> stages = tempPattern.getStages();
         List<StatusPatternPhase> phases = tempPattern.getPhase();
         double factor = 1.0;
@@ -156,38 +138,23 @@ public class OptService {
     }
 
 
-
-    public StatusPattern GetStatusPattern(String devid)
-    {
-        JSONObject js = new JSONObject();
-        js.put("agentid", devid);
-        js.put("infotype", "status/pattern");
-        js.put("operation", "get-request");
-
-        RESTRet response = HttpPost(devsuri, js);
-        if(response.isSuccess() == false)
-            return null;
-        Map data = (Map) ((Map) response.getData()).get("data");
-
-        return JSONObject.toJavaObject(new JSONObject(data), StatusPattern.class);
-    }
-
-
-    public RESTRet HttpPost(String uri, JSONObject js)
-    {
-        //设置请求头
-        HttpHeaders headers = new HttpHeaders();
-        MediaType mediaType = MediaType.parseMediaType("application/json; charset=UTF-8");
-        headers.setContentType(mediaType);
-        headers.add("Accept", MediaType.ALL_VALUE);
-
-        //封装请求行和请求体
-        HttpEntity<String> entity = new HttpEntity<>(js.toString(), headers);
-        //发送请求
-        String url = "http://localhost:" + uri + "/ openatc/devs/message";
-        RESTRet res =  restTemplate.postForObject(url, entity, RESTRet.class);
-        return res;
-    }
+//
+//
+//    public RESTRet HttpPost(String uri, JSONObject js)
+//    {
+//        //设置请求头
+//        HttpHeaders headers = new HttpHeaders();
+//        MediaType mediaType = MediaType.parseMediaType("application/json; charset=UTF-8");
+//        headers.setContentType(mediaType);
+//        headers.add("Accept", MediaType.ALL_VALUE);
+//
+//        //封装请求行和请求体
+//        HttpEntity<String> entity = new HttpEntity<>(js.toString(), headers);
+//        //发送请求
+//        String url = "http://localhost:" + uri + "/ openatc/devs/message";
+//        RESTRet res =  restTemplate.postForObject(url, entity, RESTRet.class);
+//        return res;
+//    }
 
 
 }

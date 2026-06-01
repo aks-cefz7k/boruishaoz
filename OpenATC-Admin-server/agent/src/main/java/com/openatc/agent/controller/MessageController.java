@@ -11,18 +11,23 @@
  **/
 package com.openatc.agent.controller;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.openatc.agent.model.ControlInterrupt;
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
+import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.comm.ocp.DataParamMD5;
 import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
+import com.openatc.model.model.ControlPattern;
+import com.openatc.model.model.StatusPattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +68,9 @@ public class MessageController {
 
     @Autowired
     protected TokenUtil tokenUtil;
+
+
+    Gson gson = new Gson();
 
     @PostConstruct
     public void init(){
@@ -123,6 +131,49 @@ public class MessageController {
         return responceData;
     }
 
+    /**
+     * @param agentid  请求路口
+     * @return StatusPattern 实时方案状态
+     * @Title: GetStatusPattern
+     * @Description: 获取方案状态
+     */
+    public StatusPattern GetStatusPattern(String agentid)
+    {
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.workstatus);
+        RESTRet<MessageData> restRet = postDevsMessage(null, messageData);
+
+        if( !restRet.isSuccess() )
+            return null;
+
+        return gson.fromJson(restRet.getData().getData(),StatusPattern.class);
+    }
+
+    /**
+     * @param agentid  设置路口
+     * @param controlPattern  设置方案
+     * @return RESTRet 返回执行应答
+     * @Title: SetControlPattern
+     * @Description: 设置控制方式
+     */
+    public RESTRet SetControlPattern(String agentid, ControlPattern controlPattern)
+    {
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, gson.toJsonTree(controlPattern));
+        RESTRet restRet = postDevsMessage(null, messageData);
+        return restRet;
+    }
+
+    /**
+     * @param agentid  设置路口
+     * @param controlInterrupt  设置优化方案
+     * @return RESTRet 返回执行应答
+     * @Title: SetControlInterrupt
+     * @Description: 设置控制方式
+     */
+    public RESTRet SetControlInterrupt(String agentid, ControlInterrupt controlInterrupt) {
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.interrupt, gson.toJsonTree(controlInterrupt));
+        RESTRet restRet = postDevsMessage(null, messageData);
+        return restRet;    }
+
     @PostMapping(value = "/md5")
     public RESTRet postDevsMessage(@RequestBody MessageData messageData) throws UnsupportedEncodingException {
         JsonElement data = messageData.getData();
@@ -133,6 +184,7 @@ public class MessageController {
         }
         return RESTRetUtils.successObj(datamd5value);
     }
+
     /**
      * @param requestData  请求消息
      * @param res 应答消息
