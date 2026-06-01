@@ -262,6 +262,9 @@ public class OcpDataPackUpPack { //数据表内容宏定义
             case channelcheck:// 设备参数
                 eight = INFO_TYPE_SYSTEM_CHANNEL_CHECK;
                 break;
+            case interrupt:// 设备参数
+                eight = INFO_TYPE_PATTERN_INTERRUPT;
+                break;
             default:
         }
         return eight;
@@ -400,6 +403,9 @@ public class OcpDataPackUpPack { //数据表内容宏定义
                 break;
             case systemcustom:// 查询设备参数
                 three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            case interrupt:// 查询设备参数
+                three = DATA_LINK_CONTROL;
                 break;
             default:
         }
@@ -822,7 +828,7 @@ public class OcpDataPackUpPack { //数据表内容宏定义
                 return ReadDataScheduleSuccess;
             }
         }
-        return ReadDataScheduleFault;
+        return ReadDataScheduleSuccess;
     }
 
     /**

@@ -22,10 +22,20 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     /*
      * 错误信息
      * */
+
+    //全局异常错误
+    E_0001("0001", "NullPointerException"),
+    E_0002("0002", "HttpRequestMethodNotSupportedException"),
+    E_0003("0003", "TypeMismatchException"),
+    E_0004("0004", "MissingServletRequestParameterException"),
+    E_0005("0005", "ValidationException or MethodArgumentNotValidException"),
+    E_0006("0006", "system error"),
+
     E_1000("10000", "Parameter is null!"),
     E_1001("10001", "Illegal parameter!"),
     E_1002("1002", "URL is not correct!"),
     E_2002("10002", "The record is not exit!"),
+
     E_2003("20003", "The id is not exit or equal 0 !"),
     E_2004("20004", "No Param Record !"),
     E_2005("20005", "Not found devices id for udp!"),
@@ -34,7 +44,6 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_2008("20008", "File read failed!"),
     E_2009("20009", "File does not exist!"),
     E_2010("20010", "I/O close mistake!"),
-
 
     //用户管理相关
     E_3001("3001", "user_name does not exist!"),
@@ -80,20 +89,13 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_8003("8003", "device is found By VipRoute"),
     E_8004("8004", "Agentid is duplicated"),
 
-    //控制相关
+    //瓶颈控制相关
     E_9001("9001", "Overflow control failed"),
     E_9002("9002", "Overflow recovery failed"),
+    E_9003("9003", "Overflow is executing, can not be deleted"),
 
     //组织机构错误
-    E_11001("11001", "Organize Repeat Name!"),
-
-    //全局异常错误
-    E_0001("0001", "NullPointerException"),
-    E_0002("0002", "HttpRequestMethodNotSupportedException"),
-    E_0003("0003", "TypeMismatchException"),
-    E_0004("0004", "MissingServletRequestParameterException"),
-    E_0005("0005", "ValidationException or MethodArgumentNotValidException"),
-    E_0006("0006", "system error");
+    E_11001("11001", "Organize Repeat Name!");
 
     private String errorCode;
 

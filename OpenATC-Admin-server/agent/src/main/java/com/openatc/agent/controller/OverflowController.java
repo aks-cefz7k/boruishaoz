@@ -20,9 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.openatc.core.common.IErrorEnumImplOuter.E_9003;
+
 
 @RestController
 public class OverflowController {
+
+    private final String OverflowDetOn = "1";
+    private final String OverflowDetOff = "2";
 
     private Logger logger = LoggerFactory.getLogger(OverflowController.class);
 
@@ -73,6 +78,9 @@ public class OverflowController {
     public RESTRetBase DeleteOverflowdetector(@PathVariable Long id){
         Optional<OverflowDetector> tt = overflowDetectorRepository.findById(id);
         OverflowDetector aa = tt.get();
+        if(aa.getStatus() != null && aa.getStatus().equals(OverflowDetOn))
+            return RESTRetUtils.errorObj(E_9003);
+
         overflowDetectorRepository.deleteById(id);
         return RESTRetUtils.successObj(aa);
     }
@@ -146,6 +154,7 @@ public class OverflowController {
         }
 
         // todo 设备控制需要重构为单路口方式
+        overflowDetectorRepository.updateStatusById(id,OverflowDetOn);
         return RESTRetUtils.successObj();
     }
 
@@ -169,7 +178,7 @@ public class OverflowController {
         }
 
         // todo 设备控制需要重构为单路口方式
-        overflowDetectorRepository.updateStatusById(id,"2");
+        overflowDetectorRepository.updateStatusById(id,OverflowDetOff);
         return RESTRetUtils.successObj();
     }
 }
