@@ -259,6 +259,9 @@ public class OcpDataPackUpPack { //数据表内容宏定义
             case systemcustom:// 设备参数
                 eight = INFO_TYPE_SYSTEM_CUSTOM;
                 break;
+            case channelcheck:// 设备参数
+                eight = INFO_TYPE_SYSTEM_CHANNEL_CHECK;
+                break;
             default:
         }
         return eight;
@@ -333,6 +336,9 @@ public class OcpDataPackUpPack { //数据表内容宏定义
                 three = DATA_LINK_BASIC_INFO;
                 break;
             case lampcolor://灯色状态查询
+                three = DATA_LINK_BASIC_INFO;
+                break;
+            case channelcheck: // 通道检测
                 three = DATA_LINK_BASIC_INFO;
                 break;
             case time://查询信号机时间

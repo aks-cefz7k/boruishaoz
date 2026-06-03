@@ -18,7 +18,9 @@ import com.openatc.agent.model.*;
 import com.openatc.agent.service.*;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
+import com.openatc.core.common.IErrorEnumImplInner;
 import com.openatc.core.common.IErrorEnumImplOuter;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
@@ -28,6 +30,7 @@ import com.openatc.model.model.LockDirection;
 import com.openatc.model.service.ManualpanelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -36,6 +39,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
+
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 @RestController
 @CrossOrigin
@@ -129,8 +134,7 @@ public class DevController {
     //删除
     @DeleteMapping(value = "/devs/{id}")
     public RESTRetBase DeleteDev(@PathVariable String id) {
-        AscsBaseModel as = mDao.getAscsByID(id);
-        mDao.deleteDevByID(id);
+
         //删除设备时，应通知所有服务更新映
         //删除协调路线的id设备
         List<Route> routes = routeDao.findAll();
@@ -140,10 +144,11 @@ public class DevController {
             while (intersectionIterator.hasNext()) {
                 RouteIntersection next = intersectionIterator.next();
                 if (next.getAgentid().equals(id)) {
-                    intersectionIterator.remove();
+//                    intersectionIterator.remove();
+                    InnerError devCommError = RESTRetUtils.errorDevCommObj(id, IErrorEnumImplInner.E_8101, next);
+                    return RESTRetUtils.errorDetialObj(E_8002,devCommError);
                 }
             }
-            routeDao.save(route);
         }
 
         //删除勤务路线的设备
@@ -154,11 +159,16 @@ public class DevController {
             while (vipRouteDeviceIterator.hasNext()) {
                 VipRouteDevice next = vipRouteDeviceIterator.next();
                 if (next.getAgentid().equals(id)) {
-                    vipRouteDeviceIterator.remove();
+//                    vipRouteDeviceIterator.remove();
+                    InnerError devCommError = RESTRetUtils.errorDevCommObj(id, IErrorEnumImplInner.E_8101, next);
+
+                    return RESTRetUtils.errorDetialObj(E_8003,devCommError);
                 }
             }
-            vipRouteDao.save(vipRoute);
         }
+
+        AscsBaseModel as = mDao.getAscsByID(id);
+        mDao.deleteDevByID(id);
         return RESTRetUtils.successObj(as);
     }
 
@@ -172,8 +182,7 @@ public class DevController {
         }
         int count = mDao.getDevByAgentid(ascs.getAgentid());
         if (count != 0) {
-            mDao.updateDev(ascs);
-            return RESTRetUtils.successObj(ascs);
+            return RESTRetUtils.errorObj(E_8004);
         }
         return RESTRetUtils.successObj(mDao.insertDev(ascs));
     }
@@ -209,7 +218,7 @@ public class DevController {
         String newAgentid = jsonObject.get("newAgentid").getAsString();
         AscsBaseModel dev = mDao.getAscsByID(newAgentid);
         if (dev != null) {
-            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_8002);
+            return RESTRetUtils.errorObj(false,IErrorEnumImplOuter.E_8004);
         }
         boolean result = mDao.modifyAgentid(oldAgentid, newAgentid);
         return RESTRetUtils.successObj(result);

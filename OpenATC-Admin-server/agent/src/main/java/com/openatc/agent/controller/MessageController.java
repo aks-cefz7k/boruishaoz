@@ -11,13 +11,14 @@
  **/
 package com.openatc.agent.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonElement;
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
 import com.openatc.comm.data.MessageData;
+import com.openatc.comm.ocp.DataParamMD5;
 import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
@@ -30,7 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
+import com.alibaba.fastjson.JSONObject;
 
 import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
 import static com.openatc.comm.common.CommunicationType.COMM_SERVER_TYPE_CENTER;
@@ -118,6 +121,17 @@ public class MessageController {
             }
         }
         return responceData;
+    }
+
+    @PostMapping(value = "/md5")
+    public RESTRet postDevsMessage(@RequestBody MessageData messageData) throws UnsupportedEncodingException {
+        JsonElement data = messageData.getData();
+        DataParamMD5 dataMD5 = new DataParamMD5();
+        String datamd5value = null;
+        if (data != null) {
+            datamd5value = dataMD5.getMD5(data.toString());
+        }
+        return RESTRetUtils.successObj(datamd5value);
     }
     /**
      * @param requestData  请求消息
