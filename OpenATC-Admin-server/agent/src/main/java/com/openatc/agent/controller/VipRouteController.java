@@ -58,9 +58,9 @@ public class VipRouteController {
     @GetMapping(value = "/viproute")
     public RESTRetBase getVipRoute() throws ParseException {
         List<VipRoute> vipRoutes = vipRouteDao.findAll(sort);
-        for (VipRoute vipRoute : vipRoutes) {
-            addGeometryToVipRoute(vipRoute);
-        }
+//        for (VipRoute vipRoute : vipRoutes) {
+//            addGeometryToVipRoute(vipRoute);
+//        }
         return RESTRetUtils.successObj(vipRoutes);
     }
 
@@ -68,7 +68,7 @@ public class VipRouteController {
     @GetMapping(value = "/viproute/{id}")
     public RESTRetBase getVipRouteById(@PathVariable int id) throws ParseException {
         VipRoute vipRoute = vipRouteDao.findById(id);
-        addGeometryToVipRoute(vipRoute);
+//        addGeometryToVipRoute(vipRoute);
         return RESTRetUtils.successObj(vipRouteDao.findById(id));
     }
 
@@ -141,7 +141,7 @@ public class VipRouteController {
         // 4 保存到数据库中
         VipRoute dbRoute = vipRouteDao.save(routeEntity);
 
-        addGeometryToVipRoute(dbRoute);
+//        addGeometryToVipRoute(dbRoute);
 
         return RESTRetUtils.successObj(dbRoute);
     }
