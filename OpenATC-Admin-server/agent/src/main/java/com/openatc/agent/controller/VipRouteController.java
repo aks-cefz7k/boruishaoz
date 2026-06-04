@@ -1,6 +1,7 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.VipRoute;
 import com.openatc.agent.model.VipRouteDevice;
@@ -195,9 +196,10 @@ public class VipRouteController {
                 return restRet;
             } else {
                 messageData = (MessageData) restRet.getData();
-                int succeess = messageData.getData().getAsJsonObject().get("success").getAsInt();
-                if(succeess != 0) // 非0执行失败
+                JsonElement succeess = messageData.getData().getAsJsonObject().get("success");
+                if(succeess == null || succeess.getAsInt() != 0){
                     return restRet;
+                }
             }
 
             onExcuteDevlist.add(agentid);
