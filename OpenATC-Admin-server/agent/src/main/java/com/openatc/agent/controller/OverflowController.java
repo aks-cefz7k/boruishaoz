@@ -10,6 +10,7 @@ import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.StatusPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.openatc.core.common.IErrorEnumImplOuter.E_9003;
+import static com.openatc.core.common.IErrorEnumImplOuter.E_9004;
 
 
 @RestController
@@ -40,11 +42,29 @@ public class OverflowController {
     @Autowired
     private OptService optService;
 
+    @Autowired
+    private  DevController devController;
+
     //查询整个区域
     @GetMapping(value = "/overflowdetector")
     public RESTRetBase GetOverflowdetetor(){
-        List<OverflowDetector> all = overflowDetectorRepository.findAll();
-        return RESTRetUtils.successObj(all);
+        List<OverflowDetector> OverflowDetectors = overflowDetectorRepository.findAll();
+        RESTRet<List<AscsBaseModel>> ret = devController.GetDevs();
+        List<AscsBaseModel> ascs = ret.getData();
+
+        // 查询路口名和路口状态
+        for(OverflowDetector OverflowDetector : OverflowDetectors){
+            for( Overflow overflow : OverflowDetector.getOverflows()){
+                for (AscsBaseModel asc : ascs){
+                    if(asc.getAgentid().equals(overflow.getIntersectionid())){
+                        overflow.setIntersectionname(asc.getName());
+                        overflow.setIntersectionstate(asc.getState());
+                        break;
+                    }
+                }
+            }
+        }
+        return RESTRetUtils.successObj(OverflowDetectors);
     }
 
     //更新区域信息
@@ -54,12 +74,12 @@ public class OverflowController {
         Optional<OverflowDetector> byId = overflowDetectorRepository.findById(ofdEntity.getId());
         if(ofdEntity.getOverflows() == null)
         {
-            OverflowDetector overflowDetector = byId.get();
-            overflowDetector.setOverflowDetectorId(ofdEntity.getOverflowDetectorId());
-            overflowDetector.setType(ofdEntity.getType());
-            overflowDetector.setStatus(ofdEntity.getStatus());
-            overflowDetector.setDescription(ofdEntity.getDescription());
-            rr = overflowDetectorRepository.save(overflowDetector);
+            OverflowDetector OverflowDetector = byId.get();
+            OverflowDetector.setOverflowDetectorId(ofdEntity.getOverflowDetectorId());
+            OverflowDetector.setType(ofdEntity.getType());
+            OverflowDetector.setStatus(ofdEntity.getStatus());
+            OverflowDetector.setDescription(ofdEntity.getDescription());
+            rr = overflowDetectorRepository.save(OverflowDetector);
         }else{
             rr = overflowDetectorRepository.save(ofdEntity);
         }
@@ -69,6 +89,11 @@ public class OverflowController {
     //添加区域信息
     @PostMapping(value = "/overflowdetector")
     public RESTRetBase AddOverflowdetector(@RequestBody OverflowDetector ofdEntity){
+        // 查找是否有重命名
+        List<Integer> ids = overflowDetectorRepository.findOverflowDetbyName(ofdEntity.getDescription());
+        if(ids.size() > 0)
+            return RESTRetUtils.errorObj(E_9004);
+
         OverflowDetector rr = overflowDetectorRepository.save(ofdEntity);
         return RESTRetUtils.successObj(rr);
     }

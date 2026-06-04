@@ -25,6 +25,10 @@ public class Overflow {
     private int controltime;          //时间
     private int level;                //等级
     private Boolean isopen;           //是否开启
+    @Transient
+    private String  intersectionname;      //路口名称
+    @Transient
+    private String intersectionstate;      //路口状态
 }
 
 

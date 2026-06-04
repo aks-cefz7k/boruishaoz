@@ -230,12 +230,8 @@ public class AscsDao {
         String sql =
                 "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid ='"
                         + id + "'";
-        List<AscsBaseModel> listAscs = null;
-        try {
-            listAscs = getDevByPara(sql);
-        } catch (ParseException e) {
-            logger.warning("getAscsByID error :" + e.getMessage());
-        }
+        List<AscsBaseModel> listAscs = getDevByPara(sql);
+
         if (listAscs.size() > 0) {
             ascsBaseModel = listAscs.get(0);
         }
@@ -273,7 +269,7 @@ public class AscsDao {
         return list;
     }
 
-    public List<AscsBaseModel> getDevByPara(String sql) throws ParseException {
+    public List<AscsBaseModel> getDevByPara(String sql)  {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //使用Sqlite数据库时，两个请求同时访问会将数据库锁定，因此添加此处添加一个锁
         List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
@@ -295,7 +291,11 @@ public class AscsDao {
             tt.setGeometry(gson.fromJson(geometry, MyGeometry.class));
             tt.setState((String) map.get("state"));
             if (map.get("lastTime") != null) {
-                tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
+                try {
+                    tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
+                } catch (ParseException e) {
+                    tt.setLastTime(null);
+                }
             }
             tt.setName((String) map.get("name"));
             JsonObject jsonparam = new JsonParser().parse(map.get("jsonparam").toString()).getAsJsonObject();

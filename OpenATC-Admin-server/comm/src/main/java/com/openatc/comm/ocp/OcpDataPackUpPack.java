@@ -38,121 +38,94 @@ public class OcpDataPackUpPack { //数据表内容宏定义
 
     //操作类型字符串
     public String StringOperatorType(byte operatorNumber) {
-        if (operatorNumber == -128) {
-            return getrequest;
+        switch (operatorNumber) {
+            case -128:
+                return getrequest;
+            case -125:
+                return getresponse;
+            case -127:
+                return setrequest;
+            case -124:
+                return setresponse;
+            case -126:
+                return report;
+            case -123:
+                return erroresponse;
         }
-        if (operatorNumber == -125) {
-            return getresponse;
-        }
-        if (operatorNumber == -127) {
-            return setrequest;
-        }
-        if (operatorNumber == -124) {
-            return setresponse;
-        }
-        if (operatorNumber == -126) {
-            return report;
-        }
-        if (operatorNumber == -123) {
-            return erroresponse;
-        }
-        return null;
+        return erroresponse;
     }
 
     public String StringOperatorObj(byte operatorObj) {
-        if (operatorObj == 0x01 || operatorObj == 0x51) {
-            return login;
+        switch (operatorObj) {
+            case 0x01:
+            case 0x51:
+                return login;
+            case 0x02:
+                return volume;
+            case 0x03:
+                return workstatus;
+            case 0x04:
+                return lampcolor;
+            case 0x05:
+                return time;
+            case 0x06:
+                return signalgroup;
+            case 0x07:
+                return phase;
+            case 0x08:
+                return timepattern;
+            case 0x09:
+                return scheduleplan;
+            case 0x0A:
+                return ControlPattern;
+            case 0x0B:
+                return falut;
+            case 0x0C:
+                return atcversion;
+            case 0x0D:
+                return paramversion;
+            case 0x0E:
+                return code;
+            case INFO_TYPE_REMOTE_CONTROL:
+                return remote;
+            case 0x10:
+                return detector;
+            case 0x11:
+                return overlap;
+            case 0x12:
+                return scheduledate;
+            case 0x24:
+            case 0x23:
+            case 0x18:
+                return allfeature;
+            case -94:
+                return paramip;
+            case -93:
+                return serialport;
+            case -92:
+                return manualpanel;
+            case -91:
+                return updatedisk;
+            case -90:
+                return systemremote;
+            case -89:
+                return systemlog;
+            case -88:
+                return channelcheck;
+            case -87:
+                return volumelog;
+            case -86:
+                return interrupt;
+            case -85:
+                return channelstatus;
+            case -84:
+                return channellampstatus;
+            case -83:
+                return systemcustom;
+            case INFO_TYPE_SYSTEM_UPDATE:
+                return systemupdate;
         }
-        if (operatorObj == 0x02) {
-            return volume;
-        }
-        if (operatorObj == 0x03) {
-            return workstatus;
-        }
-        if (operatorObj == 0x04) {
-            return lampcolor;
-        }
-        if (operatorObj == 0x05) {
-            return time;
-        }
-        if (operatorObj == 0x06) {
-            return signalgroup;
-        }
-        if (operatorObj == 0x07) {
-            return phase;
-        }
-        if (operatorObj == 0x08) {
-            return timepattern;
-        }
-        if (operatorObj == 0x09) {
-            return scheduleplan;
-        }
-        if (operatorObj == 0x0A) {
-            return ControlPattern;
-        }
-        if (operatorObj == 0x0B) {
-            return falut;
-        }
-        if (operatorObj == 0x0C) {
-            return atcversion;
-        }
-        if (operatorObj == 0x0D) {
-            return paramversion;
-        }
-        if (operatorObj == 0x0E) {
-            return code;
-        }
-        if (operatorObj == 0x0F) {
-            return remote;
-        }
-        if (operatorObj == 0x10) {
-            return detector;
-        }
-        if (operatorObj == 0x11) {
-            return overlap;
-        }
-        if (operatorObj == 0x12) {
-            return scheduledate;
-        }
-        if (operatorObj == 0x24 || operatorObj == 0x23 || operatorObj == 0x18) {
-            return allfeature;
-        }
-        if (operatorObj == -94) {
-            return paramip;
-        }
-        if (operatorObj == -93) {
-            return serialport;
-        }
-        if (operatorObj == -92) {
-            return manualpanel;
-        }
-        if (operatorObj == -91) {
-            return updatedisk;
-        }
-        if (operatorObj == -90) {
-            return systemremote;
-        }
-        if (operatorObj == -89) {
-            return systemlog;
-        }
-        if (operatorObj == -88) {
-            return channelcheck;
-        }
-        if (operatorObj == -87) {
-            return volumelog;
-        }
-        if (operatorObj == -86) {
-            return interrupt;
-        }
-        if (operatorObj == -85) {
-            return channelstatus;
-        }
-        if (operatorObj == -84) {
-            return channellampstatus;
-        }
-        if (operatorObj == -83) {
-            return systemcustom;
-        }
+
         return null;
     }
 
@@ -259,11 +232,17 @@ public class OcpDataPackUpPack { //数据表内容宏定义
             case systemcustom:// 设备参数
                 eight = INFO_TYPE_SYSTEM_CUSTOM;
                 break;
-            case channelcheck:// 设备参数
+            case channelcheck:// 通道检测
                 eight = INFO_TYPE_SYSTEM_CHANNEL_CHECK;
                 break;
-            case interrupt:// 设备参数
+            case interrupt:// 方案干预
                 eight = INFO_TYPE_PATTERN_INTERRUPT;
+                break;
+            case remote:// 远程控制
+                eight = INFO_TYPE_REMOTE_CONTROL;
+                break;
+            case systemupdate:// 远程控制
+                eight = INFO_TYPE_SYSTEM_UPDATE;
                 break;
             default:
         }
@@ -406,6 +385,12 @@ public class OcpDataPackUpPack { //数据表内容宏定义
                 break;
             case interrupt:// 查询设备参数
                 three = DATA_LINK_CONTROL;
+                break;
+            case remote:// 远程控制
+                three = DATA_LINK_INTER_ORDER;
+                break;
+            case systemupdate:// 远程控制
+                three = DATA_LINK_PARAM_TRAMFER;
                 break;
             default:
         }

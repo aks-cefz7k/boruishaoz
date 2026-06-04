@@ -90,7 +90,7 @@ public class DevController {
 
     //得到所有设备
     @GetMapping(value = { "/devs" ,  "/devs/all"})
-    public RESTRetBase GetDevs() throws ParseException {
+    public RESTRet GetDevs() {
         String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
         mDao.alterStatus(ascsBaseModels);
