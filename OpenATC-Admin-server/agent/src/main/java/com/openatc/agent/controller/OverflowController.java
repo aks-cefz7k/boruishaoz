@@ -155,6 +155,7 @@ public class OverflowController {
         List<String> error_offlines = new ArrayList<>();
         List<String> error_fails = new ArrayList<>();
 
+        RESTRet restRet = null;
 
         for(Overflow ov: overflowList)
         {
@@ -163,11 +164,11 @@ public class OverflowController {
             if(statusPattern == null){
                 //没有取到方案
                 error_offlines.add(agentid);
-                logger.warn("Device not on line, agentid = " + agentid);
+                logger.warn("Can not get pattern, agentid = " + agentid);
                 return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9001);
             }
 
-            RESTRet restRet = optService.InterruptPattern(statusPattern, agentid);
+            restRet = optService.InterruptPattern(statusPattern, agentid);
             if(restRet.isSuccess() == false){
                 logger.warn("Device overflow control failed, agentid = " + agentid);
                 error_fails.add(agentid);
@@ -180,7 +181,7 @@ public class OverflowController {
 
         // todo 设备控制需要重构为单路口方式
         overflowDetectorRepository.updateStatusById(id,OverflowDetOn);
-        return RESTRetUtils.successObj();
+        return restRet;
     }
 
 
@@ -192,10 +193,11 @@ public class OverflowController {
         List<Overflow>  overflowList = new ArrayList<>();
         List<String> error_fails = new ArrayList<>();
         overflowList = overflowRepository.findByPatternid(id);
+        RESTRet restRet = null;
         for(Overflow ov: overflowList)
         {
             String agentid = ov.getIntersectionid();
-            RESTRet restRet = optService.AutoControl(agentid);
+            restRet = optService.AutoControl(agentid);
             if(restRet.isSuccess() == false){
                 error_fails.add(agentid);
                 return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9002);
@@ -204,6 +206,6 @@ public class OverflowController {
 
         // todo 设备控制需要重构为单路口方式
         overflowDetectorRepository.updateStatusById(id,OverflowDetOff);
-        return RESTRetUtils.successObj();
+        return restRet;
     }
 }

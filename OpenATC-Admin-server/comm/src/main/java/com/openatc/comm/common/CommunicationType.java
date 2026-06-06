@@ -29,11 +29,11 @@ public enum CommunicationType {
 
     public static String PLATFORM_TYPE_OPENATC = "OpenATC";
 
-    public static int EXANGE_TYPE_DEVICE = 0;
-    public static int EXANGE_TYPE_CENTER = 1;
+    public static int EXANGE_TYPE_DEVICE = 0; // 与设备的通讯，通过ip+端口来区分不同设备
+    public static int EXANGE_TYPE_CENTER = 1; // 与平台的通讯，通过agentid来区分不同设备
 
-    public static int COMM_SERVER_TYPE_CONFIGER = 0;
-    public static int COMM_SERVER_TYPE_CENTER = 1;
+    public static int COMM_SERVER_TYPE_CONFIGER = 0; // 配置软件服务标志
+    public static int COMM_SERVER_TYPE_CENTER = 1; // 平台服务标志
 
     public static int COMM_SOCKET_TYPE_UDP = 0;
     public static int COMM_SOCKET_TYPE_TCP = 1;

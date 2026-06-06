@@ -18,6 +18,7 @@ import java.net.SocketException;
 import java.text.ParseException;
 
 import static com.openatc.comm.common.CommunicationType.COMM_SOCKET_TYPE_UDP;
+import static com.openatc.comm.common.CommunicationType.EXANGE_TYPE_CENTER;
 
 
 @RestController
@@ -48,7 +49,7 @@ public class ThirdPlatMessageController {
 
         try {
             responceData = commClient
-                    .exange(adapterIP, adapterPort, protocolType, 1, message,COMM_SOCKET_TYPE_UDP);
+                    .exange(adapterIP, adapterPort, protocolType, EXANGE_TYPE_CENTER, message,COMM_SOCKET_TYPE_UDP);
         } catch (Exception e) {
             e.printStackTrace();
         }

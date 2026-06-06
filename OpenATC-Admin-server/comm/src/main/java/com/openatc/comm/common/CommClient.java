@@ -130,14 +130,14 @@ public class CommClient {
 
 
     // 原始通讯接口，通过设备IP和端口，发送和接收消息
-    public MessageData exange(String ip, int port, String protype, int platform, MessageData sendMsg, int socketType) throws UnsupportedEncodingException {
+    public MessageData exange(String ip, int port, String protype, int exangeType, MessageData sendMsg, int socketType) throws UnsupportedEncodingException {
 
 //        long starttime = System.currentTimeMillis();
 //        long endtime = 0L;
         String agentId = sendMsg.getAgentid();
 
         // 产品工厂类
-        ProtocolFactory factory = new scpFactory();
+        ProtocolFactory factory = null;
         // 协议判断
         if (protype.equals(OCP_PROTYPE)) {
             factory = new ocpFactory();
@@ -177,7 +177,7 @@ public class CommClient {
         }
 
         // 创建消息通讯对象
-        Communication communication = factory.createCommunication(message,commType, platform);
+        Communication communication = factory.createCommunication(message,commType, exangeType);
 
         // 发送
         int sendrev = 0;

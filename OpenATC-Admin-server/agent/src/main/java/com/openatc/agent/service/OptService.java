@@ -1,10 +1,12 @@
 package com.openatc.agent.service;
 
+import com.google.gson.JsonObject;
 import com.openatc.agent.controller.MessageController;
 import com.openatc.agent.model.OptDev;
 import com.openatc.agent.model.ControlInterrupt;
 import com.openatc.agent.model.OptRing;
 import com.openatc.agent.model.Overflow;
+import com.openatc.comm.data.MessageData;
 import com.openatc.core.model.RESTRet;
 import com.openatc.model.model.ControlPattern;
 import com.openatc.model.model.StatusPattern;
@@ -64,7 +66,16 @@ public class OptService {
         controlInterrupt.setOffset(0);
         controlInterrupt.setRings(ringlst);
 
-        return messageController.SetControlInterrupt(agentid,controlInterrupt);
+        RESTRet<MessageData> restRet = messageController.SetControlInterrupt(agentid,controlInterrupt);
+        MessageData messageData = restRet.getData();
+        JsonObject data = messageData.getData().getAsJsonObject();
+        if(data.get("return").getAsString().equals("success")){
+            JsonObject responsedata = new JsonObject();
+            responsedata.addProperty("success",1);
+            messageData.setData(responsedata);
+        }
+
+        return restRet;
     }
 
 
@@ -77,11 +88,13 @@ public class OptService {
 
 
         StatusPattern tempPattern = messageController.GetStatusPattern(agentid) ;
-        if(tempPattern == null){
+        if(tempPattern == null)
             return null;
-        }
 
         List<List<Integer>> stages = tempPattern.getStages();
+        if(stages == null)
+            return null;
+
         List<StatusPatternPhase> phases = tempPattern.getPhase();
         double factor = 1.0;
         double param = 0.0;
