@@ -157,6 +157,9 @@ public class OverflowController {
 
         RESTRet restRet = null;
 
+        if (overflowList.size() == 0)
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9005);
+
         for(Overflow ov: overflowList)
         {
             String agentid = ov.getIntersectionid();

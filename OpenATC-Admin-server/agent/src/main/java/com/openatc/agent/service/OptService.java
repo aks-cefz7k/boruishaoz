@@ -66,13 +66,15 @@ public class OptService {
         controlInterrupt.setOffset(0);
         controlInterrupt.setRings(ringlst);
 
-        RESTRet<MessageData> restRet = messageController.SetControlInterrupt(agentid,controlInterrupt);
-        MessageData messageData = restRet.getData();
-        JsonObject data = messageData.getData().getAsJsonObject();
-        if(data.get("return").getAsString().equals("success")){
-            JsonObject responsedata = new JsonObject();
-            responsedata.addProperty("success",1);
-            messageData.setData(responsedata);
+        RESTRet restRet = messageController.SetControlInterrupt(agentid,controlInterrupt);
+        if(restRet.isSuccess()){
+            MessageData messageData = (MessageData) restRet.getData();
+            JsonObject data = messageData.getData().getAsJsonObject();
+            if(data.get("return").getAsString().equals("success")){
+                JsonObject responsedata = new JsonObject();
+                responsedata.addProperty("success",1);
+                messageData.setData(responsedata);
+            }
         }
 
         return restRet;

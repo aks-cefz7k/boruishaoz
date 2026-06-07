@@ -94,6 +94,7 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     E_9002("9002", "Overflow recovery failed"),
     E_9003("9003", "Overflow is executing, can not be deleted"),
     E_9004("9004", "Overflow pattern name is already exist"),
+    E_9005("9005", "Overflow pattern is empty"),
 
     //组织机构错误
     E_11001("11001", "Organize Repeat Name!");
