@@ -15,6 +15,7 @@ import com.openatc.model.model.StatusPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -48,7 +49,8 @@ public class OverflowController {
     //查询整个区域
     @GetMapping(value = "/overflowdetector")
     public RESTRetBase GetOverflowdetetor(){
-        List<OverflowDetector> OverflowDetectors = overflowDetectorRepository.findAll();
+        List<OverflowDetector> OverflowDetectors = overflowDetectorRepository.findAll(new Sort(Sort.Direction.ASC,"id"));
+
         RESTRet<List<AscsBaseModel>> ret = devController.GetDevs();
         List<AscsBaseModel> ascs = ret.getData();
 

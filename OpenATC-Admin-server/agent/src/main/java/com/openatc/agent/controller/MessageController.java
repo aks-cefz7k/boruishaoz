@@ -13,6 +13,7 @@ package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.openatc.agent.model.ControlInterrupt;
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
@@ -120,13 +121,11 @@ public class MessageController {
                 logger.warning("token of set-request is null;");
             }
 //            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            try {
-                THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, token);
-                hisParamService.insertHisParam(tParams);
-            } catch (Exception e) {
-                logger.warning(e.toString());
-                return responceData;
-            }
+
+            THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, token);
+            hisParamService.insertHisParam(tParams);
+            return responceData;
+
         }
         return responceData;
     }
@@ -227,8 +226,10 @@ public class MessageController {
                 hisParams.setResponsebody(responceData.getData().toString());
                 //消息子类型
                 int subInfoType = 0;
-                if (operation.equals("set-response")) {//控制消息
-                    subInfoType = responceData.getData().getAsJsonObject().get("control").getAsInt();
+                if (operation.equals("set-response")) {
+                    //控制消息，需要判断子类型
+                    if(requestData.getInfotype().equals(CosntDataDefine.ControlPattern))
+                        subInfoType = responceData.getData().getAsJsonObject().get("control").getAsInt();
                 }
                 hisParams.setSubInfoType(subInfoType);
                 //请求错误码

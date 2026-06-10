@@ -72,7 +72,7 @@ public class OptService {
             JsonObject data = messageData.getData().getAsJsonObject();
             if(data.get("return").getAsString().equals("success")){
                 JsonObject responsedata = new JsonObject();
-                responsedata.addProperty("success",1);
+                responsedata.addProperty("success",0);
                 messageData.setData(responsedata);
             }
         }
