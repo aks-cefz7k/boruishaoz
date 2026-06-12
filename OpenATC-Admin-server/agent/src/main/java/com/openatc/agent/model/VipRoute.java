@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
-@Table(name = "vip_route", schema = "public")
+@Table(name = "vip_route")
 @Entity
 public class VipRoute {
     @Id

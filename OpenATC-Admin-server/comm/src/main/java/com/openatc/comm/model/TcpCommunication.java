@@ -13,8 +13,11 @@ package com.openatc.comm.model;
 
 import com.openatc.comm.data.MessageData;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.logging.Logger;
 
 // 使用随机端口发送和监听UDP数据，适用于配置工具的直连网络，不含监听主动上报消息功能

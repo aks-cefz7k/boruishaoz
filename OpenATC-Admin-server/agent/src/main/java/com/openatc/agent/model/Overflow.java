@@ -12,7 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "overflow", schema = "public")
+@Table(name = "overflow")
 public class Overflow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,10 @@ public class Overflow {
     private int controltime;          //时间
     private int level;                //等级
     private Boolean isopen;           //是否开启
+    @Transient
+    private String  intersectionname;      //路口名称
+    @Transient
+    private String intersectionstate;      //路口状态
 }
 
 

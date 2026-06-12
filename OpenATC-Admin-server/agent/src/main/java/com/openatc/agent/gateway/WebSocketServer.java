@@ -95,6 +95,8 @@ public class WebSocketServer {
     // 接受username
     private String username = "kissAdmin";
 
+    Gson gson = new Gson();
+
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
@@ -110,9 +112,9 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(String message) {
         log.info("onMessage sessionId:{},receive:{}", session.getId(), message);
-        Gson gs = new Gson();
+
         WebSocketSub wss;
-        wss = gs.fromJson(message, WebSocketSub.class);
+        wss = gson.fromJson(message, WebSocketSub.class);
         String infoType = wss.getInfotype().trim(); //订阅类型
         String subscribe = wss.getSubscribe(); //开始or结束标
         String[] para = wss.getParam(); //订阅的通道

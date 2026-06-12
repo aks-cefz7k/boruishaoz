@@ -1,0 +1,51 @@
+server:
+    port: 55425
+
+
+
+
+
+
+
+roadnetwork:
+    crosses:
+        -   name: cfxj
+            agentid: 1631933545182
+            yellow: 3
+            red: 2
+            loss: 3
+            phases:
+                -   id: 1
+                    flowperhour: 200
+                    saturation: 1650
+                -   id: 2
+                    flowperhour: 200
+                    saturation: 1650
+                -   id: 3
+                    flowperhour: 200
+                    saturation: 1650
+                -   id: 4
+                    flowperhour: 200
+                    saturation: 1650
+                -   id: 5
+                    flowperhour: 200
+                    saturation: 1650
+                -   id: 6
+                    flowperhour: 200
+                    saturation: 1650
+                -   id: 7
+                    flowperhour: 200
+                    saturation: 1650
+                -   id: 8
+                    flowperhour: 200
+                    saturation: 1650
+            barriers:
+                -   id: 1
+                    phases: [[1, 2], [3, 4]]
+                -   id: 2
+                    phases: [[5, 6], [7, 8]]
+            rings:
+                -   num: 1
+                    sequence: [1, 2, 5, 6]
+                -   num: 2
+                    sequence: [3, 4, 7, 8]

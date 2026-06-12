@@ -2,7 +2,10 @@ package com.openatc.agent.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
@@ -26,6 +29,7 @@ public class Fault {
     private String operator; //故障记录操作者
     private Long operationTime; //操作事件
     private String enumerate;  //0:未处理 1:已忽略 2:已处理
+    private String deleteFlag = "0";  //0:未删除 1:已删除
 
 }
 

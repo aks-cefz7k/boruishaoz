@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -34,7 +33,7 @@ import java.util.logging.Logger;
 /**
  * @author
  * @ClassName: KDAgent
- * @Description: TODO
+ * @Description:
  * @date 2019年10月19日 下午6:50:52
  */
 @EnableScheduling

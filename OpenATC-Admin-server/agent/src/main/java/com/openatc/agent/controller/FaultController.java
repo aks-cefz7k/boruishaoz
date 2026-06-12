@@ -13,6 +13,7 @@ import com.openatc.agent.utils.TokenUtil;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,9 @@ public class FaultController {
 
     @Autowired
     protected TokenUtil tokenUtil;
+
+    @Autowired(required = false)
+    AscsDao mDao;
 
     Gson gson = new Gson();
 
@@ -132,11 +136,15 @@ public class FaultController {
         if (jsonObject == null) {
             return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
         }
-        String agentId = jsonObject.get("agentId") == null ? Integer.MAX_VALUE + "" : jsonObject.get("agentId").getAsString();
+        String agentId = jsonObject.get("agentId") == null ? "" : jsonObject.get("agentId").getAsString();
+        String enumerate = jsonObject.get("enumerate") == null ? "" : jsonObject.get("enumerate").getAsString();
+        int m_byFaultBoardType = jsonObject.get("m_byFaultBoardType") == null ? 0 : jsonObject.get("m_byFaultBoardType").getAsInt();
+        int m_wFaultType = jsonObject.get("m_wFaultType") == null ? 0 : jsonObject.get("m_wFaultType").getAsInt();
         Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
-        Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
+        Integer pageRow = jsonObject.get("pageRow") == null ? 999999999 : jsonObject.get("pageRow").getAsInt();
         String beginTime = jsonObject.get("beginTime") == null ? "0" : jsonObject.get("beginTime").getAsString();
         String endTime = jsonObject.get("endTime") == null ? "0" : jsonObject.get("endTime").getAsString();
+        Boolean isCurrentFault = jsonObject.get("isCurrentFault") == null ? false : jsonObject.get("isCurrentFault").getAsBoolean();
         long bTime;
         long eTime;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -158,9 +166,26 @@ public class FaultController {
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
-            if (!agentId.equals(Integer.MAX_VALUE + "")) {
+            if (!agentId.equals("")) {
                 predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
             }
+            // 确认结果
+            if (!enumerate.equals("")) {
+                predicateList.add(criteriaBuilder.equal(root.get("enumerate"), enumerate));
+            }
+            // 板卡类型
+            if (m_byFaultBoardType != 0) {
+                predicateList.add(criteriaBuilder.equal(root.get("m_byFaultBoardType"), m_byFaultBoardType));
+            }
+            // 主故障类型
+            if (m_wFaultType != 0) {
+                predicateList.add(criteriaBuilder.equal(root.get("m_wFaultType"), m_wFaultType));
+            }
+            // 当前故障
+            if (isCurrentFault) {
+                predicateList.add(criteriaBuilder.equal(root.get("m_unFaultRenewTime"), 0));
+            }
+            predicateList.add(criteriaBuilder.equal(root.get("deleteFlag"), "0"));
             predicateList.add(criteriaBuilder.between(root.get("m_unFaultOccurTime"), l[0], l[1]));
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         };
@@ -234,17 +259,27 @@ public class FaultController {
     public List<JsonObject> transformFaultList(List<Fault> faults) {
         List<JsonObject> jsonObjects = new ArrayList<>();
         for (Fault fault : faults) {
-            JsonObject jsonObject = transformFault(fault);
+            //查路口名
+            String agentName = "";
+            AscsBaseModel ascsBaseModel = mDao.getAscsByID(fault.getAgentid());
+            if (ascsBaseModel != null) {
+                agentName = ascsBaseModel.getName();
+                if (agentName.equals("")) {
+                    agentName = ascsBaseModel.getAgentid();
+                }
+            }
+            JsonObject jsonObject = transformFault(fault,agentName);
             jsonObjects.add(jsonObject);
         }
         return jsonObjects;
     }
 
-    private JsonObject transformFault(Fault fault) {
+    private JsonObject transformFault(Fault fault,String name) {
         JsonObject jsonObject = gson.fromJson(gson.toJson(fault), JsonObject.class);
         jsonObject.addProperty("m_unFaultOccurTime", fault.getM_unFaultOccurTime() == 0 ? "0" : DateUtil.longToString(fault.getM_unFaultOccurTime() * 1000));
         jsonObject.addProperty("m_unFaultRenewTime", fault.getM_unFaultRenewTime() == 0 ? "0" : DateUtil.longToString(fault.getM_unFaultRenewTime() * 1000));
         jsonObject.addProperty("operationTime", (fault.getOperationTime() == null || fault.getOperationTime() == 0) ? "0" : DateUtil.longToString(fault.getOperationTime() * 1000));
+        jsonObject.addProperty("name", (name));
         return jsonObject;
     }
     /**

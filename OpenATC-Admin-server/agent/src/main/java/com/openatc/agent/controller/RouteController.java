@@ -24,10 +24,11 @@ import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
 import com.openatc.core.common.Constants;
 import com.openatc.core.common.IErrorEnumImplInner;
-import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.Split;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
 /**
  * @author kedacom
  * @ClassName: RouteController
- * @Description: TODO
+ * @Description:
  * @date 2019年12月4日 下午16:34:17
  */
 @RestController
@@ -189,13 +190,13 @@ public class RouteController {
 
             int phaseno = 0;
             int cycle = 100;
-            List<Device> deviceList = routePara.getDevs();
-            for (Device device : deviceList) {
+            List<RouteIntsection> deviceList = routePara.getDevs();
+            for (RouteIntsection device : deviceList) {
                 //得到距离
                 intslenth[device.getSortid() - 1] = device.getDistance();
 
                 //得到周期
-                cycle = device.getFeature().getPatternList().getCycle();
+                cycle = device.getFeature().getPatternList().get(0).getCycle();
                 //根据相位号得到协调相位值
                 if (routePara.getDirection().equals("up"))
                     phaseno = device.getForwardphaseid();
@@ -204,17 +205,17 @@ public class RouteController {
                 else
                     phaseno = device.getForwardphaseid();
 
-                List<Ring>[] rings = device.getFeature().getPatternList().getRings();
+                List<List<Split>> rings = device.getFeature().getPatternList().get(0).getRings();
 
                 label:
-                for (int i = 0; i < rings.length; i++) {
-                    List<Ring> ringList = rings[i];
-                    for (Ring ring : ringList) {
-                        if (ring.getId() == phaseno) {
-                            intssplit[device.getSortid() - 1] = ring.getValue();
+                for (int i = 0; i < rings.size(); i++) {
+                    List<Split> ring = rings.get(i);
+                    for (Split split : ring) {
+                        if (split.getId() == phaseno) {
+                            intssplit[device.getSortid() - 1] = split.getValue();
                             break label;
                         } else {
-                            intsabs[device.getSortid() - 1] += ring.getValue();
+                            intsabs[device.getSortid() - 1] += split.getValue();
                         }
                     }
                 }
@@ -232,16 +233,16 @@ public class RouteController {
             else
                 intsoffset = kdalgorithm.offsetByBiDirection(intslenth, intsvelup, intsveldown, intssplit);
 
-            List<Device> routeOptList = routeOpt.getDevs();
+            List<RouteIntsection> routeOptList = routeOpt.getDevs();
 
-            for (Device device : routeOptList) {
+            for (RouteIntsection device : routeOptList) {
 
                 //把每个路口相位差转成绝对相位差，start位置也会变化
                 intsoffset[device.getSortid() - 1] -= intsabs[device.getSortid() - 1];
                 if (intsoffset[device.getSortid() - 1] < 0)
                     intsoffset[device.getSortid() - 1] += cycle;
 
-                device.getFeature().getPatternList().setOffset(intsoffset[device.getSortid() - 1]);
+                device.getFeature().getPatternList().get(0).setOffset(intsoffset[device.getSortid() - 1]);
             }
 
             List<Greenwave> greenwaveList = new LinkedList<>();
@@ -324,10 +325,10 @@ public class RouteController {
             //featureList就是要发送的patternList
             featureList = device.getAsJsonObject().get("feature").getAsJsonObject();
             MessageData messageData = new MessageData(intersectionid, CosntDataDefine.setrequest, "feature/" + feature, featureList);
-            RESTRet<MessageData> retBase = null;
-            retBase = messageController.postDevsMessage(null, messageData);
+
+            RESTRet<MessageData> retBase = messageController.postDevsMessage(null, messageData);
             if (retBase.getMessage().equals("Device not online!")) {
-                DevCommError devCommError = RESTRetUtils.errorObj(intersectionid, CosntDataDefine.errorrequest, "feature/" + feature, IErrorEnumImplInner.E_301);
+                InnerError devCommError = RESTRetUtils.errorDevCommObj(intersectionid, IErrorEnumImplInner.E_301, retBase.getData());
                 return RESTRetUtils.errorDetialObj(E_4003, devCommError);
             }
         }

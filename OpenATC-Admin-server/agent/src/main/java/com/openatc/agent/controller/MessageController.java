@@ -11,15 +11,24 @@
  **/
 package com.openatc.agent.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.openatc.agent.model.ControlInterrupt;
 import com.openatc.agent.model.THisParams;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.utils.TokenUtil;
 import com.openatc.comm.common.CommClient;
-import com.openatc.model.model.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
+import com.openatc.comm.ocp.CosntDataDefine;
+import com.openatc.comm.ocp.DataParamMD5;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
+import com.openatc.model.model.ControlPattern;
+import com.openatc.model.model.StatusPattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.net.SocketException;
-import java.text.ParseException;
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
+import com.alibaba.fastjson.JSONObject;
 
 import static com.openatc.agent.utils.MyHttpUtil.getIpAddress;
-import static com.openatc.comm.common.CommunicationType.*;
+import static com.openatc.comm.common.CommunicationType.COMM_SERVER_TYPE_CENTER;
 import static com.openatc.core.common.IErrorEnumImplOuter.E_8001;
 
 
@@ -61,6 +70,9 @@ public class MessageController {
     @Autowired
     protected TokenUtil tokenUtil;
 
+
+    Gson gson = new Gson();
+
     @PostConstruct
     public void init(){
         // 设置通讯模式为UDP固定端口
@@ -72,10 +84,10 @@ public class MessageController {
      * @param requestData 发送给设备的请求消息
      * @return RESTRetBase
      * @Title: postDevsMessage
-     * @Description: TODO
+     * @Description:
      */
     @PostMapping(value = "/devs/message")
-    public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) throws SocketException, ParseException {
+    public RESTRet postDevsMessage(HttpServletRequest httpServletRequest, @RequestBody MessageData requestData) {
 
         AscsBaseModel ascsBaseModel = mDao.getAscsByID(requestData.getAgentid());
 
@@ -92,9 +104,9 @@ public class MessageController {
             logger.info("GetDevById is null, request = " + requestData.toString());
             return RESTRetUtils.errorObj(false,E_8001);
         }
-        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
-        int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
-        String protocol = ascsBaseModel.getProtocol();
+//        String ip = ascsBaseModel.getJsonparam().get("ip").getAsString();
+//        int port = ascsBaseModel.getJsonparam().get("port").getAsInt();
+//        String protocol = ascsBaseModel.getProtocol();
 
         RESTRet responceData = commClient.devMessage(requestData, ascsBaseModel);
 
@@ -108,25 +120,78 @@ public class MessageController {
             if (token == null) {
                 logger.warning("token of set-request is null;");
             }
-            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
-            try {
-                hisParamService.insertHisParam(CreateHisParam(requestData, (MessageData) responceData.getData(), OperatorIp, token));
-            } catch (Exception e) {
-                logger.warning(e.toString());
-                return responceData;
-            }
+//            logger.info("=============Send set-request to " + requestData.getAgentid() + ":" + ip + ":" + port + ":" + protocol + ":" + requestData.getInfotype());
+
+            THisParams tParams = CreateHisParam(requestData, (RESTRet) responceData, OperatorIp, token);
+            hisParamService.insertHisParam(tParams);
+            return responceData;
+
         }
         return responceData;
     }
+
+    /**
+     * @param agentid  请求路口
+     * @return StatusPattern 实时方案状态
+     * @Title: GetStatusPattern
+     * @Description: 获取方案状态
+     */
+    public StatusPattern GetStatusPattern(String agentid)
+    {
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.getrequest, CosntDataDefine.workstatus);
+        RESTRet<MessageData> restRet = postDevsMessage(null, messageData);
+
+        if( !restRet.isSuccess() )
+            return null;
+
+        return gson.fromJson(restRet.getData().getData(),StatusPattern.class);
+    }
+
+    /**
+     * @param agentid  设置路口
+     * @param controlPattern  设置方案
+     * @return RESTRet 返回执行应答
+     * @Title: SetControlPattern
+     * @Description: 设置控制方式
+     */
+    public RESTRet SetControlPattern(String agentid, ControlPattern controlPattern)
+    {
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, gson.toJsonTree(controlPattern));
+        RESTRet restRet = postDevsMessage(null, messageData);
+        return restRet;
+    }
+
+    /**
+     * @param agentid  设置路口
+     * @param controlInterrupt  设置优化方案
+     * @return RESTRet 返回执行应答
+     * @Title: SetControlInterrupt
+     * @Description: 设置控制方式
+     */
+    public RESTRet SetControlInterrupt(String agentid, ControlInterrupt controlInterrupt) {
+        MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.interrupt, gson.toJsonTree(controlInterrupt));
+        RESTRet restRet = postDevsMessage(null, messageData);
+        return restRet;    }
+
+    @PostMapping(value = "/md5")
+    public RESTRet postDevsMessage(@RequestBody MessageData messageData) throws UnsupportedEncodingException {
+        JsonElement data = messageData.getData();
+        DataParamMD5 dataMD5 = new DataParamMD5();
+        String datamd5value = null;
+        if (data != null) {
+            datamd5value = dataMD5.getMD5(data.toString());
+        }
+        return RESTRetUtils.successObj(datamd5value);
+    }
+
     /**
      * @param requestData  请求消息
-     * @param responceData 应答消息
+     * @param res 应答消息
      * @return THisParams 操作记录
      * @Title: CreateHisParam
      * @Description: 生成一条操作记录
      */
-    private THisParams CreateHisParam(MessageData requestData, MessageData responceData, String ip, String token) {
-
+    private THisParams CreateHisParam(MessageData requestData, RESTRet res, String ip, String token) {
         logger.info( "Create History Param - requestData： " + requestData + " token：" + token);
 
         THisParams hisParams = new THisParams();
@@ -135,8 +200,7 @@ public class MessageController {
         //操作者
         if(username == null){
             hisParams.setOperator("");
-        }
-        else{
+        } else {
             hisParams.setOperator(username);
         }
         //操作时间自动生成
@@ -152,11 +216,54 @@ public class MessageController {
         } catch (Exception e) {
             hisParams.setRequestbody("{}");
         }
-        if(responceData != null){
-            //消息描述
-            hisParams.setStatus(responceData.getOperation());
-            //响应内容
-            hisParams.setResponsebody(responceData.getData().toString());
+        if (res.isSuccess()) {
+            MessageData responceData = (MessageData)res.getData();
+            if(responceData != null){
+                //消息描述
+                String operation = responceData.getOperation();
+                hisParams.setStatus(operation);
+                //响应内容
+                hisParams.setResponsebody(responceData.getData().toString());
+                //消息子类型
+                int subInfoType = 0;
+                if (operation.equals("set-response")) {
+                    //控制消息，需要判断子类型
+                    if(requestData.getInfotype().equals(CosntDataDefine.ControlPattern))
+                        subInfoType = responceData.getData().getAsJsonObject().get("control").getAsInt();
+                }
+                hisParams.setSubInfoType(subInfoType);
+                //请求错误码
+                String responseCode = res.getCode();
+                hisParams.setResponseCode(responseCode);
+                //特征参数错误码
+                int deviceErrorCode = 0;
+                if (operation.equals("error-response")) {
+                    deviceErrorCode = responceData.getData().getAsJsonObject().get("code").getAsInt();
+                }
+                hisParams.setDeviceErrorCode(deviceErrorCode);
+            }
+        } else {
+            InnerError innerError = (InnerError)res.getData();
+            if(innerError != null){
+                //消息描述
+                String operation = requestData.getOperation();
+                hisParams.setStatus(operation);
+                //响应内容
+                String responseBodey = JSONObject.toJSONString(innerError.getContent());
+                hisParams.setResponsebody(responseBodey);
+                //消息子类型
+                int subInfoType = 0;
+                hisParams.setSubInfoType(subInfoType);
+                //请求错误码
+                String responseCode = res.getCode();
+                hisParams.setResponseCode(responseCode);
+                //请求内部错误码
+                String innerErrorCode = innerError.getErrorCode();
+                hisParams.setInnerErrorCode(innerErrorCode);
+                //特征参数错误码
+                int deviceErrorCode = 0;
+                hisParams.setDeviceErrorCode(deviceErrorCode);
+            }
         }
         return hisParams;
     }

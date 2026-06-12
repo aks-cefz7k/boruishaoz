@@ -14,7 +14,7 @@ package com.openatc.agent.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.openatc.agent.model.*;
+import com.openatc.agent.model.DevCover;
 import com.openatc.model.model.AscsBaseModel;
 import com.openatc.model.model.MyGeometry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.sql.*;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.Date;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Repository
@@ -48,6 +47,8 @@ public class AscsDao {
     private StringRedisTemplate redisTemplate;
 
     private Map<String, String> thirdidToAgentidOcp = new HashMap<>();
+
+    Gson gson = new Gson();
 
     /**
      * 初始化OCP设备的真实ID和平台ID的映射关系
@@ -101,7 +102,6 @@ public class AscsDao {
 
     public List<AscsBaseModel> convertAscs(List<Map<String, Object>> lvRet) {
         List<AscsBaseModel> pl = new ArrayList<>();
-        Gson gs = new Gson();
         for (Map map : lvRet) {
 
             AscsBaseModel ascBase = new AscsBaseModel();
@@ -115,7 +115,7 @@ public class AscsDao {
             ascBase.setLastTime((Date) map.get("lastTime"));
             ascBase.setCode((String) map.get("code"));
             String geometry = (String) map.get("geometry");
-            ascBase.setGeometry(gs.fromJson(geometry, MyGeometry.class));
+            ascBase.setGeometry(gson.fromJson(geometry, MyGeometry.class));
             JsonObject jsonparam = new JsonParser().parse(map.get("jsonparam").toString()).getAsJsonObject();
             ascBase.setJsonparam(jsonparam);
             pl.add(ascBase);
@@ -230,12 +230,8 @@ public class AscsDao {
         String sql =
                 "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid ='"
                         + id + "'";
-        List<AscsBaseModel> listAscs = null;
-        try {
-            listAscs = getDevByPara(sql);
-        } catch (ParseException e) {
-            logger.warning("getAscsByID error :" + e.getMessage());
-        }
+        List<AscsBaseModel> listAscs = getDevByPara(sql);
+
         if (listAscs.size() > 0) {
             ascsBaseModel = listAscs.get(0);
         }
@@ -243,49 +239,29 @@ public class AscsDao {
     }
 
 
-    public int updatePattern(Params ps) {
-        //判断是否存在该agentid的记录
-        String sql = "SELECT count(id) FROM parameters where agentid = ?";
-        long count = jdbcTemplate.queryForObject(sql, Long.class, ps.getAgentid());
-        if (count != 0) {
-            sql = "update parameters set name=?,operator=?,params=(to_json(?::json)),opertime=LOCALTIMESTAMP where agentid=?";
-            int rows = jdbcTemplate.update(sql,
-                    ps.getName(),
-                    ps.getOperator(),
-                    ps.getParams().toString(),
-                    ps.getAgentid());
-            return rows;
-
-        } else {
-            sql = "INSERT INTO parameters(name,agentid,operator,params,opertime) VALUES (?,?,?,to_json(?::json),LOCALTIMESTAMP)";
-            int rows = jdbcTemplate.update(sql,
-                    ps.getName(),
-                    ps.getAgentid(),
-                    ps.getOperator(),
-                    ps.getParams().toString());
-            return rows;
-        }
-    }
-
-    public List<Params> getDevPatternByPara(String sql) {
-
-        List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
-        List<Params> abm = new ArrayList<>();
-        for (Map map : lvRet) {
-            Params tt = new Params();
-            tt.setId((int) map.get("id"));
-            tt.setName((String) map.get("name"));
-            tt.setAgentid((int) map.get("agentid"));
-            DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            String str = sdf.format(map.get("opertime"));
-            tt.setOpertime(str);
-            tt.setOperator((String) map.get("operator"));
-            JsonObject param = new JsonParser().parse(map.get("params").toString()).getAsJsonObject();
-            tt.setParams(param);
-            abm.add(tt);
-        }
-        return abm;
-    }
+//    public int updatePattern(Params ps) {
+//        //判断是否存在该agentid的记录
+//        String sql = "SELECT count(id) FROM parameters where agentid = ?";
+//        long count = jdbcTemplate.queryForObject(sql, Long.class, ps.getAgentid());
+//        if (count != 0) {
+//            sql = "update parameters set name=?,operator=?,params=(to_json(?::json)),opertime=LOCALTIMESTAMP where agentid=?";
+//            int rows = jdbcTemplate.update(sql,
+//                    ps.getName(),
+//                    ps.getOperator(),
+//                    ps.getParams().toString(),
+//                    ps.getAgentid());
+//            return rows;
+//
+//        } else {
+//            sql = "INSERT INTO parameters(name,agentid,operator,params,opertime) VALUES (?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+//            int rows = jdbcTemplate.update(sql,
+//                    ps.getName(),
+//                    ps.getAgentid(),
+//                    ps.getOperator(),
+//                    ps.getParams().toString());
+//            return rows;
+//        }
+//    }
 
     public List<String> getFaultDev() {
         String sql = "select DISTINCT(agentid) from fault where m_un_fault_renew_time = 0";
@@ -293,12 +269,11 @@ public class AscsDao {
         return list;
     }
 
-    public List<AscsBaseModel> getDevByPara(String sql) throws ParseException {
+    public List<AscsBaseModel> getDevByPara(String sql)  {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //使用Sqlite数据库时，两个请求同时访问会将数据库锁定，因此添加此处添加一个锁
         List<Map<String, Object>> lvRet = jdbcTemplate.queryForList(sql);
         List<AscsBaseModel> abm = new ArrayList<>();
-        Gson gs = new Gson();
         for (Map map : lvRet) {
             AscsBaseModel tt = new AscsBaseModel();
             tt.setId((int) map.get("id"));
@@ -313,10 +288,14 @@ public class AscsDao {
             tt.setStatus((int) map.get("status"));
             String geometry = (String) map.get("geometry");
             tt.setCode((String) map.get("code"));
-            tt.setGeometry(gs.fromJson(geometry, MyGeometry.class));
+            tt.setGeometry(gson.fromJson(geometry, MyGeometry.class));
             tt.setState((String) map.get("state"));
             if (map.get("lastTime") != null) {
-                tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
+                try {
+                    tt.setLastTime(sdf.parse(map.get("lastTime").toString()));
+                } catch (ParseException e) {
+                    tt.setLastTime(null);
+                }
             }
             tt.setName((String) map.get("name"));
             JsonObject jsonparam = new JsonParser().parse(map.get("jsonparam").toString()).getAsJsonObject();
@@ -462,8 +441,8 @@ public class AscsDao {
 
     public int updateAscsByReport(DevCover devCover) {
 
-        String login_thirpartyid = devCover.getThirdpartyid(); // 设备上报的真实id
-        if(login_thirpartyid == null){
+        String devsid = devCover.getThirdpartyid(); // 设备上报的真实id
+        if(devsid == null){
             logger.warning("Report thirpartyid = null, devCover = " + devCover.toString());
             return 0;
         }
@@ -486,9 +465,10 @@ public class AscsDao {
             jo.addProperty("model", devCover.getModel());
         ascsModel.setJsonparam(jo);
         ascsModel.setProtocol(devCover.getProtocol());
-        ascsModel.setThirdplatformid(login_thirpartyid);
+        ascsModel.setThirdplatformid(devsid);
 
         ascsModel.setAgentid(devCover.getAgentid());
+        ascsModel.setName(devsid);
 
         //更新数据
         String sql = "update dev set thirdplatformid=?, type=?,status=?,protocol=?,lastTime=LOCALTIMESTAMP where agentid = ?";
@@ -502,9 +482,10 @@ public class AscsDao {
 
         // update失败，则说明agentid不存在，表明第一次上报，新设置agentid,并发送更新通知
         if (rows == 0) {
-            sql = "INSERT INTO dev(agentid, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
+            sql = "INSERT INTO dev(agentid, name, thirdplatformid,type,status,protocol,geometry,jsonparam,lastTime) VALUES (?,?,?,?,?,?,?,to_json(?::json),LOCALTIMESTAMP)";
             rows = jdbcTemplate.update(sql,
                     ascsModel.getAgentid(),
+                    ascsModel.getName(),
                     ascsModel.getThirdplatformid(),
                     ascsModel.getType(),
                     ascsModel.getStatus(),

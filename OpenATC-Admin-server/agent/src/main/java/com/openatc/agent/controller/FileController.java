@@ -4,11 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.utils.MyHttpUtil;
-import com.openatc.model.model.AscsBaseModel;
 import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
+import com.openatc.core.util.FileUtil;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +36,19 @@ public class FileController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    /**
+     * @return RESTRetBase
+     * @descripation 获取左右行配置
+     * @Date 2021/9/16 13:57
+     **/
+    @GetMapping(value = "/platform/LRRoadConfig")
+    public RESTRetBase getLRRoadConfig() throws IOException {
+        return FileUtil.readFile("./static/LRRoadConfig.json");
+
+    }
+
+
 
     @PostMapping(value = "/system/update")
     public RESTRetBase uploadFile(@RequestParam(value = "file") MultipartFile file,

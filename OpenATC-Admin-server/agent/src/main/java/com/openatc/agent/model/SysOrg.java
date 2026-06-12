@@ -11,7 +11,6 @@
  **/
 package com.openatc.agent.model;
 
-import com.google.gson.JsonElement;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -21,7 +20,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "t_orgnization", schema = "public")
+@Table(name = "t_orgnization")
 public class SysOrg {
 
     @Id

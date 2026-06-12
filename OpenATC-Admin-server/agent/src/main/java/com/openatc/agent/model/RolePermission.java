@@ -17,7 +17,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "t_role_permission", schema = "public")
+@Table(name = "t_role_permission")
 public class RolePermission {
     @Id
     @GeneratedValue

@@ -14,21 +14,19 @@ package com.openatc.agent.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.openatc.agent.utils.DateToLongSerializer;
-//import com.kedacom.openatc.kdagent.utils.JsonbType;
-
-import java.util.Date;
-import java.util.List;
-import javax.persistence.*;
-
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.boot.jackson.JsonObjectSerializer;
 
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
 
 @Data
 @Entity
-@Table(name = "t_user", schema = "public")
+@Table(name = "t_user")
 //@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 public class User {
 

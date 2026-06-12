@@ -16,7 +16,7 @@ package com.openatc.comm.common;
 
 /** 
 * @ClassName: AgentInfoType 
-* @Description: TODO
+* @Description:
 * @author zs
 * @date 2019年10月19日 下午6:19:12 
 *  
@@ -40,7 +40,7 @@ public enum AgentInfoType {
 	}
 	/** 
 	* @Title: toString 
-	* @Description: TODO
+	* @Description:
 	* @return String
 	* @throws 
 	*/

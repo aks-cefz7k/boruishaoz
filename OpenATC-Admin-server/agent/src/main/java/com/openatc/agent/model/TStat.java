@@ -8,7 +8,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Data
-@Table(name = "t_stat", schema = "public")
+@Table(name = "t_stat")
 @Entity
 @IdClass(TStatKey.class)
 public class TStat {

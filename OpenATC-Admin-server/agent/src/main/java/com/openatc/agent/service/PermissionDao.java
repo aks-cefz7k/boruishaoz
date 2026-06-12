@@ -11,13 +11,13 @@
  **/
 package com.openatc.agent.service;
 
-import java.util.List;
-
 import com.openatc.agent.model.Permission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 
 public interface PermissionDao extends JpaRepository<Permission, Integer>{

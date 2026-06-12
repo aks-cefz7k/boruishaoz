@@ -13,6 +13,7 @@ package com.openatc.agent.model;
 
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -25,7 +26,7 @@ import java.util.Date;
 */
 @Data
 @Entity
-@Table(name = "operation_record", schema = "public")
+@Table(name = "operation_record")
 public class THisParams {
 	@Id
 	@GeneratedValue
@@ -63,7 +64,19 @@ public class THisParams {
 	@Column
 	private String extend_02;
 
-	public THisParams(int id, String operator, Date opertime, String source, String agentid, String infotype, String status) {
+	@Column
+	private Integer subInfoType; //消息子类型（控制类型）
+
+	@Column
+	private String responseCode; //请求错误码
+
+	@Column
+	private Integer deviceErrorCode; //特征参数错误码
+
+	@Column
+	private String innerErrorCode; //内部错误码
+
+	public THisParams(int id, String operator, Date opertime, String source, String agentid, String infotype, String status, Integer subInfoType, String responseCode, Integer deviceErrorCode, String innerErrorCode) {
 		this.id = id;
 		this.operator = operator;
 		this.opertime = (Date)opertime.clone();
@@ -71,6 +84,10 @@ public class THisParams {
 		this.agentid = agentid;
 		this.infotype = infotype;
 		this.status = status;
+		this.subInfoType = subInfoType;
+		this.responseCode = responseCode;
+		this.deviceErrorCode = deviceErrorCode;
+		this.innerErrorCode = innerErrorCode;
 	}
 
 	public THisParams() {

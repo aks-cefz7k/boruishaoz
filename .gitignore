@@ -6,3 +6,4 @@ OpenATC-Admin-server/agent/src/main/resources/static
 *.project
 /.idea
 /.static
+comm/.idea/

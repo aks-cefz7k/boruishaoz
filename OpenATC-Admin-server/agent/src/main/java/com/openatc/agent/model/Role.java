@@ -13,15 +13,17 @@ package com.openatc.agent.model;
 
 
 //import com.kedacom.openatc.kdagent.utils.JsonbType;
+
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "t_role", schema = "public")
+@Table(name = "t_role")
 //@TypeDef(name = "JsonbType", typeClass = JsonbType.class)
 public class Role {
 

@@ -1,18 +1,21 @@
 package com.openatc.agent.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.openatc.agent.model.*;
+import com.openatc.agent.model.VipRoute;
+import com.openatc.agent.model.VipRouteDevice;
+import com.openatc.agent.model.VipRouteDeviceStatus;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
 import com.openatc.agent.service.VipRouteDeviceDao;
-import com.openatc.model.model.AscsBaseModel;
 import com.openatc.comm.data.MessageData;
 import com.openatc.comm.ocp.CosntDataDefine;
-import com.openatc.core.model.DevCommError;
+import com.openatc.core.model.InnerError;
 import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -21,13 +24,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.SocketException;
 import java.text.ParseException;
-import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-import static com.openatc.core.common.IErrorEnumImplOuter.E_5001;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_6001;
-import static com.openatc.core.common.IErrorEnumImplOuter.E_6002;
+import static com.openatc.core.common.IErrorEnumImplOuter.*;
 
 @Slf4j
 @RestController
@@ -52,15 +53,15 @@ public class VipRouteController {
     private Sort.Order order = Sort.Order.asc("id");
     private Sort sort = Sort.by(order);
     private Gson gson = new Gson();
-    private CopyOnWriteArrayList cowlist = new CopyOnWriteArrayList();
+    private List onExcuteDevlist = new ArrayList();
 
     // 获取所有的勤务路线的全部信息
     @GetMapping(value = "/viproute")
     public RESTRetBase getVipRoute() throws ParseException {
         List<VipRoute> vipRoutes = vipRouteDao.findAll(sort);
-        for (VipRoute vipRoute : vipRoutes) {
-            addGeometryToVipRoute(vipRoute);
-        }
+//        for (VipRoute vipRoute : vipRoutes) {
+//            addGeometryToVipRoute(vipRoute);
+//        }
         return RESTRetUtils.successObj(vipRoutes);
     }
 
@@ -68,7 +69,7 @@ public class VipRouteController {
     @GetMapping(value = "/viproute/{id}")
     public RESTRetBase getVipRouteById(@PathVariable int id) throws ParseException {
         VipRoute vipRoute = vipRouteDao.findById(id);
-        addGeometryToVipRoute(vipRoute);
+//        addGeometryToVipRoute(vipRoute);
         return RESTRetUtils.successObj(vipRouteDao.findById(id));
     }
 
@@ -141,7 +142,7 @@ public class VipRouteController {
         // 4 保存到数据库中
         VipRoute dbRoute = vipRouteDao.save(routeEntity);
 
-        addGeometryToVipRoute(dbRoute);
+//        addGeometryToVipRoute(dbRoute);
 
         return RESTRetUtils.successObj(dbRoute);
     }
@@ -170,7 +171,7 @@ public class VipRouteController {
 
     //执行勤务路线
     @PostMapping(value = "/viproute/execute")
-    public RESTRetBase executeVipRoutes(@RequestBody JsonObject jsonObject) throws SocketException, ParseException, InterruptedException {
+    public RESTRetBase executeVipRoutes(@RequestBody JsonObject jsonObject) throws SocketException, ParseException {
         int viprouteid = jsonObject.get("viprouteid").getAsInt();
         String agentid = jsonObject.get("agentid").getAsString();
         int operation = jsonObject.get("operation").getAsInt();
@@ -181,29 +182,44 @@ public class VipRouteController {
         data.addProperty("control", vrDevice.getControl());
         data.addProperty("terminal", vrDevice.getTerminal());
         data.addProperty("value", vrDevice.getValue());
+        Thread thread1 = null;
         // 执行勤务路线
         if (operation == 1) {
-            log.info("cowlist: " + cowlist);
-            if (cowlist.contains(agentid)) return RESTRetUtils.errorObj(E_6002);
-            cowlist.add(agentid);
-            AtomicInteger totaltime = new AtomicInteger(vrDevice.getTotaltime());
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, data);
+            if (onExcuteDevlist.contains(agentid))
+                return RESTRetUtils.errorObj(E_6002);
+
+            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
-            log.info("******restRet:  " + restRet);
-            if (restRet.getData() instanceof DevCommError) {
-                cowlist.remove(agentid);
+            // 应答错误处理
+            if (restRet.getData() instanceof InnerError) {
+                log.warn("viproute execute error:" + restRet);
                 return restRet;
+            } else {
+                messageData = (MessageData) restRet.getData();
+                JsonElement succeess = messageData.getData().getAsJsonObject().get("success");
+                if(succeess == null || succeess.getAsInt() != 0){
+                    return restRet;
+                }
             }
+
+            onExcuteDevlist.add(agentid);
             // 2 开启一个线程后台计算剩余时间
-            Thread thread1 = new Thread(() -> {
-                while (totaltime.get() > 0 && cowlist.contains(agentid)) {
+            thread1 = new Thread(() -> {
+                int totaltime = vrDevice.getTotaltime();
+                if(totaltime == 0){
+                    // 回自主控制
+                    backSelfControl(agentid);
+                    onExcuteDevlist.remove(agentid);
+                }
+
+                while (totaltime > 0 && onExcuteDevlist.contains(agentid)) {
                     try {
-                        totaltime.addAndGet(-1);
+                        totaltime -=1;
                         // 将时间更新到redis中
-                        if (totaltime.get() > 0) {
+                        if (totaltime > 0) {
                             //相位用两位字符串表示，不足位数补0
-                            String min = String.format("%2d", totaltime.get() / 60).replace(" ", "0");
-                            String sec = String.format("%2d", totaltime.get() % 60).replace(" ", "0");
+                            String min = String.format("%2d", totaltime / 60).replace(" ", "0");
+                            String sec = String.format("%2d", totaltime % 60).replace(" ", "0");
                             String resttime = min + ":" + sec;
                             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 1, resttime);
                             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
@@ -211,22 +227,17 @@ public class VipRouteController {
                             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
                             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
                         }
-                        if (totaltime.get() <= 0) {
-                            cowlist.remove(agentid);
+                        if (totaltime <= 0) {
+                            // 回自主控制
+                            backSelfControl(agentid);
+                            onExcuteDevlist.remove(agentid);
+                            log.info("Vip road thread end! agentid:" + agentid);
+                            break;
                         }
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        log.warn("Vip road thread interrupted! agentid:" + agentid);
                     }
-                }
-                // 回自主控制
-                try {
-                    backSelfControl(agentid);
-                    log.info("执行自主控制");
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
             });
             thread1.start();
@@ -234,22 +245,23 @@ public class VipRouteController {
         // 取消勤务路线
         if (operation == 0) {
             data.addProperty("control", 0);
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, data);
+            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
             RESTRet restRet = messageController.postDevsMessage(null, messageData);
-            if (restRet.getData() instanceof DevCommError) return restRet;
-            cowlist.remove(agentid);
+            if (restRet.getData() instanceof InnerError) return restRet;
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
             log.info("取消执行，存入redis");
+            // 回自主控制
             backSelfControl(agentid);
+            onExcuteDevlist.remove(agentid);
         }
         return RESTRetUtils.successObj();
     }
 
-    private void backSelfControl(String agentid) throws SocketException, ParseException {
+    private void backSelfControl(String agentid) {
         JsonObject selfControl = new JsonObject();
         selfControl.addProperty("control", 0);
-        MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.workmode, selfControl);
+        MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, selfControl);
         messageController.postDevsMessage(null, selfMessage);
     }
 

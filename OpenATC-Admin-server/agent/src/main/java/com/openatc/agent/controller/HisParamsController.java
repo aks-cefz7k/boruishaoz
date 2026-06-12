@@ -15,20 +15,30 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openatc.agent.model.THisParams;
+import com.openatc.agent.model.THisParamsVO;
 import com.openatc.agent.resmodel.PageOR;
+import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.HisParamServiceImpl;
 import com.openatc.agent.service.THisParamsDao;
+import com.openatc.agent.utils.PageInit;
+import com.openatc.core.common.IErrorEnumImplOuter;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.DateUtil;
 import com.openatc.core.util.RESTRetUtils;
+import com.openatc.model.model.AscsBaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -54,6 +64,8 @@ public class HisParamsController {
     @Autowired(required = false)
     protected THisParamsDao thisParamsDao;
 
+    @Autowired(required = false)
+    AscsDao mDao;
 
     /**
      * @return RESTRetBase
@@ -85,6 +97,101 @@ public class HisParamsController {
         pageOR.setTotal(tHisParams.getTotalElements());
         pageOR.setContent(tHisParams.getContent());
         return RESTRetUtils.successObj(pageOR);
+    }
+
+
+    /**
+     * @return RESTRetBase
+     * @Title: getHisParamsRange
+     * @Description: 分页获取指定操作记录列表
+     */
+    @PostMapping(value = "/devs/hisparams/range")
+    public RESTRetBase getHisParamsRange(@RequestBody JsonObject jsonObject) {
+        if (jsonObject == null) {
+            return RESTRetUtils.errorObj(false, IErrorEnumImplOuter.E_1000);
+        }
+        Object agentId = jsonObject.get("agentId") == null ? "" : jsonObject.get("agentId").getAsString();
+        String source = jsonObject.get("source") == null ? "" : jsonObject.get("source").getAsString();
+        String infotype = jsonObject.get("infotype") == null ? "" : jsonObject.get("infotype").getAsString();
+        String operator = jsonObject.get("operator") == null ? "" : jsonObject.get("operator").getAsString();
+        String status = jsonObject.get("status") == null ? "" : jsonObject.get("status").getAsString();
+        Integer pageNum = jsonObject.get("pageNum") == null ? 0 : jsonObject.get("pageNum").getAsInt();
+        Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
+        String beginTime = jsonObject.get("beginTime") == null ? "" : jsonObject.get("beginTime").getAsString();
+        String endTime = jsonObject.get("endTime") == null ? "" : jsonObject.get("endTime").getAsString();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Sort sort = new Sort(Sort.Direction.DESC, "opertime"); //排序
+        PageInit pageInit = new PageInit(pageNum, pageRow); //分页初始化
+        Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow(), sort);
+        Specification<THisParams> queryCondition = (Specification<THisParams>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            //添加查询条件
+            if (!agentId.equals("")) {
+                predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
+            }
+            // 源地址
+            if (!source.equals("")) {
+                predicateList.add(criteriaBuilder.like(root.get("source"), "%" + source + "%"));
+            }
+            // 用户名
+            if (!operator.equals("")) {
+                predicateList.add(criteriaBuilder.like(root.get("operator"), "%" + operator + "%"));
+            }
+            // 消息类型
+            if (!infotype.equals("")) {
+                predicateList.add(criteriaBuilder.equal(root.get("infotype"), infotype));
+            }
+            // 返回状态
+            if (!status.equals("")) {
+                predicateList.add(criteriaBuilder.equal(root.get("status"), status));
+            }
+            if (!beginTime.equals("") && !endTime.equals("")) {
+                try {
+                    predicateList.add(criteriaBuilder.between(root.get("opertime"), format.parse(beginTime), format.parse(endTime)));
+                } catch (ParseException e) {
+                    logger.warning("时间转换异常");
+                }
+            }
+            return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+        };
+        Page<THisParams> tHisParams = thisParamsDao.findAll(queryCondition, pageable);
+        if (tHisParams.getSize() == 0) {
+            return RESTRetUtils.errorObj(E_2004);
+        }
+        PageOR pageOR = new PageOR();
+        pageOR.setTotal(tHisParams.getTotalElements());
+        List<THisParams> content = tHisParams.getContent();
+        List<THisParamsVO> targetList = new ArrayList<THisParamsVO>();
+        for (THisParams param: content) {
+            AscsBaseModel ascsBaseModel = mDao.getAscsByID(param.getAgentid());
+            String agentName = "";
+            if (ascsBaseModel != null) {
+                agentName = ascsBaseModel.getName();
+                if (agentName.equals("")) {
+                    agentName = ascsBaseModel.getAgentid();
+                }
+            }
+            THisParamsVO vo = new THisParamsVO(param, agentName);
+            targetList.add(vo);
+        }
+        pageOR.setContent(targetList);
+        return RESTRetUtils.successObj(pageOR);
+    }
+
+    /**
+     * @Author: yangyi
+     * @Date: 2021/11/19 13:38
+     * @Description: 根据路口名获取路口列表
+     */
+    public List<AscsBaseModel> getDeviceListByName (String name) {
+        List<AscsBaseModel> ascsBaseModels = new ArrayList<>();
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev where name like '%" + name+ "%' ORDER BY agentid";
+        try {
+            ascsBaseModels = mDao.getDevByPara(sql);
+        } catch (Exception e){
+            logger.warning("Error: getDeviceListByName");
+        }
+        return ascsBaseModels;
     }
 
     /**

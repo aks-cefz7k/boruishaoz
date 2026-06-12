@@ -50,6 +50,8 @@ public final class CosntDataDefine {
     public static final byte                INFO_TYPE_IDENTIFY_CODE     = 0x0E;           //信号机识别码
     public static final byte                INFO_TYPE_REMOTE_CONTROL    = 0x0F;           //远程控制
     public static final byte                INFO_TYPE_DETECTOR          = 0x10;           //检测器
+    public static final byte                INFO_TYPE_OVERLAP           = 0x11;           //跟随相位
+    public static final byte                INFO_TYPE_SCHEDUL_DATE      = 0x12;           //日期
     public static final byte                INFO_TYPE_ALL_FEATURE       = -96;            //整体参数0xA0
     public static final byte                INFO_TYPE_FEATURE_STATUS    = -95;            //方案状态0xA1
     public static final byte                INFO_TYPE_IP                = -94;            //IP 0xA2
@@ -85,37 +87,41 @@ public final class CosntDataDefine {
     public static final         String      errorrequest    = "error-request";
 
     //操作对象字符串定义
-    public static final         String      login           = "login";                  //
+    public static final         String      login           = "login";                  //注册心跳
+    // 状态对象
     public static final         String      volume          = "status/currentvolume";   //交通流,当前流量
     public static final         String      workstatus      = "status/pattern";         //工作状态
-    public static final         String      lampcolor       = "status/channel";         //
-    public static final         String      time            = "system/time";            //当前时间
-    public static final         String      signalgroup     = "feature/channel";        //信号灯组
-    public static final         String      phase           = "feature/phase";          //
-    public static final         String      timepattern     = "feature/pattern";        //配时方案
-    public static final         String      scheduleplan    = "feature/plan";           //方案调度计划
-    public static final         String      workmode        = "control/pattern";        //
+    public static final         String      lampcolor       = "status/channel";         //通道状态
     public static final         String      falut           = "status/fault";           //信号机故障
+    public static final         String      channelstatus   = "status/channeltest";     //通道状态
+    public static final         String      channellampstatus   ="status/channellamp";  //通道灯色lamp
+    // 系统对象
+    public static final         String      time            = "system/time";            //当前时间
     public static final         String      atcversion      = "system/version";         //信号机版本
-    public static final         String      paramversion    = "system/paramversion";    //
+    public static final         String      paramversion    = "system/paramversion";    //特征参数版本
     public static final         String      code            = "system/code";            //识别码
-    public static final         String      remote          = "control/remote";         //远程控制
-    public static final         String      detector        = "feature/detecter";       //
-
-    public static final         String      allfeature      = "feature/all";            //整体参数
     public static final         String      paramip         = "system/ip";              //IP
     public static final         String      serialport      = "system/serialport";      //串口
     public static final         String      manualpanel     = "system/manualpanel";     //手动面板设置
-    public static final         String      channel         = "feature/channel";
     public static final         String      updatedisk      = "system/udiskupdate";     //u盘更新
     public static final         String      systemremote    = "system/remote";          //远程调试
     public static final         String      systemlog       = "system/log";             //操作日志
     public static final         String      channelcheck    = "system/channelcheck";    //通道可检测
     public static final         String      volumelog       = "system/volumelog";       //流量日志
+    public static final         String      systemcustom    ="system/custom";            //设备参数
+    public static final         String      systemupdate    ="system/update";            //设备升级
+    // 参数对象
+    public static final         String      signalgroup     = "feature/channel";        //信号灯组
+    public static final         String      phase           = "feature/phase";          //相位
+    public static final         String      overlap           = "feature/overlap";      //跟随相位
+    public static final         String      timepattern     = "feature/pattern";        //方案
+    public static final         String      scheduleplan    = "feature/plan";           //时段
+    public static final         String      scheduledate    = "feature/date";           //日期
+    public static final         String      detector        = "feature/detecter";       //检测器
+    public static final         String      allfeature      = "feature/all";            //整体参数
+    // 控制对象
+    public static final         String      ControlPattern  = "control/pattern";        //控制方式
+    public static final         String      remote          = "control/remote";         //远程控制
     public static final         String      interrupt       = "control/interrupt";      //方案干预
-    public static final         String      channelstatus   = "status/channeltest";     //通道状态
-    public static final         String      channellampstatus   ="status/channellamp";  //通道灯色lamp
-	public static final         String      systemcustom   ="system/custom";      		//设备参数
-    public static final         String      systemupdate   ="system/update";      		//设备升级
 
 }

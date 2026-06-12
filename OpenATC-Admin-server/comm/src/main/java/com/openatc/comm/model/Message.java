@@ -14,7 +14,6 @@ package com.openatc.comm.model;
 import com.openatc.comm.data.MessageData;
 
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
 
 public interface Message {
     PackData pack(MessageData sendMsg) throws UnsupportedEncodingException;

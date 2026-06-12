@@ -10,7 +10,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "overflow_detector", schema = "public")
+@Table(name = "overflow_detector")
 @Data
 public class OverflowDetector {
     @Id
