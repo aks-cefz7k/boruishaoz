@@ -320,9 +320,6 @@ public class OcpDataPackUpPack { //数据表内容宏定义
             case lampcolor://灯色状态查询
                 three = DATA_LINK_BASIC_INFO;
                 break;
-            case channelcheck: // 通道检测
-                three = DATA_LINK_BASIC_INFO;
-                break;
             case time://查询信号机时间
                 three = DATA_LINK_BASIC_INFO;
                 break;
@@ -391,6 +388,9 @@ public class OcpDataPackUpPack { //数据表内容宏定义
                 break;
             case systemupdate:// 远程控制
                 three = DATA_LINK_PARAM_TRAMFER;
+                break;
+            case channelcheck: // 通道检测
+                three = DATA_LINK_CONTROL;
                 break;
             default:
         }

@@ -151,24 +151,19 @@ public class OverflowController {
     @PostMapping (value = "/overflow/control/{id}")
     public RESTRetBase OverflowControl(@PathVariable long id)
     {
-        //根据id开启溢出控制
-        List<Overflow>  overflowList = new ArrayList<>();
-        overflowList = overflowRepository.findByPatternid(id);
-        List<String> error_offlines = new ArrayList<>();
-        List<String> error_fails = new ArrayList<>();
-
-        RESTRet restRet = null;
-
+        // 判断是否为空方案
+        List<Overflow>  overflowList = overflowRepository.findByPatternid(id);
         if (overflowList.size() == 0)
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9005);
 
+        //根据id开启溢出控制
+        RESTRet restRet = null;
         for(Overflow ov: overflowList)
         {
             String agentid = ov.getIntersectionid();
             StatusPattern statusPattern = optService.OptStatusPattern(ov);
             if(statusPattern == null){
                 //没有取到方案
-                error_offlines.add(agentid);
                 logger.warn("Can not get pattern, agentid = " + agentid);
                 return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9001);
             }
@@ -176,7 +171,6 @@ public class OverflowController {
             restRet = optService.InterruptPattern(statusPattern, agentid);
             if(restRet.isSuccess() == false){
                 logger.warn("Device overflow control failed, agentid = " + agentid);
-                error_fails.add(agentid);
                 return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9001);
             }else{
                 overflowRepository.updateIsopenByIntersectionid(agentid,true);
@@ -194,17 +188,18 @@ public class OverflowController {
     @PostMapping(value = "/overflow/control/off/{id}")
     public RESTRetBase OffOverflowControl(@PathVariable long id)
     {
+        // 判断是否为空方案
+        List<Overflow> overflowList = overflowRepository.findByPatternid(id);
+        if (overflowList.size() == 0)
+            return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9005);
+
         //根据id恢复自主控制
-        List<Overflow>  overflowList = new ArrayList<>();
-        List<String> error_fails = new ArrayList<>();
-        overflowList = overflowRepository.findByPatternid(id);
         RESTRet restRet = null;
         for(Overflow ov: overflowList)
         {
             String agentid = ov.getIntersectionid();
             restRet = optService.AutoControl(agentid);
             if(restRet.isSuccess() == false){
-                error_fails.add(agentid);
                 return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9002);
             }
         }
