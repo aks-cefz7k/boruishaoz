@@ -2,6 +2,7 @@ package com.openatc.model.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +25,6 @@ public class Split {
         this.id = id;
         this.value = value;
         this.mode = mode;
-
+        this.options = new ArrayList<>();
     }
 }
