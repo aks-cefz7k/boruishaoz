@@ -15,6 +15,9 @@ public class MyArrayUtil {
     public static List<Integer> intArray2List(int[] ints){
 
         List<Integer> integerList  = new ArrayList<>();
+        if (ints == null)
+            return integerList;
+
         for(int i : ints){
             integerList.add(i);
         }
