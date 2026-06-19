@@ -2,11 +2,8 @@ package com.openatc.optimize.fixedtimeplan.model.control;
 
 
 import com.alibaba.fastjson.JSON;
-import com.openatc.optimize.fixedtimeplan.config.cross.Barrier;
-import com.openatc.optimize.fixedtimeplan.config.cross.CrossConfig;
+import com.openatc.optimize.fixedtimeplan.config.cross.*;
 
-import com.openatc.optimize.fixedtimeplan.config.cross.Phase;
-import com.openatc.optimize.fixedtimeplan.config.cross.Ring;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -64,6 +61,19 @@ public class Cross {
 
     private void calcYofBarrier(Barrier barrier){
         double Y = 0;
+        for(BarrierItem item:barrier.getItems()){
+            List<Integer> ids = item.getData();
+            double tempY = 0;
+            for(Integer id:ids){
+                tempY += phaseMap.get(id).Y();
+            }
+            log.info("temp Y of barrer {} is {}", barrier.getNum(), tempY);
+            if(tempY > Y){
+                Y = tempY;
+            }
+        }
+
+        /*
         for(List<Integer> ids:barrier.getPhases()){
             double tempY = 0;
             for(Integer id:ids){
@@ -74,6 +84,8 @@ public class Cross {
                 Y = tempY;
             }
         }
+
+         */
         barrier.setY(Y);
     }
 
@@ -81,6 +93,19 @@ public class Cross {
         for(Barrier barrier:crossConfig.getBarriers()){
             barrier.setDuration(barrier.getY()/totalY*cycle);
             log.info("duration of barrier {} is {}", barrier.getNum(), barrier.getDuration());
+            for(BarrierItem item:barrier.getItems()){
+                List<Integer> ids = item.getData();
+                double tempY = 0;
+                for(Integer id : ids){
+                    tempY += phaseMap.get(id).Y();
+                }
+                for(Integer id : ids){
+                    phaseMap.get(id).setDuration(Math.round(barrier.getDuration()*phaseMap.get(id).Y()/tempY));
+                }
+            }
+
+
+            /*
             for(List<Integer> ids:barrier.getPhases()){
                 double tempY = 0;
                 for(Integer id : ids){
@@ -91,6 +116,8 @@ public class Cross {
                 }
 
             }
+
+             */
 
         }
     }
