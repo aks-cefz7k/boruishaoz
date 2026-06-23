@@ -383,6 +383,10 @@ public class TemplateService {
 
         //确定计划
         PlanTime planTime = new PlanTime();
+        planTime.setId(1);
+        planTime.setControl(5);
+        planTime.setPattern(1);
+
         List<PlanTime> planTimes = new ArrayList<>();
         planTimes.add(planTime);
         int planId = 0;
