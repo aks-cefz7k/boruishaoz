@@ -51,7 +51,7 @@ public class UdpCommunicationStaticPort implements Communication {
     private String agentid; // 当前请求的设备KEY
     private String messageKey; // 当前请求的设备KEY，用于多线程同步
     private Thread thread; // 当前请求的线程对象
-    private MessageData responceData;
+    private MessageData responceData = null;
     private ReentrantLock lock; // 同步锁，将同一个设备的请求按顺序排队发送
     private DatagramSocket datagramSocket;
     private int exangeType; // 当前设备的通讯平台
@@ -159,16 +159,21 @@ public class UdpCommunicationStaticPort implements Communication {
 
     @Override
     public MessageData receiveData() {
-        // 此处等待消息返回
-        try {
-            Thread.sleep(TIMEOUT);
-            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid,E_109,null);
-            responceData = CreateErrorResponceData(agentid, devCommError);
 
-            logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
-        } catch (InterruptedException e) {
-            logger.info("Udp Receive Response Thread#" + thread.getId() + " KEY:" + messageKey + " Agentid:" + responceData.getAgentid() + " Devid:" + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
+        if(responceData == null)
+        {
+            // 此处等待消息返回
+            try {
+                Thread.sleep(TIMEOUT);
+                InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid,E_109,null);
+                responceData = CreateErrorResponceData(agentid, devCommError);
+
+                logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
+            } catch (InterruptedException e) {
+                logger.info("Udp Receive Response Thread#" + thread.getId() + " KEY:" + messageKey + " Agentid:" + responceData.getAgentid() + " Devid:" + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
+            }
         }
+
 
         messageMap.remove(messageKey);
         lockMap.remove(messageKey);
