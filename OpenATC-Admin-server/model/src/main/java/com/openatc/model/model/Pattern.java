@@ -21,5 +21,5 @@ public class Pattern {
     int coordinatestage;
     String desc;
     List<List<Split>> rings;
-
+    List<List<Integer>> stages;
 }
