@@ -167,7 +167,7 @@ public class FaultController {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
             if (!agentId.equals("")) {
-                predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
+                predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
             }
             // 确认结果
             if (!enumerate.equals("")) {

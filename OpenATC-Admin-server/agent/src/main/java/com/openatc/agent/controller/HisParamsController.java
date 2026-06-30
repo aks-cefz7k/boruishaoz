@@ -127,7 +127,7 @@ public class HisParamsController {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
             if (!agentId.equals("")) {
-                predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
+                predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
             }
             // 源地址
             if (!source.equals("")) {
