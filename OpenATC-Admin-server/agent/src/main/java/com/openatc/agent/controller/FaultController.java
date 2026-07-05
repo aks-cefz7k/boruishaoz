@@ -154,8 +154,6 @@ public class FaultController {
         } catch (ParseException e) {
             bTime = 0;
             eTime = System.currentTimeMillis();
-            logger.warn("日期格式不正确：" + e.getMessage());
-            logger.warn("默认查询所有范围内的故障记录");
         }
         //将bTime和eTime加入到数组中是因为在lambda表达式中变量应该是final类型
         long[] l = new long[2];
@@ -167,7 +165,7 @@ public class FaultController {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
             if (!agentId.equals("")) {
-                predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
+                predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
             }
             // 确认结果
             if (!enumerate.equals("")) {
@@ -239,7 +237,7 @@ public class FaultController {
     @PostMapping("fault/check")
     public RESTRetBase checkFault(HttpServletRequest httpServletRequest, @RequestBody JsonObject jsonObject) {
         String enumerate = jsonObject.get("enumerate").getAsString();
-        if (!enumerate.equals("0") && enumerate.equals("1") && enumerate.equals("2")) {
+            if (!enumerate.equals("0") && enumerate.equals("1") && enumerate.equals("2")) {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_1001);
         }
         Long id = jsonObject.get("id").getAsLong();

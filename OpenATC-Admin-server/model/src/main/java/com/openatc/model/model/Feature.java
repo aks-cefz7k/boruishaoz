@@ -16,5 +16,5 @@ public class Feature {
     List<Phase> phaseList;
     List<Pattern> patternList;
     List<Plan> planList;
-//
+    List<DateParam> dateList;
 }

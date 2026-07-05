@@ -119,7 +119,6 @@ public class HisParamsController {
         Integer pageRow = jsonObject.get("pageRow") == null ? 10 : jsonObject.get("pageRow").getAsInt();
         String beginTime = jsonObject.get("beginTime") == null ? "" : jsonObject.get("beginTime").getAsString();
         String endTime = jsonObject.get("endTime") == null ? "" : jsonObject.get("endTime").getAsString();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Sort sort = new Sort(Sort.Direction.DESC, "opertime"); //排序
         PageInit pageInit = new PageInit(pageNum, pageRow); //分页初始化
         Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow(), sort);
@@ -127,7 +126,7 @@ public class HisParamsController {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
             if (!agentId.equals("")) {
-                predicateList.add(criteriaBuilder.like(root.get("agentid"), "%" + agentId + "%"));
+                predicateList.add(criteriaBuilder.equal(root.get("agentid"), agentId));
             }
             // 源地址
             if (!source.equals("")) {
@@ -147,6 +146,7 @@ public class HisParamsController {
             }
             if (!beginTime.equals("") && !endTime.equals("")) {
                 try {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     predicateList.add(criteriaBuilder.between(root.get("opertime"), format.parse(beginTime), format.parse(endTime)));
                 } catch (ParseException e) {
                     logger.warning("时间转换异常");
