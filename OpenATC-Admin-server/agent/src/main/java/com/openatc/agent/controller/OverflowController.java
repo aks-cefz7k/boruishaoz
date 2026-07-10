@@ -152,7 +152,6 @@ public class OverflowController {
 
         Map<String, StatusPattern> statusPatternMap = new HashMap<>();
         //根据id开启溢出控制
-        RESTRet restRet = null;
         for (Overflow ov : overflowList) {
             String agentid = ov.getIntersectionid();
             StatusPattern statusPattern = optService.OptStatusPattern(ov);
@@ -166,7 +165,7 @@ public class OverflowController {
 
         // 状态获取成功，开启控制,state: 执行结果, 0：执行失败, 1：执行成功，2：恢复失败，3：恢复成功
         for (Map.Entry<String, StatusPattern> entry : statusPatternMap.entrySet()) {
-            restRet = optService.InterruptPattern(entry.getValue(), entry.getKey());
+            RESTRet restRet = optService.InterruptPattern(entry.getValue(), entry.getKey());
             if (restRet.isSuccess() == false) {
                 logger.warn("Device overflow control failed, agentid = " + entry.getKey());
                 overflowRepository.updateIsopenByIntersectionid(entry.getKey(), 0);
@@ -178,7 +177,7 @@ public class OverflowController {
 
         // 设置方案开启状态
         overflowDetectorRepository.updateStatusById(id, OverflowDetOn);
-        return restRet;
+        return RESTRetUtils.successObj();
     }
 
 
@@ -191,12 +190,11 @@ public class OverflowController {
             return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9005);
 
         //根据id恢复自主控制
-        RESTRet restRet = null;
         for (Overflow ov : overflowList) {
             // 已开启的路口发送恢复控制,state: 执行结果, 0：执行失败, 1：执行成功，2：恢复失败，3：恢复成功
             if (ov.getState() == 1) {
                 String agentid = ov.getIntersectionid();
-                restRet = optService.AutoControl(agentid);
+                RESTRet restRet = optService.AutoControl(agentid);
                 if (restRet.isSuccess() == false) {
                     overflowRepository.updateIsopenByIntersectionid(agentid, 2);
                     return RESTRetUtils.errorObj(IErrorEnumImplOuter.E_9002);
@@ -207,7 +205,7 @@ public class OverflowController {
 
         // 设置方案关闭状态
         overflowDetectorRepository.updateStatusById(id, OverflowDetOff);
-        return restRet;
+        return RESTRetUtils.successObj();
     }
 
     /**

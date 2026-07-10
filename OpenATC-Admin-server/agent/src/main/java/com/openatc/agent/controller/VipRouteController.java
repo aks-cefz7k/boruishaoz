@@ -246,10 +246,15 @@ public class VipRouteController {
         }
         // 取消勤务路线
         else if (operation == 0) {
-            data.addProperty("control", 0);
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
-            RESTRet restRet = messageController.postDevsMessage(null, messageData);
-            if (restRet.getData() instanceof InnerError) return restRet;
+            StatusPattern statusPattern = messageController.GetStatusPattern(agentid);
+            // 当前设备不在线，不执行取消
+            if(statusPattern == null){
+                return RESTRetUtils.errorObj(E_4003);
+            } // 当前状态和执行状态不一致时，不执行取消
+            else if(statusPattern.getControl() != vrDevice.getControl()){
+                return RESTRetUtils.errorObj(E_6003);
+            }
+            // 执行取消操作
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
             log.info("取消执行，存入redis");
@@ -260,11 +265,11 @@ public class VipRouteController {
         return RESTRetUtils.successObj();
     }
 
-    private void backSelfControl(String agentid) {
+    private RESTRet backSelfControl(String agentid) {
         JsonObject selfControl = new JsonObject();
         selfControl.addProperty("control", 0);
         MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, selfControl);
-        messageController.postDevsMessage(null, selfMessage);
+        return messageController.postDevsMessage(null, selfMessage);
     }
 
     // 查询勤务路线路口状态

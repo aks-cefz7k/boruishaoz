@@ -79,6 +79,7 @@ public enum IErrorEnumImplOuter implements IErrorEnum {
     //勤务路线错误
     E_6001("6001", "Duplicate vipRoute name!"),
     E_6002("6002", "Device is in execution!"),
+    E_6003("6003", "VipRoute Cannot cancel! Control is changed."),
 
     //历史流量错误
     E_7001("7001", "ftpClient connect failed!"),
