@@ -165,12 +165,15 @@ public class UdpCommunicationStaticPort implements Communication {
             // 此处等待消息返回
             try {
                 Thread.sleep(TIMEOUT);
-                InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid,E_109,null);
+                InnerError devCommError = RESTRetUtils.innerErrorObj(agentid,E_109,null);
                 responceData = CreateErrorResponceData(agentid, devCommError);
 
                 logger.warning("Receive Time Out ! Thread#" + thread.getId() + " KEY:" + messageKey);
             } catch (InterruptedException e) {
-                logger.info("Udp Receive Response Thread#" + thread.getId() + " KEY:" + messageKey + " Agentid:" + responceData.getAgentid() + " Devid:" + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
+                if(responceData == null){
+                    logger.info("Udp Receive Null Response ! Thread#" + thread.getId() + " KEY:" + messageKey);
+                } else
+                    logger.info("Udp Receive Response Thread#" + thread.getId() + " KEY:" + messageKey + " Agentid:" + responceData.getAgentid() + " Devid:" + responceData.getThirdpartyid() + " Infotype:" + responceData.getInfotype());
             }
         }
 
@@ -266,13 +269,13 @@ public class UdpCommunicationStaticPort implements Communication {
                                 comm.responceData = responceData;
                                 comm.thread.interrupt();
                             } else {
-                                InnerError devCommError = RESTRetUtils.errorDevCommObj(comm.agentid,E_205,null);
+                                InnerError devCommError = RESTRetUtils.innerErrorObj(comm.agentid,E_205,null);
                                 comm.responceData = CreateErrorResponceData(comm.agentid, devCommError);
                                 logger.warning("Udp Receive InfoType error:" + responceInfoType + " by Send InfoType:" + comm.sendmsgtype);
                                 comm.thread.interrupt();
                             }
                         } else {
-                            InnerError devCommError = RESTRetUtils.errorDevCommObj(comm.agentid,E_206,null );
+                            InnerError devCommError = RESTRetUtils.innerErrorObj(comm.agentid,E_206,null );
                             comm.responceData = CreateErrorResponceData(comm.agentid,  devCommError);
                             logger.warning("Can not find UdpCommunication for Receive Msg : Key:" + messageKey);
                         }

@@ -5,13 +5,15 @@ import lombok.Data;
 @Data
 public class VipRouteDeviceStatus {
     private String agentid;
-    private int state;
+    private int state; // 0待执勤, 1执勤中
     private String resttime;
+    private int control; // 当前控制方式（-1未知）
 
-    public VipRouteDeviceStatus(String agentid, int state, String resttime) {
+    public VipRouteDeviceStatus(String agentid, int state, String resttime ) {
         this.agentid = agentid;
         this.state = state;
         this.resttime = resttime;
+        this.control = -1;
     }
 
     public VipRouteDeviceStatus() {

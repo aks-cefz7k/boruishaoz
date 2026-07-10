@@ -61,19 +61,19 @@ public class CommClient {
 
         //判断操作类型是否为空
         if (requestData.getOperation() == null) {
-            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_101, requestData);
+            devCommError = RESTRetUtils.innerErrorObj(agentid, E_101, requestData);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
         //判断消息类型是否为空
         if (requestData.getInfotype() == null) {
-            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_102, requestData);
+            devCommError = RESTRetUtils.innerErrorObj(agentid, E_102, requestData);
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
         //判断协议是否为空
         if (protocal == null) {
-            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_108, requestData );
+            devCommError = RESTRetUtils.innerErrorObj(agentid, E_108, requestData );
             return RESTRetUtils.errorDetialObj(E_4001, devCommError);
         }
 
@@ -88,26 +88,21 @@ public class CommClient {
 //        }
 
         // 获取responceData
-        MessageData responceData = null;
-        try {
-            responceData = exange(ip, port, protocal, exangeType,requestData,socketType);
-        } catch (Exception e) {
-            log.warning( "message exange error:" + e.getMessage());
-        }
+        MessageData responceData = exange(ip, port, protocal, exangeType,requestData,socketType);
 
         if (responceData == null){
-            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_200, null);
+            devCommError = RESTRetUtils.innerErrorObj(agentid, E_200, null);
             return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
 
         if (responceData.getOperation() == null){
-            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_101, responceData );
+            devCommError = RESTRetUtils.innerErrorObj(agentid, E_101, responceData );
             return RESTRetUtils.errorDetialObj(E_4006, devCommError);
         }
 
         //判断设备是否在线
         if (responceData.getOperation().equals("Communication Error!")) {
-            devCommError = RESTRetUtils.errorDevCommObj(agentid, E_301, responceData);
+            devCommError = RESTRetUtils.innerErrorObj(agentid, E_301, responceData);
             return RESTRetUtils.errorDetialObj(E_4003, devCommError, responceData.getDelay());
         }
 
@@ -130,7 +125,7 @@ public class CommClient {
 
 
     // 原始通讯接口，通过设备IP和端口，发送和接收消息
-    public MessageData exange(String ip, int port, String protype, int exangeType, MessageData sendMsg, int socketType) throws UnsupportedEncodingException {
+    public MessageData exange(String ip, int port, String protype, int exangeType, MessageData sendMsg, int socketType) {
 
 //        long starttime = System.currentTimeMillis();
 //        long endtime = 0L;
@@ -151,11 +146,18 @@ public class CommClient {
         Message message = factory.createMessage();
 
         // 打包
-        PackData packData = message.pack(sendMsg);
+        PackData packData = null;
+        try {
+            packData = message.pack(sendMsg);
+        } catch (UnsupportedEncodingException e) {
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_208,e.getMessage() );;
+            return CreateErrorResponceData(agentId,devCommError);
+        }
+
         // packData为空，则返回消息不支持
         if (packData == null) {
-            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentId, E_107, null);
-            return CreateErrorRequestData(agentId,new InnerError());
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId, E_107, null);
+            return CreateErrorRequestData(agentId,devCommError);
         }
 
         // 设置通讯类型
@@ -192,7 +194,7 @@ public class CommClient {
 
         if(sendrev != 0){
             log.warning("Comm Send Data error!" + sendMsg);
-            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentId,E_204,null );
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_204,null );
             return CreateErrorResponceData(agentId,devCommError);
         }
 
@@ -202,7 +204,7 @@ public class CommClient {
 
         // 没有收到消息
         if(responceData == null){
-            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentId,E_200,null );;
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentId,E_200,null );;
             responceData = CreateErrorResponceData(agentId,devCommError);
         }
 

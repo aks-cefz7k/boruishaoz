@@ -2,7 +2,6 @@ package com.openatc.agent.service;
 
 import com.google.gson.JsonObject;
 import com.openatc.agent.controller.MessageController;
-import com.openatc.agent.model.OptDev;
 import com.openatc.agent.model.ControlInterrupt;
 import com.openatc.agent.model.OptRing;
 import com.openatc.agent.model.Overflow;
@@ -83,8 +82,13 @@ public class OptService {
         return restRet;
     }
 
+    // 获取实时的路口方案
+    public StatusPattern curStatusPattern(String agentid)
+    {
+        return messageController.GetStatusPattern(agentid);
+    }
 
-
+    // 获取优化后的路口方案
     public StatusPattern OptStatusPattern(Overflow overflow)
     {
         String agentid = overflow.getIntersectionid().toString();   //设备id
@@ -146,14 +150,14 @@ public class OptService {
 
     //@brief 对瓶颈id下的一组路口进行溢出优化
     //@overflowList：一组待优化路口相位
-    public void OptPatterns(List<Overflow> overflowList)
-    {
-        for(int i = 0; i < overflowList.size(); i++)
-        {
-            Overflow temp = overflowList.get(i);
-            OptStatusPattern(temp);
-        }
-    }
+//    public void OptPatterns(List<Overflow> overflowList)
+//    {
+//        for(int i = 0; i < overflowList.size(); i++)
+//        {
+//            Overflow temp = overflowList.get(i);
+//            OptStatusPattern(temp);
+//        }
+//    }
 
 
 //

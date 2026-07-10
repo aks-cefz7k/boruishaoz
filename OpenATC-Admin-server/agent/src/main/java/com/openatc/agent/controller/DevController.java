@@ -30,7 +30,6 @@ import com.openatc.model.model.LockDirection;
 import com.openatc.model.service.ManualpanelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -91,7 +90,7 @@ public class DevController {
     //得到所有设备
     @GetMapping(value = { "/devs" ,  "/devs/all"})
     public RESTRet GetDevs() {
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
         List<AscsBaseModel> ascsBaseModels = mDao.getDevByPara(sql);
         mDao.alterStatus(ascsBaseModels);
         return RESTRetUtils.successObj(ascsBaseModels);
@@ -127,7 +126,7 @@ public class DevController {
     //得到某类型的设备
     @GetMapping(value = "/devs/type/{ptype}")
     public RESTRetBase GetDevByType(@PathVariable String ptype) throws ParseException {
-        String sql = "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='" + ptype + "'";
+        String sql = "SELECT id,agentid,protocol, geometry,type,status,descs, name,jsonparam,case (LOCALTIMESTAMP - lastTime)< '1 min' when true then 'UP' else 'DOWN' END AS state FROM dev WHERE type ='" + ptype + "'";
         return RESTRetUtils.successObj(mDao.getDevByPara(sql));
     }
 
@@ -145,7 +144,7 @@ public class DevController {
                 RouteIntersection next = intersectionIterator.next();
                 if (next.getAgentid().equals(id)) {
 //                    intersectionIterator.remove();
-                    InnerError devCommError = RESTRetUtils.errorDevCommObj(id, IErrorEnumImplInner.E_8101, next);
+                    InnerError devCommError = RESTRetUtils.innerErrorObj(id, IErrorEnumImplInner.E_8101, next);
                     return RESTRetUtils.errorDetialObj(E_8002,devCommError);
                 }
             }
@@ -160,7 +159,7 @@ public class DevController {
                 VipRouteDevice next = vipRouteDeviceIterator.next();
                 if (next.getAgentid().equals(id)) {
 //                    vipRouteDeviceIterator.remove();
-                    InnerError devCommError = RESTRetUtils.errorDevCommObj(id, IErrorEnumImplInner.E_8101, next);
+                    InnerError devCommError = RESTRetUtils.innerErrorObj(id, IErrorEnumImplInner.E_8101, next);
 
                     return RESTRetUtils.errorDetialObj(E_8003,devCommError);
                 }
