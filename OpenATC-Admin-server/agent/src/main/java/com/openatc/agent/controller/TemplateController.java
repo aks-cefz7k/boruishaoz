@@ -76,15 +76,15 @@ public class TemplateController {
         RESTRet<MessageData> retBase = null;
         retBase = messageController.postDevsMessage(null, messageData);
         if (retBase.getCode().equals(E_4002.getErrorCode())) {
-            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_200, retBase.getData());
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_200, retBase.getData());
             return RESTRetUtils.errorDetialObj(E_4002, devCommError);
         }
         if (retBase.getCode().equals(E_4003.getErrorCode())) {
-            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_301, retBase.getData());
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_301, retBase.getData());
             return RESTRetUtils.errorDetialObj(E_4003, devCommError);
         }
         if (retBase.getCode().equals(E_4005.getErrorCode())) {
-            InnerError devCommError = RESTRetUtils.errorDevCommObj(agentid, IErrorEnumImplInner.E_200, retBase.getData());
+            InnerError devCommError = RESTRetUtils.innerErrorObj(agentid, IErrorEnumImplInner.E_200, retBase.getData());
             return RESTRetUtils.errorDetialObj(E_4005, devCommError);
         }
         if (retBase.getData() == null) {

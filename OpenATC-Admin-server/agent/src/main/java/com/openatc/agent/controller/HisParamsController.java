@@ -183,16 +183,16 @@ public class HisParamsController {
      * @Date: 2021/11/19 13:38
      * @Description: 根据路口名获取路口列表
      */
-    public List<AscsBaseModel> getDeviceListByName (String name) {
-        List<AscsBaseModel> ascsBaseModels = new ArrayList<>();
-        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev where name like '%" + name+ "%' ORDER BY agentid";
-        try {
-            ascsBaseModels = mDao.getDevByPara(sql);
-        } catch (Exception e){
-            logger.warning("Error: getDeviceListByName");
-        }
-        return ascsBaseModels;
-    }
+//    public List<AscsBaseModel> getDeviceListByName (String name) {
+//        List<AscsBaseModel> ascsBaseModels = new ArrayList<>();
+//        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '5 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev where name like '%" + name+ "%' ORDER BY agentid";
+//        try {
+//            ascsBaseModels = mDao.getDevByPara(sql);
+//        } catch (Exception e){
+//            logger.warning("Error: getDeviceListByName");
+//        }
+//        return ascsBaseModels;
+//    }
 
     /**
      * @param request request

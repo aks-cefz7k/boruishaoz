@@ -852,7 +852,7 @@ public class OcpDataPackUpPack { //数据表内容宏定义
 
         // 错误应答和下载全部参数错误，需要加上错误包装类
         if(recvData.getOperation().equals(erroresponse) || chInfoType == CFG_ACK_SENDDATA_FAILED){
-            InnerError innerError = RESTRetUtils.errorDevCommObj(null,E_207,gson.fromJson(tempData, JsonElement.class));
+            InnerError innerError = RESTRetUtils.innerErrorObj(null,E_207,gson.fromJson(tempData, JsonElement.class));
             recvData.setData(gson.toJsonTree(innerError));
         } else if (tempData != null) {
             JsonElement obj = gson.fromJson(tempData, JsonElement.class);
