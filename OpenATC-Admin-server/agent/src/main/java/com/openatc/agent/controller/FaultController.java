@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,7 +87,7 @@ public class FaultController {
         Pageable pageRequest = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
-            predicateList.add(criteriaBuilder.equal(root.get("m_unFaultOccurTime"), 0));
+            predicateList.add(criteriaBuilder.equal(root.get("mUnFaultOccurTime"), 0));
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         };
         Page<Fault> faults = faultDao.findAll(queryCondition, pageRequest);
@@ -160,7 +161,8 @@ public class FaultController {
         l[0] = bTime;
         l[1] = eTime;
         PageInit pageInit = new PageInit(pageNum, pageRow); //分页初始化
-        Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow());
+        Sort sort = new Sort(Sort.Direction.DESC, "mUnFaultOccurTime"); //排序
+        Pageable pageable = PageRequest.of(pageInit.getPageNum(), pageInit.getPageRow(), sort);
         Specification<Fault> queryCondition = (Specification<Fault>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             //添加查询条件
@@ -184,7 +186,7 @@ public class FaultController {
                 predicateList.add(criteriaBuilder.equal(root.get("m_unFaultRenewTime"), 0));
             }
             predicateList.add(criteriaBuilder.equal(root.get("deleteFlag"), "0"));
-            predicateList.add(criteriaBuilder.between(root.get("m_unFaultOccurTime"), l[0], l[1]));
+            predicateList.add(criteriaBuilder.between(root.get("mUnFaultOccurTime"), l[0], l[1]));
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         };
         Page<Fault> faultList = faultDao.findAll(queryCondition, pageable);
@@ -274,7 +276,7 @@ public class FaultController {
 
     private JsonObject transformFault(Fault fault,String name) {
         JsonObject jsonObject = gson.fromJson(gson.toJson(fault), JsonObject.class);
-        jsonObject.addProperty("m_unFaultOccurTime", fault.getM_unFaultOccurTime() == 0 ? "0" : DateUtil.longToString(fault.getM_unFaultOccurTime() * 1000));
+        jsonObject.addProperty("m_unFaultOccurTime", fault.getMUnFaultOccurTime() == 0 ? "0" : DateUtil.longToString(fault.getMUnFaultOccurTime() * 1000));
         jsonObject.addProperty("m_unFaultRenewTime", fault.getM_unFaultRenewTime() == 0 ? "0" : DateUtil.longToString(fault.getM_unFaultRenewTime() * 1000));
         jsonObject.addProperty("operationTime", (fault.getOperationTime() == null || fault.getOperationTime() == 0) ? "0" : DateUtil.longToString(fault.getOperationTime() * 1000));
         jsonObject.addProperty("name", (name));

@@ -1,5 +1,7 @@
 package com.openatc.agent.model;
 
+import javax.naming.Name;
+import javax.persistence.Column;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -18,7 +20,10 @@ public class Fault {
     @Id
     private Long m_wFaultID;
     private Integer m_byFaultBoardType;
-    private Long m_unFaultOccurTime;
+
+    @Column(name = "m_un_fault_occur_time")
+    private Long mUnFaultOccurTime;
+
     private Long m_unFaultRenewTime;
     private Long m_wFaultType;
     private Integer m_wSubFaultType;
