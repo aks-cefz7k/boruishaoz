@@ -258,17 +258,15 @@ public class FaultController {
      */
     public List<JsonObject> transformFaultList(List<Fault> faults) {
         List<JsonObject> jsonObjects = new ArrayList<>();
+        List<String> agentidList = new ArrayList<String>();
+        for (Fault fault : faults) {
+            agentidList.add(fault.getAgentid());
+        }
+        List<AscsBaseModel> devList = mDao.getListByAgentids(agentidList);
         for (Fault fault : faults) {
             //查路口名
-            String agentName = "";
-            AscsBaseModel ascsBaseModel = mDao.getAscsByID(fault.getAgentid());
-            if (ascsBaseModel != null) {
-                agentName = ascsBaseModel.getName();
-                if (agentName.equals("")) {
-                    agentName = ascsBaseModel.getAgentid();
-                }
-            }
-            JsonObject jsonObject = transformFault(fault,agentName);
+            String agentName = mDao.getDevNameFromList(devList, fault.getAgentid());
+            JsonObject jsonObject = transformFault(fault, agentName);
             jsonObjects.add(jsonObject);
         }
         return jsonObjects;
