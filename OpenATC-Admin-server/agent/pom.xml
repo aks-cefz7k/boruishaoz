@@ -101,6 +101,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.openatc.admin</groupId>
+            <artifactId>fixedtimeplan</artifactId>
+            <version>2.0.2</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>
