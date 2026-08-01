@@ -68,6 +68,14 @@ public class AscsDao {
             }
         }
     }
+    public List<AscsBaseModel> getAscs() {
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
+        List<AscsBaseModel> ascsBaseModels = getDevByPara(sql);
+
+//        String sql = "SELECT id, agentid,protocol, geometry, lastTime, descs,type,status,jsonparam, code FROM dev where code  = '" + code + "'";
+//        List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        return ascsBaseModels;
+    }
 
     public List<AscsBaseModel> getAscsByCode(String code) {
         String sql = "SELECT id, agentid,protocol, geometry, lastTime, descs,type,status,jsonparam, code FROM dev where code  = '" + code + "'";
@@ -244,11 +252,14 @@ public class AscsDao {
      * @Description: getListByAgentids
      */ 
     public List<AscsBaseModel> getListByAgentids(List<String> list) throws EnumConstantNotPresentException {
-        String agentids = getInCond(list);
-        String sql =
-            "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid in "
-                + agentids;
-        List<AscsBaseModel> listAscs = getDevByPara(sql);
+        List<AscsBaseModel> listAscs = new ArrayList<AscsBaseModel>();
+        if (list != null && list.size() > 0) {
+            String agentids = getInCond(list);
+            String sql =
+                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid in "
+                    + agentids;
+            listAscs = getDevByPara(sql);
+        }
         return listAscs;
     }
     /**
