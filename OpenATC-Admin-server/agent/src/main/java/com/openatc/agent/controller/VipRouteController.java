@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.VipRoute;
 import com.openatc.agent.model.VipRouteDevice;
-import com.openatc.agent.model.VipRouteDeviceDevState;
+import com.openatc.agent.model.VipRouteDeviceOnline;
 import com.openatc.agent.model.VipRouteDeviceStatus;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
@@ -280,15 +280,15 @@ public class VipRouteController {
         }
 
         // 查询路线中的路口信息，并修改状态
-        List<VipRouteDeviceDevState> VipRouteDevices =  vipRouteDao.findVipRouteWithDevStateById(id);
-        int a = VipRouteDevices.get(0).getStatus();
+        List<VipRouteDeviceOnline> VipRouteDevices =  vipRouteDao.findVipRouteWithDevStateById(id);
 
-        VipRoute vipRoute = vipRouteDao.findById(id);
-        for(VipRouteDevice vipRouteDevice : vipRoute.getDevs()){
-            String agentid = vipRouteDevice.getAgentid();
+//        VipRoute vipRoute = vipRouteDao.findById(id);
+        for(VipRouteDeviceOnline vipRouteDeviceOnline : VipRouteDevices){
+            String agentid = vipRouteDeviceOnline.getAgentid();
             VipRouteDeviceStatus vipRouteDeviceStatus = GetVipRouteDeviceStatusbyID(vriss, agentid);
-            AscsBaseModel devs = ascsDao.getAscsByID(agentid);
-            if(devs.getState().equals("DOWN")) {
+//            AscsBaseModel devs = ascsDao.getAscsByID(agentid);
+            String online = vipRouteDeviceOnline.getState();
+            if(online.equals("DOWN")) {
                 vipRouteDeviceStatus.setControl(-1);
                 continue;
             }
@@ -299,8 +299,8 @@ public class VipRouteController {
             }
             else{ // 设备在线,设置设备当前状态
                 int curControl = statusPattern.getControl();
-                int routeControl = vipRouteDevice.getControl();
-                if( curControl != routeControl )
+//                int routeControl = vipRouteDevice.getControl();
+//                if( curControl != routeControl )
                 vipRouteDeviceStatus.setControl(curControl);
             }
         }
