@@ -36,7 +36,7 @@ services:
 
   # 配置软件服务（可选）
   configserver:
-    image: 'docker-registry:5000/configserver:latest'
+    image: 'docker-registry:5000/openatc/configserver:latest'
     ports:
       - '8012:8012'
     volumes:

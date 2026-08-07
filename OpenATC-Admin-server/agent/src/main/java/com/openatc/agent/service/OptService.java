@@ -2,7 +2,7 @@ package com.openatc.agent.service;
 
 import com.google.gson.JsonObject;
 import com.openatc.agent.controller.MessageController;
-import com.openatc.agent.model.OptDev;
+import com.openatc.agent.controller.OverflowController;
 import com.openatc.agent.model.ControlInterrupt;
 import com.openatc.agent.model.OptRing;
 import com.openatc.agent.model.Overflow;
@@ -12,6 +12,8 @@ import com.openatc.model.model.ControlPattern;
 import com.openatc.model.model.StatusPattern;
 import com.openatc.model.model.StatusPatternPhase;
 import com.openatc.model.model.StatusRing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ import java.util.Map;
 
 @Service
 public class OptService {
+
+    private Logger logger = LoggerFactory.getLogger(OptService.class);
 
     @Autowired
     private MessageController messageController;
@@ -70,18 +74,26 @@ public class OptService {
         if(restRet.isSuccess()){
             MessageData messageData = (MessageData) restRet.getData();
             JsonObject data = messageData.getData().getAsJsonObject();
-            if(data.get("return").getAsString().equals("success")){
-                JsonObject responsedata = new JsonObject();
-                responsedata.addProperty("success",0);
-                messageData.setData(responsedata);
+            if(data.get("return")!= null){
+                if(data.get("return").getAsString().equals("success")){
+                    JsonObject responsedata = new JsonObject();
+                    responsedata.addProperty("success",0);
+                    messageData.setData(responsedata);
+                }
             }
+
         }
 
         return restRet;
     }
 
+    // 获取实时的路口方案
+    public StatusPattern curStatusPattern(String agentid)
+    {
+        return messageController.GetStatusPattern(agentid);
+    }
 
-
+    // 获取优化后的路口方案
     public StatusPattern OptStatusPattern(Overflow overflow)
     {
         String agentid = overflow.getIntersectionid().toString();   //设备id
@@ -90,12 +102,16 @@ public class OptService {
 
 
         StatusPattern tempPattern = messageController.GetStatusPattern(agentid) ;
-        if(tempPattern == null)
+        if(tempPattern == null){
+            logger.warn("GetStatusPattern is Null! Overflow:" + overflow);
             return null;
+        }
 
         List<List<Integer>> stages = tempPattern.getStages();
-        if(stages == null)
+        if(stages == null){
+            logger.warn("Stages is Null! Overflow:" + overflow + "StatusPattern:" + tempPattern);
             return null;
+        }
 
         List<StatusPatternPhase> phases = tempPattern.getPhase();
         double factor = 1.0;
@@ -114,7 +130,12 @@ public class OptService {
         }
 
         factor = factor / param;
-        int optCycle = tempPattern.getCycle();
+        Integer optCycle = tempPattern.getCycle();
+        if(optCycle == null){
+            logger.warn("Cycle is Null! Overflow:" + overflow + "StatusPattern:" + tempPattern);
+            return null;
+        }
+
         for(List<Integer> lst:stages)
         {
             if(lst.contains(phaseid)){
@@ -143,14 +164,14 @@ public class OptService {
 
     //@brief 对瓶颈id下的一组路口进行溢出优化
     //@overflowList：一组待优化路口相位
-    public void OptPatterns(List<Overflow> overflowList)
-    {
-        for(int i = 0; i < overflowList.size(); i++)
-        {
-            Overflow temp = overflowList.get(i);
-            OptStatusPattern(temp);
-        }
-    }
+//    public void OptPatterns(List<Overflow> overflowList)
+//    {
+//        for(int i = 0; i < overflowList.size(); i++)
+//        {
+//            Overflow temp = overflowList.get(i);
+//            OptStatusPattern(temp);
+//        }
+//    }
 
 
 //

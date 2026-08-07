@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.openatc.agent.model.VipRoute;
 import com.openatc.agent.model.VipRouteDevice;
+import com.openatc.agent.model.VipRouteDeviceOnline;
 import com.openatc.agent.model.VipRouteDeviceStatus;
 import com.openatc.agent.service.AscsDao;
 import com.openatc.agent.service.VipRouteDao;
@@ -16,13 +17,13 @@ import com.openatc.core.model.RESTRet;
 import com.openatc.core.model.RESTRetBase;
 import com.openatc.core.util.RESTRetUtils;
 import com.openatc.model.model.AscsBaseModel;
+import com.openatc.model.model.StatusPattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,28 +68,28 @@ public class VipRouteController {
 
     // 获取单个勤务路线的全部信息
     @GetMapping(value = "/viproute/{id}")
-    public RESTRetBase getVipRouteById(@PathVariable int id) throws ParseException {
+    public RESTRetBase getVipRouteById(@PathVariable int id) {
         VipRoute vipRoute = vipRouteDao.findById(id);
 //        addGeometryToVipRoute(vipRoute);
-        return RESTRetUtils.successObj(vipRouteDao.findById(id));
+        return RESTRetUtils.successObj(vipRoute);
     }
 
 
-    private void addGeometryToVipRoute(VipRoute vipRoute) throws ParseException {
-        Set<VipRouteDevice> vipRouteDevs = vipRoute.getDevs();
-        if(vipRouteDevs == null){
-            return;
-        }
-        for (VipRouteDevice vipRouteDev : vipRouteDevs) {
-            if(vipRouteDev == null){
-                return;
-            }
-            String agentid = vipRouteDev.getAgentid();
-            AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
-            if(ascsBaseModel == null) return;
-            vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
-        }
-    }
+//    private void addGeometryToVipRoute(VipRoute vipRoute)  {
+//        Set<VipRouteDevice> vipRouteDevs = vipRoute.getDevs();
+//        if(vipRouteDevs == null){
+//            return;
+//        }
+//        for (VipRouteDevice vipRouteDev : vipRouteDevs) {
+//            if(vipRouteDev == null){
+//                return;
+//            }
+//            String agentid = vipRouteDev.getAgentid();
+//            AscsBaseModel ascsBaseModel = ascsDao.getAscsByID(agentid);
+//            if(ascsBaseModel == null) return;
+//            vipRouteDev.setGeometry(ascsBaseModel.getGeometry());
+//        }
+//    }
 
 
     // 查询所有勤务路线的简略信息
@@ -116,9 +117,9 @@ public class VipRouteController {
 
     // 更新勤务路线
     @PutMapping(value = "/viproute")
-    public RESTRetBase updateVipRoute(@RequestBody VipRoute routeEntity) throws ParseException {
+    public RESTRetBase updateVipRoute(@RequestBody VipRoute routeEntity) {
         int id = routeEntity.getId();
-        // 0 执行前先判断一下是否存在执行中的设备，如果存在，抛出错误
+        // 0 执行前先判断一下是否存在执行中的设备，如果存在，应答错误
         List<VipRouteDevice> vipRouteDevices = vipRouteDeviceDao.findByViprouteid(id);
         for (VipRouteDevice vipRouteDevice : vipRouteDevices) {
             String vrStatus = stringRedisTemplate.opsForValue().get(ASC_VIPROUTE_STATUS + id + ":" + vipRouteDevice.getAgentid());
@@ -129,11 +130,12 @@ public class VipRouteController {
         // 1 首先删除这条路线之前的设备
         vipRouteDeviceDao.deleteByViprouteid(id);
 
-        // 2 保存路线之前，要先计算墨卡托坐标
+        // 2 保存路线
         Set<VipRouteDevice> devs = routeEntity.getDevs();
         if (devs != null && devs.size() != 0) {
             // 3 将设备信息更新到redis中
             for (VipRouteDevice vipRouteDevice : devs) {
+                stringRedisTemplate.delete(ASC_VIPROUTE_STATUS + vipRouteDevice.getViprouteid() + ":*");
                 VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(vipRouteDevice.getAgentid(), 0, "00:00");
                 stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + vipRouteDevice.getViprouteid() + ":" + vipRouteDevice.getAgentid(), gson.toJson(vipRouteDeviceStatus));
             }
@@ -171,7 +173,7 @@ public class VipRouteController {
 
     //执行勤务路线
     @PostMapping(value = "/viproute/execute")
-    public RESTRetBase executeVipRoutes(@RequestBody JsonObject jsonObject) throws SocketException, ParseException {
+    public RESTRetBase executeVipRoutes(@RequestBody JsonObject jsonObject) {
         int viprouteid = jsonObject.get("viprouteid").getAsInt();
         String agentid = jsonObject.get("agentid").getAsString();
         int operation = jsonObject.get("operation").getAsInt();
@@ -226,49 +228,48 @@ public class VipRouteController {
                         } else {
                             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
                             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
-                        }
-                        if (totaltime <= 0) {
-                            // 回自主控制
-                            backSelfControl(agentid);
                             onExcuteDevlist.remove(agentid);
                             log.info("Vip road thread end! agentid:" + agentid);
+                            // 回自主控制
+                            backSelfControl(agentid);
                             break;
                         }
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         log.warn("Vip road thread interrupted! agentid:" + agentid);
+                        break;
                     }
                 }
             });
             thread1.start();
         }
         // 取消勤务路线
-        if (operation == 0) {
-            data.addProperty("control", 0);
-            MessageData messageData = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, data);
-            RESTRet restRet = messageController.postDevsMessage(null, messageData);
-            if (restRet.getData() instanceof InnerError) return restRet;
+        else if (operation == 0) {
+
             VipRouteDeviceStatus vipRouteDeviceStatus = new VipRouteDeviceStatus(agentid, 0, ZEROSECONDS);
             stringRedisTemplate.opsForValue().set(ASC_VIPROUTE_STATUS + viprouteid + ":" + agentid, gson.toJson(vipRouteDeviceStatus));
             log.info("取消执行，存入redis");
-            // 回自主控制
-            backSelfControl(agentid);
             onExcuteDevlist.remove(agentid);
+            // 回自主控制
+            RESTRet restRet = backSelfControl(agentid);
+            if (restRet.getData() instanceof InnerError)
+                return restRet;
         }
         return RESTRetUtils.successObj();
     }
 
-    private void backSelfControl(String agentid) {
+    private RESTRet backSelfControl(String agentid) {
         JsonObject selfControl = new JsonObject();
         selfControl.addProperty("control", 0);
         MessageData selfMessage = new MessageData(agentid, CosntDataDefine.setrequest, CosntDataDefine.ControlPattern, selfControl);
-        messageController.postDevsMessage(null, selfMessage);
+        return messageController.postDevsMessage(null, selfMessage);
     }
 
     // 查询勤务路线路口状态
     @GetMapping(value = "/viproute/{id}/status")
     public RESTRetBase getVipRouteStatus(@PathVariable int id) {
 
+        // 获取路线状态
         List<VipRouteDeviceStatus> vriss = new ArrayList<>();
         String fuzzykeys = ASC_VIPROUTE_STATUS + id + ":*";
         Set<String> vrstatuskeys = stringRedisTemplate.keys(fuzzykeys);
@@ -277,29 +278,75 @@ public class VipRouteController {
             VipRouteDeviceStatus vipRouteDeviceStatus = gson.fromJson(s, VipRouteDeviceStatus.class);
             vriss.add(vipRouteDeviceStatus);
         }
+
+        // 查询路线中的路口信息，并修改状态
+        List<VipRouteDeviceOnline> VipRouteDevices =  vipRouteDao.findVipRouteWithDevStateById(id);
+
+//        VipRoute vipRoute = vipRouteDao.findById(id);
+        for(VipRouteDeviceOnline vipRouteDeviceOnline : VipRouteDevices){
+            String agentid = vipRouteDeviceOnline.getAgentid();
+            VipRouteDeviceStatus vipRouteDeviceStatus = GetVipRouteDeviceStatusbyID(vriss, agentid);
+//            AscsBaseModel devs = ascsDao.getAscsByID(agentid);
+            String online = vipRouteDeviceOnline.getState();
+            if(online.equals("DOWN")) {
+                vipRouteDeviceStatus.setControl(-1);
+                continue;
+            }
+
+            StatusPattern statusPattern = messageController.GetStatusPattern(agentid);
+            if(statusPattern == null){ // 无法获取到方案状态，设备不在线
+                vipRouteDeviceStatus.setControl(-1);
+            }
+            else{ // 设备在线,设置设备当前状态
+                int curControl = statusPattern.getControl();
+//                int routeControl = vipRouteDevice.getControl();
+//                if( curControl != routeControl )
+                vipRouteDeviceStatus.setControl(curControl);
+            }
+        }
+
         return RESTRetUtils.successObj(vriss);
     }
 
     /**
-     * 经度转墨卡托
-     *
-     * @param x 经度
-     * @return 墨卡托经度
+     * 根据路口ID，从vip路线中，获取路口的状态
+     * @author: zhangwenchao
+     * @param agentid
+     * @return 单个路口的状态
      */
-    public static double getMercatorLon(double x) {
-        double mx = x * 20037508.34 / 180;
-        return mx;
+    private VipRouteDeviceStatus GetVipRouteDeviceStatusbyID(List<VipRouteDeviceStatus> vriss ,String agentid){
+        VipRouteDeviceStatus vipRouteDeviceStatus = null;
+        for(VipRouteDeviceStatus deviceStatus: vriss ){
+            if(deviceStatus.getAgentid().equals(agentid)){
+                vipRouteDeviceStatus = deviceStatus;
+                break;
+            }
+        }
+        return vipRouteDeviceStatus;
+
     }
 
-    /**
-     * 纬度转墨卡托
-     *
-     * @param y 纬度
-     * @return 墨卡托纬度
-     */
-    public static double getMercatorLat(double y) {
-        double my = Math.log(Math.tan((90 + y) * Math.PI / 360)) / (Math.PI / 180);
-        my = my * 20037508.34 / 180;
-        return my;
-    }
+
+//    /**
+//     * 经度转墨卡托
+//     *
+//     * @param x 经度
+//     * @return 墨卡托经度
+//     */
+//    public static double getMercatorLon(double x) {
+//        double mx = x * 20037508.34 / 180;
+//        return mx;
+//    }
+//
+//    /**
+//     * 纬度转墨卡托
+//     *
+//     * @param y 纬度
+//     * @return 墨卡托纬度
+//     */
+//    public static double getMercatorLat(double y) {
+//        double my = Math.log(Math.tan((90 + y) * Math.PI / 360)) / (Math.PI / 180);
+//        my = my * 20037508.34 / 180;
+//        return my;
+//    }
 }

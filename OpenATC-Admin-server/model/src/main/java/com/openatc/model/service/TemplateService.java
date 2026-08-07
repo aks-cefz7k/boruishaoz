@@ -383,6 +383,10 @@ public class TemplateService {
 
         //确定计划
         PlanTime planTime = new PlanTime();
+        planTime.setId(1);
+        planTime.setControl(5);
+        planTime.setPattern(1);
+
         List<PlanTime> planTimes = new ArrayList<>();
         planTimes.add(planTime);
         int planId = 0;
@@ -447,9 +451,11 @@ public class TemplateService {
         temPhase.setRedclear(redclear);
         temPhase.setControltype(controltype);
         //双环从第5个开始要设为2
-        if (id > 3) {
+        if (id > 3)
             temPhase.setRing(2);
-        }
+        else
+            temPhase.setRing(1);
+
         if (phaseCount == 8) {
             switch (id) {
                 case 0:

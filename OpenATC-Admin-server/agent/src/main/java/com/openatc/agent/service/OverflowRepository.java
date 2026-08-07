@@ -18,6 +18,6 @@ public interface OverflowRepository extends JpaRepository<Overflow, Long> {
 
     @Transactional
     @Modifying
-    @Query("update Overflow o set o.isopen=?2 where o.intersectionid=?1")
-    void updateIsopenByIntersectionid(String intersectionid, Boolean isopen);
+    @Query("update Overflow o set o.state=?2 where o.intersectionid=?1")
+    void updateIsopenByIntersectionid(String intersectionid, int state);
 }

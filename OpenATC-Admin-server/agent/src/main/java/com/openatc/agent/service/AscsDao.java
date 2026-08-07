@@ -68,6 +68,14 @@ public class AscsDao {
             }
         }
     }
+    public List<AscsBaseModel> getAscs() {
+        String sql = "SELECT id, thirdplatformid, platform, gbid, firm, agentid, protocol, geometry, type, status, descs, name,jsonparam, case (LOCALTIMESTAMP - lastTime)< '1 min' when 'true' then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev ORDER BY agentid";
+        List<AscsBaseModel> ascsBaseModels = getDevByPara(sql);
+
+//        String sql = "SELECT id, agentid,protocol, geometry, lastTime, descs,type,status,jsonparam, code FROM dev where code  = '" + code + "'";
+//        List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        return ascsBaseModels;
+    }
 
     public List<AscsBaseModel> getAscsByCode(String code) {
         String sql = "SELECT id, agentid,protocol, geometry, lastTime, descs,type,status,jsonparam, code FROM dev where code  = '" + code + "'";
@@ -228,7 +236,7 @@ public class AscsDao {
 
         AscsBaseModel ascsBaseModel = null;
         String sql =
-                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '5 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid ='"
+                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '1 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid ='"
                         + id + "'";
         List<AscsBaseModel> listAscs = getDevByPara(sql);
 
@@ -238,6 +246,73 @@ public class AscsDao {
         return ascsBaseModel;
     }
 
+    /**
+     * @Author: yangyi
+     * @Date: 2021/12/21 10:25
+     * @Description: getListByAgentids
+     */ 
+    public List<AscsBaseModel> getListByAgentids(List<String> list) throws EnumConstantNotPresentException {
+        List<AscsBaseModel> listAscs = new ArrayList<AscsBaseModel>();
+        if (list != null && list.size() > 0) {
+            String agentids = getInCond(list);
+            String sql =
+                "SELECT id, thirdplatformid , platform, gbid, firm, agentid,protocol, geometry,type,status,descs,name, jsonparam,case (LOCALTIMESTAMP - lastTime)< '1 min' when true then 'UP' else 'DOWN' END AS state,lastTime,sockettype FROM dev WHERE agentid in "
+                    + agentids;
+            listAscs = getDevByPara(sql);
+        }
+        return listAscs;
+    }
+    /**
+     * @Author: yangyi
+     * @Date: 2021/12/21 13:51
+     * @Description:
+     */
+    public static String getInCond(List<String> list) {
+        String[] strArr = list.toArray(new String[list.size()]);
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0;i < strArr.length; i++){
+            if(i == strArr.length-1){
+                sb.append("'"+strArr[i]+"'");
+            }else{
+                sb.append("'"+strArr[i]+"'"+",");
+            }
+        }
+        return '(' +sb.toString()+ ')';
+    }
+
+    /**
+     * @Author: yangyi
+     * @Date: 2021/12/21 10:34
+     * @Description: getDevFromList
+     */ 
+    public AscsBaseModel getDevFromList (List<AscsBaseModel> list, String agentid) {
+        AscsBaseModel ascsBaseModel = null;
+        if (list != null && list.size() > 0 && agentid != null) {
+            for (AscsBaseModel dev: list) {
+                if (agentid.equals(dev.getAgentid())){
+                    ascsBaseModel = dev;
+                }
+            }
+        }
+        return ascsBaseModel;
+    }
+
+    /**
+     * @Author: yangyi
+     * @Date: 2021/12/21 14:25
+     * @Description: getDevNameFromList
+     */ 
+    public String getDevNameFromList (List<AscsBaseModel> list, String agentid) {
+        AscsBaseModel ascsBaseModel = getDevFromList(list, agentid);
+        String agentName = "";
+        if (ascsBaseModel != null) {
+            agentName = ascsBaseModel.getName();
+            if (agentName == null || agentName.equals("")) {
+                agentName = ascsBaseModel.getAgentid();
+            }
+        }
+        return  agentName;
+    }
 
 //    public int updatePattern(Params ps) {
 //        //判断是否存在该agentid的记录
