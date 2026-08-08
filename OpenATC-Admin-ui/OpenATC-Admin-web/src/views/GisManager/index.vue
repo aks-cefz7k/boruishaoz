@@ -364,7 +364,7 @@ export default {
       this.getRouteDistande(pointArr)
     },
     getRouteDistande (pointArr) {
-      if (!this.map) {
+      if (!this.map || pointArr.length === 0) {
         return 0
       }
       let res = 0
