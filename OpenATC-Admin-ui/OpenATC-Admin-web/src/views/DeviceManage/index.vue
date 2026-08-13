@@ -11,6 +11,8 @@
  **/
 <template>
   <div class="openatc-device">
+    <!-- <SelectAgentid @onChange="onSelectAgentidChange"></SelectAgentid>
+    <SelectCrossPhase :agentid="agentid" @onChange="onSelectCrossPhaseChange"></SelectCrossPhase> -->
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
     <div class="devs-container">
       <div class="tag-container">
@@ -173,11 +175,14 @@ import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
 import { GetCurrentFaultByAgentid } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
+import SelectAgentid from '@/components/SelectAgentid'
+import SelectCrossPhase from '@/components/SelectCrossPhase'
 export default {
   name: 'device',
-  components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics },
+  components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics, SelectAgentid, SelectCrossPhase },
   data () {
     return {
+      agentid: 0,
       stateList: [],
       isOnlineChecked: true,
       isFaultChecked: true,
@@ -227,6 +232,12 @@ export default {
     this.getList()
   },
   methods: {
+    onSelectAgentidChange (agentid) {
+      this.agentid = agentid
+    },
+    onSelectCrossPhaseChange (dir) {
+      // console.log(dir)
+    },
     onOnlineChange (val) {
       this.isOnlineChecked = val
       this.onStateChange()
