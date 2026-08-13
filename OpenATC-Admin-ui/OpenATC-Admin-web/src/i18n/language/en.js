@@ -350,7 +350,8 @@ const en = {
       'messagetype': 'Infotype',
       'reponsestatus': 'Response Status',
       'opera': 'Operation',
-      'export': 'Export'
+      'export': 'Export',
+      'view': 'View'
     },
     'organization': {
       'viewdevice': 'ViewDevice',

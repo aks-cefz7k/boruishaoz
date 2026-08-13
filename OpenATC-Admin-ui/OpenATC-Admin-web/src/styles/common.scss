@@ -2310,3 +2310,11 @@ table td {
     }
   }
 } 
+// 操作记录json弹窗
+.recordJsonModal {
+  width: 900px;
+  pre {
+    max-height: 880px;
+    overflow: auto;
+  }
+}

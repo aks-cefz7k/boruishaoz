@@ -75,7 +75,7 @@
         </el-table-column>
         <el-table-column :label="$t('openatc.record.opera')" align="center">
         <template slot-scope="scope">
-            <el-button type="text" @click="derive(scope.$index)">{{$t('openatc.record.export')}}</el-button>
+            <el-button type="text" @click="derive(scope.$index)">{{$t('openatc.record.view')}}</el-button>
         </template>
         </el-table-column>
     </el-table>
@@ -180,7 +180,12 @@ export default {
           return
         }
         let exportData = data.data.data
-        this.leadingOut(exportData)
+        // this.leadingOut(exportData)
+        this.$alert(`<pre>${JSON.stringify(exportData, null, 4)}</pre>`, '', {
+          customClass: 'recordJsonModal',
+          showConfirmButton: false,
+          dangerouslyUseHTMLString: true
+        })
       })
     },
     handleData (data) {

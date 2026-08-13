@@ -350,7 +350,8 @@ const zh = {
       'messagetype': '消息类型',
       'reponsestatus': '返回状态',
       'opera': '操作',
-      'export': '导出'
+      'export': '导出',
+      'view': '查看'
     },
     'organization': {
       'viewdevice': '查看设备',
