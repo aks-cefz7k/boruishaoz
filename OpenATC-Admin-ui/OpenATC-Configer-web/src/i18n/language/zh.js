@@ -185,6 +185,7 @@ const zh = {
       'modelList13': '方案恢复过渡',
       'modelList19': '感应式行人过街',
       'modelList23': '相位关断',
+      'modelList16': '相位锁定',
       'tips': '提示',
       'exitmanul': '退出前需要先恢复自主控制, 是否退出?',
       'canceled': '已取消',
@@ -524,7 +525,7 @@ const zh = {
     },
     'controlpanel': {
       'controlmode': '控制模式',
-      'duration': '持续时间',
+      'duration': '绿灯持续时间',
       'transitiongreenflashtime': '过渡绿闪时间:',
       'transitionyellowtime': '过渡黄灯时间:',
       'transitionredtime': '过渡全红时间',
@@ -538,6 +539,7 @@ const zh = {
       'defaultsettings': '生成默认设置',
       'allclear': '全部清除',
       'clear': '清空',
+      'execute': '锁定当前方向',
       'resetstatus': '状态重置',
       'manualbtn': 'manualbtn',
       'manualbtn1': '东西直行',
@@ -562,7 +564,8 @@ const zh = {
       'manualpanelundefined': '',
       'manualpanel0': '默认',
       'manualpanel1': '自定义',
-      'manualcontrolbackground': 'manualcontrolbackground'
+      'manualcontrolbackground': 'manualcontrolbackground',
+      'lockconfigempty': '通道锁定信息不能为空！'
     },
     'system': {
       'information': '信息',

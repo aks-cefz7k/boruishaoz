@@ -185,6 +185,7 @@ const en = {
       'modelList13': 'Pattern Recovery',
       'modelList19': 'Inductive Pedestrian Crossing Control',
       'modelList23': 'Close Phase',
+      'modelList16': 'Lock Phase',
       'tips': 'Tips',
       'exitmanul': 'It is necessary to restore self-control before exiting. Do you want to exit?',
       'canceled': 'Cancelled',
@@ -526,7 +527,7 @@ const en = {
     },
     'controlpanel': {
       'controlmode': 'Control Mode',
-      'duration': 'Duration',
+      'duration': 'Green Duration',
       'transitiongreenflashtime': 'Green Flash Time',
       'transitionyellowtime': 'Yellow Time',
       'transitionredtime': 'All Red Time',
@@ -540,6 +541,7 @@ const en = {
       'defaultsettings': 'Default Settings',
       'allclear': 'All Clear',
       'clear': 'Clear',
+      'execute': 'Lock current direction',
       'resetstatus': 'Reset State',
       'manualbtn': 'manualbtn',
       'manualbtn1': '1',
@@ -564,7 +566,8 @@ const en = {
       'manualpanelundefined': '',
       'manualpanel0': 'Default',
       'manualpanel1': 'Custom',
-      'manualcontrolbackground': 'manualcontrolbackgrounden'
+      'manualcontrolbackground': 'manualcontrolbackgrounden',
+      'lockconfigempty': 'Channel locK info cannot be empty!'
     },
     'system': {
       'information': 'Information',
