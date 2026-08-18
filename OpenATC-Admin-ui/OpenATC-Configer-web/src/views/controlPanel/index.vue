@@ -39,7 +39,7 @@
       <div class="manual-control-button">
         <el-button type="primary" @click="resetDefaultManualpanel">{{$t('edge.controlpanel.defaultsettings')}}</el-button>
         <el-button type="primary" @click="allclear">{{$t('edge.controlpanel.allclear')}}</el-button>
-        <el-button type="primary" @click="execute">{{$t('edge.controlpanel.execute')}}</el-button>
+        <el-button type="primary" @click="execute" style="margin-left: 50px;">{{$t('edge.controlpanel.execute')}}</el-button>
       </div>
     </div>
     <div class="manual-tables" style="display: inline-block">
@@ -614,6 +614,7 @@ export default {
   color: #ffffff;
 }
 .manual-control-button {
+  width: 848px;
   margin-top: 20px;
   text-align: center;
 }
