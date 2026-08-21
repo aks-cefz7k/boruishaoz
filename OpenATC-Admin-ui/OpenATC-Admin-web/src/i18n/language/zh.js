@@ -93,10 +93,10 @@ const zh = {
       'faultsum': '故障总数',
       'faulttype': '故障类型',
       'quantity': '数量',
-      'devicemaneger': '设备管理',
+      'devicemaneger': '路口管理',
       'usermanager': '用户管理',
       'operationrecord': '操作记录',
-      'faultOrOffLine': '故障 / 在线'
+      'fault': '故障'
     },
     'faultrecord': {
       'asc': '信号机',

@@ -93,10 +93,10 @@ const en = {
       'faultsum': 'Fault Sum',
       'faulttype': 'Fault Type',
       'quantity': 'Quantity',
-      'devicemaneger': 'Device Maneger',
+      'devicemaneger': 'Cross Maneger',
       'usermanager': 'User Manager',
       'operationrecord': 'Operation Record',
-      'faultOrOffLine': 'Fault / Online'
+      'fault': 'Fault'
     },
     'faultrecord': {
       'asc': 'Asc',

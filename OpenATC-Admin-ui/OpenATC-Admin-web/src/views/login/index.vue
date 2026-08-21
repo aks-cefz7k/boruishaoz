@@ -55,6 +55,7 @@ import { SetSimuUserKey, setLanguage, getLanguage, setTheme } from '@/utils/auth
 import { SystemconfigApi } from '@/api/systemconfig.js'
 import { getMessageByCode } from '@/utils/responseMessage'
 // import axios from 'axios'
+import { clearCrossFilter } from '@/utils/crossFilterMgr'
 
 export default {
   name: 'login',
@@ -135,6 +136,7 @@ export default {
               SetSimuUserKey(this.loginForm.user_name)
               this.loginInterface.loginSucess(data.data.data.token)
               this.loadDefaultConfig()
+              clearCrossFilter() // 清除路口管理过滤条件
             })
             .catch(err => {
               this.loading = false
