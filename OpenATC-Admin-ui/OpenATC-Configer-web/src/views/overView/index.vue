@@ -45,8 +45,8 @@
                   <div class="curr-num">{{$t('edge.overview.patternnum')}}</div>
                 </div>
                 <div style="float: right; height: 50%; width: 50%; text-align: center;">
-                  <div class="curr-grade">{{controlData.name}}</div>
-                  <div class="curr-num">{{$t('edge.overview.patternname')}}</div>
+                  <!-- <div class="curr-grade">{{controlData.name}}</div>
+                  <div class="curr-num">{{$t('edge.overview.patternname')}}</div> -->
                 </div>
               </div>
             </div>
@@ -217,7 +217,7 @@
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.curModel')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value">{{currModel > -1 ? $t('edge.overview.modelList' + currModel) : ''}}</div>
                 </div>
-                <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div>
+                <!-- <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.patternname')}}:</div><div style="margin-left: 85px;" class="cross-value">{{controlData.name}}</div></div> -->
                 <div class="cross-content"><div style="float: left;" class="cross-name">{{$t('edge.overview.controlnumber')}}:</div>
                   <div style="margin-left: 85px;" class="cross-value" v-show="!isOperation">{{controlData.patternid}}</div>
                 </div>

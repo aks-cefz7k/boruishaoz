@@ -197,6 +197,7 @@ export default {
       manualpanelIsNull: false, // 判断手动面板数据是否为空
       deviceinfo: false, // 校验设备信息的规则
       splitCheck: true,
+      singleDownloadNotZero: false, // 判断单独下载数据是否为空
       type: false,
       language: 'Language',
       loading: {},
@@ -207,22 +208,27 @@ export default {
       }, {
         value: 'phase',
         // label: '相位'
+        field: 'phaseList',
         label: '2'
       }, {
         value: 'overlap',
         // label: '跟随相位'
+        field: 'overlaplList',
         label: '3'
       }, {
         value: 'pattern',
         // label: '方案'
+        field: 'patternList',
         label: '4'
       }, {
         value: 'plan',
         // label: '计划'
+        field: 'planList',
         label: '5'
       }, {
         value: 'date',
         // label: '日期'
+        field: 'dateList',
         label: '6'
       }
       // {
@@ -389,13 +395,15 @@ export default {
       if (this.value === 'all' || this.value === 'pattern') {
         // 去除patternList里的description对象
         let patternList = res.patternList
-        for (let pattern of patternList) {
-          for (let rings of pattern.rings) {
-            for (let i = 0; i < rings.length; i++) {
-              rings[i] = (
-                ({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
-                  ({ name, id, value, mode, options, minSplit, delaystart, advanceend })
-              )(rings[i])
+        if (patternList !== undefined) {
+          for (let pattern of patternList) {
+            for (let rings of pattern.rings) {
+              for (let i = 0; i < rings.length; i++) {
+                rings[i] = (
+                  ({ name, id, value, mode, options, minSplit, delaystart, advanceend }) =>
+                    ({ name, id, value, mode, options, minSplit, delaystart, advanceend })
+                )(rings[i])
+              }
             }
           }
         }
@@ -619,35 +627,39 @@ export default {
       let newTscParam = this.cloneObjectFn(tscParam)
       if (this.value === 'all' || this.value === 'date') {
         let dateList = newTscParam.dateList
-        for (let dates of dateList) {
-          let date = dates.date
-          let day = dates.day
-          let month = dates.month
-          if (date && date.includes('全选')) {
-            let index = date.indexOf('全选')
-            date.splice(index, 1) // 排除全选选项
-          } else if (date && date.includes('All')) {
-            let index = date.indexOf('All')
-            date.splice(index, 1) // 排除全选选项
-          }
-          if (day && day.includes(8)) {
-            let index = day.indexOf(8)
-            day.splice(index, 1) // 排除全选选项
-          }
-          if (month && month.includes(0)) {
-            let index = month.indexOf(0)
-            month.splice(index, 1) // 排除全选选项
+        if (dateList !== undefined) {
+          for (let dates of dateList) {
+            let date = dates.date
+            let day = dates.day
+            let month = dates.month
+            if (date && date.includes('全选')) {
+              let index = date.indexOf('全选')
+              date.splice(index, 1) // 排除全选选项
+            } else if (date && date.includes('All')) {
+              let index = date.indexOf('All')
+              date.splice(index, 1) // 排除全选选项
+            }
+            if (day && day.includes(8)) {
+              let index = day.indexOf(8)
+              day.splice(index, 1) // 排除全选选项
+            }
+            if (month && month.includes(0)) {
+              let index = month.indexOf(0)
+              month.splice(index, 1) // 排除全选选项
+            }
           }
         }
       }
       if (this.value === 'all' || this.value === 'pattern') {
         let patternList = newTscParam.patternList
-        for (let pattern of patternList) {
-          let rings = pattern.rings
-          for (let ring of rings) {
-            if (ring.length === 0) continue
-            for (let rg of ring) {
-              rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+        if (patternList !== undefined) {
+          for (let pattern of patternList) {
+            let rings = pattern.rings
+            for (let ring of rings) {
+              if (ring.length === 0) continue
+              for (let rg of ring) {
+                rg.options = this.getBinarySystem(rg.options) // 转换为二进制数组
+              }
             }
           }
         }
@@ -684,12 +696,35 @@ export default {
       if (list.includes(4)) arr[2] = 1
       return arr
     },
+    handleSingleParam (type, tscParams) {
+      this.singleDownloadNotZero = true
+      let allparam = JSON.parse(JSON.stringify(tscParams))
+      let typeOption = this.options.filter(option => option.value === type)
+      let optionobj
+      let typeParams = {}
+      if (typeOption.length) {
+        optionobj = typeOption[0]
+        let field = optionobj.field
+        if (allparam[field] === undefined || !allparam[field].length) {
+          this.singleDownloadNotZero = false
+        }
+        typeParams[field] = allparam[field]
+        return typeParams
+      }
+    },
     singleDownload (typeStr) {
       let tscParam = this.globalParamModel.getGlobalParams()
       let targetTscParam = this.normalData(tscParam) // 规范数据格式
       let newTscParam = this.handleTscParam(targetTscParam)
+      let typeParams = this.handleSingleParam(typeStr, newTscParam)
+      if (!this.singleDownloadNotZero) {
+        this.$message.error(
+          this.$t('edge.errorTip.singleDownloadNotZero')
+        )
+        return
+      }
       this.lockScreen()
-      downloadSingleTscParam(typeStr, newTscParam).then(data => {
+      downloadSingleTscParam(typeStr, typeParams).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
           if (data.data.code === '4003') {

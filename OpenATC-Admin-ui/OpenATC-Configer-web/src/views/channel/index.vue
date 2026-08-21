@@ -19,9 +19,8 @@
           <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('edge.channel.desc')" prop="desc" min-width="100">
+      <!-- <el-table-column align="center" :label="$t('edge.channel.desc')" prop="desc" min-width="100">
         <template slot-scope="scope">
-          <!-- <el-input size="small" v-model="scope.row.desc"  @change="handleEdit(scope.$index, scope.row)"></el-input> -->
           <el-select v-model="scope.row.desc" :placeholder="$t('edge.common.select')" size="small" clearable>
             <el-option
               v-for="item in signLocationList"
@@ -31,8 +30,8 @@
             </el-option>
           </el-select>
         </template>
-      </el-table-column>
-      <el-table-column align="center" :label="$t('edge.channel.controlType')" min-width="200" prop="typeAndSouce">
+      </el-table-column> -->
+      <el-table-column align="center" :label="$t('edge.channel.controlType')" prop="typeAndSouce">
         <template slot-scope="scope">
           <el-cascader
             size="medium"
@@ -46,12 +45,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" :label="$t('edge.phase.lane')">
+      <!-- <el-table-column align="center" :label="$t('edge.phase.lane')">
         <template slot-scope="scope">
           <el-input size="small" v-model="scope.row.lane" oninput="this.value=this.value.replace(/[^\d\,]/g,'')"></el-input>
-          <!-- <span>{{scope.row.Lane}}</span> -->
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column align="center" :label="$t('edge.channel.voltthresh')">
         <template slot-scope="scope">

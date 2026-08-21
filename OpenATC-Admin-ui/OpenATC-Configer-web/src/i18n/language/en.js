@@ -118,7 +118,7 @@ const en = {
       'exitmanual': 'Exit Manual',
       'controlmodel': 'Control Pattern',
       'patternname': 'Pattern Name',
-      'controlnumber': 'Control Num',
+      'controlnumber': 'Pattern Num',
       'mode': 'Mode',
       'stage': 'Stage',
       'specialcontrol': 'Special Control',
@@ -805,7 +805,8 @@ const en = {
       'ringErrorTip': 'Ring configuration should be started from ring 1, and skip ring configuration is not allowed!',
       'deviceinformationnotnull': 'Address code in device information cannot be empty!',
       'noSchemeUpload': 'There is no scheme to upload!',
-      'readSchemeSucc': 'Reading scheme succeeded!'
+      'readSchemeSucc': 'Reading scheme succeeded!',
+      'singleDownloadNotZero': 'Download data cannot be empty!'
     },
     'importTemp': {
       'editTemplateData': 'Edit Template Data',

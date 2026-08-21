@@ -118,7 +118,7 @@ const zh = {
       'exitmanual': '退出手动',
       'controlmodel': '控制模式',
       'patternname': '方案名称',
-      'controlnumber': '控制编号',
+      'controlnumber': '方案编号',
       'mode': '控制方式',
       'stage': '阶段(驻留)',
       'specialcontrol': '特殊控制',
@@ -804,7 +804,8 @@ const zh = {
       'ringErrorTip': '环配置应从环1起配，不允出现跳环配置!',
       'deviceinformationnotnull': '设备信息中的地址码不能为空！',
       'noSchemeUpload': '暂没有可上载方案！',
-      'readSchemeSucc': '读取方案成功！'
+      'readSchemeSucc': '读取方案成功！',
+      'singleDownloadNotZero': '下载数据不能为空!'
     },
     'importTemp': {
       'editTemplateData': '模板数据编辑',
