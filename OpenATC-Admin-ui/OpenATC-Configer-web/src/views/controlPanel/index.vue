@@ -406,7 +406,7 @@ export default {
           let channellocKinfo = currDirChannellockInfo.channel.map(data => {
             return {
               channelid: data.channelid,
-              lockstatus: data.channelstatus
+              channelstatus: data.channelstatus
             }
           })
           param.channellocKinfo = channellocKinfo
