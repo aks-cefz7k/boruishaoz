@@ -312,5 +312,10 @@
   "key": "getFaultHistory",
   "url": "/fault/history",
   "method": "post"
+},
+{
+  "key": "getLRRoadConfig",
+  "url": "/platform/LRRoadConfig",
+  "method": "get"
 }
 ]
