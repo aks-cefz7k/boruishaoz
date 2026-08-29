@@ -142,7 +142,14 @@ const zh = {
       'operator': '确认者',
       'operationTime': '确认时间',
       'enumerate': '确认结果',
-      'operation': '操作'
+      'operation': '操作',
+      'realtimefault': '实时故障',
+      'historicalfault': '历史故障',
+      'boardtype': '板卡类型',
+      'mainfaulttype': '故障主类型',
+      'confirmresults': '确认结果',
+      'intersectionname': '路口名称',
+      'faulttime': '故障发生时间'
     },
     'devicemanager': {
       'devicelist': '路口列表',

@@ -142,7 +142,14 @@ const en = {
       'faultvaluedetail': 'Fault Value Detail',
       'operator': 'Operator',
       'operationTime': 'Operation Time',
-      'enumerate': 'Enumerate'
+      'enumerate': 'Enumerate',
+      'realtimefault': 'Realtime Fault',
+      'historicalfault': 'Historical Fault',
+      'boardtype': 'Board type',
+      'mainfaulttype': 'Main fault type',
+      'confirmresults': 'Confirmation results',
+      'intersectionname': 'Intersection Name',
+      'faulttime': 'Time of failure'
     },
     'devicemanager': {
       'devicelist': 'Intersection',

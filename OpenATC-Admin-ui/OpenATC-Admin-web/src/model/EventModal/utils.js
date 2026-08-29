@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) 2020 kedacom
+ * OpenATC is licensed under Mulan PSL v2.
+ * You can use i18n software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ **/
+import i18n from '@/i18n/index.js'
 export function getFaultType (type) {
   if (type >= 101 && type <= 199) {
     return '主控板故障'
@@ -41,6 +53,64 @@ const faultCodeMap = new Map([
   [401, 'I/O板未初始化'],
   [402, 'I/O板脱机']
 ])
+
+const faultCodeMapEn = new Map([
+  [101, 'CanBus Fault'],
+  [102, 'Yellow Flasher Fault'],
+  [103, 'TZParam Fault'],
+  [104, 'FaultDet Offline'],
+  [105, 'Relay Not Work'],
+  [201, 'LampBoard ID Fault'],
+  [202, 'LampBoard Offline'],
+  [203, 'No Red Lamp Is On'],
+  [204, 'Red And Green Conflict'],
+  [205, 'Green Conflict'],
+  [206, 'Red Lamp Voltage Fault'],
+  [207, 'Yellow Lamp Voltage Fault'],
+  [208, 'Green Lamp Voltage Fault'],
+  [209, 'Red Lamp Lamp Power Fault'],
+  [210, 'Yellow Lamp Lamp Power Fault'],
+  [211, 'Green Lamp Lamp Power Fault'],
+  [212, 'Lamp pack failure'],
+  [213, 'Car detector failure'],
+  [214, 'Lamp Control Board Slot Code Error'],
+  [215, 'Code Error Of Lamp Control Board Plug'],
+  [216, 'The Number Of Lamp Control Board Not be Configed for The Master'],
+  [301, 'VehDetBoard Is Not Init'],
+  [302, 'VehDetBoard Is Offline'],
+  [303, 'VehDetector Short Circiut'],
+  [304, 'VehDetector Open  Circiut'],
+  [401, 'I/O Board Is Not Init'],
+  [402, 'I/O Board Offline']
+])
 export function getMainFaultType (type) {
   return faultCodeMap.get(type)
+}
+
+export function getAllMainFaultTypeArr (keyfield, valuefield) {
+  let typeArr = []
+  let label = 'label'
+  let val = 'value'
+  if (keyfield && keyfield !== '') {
+    label = keyfield
+  }
+  if (valuefield && valuefield !== '') {
+    val = valuefield
+  }
+  if (i18n.locale === 'en') {
+    for (let [key, value] of faultCodeMapEn.entries()) {
+      typeArr.push({
+        [label]: key,
+        [val]: value
+      })
+    }
+  } else {
+    for (let [key, value] of faultCodeMap) {
+      typeArr.push({
+        [label]: key,
+        [val]: value
+      })
+    }
+  }
+  return typeArr
 }
