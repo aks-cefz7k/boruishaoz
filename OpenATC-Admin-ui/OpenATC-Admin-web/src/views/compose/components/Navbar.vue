@@ -174,7 +174,7 @@
                     </el-col>
                     <el-col :span="20">
                       <div class="grid-content bg-purple">
-                       {{fault.id}} {{fault.name}}
+                        {{fault.name?fault.name:fault.agentid}}
                       </div>
                     </el-col>
                   </el-row>
@@ -397,9 +397,9 @@ export default {
       this.faultDatas = data
       searchRoadName(data.agentid).then(j => {
         if (j.data.data.name) {
-          this.roadName = j.data.data.id + ' ' + j.data.data.name
+          this.roadName = j.data.data.name
         } else {
-          this.roadName = j.data.data.id
+          this.roadName = j.data.data.agentid
         }
       })
       this.infotype = this.formatterInfotype(data.infotype)
@@ -507,6 +507,7 @@ export default {
             })
           }
           this.faultData = data.data.data.content
+          console.log(this.faultData, 'this.faultData')
         }
       })
     },
