@@ -313,9 +313,21 @@
             display: flex;
             align-items: center;
         }
+        .stateGroup {
+          overflow: hidden;
+          width: 75px;
+          margin: 5px auto;
+        }
         .state {
-            font-size: 14px;
-            color: $--color-text-regular;
+          float: left;
+          font-size: 14px;
+          color: $--color-text-regular;
+        }
+        .toJump {
+          cursor: pointer;
+        }
+        .offlinestate {
+          width: 100%;
         }
         .desc {
             text-align: center;
@@ -326,7 +338,7 @@
             background-size: 66px 66px;
             background-repeat: no-repeat;
             background-position:center center;
-            margin: 0 13.5% 0 20%;
+            margin: 0 13.5% 0 18%;
         }
         .devsUp {
             > div {
@@ -2310,3 +2322,11 @@ table td {
     }
   }
 } 
+// 操作记录json弹窗
+.recordJsonModal {
+  width: 900px;
+  pre {
+    max-height: 880px;
+    overflow: auto;
+  }
+}

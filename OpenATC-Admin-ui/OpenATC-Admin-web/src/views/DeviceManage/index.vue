@@ -11,6 +11,8 @@
  **/
 <template>
   <div class="openatc-device">
+    <!-- <SelectAgentid @onChange="onSelectAgentidChange"></SelectAgentid>
+    <SelectCrossPhase :agentid="agentid" @onChange="onSelectCrossPhaseChange"></SelectCrossPhase> -->
     <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
     <div class="devs-container">
       <div class="tag-container">
@@ -110,9 +112,9 @@
                   trigger="click">
                   <div>
                     <template>
-                      <el-checkbox @change="onOnlineChange" :checked="true" :label="$t('openatc.devicemanager.online')"></el-checkbox>
-                      <el-checkbox @change="onFaultChange" :checked="true" :label="$t('openatc.devicemanager.fault')"></el-checkbox>
-                      <el-checkbox @change="onOfflineChange" :checked="true" :label="$t('openatc.devicemanager.offline')"></el-checkbox>
+                      <el-checkbox @change="onOnlineChange" :checked="isOnlineChecked" :label="$t('openatc.devicemanager.online')"></el-checkbox>
+                      <el-checkbox @change="onFaultChange" :checked="isFaultChecked" :label="$t('openatc.devicemanager.fault')"></el-checkbox>
+                      <el-checkbox @change="onOfflineChange" :checked="isOfflineChecked" :label="$t('openatc.devicemanager.offline')"></el-checkbox>
                     </template>
                   </div>
                   <el-row type="text" slot="reference">
@@ -173,12 +175,16 @@ import DeviceTags from './deviceTags'
 import { GetAllDevice, DeleteDevice } from '@/api/device'
 import { GetCurrentFaultByAgentid } from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
+import SelectAgentid from '@/components/SelectAgentid'
+import SelectCrossPhase from '@/components/SelectCrossPhase'
+import { setCrossFilter, getCrossFilter } from '@/utils/crossFilterMgr'
 export default {
   name: 'device',
-  components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics },
+  components: { Update, Messagebox, DeviceTags, FaultDetail, PatternStatistics, TrafficStatistics, SelectAgentid, SelectCrossPhase },
   data () {
     return {
-      stateList: [],
+      agentid: 0,
+      stateList: ['UP', 'FAULT', 'DOWN'],
       isOnlineChecked: true,
       isFaultChecked: true,
       isOfflineChecked: true,
@@ -211,7 +217,7 @@ export default {
         (data.name !== undefined && data.name.toLowerCase().includes(this.devsfilter.toLowerCase()))
       )
       let stateList = this.stateList
-      if (stateList && stateList.length > 0) {
+      if (stateList && stateList.length >= 0) {
         list = list.filter(dev => {
           return stateList.includes(dev.state)
         })
@@ -223,10 +229,26 @@ export default {
       return list
     }
   },
+  watch: {
+    devsfilter: {
+      handler: (filter) => {
+        setCrossFilter(filter)
+      },
+      deep: true
+    }
+  },
   created () {
+    this.devsfilter = getCrossFilter('deviceFilter')
     this.getList()
+    this.getStatusFilterParams()
   },
   methods: {
+    onSelectAgentidChange (agentid) {
+      this.agentid = agentid
+    },
+    onSelectCrossPhaseChange (dir) {
+      // console.log(dir)
+    },
     onOnlineChange (val) {
       this.isOnlineChecked = val
       this.onStateChange()
@@ -402,6 +424,26 @@ export default {
           break
         case 'traffic':
           break
+      }
+    },
+    getStatusFilterParams () {
+      // 获取从首页跳转过来的设备状态过滤参数
+      if (this.$route.params.filter !== undefined) {
+        let stateFilter = this.$route.params.filter
+        switch (stateFilter) {
+          case 'online': this.onOnlineChange(true)
+            this.onOfflineChange(false)
+            this.onFaultChange(false)
+            break
+          case 'offline': this.onOfflineChange(true)
+            this.onOnlineChange(false)
+            this.onFaultChange(false)
+            break
+          case 'fault': this.onFaultChange(true)
+            this.onOnlineChange(false)
+            this.onOfflineChange(false)
+            break
+        }
       }
     }
   }

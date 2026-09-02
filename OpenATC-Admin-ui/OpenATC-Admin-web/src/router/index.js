@@ -77,6 +77,7 @@ export const constantRouterMapOfLogin = [{
   name: 'Device',
   hidden: true,
   children: [{
+    name: 'deviceMgr',
     path: '/device',
     component: () => import('@/views/DeviceManage/index')
   }]

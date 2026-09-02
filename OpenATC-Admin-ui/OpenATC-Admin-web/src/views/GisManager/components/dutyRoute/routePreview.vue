@@ -166,9 +166,9 @@ export default {
 }
 
 .block >>> .el-timeline-item__node--large {
-  left: -8px;
-  width: 28px;
-  height: 28px;
+  left: -4px;
+  width: 20px;
+  height: 20px;
 }
 .block >>> .el-timeline-item__tail {
   position: absolute;

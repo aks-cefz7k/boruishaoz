@@ -104,11 +104,10 @@ export const downloadTscParam = (operator, tscParams) => {
   return api.Send({}, data)
 }
 
-export const downloadSingleTscParam = (type, tscParams) => {
+export const downloadSingleTscParam = (type, typeParams) => {
   var iframdevid = getIframdevid()
   let api = new Authapi('downloadSingleTscParam')
-  let param = JSON.stringify(tscParams)
-  let params = JSON.parse(param)
+  let params = JSON.parse(JSON.stringify(typeParams))
   let data = {}
   data.agentid = iframdevid
   data.operation = 'set-request'

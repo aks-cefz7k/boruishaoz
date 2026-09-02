@@ -160,6 +160,21 @@
     "method": "put"
   },
   {
+    "key": "uploadSingleTscParam",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
+    "key": "getTscCurrentVolume",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
+    "key": "putTscControl",
+    "url": "/devs/message",
+    "method": "post"
+  },
+  {
     "key": "getTscControl",
     "url": "/devs/message",
     "method": "post"

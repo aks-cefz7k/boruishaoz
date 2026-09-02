@@ -30,7 +30,7 @@
         <el-col :span="12">
           <el-row :gutter="0">
             <el-col :span="10">
-              <div class="grid-content-label">
+              <div class="grid-content-label" style="margin-left: -10px;">
                 {{ $t("openatc.dutyroute.residentphase") }}:
               </div>
             </el-col>
@@ -62,19 +62,21 @@
             </el-col>
             <el-col :span="16">
               <div style="display:inline-block;">
-              <template style="padding:5px;">{{ node.resttime }}</template>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <el-button  v-show="tabName === 'second'"
-                          style="float: right;padding:5px;"
-                          :type="getButtonType(node)"
-                          size="small"
-                          @click="executeViproute">
-                <template v-if="!node.state || node.state === 0">
-                  {{ $t("openatc.dutyroute.executenow") }}
-                </template>
-                <template v-else>
-                  {{ $t("openatc.dutyroute.cancelexecute") }}
-                </template>
-              </el-button>
+                <div style="display:inline-block; vertical-align:top;">{{ node.resttime }}</div>
+                <div style="display:inline-block;margin-left:60px;">
+                  <el-button  v-show="tabName === 'second'"
+                              style="float: right;padding:5px;"
+                              :type="getButtonType(node)"
+                              size="small"
+                              @click="executeViproute">
+                    <template v-if="!node.state || node.state === 0">
+                      {{ $t("openatc.dutyroute.executenow") }}
+                    </template>
+                    <template v-else>
+                      {{ $t("openatc.dutyroute.cancelexecute") }}
+                    </template>
+                  </el-button>
+                </div>
               </div>
             </el-col>
           </el-row>
