@@ -14,20 +14,84 @@
     <div style="float:left;margin:15px 20px;">
       <div class="common-table-title">{{$t('openatc.main.operationrecord')}}</div>
     </div>
-    <div class="filter-container">
-      <el-form>
-        <el-form-item>
-          <el-input
-            v-model="schfilter"
-            :placeholder="$t('openatc.common.searchplaceholder')"
-            prefix-icon="el-icon-search"
-            style="width: 200px;"/>
-        </el-form-item>
-      </el-form>
+    <div class="filter-container" style="border: 0px solid red;width:90%;">
+      <el-row  :gutter="10">
+        <el-col :span="3">
+          <div>
+            <span class="header-span">源地址：</span>
+            <el-input
+                v-model="source"
+                style="width:70%"
+            />
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div>
+            <span class="header-span">消息类型：</span>
+            <el-input
+                v-model="infotype"
+                style="width:60%"
+            />
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div>
+            <span class="header-span">返回状态：</span>
+            <el-input
+                v-model="status"
+                style="width:60%"
+            />
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div>
+            <span class="header-span">路口名称：</span>
+            <el-input
+                v-model="agentid"
+                style="width:60%"
+            />
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <span class="header-span">用户名：</span>
+            <el-input
+                v-model="operator"
+                style="width:70%"
+            />
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="timepicker">
+            <span class="header-span">操作时间：</span>
+            <template >
+              <el-date-picker
+                style="width:80%"
+                v-model="timeValue"
+                popper-class="common-date-popper"
+                type="datetimerange"
+                range-separator="-"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间">
+              </el-date-picker>
+            </template>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              @click="onSearchClick()"
+              >{{ $t("openatc.button.search") }}
+            </el-button>
+          </div>
+        </el-col>
+      </el-row>
     </div>
-     <div class="atc-table">
-    <el-table
-        :data="tableData.filter(data => !schfilter || (data.operator !== undefined && data.operator.toLowerCase().includes(schfilter.toLowerCase())) || (data.description !== undefined && data.description.toLowerCase().includes(schfilter.toLowerCase())))"
+    <div class="atc-table">
+      <el-table
+        :data="tableData"
         size="mini"
         :max-height="tableHeight"
         style="width: 100%"
@@ -78,7 +142,7 @@
             <el-button type="text" @click="derive(scope.$index)">{{$t('openatc.record.view')}}</el-button>
         </template>
         </el-table-column>
-    </el-table>
+      </el-table>
      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum" :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" style='margin:0px;'>
     </el-pagination>
   </div>
@@ -93,6 +157,12 @@ export default {
   components: {},
   data () {
     return {
+      source: '',
+      infotype: '',
+      status: '',
+      agentid: '',
+      operator: '',
+      timeValue: '',
       tableHeight: 700,
       screenHeight: window.innerHeight, // 屏幕高度
       schfilter: '',
@@ -138,6 +208,17 @@ export default {
     this.getAllRecord()
   },
   methods: {
+    onSearchClick () {
+      let reqData = {
+        source: this.source,
+        infotype: this.infotype,
+        status: this.status,
+        agentid: this.agentid,
+        operator: this.operator,
+        timeValue: this.timeValue
+      }
+      console.log(reqData)
+    },
     leadingOut (data) {
       // 定义文件内容，类型必须为Blob 否则createObjectURL会报错
       // const tscParam = this.globalParamModel.getGlobalParams()
