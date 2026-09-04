@@ -471,7 +471,6 @@ export default {
       this.$store.dispatch('SetChannelDesc', desclist)
     },
     upload () {
-      this.globalParamModel.reset()
       this.lockScreen()
       let typeStr = this.value
       if (typeStr !== 'all') {
@@ -479,6 +478,7 @@ export default {
         // this.unlockScreen()
         return
       }
+      this.globalParamModel.reset()
       uploadTscParam().then(data => {
         this.unlockScreen()
         if (!data.data.success) {
@@ -548,16 +548,8 @@ export default {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        // if (allTscParam.manualpanel === undefined) {
-        //   allTscParam.manualpanel = {}
-        // }
-        // if (allTscParam.channellock === undefined) {
-        //   allTscParam.channellock = []
-        // }
-        // if (allTscParam.singleoptim === undefined) {
-        //   allTscParam.singleoptim = []
-        // }
-        this.globalParamModel.setGlobalParams(allTscParam)
+        let newTscParam = this.handleSingleData(typeStr, allTscParam)
+        this.globalParamModel.setGlobalParams(newTscParam)
         this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
         // 上载成功后就生成通道描述map
         // if (typeStr === 'channel') {
@@ -567,6 +559,16 @@ export default {
         //   })
         // }
       })
+    },
+    handleSingleData (typeStr, allTscParam) {
+      // 在全局参数中，替换单独上载的数据
+      let singleTscParam = JSON.parse(JSON.stringify(allTscParam))
+      let curTscParam = this.globalParamModel.getGlobalParams()
+      curTscParam = {
+        ...curTscParam,
+        ...singleTscParam
+      }
+      return curTscParam
     },
     download () {
       let typeStr = this.value
