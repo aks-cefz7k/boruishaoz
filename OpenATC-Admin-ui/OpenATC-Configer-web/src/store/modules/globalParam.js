@@ -68,7 +68,8 @@ const Global = {
     graphicMode: false, // 为true时，切换到图形界面模式，只显示路口图部分
     roadDirection: 'right', // 当前路口行车方向：默认右行
     channelDescMap: new Map(), // 管理实时通道描述数据
-    isShowGui: true // 总览当前是否是图形界面
+    isShowGui: true, // 总览当前是否是图形界面
+    isRefreshTankuang: 'norefresh' // 刷新某个页面的相位弹框组件
   },
   mutations: {
     SAVE_PARAM: (state, data) => {
@@ -124,6 +125,9 @@ const Global = {
     },
     SET_SHOW_GUI: (state, isShowGui) => {
       state.isShowGui = isShowGui
+    },
+    SET_ISREFRESHTANKUANG: (state, isRefreshTankuang) => {
+      state.isRefreshTankuang = isRefreshTankuang
     }
   },
   actions: {
@@ -183,6 +187,9 @@ const Global = {
     },
     SetShowGui ({ commit }, isShowGui) {
       commit('SET_SHOW_GUI', isShowGui)
+    },
+    SetRefreshTankuang ({ commit }, isRefreshTankuang) {
+      commit('SET_ISREFRESHTANKUANG', isRefreshTankuang)
     }
   }
 }

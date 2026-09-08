@@ -560,10 +560,18 @@ export default {
         // }
       })
     },
-    handleSingleData (typeStr, allTscParam) {
+    handleSingleData (type, TscParam) {
       // 在全局参数中，替换单独上载的数据
-      let singleTscParam = JSON.parse(JSON.stringify(allTscParam))
+      let singleTscParam = JSON.parse(JSON.stringify(TscParam))
       let curTscParam = this.globalParamModel.getGlobalParams()
+      // 解决相位、跟随相位单独上载，相位方向和行人相位方向组件不更新问题
+      if (type === 'phase') {
+        this.$store.dispatch('SetRefreshTankuang', 'phase')
+      } else if (type === 'overlap') {
+        this.$store.dispatch('SetRefreshTankuang', 'overlap')
+      } else {
+        this.$store.dispatch('SetRefreshTankuang', 'norefresh')
+      }
       curTscParam = {
         ...curTscParam,
         ...singleTscParam
