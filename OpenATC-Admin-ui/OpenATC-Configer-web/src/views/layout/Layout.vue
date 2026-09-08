@@ -15,7 +15,7 @@
     <sidebar class="sidebar-container" v-if="!hideMenu && !graphicMode"></sidebar>
     <div class="edge-main-container" :class="{'changeMainPosition': hideMenu || graphicMode}">
       <navbar></navbar>
-      <app-main v-if="isload"></app-main>
+      <app-main></app-main>
     </div>
   </div>
 </template>
@@ -43,8 +43,7 @@ export default {
       bodyDomSize: {
         width: 1920,
         height: 1080
-      },
-      isload: false
+      }
     }
   },
   mixins: [ResizeMixin],
@@ -134,6 +133,10 @@ export default {
     },
     getRoadConfig () {
       GetLRRoadConfig().then((data) => {
+        if (!data) {
+          this.$store.dispatch('SetRoadDirection', 'right')
+          return
+        }
         if (!data.data.success) {
           this.$store.dispatch('SetRoadDirection', 'right')
           return
@@ -145,11 +148,9 @@ export default {
         } else {
           this.$store.dispatch('SetRoadDirection', 'right')
         }
-        this.isload = true
       }).catch(error => {
-        this.$message.error(error)
         this.$store.dispatch('SetRoadDirection', 'right')
-        console.log(error)
+        this.$message.error(error)
       })
       // axios.get('./LRRoadConfig.json').then(val => {
       //   // 读取左行 右行配置文件
@@ -159,7 +160,6 @@ export default {
       //   } else {
       //     this.$store.dispatch('SetRoadDirection', 'right')
       //   }
-      //   this.isload = true
       // })
     }
   }
