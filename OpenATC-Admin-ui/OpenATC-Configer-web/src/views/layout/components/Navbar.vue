@@ -601,8 +601,8 @@ export default {
       downloadTscParam(this.$store.state.user.user_name, newTscParam).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          if (data.data.code === '4002') { // 信号机参数校验
-            let codeList = data.data.data.errorCode
+          if (data.data.code === '4002' && data.data.data.errorCode === '4207') { // 信号机参数校验
+            let codeList = data.data.data.content.errorCode
             if (codeList.length === 0) {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return
@@ -737,8 +737,25 @@ export default {
       downloadSingleTscParam(typeStr, typeParams).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          if (data.data.code === '4003') {
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+          if (data.data.code === '4002' && data.data.data.errorCode === '4207') { // 信号机参数校验
+            let codeList = data.data.data.content.errorCode
+            if (codeList.length === 0) {
+              this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
+              return
+            }
+            let errorMes = this.$t('edge.common.downloaderror')
+            for (let code of codeList) {
+              if (this.$i18n.locale === 'en') {
+                errorMes = getErrorMesEn(errorMes, code)
+              } else {
+                errorMes = getErrorMesZh(errorMes, code)
+              }
+            }
+            this.$message({
+              message: errorMes,
+              type: 'error',
+              dangerouslyUseHTMLString: true
+            })
             return
           }
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
