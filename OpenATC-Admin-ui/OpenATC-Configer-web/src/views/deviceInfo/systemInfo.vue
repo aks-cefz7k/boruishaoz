@@ -442,8 +442,8 @@ export default {
             this.$message.error(this.$t('edge.errorTip.devicenotonline'))
             return
           }
-          if (data.data.code === '4002') { // 信号机参数校验
-            let codeList = data.data.data.errorCode
+          if (data.data.code === '4002' && data.data.data.errorCode === '4207') { // 信号机参数校验
+            let codeList = data.data.data.content.errorCode
             if (codeList.length === 0) {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return

@@ -693,6 +693,7 @@ export default {
       this.stagesList = []
       this.currentStage = data.current_stage
       let stages = data.stages
+      if (!stages) return
       for (let stage of stages) {
         let tempList = []
         let directionList = []

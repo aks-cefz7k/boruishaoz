@@ -471,7 +471,6 @@ export default {
       this.$store.dispatch('SetChannelDesc', desclist)
     },
     upload () {
-      this.globalParamModel.reset()
       this.lockScreen()
       let typeStr = this.value
       if (typeStr !== 'all') {
@@ -479,6 +478,7 @@ export default {
         // this.unlockScreen()
         return
       }
+      this.globalParamModel.reset()
       uploadTscParam().then(data => {
         this.unlockScreen()
         if (!data.data.success) {
@@ -548,16 +548,8 @@ export default {
           this.$message.error(this.$t('edge.errorTip.noSchemeUpload'))
           return
         }
-        // if (allTscParam.manualpanel === undefined) {
-        //   allTscParam.manualpanel = {}
-        // }
-        // if (allTscParam.channellock === undefined) {
-        //   allTscParam.channellock = []
-        // }
-        // if (allTscParam.singleoptim === undefined) {
-        //   allTscParam.singleoptim = []
-        // }
-        this.globalParamModel.setGlobalParams(allTscParam)
+        let newTscParam = this.handleSingleData(typeStr, allTscParam)
+        this.globalParamModel.setGlobalParams(newTscParam)
         this.$alert(this.$t('edge.common.uploadsuccess'), { type: 'success' })
         // 上载成功后就生成通道描述map
         // if (typeStr === 'channel') {
@@ -567,6 +559,24 @@ export default {
         //   })
         // }
       })
+    },
+    handleSingleData (type, TscParam) {
+      // 在全局参数中，替换单独上载的数据
+      let singleTscParam = JSON.parse(JSON.stringify(TscParam))
+      let curTscParam = this.globalParamModel.getGlobalParams()
+      // 解决相位、跟随相位单独上载，相位方向和行人相位方向组件不更新问题
+      if (type === 'phase') {
+        this.$store.dispatch('SetRefreshTankuang', 'phase')
+      } else if (type === 'overlap') {
+        this.$store.dispatch('SetRefreshTankuang', 'overlap')
+      } else {
+        this.$store.dispatch('SetRefreshTankuang', 'norefresh')
+      }
+      curTscParam = {
+        ...curTscParam,
+        ...singleTscParam
+      }
+      return curTscParam
     },
     download () {
       let typeStr = this.value
@@ -591,8 +601,8 @@ export default {
       downloadTscParam(this.$store.state.user.user_name, newTscParam).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          if (data.data.code === '4002') { // 信号机参数校验
-            let codeList = data.data.data.errorCode
+          if (data.data.code === '4002' && data.data.data.errorCode === '4207') { // 信号机参数校验
+            let codeList = data.data.data.content.errorCode
             if (codeList.length === 0) {
               this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
               return
@@ -727,8 +737,25 @@ export default {
       downloadSingleTscParam(typeStr, typeParams).then(data => {
         this.unlockScreen()
         if (!data.data.success) {
-          if (data.data.code === '4003') {
-            this.$message.error(this.$t('edge.errorTip.devicenotonline'))
+          if (data.data.code === '4002' && data.data.data.errorCode === '4207') { // 信号机参数校验
+            let codeList = data.data.data.content.errorCode
+            if (codeList.length === 0) {
+              this.$message.error(this.$t('edge.errorTip.saveParamFailed'))
+              return
+            }
+            let errorMes = this.$t('edge.common.downloaderror')
+            for (let code of codeList) {
+              if (this.$i18n.locale === 'en') {
+                errorMes = getErrorMesEn(errorMes, code)
+              } else {
+                errorMes = getErrorMesZh(errorMes, code)
+              }
+            }
+            this.$message({
+              message: errorMes,
+              type: 'error',
+              dangerouslyUseHTMLString: true
+            })
             return
           }
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))

@@ -20,12 +20,12 @@
       </el-table-column>
       <el-table-column class="table-column" :label="$t('edge.phase.desc')" min-width="150" align="center">
         <template slot-scope="scope">
-          <Tankuang :list="scope.row.direction" :imgs="imgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" :showSpan="showSpan" @finsh="handlefinsh"/>
+          <Tankuang :list="scope.row.direction" :imgs="imgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" :showSpan="showSpan" :refresh="refreshTankuang" @finsh="handlefinsh"/>
         </template>
       </el-table-column>
       <el-table-column class="table-column" :label="$t('edge.phase.peddesc')" min-width="150" align="center">
         <template slot-scope="scope">
-          <PedTankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" :showSpan="showSpan" @finsh="handlefinshped"/>
+          <PedTankuang :list="scope.row.peddirection" :imgs="pedimgs" :index="scope.$index" :showBottomName="showBottomName" :lines="lines" :rows="rows" :showSpan="showSpan" :refresh="refreshTankuang" @finsh="handlefinshped"/>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('edge.overlap.desc')">
@@ -105,7 +105,8 @@ export default {
       }, {
         label: this.$t('edge.phase.offpulse'),
         value: 3
-      }]
+      }],
+      refreshTankuang: false // 是否重新刷新弹框数据
     }
   },
   filters: {
@@ -139,7 +140,8 @@ export default {
       return arrays
     },
     ...mapState({
-      overlaplList: state => state.globalParam.tscParam.overlaplList
+      overlaplList: state => state.globalParam.tscParam.overlaplList,
+      isRefreshTankuang: state => state.globalParam.isRefreshTankuang
     })
   },
   created () {
@@ -158,6 +160,13 @@ export default {
   watch: {
     overlaplList: function () {
       this.init()
+    },
+    isRefreshTankuang: {
+      handler: function (val) {
+        if (val === 'overlap') {
+          this.refreshTankuang = true
+        }
+      }
     }
   },
   methods: {
