@@ -403,5 +403,10 @@
     "key": "getHistoryPatternData",
     "url": "/historydata/pattern/range",
     "method": "post"
+  },
+  {
+    "key": "getHisParamsRange",
+    "url": "/devs/hisparams/range",
+    "method": "post"
   }
 ]

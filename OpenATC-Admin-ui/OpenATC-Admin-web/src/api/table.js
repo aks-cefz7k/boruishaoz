@@ -24,3 +24,8 @@ export function exportHisParams (uuid) {
   let paramList = [uuid, 'export', 'request']
   return api.Send({}, {}, paramList)
 }
+
+export function getHisParamsRange (param) {
+  let api = new Authapi('getHisParamsRange')
+  return api.Send({}, param)
+}

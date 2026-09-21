@@ -345,9 +345,11 @@ const zh = {
     'record': {
       'user': '用户',
       'updatetime': '更新时间',
+      'opertime': '操作时间',
       'originadress': '源地址',
       'deviceid': '设备ID',
       'messagetype': '消息类型',
+      'subInfoType': '消息子类型',
       'reponsestatus': '返回状态',
       'opera': '操作',
       'export': '导出',
