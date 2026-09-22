@@ -352,9 +352,11 @@ const en = {
     'record': {
       'user': 'Operator',
       'updatetime': 'Update Time',
+      'opertime': 'Operation Time',
       'originadress': 'Source',
       'deviceid': 'Device Id',
       'messagetype': 'Infotype',
+      'subInfoType': 'Sub InfoType',
       'reponsestatus': 'Response Status',
       'opera': 'Operation',
       'export': 'Export',

@@ -70,21 +70,38 @@ export default {
     showSpan: {
       type: Boolean,
       default: true
+    },
+    refresh: {
+      type: Boolean,
+      default: false
+    }
+  },
+  watch: {
+    refresh: {
+      handler: function (val) {
+        if (val) {
+          this.refreshData()
+        }
+      }
     }
   },
   created () {
-    for (let obj of this.imgs) {
-      if (this.list.length > 0 && this.list.includes(obj.id)) {
-        this.status.push(1)
-      } else {
-        this.status.push(0)
-      }
-    }
-    this.name = this.getName()
-    // 根据行列计算最多展示的图标
-    this.sum = this.lines * this.rows
+    this.refreshData()
   },
   methods: {
+    refreshData () {
+      this.status = []
+      for (let obj of this.imgs) {
+        if (this.list.length > 0 && this.list.includes(obj.id)) {
+          this.status.push(1)
+        } else {
+          this.status.push(0)
+        }
+      }
+      this.name = this.getName()
+      // 根据行列计算最多展示的图标
+      this.sum = this.lines * this.rows
+    },
     boxShow (index) {
       this.status[index] = !this.status[index]
       this.name = this.getName()

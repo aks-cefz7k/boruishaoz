@@ -14,71 +14,132 @@
     <div style="float:left;margin:15px 20px;">
       <div class="common-table-title">{{$t('openatc.main.operationrecord')}}</div>
     </div>
-    <div class="filter-container">
-      <el-form>
-        <el-form-item>
-          <el-input
-            v-model="schfilter"
-            :placeholder="$t('openatc.common.searchplaceholder')"
-            prefix-icon="el-icon-search"
-            style="width: 200px;"/>
-        </el-form-item>
-      </el-form>
+    <div class="filter-container" style="border: 0px solid red;width:90%;">
+      <el-row  :gutter="10">
+        <el-col :span="3">
+          <div>
+            <span class="header-span">{{$t('openatc.record.originadress') }}：</span>
+            <el-input
+                v-model="source"
+                style="width:70%"
+            />
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div>
+            <span class="header-span">{{$t('openatc.record.messagetype') }}：</span>
+            <SelectInfoType ref="selectInfoType" style="width:60%"></SelectInfoType>
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div>
+            <span class="header-span">{{$t('openatc.record.reponsestatus') }}：</span>
+            <SelectReponseStatus ref="selectReponseStatus"
+                                 style="width:60%"></SelectReponseStatus>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <span class="header-span">{{ $t("openatc.faultrecord.roadname") }}：</span>
+            <SelectAgentid ref="selectAgentid"
+                           style="width:70%"></SelectAgentid>
+            <SelectControl ref="selectControl"
+                           v-show="false"
+                           style="width:70%"></SelectControl>
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div>
+            <span class="header-span">{{$t('openatc.login.username') }}：</span>
+            <el-input
+                v-model="operator"
+                style="width:70%"
+            />
+          </div>
+        </el-col>
+        <el-col :span="6.5">
+          <div class="timepicker">
+            <span class="header-span">{{$t('openatc.record.opertime') }}：</span>
+            <template >
+              <el-date-picker
+                style="width:80%"
+                v-model="timeValue"
+                popper-class="common-date-popper"
+                type="datetimerange"
+                range-separator="-"
+                :start-placeholder="$t('openatc.usermanager.starttime')"
+                :end-placeholder="$t('openatc.usermanager.endtime')">
+              </el-date-picker>
+            </template>
+          </div>
+        </el-col>
+        <el-col :span="1.5">
+          <div>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              @click="onSearchClick()"
+              >{{ $t("openatc.button.search") }}
+            </el-button>
+          </div>
+        </el-col>
+      </el-row>
     </div>
-     <div class="atc-table">
-    <el-table
-        :data="tableData.filter(data => !schfilter || (data.operator !== undefined && data.operator.toLowerCase().includes(schfilter.toLowerCase())) || (data.description !== undefined && data.description.toLowerCase().includes(schfilter.toLowerCase())))"
+    <div class="atc-table">
+      <el-table
+        :data="tableData"
         size="mini"
         :max-height="tableHeight"
         style="width: 100%"
         v-loading.body="listLoading"
         id="footerBtn">
         <el-table-column
-        type="index"
-        align="center">
-        </el-table-column>
-        <!-- <el-table-column
-        prop="description"
-        label="描述"
-        align="center">
-        </el-table-column> -->
-        <el-table-column
-        prop="operator"
-        :label="$t('openatc.record.user')"
-        align="center">
+          type="index"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="opertime"
-        :label="$t('openatc.record.updatetime')"
-        sortable
-        align="center">
+          prop="operator"
+          :label="$t('openatc.record.user')"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="source"
-        :label="$t('openatc.record.originadress')"
-        align="center">
+          prop="name"
+          :label="$t('openatc.faultrecord.roadname')"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="agentid"
-        :label="$t('openatc.record.deviceid')"
-        align="center">
+          prop="source"
+          :label="$t('openatc.record.originadress')"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="infotype"
-        :label="$t('openatc.record.messagetype')"
-        align="center">
+          prop="infotype"
+          :label="$t('openatc.record.messagetype')"
+          align="center">
         </el-table-column>
         <el-table-column
-        prop="status"
-        :label="$t('openatc.record.reponsestatus')"
-        align="center">
+          prop="subInfoType"
+          :label="$t('openatc.record.subInfoType')"
+          :formatter="formatterSubInfoType"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          :label="$t('openatc.record.reponsestatus')"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="opertime"
+          :label="$t('openatc.record.opertime')"
+          sortable
+          align="center">
         </el-table-column>
         <el-table-column :label="$t('openatc.record.opera')" align="center">
         <template slot-scope="scope">
             <el-button type="text" @click="derive(scope.$index)">{{$t('openatc.record.view')}}</el-button>
         </template>
         </el-table-column>
-    </el-table>
+      </el-table>
      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.pageNum" :page-size="listQuery.pageRow" :total="totalCount" :page-sizes="[10, 20, 50, 100]" layout="total, sizes, prev, pager, next, jumper" style='margin:0px;'>
     </el-pagination>
   </div>
@@ -86,13 +147,24 @@
 </template>
 
 <script>
-import { getHisParamsList, exportHisParams } from '../../api/table'
+import { getHisParamsList, getHisParamsRange, exportHisParams } from '../../api/table'
 import { getMessageByCode } from '@/utils/responseMessage'
+import SelectAgentid from '@/components/SelectAgentid'
+import SelectInfoType from '@/components/SelectInfoType'
+import SelectReponseStatus from '@/components/SelectReponseStatus'
+import SelectControl from '@/views/Service/components/SelectControl'
+import moment from 'moment'
 export default {
   name: 'user',
-  components: {},
+  components: {SelectAgentid, SelectInfoType, SelectReponseStatus, SelectControl},
   data () {
     return {
+      source: '',
+      infotype: '',
+      status: '',
+      agentid: '',
+      operator: '',
+      timeValue: [new Date().getTime() - 3600 * 1000 * 24, new Date()],
       tableHeight: 700,
       screenHeight: window.innerHeight, // 屏幕高度
       schfilter: '',
@@ -109,7 +181,17 @@ export default {
       totalCount: 0 // 分页组件--数据总条数
     }
   },
+  watch: {
+    screenHeight: function () {
+      // 监听屏幕高度变化
+      this.tableHeight =
+                window.innerHeight -
+                document.querySelector('#footerBtn').offsetTop -
+                200
+    }
+  },
   mounted: function () {
+    this.getList()
     var _this = this
     _this.$nextTick(function () {
       // window.innerHeight:浏览器的可用高度
@@ -125,19 +207,56 @@ export default {
       }
     })
   },
-  watch: {
-    screenHeight: function () {
-      // 监听屏幕高度变化
-      this.tableHeight =
-                window.innerHeight -
-                document.querySelector('#footerBtn').offsetTop -
-                200
-    }
-  },
-  created () {
-    this.getAllRecord()
-  },
   methods: {
+    onSearchClick () {
+      this.getList()
+    },
+    getReqData () {
+      let reqData = {}
+      let from = moment(this.timeValue[0]).format('YYYY-MM-DD HH:mm:ss')
+      let to = moment(this.timeValue[1]).format('YYYY-MM-DD HH:mm:ss')
+      let agentid = this.$refs.selectAgentid.value
+      let infotype = this.$refs.selectInfoType.value
+      let status = this.$refs.selectReponseStatus.value
+      reqData = {
+        source: this.source,
+        infotype: infotype,
+        status: status,
+        agentId: agentid,
+        operator: this.operator,
+        beginTime: from,
+        endTime: to,
+        pageNum: this.listQuery.pageNum,
+        pageRow: this.listQuery.pageRow
+      }
+      return reqData
+    },
+    getList () {
+      let reqData = this.getReqData()
+      this.listLoading = true
+      getHisParamsRange(reqData).then(data => {
+        if (data.data.success !== true) {
+          this.listLoading = false
+          if (data.data.code === '20004') {
+            this.$message.error('无参数记录!')
+            return
+          }
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        }
+        this.listLoading = false
+        this.tableData = this.handleData(data.data.data.content)
+        this.totalCount = data.data.data.total
+      })
+    },
+    formatterSubInfoType (row, column) {
+      let res = row.subInfoType
+      let selectControl = this.$refs.selectControl
+      if (selectControl) {
+        res = selectControl.getNameById(res)
+      }
+      return res
+    },
     leadingOut (data) {
       // 定义文件内容，类型必须为Blob 否则createObjectURL会报错
       // const tscParam = this.globalParamModel.getGlobalParams()
@@ -219,9 +338,9 @@ export default {
       this.getAllRecord()
     },
     handleFilter () {
-      // 查询事件
-      this.listQuery.pageNum = 1
-      this.getAllRecord()
+      // // 查询事件
+      // this.listQuery.pageNum = 1
+      // this.getAllRecord()
     }
   }
 }

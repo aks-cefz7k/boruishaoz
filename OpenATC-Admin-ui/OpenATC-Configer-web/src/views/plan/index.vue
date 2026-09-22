@@ -13,7 +13,7 @@
   <div class="app-container plan-container">
     <div class="tabs-style">
       <el-tabs v-model="curTabsValue" type="card" editable @edit="handleTabsEdit">
-        <el-tab-pane v-for="item in planList" :key="item.index" :label="item.desc" :name="item.index">
+        <el-tab-pane v-for="item in planList" :key="item.id" :label="item.desc" :name="String(item.id)">
           <tabPane :plan="item.plan" :planid="item.id" :planname="item.desc"/>
         </el-tab-pane>
       </el-tabs>
@@ -29,7 +29,7 @@ export default {
   components: { tabPane },
   data () {
     return {
-      curTabsValue: '0',
+      curTabsValue: '1',
       tabIndex: 0
     }
   },
@@ -52,9 +52,12 @@ export default {
       const planList = this.globalParamModel.getParamsByType('planList')
       if (planList.length > 0) {
         // 保证增加tab页后，当前页展示新加的tab内容
-        this.curTabsValue = this.isAddTab ? String(this.tabIndex) : planList[0].index
+        this.curTabsValue = this.isAddTab || this.isDeleteTab ? this.curTabsValue : String(planList[0].id)
         if (this.isAddTab) {
           this.isAddTab = !this.isAddTab
+        }
+        if (this.isDeleteTab) {
+          this.isDeleteTab = !this.isDeleteTab
         }
       }
     },
@@ -78,16 +81,17 @@ export default {
           }).then(() => {
           if (activeName === targetName) {
             tabs.forEach((tab, index) => {
-              if (tab.desc === targetName) {
+              if (String(tab.id) === targetName) {
                 let nextTab = tabs[index + 1] || tabs[index - 1]
                 if (nextTab) {
-                  activeName = nextTab.index
+                  activeName = String(nextTab.id)
                 }
               }
             })
           }
           this.curTabsValue = activeName
-          this.$store.getters.tscParam.planList = tabs.filter(tab => tab.index !== targetName)
+          this.isDeleteTab = true
+          this.$store.getters.tscParam.planList = tabs.filter(tab => String(tab.id) !== targetName)
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -96,10 +100,10 @@ export default {
         })
       }
     },
-    GetUnUesdPlanNum () {
-      var planKey = new Date()
-      return Number(planKey.getFullYear().toString() + (planKey.getMonth() + 1).toString() + planKey.getHours().toString() + planKey.getMinutes() + planKey.getSeconds())
-    },
+    // GetUnUesdPlanNum () {
+    //   var planKey = new Date()
+    //   return Number(planKey.getFullYear().toString() + (planKey.getMonth() + 1).toString() + planKey.getHours().toString() + planKey.getMinutes() + planKey.getSeconds())
+    // },
     getIdOfByte () { // 获取id的规则为，范围在1-255之间，且是与其他id不能重复的最小的值。
       let planList = this.globalParamModel.getParamsByType('planList')
       if (planList.length === 0) {
@@ -142,14 +146,14 @@ export default {
       }).then(({ value }) => {
         let inputvalue = value.replace(/\s/g, '') // 去掉字符串空格
         let planItem = {}
-        this.tabIndex = this.GetUnUesdPlanNum()
-        planItem.index = String(this.tabIndex)
+        // this.tabIndex = this.GetUnUesdPlanNum()
+        // planItem.index = String(this.tabIndex)
         planItem.id = this.getIdOfByte()
         planItem.desc = inputvalue
         planItem.plan = []
         // planList.push(planItem)
         this.globalParamModel.addParamsByType('planList', planItem)
-        this.curTabsValue = String(this.tabIndex)
+        this.curTabsValue = String(planItem.id)
         this.isAddTab = true
       }).catch(() => {
         // this.$message({

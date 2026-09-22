@@ -1075,6 +1075,26 @@
         float: right;
         margin-top: 10px;
         margin-right: 20px;
+        .header-span {
+          color: $--color-text-secondary;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 14px;
+        }
+        .timepicker {
+          .el-date-editor .el-range-separator {
+            line-height: 29px;
+          }
+          .el-date-editor .el-range-input {
+            color: $--color-text-primary;
+            background-color: $--color-white;
+          }
+          .el-date-editor.el-input__inner {
+            // height: 36px;
+            // float: left;
+          }
+        }
       }
   }
   // 组织机构页面样式

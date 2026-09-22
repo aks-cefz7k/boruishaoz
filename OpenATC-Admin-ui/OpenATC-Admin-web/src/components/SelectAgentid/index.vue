@@ -6,7 +6,7 @@
     collapse-tags
     clearable
     filterable
-    :placeholder="$t('openatc.devicemanager.crossid')"
+    :placeholder="placeholderText"
     @change="onChange"
   >
     <el-option
@@ -15,8 +15,10 @@
       :label="item.label"
       :value="item.value"
     >
-      <span style="float: left">{{ item.label }}</span>
-      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+      <template v-if="isShowId">
+        <span style="float: left">{{ item.label }}</span>
+        <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+      </template>
     </el-option>
   </el-select>
 </template>
@@ -31,6 +33,14 @@ export default {
       default: false
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    placeholderText: {
+      type: String,
+      default: ''
+    },
+    isShowId: {
       type: Boolean,
       default: false
     }
