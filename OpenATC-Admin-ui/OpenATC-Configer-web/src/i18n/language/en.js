@@ -901,19 +901,19 @@ const en = {
       '3017': 'Organization does not exist',
       '3018': 'Access ip is inconsistent with user ip, login is forbidden',
       // 消息通讯错误
-      '4001': '错误请求',
-      '4002': '错误应答',
-      '4003': '设备不在线',
-      '4004': '重复的设备id',
-      '4005': '信号机应答为空',
-      '4006': '信号机应答操作类型为空',
+      '4001': 'Error Request',
+      '4002': 'Error Response',
+      '4003': 'Device Not Online',
+      '4004': 'Repeat ID',
+      '4005': 'Device Empty Response',
+      '4006': 'Device Response Operation Is None',
       // 协调路线错误
-      '5001': '重复的协调路线名称',
+      '5001': 'Repeat Route Name',
       // 勤务路线错误
-      '6001': '重复的勤务路线名称',
-      '6002': '勤务路线正在执行中',
+      '6001': 'Repeat Route Name',
+      '6002': 'The route is on execution',
       // 流量错误
-      '7001': 'ftp客户端连接失败'
+      '7001': 'ftp clent connect fail'
     }
   }
 }
