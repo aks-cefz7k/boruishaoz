@@ -358,6 +358,7 @@ const en = {
       'messagetype': 'Infotype',
       'subInfoType': 'Sub InfoType',
       'reponsestatus': 'Response Status',
+      'errorReason': 'Error Reason',
       'opera': 'Operation',
       'export': 'Export',
       'view': 'View'
@@ -480,12 +481,12 @@ const en = {
     },
     'message': {
       // 协调路线错误
-      '5001': '重复的协调路线名称',
+      '5001': 'Repeat Route Name',
       // 勤务路线错误
-      '6001': '重复的勤务路线名称',
-      '6002': '勤务路线正在执行中',
+      '6001': 'Repeat Route Name',
+      '6002': 'The route is on execution',
       // 流量错误
-      '7001': 'ftp客户端连接失败'
+      '7001': 'ftp clent connect fail'
     },
     'patternstatistic': {
       'patterninfo': 'Pattern info',

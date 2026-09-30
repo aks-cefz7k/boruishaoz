@@ -28,7 +28,7 @@
         <el-col :span="3">
           <div>
             <span class="header-span">{{$t('openatc.record.messagetype') }}：</span>
-            <SelectInfoType ref="selectInfoType" style="width:60%"></SelectInfoType>
+            <SelectInfoType ref="selectInfoType" style="width:63%"></SelectInfoType>
           </div>
         </el-col>
         <el-col :span="3">
@@ -126,6 +126,12 @@
         <el-table-column
           prop="status"
           :label="$t('openatc.record.reponsestatus')"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="responseCode"
+          :formatter="formatterResponseCode"
+          :label="$t('openatc.record.errorReason')"
           align="center">
         </el-table-column>
         <el-table-column
@@ -254,6 +260,17 @@ export default {
       let selectControl = this.$refs.selectControl
       if (selectControl) {
         res = selectControl.getNameById(res)
+      }
+      return res
+    },
+    formatterResponseCode (row, column) {
+      let res = ''
+      let responseCode = row.responseCode
+      if (responseCode && responseCode !== '0') {
+        let innerErrorCode = row.innerErrorCode
+        let errorMessage = getMessageByCode(responseCode, this.$i18n.locale)
+        let subMessage = getMessageByCode(innerErrorCode, this.$i18n.locale)
+        res = errorMessage + ' - ' + subMessage
       }
       return res
     },

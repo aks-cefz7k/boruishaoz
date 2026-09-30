@@ -358,6 +358,7 @@ const zh = {
       'messagetype': '消息类型',
       'subInfoType': '消息子类型',
       'reponsestatus': '返回状态',
+      'errorReason': '错误原因',
       'opera': '操作',
       'export': '导出',
       'view': '查看'
