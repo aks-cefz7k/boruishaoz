@@ -16,7 +16,7 @@
         <div class="filter">
           <span class="header-span">{{$t('openatc.faultrecord.boardtype') }}：</span>
           <el-select
-            v-model="boardTypevalue"
+            v-model="faultBoardType"
             clearable
             filterable>
             <el-option
@@ -31,7 +31,7 @@
         <div class="filter">
           <span class="header-span">{{$t('openatc.faultrecord.mainfaulttype') }}：</span>
           <el-select
-            v-model="mainFaultValue"
+            v-model="faultType"
             clearable
             filterable>
             <el-option
@@ -46,7 +46,7 @@
         <div class="filter">
           <span class="header-span">{{$t('openatc.faultrecord.confirmresults') }}：</span>
           <el-select
-            v-model="enumerateValue"
+            v-model="enumerate"
             clearable
             filterable>
             <el-option
@@ -60,17 +60,8 @@
         </div>
         <div class="filter">
           <span class="header-span">{{$t('openatc.faultrecord.intersectionname') }}：</span>
-          <SelectAgentid ref="selectAgentid"
-                           style="width:70%"></SelectAgentid>
+          <SelectAgentid ref="selectAgentid" style="width:70%" @onChange="onChangeAgentid"></SelectAgentid>
         </div>
-        <!-- <div class="filter">
-          <span class="header-span">{{$t('openatc.faultrecord.') }}：</span>
-          <el-input
-              :placeholder="$t('openatc.common.searchdeviceid')"
-              v-model="devsfilter"
-              style="width: 200px;"
-          />
-        </div> -->
         <div class="filter">
           <span class="header-span">{{$t('openatc.faultrecord.faulttime') }}：</span>
           <el-date-picker
@@ -86,7 +77,7 @@
             <el-button
               type="primary"
               icon="el-icon-search"
-              @click="searchRecord()"
+              @click="searchRecord('search')"
               style="margin-left: 8px;"
               >{{ $t("openatc.button.search") }}</el-button>
         </div>
@@ -193,7 +184,7 @@
 
 <script>
 import { getMessageByCode } from '@/utils/responseMessage'
-import { GetAllFault, GetAllFaultRange, DeleteFaultById } from '@/api/fault'
+import { GetAllFaultRange, DeleteFaultById } from '@/api/fault'
 import Messagebox from '../../components/MessageBox'
 import { BoardType } from '@/utils/fault.js'
 import { getAllMainFaultTypeArr } from '@/model/EventModal/utils.js'
@@ -207,7 +198,6 @@ export default {
       screenHeight: window.innerHeight, // 屏幕高度
       schfilter: '',
       listLoading: false,
-      devsfilter: '',
       messageboxVisible: false,
       tableData: [],
       deleteId: '',
@@ -216,11 +206,12 @@ export default {
         pageRow: 50 // 每页条数
       },
       totalCount: 0, // 分页组件--数据总条数
-      boardTypevalue: 1,
+      agentid: '',
+      faultBoardType: '',
       boardTypeOptions: [],
-      mainFaultValue: 101,
+      faultType: '',
       mainFaultOptions: [],
-      enumerateValue: '2',
+      enumerate: '',
       enumerateOptions: [{
         label: this.$t('openatc.faultrecord.untreated'),
         value: '0'
@@ -354,36 +345,30 @@ export default {
       second = second < 10 ? ('0' + second) : second
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
     },
-    searchRecord () {
+    searchRecord (operate) {
+      let beginTime, endTime
+      this.listLoading = true
       if (this.timeValue) {
-        let beginTime = this.formateDate(this.timeValue[0])
-        let endTime = this.formateDate(this.timeValue[1])
-        GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
-          if (data.data.success !== true) {
-            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-            return
-          }
-          this.tableData = data.data.data.content
-          this.totalCount = data.data.data.total
-        })
-      } else if (this.devsfilter) {
-        let beginTime = ''
-        let endTime = ''
-        GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.devsfilter, beginTime, endTime).then(data => {
-          if (data.data.success !== true) {
-            this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-            return
-          }
-          this.tableData = data.data.data.content
-          this.totalCount = data.data.data.total
-        })
-      } else {
-        this.getAllRecord()
+        beginTime = this.formateDate(this.timeValue[0])
+        endTime = this.formateDate(this.timeValue[1])
       }
+      if (operate === 'search') {
+        // 点击查询，页面返回第一页。否则可能无数据显示
+        this.listQuery.pageNum = 1
+      }
+      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.agentid, beginTime, endTime, this.faultBoardType, this.faultType, this.enumerate).then(data => {
+        if (data.data.success !== true) {
+          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
+          return
+        }
+        this.listLoading = false
+        this.tableData = data.data.data.content
+        this.totalCount = data.data.data.total
+      })
     },
     getAllRecord () {
       this.listLoading = true
-      GetAllFault(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
+      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
         if (data.data.success !== true) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
@@ -396,14 +381,15 @@ export default {
       })
     },
     handleSizeChange (val) {
-      // 改变每页数量
+      // 改变每页数量，默认返回第一页
+      this.listQuery.pageNum = 1
       this.listQuery.pageRow = val
-      this.getAllRecord()
+      this.searchRecord()
     },
     handleCurrentChange (val) {
       // 改变页码
       this.listQuery.pageNum = val
-      this.getAllRecord()
+      this.searchRecord()
     },
     cancle () {
       this.messageboxVisible = false
@@ -426,8 +412,10 @@ export default {
         this.messageboxVisible = false
         this.getAllRecord()
       })
+    },
+    onChangeAgentid (agentid) {
+      this.agentid = agentid
     }
-
   }
 }
 </script>

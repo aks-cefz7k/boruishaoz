@@ -74,14 +74,29 @@ export const enumerateCheck = (agentid, id, enumerate) => {
   return api.Send({}, param)
 }
 
-export const GetAllFaultRange = (pageNum, pageSize, id, beginTime, endTime) => {
+export const GetAllFaultRange = (pageNum, pageSize, id, beginTime, endTime, faultBoardType, faultType, enumerate, type) => {
   let api = new Authapi('GetAllFaultRange')
   let param = {
     'pageNum': pageNum,
-    'pageRow': pageSize,
-    'agentId': id,
-    'beginTime': beginTime,
-    'endTime': endTime
+    'pageRow': pageSize
+  }
+  if (id && id !== '') {
+    param.agentId = id
+  }
+  if (beginTime) {
+    param.beginTime = beginTime
+  }
+  if (endTime) {
+    param.endTime = endTime
+  }
+  if (faultBoardType && faultBoardType !== '') {
+    param.m_byFaultBoardType = faultBoardType
+  }
+  if (faultType && faultType !== '') {
+    param.m_wFaultType = faultType
+  }
+  if (enumerate && enumerate !== '') {
+    param.enumerate = enumerate
   }
   return api.Send({}, param)
 }

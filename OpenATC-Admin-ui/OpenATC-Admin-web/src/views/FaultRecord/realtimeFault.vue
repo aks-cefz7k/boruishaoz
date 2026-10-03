@@ -16,7 +16,7 @@
 
 <script>
 import { getMessageByCode } from '@/utils/responseMessage'
-import { GetAllFault, GetAllFaultRange, DeleteFaultById } from '@/api/fault'
+import { GetAllFaultRange, DeleteFaultById } from '@/api/fault'
 import Messagebox from '../../components/MessageBox'
 export default {
   components: { Messagebox },
@@ -183,7 +183,7 @@ export default {
     },
     getAllRecord () {
       this.listLoading = true
-      GetAllFault(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
+      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
         if (data.data.success !== true) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
