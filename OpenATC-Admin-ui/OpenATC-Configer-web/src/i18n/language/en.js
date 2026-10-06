@@ -875,6 +875,11 @@ const en = {
       '20003': 'id cannot be empty and cannot be 0',
       '20004': 'No parameter record',
       '20005': 'No device id found',
+      '20006': 'Data stream close failed!',
+      '20007': 'Json Type conversion failed!',
+      '20008': 'File read failed!',
+      '20009': 'File does not exist!',
+      '20010': 'I/O close mistake!',
       // 全局异常错误
       '0001': 'Null pointer',
       '0002': 'Wrong request method',
@@ -907,6 +912,28 @@ const en = {
       '4004': 'Repeat ID',
       '4005': 'Device Empty Response',
       '4006': 'Device Response Operation Is None',
+      // 错误子类型
+      // error-request
+      '4100': 'agentid is null!',
+      '4101': 'operation is null!',
+      '4102': 'infotype is null!',
+      '4103': 'infodata is null!',
+      '4104': 'JSON format is incorrect!',
+      '4105': 'agentid not exist!',
+      '4106': 'Unknown operation type!',
+      '4107': 'Unknown infotype!',
+      '4108': 'protocol is null!',
+      '4109': 'Receive Time Out or Receive Incorrect Data!',
+      // error-response
+      '4200': 'response is null!',
+      '4201': 'response format error!',
+      '4203': 'Unknown request instruction!',
+      '4204': 'Comm Send Data error!',
+      '4205': 'Udp Receive InfoType error by Send InfoType',
+      '4206': 'Can not find UdpCommunication for Receive Msg',
+      '4207': 'Error response from feature download',
+      // device not online
+      '4301': 'Device not online',
       // 协调路线错误
       '5001': 'Repeat Route Name',
       // 勤务路线错误
