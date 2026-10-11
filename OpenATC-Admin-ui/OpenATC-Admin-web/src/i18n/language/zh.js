@@ -193,7 +193,7 @@ const zh = {
       'faultGrade': '故障等级',
       'faultValue': '故障值',
       'crowsid': '路口ID',
-      'updateDeviceId': '修改设备ID',
+      'updateDeviceId': '修改路口ID',
       'deviceNotNull': '设备ID不能为空！',
       'oldIdNotConsistentNewId': '新设备id不能与老设备id一致!',
       'thirdplatformid': '第三方ID',

@@ -23,7 +23,7 @@
           :visible.sync="innerVisible"
           append-to-body>
           <el-form ref="deviceId" :model="innerForm">
-            <el-form-item :label="$t('openatc.devicemanager.deviceid')" label-width="15%">
+            <el-form-item :label="$t('openatc.devicemanager.crowsid')" label-width="15%">
               <el-input v-model="innerForm.id" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
