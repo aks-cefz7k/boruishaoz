@@ -42,7 +42,7 @@
           <el-table-column type="index" align="center"> </el-table-column>
           <el-table-column
             prop="agentid"
-            :label="$t('openatc.devicemanager.deviceid')"
+            :label="$t('openatc.devicemanager.crossid')"
             :sort-method="sortAgentId"
             sortable
             align="center"

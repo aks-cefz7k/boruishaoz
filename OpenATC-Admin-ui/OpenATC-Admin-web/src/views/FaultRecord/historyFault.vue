@@ -96,7 +96,7 @@
           </el-table-column>
           <el-table-column
           prop="agentid"
-          :label="$t('openatc.faultrecord.deviceid')"
+          :label="$t('openatc.devicemanager.crossid')"
           sortable
           align="center">
           </el-table-column>
