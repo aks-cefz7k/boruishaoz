@@ -112,6 +112,7 @@ const zh = {
       'platform': '平台类型',
       'online': '在线',
       'offline': '离线',
+      'connected': '已连接',
       'onlineing': '联机中...',
       'controlmode': '控制方式',
       'manual': '手动控制',

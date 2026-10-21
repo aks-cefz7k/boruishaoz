@@ -112,6 +112,7 @@ const en = {
       'platform': 'platform',
       'online': 'Online',
       'offline': 'Offline',
+      'connected': 'Connected',
       'onlineing': 'Offline...',
       'controlmode': 'Control Mode',
       'manual': 'Manual',

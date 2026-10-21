@@ -101,7 +101,7 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item divided command="a">{{$t('edge.main.changepass')}}</el-dropdown-item>
-                <el-dropdown-item command="help">{{$t('edge.main.help')}}</el-dropdown-item>
+                <!-- <el-dropdown-item command="help">{{$t('edge.main.help')}}</el-dropdown-item> -->
                 <el-dropdown-item command="about">{{$t('edge.main.about')}}</el-dropdown-item>
                 <el-dropdown-item command="b">{{$t('edge.main.exit')}}</el-dropdown-item>
               </el-dropdown-menu>
@@ -125,6 +125,9 @@
         </el-tooltip>
         <el-tooltip :content="$t('edge.main.text')" placement="bottom" effect="dark">
           <el-button type="text" @click="clickSwitchIcon(false)"><i class="iconfont icon-wenzijiemian" :class="{'choosedIcon': !isShowGui, 'defaultIcon': isShowGui}"></i></el-button>
+        </el-tooltip>
+         <el-tooltip :content="$t('edge.main.help')" placement="bottom" effect="dark">
+          <el-button type="text" @click="showHelp()"><i class="iconfont icon-bangzhu defaultIcon"></i></el-button>
         </el-tooltip>
       </div>
     </el-menu>
@@ -1359,8 +1362,8 @@ export default {
           break
         case 'about': this.showVersion()
           break
-        case 'help': this.showHelp()
-          break
+        // case 'help': this.showHelp()
+        //   break
         default: router.push({ path: '/' })
       }
     },
