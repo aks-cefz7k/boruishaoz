@@ -370,7 +370,8 @@ const zh = {
       'unrelateddevice': '未关联设备',
       'relateddevice': '已关联设备',
       'modifyorganization': '修改组织',
-      'addorganization': '添加组织'
+      'addorganization': '添加组织',
+      'emptyname': '名称为空!'
     },
     'dutyroute': {
       'clickaddroute': '点击添加按钮添加路线',

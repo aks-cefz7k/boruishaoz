@@ -370,7 +370,8 @@ const en = {
       'unrelateddevice': 'Unrelated Device',
       'relateddevice': 'Related Device',
       'modifyorganization': 'Modify Organization',
-      'addorganization': 'Add Organization'
+      'addorganization': 'Add Organization',
+      'emptyname': 'Empty Name !'
     },
     'dutyroute': {
       'clickaddroute': 'Click to add a new route',

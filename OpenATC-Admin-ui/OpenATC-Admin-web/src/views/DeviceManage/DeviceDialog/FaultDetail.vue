@@ -62,7 +62,7 @@
         </el-table-column>
         <el-table-column :label="$t('openatc.devicemanager.operation')" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" @click="onIgnoreClick(scope.row.id)">{{$t('openatc.button.ignore')}}</el-button>
+          <el-button type="primary" @click="onIgnoreClick(scope.row)">{{$t('openatc.button.ignore')}}</el-button>
         </template>
         </el-table-column>
       </el-table>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { DeleteFaultById } from '@/api/fault'
+import {enumerateCheck} from '@/api/fault'
 import { getMessageByCode } from '@/utils/responseMessage'
 export default {
   name: 'FaultDetail',
@@ -159,21 +159,18 @@ export default {
       }
       return datas
     },
-    onIgnoreClick (id) {
+    onIgnoreClick (row) {
       let _this = this
-      DeleteFaultById(id).then(res => {
+      let id = row.m_wFaultID
+      let enumerate = 1
+      enumerateCheck(row.agentid, id, enumerate).then(res => {
         if (!res.data.success) {
-          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
-          this.$message({
-            message: this.$t('openatc.common.deletefailed'),
-            type: 'error',
-            duration: 1 * 1000
-          })
+          _this.$message.error(getMessageByCode(res.data.code, _this.$i18n.locale))
           return
         }
         this.dialogFormVisible = false
         this.$message({
-          message: this.$t('openatc.common.deletesuccess'),
+          message: this.$t('openatc.common.operationsuccess'),
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
