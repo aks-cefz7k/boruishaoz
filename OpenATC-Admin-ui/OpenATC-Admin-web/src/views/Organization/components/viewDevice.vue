@@ -92,7 +92,7 @@
             align="center"
           >
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="roles"
             :label="$t('openatc.devicemanager.state')"
             align="center"
@@ -107,7 +107,7 @@
                 >
               </div>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="lastTime"
             :label="$t('openatc.devicemanager.lastupdatetime')"

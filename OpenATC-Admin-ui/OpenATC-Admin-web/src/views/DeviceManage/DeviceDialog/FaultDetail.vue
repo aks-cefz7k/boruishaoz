@@ -174,7 +174,7 @@ export default {
           type: 'success',
           duration: 1 * 1000,
           onClose: () => {
-            _this.$parent.getList()
+            _this.$parent.handleFault(row)
           }
         })
       })
