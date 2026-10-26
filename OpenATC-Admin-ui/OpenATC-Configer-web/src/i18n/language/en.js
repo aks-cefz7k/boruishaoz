@@ -446,7 +446,10 @@ const en = {
       'greenoutputvoltage': 'Green Output Voltage',
       'greenoffresidualpower': 'Green Off Residual Power',
       'greenonoutputpower': 'Green On Output Power',
-      'inputvoltage': 'Input Voltage'
+      'inputvoltage': 'Input Voltage',
+      'implement': 'Implement',
+      'implementsuccess': 'Implement success!',
+      'noClickedLamp': 'No channel light terminal selected!'
     },
     'pedestrianDetector': {
       'desc': 'Description ',

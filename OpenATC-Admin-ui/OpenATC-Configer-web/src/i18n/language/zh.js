@@ -444,7 +444,10 @@ const zh = {
       'greenoutputvoltage': '绿灯输出电压',
       'greenoffresidualpower': '绿灯关闭的残留功率',
       'greenonoutputpower': '绿灯亮灯的输出功率',
-      'inputvoltage': '通道输入电压'
+      'inputvoltage': '通道输入电压',
+      'implement': '执行',
+      'implementsuccess': '执行成功！',
+      'noClickedLamp': '未选择通道灯端子！'
     },
     'pedestrianDetector': {
       'desc': '描述',
