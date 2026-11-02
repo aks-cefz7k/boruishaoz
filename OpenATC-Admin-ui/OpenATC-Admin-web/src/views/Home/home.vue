@@ -176,7 +176,7 @@ export default {
         } else {
           list = res.data.data
         }
-        this.faultList = list
+        this.faultList = list.content
       })
     }
   },

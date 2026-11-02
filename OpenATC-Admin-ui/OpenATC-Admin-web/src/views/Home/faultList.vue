@@ -27,8 +27,8 @@
         >
         <el-table-column
           prop="agentid"
-          :label="$t('openatc.devicemanager.crowsid')"
-          width="100">
+          :label="$t('openatc.devicemanager.devicename')"
+          width="220">
         </el-table-column>
         <el-table-column
           prop="m_unFaultOccurTime"

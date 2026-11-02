@@ -205,7 +205,7 @@ export default {
         // 获取patternList
         for (let newPattern of newPatternList) {
           if (newPattern.agentid === agentid) {
-            feature.patternList = newPattern
+            feature.patternList = [newPattern]
           }
         }
         // 获取phaseList
