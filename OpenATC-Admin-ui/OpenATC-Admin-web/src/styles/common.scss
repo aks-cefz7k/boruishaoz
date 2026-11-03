@@ -1074,7 +1074,7 @@
       .filter-container {
         float: right;
         margin-top: 10px;
-        margin-right: 20px;
+        // margin-right: 20px;
         .header-span {
           color: $--color-text-secondary;
           font-size: 14px;
@@ -1089,10 +1089,6 @@
           .el-date-editor .el-range-input {
             color: $--color-text-primary;
             background-color: $--color-white;
-          }
-          .el-date-editor.el-input__inner {
-            // height: 36px;
-            // float: left;
           }
         }
       }
