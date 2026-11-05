@@ -517,6 +517,8 @@ export default {
         if (this.$route.path === this.routerPath.gis) {
           return false
         }
+      } else {
+        this.$store.dispatch('SetGisBizType', 'deviceState')
       }
       router.push({
         path: this.routerPath[key]
