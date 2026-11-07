@@ -31,6 +31,8 @@ import animate from 'animate.css'
 
 import i18n from './i18n'
 
+import { GetLRRoadConfig } from '@/api/config'
+
 window.dev = process.env.NODE_ENV
 
 Vue.use(ElementUI, {
@@ -43,6 +45,27 @@ Vue.use(animate)
 Vue.config.productionTip = false
 Vue.prototype.$echarts = Echarts
 Vue.use(Echarts)
+
+GetLRRoadConfig().then((data) => {
+  if (!data) {
+    store.dispatch('SetRoadDirection', 'right')
+    return
+  }
+  if (!data.data.success) {
+    store.dispatch('SetRoadDirection', 'right')
+    return
+  }
+  // 读取左行 右行配置文件
+  let roadDir = data.data.data.roadDirection
+  if (roadDir !== undefined) {
+    store.dispatch('SetRoadDirection', roadDir)
+  } else {
+    store.dispatch('SetRoadDirection', 'right')
+  }
+}).catch(error => {
+  store.dispatch('SetRoadDirection', 'right')
+  this.$message.error(error)
+})
 
 // mian test hg
 /* eslint-disable no-new */
