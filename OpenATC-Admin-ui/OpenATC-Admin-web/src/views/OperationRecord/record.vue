@@ -20,29 +20,35 @@
           <div>
             <span class="header-span">{{$t('openatc.record.originadress') }}：</span>
             <el-input
+                clearable
                 v-model="source"
                 style="width:70%"
+                @change="onConditionChange"
             />
           </div>
         </el-col>
-        <el-col :span="3">
+        <el-col :span="3.5">
           <div>
             <span class="header-span">{{$t('openatc.record.messagetype') }}：</span>
-            <SelectInfoType ref="selectInfoType" style="width:63%"></SelectInfoType>
+            <SelectInfoType ref="selectInfoType"
+                            style="width:63%"
+                            @onChange="onConditionChange"></SelectInfoType>
           </div>
         </el-col>
         <el-col :span="3">
           <div>
             <span class="header-span">{{$t('openatc.record.reponsestatus') }}：</span>
             <SelectReponseStatus ref="selectReponseStatus"
-                                 style="width:60%"></SelectReponseStatus>
+                                 style="width:60%"
+                                 @onChange="onConditionChange"></SelectReponseStatus>
           </div>
         </el-col>
         <el-col :span="4">
           <div>
             <span class="header-span">{{ $t("openatc.faultrecord.roadname") }}：</span>
             <SelectAgentid ref="selectAgentid"
-                           style="width:70%"></SelectAgentid>
+                           style="width:70%"
+                           @onChange="onConditionChange"></SelectAgentid>
             <SelectControl ref="selectControl"
                            v-show="false"
                            style="width:70%"></SelectControl>
@@ -52,12 +58,14 @@
           <div>
             <span class="header-span">{{$t('openatc.login.username') }}：</span>
             <el-input
+                clearable
                 v-model="operator"
                 style="width:70%"
+                @change="onConditionChange"
             />
           </div>
         </el-col>
-        <el-col :span="6.5">
+        <el-col :span="7.5">
           <div class="timepicker">
             <span class="header-span">{{$t('openatc.record.opertime') }}：</span>
             <template >
@@ -68,12 +76,13 @@
                 type="datetimerange"
                 range-separator="-"
                 :start-placeholder="$t('openatc.usermanager.starttime')"
-                :end-placeholder="$t('openatc.usermanager.endtime')">
+                :end-placeholder="$t('openatc.usermanager.endtime')"
+                @change="onConditionChange">
               </el-date-picker>
             </template>
           </div>
         </el-col>
-        <el-col :span="1.5">
+        <!-- <el-col :span="1.5">
           <div>
             <el-button
               type="primary"
@@ -82,7 +91,7 @@
               >{{ $t("openatc.button.search") }}
             </el-button>
           </div>
-        </el-col>
+        </el-col> -->
       </el-row>
     </div>
     <div class="atc-table">
@@ -214,6 +223,9 @@ export default {
     })
   },
   methods: {
+    onConditionChange (val) {
+      this.getList()
+    },
     onSearchClick () {
       this.getList()
     },
@@ -347,17 +359,12 @@ export default {
     handleSizeChange (val) {
       // 改变每页数量
       this.listQuery.pageRow = val
-      this.handleFilter()
+      this.getList()
     },
     handleCurrentChange (val) {
       // 改变页码
       this.listQuery.pageNum = val
-      this.getAllRecord()
-    },
-    handleFilter () {
-      // // 查询事件
-      // this.listQuery.pageNum = 1
-      // this.getAllRecord()
+      this.getList()
     }
   }
 }
