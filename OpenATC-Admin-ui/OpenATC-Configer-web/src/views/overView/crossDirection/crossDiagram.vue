@@ -252,6 +252,13 @@ export default {
         if (val === 3) return
         this.handleDefaultStatus()
       }
+    },
+    roadDirection: {
+      handler: function (val1, val2) {
+        if (val1 !== val2) {
+          this.init()
+        }
+      }
     }
   },
   data () {
@@ -286,6 +293,12 @@ export default {
     }
   },
   methods: {
+    init () {
+      this.CrossDiagramMgr = new CrossDiagramMgr()
+      this.getRoadDirection()
+      this.PhaseDataModel = new PhaseDataModel()
+      this.getIntersectionInfo() // 获取路口信息
+    },
     comparePhaseStatus () {
       // 对比车道： 跟随相位和相位的状态数据（此处判断是为了保证被比较的数据direction都是唯一的）
       if (!this.comdirePhaseData && !this.comdireOverlapPhaseData) {
@@ -765,10 +778,7 @@ export default {
     }
   },
   mounted () {
-    this.CrossDiagramMgr = new CrossDiagramMgr()
-    this.getRoadDirection()
-    this.PhaseDataModel = new PhaseDataModel()
-    this.getIntersectionInfo() // 获取路口信息
+    this.init()
   }
 }
 </script>
