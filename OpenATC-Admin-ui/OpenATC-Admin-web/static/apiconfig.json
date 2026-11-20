@@ -305,6 +305,11 @@
     "method": "delete"
   },
   {
+    "key": "DeleteFault",
+    "url": "/fault/del",
+    "method": "delete"
+  },
+  {
     "key": "get_all_systemconfig",
     "url": "/systemconfig",
     "method": "get"

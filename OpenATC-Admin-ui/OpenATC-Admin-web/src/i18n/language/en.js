@@ -149,7 +149,11 @@ const en = {
       'mainfaulttype': 'Main fault type',
       'confirmresults': 'Confirmation results',
       'intersectionname': 'Intersection Name',
-      'faulttime': 'Time of failure'
+      'faulttime': 'Time of failure',
+      'isdelfaultrecord': 'Delete this fault record?',
+      'channel': 'channel',
+      'detector': 'detector',
+      'port': 'port'
     },
     'devicemanager': {
       'devicelist': 'Intersection',

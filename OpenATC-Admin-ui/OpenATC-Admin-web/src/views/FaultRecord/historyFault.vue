@@ -11,7 +11,7 @@
  **/
 <template>
 <div class="openatc-historyfaultrecord">
-    <Messagebox :visible="messageboxVisible" :text="$t('openatc.devicemanager.deletedevice')" @cancle="cancle" @ok="ok"/>
+    <Messagebox :visible="messageboxVisible" :text="$t('openatc.faultrecord.isdelfaultrecord')" @cancle="cancle" @ok="ok"/>
     <div class="filter-container">
         <div class="filter">
           <span class="header-span">{{$t('openatc.faultrecord.boardtype') }}：</span>
@@ -148,6 +148,7 @@
           </el-table-column>
           <el-table-column
           prop="m_byFaultDescValue"
+          :formatter="m_byFaultDescValue"
           :label="$t('openatc.faultrecord.faultvaluedetail')"
           align="center">
           </el-table-column>
@@ -184,10 +185,10 @@
 
 <script>
 import { getMessageByCode } from '@/utils/responseMessage'
-import { GetAllFaultRange, DeleteFaultById } from '@/api/fault'
+import { GetAllFaultRange, DeleteFault } from '@/api/fault'
 import Messagebox from '../../components/MessageBox'
 import { BoardType } from '@/utils/fault.js'
-import { getAllMainFaultTypeArr } from '@/model/EventModal/utils.js'
+import { getAllMainFaultTypeArr, getMainFaultType, getMainFaultTypeEn } from '@/model/EventModal/utils.js'
 import SelectAgentid from '@/components/SelectAgentid'
 export default {
   components: { Messagebox, SelectAgentid },
@@ -200,7 +201,7 @@ export default {
       listLoading: false,
       messageboxVisible: false,
       tableData: [],
-      deleteId: '',
+      delObj: {},
       listQuery: {
         pageNum: 1, // 页码
         pageRow: 50 // 每页条数
@@ -259,8 +260,10 @@ export default {
       this.mainFaultOptions = getAllMainFaultTypeArr()
     },
     handleDelete (row) {
-      let dev = row
-      this.deleteId = dev.id
+      this.delObj = {
+        agentid: row.agentid,
+        id: row.m_wFaultID
+      }
       this.messageboxVisible = true
     },
     formatterBoardType (row, column) {
@@ -318,16 +321,38 @@ export default {
       return res
     },
     m_wFaultTypes (row, column) {
+      // 故障主类型需要显示具体类型，不要按范围判断
       let faultType = row.m_wFaultType
       let res = ''
-      if (faultType >= 101 && faultType <= 199) {
-        res = this.$t('openatc.faultrecord.maincontrolboardfault')
-      } else if (faultType >= 201 && faultType <= 299) {
-        res = this.$t('openatc.faultrecord.lightcontrolversionfault')
-      } else if (faultType >= 301 && faultType <= 399) {
-        res = this.$t('openatc.faultrecord.carinspectionboardfault')
-      } else if (faultType >= 401 && faultType <= 499) {
-        res = this.$t('openatc.faultrecord.ioboardfault')
+      // if (faultType >= 101 && faultType <= 199) {
+      //   res = this.$t('openatc.faultrecord.maincontrolboardfault')
+      // } else if (faultType >= 201 && faultType <= 299) {
+      //   res = this.$t('openatc.faultrecord.lightcontrolversionfault')
+      // } else if (faultType >= 301 && faultType <= 399) {
+      //   res = this.$t('openatc.faultrecord.carinspectionboardfault')
+      // } else if (faultType >= 401 && faultType <= 499) {
+      //   res = this.$t('openatc.faultrecord.ioboardfault')
+      // }
+      if (this.$i18n.locale === 'en') {
+        res = getMainFaultTypeEn(faultType)
+      } else {
+        res = getMainFaultType(faultType)
+      }
+      return res
+    },
+    m_byFaultDescValue (row, column) {
+      let res = ''
+      let faultDesc = row.m_byFaultDescValue
+      let boardType = row.m_byFaultBoardType
+      if (faultDesc && faultDesc.length) {
+        res = faultDesc.join(',')
+        if (boardType === 2) {
+          res = this.$t('openatc.faultrecord.channel') + res
+        } else if (boardType === 3) {
+          res = this.$t('openatc.faultrecord.detector') + res
+        } else if (boardType === 4) {
+          res = this.$t('openatc.faultrecord.port') + res
+        }
       }
       return res
     },
@@ -395,7 +420,7 @@ export default {
       this.messageboxVisible = false
     },
     ok () {
-      DeleteFaultById(this.deleteId).then(res => {
+      DeleteFault(this.delObj).then(res => {
         if (!res.data.success) {
           this.$message.error(res.data.message)
           this.$message({

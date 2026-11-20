@@ -149,7 +149,11 @@ const zh = {
       'mainfaulttype': '故障主类型',
       'confirmresults': '确认结果',
       'intersectionname': '路口名称',
-      'faulttime': '故障发生时间'
+      'faulttime': '故障发生时间',
+      'isdelfaultrecord': '是否删除此条故障记录？',
+      'channel': '通道',
+      'detector': '检测器',
+      'port': '端口'
     },
     'devicemanager': {
       'devicelist': '路口列表',
