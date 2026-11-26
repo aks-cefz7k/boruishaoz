@@ -64,6 +64,16 @@ export const DeleteFaultById = (id) => {
   return api.Send({}, {}, urlParamList)
 }
 
+export const DeleteFault = (delObj) => {
+  // 删除故障记录
+  let api = new Authapi('DeleteFault')
+  let param = {
+    agentid: delObj.agentid,
+    id: delObj.id
+  }
+  return api.Send({}, param)
+}
+
 export const enumerateCheck = (agentid, id, enumerate) => {
   let api = new Authapi('enumerateCheck')
   let param = {

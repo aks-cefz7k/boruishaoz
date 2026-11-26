@@ -87,6 +87,10 @@ export function getMainFaultType (type) {
   return faultCodeMap.get(type)
 }
 
+export function getMainFaultTypeEn (type) {
+  return faultCodeMapEn.get(type)
+}
+
 export function getAllMainFaultTypeArr (keyfield, valuefield) {
   let typeArr = []
   let label = 'label'

@@ -9,17 +9,19 @@
           :style="{'borderRadius': item.borderRadius}">{{item.value}}</span>
     </el-button-group>
   </div>
+  <CurrentFault v-if="curpagekey === 'realtimefault'"/>
   <HistoryFault v-if="curpagekey === 'historicalfault'"/>
 </div>
 </template>
 
 <script>
 import HistoryFault from './historyFault'
+import CurrentFault from './realtimeFault'
 export default {
-  components: { HistoryFault },
+  components: { HistoryFault, CurrentFault },
   data () {
     return {
-      curpagekey: 'historicalfault',
+      curpagekey: 'realtimefault',
       chooseButtons: [
         {
           key: 'realtimefault',
