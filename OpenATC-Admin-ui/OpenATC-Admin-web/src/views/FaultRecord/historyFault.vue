@@ -17,6 +17,7 @@
           <span class="header-span">{{$t('openatc.faultrecord.boardtype') }}：</span>
           <el-select
             v-model="faultBoardType"
+            @change="searchRecord('search')"
             clearable
             filterable>
             <el-option
@@ -32,6 +33,7 @@
           <span class="header-span">{{$t('openatc.faultrecord.mainfaulttype') }}：</span>
           <el-select
             v-model="faultType"
+            @change="searchRecord('search')"
             clearable
             filterable>
             <el-option
@@ -47,6 +49,7 @@
           <span class="header-span">{{$t('openatc.faultrecord.confirmresults') }}：</span>
           <el-select
             v-model="enumerate"
+            @change="searchRecord('search')"
             clearable
             filterable>
             <el-option
@@ -70,16 +73,17 @@
                 size="small"
                 type="datetimerange"
                 style="height:40px;"
+                @change="searchRecord('search')"
                 :range-separator="$t('openatc.usermanager.to')"
                 :start-placeholder="$t('openatc.usermanager.starttime')"
                 :end-placeholder="$t('openatc.usermanager.endtime')">
             </el-date-picker>
-            <el-button
+            <!-- <el-button
               type="primary"
               icon="el-icon-search"
-              @click="searchRecord('search')"
+              @click="searchRecord"
               style="margin-left: 8px;"
-              >{{ $t("openatc.button.search") }}</el-button>
+              >{{ $t("openatc.button.search") }}</el-button> -->
         </div>
     </div>
     <div class="devs-table">
@@ -227,7 +231,7 @@ export default {
   },
   created () {
     this.initOptions()
-    this.getAllRecord()
+    this.searchRecord()
   },
   mounted: function () {
     var _this = this
@@ -378,7 +382,7 @@ export default {
         endTime = this.formateDate(this.timeValue[1])
       }
       if (operate === 'search') {
-        // 点击查询，页面返回第一页。否则可能无数据显示
+        // 搜索条件改变查询，页面返回第一页。否则可能无数据显示
         this.listQuery.pageNum = 1
       }
       GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.agentid, beginTime, endTime, this.faultBoardType, this.faultType, this.enumerate).then(data => {
@@ -389,20 +393,6 @@ export default {
         this.listLoading = false
         this.tableData = data.data.data.content
         this.totalCount = data.data.data.total
-      })
-    },
-    getAllRecord () {
-      this.listLoading = true
-      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow).then(data => {
-        if (data.data.success !== true) {
-          this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
-          return
-        }
-        if (data.data.success) {
-          this.listLoading = false
-          this.tableData = data.data.data.content
-          this.totalCount = data.data.data.total
-        }
       })
     },
     handleSizeChange (val) {
@@ -435,11 +425,12 @@ export default {
           type: 'success'
         })
         this.messageboxVisible = false
-        this.getAllRecord()
+        this.searchRecord()
       })
     },
     onChangeAgentid (agentid) {
       this.agentid = agentid
+      this.searchRecord()
     }
   }
 }
