@@ -43,3 +43,24 @@ export function getFaultHistory (reqData) {
   data.agentId = agentid
   return api.Send({}, data)
 }
+
+export const GetCurrentFaultByAgentid = (id) => {
+  let api = new Authapi('getCurrentFaultByAgentid')
+  let urlParamList = [id, 'current']
+  return api.Send({}, {}, urlParamList)
+}
+
+export const GetAllFaultRange = (param) => {
+  let api = new Authapi('getAllFaultRange')
+  return api.Send({}, param)
+}
+
+export const enumerateCheck = (agentid, id, enumerate) => {
+  let api = new Authapi('enumerateCheck')
+  let param = {
+    'agentid': agentid,
+    'id': id,
+    'enumerate': enumerate
+  }
+  return api.Send({}, param)
+}

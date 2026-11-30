@@ -28,11 +28,11 @@
               <el-input v-model="customInfo.areaid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
-              <div class="sub-title">{{$t('edge.deviceinfo.crossid')}}</div>
+              <div class="sub-title">{{$t('edge.deviceinfo.devid')}}</div>
               <el-input v-model="customInfo.intersectionid" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">
-              <div class="sub-title">{{$t('edge.overview.crossname')}}:</div>
+              <div class="sub-title">{{$t('edge.deviceinfo.devname')}}:</div>
               <el-input v-model="customInfo.fixintersectioninfo" :placeholder="$t('edge.common.entercontent')" style="width:100%" size="small"></el-input>
             </el-col>
             <el-col :span="4">

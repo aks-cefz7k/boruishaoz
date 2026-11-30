@@ -834,6 +834,14 @@ border: 1px solid $--border-color-base;
     margin-right: 4px;
     margin-bottom: 4px;
   }
+  .fault-detail-btn {
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #409EFF;
+    line-height: 14px;
+    cursor: pointer;
+  }
   .control-model {
     float: left;
     margin-top: 10px;

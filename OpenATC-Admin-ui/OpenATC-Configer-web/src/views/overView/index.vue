@@ -11,6 +11,7 @@
  **/
 <template>
   <div class="container-main">
+    <FaultDetailModal ref="faultDetail" :agentId="agentId"></FaultDetailModal>
     <div :style="{'transform': `scale(${shrink})`, 'transform-origin': 'left top', 'height': '100%'}">
       <div class="wenzijiemian" v-show="!isShowGui">
         <div class="container-left">
@@ -198,13 +199,13 @@
                 <div class="cross-content" v-if="platform"><div style="float: left;" class="cross-name">{{$t('edge.overview.platform')}}:</div><div style="margin-left: 85px;" class="cross-value">{{platform}}</div></div>
                 <div class="cross-content">
                   <div style="float: left;" class="cross-name">{{$t('edge.overview.faultinfo')}}:</div>
-                  <div style="margin-left: 85px;" v-if="faultArr.length">
-                    <div style="margin-bottom: 10px;"><el-button type="primary" size="mini" class="faultbtn" @click="handleFaultsVisible">{{ faultvisible ? $t('edge.overview.hideFault') : $t('edge.overview.showFault')}}</el-button></div>
-                    <div v-if="faultvisible">
-                      <el-tag type="danger" v-for="(faultMsg, index) in faultArr" :key="index" size="small" >{{faultMsg}}</el-tag>
-                    </div>
+                  <div style="margin-left: 85px;" v-if="curFaultList.length">
+                    <el-tag type="success">{{$t('edge.overview.confirmed')}}<span style="margin: 0 2px;">{{confirmedFault.length}}</span>{{$t('edge.overview.item')}}</el-tag>
+                    <el-tag>{{$t('edge.overview.untreated')}}<span style="margin: 0 2px;">{{untreatedFault.length}}</span>{{$t('edge.overview.item')}}</el-tag>
+                    <el-tag type="info">{{$t('edge.overview.ignored')}}<span style="margin: 0 2px;">{{ignoredFault.length}}</span>{{$t('edge.overview.item')}}</el-tag>
+                    <span class="fault-detail-btn" @click="showFaultDetail">{{$t('edge.overview.details')}}>></span>
                   </div>
-                  <div style="margin-left: 85px;" class="cross-value" v-if="!faultArr.length">{{$t('edge.overview.nofault')}}</div>
+                  <div style="margin-left: 85px;" class="cross-value" v-if="!curFaultList.length">{{$t('edge.overview.nofault')}}</div>
                 </div>
               </div>
               <div class="control-bottom">
@@ -265,6 +266,8 @@ import ManualControlModal from './manualControlModal'
 import ClosePhaseControlModal from './closePhaselControlModal'
 import { getFaultMesZh, getFaultMesEn } from '../../utils/faultcode.js'
 import { getMessageByCode } from '../../utils/responseMessage'
+import { GetAllFaultRange } from '@/api/fault'
+import FaultDetailModal from '@/components/FaultDetailModal'
 export default {
   name: 'overview',
   components: {
@@ -276,7 +279,8 @@ export default {
     CurVolume,
     CurPhase,
     ManualControlModal,
-    ClosePhaseControlModal
+    ClosePhaseControlModal,
+    FaultDetailModal
   },
   data () {
     return {
@@ -446,7 +450,11 @@ export default {
         iconClass: 'closephase',
         iconName: '关断相位'
       }],
-      closePhaseRings: []
+      closePhaseRings: [],
+      curFaultList: [],
+      confirmedFault: [],
+      ignoredFault: [],
+      untreatedFault: []
     }
   },
   computed: {
@@ -473,6 +481,7 @@ export default {
           // this.protocol = this.$route.query.protocol
           this.resetCrossDiagram()
           this.getPlatform()
+          this.getFaultById()
         }
       },
       // 深度观察监听
@@ -508,6 +517,7 @@ export default {
   },
   mounted () {
     this.getPlatform()
+    this.getFaultById()
     if (this.$route.query.shrink) {
       this.shrink = Number(this.$route.query.shrink)
     }
@@ -1291,6 +1301,35 @@ export default {
         list.push(obj)
       }
       return list
+    },
+    getFaultById () {
+      // GetCurrentFaultByAgentid(this.agentId).then(res => {
+      //   if (!res.data.success) {
+      //     this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+      //     return false
+      //   } else {
+      //     this.curFaultList = res.data.data
+      //     this.confirmedFault = this.curFaultList.filter(ele => ele.enumerate === '2')
+      //     this.ignoredFault = this.curFaultList.filter(ele => ele.enumerate === '1')
+      //   }
+      // })
+      let param = {
+        agentId: this.agentId,
+        isCurrentFault: true
+      }
+      GetAllFaultRange(param).then(res => {
+        if (res.data.success !== true) {
+          this.$message.error(getMessageByCode(res.data.code, this.$i18n.locale))
+          return
+        }
+        this.curFaultList = res.data.data.content
+        this.confirmedFault = this.curFaultList.filter(ele => ele.enumerate === '2')
+        this.ignoredFault = this.curFaultList.filter(ele => ele.enumerate === '1')
+        this.untreatedFault = this.curFaultList.filter(ele => ele.enumerate === '0')
+      })
+    },
+    showFaultDetail () {
+      this.$refs.faultDetail.onViewFaultClick()
     }
   },
   // beforeDestroy () {

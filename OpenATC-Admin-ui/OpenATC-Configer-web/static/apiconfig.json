@@ -317,5 +317,20 @@
   "key": "getLRRoadConfig",
   "url": "/platform/LRRoadConfig",
   "method": "get"
+},
+{
+  "key": "getCurrentFaultByAgentid",
+  "url": "/fault",
+  "method": "get"
+},
+{
+  "key": "getAllFaultRange",
+  "url": "/fault/range",
+  "method": "post"
+},
+{
+  "key": "enumerateCheck",
+  "url": "/fault/check",
+  "method": "post"
 }
 ]
