@@ -191,8 +191,8 @@
 import { getMessageByCode } from '@/utils/responseMessage'
 import { GetAllFaultRange, DeleteFault } from '@/api/fault'
 import Messagebox from '../../components/MessageBox'
-import { BoardType } from '@/utils/fault.js'
-import { getAllMainFaultTypeArr, getMainFaultType, getMainFaultTypeEn } from '@/model/EventModal/utils.js'
+import { BoardType, formatFaultDescValue, formatBoardType, formatEnumerate, formatSubFaultType, formatFaultLevel, formatFaultTypes } from '@/utils/fault.js'
+import { getAllMainFaultTypeArr } from '@/model/EventModal/utils.js'
 import SelectAgentid from '@/components/SelectAgentid'
 export default {
   components: { Messagebox, SelectAgentid },
@@ -270,95 +270,23 @@ export default {
       }
       this.messageboxVisible = true
     },
-    formatterBoardType (row, column) {
-      let boardType = row.m_byFaultBoardType
-      let res = ''
-      if (boardType === 1) {
-        res = this.$t('openatc.faultrecord.maincontrolboard')
-      } else if (boardType === 2) {
-        res = this.$t('openatc.faultrecord.lightcontrolversion')
-      } else if (boardType === 3) {
-        res = this.$t('openatc.faultrecord.carinspectionboard')
-      } else if (boardType === 4) {
-        res = this.$t('openatc.faultrecord.ioboard')
-      }
-      return res
+    formatterBoardType (row) {
+      return formatBoardType(row)
     },
-    formatterEnumerate (row, column) {
-      let enumerate = row.enumerate
-      let res = ''
-      if (enumerate === '0') {
-        res = this.$t('openatc.faultrecord.untreated')// 未处理
-      } else if (enumerate === '1') {
-        res = this.$t('openatc.faultrecord.ignored')// 忽略
-      } else if (enumerate === '2') {
-        res = this.$t('openatc.faultrecord.confirmed')// 确认
-      }
-      return res
+    formatterEnumerate (row) {
+      return formatEnumerate(row)
     },
-    m_wSubFaultType (row, column) {
-      let wSubFaultType = row.m_wSubFaultType
-      let res = ''
-      if (wSubFaultType === 0) {
-        res = ''
-      } else if (wSubFaultType === 1) {
-        res = this.$t('openatc.faultrecord.powerup')
-      } else if (wSubFaultType === 2) {
-        res = this.$t('openatc.faultrecord.powerdown')
-      } else if (wSubFaultType === 3) {
-        res = this.$t('openatc.faultrecord.powerno')
-      } else if (wSubFaultType === 4) {
-        res = this.$t('openatc.faultrecord.powerfault')
-      }
-      return res
+    m_wSubFaultType (row) {
+      return formatSubFaultType(row)
     },
-    m_byFaultLevel (row, column) {
-      let byFaultLevel = row.m_byFaultLevel
-      let res = ''
-      if (byFaultLevel === 1) {
-        res = this.$t('openatc.faultrecord.general')
-      } else if (byFaultLevel === 2) {
-        res = this.$t('openatc.faultrecord.degradation')
-      } else if (byFaultLevel === 3) {
-        res = this.$t('openatc.faultrecord.serious')
-      }
-      return res
+    m_byFaultLevel (row) {
+      return formatFaultLevel(row)
     },
-    m_wFaultTypes (row, column) {
-      // 故障主类型需要显示具体类型，不要按范围判断
-      let faultType = row.m_wFaultType
-      let res = ''
-      // if (faultType >= 101 && faultType <= 199) {
-      //   res = this.$t('openatc.faultrecord.maincontrolboardfault')
-      // } else if (faultType >= 201 && faultType <= 299) {
-      //   res = this.$t('openatc.faultrecord.lightcontrolversionfault')
-      // } else if (faultType >= 301 && faultType <= 399) {
-      //   res = this.$t('openatc.faultrecord.carinspectionboardfault')
-      // } else if (faultType >= 401 && faultType <= 499) {
-      //   res = this.$t('openatc.faultrecord.ioboardfault')
-      // }
-      if (this.$i18n.locale === 'en') {
-        res = getMainFaultTypeEn(faultType)
-      } else {
-        res = getMainFaultType(faultType)
-      }
-      return res
+    m_wFaultTypes (row) {
+      return formatFaultTypes(row)
     },
-    m_byFaultDescValue (row, column) {
-      let res = ''
-      let faultDesc = row.m_byFaultDescValue
-      let boardType = row.m_byFaultBoardType
-      if (faultDesc && faultDesc.length) {
-        res = faultDesc.join(',')
-        if (boardType === 2) {
-          res = this.$t('openatc.faultrecord.channel') + res
-        } else if (boardType === 3) {
-          res = this.$t('openatc.faultrecord.detector') + res
-        } else if (boardType === 4) {
-          res = this.$t('openatc.faultrecord.port') + res
-        }
-      }
-      return res
+    m_byFaultDescValue (row) {
+      return formatFaultDescValue(row)
     },
     formateDate (newDate) {
       var y = newDate.getFullYear()
@@ -385,7 +313,7 @@ export default {
         // 搜索条件改变查询，页面返回第一页。否则可能无数据显示
         this.listQuery.pageNum = 1
       }
-      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, this.agentid, beginTime, endTime, this.faultBoardType, this.faultType, this.enumerate).then(data => {
+      GetAllFaultRange(this.listQuery.pageNum, this.listQuery.pageRow, false, this.agentid, beginTime, endTime, this.faultBoardType, this.faultType, this.enumerate).then(data => {
         if (data.data.success !== true) {
           this.$message.error(getMessageByCode(data.data.code, this.$i18n.locale))
           return
